@@ -1,0 +1,130 @@
+script#viewEvent(type="text/ng-template")
+    div(class = "jumbotron")
+        div(class = "container")
+            h1
+                {{welcomeMessage}}
+            button(ng-click = "iminResponse = !iminResponse", class = "btn btn-primary btn-lg", data-toggle = "modal", data-target = "#ImInQuestionair") Are you coming?
+            div(id = "ImInQuestionair", class = "modal fade", tabindex = "-1", role="dialog", aria-hidden="true")
+                div(class = "modal-dialog")
+                    div(class = "modal-content")
+                        div(class = "modal-header")
+                            button(type="button", class="close", data-dismiss="modal", ng-click = "nevermind()")
+                                span(aria-hidden="true") &times
+                                span(class = "sr-only") Close
+
+                        div(class = "modal-body")
+                            div(class = "modal-body")
+                                div.container
+                                    | Who are you? &nbsp
+                                    input(id = "enterName", type = "input", ng-model = "newAttendee", placeholder="Enter your name", data-toggle = "popover", data-content = "Please enter your name. Can't be blank!")
+                                br
+                                div.container
+                                    div(class = "btn-group")
+                                        button(type = "button", class = "btn btn-primary", ng-click = "ImIn()") ImIn
+                                        button(type = "button", class = "btn btn-warning", ng-click = "maybe()") Maybe
+                                        button(type = "button", class = "btn btn-danger", ng-click = "nopes()") Nope
+                        div(class = "modal-footer")
+                            button(id = "addAttendee", type = "button", class = "btn btn-primary", ng-click = "addAttendee()") Save
+                            button(type = "button", class = "btn btn-warning", data-dismiss="modal", ng-click = "nevermind()") Nevermind
+
+            br
+            br
+
+            div(class = "col-md-12 col-sm-12")
+                div(class = "panel panel-info")
+                    div(class = "panel-heading")
+                        | Event Details &nbsp
+                        button(class = "btn btn-primary", ng-click = "editFields()") {{editButton}}
+                    div(class = "panel-body")
+                        p(ng-if = "!editable")
+                            b
+                                | Name: &nbsp
+                            {{event.eventName}}
+                        p(ng-if = "editable")
+                            b
+                                | Name: &nbsp
+                            input(ng-model = "event.eventName")
+
+
+                        p(ng-if = "!editable")
+                            b
+                                | Date: &nbsp
+                            {{event.eventDate.toLocaleDateString()}}
+                        p(ng-if = "editable")
+                            b
+                                | Date: &nbsp
+                            input(ng-model = "event.eventDate", bs-datepicker)
+
+                        p(ng-if = "!editable")
+                            b
+                                | Time: &nbsp
+                            {{event.eventDate.toLocaleTimeString()}}
+                        p(ng-if = "editable")
+                            b
+                                | Time: &nbsp
+                            input(ng-model = "event.eventDate", bs-timepicker)
+
+                        p
+                            b
+                                | Overview: &nbsp
+                            span(class = "label label-info") {{event.attendees.length}}
+                            span(class = "label label-warning") {{event.maybe.length}}
+                            span(class = "label label-danger") {{event.nopes.length}}
+                        p(ng-if = "!editable")
+                            b
+                                | Location: &nbsp
+                            {{event.eventLocation}}
+                        p(ng-if = "editable")
+                            b
+                                | Location: &nbsp
+                            input(ng-model = "event.eventLocation")
+                        p
+                            button(class = "btn btn-primary", data-placement="bottom",id = "showMap", ng-click = "showMap()")
+                                | View on Google Maps
+                                i(class = "glyphicon glyphicon-map-marker")
+                            button(ng-click = "reloadMaps()", class = "btn btn-default") Reload Maps
+                            div(ng-if = "isVisible", class = "animate-if", id = "map-canvas")
+
+
+    div.row
+        div.container
+            div(class = "col-md-4 col-sm-6")
+                div(class = "panel panel-info")
+                    div(class = "panel-heading")
+                        | Who's Coming?
+                    div(class = "panel-body")
+                        input(ng-model = "searchAttendees")
+                        table(class = "table table-stripped")
+                            tr
+                                th()
+                                    | Name
+                            tr(ng-repeat="attendee in event.attendees | filter:searchAttendees")
+                                td
+                                    {{attendee.userName}}
+            div(class = "col-md-4 col-sm-6")
+                div(class = "panel panel-warning")
+                    div(class = "panel-heading")
+                        | Who Might Be Coming?
+                    div(class = "panel-body")
+                        input(ng-model = "searchMaybe")
+                        table(class = "table table-stripped")
+                            tr
+                                th()
+                                    | Name
+                            tr(ng-repeat="attendee in event.maybe | filter:searchMaybe")
+                                td
+                                    {{attendee.userName}}
+            div(class = "col-md-4 col-sm-6")
+                div(class = "panel panel-danger")
+                    div(class = "panel-heading")
+                        | Who's Not Coming
+                    div(class = "panel-body")
+                        input(ng-model = "searchNopes")
+                        table(class = "table table-stripped")
+                            tr
+                                th()
+                                    | Name
+                            tr(ng-repeat="attendee in event.nopes | filter:searchNopes")
+                                td
+                                    {{attendee.userName}}
+

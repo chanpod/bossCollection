@@ -1,0 +1,32 @@
+script#createEvent(type="text/ng-template")
+    div(class = "jumbotron")
+        div(class = "container-fluid")
+            h1.
+                Create an Event
+
+
+    div(class = "well")
+        div.container
+            form(role = "form")
+                div(class = "form-group has-success")
+                    label(for ="eventName") Event Name
+                    input(data-placement="top", ng-change = "validate()", type = "text", class = "form-control text", id = "eventName", ng-model = "event.eventName", placeholder ="Enter the name of the event", required)
+                div(class = "form-group")
+                    label(for ="date") Date
+                    input(bs-datepicker, class = "form-control", id = "date", ng-model = "event.eventDate")
+                div(class = "form-group")
+                    label(for = "time") Time
+                    input(bs-timepicker, class = "form-control", id = "time", ng-model = "event.eventDate")
+                div(class = "form-group")
+                    label(for = "location") Location
+                    input(type = "text", class = "form-control", id = "location", ng-model="event.eventLocation")
+                div(class = "form-group")
+                    label(for = "email") Email Address - We'll send you an email with the url to your event in case you lose it.
+                    input(type = "text", class = "form-control", id = "email", ng-model="event.emailAddress", required)
+                div(class = "form-group")
+                    label(for = "email") Email Address - Make sure you didn't typo.
+                    input(data-placement="top", type = "text", class = "form-control", id = "emailCheck", ng-model="event.emailAddressCheck", required)
+                button(type = "button", class = "btn btn-primary", ng-click = "submitEvent()") Submit
+
+
+

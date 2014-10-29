@@ -1,0 +1,23 @@
+<br>
+<div class = "col-md-12 col-sm-12">
+    <div class = "panel panel-info">
+        <div class = "panel-heading">
+            Who's Coming
+        </div>
+        <div class = "panel-body">
+            <input ng-model = "searchAttendees">
+            <table class = "table table-stripped">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                </tr>
+                <tr ng-repeat="attendee in event.attendees | filter:searchAttendees">
+                    <td>
+                        {{attendee.userName}}
+                    </td>
+                </tr>
+            </tabel>
+        </div>
+    </div>
+</div>

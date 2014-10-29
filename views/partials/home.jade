@@ -1,0 +1,13 @@
+script#home(type="text/ng-template")
+    div(class = "jumbotron")
+        div(class = "container")
+            h1.
+                {{welcomeMessage}}
+            p.
+                A place for creating quick and easy rsvps.
+    div(class = "well")
+        div.container
+            h2
+             | Get Started
+            button(type = "button", class = "btn btn-primary", ng-click = "createEvent()")
+               | Create An Event
