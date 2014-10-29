@@ -1,0 +1,74 @@
+<div class ="jumbotron text-center">
+<h1> Comp 5120 </h1>
+<p>
+Benjamin Skipper
+<br>
+bas0017
+</p>
+
+</div>
+
+<div class = "container">
+<div class = "row">
+<div class = "col-md-2"> </div>
+<div id = "inputDiv" class = "col-md-10">
+
+<h3><b>Enter your Query</b></h3><br><textarea type = "text" style = "width:400px;height:100px;"> </textarea> 
+<br>
+<button class = "btn btn-primary" ng-click = "getQuery()"> Query </button>
+
+</div>
+<br>
+<div class = "row">
+
+<div class="btn-group-vertical col-md-2" style = "margin-top:20px;">
+   <button ng-repeat = "table in tables.tables" type="button" class="btn btn-default"  ng-click = "updateCurrentTable(table.name)">{{table.name}}</button>
+   
+</div>
+
+<div class = col-md-10>
+   <h2> All data </h2>
+  <table id = "sqlData" class = "table">
+	<tr>
+		<th ng-repeat = "column in columns">
+			{{column.name}} 
+		</th>
+	</tr>
+	<tr ng-repeat = "data in tableData track by $index">
+	<td ng-repeat = "item in data.items track by $index">
+	{{item}}  
+	</td>
+	</tr>
+  </table>
+</div>
+</div>
+
+
+
+<div class = "row">
+<div class = "col-md-2"> <span style = "width:100%;"> </span> </div>
+
+<div class = "col-md-10">
+   <h2> Queried Data </h2>
+  <table id = "sqlData" class = "table">
+	<tr>
+		<th ng-repeat = "column in queryColumns">
+			{{column.name}} 
+		</th>
+	</tr>
+	<tr ng-repeat = "data in queryTableData">
+	<td ng-repeat = "item in data.items">
+	{{item}}  
+	</td>
+	</tr>
+  </table>
+</div>
+
+
+
+</div>
+
+
+</div>
+</div>
+</div>
