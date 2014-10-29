@@ -87,12 +87,22 @@ angular.module("Imn.controllers", ['Imn.services'])
             };
         }
     }])
-    .controller("homeController", ["$scope", '$location', function($scope, $location){
+    .controller("homeController", ["$scope", '$http', function($scope, $http){
 
         $scope.welcomeMessage = "Welcome to ImIn"
 
         $scope.createEvent = function(){
-            $location.path("/createEvent");
+            console.log("test");
+
+            $http({
+                url:'https://us.api.battle.net/wow/battlePet/ability/640?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d',
+                method: "GET",
+            }).success(function (data) {
+                $scope.users = data;
+                console.log(data);
+            });
+
+
         }
 
     }])
