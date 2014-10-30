@@ -14,12 +14,16 @@ angular.module('myApp.sqlView', ['ngRoute'])
     var jsonP = "jsonp=JSON_CALLBACK";
     var blizzApiRoot = "https://us.api.battle.net/wow/";
     var charInfo = "character/Zul'Jin/Defragmentor";
+    var staticResources = "";
+
+    $scope.classImg = staticResources;
 
 
 $scope.getAbility = function(query) {
     var url = blizzApiRoot + charInfo + '?locale=en_US&' + apiKey + '&' + jsonP;
     $http.jsonp(url).success(function (data) {
         console.log(data);
+        $scope.classImg = staticResources + data.thumbnail;
     });
 
 }
