@@ -24,38 +24,15 @@ angular.module('myApp.sqlView', ['ngRoute'])
 	$scope.queryColumns = [];
 
 
-$scope.getQuery = function(query){
-	$scope.getPHP();
-	console.log($scope.tables);
-}
-	
+$scope.getAbility = function(query) {
 
-	$scope.updateCurrentTable = function(tableName){
-		$scope.currentTable = tableName;
-		
-		$scope.tables.tables.forEach(function(data, index){
-			if(data.name === tableName){
-				$scope.tableIndex = index;
-			}
-		});
-		
-		$scope.columns = $scope.tables.tables[$scope.tableIndex].columns;
-		$scope.tableData = $scope.tables.tables[$scope.tableIndex].data;
-		
-		
-	};
-	
-	$scope.getPHP = function(item, event) {
-		var result = {};
-               $scope.url = "/phpFiles/bas0017buildJSON.php";
-			   $http.get($scope.url, {}).success(function(data, status){
-					var myJSONstring
-					
-					
-					$scope.tables = data;
-					console.log($scope.tables);					
-			   })
-            }
-			$scope.getPHP();
+    $http({
+        url:'https://us.api.battle.net/wow/battlePet/ability/640?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d',
+        method: "POST",
+    }).success(function (data) {
+        $scope.users = data;
+    });
+
+}
 			
 }]);
