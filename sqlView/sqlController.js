@@ -23,6 +23,10 @@ angular.module('myApp.sqlView', ['ngRoute'])
 	$scope.queryTableData = [];
 	$scope.queryColumns = [];
 
+        function jsonp_callback(data) {
+            // returning from async callbacks is (generally) meaningless
+            console.log(data.found);
+        }
 
 $scope.getAbility = function(query) {
 
