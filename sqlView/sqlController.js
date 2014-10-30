@@ -14,7 +14,7 @@ angular.module('myApp.sqlView', ['ngRoute'])
     var jsonP = "jsonp=JSON_CALLBACK";
     var blizzApiRoot = "https://us.api.battle.net/wow/";
     var charInfo = "character/Zul'Jin/Defragmentor";
-    var staticResources = "http://us.battle.net/static-render/";
+    var staticResources = "http://us.battle.net/static-render/us/";
 
     $scope.classImg = "";
 
