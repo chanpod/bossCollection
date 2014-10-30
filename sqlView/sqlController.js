@@ -29,7 +29,7 @@ $scope.getAbility = function(query) {
     var url = 'http://us.api.battle.net/wow/battlePet/ability/640?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d';
 
     $http(url).success(function (data) {
-        $scope.users = data;
+        console.log(data);
     });
 
 }
