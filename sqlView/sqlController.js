@@ -26,7 +26,7 @@ angular.module('myApp.sqlView', ['ngRoute'])
 
 $scope.getAbility = function(query) {
 
-    var url = 'https://us.api.battle.net/wow/battlePet/ability/640?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d&jsonp=?callback=JSON_CALLBACK';
+    var url = 'https://us.api.battle.net/wow/battlePet/ability/640?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d?callback=JSON_CALLBACK';
 
     $http.jsonp(url).success(function (data) {
         $scope.users = data;
