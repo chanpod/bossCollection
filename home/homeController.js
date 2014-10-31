@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.sqlView', ['ngRoute'])
+angular.module('myApp.home', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', {
-    templateUrl: 'sqlView/sqlPartial.html',
+    templateUrl: 'home/sqlPartial.html',
     controller: 'sqlController'
   });
 }])
 
-.controller('sqlController', ['$scope', '$http', '$templateCache', function($scope, $http, $templateCache) {
+.controller('homeController', ['$scope', '$http', '$templateCache', function($scope, $http) {
 	var apiKey = "apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
     var jsonP = "jsonp=JSON_CALLBACK";
     var blizzApiRoot = "https://us.api.battle.net/wow/";
@@ -19,7 +19,7 @@ angular.module('myApp.sqlView', ['ngRoute'])
     $scope.classImg = "";
 
 
-$scope.getAbility = function(query) {
+$scope.getAbility = function() {
     var url = blizzApiRoot + charInfo + '?locale=en_US&' + apiKey + '&' + jsonP;
     $http.jsonp(url).success(function (data) {
         console.log(data);
