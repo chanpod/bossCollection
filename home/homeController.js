@@ -4,8 +4,8 @@ angular.module('myApp.home', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', {
-    templateUrl: 'home/sqlPartial.html',
-    controller: 'sqlController'
+    templateUrl: 'home/homePartial.html',
+    controller: 'homeController'
   });
 }])
 
