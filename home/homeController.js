@@ -2,7 +2,7 @@
 
 angular.module('myApp.home', ['ngRoute'])
 
-.config(['$routeProvider', function($routeProvider) {
+.config(['$routeProvider',  function($routeProvider) {
   $routeProvider.when('/home', {
     templateUrl: 'home/homePartial.html',
     controller: 'homeController'
