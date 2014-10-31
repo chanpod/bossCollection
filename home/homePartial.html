@@ -5,33 +5,39 @@ Enter Your Guild to see your progression.
 </p>
 
     <div class = "row">
-        <div class = "col-md-3"></div>
-            <div class = "col-md-3">
-                Realm: <input ng-model = "realm">
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Realm</label>
+                <input type="email" class="form-control" id="iRealm" ng-model = "realm" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Guild</label>
+                <input type="password" class="form-control" id="iGuild" ng-model = "guild" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Character</label>
+                <input type="password" class="form-control" id="iCharacter" ng-model = "charName" placeholder="Password">
             </div>
 
-            <div class = "col-md-3">
-                Guild: <input ng-model = "guild">
+            <button ng-click = "getCharacter()" class = "btn btn-primary"> Get Character Info</button>
+        </form>
+</div>
+<div class = "jumbotron">
+    <div class = "row">
+
+        <div class = "md-col-6">
+            <div>
+                <img ng-src = {{classImg}}>
             </div>
-        <div class = "col-md-3"></div>
+        </div>
+
+    </div>
+
 </div>
 
-    <div class = "row">
-        <div class = "col-md-3"></div>
-            <div class = "col-md-3">
-                Character Name: <input ng-model = "charName">
-            </div>
 
 
-        <div class = "col-md-3"></div>
-    </div>
 
-
-    <button ng-click = "getCharacter()"> Get Character Info</button>
-
-    <div>
-        <img ng-src = {{classImg}}>
-    </div>
 
 </div>
 
