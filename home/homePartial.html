@@ -3,33 +3,26 @@
 <p>
 Enter Your Guild to see your progression.
 </p>
+
     <div class = "row">
-        <div class = "col-md-6">
-            <div class = "row">
-                <div class = "col-md-6">
-                Realm: <input ng-model = "realm">
-                </div>
+        <div class = "col-md-3"
+        <div class = "col-md-3">
+            Realm: <input ng-model = "realm">
+        </div>
 
-                <div class = "col-md-6">
-                Guild: <input ng-model = "guild">
-                </div>
-            </div>
-         </div>
+        <div class = "col-md-3">
+            Guild: <input ng-model = "guild">
+        </div>
+        <div class = "col-md-3"></div>
     </div>
-</div>
-
-<button ng-click = "getAbility()"> Get Ability</button>
-
-    <div> <img ng-src = {{classImg}}> </div>
 
 
+    <button ng-click = "getAbility()"> Get Ability</button>
 
-
-
+    <div>
+        <img ng-src = {{classImg}}>
+    </div>
 
 </div>
 
 
-</div>
-</div>
-</div>
