@@ -10,26 +10,20 @@ angular.module('myApp.sqlView', ['ngRoute'])
 }])
 
 .controller('sqlController', ['$scope', '$http', '$templateCache', function($scope, $http, $templateCache) {
-	
-	$scope.currentTable = "initial";
-	$scope.tableIndex = 0;
+	var apiKey = "apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+    var jsonP = "jsonp=JSON_CALLBACK";
+    var blizzApiRoot = "https://us.api.battle.net/wow/";
+    var charInfo = "character/Zul'Jin/Defragmentor";
+    var staticResources = "http://us.battle.net/static-render/us/";
 
-	$scope.columns = [];
-	$scope.tableData = [];
-
-	$scope.tables = {};
-
-	$scope.queryTable = {};
-	$scope.queryTableData = [];
-	$scope.queryColumns = [];
+    $scope.classImg = "";
 
 
 $scope.getAbility = function(query) {
-
-    $http.jsonp({
-        url:'https://us.api.battle.net/wow/battlePet/ability/640?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d&jsonp=JSON_CALLBACK'
-    }).success(function (data) {
-        $scope.users = data;
+    var url = blizzApiRoot + charInfo + '?locale=en_US&' + apiKey + '&' + jsonP;
+    $http.jsonp(url).success(function (data) {
+        console.log(data);
+        $scope.classImg = staticResources + data.thumbnail;
     });
 
 }
