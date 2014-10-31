@@ -8,7 +8,7 @@ angular.module('myApp', [
 ]).
 config(['$routeProvider', '$httpProvider', '$locationProvider', function($routeProvider, $httpProvider, $locationProvider) {
         $routeProvider
-            .when('/home', {
+            .when('/', {
                 templateUrl: 'home/homePartial.html',
                 controller: 'homeController'
             })
@@ -16,11 +16,7 @@ config(['$routeProvider', '$httpProvider', '$locationProvider', function($routeP
                 templateUrl: 'realmStatus/realmPartial.html',
                 controller: 'realmStatusController'
             })
-            .otherwise({redirectTo: '/home'});
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common['X-Requested-With'];
-        $locationProvider.html5Mode({
-            enabled: true,
-            requireBase: false
-        });
+            .otherwise({redirectTo: '/'});
+
+
     }]);
