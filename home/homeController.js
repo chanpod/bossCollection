@@ -9,7 +9,7 @@ angular.module('myApp.home', ['ngRoute'])
   });
 }])
 
-.controller('homeController', ['$scope', '$http', '$templateCache', function($scope, $http) {
+.controller('homeController', ['$scope', '$http', function($scope, $http) {
 	var apiKey = "apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
     var jsonP = "jsonp=JSON_CALLBACK";
     var blizzApiRoot = "https://us.api.battle.net/wow/";
