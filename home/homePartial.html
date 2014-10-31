@@ -5,32 +5,32 @@ Enter Your Guild to see your progression.
 </p>
 
     <div class = "row">
-        <div class = "md-col-4"></div>
-        <div class = "md-col-4">
+        <div class = "col-md-4"></div>
+        <div class = "col-md-4">
             <form role="form">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Realm</label>
-                    <input type="email" class="form-control" id="iRealm" ng-model = "realm" placeholder="Enter email">
+                    <input type="input" class="form-control" id="iRealm" ng-model = "realm" placeholder="Realm">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Guild</label>
-                    <input type="password" class="form-control" id="iGuild" ng-model = "guild" placeholder="Password">
+                    <input type="input" class="form-control" id="iGuild" ng-model = "guild" placeholder="Guild Name">
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Character</label>
-                    <input type="password" class="form-control" id="iCharacter" ng-model = "charName" placeholder="Password">
+                    <input type="input" class="form-control" id="iCharacter" ng-model = "charName" placeholder="Character Name">
                 </div>
 
                 <button ng-click = "getCharacter()" class = "btn btn-primary"> Get Character Info</button>
             </form>
         </div>
-        <div class = "md-col-4"></div>
+        <div class = "col-md-4"></div>
     </div>
 </div>
 <div class = "jumbotron">
     <div class = "row">
 
-        <div class = "md-col-6">
+        <div class = "col-md-6">
             <div>
                 <img ng-src = {{classImg}}>
             </div>
