@@ -17,6 +17,6 @@ config(['$routeProvider', '$httpProvider', '$locationProvider', function($routeP
                 controller: 'realmStatusController'
             })
             .otherwise({redirectTo: '/'});
-
+        $locationProvider.html5Mode(true);
 
     }]);
