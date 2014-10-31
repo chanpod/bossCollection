@@ -1,14 +1,6 @@
 'use strict';
 
-angular.module('myApp.home', ['ngRoute'])
-
-.config(['$routeProvider',  function($routeProvider) {
-  $routeProvider.when('/home', {
-    templateUrl: 'home/homePartial.html',
-    controller: 'homeController'
-  });
-}])
-
+angular.module('myApp.home', [])
 .controller('homeController', ['$scope', '$http', function($scope, $http) {
 	var apiKey = "apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
     var jsonP = "jsonp=JSON_CALLBACK";
