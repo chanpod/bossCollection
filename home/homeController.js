@@ -24,7 +24,9 @@ angular.module('myApp.home', ['ngRoute'])
 
 
 $scope.getCharacter = function() {
+    charInfo = "character/" + $scope.realm + "/" + $scope.charName;
     var url = blizzApiRoot + charInfo + '?locale=en_US&' + apiKey + '&' + jsonP;
+
     $http.jsonp(url).success(function (data) {
         console.log(data);
         $scope.classImg = staticResources + data.thumbnail;
