@@ -17,6 +17,8 @@ angular.module('myApp.home', ['ngRoute'])
     var staticResources = "http://us.battle.net/static-render/us/";
 
     $scope.classImg = "";
+    $scope.guild = "";
+    $scope.realm = "";
 
 
 $scope.getAbility = function() {
