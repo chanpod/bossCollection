@@ -13,7 +13,7 @@ var express = require('express'),
   path = require('path');
 
 var app = express();
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 4000;
 
 /**
  * Configuration
@@ -45,5 +45,5 @@ app.use('/', router);
  */
 
 app.listen(port);
-console.log("Listening on port 80");
+console.log("Listening on port 4000");
 console.log('...');
