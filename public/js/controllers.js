@@ -90,12 +90,14 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', function($scope, $location, $http, charService){
 
         $scope.data = {
-            label: 50,
-            percentage:.5
+            label: 0,
+            percentage:0
         };
 
+        $scope.bossNum = 13;
+
         $scope.$watch('data', function (newValue, oldValue) {
-            newValue.percentage = newValue.label / 100;
+            newValue.percentage = newValue.label / $scope.bossNum;
         }, true);
 
         $scope.welcomeMessage = "Welcome to your Boss Collection"
@@ -103,21 +105,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.realm = "";
         $scope.character = "";
 
-        var apiKey = "apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        var jsonP = "jsonp=JSON_CALLBACK";
-        var blizzApiRoot = "https://us.api.battle.net/wow/";
+
+
+
         var charInfo = "character/" + $scope.realm + "/" + $scope.character;
         var guildInfo = "";
         var staticResources = "http://us.battle.net/static-render/us/";
 
-        charService.test();
+
         $scope.getCharacter = function() {
-            charInfo = "character/" + $scope.realm + "/" + $scope.character;
-            var url = blizzApiRoot + charInfo + '?locale=en_US&' + apiKey + '&' + jsonP;
-            $http.jsonp(url).success(function (data) {
-                console.log(data);
-                $scope.classImg = staticResources + data.thumbnail;
-            });
+            charService.getCharacter($scope.realm, $scope.character);
         }
 
 
