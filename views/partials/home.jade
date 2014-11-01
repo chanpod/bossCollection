@@ -1,0 +1,24 @@
+script#home(type="text/ng-template")
+    div(class = "jumbotron mainJumbo")
+        div(class = "container")
+            h1.
+                {{welcomeMessage}}
+            p.
+                Enter your Realm and Guild name to see your raid progression!
+    div(class = "well")
+        div.container
+            h2
+             | Get Started
+            div(class = "requiredInfo")
+                form(role="form")
+                    div(class = "form-group")
+                        label(for="realmName") Realm
+                        input(type = "input", class = "form-control", id ="iRealmName", ng-model = "realm", placeholder = "Enter Realm Name")
+                    div(class = "form-group")
+                        label(for="guildName") Guild
+                        input(type = "input", class = "form-control", id ="iRealmName", ng-model = "guild", placeholder = "Enter Realm Name")
+                    div(class = "form-group")
+                        label(for="characterName") Character
+                        input(type = "input", class = "form-control", id ="iRealmName", ng-model = "character", placeholder = "Enter Realm Name")
+                    button(type = "button", class = "btn btn-primary", ng-click = "getCharacter()")
+                       | Create An Event
