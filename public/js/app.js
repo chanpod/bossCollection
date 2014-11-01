@@ -7,7 +7,8 @@ angular.module('BossCollection', [
   'Imn.filters',
   'BossCollection.services',
   'Imn.directives',
-  'ngRoute'
+  'ngRoute',
+  'angular.directives-round-progress'
 
 ]).
 config(function ($routeProvider, $locationProvider) {

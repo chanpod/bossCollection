@@ -89,6 +89,15 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
     }])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', function($scope, $location, $http, charService){
 
+        $scope.data = {
+            label: 50,
+            percentage:.5
+        };
+
+        $scope.$watch('data', function (newValue, oldValue) {
+            newValue.percentage = newValue.label / 100;
+        }, true);
+
         $scope.welcomeMessage = "Welcome to your Boss Collection"
         $scope.guild = "";
         $scope.realm = "";
