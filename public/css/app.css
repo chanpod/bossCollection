@@ -28,4 +28,108 @@ body {
 
 }
 
+.shamanClassColor{
+
+    background-color: #0070DE;
+    color:white;
+}
+
+.shamanClassColor small{
+    color:white;
+}
+
+.dkClassColor{
+
+    background-color: #C41F3B;
+    color:white;
+}
+
+.dkClassColor small{
+    color:white;
+}
+
+.druidClassColor{
+
+    background-color: #FF7D0A;
+    color:white;
+}
+
+.druidClassColor small{
+    color:white;
+}
+
+.hunterClassColor{
+
+    background-color: #ABD473;
+    color:white;
+}
+
+.hunterClassColor small{
+    color:white;
+}
+
+.mageClassColor{
+
+    background-color: #69CCF0;
+    color:white;
+}
+
+.mageClassColor small{
+    color:white;
+}
+
+.monkClassColor{
+
+    background-color: #00FF96;
+    color:black;
+}
+
+.monkClassColor small{
+    color:black;
+}
+.paladinClassColor{
+
+    background-color: #F58CBA;
+    color:white;
+}
+
+.paladinClassColor small{
+    color:white;
+}
+.priestClassColor{
+
+    background-color: #FFFFFF;
+    color:black;
+}
+
+.priestClassColor small{
+    color:black;
+}
+.rogueClassColor{
+
+    background-color: #FFF569;
+    color:white;
+}
+
+.rogueClassColor small{
+    color:white;
+}
+.warlockClassColor{
+
+    background-color: #9482C9;
+    color:white;
+}
+
+.warlockClassColor small{
+    color:white;
+}
+.warriorClassColor{
+
+    background-color: #C79C6E;
+    color:white;
+}
+
+.warriorClassColor small{
+    color:white;
+}
 

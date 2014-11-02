@@ -19,7 +19,7 @@ script#home(type="text/ng-template")
                         input(type = "input", class = "form-control", id ="iRealmName", ng-model = "guild", placeholder = "Enter Realm Name")
                     div(class = "form-group")
                         label(for="characterName") Character
-                        input(type = "input", class = "form-control", id ="iRealmName", ng-model = "character", placeholder = "Enter Realm Name")
+                        input(type = "input", class = "form-control", id ="iRealmName", ng-model = "characterName", placeholder = "Enter Realm Name")
                     button(type = "button", class = "btn btn-primary", ng-click = "getCharacter()")
                        | Get Info
     div(class = "well")
@@ -79,4 +79,27 @@ script#home(type="text/ng-template")
                     data-round-progress-outer-circle-width="15",
                     data-round-progress-outer-circle-radius="60",
                     data-round-progress-inner-circle-radius="0")
-
+    div(ng-class = "classColor").well
+        div.container
+            div()
+                h1.text-center
+                    {{characterName}}
+            div.row
+                div.col-md-3
+                    h3
+                        | iLevel
+                        br
+                        small
+                            {{iLvl}}
+                div.col-md-3
+                    h3
+                        | Acheivment Points
+                        br
+                        small
+                            {{achievmentPoints}}
+                div.col-md-3
+                    h3
+                        | Specs
+                        br
+                        small
+                            | Resto & Elemental

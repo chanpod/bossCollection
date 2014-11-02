@@ -87,7 +87,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             };
         }
     }])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', function($scope, $location, $http, charService){
+    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$q',function($scope, $location, $http, charService, $q){
 
         $scope.data = {
             label: 0,
@@ -103,18 +103,34 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.welcomeMessage = "Welcome to your Boss Collection"
         $scope.guild = "";
         $scope.realm = "";
-        $scope.character = "";
+        $scope.characterName = "";
+        $scope.character = {};
+        $scope.classColor = "shamanClassColor";
+        $scope.iLvl = "";
+        $scope.achievmentPoints = $scope.character.achievementPoints;
+
+        $scope.$watch('character', function (newValue, oldValue) {
+            $scope.achievmentPoints = $scope.character.achievementPoints;
+        }, true);
 
 
-
-
-        var charInfo = "character/" + $scope.realm + "/" + $scope.character;
-        var guildInfo = "";
+        var guildInfo = {};
         var staticResources = "http://us.battle.net/static-render/us/";
 
 
         $scope.getCharacter = function() {
-            charService.getCharacter($scope.realm, $scope.character);
+
+            var promise = charService.getCharacter($scope.realm, $scope.characterName);
+
+            promise.then(function(result){
+                $scope.character = result;
+
+                $scope.classColor = charService.getClass($scope.character) + "ClassColor";
+
+                $scope.iLvl = charService.getiLvl($scope.character);
+
+
+            });
         }
 
 
