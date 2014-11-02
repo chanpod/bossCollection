@@ -109,6 +109,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.iLvl = "";
         $scope.achievmentPoints = $scope.character.achievementPoints;
 
+
         $scope.$watch('character', function (newValue, oldValue) {
             $scope.achievmentPoints = $scope.character.achievementPoints;
         }, true);
@@ -117,6 +118,12 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         var guildInfo = {};
         var staticResources = "http://us.battle.net/static-render/us/";
 
+        //https://us.api.battle.net/wow/guild/:realm/:guildname?fields=members&apikey=client_id
+        var url = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir bosscollection?fields=members&apikey=client_id";
+        $http.jsonp(url).success(function (data) {
+            console.log(data);
+
+        });
 
         $scope.getCharacter = function() {
 

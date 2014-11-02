@@ -14,11 +14,33 @@ body {
 
 }
 
+.wodGradient{
+    background-image: linear-gradient(#9D3A00, #CE8000);
+}
+
+.mopGradient{
+    background-image: linear-gradient(#02403B, #019373);
+}
+
+.center{
+    display: table;
+    margin: 0 auto;
+}
+
 .wodBanner{
-    background-image: url("/js/lib/test.png");
+    background-image: url("/images/expansionBanners/wod.png");
     background-repeat: no-repeat;
-    background-size: 300px;
-    width:300px;
+    background-size: 450px;
+    width:450px;
+    height:200px;
+    color:white;
+}
+
+.mopBanner{
+    background-image: url("/images/expansionBanners/mop.png");
+    background-repeat: no-repeat;
+    background-size: 450px;
+    width:450px;
     height:200px;
     color:white;
 }
