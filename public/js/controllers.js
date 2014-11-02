@@ -102,8 +102,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
         $scope.welcomeMessage = "Welcome to your Boss Collection"
         $scope.guild = "";
-        $scope.realm = "";
-        $scope.characterName = "";
+        $scope.realm = "Zul'jin";
+        $scope.characterName = "Defragmentor";
         $scope.character = {};
         $scope.classColor = "shamanClassColor";
         $scope.iLvl = "";

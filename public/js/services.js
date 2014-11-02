@@ -16,7 +16,7 @@ service.factory('charService', function($http, $q){
             getCharacter: function (realm, charName){
                 var deferred = $q.defer();
 
-                var charInfo = "character/" + realm + "/" + charName + "?" + getItems + ",progression,guild,";
+                var charInfo = "character/" + realm + "/" + charName + "?" + getItems + ",progression,guild,talents,";
                 var url = blizzApiRoot + charInfo + '?' + local + '&' + endUrl;
                 $http.jsonp(url).success(function (data) {
                     console.log(data);
@@ -43,6 +43,10 @@ service.factory('charService', function($http, $q){
 
                     return character.items.averageItemLevelEquipped
 
+            },
+            getSpecs: function(character){
+
+                return character.items.averageItemLevelEquipped
             }
 
         };
