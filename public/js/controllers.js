@@ -100,22 +100,22 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
 
         $scope.wodData = {
-            "hm" :{
+            "0hm" :{
                 "name" : "Highmaul",
                 "currentKills" : 0,
                 "total" : 7
             },
-            "brf" : {
+            "1brf" : {
                 "name" : "Blackrock Foundry",
                 "currentKills" : 0,
                 "total" : 7
             },
-            "world" : {
+            "2world" : {
                 "name" : "World Bosses",
                 "currentKills" : 0,
                 "total" : 3
             },
-            "xtotal" : {
+            "3total" : {
                 "name" : "Total",
                 "total": 17,
                 "currentKills" : 0
@@ -123,54 +123,127 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         };
 
         $scope.mopData = {
-            "msv" :{
+            "0msv" :{
                 "name" : "Mogu'shan vaults",
                 "currentKills" : 0,
-                "total" : 0
+                "total" : 6
             },
-            "hof" : {
+            "1hof" : {
                 "name" : "Heart of Fear",
                 "currentKills" : 0,
-                "total" : 0
+                "total" : 6
             },
-            "tos" : {
+            "2tos" : {
                 "name" : "Terrace of Endless Spring",
                 "currentKills" : 0,
-                "total" : 0
+                "total" : 4
             },
-            "tot" : {
+            "3tot" : {
                 "name" : "Throne of Thunder",
                 "currentKills" : 0,
-                "total" : 0
+                "total" : 13
             },
-            "soo" : {
+            "4soo" : {
                 "name" : "Siege of Orgrimmar",
                 "currentKills" : 0,
-                "total" : 0
+                "total" : 14
             },
-            "xtotal" : {
+            "5total" : {
                 "name" : "Total",
-                "total": 55,
+                "total": 43,
                 "currentKills" : 0
             }
 
         };
 
-
-        $scope.mogushanVaults = {
-            label: 3,
-            percentage:0
+        $scope.cataData = {
+            "0bwd" :{
+                "name" : "Blackwing Descent",
+                "currentKills" : 0,
+                "total" : 6
+            },
+            "1bot" : {
+                "name" : "Bastion of Twilight",
+                "currentKills" : 0,
+                "total" : 5
+            },
+            "2tfw" : {
+                "name" : "Throne of the Four Winds",
+                "currentKills" : 0,
+                "total" : 2
+            },
+            "3bd" : {
+                "name" : "Baradin Hold",
+                "currentKills" : 0,
+                "total" : 3
+            },
+            "4firelands" : {
+                "name" : "Firelands",
+                "currentKills" : 0,
+                "total" : 7
+            },
+            "5ds" : {
+                "name" : "DragonSoul",
+                "currentKills" : 0,
+                "total" : 8
+            },
+            "6total" : {
+                "name" : "Total",
+                "total": 31,
+                "currentKills" : 0
+            }
         };
 
-        $scope.mopTotal = {
-            label: 15,
-            percentage:0
-        }
-
-        $scope.data = {
-            label: 0,
-            percentage:0
+        $scope.wotlkData = {
+            "0nax" :{
+                "name" : "Naxxramas",
+                "currentKills" : 0,
+                "total" : 19
+            },
+            "1onyx" : {
+                "name" : "Bastion of Twilight",
+                "currentKills" : 0,
+                "total" : 1
+            },
+            "2eoe" : {
+                "name" : "Eye of Eternity",
+                "currentKills" : 0,
+                "total" : 1
+            },
+            "3voa" : {
+                "name" : "Vault of Archavon",
+                "currentKills" : 0,
+                "total" : 4
+            },
+            "4coa" : {
+                "name" : "Chamber of Aspects",
+                "currentKills" : 0,
+                "total" : 2
+            },
+            "5cc" : {
+                "name" : "Crusaders' Coliseum",
+                "currentKills" : 0,
+                "total" : 5
+            },
+            "6ulduar" : {
+                "name" : "Ulduar",
+                "currentKills" : 0,
+                "total" : 14
+            },
+            "7icc" : {
+                "name" : "Ice Crown Citadel",
+                "currentKills" : 0,
+                "total" : 12
+            },
+            "8total" : {
+                "name" : "Total",
+                "total": 58,
+                "currentKills" : 0
+            }
         };
+
+
+
 
         $scope.mogushanVaultsRegTotal = 13;
         $scope.mopTotalBosses = 50;

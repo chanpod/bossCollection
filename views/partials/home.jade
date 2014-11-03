@@ -100,7 +100,7 @@ script#home(type="text/ng-template")
                     div.col-md-4.mopBanner
             div.container.text-center
                 div.row
-                    div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-2
+                    div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-4
                         h2.text-center.raidHeaders
                             {{raid.name}}
                         div()
@@ -124,51 +124,22 @@ script#home(type="text/ng-template")
                     div.col-md-4.cataBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-3
-                        h2.text-center
-                            | Raid 1
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 2
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 3
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
+                    div(ng-repeat = "raid in cataData", class = "guildProgression").col-md-3.col-sm-4
+                        h2.text-center.raidHeaders
+                            {{raid.name}}
+                        div()
+                            div.progress-data
+                                h3
+                                    {{raid.currentKills}}/{{raid.total}}
+                            div(
+                                round-progress,
+                                max="raid.total",
+                                current="raid.currentKills",
+                                color="{{progressColor}}",
+                                bgcolor="{{bgColor}}",
+                                radius="{{radius}}",
+                                stroke="{{stroke}}",
+                                semi="isSemi")
 
     div(class = "well").wotlkGradient
         div().container.text-center
@@ -178,51 +149,22 @@ script#home(type="text/ng-template")
                     div.col-md-4.wotlkBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 1
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 2
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 3
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
+                    div(ng-repeat = "raid in wotlkData", class = "guildProgression").col-md-3.col-sm-4
+                        h2.text-center.raidHeaders
+                            {{raid.name}}
+                        div()
+                            div.progress-data
+                                h3
+                                    {{raid.currentKills}}/{{raid.total}}
+                            div(
+                                round-progress,
+                                max="raid.total",
+                                current="raid.currentKills",
+                                color="{{progressColor}}",
+                                bgcolor="{{bgColor}}",
+                                radius="{{radius}}",
+                                stroke="{{stroke}}",
+                                semi="isSemi")
 
     div(class = "well").bcGradient
         div().container.text-center
