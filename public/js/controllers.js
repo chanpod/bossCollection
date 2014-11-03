@@ -98,16 +98,63 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.bgColor = '#eaeaea';
         $scope.isSemi = false;
 
+
         $scope.wodData = {
-            totalBosses: 17,
-            currentGuildTotalKills: 0,
-            currentGuildHMKills: 0,
-            currentGuildBRFKills: 0,
-            currentGuildWorldBossesKills: 0,
-            blackRockFoundyBosses: 7,
-            highMaulBosses: 7,
-            worldBosses: 3
-        }
+            "hm" :{
+                "name" : "Highmaul",
+                "currentKills" : 0,
+                "total" : 7
+            },
+            "brf" : {
+                "name" : "Blackrock Foundry",
+                "currentKills" : 0,
+                "total" : 7
+            },
+            "world" : {
+                "name" : "World Bosses",
+                "currentKills" : 0,
+                "total" : 3
+            },
+            "xtotal" : {
+                "name" : "Total",
+                "total": 17,
+                "currentKills" : 0
+            }
+        };
+
+        $scope.mopData = {
+            "msv" :{
+                "name" : "Mogu'shan vaults",
+                "currentKills" : 0,
+                "total" : 0
+            },
+            "hof" : {
+                "name" : "Heart of Fear",
+                "currentKills" : 0,
+                "total" : 0
+            },
+            "tos" : {
+                "name" : "Terrace of Endless Spring",
+                "currentKills" : 0,
+                "total" : 0
+            },
+            "tot" : {
+                "name" : "Throne of Thunder",
+                "currentKills" : 0,
+                "total" : 0
+            },
+            "soo" : {
+                "name" : "Siege of Orgrimmar",
+                "currentKills" : 0,
+                "total" : 0
+            },
+            "xtotal" : {
+                "name" : "Total",
+                "total": 55,
+                "currentKills" : 0
+            }
+
+        };
 
 
         $scope.mogushanVaults = {

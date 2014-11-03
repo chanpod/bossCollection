@@ -76,69 +76,22 @@ script#home(type="text/ng-template")
                     div.col-md-4.wodBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-3.col-sm-3
+                    div(ng-repeat = "raid in wodData", class = "guildProgression").col-md-3.col-sm-3
                         h2.text-center.raidHeaders
-                            | Blackrock Foundry
-                        div.progress-data
-                            h3
-                                | {{wodData.currentGuildBRFKills}}/{{wodData.blackRockFoundyBosses}}
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-3.col-sm-3
-                        h2.text-center.raidHeaders
-                            | Highmaul
-                        div.progress-data
-                            h3
-                                | 15/{{wodData.blackRockFoundyBosses}}
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-3.col-sm-3
-                        h2.text-center.raidHeaders
-                            | World Bosses
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-3.col-sm-3
-                        h2.text-center.raidHeaders
-                            | Total
-
-                        div.progress-data
-                            h3
-                                | {{wodData.currentGuildKills}}/{{wodData.totalBosses}}
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-
-
+                            {{raid.name}}
+                        div()
+                            div.progress-data
+                                h3
+                                    {{raid.currentKills}}/{{raid.total}}
+                            div(
+                                round-progress,
+                                max="raid.total",
+                                current="raid.currentKills",
+                                color="{{progressColor}}",
+                                bgcolor="{{bgColor}}",
+                                radius="{{radius}}",
+                                stroke="{{stroke}}",
+                                semi="isSemi")
     div(class = "well").mopGradient
         div().container.text-center
             div.container
@@ -147,92 +100,17 @@ script#home(type="text/ng-template")
                     div.col-md-4.mopBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-2.col-sm-4
+                    div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-2
                         h2.text-center.raidHeaders
-                            | Mogu'shan vaults
-                        div.progress-data
-                            h3
-                                | 15/20
+                            {{raid.name}}
+                        div()
+                            div.progress-data
+                                h3
+                                    {{raid.currentKills}}/{{raid.total}}
                         div(
                             round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-2.col-sm-4
-                        h2.text-center.raidHeaders
-                            | Heart of Fear
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-2.col-sm-4
-                        h2.text-center.raidHeaders
-                            | Terrace of Endless Spring
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-2.col-sm-4
-                        h2.text-center.raidHeaders
-                            | Throne of Thunder
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-2.col-sm-4
-                        h2.text-center.raidHeaders
-                            | Siege of Orgrimmar
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
-                    div(class = "guildProgression").col-md-2.col-sm-4
-                        h2.text-center.raidHeaders
-                            | Total
-
-                        div.progress-data
-                            h3
-                                | 15/20
-                        div(
-                            round-progress,
-                            max="progressMax",
-                            current="progressCurrent",
+                            max="raid.total",
+                            current="raid.currentKills",
                             color="{{progressColor}}",
                             bgcolor="{{bgColor}}",
                             radius="{{radius}}",
@@ -246,7 +124,7 @@ script#home(type="text/ng-template")
                     div.col-md-4.cataBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-4
+                    div(class = "guildProgression").col-md-3
                         h2.text-center
                             | Raid 1
                         div.progress-data
