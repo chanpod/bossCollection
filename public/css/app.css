@@ -13,9 +13,7 @@ body {
     width:100%;
 }
 
-.fixedPosition{
-    position: absolute;
-}
+
 
 .wodGradient{
     background-image: linear-gradient(#9D3A00, #CE8000);
@@ -49,50 +47,102 @@ body {
     margin: 0 auto;
 }
 
-.bcBanner{
-    background-image: url("/images/expansionBanners/bc.png");
-    background-repeat: no-repeat;
-    background-size: 450px;
-    width:450px;
-    height:200px;
-    color:white;
+@media (max-width: 767px){
+    .bcBanner{
+        background-image: url("/images/expansionBanners/bc.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width:250px;
+        height:125px;
+        color:white;
+    }
+
+    .wodBanner{
+        background-image: url("/images/expansionBanners/wod.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width:250px;
+        height:125px;
+        color:white;
+    }
+
+    .wotlkBanner{
+        background-image: url("/images/expansionBanners/wotlk.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width:250px;
+        height:125px;
+        color:white;
+    }
+
+    .mopBanner{
+        background-image: url("/images/expansionBanners/mop.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width:250px;
+        height:125px;
+        color:white;
+    }
+
+    .cataBanner{
+        background-image: url("/images/expansionBanners/cata.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width:250px;
+        height:125px;
+        color:white;
+    }
 }
 
-.wodBanner{
-    background-image: url("/images/expansionBanners/wod.png");
-    background-repeat: no-repeat;
-    background-size: 450px;
-    width:450px;
-    height:200px;
-    color:white;
+@media (min-width: 767px){
+    .wodBanner{
+        background-image: url("/images/expansionBanners/wod.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        width:450px;
+        height:200px;
+        color:white;
+    }
+
+    .bcBanner{
+        background-image: url("/images/expansionBanners/bc.png");
+        background-repeat: no-repeat;
+        background-size: 450px;
+        width:450px;
+        height:200px;
+        color:white;
+    }
+
+
+    .wotlkBanner{
+        background-image: url("/images/expansionBanners/wotlk.png");
+        background-repeat: no-repeat;
+        background-size: 450px;
+        width:450px;
+        height:200px;
+        color:white;
+    }
+
+    .mopBanner{
+        background-image: url("/images/expansionBanners/mop.png");
+        background-repeat: no-repeat;
+        background-size: 450px;
+        width:450px;
+        height:200px;
+        color:white;
+    }
+
+    .cataBanner{
+        background-image: url("/images/expansionBanners/cata.png");
+        background-repeat: no-repeat;
+        background-size: 450px;
+        width:450px;
+        height:200px;
+        color:white;
+    }
 }
 
-.wotlkBanner{
-    background-image: url("/images/expansionBanners/wotlk.png");
-    background-repeat: no-repeat;
-    background-size: 450px;
-    width:450px;
-    height:200px;
-    color:white;
-}
 
-.mopBanner{
-    background-image: url("/images/expansionBanners/mop.png");
-    background-repeat: no-repeat;
-    background-size: 450px;
-    width:450px;
-    height:200px;
-    color:white;
-}
-
-.cataBanner{
-    background-image: url("/images/expansionBanners/cata.png");
-    background-repeat: no-repeat;
-    background-size: 450px;
-    width:450px;
-    height:200px;
-    color:white;
-}
 
 .mainJumbo{
     background-color: #069;
@@ -100,7 +150,7 @@ body {
 }
 
 .requiredInfo{
-    width: 400px;
+    width: 100%;
 }
 
 .guildProgression{
