@@ -87,7 +87,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             };
         }
     }])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', function($scope, $location, $http, charService){
+    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', function($scope, $location, $http, charService, $timeout){
 
 
 
@@ -98,6 +98,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.progressColor = "#069";
         $scope.bgColor = '#eaeaea';
         $scope.isSemi = false;
+        $scope.showGuild = false;
 
 
         $scope.wodNormalsData = {
@@ -276,6 +277,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.iLvl = "";
         $scope.achievmentPoints = $scope.character.achievementPoints;
         $scope.characterImage = "";
+        $scope.showLoadingGif = false;
 
         $scope.$watch('character', function (newValue, oldValue) {
             $scope.achievmentPoints = $scope.character.achievementPoints;
@@ -285,6 +287,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
         $scope.getCharacter = function() {
 
+            $scope.showLoadingGif = true;
             var promise = charService.getCharacter($scope.realm, $scope.characterName);
 
             promise.then(function(result){
@@ -295,9 +298,18 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.iLvl = charService.getiLvl($scope.character);
 
                 $scope.characterImage = staticResources + result.thumbnail;
+                $scope.showGuild = true;
+                $scope.showLoadingGif = false;
 
-
+            },
+            function(error){
+                $scope.showLoadingGif = false;
             });
+
+            $timeout(function(){
+                $scope.showLoadingGif = false;
+            }, 5000);
+
         }
 
 

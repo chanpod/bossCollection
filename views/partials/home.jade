@@ -8,7 +8,7 @@ script#home(type="text/ng-template")
     div(class = "well")
         div.container
             h2.text-center
-             | Get Started
+             | Search for Guild
             div.container
                 div.container.col-md-12.col-lg-12.col-sm-12.center
                     form(role="form")
@@ -23,7 +23,8 @@ script#home(type="text/ng-template")
                             input(type = "input", class = "form-control", id ="iRealmName", ng-model = "characterName", placeholder = "Enter Character Name")
                         button(type = "button", class = "btn btn-primary", ng-click = "getCharacter()")
                            | Get Info
-    div(class = "well").guildWell
+                           img(ng-show = "showLoadingGif", src = "images/loading.gif")
+    div(class = "well", ng-show = "showGuild").guildWell
         div().container
             div()
                 h1.text-center
