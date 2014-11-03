@@ -89,16 +89,34 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
     }])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', '$q',function($scope, $location, $http, charService, $q){
 
+        $scope.mogushanVaults = {
+            label: 3,
+            percentage:0
+        };
+
+        $scope.mopTotal = {
+            label: 15,
+            percentage:0
+        }
+
         $scope.data = {
             label: 0,
             percentage:0
         };
 
-        $scope.bossNum = 13;
+        $scope.mogushanVaultsRegTotal = 13;
+        $scope.mopTotalBosses = 50;
 
-        $scope.$watch('data', function (newValue, oldValue) {
-            newValue.percentage = newValue.label / $scope.bossNum;
+        $scope.$watch('mopTotal', function (newValue, oldValue) {
+            newValue.percentage = newValue.label / $scope.mopTotalBosses;
         }, true);
+
+
+        $scope.$watch('mogushanVaults', function (newValue, oldValue) {
+            newValue.percentage = newValue.label / $scope.mogushanVaultsRegTotal;
+        }, true);
+
+
 
         $scope.welcomeMessage = "Welcome to your Boss Collection"
         $scope.guild = "";
@@ -135,38 +153,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
 
     }])
-    .controller("viewAllEventsController", ["$scope", 'EventService', '$location', 'SendMail', function($scope, EventService, $location, SendMail){
-
-        var path = $location.path().split('/');
-        var pathSize = path.length;
-
-        $scope.events = [];
-        $scope.welcomeMessage = "Find an event";
-
-        if(pathSize === 2){
-            console.log("No event ID");
-
-            EventService.query(function(result){
-                console.log(result)
-                angular.forEach(result, function(event, key){
-
-                    var date = new Date(event.eventDate);
-
-                    if(date.toLocaleDateString() != "Invalid Date"){
-                        event.eventDate = date.toLocaleDateString();
-                        event.eventTime = date.toLocaleTimeString();
-                    }
-                });
-
-                $scope.events = result;
-
-            });
-        }
-
-        SendMail.query();
-
-
-    }]).controller("viewEventController", ["$scope", 'EventService', '$location', 'SaveEventService', '$timeout', function($scope, EventService, $location, SaveEventService, $timeout){
+   .controller("viewEventController", ["$scope", 'EventService', '$location', 'SaveEventService', '$timeout', function($scope, EventService, $location, SaveEventService, $timeout){
 
         var path = $location.path().split('/');
         var pathSize = path.length;
@@ -180,6 +167,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.addedToYes = false;
         $scope.addedToMaybe = false;
         $scope.addedToNopes = false;
+
+
 
         $scope.newAttendee = "";
         $scope.newAttendeeToAdd = {userName: ""};
