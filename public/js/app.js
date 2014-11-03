@@ -8,7 +8,7 @@ angular.module('BossCollection', [
   'BossCollection.services',
   'Imn.directives',
   'ngRoute',
-  'angular.directives-round-progress'
+  'angular-svg-round-progress'
 
 ]).
 config(function ($routeProvider, $locationProvider) {

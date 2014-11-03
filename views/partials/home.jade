@@ -76,79 +76,67 @@ script#home(type="text/ng-template")
                     div.col-md-4.wodBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-2
-                        h2.text-center
-                            | Mogu'shan vaults
-                        div(ang:round:progress data-round-progress-model = "mogushanVaults",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-2
-                        h2.text-center
-                            | Heart of Fear
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-2
-                        h2.text-center
-                            | Terrace of Endless Spring
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-2
-                        h2.text-center
-                            | Throne of Thunder
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-2
-                        h2.text-center
-                            | Siege of Orgrimmar
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-2
-                        h2.text-center
+                    div(class = "guildProgression").col-md-3.col-sm-3
+                        h2.text-center.raidHeaders
+                            | Blackrock Foundry
+                        div.progress-data
+                            h3
+                                | {{wodData.currentGuildBRFKills}}/{{wodData.blackRockFoundyBosses}}
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-3.col-sm-3
+                        h2.text-center.raidHeaders
+                            | Highmaul
+                        div.progress-data
+                            h3
+                                | 15/{{wodData.blackRockFoundyBosses}}
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-3.col-sm-3
+                        h2.text-center.raidHeaders
+                            | World Bosses
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-3.col-sm-3
+                        h2.text-center.raidHeaders
                             | Total
-                        br
-                        div(ang:round:progress data-round-progress-model = "mopTotal",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+
+                        div.progress-data
+                            h3
+                                | {{wodData.currentGuildKills}}/{{wodData.totalBosses}}
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
 
 
     div(class = "well").mopGradient
@@ -159,42 +147,97 @@ script#home(type="text/ng-template")
                     div.col-md-4.mopBanner
             div.container.text-center
                 div.row
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 1
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 2
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
-                    div(class = "guildProgression").col-md-4
-                        h2.text-center
-                            | Raid 3
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                    div(class = "guildProgression").col-md-2.col-sm-4
+                        h2.text-center.raidHeaders
+                            | Mogu'shan vaults
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-2.col-sm-4
+                        h2.text-center.raidHeaders
+                            | Heart of Fear
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-2.col-sm-4
+                        h2.text-center.raidHeaders
+                            | Terrace of Endless Spring
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-2.col-sm-4
+                        h2.text-center.raidHeaders
+                            | Throne of Thunder
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-2.col-sm-4
+                        h2.text-center.raidHeaders
+                            | Siege of Orgrimmar
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+                    div(class = "guildProgression").col-md-2.col-sm-4
+                        h2.text-center.raidHeaders
+                            | Total
+
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
     div(class = "well").cataGradient
         div().container.text-center
             div.container
@@ -206,39 +249,48 @@ script#home(type="text/ng-template")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 1
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 2
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 3
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
 
     div(class = "well").wotlkGradient
         div().container.text-center
@@ -251,39 +303,48 @@ script#home(type="text/ng-template")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 1
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 2
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 3
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
 
     div(class = "well").bcGradient
         div().container.text-center
@@ -296,37 +357,48 @@ script#home(type="text/ng-template")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 1
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 2
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
                     div(class = "guildProgression").col-md-4
                         h2.text-center
                             | Raid 3
-                        div(ang:round:progress data-round-progress-model = "data",
-                        data-round-progress-outer-circle-background-color="#8B0000",
-                        data-round-progress-outer-circle-foreground-color="#00BFFF",
-                        data-round-progress-width="150",
-                        data-round-progress-height="150",
-                        data-round-progress-outer-circle-width="15",
-                        data-round-progress-outer-circle-radius="60",
-                        data-round-progress-inner-circle-radius="0",
-                        data-round-progress-label-color="#ffff")
+                        div.progress-data
+                            h3
+                                | 15/20
+                        div(
+                            round-progress,
+                            max="progressMax",
+                            current="progressCurrent",
+                            color="{{progressColor}}",
+                            bgcolor="{{bgColor}}",
+                            radius="{{radius}}",
+                            stroke="{{stroke}}",
+                            semi="isSemi")
+
+
 

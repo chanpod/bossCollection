@@ -87,7 +87,28 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             };
         }
     }])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$q',function($scope, $location, $http, charService, $q){
+    .controller("homeController", ["$scope", '$location', '$http', 'charService', function($scope, $location, $http, charService){
+
+
+        $scope.progressCurrent = 27;
+        $scope.progressMax = 50;
+        $scope.stroke = 15;
+        $scope.radius = 50;
+        $scope.progressColor = "#069";
+        $scope.bgColor = '#eaeaea';
+        $scope.isSemi = false;
+
+        $scope.wodData = {
+            totalBosses: 17,
+            currentGuildTotalKills: 0,
+            currentGuildHMKills: 0,
+            currentGuildBRFKills: 0,
+            currentGuildWorldBossesKills: 0,
+            blackRockFoundyBosses: 7,
+            highMaulBosses: 7,
+            worldBosses: 3
+        }
+
 
         $scope.mogushanVaults = {
             label: 3,
