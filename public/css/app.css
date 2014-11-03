@@ -11,7 +11,10 @@ body {
 #map-canvas {
     height: 400px;
     width:100%;
+}
 
+.fixedPosition{
+    position: absolute;
 }
 
 .wodGradient{

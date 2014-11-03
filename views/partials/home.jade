@@ -44,6 +44,7 @@ script#home(type="text/ng-template")
                                 | #ofMembers
     div(ng-class = "classColor").well
         div.container
+            img(ng-src = "{{characterImage}}").fixedPosition
             div()
                 h1.text-center
                     {{characterName}}

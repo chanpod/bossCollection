@@ -108,22 +108,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.classColor = "shamanClassColor";
         $scope.iLvl = "";
         $scope.achievmentPoints = $scope.character.achievementPoints;
-
+        $scope.characterImage = "";
 
         $scope.$watch('character', function (newValue, oldValue) {
             $scope.achievmentPoints = $scope.character.achievementPoints;
         }, true);
 
-
-        var guildInfo = {};
         var staticResources = "http://us.battle.net/static-render/us/";
-
-        //https://us.api.battle.net/wow/guild/:realm/:guildname?fields=members&apikey=client_id
-        var url = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir bosscollection?fields=members&apikey=client_id";
-        $http.jsonp(url).success(function (data) {
-            console.log(data);
-
-        });
 
         $scope.getCharacter = function() {
 
@@ -135,6 +126,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.classColor = charService.getClass($scope.character) + "ClassColor";
 
                 $scope.iLvl = charService.getiLvl($scope.character);
+
+                $scope.characterImage = staticResources + result.thumbnail;
 
 
             });

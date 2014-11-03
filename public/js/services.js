@@ -47,7 +47,8 @@ service.factory('charService', function($http, $q){
             getSpecs: function(character){
 
                 return character.items.averageItemLevelEquipped
-            }
+            },
+
 
         };
 
