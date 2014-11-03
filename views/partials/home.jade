@@ -74,15 +74,65 @@ script#home(type="text/ng-template")
                 div().row.center
                     div.col-md-4
                     div.col-md-4.wodBanner
-            div.container.text-center
-                div.row
-                    div(ng-repeat = "raid in wodData", class = "guildProgression").col-md-3.col-sm-3
-                        h2.text-center.raidHeaders
-                            {{raid.name}}
-                        div()
-                            div.progress-data
-                                h3
-                                    {{raid.currentKills}}/{{raid.total}}
+            div.container
+                tabset()
+                    tab(heading = "Normals")
+                        div.container.text-center
+                            div.row
+                                div(ng-repeat = "raid in wodNormalsData", class = "guildProgression").col-md-3.col-sm-3
+                                    h2.text-center.raidHeaders
+                                        {{raid.name}}
+                                    div()
+                                        div.progress-data
+                                            h3
+                                                {{raid.currentKills}}/{{raid.total}}
+                                        div(
+                                            round-progress,
+                                            max="raid.total",
+                                            current="raid.currentKills",
+                                            color="{{progressColor}}",
+                                            bgcolor="{{bgColor}}",
+                                            radius="{{radius}}",
+                                            stroke="{{stroke}}",
+                                            semi="isSemi")
+                    tab(heading = "Heroics")
+                        div.container.text-center
+                            div.row
+                                div(ng-repeat = "raid in wodHeroicData", class = "guildProgression").col-md-3.col-sm-3
+                                    h2.text-center.raidHeaders
+                                        {{raid.name}}
+                                    div()
+                                        div.progress-data
+                                            h3
+                                                {{raid.currentKills}}/{{raid.total}}
+                                        div(
+                                            round-progress,
+                                            max="raid.total",
+                                            current="raid.currentKills",
+                                            color="{{progressColor}}",
+                                            bgcolor="{{bgColor}}",
+                                            radius="{{radius}}",
+                                            stroke="{{stroke}}",
+                                            semi="isSemi")
+
+
+    div(class = "well").mopGradient
+        div().container.text-center
+            div.container
+                div().row.center
+                    div.col-md-4
+                    div.col-md-4.mopBanner
+            tabset()
+               tab(heading = "Normals")
+                   div.container.text-center
+                    div.row
+                        div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-4
+                            h2.text-center.raidHeaders
+                                {{raid.name}}
+                            div()
+                                div.progress-data
+                                    h3
+                                        {{raid.currentKills}}/{{raid.total}}
                             div(
                                 round-progress,
                                 max="raid.total",
@@ -92,30 +142,25 @@ script#home(type="text/ng-template")
                                 radius="{{radius}}",
                                 stroke="{{stroke}}",
                                 semi="isSemi")
-    div(class = "well").mopGradient
-        div().container.text-center
-            div.container
-                div().row.center
-                    div.col-md-4
-                    div.col-md-4.mopBanner
-            div.container.text-center
-                div.row
-                    div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-4
-                        h2.text-center.raidHeaders
-                            {{raid.name}}
-                        div()
-                            div.progress-data
-                                h3
-                                    {{raid.currentKills}}/{{raid.total}}
-                        div(
-                            round-progress,
-                            max="raid.total",
-                            current="raid.currentKills",
-                            color="{{progressColor}}",
-                            bgcolor="{{bgColor}}",
-                            radius="{{radius}}",
-                            stroke="{{stroke}}",
-                            semi="isSemi")
+               tab(heading = "Heroics")
+                    div.container.text-center
+                        div.row
+                            div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-4
+                                h2.text-center.raidHeaders
+                                    {{raid.name}}
+                                div()
+                                    div.progress-data
+                                        h3
+                                            {{raid.currentKills}}/{{raid.total}}
+                                div(
+                                    round-progress,
+                                    max="raid.total",
+                                    current="raid.currentKills",
+                                    color="{{progressColor}}",
+                                    bgcolor="{{bgColor}}",
+                                    radius="{{radius}}",
+                                    stroke="{{stroke}}",
+                                    semi="isSemi")
     div(class = "well").cataGradient
         div().container.text-center
             div.container
@@ -219,6 +264,7 @@ script#home(type="text/ng-template")
                             radius="{{radius}}",
                             stroke="{{stroke}}",
                             semi="isSemi")
+
 
 
 

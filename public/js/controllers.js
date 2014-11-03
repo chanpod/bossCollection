@@ -90,6 +90,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', function($scope, $location, $http, charService){
 
 
+
         $scope.progressCurrent = 27;
         $scope.progressMax = 50;
         $scope.stroke = 15;
@@ -99,15 +100,38 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.isSemi = false;
 
 
-        $scope.wodData = {
+        $scope.wodNormalsData = {
             "0hm" :{
                 "name" : "Highmaul",
-                "currentKills" : 0,
+                "currentKills" : 7,
                 "total" : 7
             },
             "1brf" : {
                 "name" : "Blackrock Foundry",
                 "currentKills" : 0,
+                "total" : 7
+            },
+            "2world" : {
+                "name" : "World Bosses",
+                "currentKills" : 2,
+                "total" : 3
+            },
+            "3total" : {
+                "name" : "Total",
+                "total": 17,
+                "currentKills" : 9
+            }
+        };
+
+        $scope.wodHeroicData = {
+            "0hm" :{
+                "name" : "Highmaul",
+                "currentKills" : 2,
+                "total" : 7
+            },
+            "1brf" : {
+                "name" : "Blackrock Foundry",
+                "currentKills" : 3,
                 "total" : 7
             },
             "2world" : {
@@ -118,7 +142,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             "3total" : {
                 "name" : "Total",
                 "total": 17,
-                "currentKills" : 0
+                "currentKills" : 5
             }
         };
 
@@ -241,22 +265,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 "currentKills" : 0
             }
         };
-
-
-
-
-        $scope.mogushanVaultsRegTotal = 13;
-        $scope.mopTotalBosses = 50;
-
-        $scope.$watch('mopTotal', function (newValue, oldValue) {
-            newValue.percentage = newValue.label / $scope.mopTotalBosses;
-        }, true);
-
-
-        $scope.$watch('mogushanVaults', function (newValue, oldValue) {
-            newValue.percentage = newValue.label / $scope.mogushanVaultsRegTotal;
-        }, true);
-
 
 
         $scope.welcomeMessage = "Welcome to your Boss Collection"
