@@ -1,4 +1,4 @@
-'use strict';
+'use Strict'
 
 angular.module('angular-svg-round-progress', [])
     .directive('roundProgress', ['$timeout', function($timeout){
