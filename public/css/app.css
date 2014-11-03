@@ -2,7 +2,7 @@
 
 body {
 
-  padding-bottom: 70px;
+
 }
 
 .angular-google-map-container { height: 400px; }
@@ -61,7 +61,25 @@ body {
     }
 }
 
+.well{
+    margin:0px;
 
+    border: 0px;
+}
+
+.guildWell {
+    background-color: #069;
+    color:white;
+}
+
+.guildWell small{
+    color:white;
+}
+
+.footer{
+    background-color:black;
+    color:white;
+}
 
 .center{
     display: table;

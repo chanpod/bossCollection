@@ -23,7 +23,7 @@ script#home(type="text/ng-template")
                             input(type = "input", class = "form-control", id ="iRealmName", ng-model = "characterName", placeholder = "Enter Character Name")
                         button(type = "button", class = "btn btn-primary", ng-click = "getCharacter()")
                            | Get Info
-    div(class = "well")
+    div(class = "well").guildWell
         div().container
             div()
                 h1.text-center
@@ -42,7 +42,7 @@ script#home(type="text/ng-template")
                             br
                             small
                                 | #ofMembers
-    div(ng-class = "classColor").well
+    div(ng-class = "classColor", ng-show = "false").well
         div.container
             img(ng-src = "{{characterImage}}").fixedPosition
             div()

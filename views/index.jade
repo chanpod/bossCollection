@@ -21,6 +21,34 @@ block body
                             //a(href="/createEvent") Create an event
 
     div(ng-view)
+
+    div.footer
+        div.container
+            div.row.text-center
+                h3
+                    | Libraries used
+                div.col-md-6.text-center
+
+                    br
+                    span
+                        a(href = "http://getbootstrap.com/")
+                            | Bootstrap
+                    br
+                    span
+                        | Blizzard api
+                div.col-md-6
+                    br
+                    span
+                        a(a href = "https://github.com/crisbeto/angular-svg-round-progressbar")
+                            | Cirsbeto round progress
+                    br
+                    span
+                        a(a href = "https://angularjs.org/")
+                            | AngularJS
+                    br
+                    span
+                        a(a href = "http://nodejs.org/")
+                            | NodeJS
     include partials/home
 
 
