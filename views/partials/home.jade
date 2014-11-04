@@ -23,7 +23,7 @@ script#home(type="text/ng-template")
                             input(type = "input", class = "form-control", id ="iRealmName", ng-model = "characterName", placeholder = "Enter Character Name")
                         button(type = "button", class = "btn btn-primary", ng-click = "getCharacter()")
                            | Get Info
-                           img(ng-show = "showLoadingGif", src = "images/loading.gif")
+                        img(ng-show = "showLoadingGif", src = "images/loading.gif")
     div(class = "well", ng-show = "showGuild").guildWell
         div().container
             div()
