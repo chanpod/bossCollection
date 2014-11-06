@@ -54,8 +54,12 @@ service.factory('charService', function($http, $q){
 
     return charApi;
     }).factory('guildServices', function(){
+        //terrace,
+        var mopRaidAchIds = ["6689"];
 
-
+        var guildApi = {
+            checkMogushanVaults
+        }
 
     return guildApi;
     });
