@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
 
+exports.checkGuild = function(req, res){
+    res.send("Hello World");
+};
 
 /*
  * GET home page.
@@ -12,4 +15,8 @@ exports.index = function(req, res){
 exports.partials = function (req, res) {
   var name = req.params.name;
   res.render('partials/' + name);
+};
+
+exports.checkGuild = function(req, res){
+    res.send("hello world");
 };

@@ -87,10 +87,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             };
         }
     }])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', function($scope, $location, $http, charService, $timeout){
+    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices',
+        function($scope, $location, $http, charService, $timeout, guildServices){
 
 
-
+            guildServices.checkGuild();
         $scope.progressCurrent = 27;
         $scope.progressMax = 50;
         $scope.stroke = 15;

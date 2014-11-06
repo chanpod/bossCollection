@@ -12,6 +12,7 @@ var express = require('express'),
   http = require('http'),
   path = require('path');
 
+
 var app = express();
 var port = process.env.PORT || 4000;
 
@@ -23,8 +24,6 @@ app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-
 /**
  * Routes
  */
@@ -32,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var router = express.Router();
 
 router.get('/', routes.index);
+router.get('/checkGuild', routes.checkGuild);
 
 
 

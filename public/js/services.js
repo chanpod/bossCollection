@@ -45,21 +45,24 @@ service.factory('charService', function($http, $q){
 
             },
             getSpecs: function(character){
-
                 return character.items.averageItemLevelEquipped
             },
-
-
         };
 
     return charApi;
-    }).factory('guildServices', function(){
+    }).factory('guildServices', function($http, $q, $resource){
         //terrace,
-        var mopRaidAchIds = ["6689"];
+        //var mopRaidAchIds = ["6689"];
 
         var guildApi = {
-            checkMogushanVaults
-        }
+            checkGuild: function(guild) {
 
-    return guildApi;
-    });
+                return $resource('/checkGuild', {guild}, {
+                    check: {method:'GET', params:{gameId:''}, isArray:true}
+                });
+
+            }
+        };
+
+        return guildApi;
+    })
