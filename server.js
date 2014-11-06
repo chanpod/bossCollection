@@ -33,33 +33,7 @@ var router = express.Router();
 router.get('/', routes.index);
 router.get('/checkGuild', routes.checkGuild);
 
-
-
 app.use('/', router);
-
-var headers = {
-  'Content-Type': 'application/json'
-};
-
-var options = {
-  host: 'myServer.example.com',
-  port: 80,
-  path: '/user/TheReddest',
-  method: 'POST',
-  headers: headers
-};
-
-var req = http.request(options, function(res) {
-  res.setEncoding('utf-8');
-
-});
-
-req.on('error', function(e) {
-  // TODO: handle error.
-});
-
-
-req.end();
 
 /**
  * Start Server

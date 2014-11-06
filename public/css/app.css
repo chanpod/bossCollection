@@ -5,6 +5,10 @@ body {
 
 }
 
+.tabHeaders a{
+   color:white;
+}
+
 .angular-google-map-container { height: 400px; }
 
 

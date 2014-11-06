@@ -50,15 +50,20 @@ service.factory('charService', function($http, $q){
         };
 
     return charApi;
-    }).factory('guildServices', function($http, $q, $resource){
+    }).factory('guildServices', function($http, $q){
         //terrace,
         //var mopRaidAchIds = ["6689"];
 
         var guildApi = {
             checkGuild: function(guild) {
-
-                return $resource('/checkGuild', {guild}, {
-                    check: {method:'GET', params:{gameId:''}, isArray:true}
+                var url = "http://localhost:4000/checkGuild";
+                $http({
+                    url: url,
+                    method: "GET",
+                    params: {"test": "Passed Data"}
+                }).success(function (data) {
+                    console.log(data);
+                    return data
                 });
 
             }

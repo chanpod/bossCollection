@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-
+var fs = require('fs');
+var guildAchievements = JSON.parse(fs.readFileSync(__dirname + '/../data/apiDumps/guildAchievements.json', 'utf8'));
 exports.checkGuild = function(req, res){
     res.send("Hello World");
 };
@@ -18,5 +19,16 @@ exports.partials = function (req, res) {
 };
 
 exports.checkGuild = function(req, res){
+
+    //console.log(JSON.stringify(guildAchievements, 0, 4));
+    //console.log(req.query);
+
     res.send("hello world");
+};
+
+
+var findAchievement = function(id){
+
+
+
 };
