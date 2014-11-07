@@ -40,7 +40,7 @@ if(req.query.criteria) {
     res.header('Charset', 'utf-8')
     //res.send(req.query.callback + {"killCount": killCount});
 
-        res.json("Hello World");
+    res.jsonp("Hello World");
 }
 
 var sooCriteria = [23692, 23693, 23694, 23695,
