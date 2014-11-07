@@ -21,6 +21,7 @@ exports.checkGuild = function(req, res){
 
     var killCount = 0;
 console.log("Check if good.");
+console.log(req.query);
 if(req.query.criteria) {
 
     var guildCriteria = req.query.criteria;
