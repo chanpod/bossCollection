@@ -37,7 +37,7 @@ if(req.query.criteria) {
     console.log(killCount);
     res.header('Content-Type', 'application/json');
     res.header('Charset', 'utf-8')
-    res.send(req.query.callback + {"killCount": killCount};
+    res.send(req.query.callback + {"killCount": killCount});
         //res.send({"killCount": killCount});
 }
 
