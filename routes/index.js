@@ -35,7 +35,10 @@ if(req.query.criteria) {
     )
 }
     console.log(killCount);
-    res.send({"killCount": killCount});
+    res.header('Content-Type', 'application/json');
+    res.header('Charset', 'utf-8')
+    res.send(req.query.callback + {"killCount": killCount};
+        //res.send({"killCount": killCount});
 }
 
 var sooCriteria = [23692, 23693, 23694, 23695,

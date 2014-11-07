@@ -44,7 +44,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
         $scope.wotlkData = progressionData.wotlkData;
 
+            var promise2 = guildServices.checkGuild({});
 
+            promise2.then(function(data){
+                $scope.mopData["4soo"].currentKills = data.killCount;
+            }, function(error){
+                console.log(error);
+            });
 
 
         $scope.$watch('character', function (newValue, oldValue) {

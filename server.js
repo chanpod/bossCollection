@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var router = express.Router();
 
 router.get('/', routes.index);
-router.get('/checkGuild', routes.checkGuild);
+router.post('/checkGuild', routes.checkGuild);
 
 app.use('/', router);
 
