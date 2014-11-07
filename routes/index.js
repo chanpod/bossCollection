@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-var fs = require('fs');
-var guildAchievements = JSON.parse(fs.readFileSync(__dirname + '/../data/apiDumps/guildAchievements.json', 'utf8'));
+
 exports.checkGuild = function(req, res){
     res.send("Hello World");
 };
@@ -20,15 +19,44 @@ exports.partials = function (req, res) {
 
 exports.checkGuild = function(req, res){
 
-    //console.log(JSON.stringify(guildAchievements, 0, 4));
-    //console.log(req.query);
+    var killCount = 0;
 
-    res.send("hello world");
-};
+if(req.query.criteria) {
 
-
-var findAchievement = function(id){
+    var guildCriteria = req.query.criteria;
 
 
+    sooCriteria.forEach(function (raidID) {
+            if (binarySearch(raidID, guildCriteria)) {
 
-};
+                killCount++;
+            }
+        }
+    )
+}
+    console.log(killCount);
+    res.send({"killCount": killCount});
+}
+
+var sooCriteria = [23692, 23693, 23694, 23695,
+    23696, 23697, 23698, 23699,
+    23700, 23702, 23703, 23701,
+    23704, 23705];
+
+function binarySearch(key, inputArray) {
+
+    var low  = 0,
+        high = inputArray.length - 1,
+        mid;
+
+    while (low <= high) {
+        mid = low + (high - low) / 2;
+        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
+
+        if (key < inputArray[mid]) { high = mid - 1; }
+        else if (key > inputArray[mid]) { low = mid + 1; }
+        else { return mid; }
+    }
+
+    return null;
+}

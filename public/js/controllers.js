@@ -87,11 +87,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             };
         }
     }])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices',
-        function($scope, $location, $http, charService, $timeout, guildServices){
+    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression',
+        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression){
 
-
-            guildServices.checkGuild();
         $scope.progressCurrent = 27;
         $scope.progressMax = 50;
         $scope.stroke = 15;
@@ -101,175 +99,27 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.isSemi = false;
         $scope.showGuild = false;
 
-
-        $scope.wodNormalsData = {
-            "0hm" :{
-                "name" : "Highmaul",
-                "currentKills" : 7,
-                "total" : 7
-            },
-            "1brf" : {
-                "name" : "Blackrock Foundry",
-                "currentKills" : 0,
-                "total" : 7
-            },
-            "2world" : {
-                "name" : "World Bosses",
-                "currentKills" : 2,
-                "total" : 3
-            },
-            "3total" : {
-                "name" : "Total",
-                "total": 17,
-                "currentKills" : 9
-            }
-        };
-
-        $scope.wodHeroicData = {
-            "0hm" :{
-                "name" : "Highmaul",
-                "currentKills" : 2,
-                "total" : 7
-            },
-            "1brf" : {
-                "name" : "Blackrock Foundry",
-                "currentKills" : 3,
-                "total" : 7
-            },
-            "2world" : {
-                "name" : "World Bosses",
-                "currentKills" : 0,
-                "total" : 3
-            },
-            "3total" : {
-                "name" : "Total",
-                "total": 17,
-                "currentKills" : 5
-            }
-        };
-
-        $scope.mopData = {
-            "0msv" :{
-                "name" : "Mogu'shan vaults",
-                "currentKills" : 0,
-                "total" : 6
-            },
-            "1hof" : {
-                "name" : "Heart of Fear",
-                "currentKills" : 0,
-                "total" : 6
-            },
-            "2tos" : {
-                "name" : "Terrace of Endless Spring",
-                "currentKills" : 0,
-                "total" : 4
-            },
-            "3tot" : {
-                "name" : "Throne of Thunder",
-                "currentKills" : 0,
-                "total" : 13
-            },
-            "4soo" : {
-                "name" : "Siege of Orgrimmar",
-                "currentKills" : 0,
-                "total" : 14
-            },
-            "5total" : {
-                "name" : "Total",
-                "total": 43,
-                "currentKills" : 0
-            }
-
-        };
-
-        $scope.cataData = {
-            "0bwd" :{
-                "name" : "Blackwing Descent",
-                "currentKills" : 0,
-                "total" : 6
-            },
-            "1bot" : {
-                "name" : "Bastion of Twilight",
-                "currentKills" : 0,
-                "total" : 5
-            },
-            "2tfw" : {
-                "name" : "Throne of the Four Winds",
-                "currentKills" : 0,
-                "total" : 2
-            },
-            "3bd" : {
-                "name" : "Baradin Hold",
-                "currentKills" : 0,
-                "total" : 3
-            },
-            "4firelands" : {
-                "name" : "Firelands",
-                "currentKills" : 0,
-                "total" : 7
-            },
-            "5ds" : {
-                "name" : "DragonSoul",
-                "currentKills" : 0,
-                "total" : 8
-            },
-            "6total" : {
-                "name" : "Total",
-                "total": 31,
-                "currentKills" : 0
-            }
-        };
-
-        $scope.wotlkData = {
-            "0nax" :{
-                "name" : "Naxxramas",
-                "currentKills" : 0,
-                "total" : 19
-            },
-            "1onyx" : {
-                "name" : "Bastion of Twilight",
-                "currentKills" : 0,
-                "total" : 1
-            },
-            "2eoe" : {
-                "name" : "Eye of Eternity",
-                "currentKills" : 0,
-                "total" : 1
-            },
-            "3voa" : {
-                "name" : "Vault of Archavon",
-                "currentKills" : 0,
-                "total" : 4
-            },
-            "4coa" : {
-                "name" : "Chamber of Aspects",
-                "currentKills" : 0,
-                "total" : 2
-            },
-            "5cc" : {
-                "name" : "Crusaders' Coliseum",
-                "currentKills" : 0,
-                "total" : 5
-            },
-            "6ulduar" : {
-                "name" : "Ulduar",
-                "currentKills" : 0,
-                "total" : 14
-            },
-            "7icc" : {
-                "name" : "Ice Crown Citadel",
-                "currentKills" : 0,
-                "total" : 12
-            },
-            "8total" : {
-                "name" : "Total",
-                "total": 58,
-                "currentKills" : 0
-            }
-        };
+        var progressionData = raidProgression.getRaidsData();
 
 
-        $scope.welcomeMessage = "Welcome to your Boss Collection"
+        $scope.wodNormalsData = progressionData.wodNormalsData;
+
+        $scope.wodHeroicData = progressionData.wodHeroicData;
+
+        $scope.wodMythicData = progressionData.wodMythicData;
+
+        $scope.mopNormalData = progressionData.mopNormalData;
+
+        $scope.mopHeroicData = progressionData.mopHeroicData;
+
+        $scope.cataNormalData = progressionData.cataNormalData;
+
+        $scope.cataHeroicData = progressionData.cataHeroicData;
+
+        $scope.wotlkData = progressionData.wotlkData;
+
+
+        $scope.welcomeMessage = "Welcome to your Boss Collection";
         $scope.guild = "";
         $scope.realm = "Zul'jin";
         $scope.characterName = "Defragmentor";
@@ -284,7 +134,18 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.achievmentPoints = $scope.character.achievementPoints;
         }, true);
 
-        var staticResources = "http://us.battle.net/static-render/us/";
+        $scope.getGuild = function(){
+
+            var promise = guildServices.getGuild($scope.realm, $scope.guild);
+
+            promise.then(function(data){
+                var promise2 = guildServices.checkGuild(data.achievements);
+
+                promise2.then(function(data){
+                    $scope.mopData["4soo"].currentKills = data.killCount;
+                })
+            })
+        }
 
         $scope.getCharacter = function() {
 
