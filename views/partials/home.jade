@@ -3,8 +3,11 @@ script#home(type="text/ng-template")
         div(class = "container")
             h1.
                 {{welcomeMessage}}
-            p.
-                Enter your Realm and Guild name to see your raid progression!
+            p
+                | Enter your Realm and Guild name to see your raid progression!
+            p
+                i
+                   | Site is still under construction. Some functionality may not work yet.
     div(class = "well")
         div.container
             h2.text-center
@@ -112,6 +115,25 @@ script#home(type="text/ng-template")
                                             radius="{{radius}}",
                                             stroke="{{stroke}}",
                                             semi="isSemi")
+                    tab(heading = "Mythic")
+                        div.container.text-center
+                            div.row
+                                div(ng-repeat = "raid in wodMythicData", class = "guildProgression").col-md-3.col-sm-3
+                                    h2.text-center.raidHeaders
+                                        {{raid.name}}
+                                    div()
+                                        div.progress-data
+                                            h3
+                                                {{raid.currentKills}}/{{raid.total}}
+                                        div(
+                                            round-progress,
+                                            max="raid.total",
+                                            current="raid.currentKills",
+                                            color="{{progressColor}}",
+                                            bgcolor="{{bgColor}}",
+                                            radius="{{radius}}",
+                                            stroke="{{stroke}}",
+                                            semi="isSemi")
 
 
     div(class = "well").mopGradient
@@ -124,7 +146,7 @@ script#home(type="text/ng-template")
                tab(heading = "Normals")
                    div.container.text-center
                     div.row
-                        div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-4
+                        div(ng-repeat = "raid in mopNormalData", class = "guildProgression").col-md-2.col-sm-4
                             h2.text-center.raidHeaders
                                 {{raid.name}}
                             div()
@@ -143,7 +165,7 @@ script#home(type="text/ng-template")
                tab(heading = "Heroics")
                     div.container.text-center
                         div.row
-                            div(ng-repeat = "raid in mopData", class = "guildProgression").col-md-2.col-sm-4
+                            div(ng-repeat = "raid in mopHeroicData", class = "guildProgression").col-md-2.col-sm-4
                                 h2.text-center.raidHeaders
                                     {{raid.name}}
                                 div()
@@ -165,15 +187,17 @@ script#home(type="text/ng-template")
                 div().row.center
                     div.col-md-4
                     div.col-md-4.cataBanner
-            div.container.text-center
-                div.row
-                    div(ng-repeat = "raid in cataData", class = "guildProgression").col-md-3.col-sm-4
-                        h2.text-center.raidHeaders
-                            {{raid.name}}
-                        div()
-                            div.progress-data
-                                h3
-                                    {{raid.currentKills}}/{{raid.total}}
+            tabset()
+               tab(heading = "Normals")
+                   div.container.text-center
+                    div.row
+                        div(ng-repeat = "raid in cataNormalData", class = "guildProgression").col-md-2.col-sm-4
+                            h2.text-center.raidHeaders
+                                {{raid.name}}
+                            div()
+                                div.progress-data
+                                    h3
+                                        {{raid.currentKills}}/{{raid.total}}
                             div(
                                 round-progress,
                                 max="raid.total",
@@ -183,6 +207,25 @@ script#home(type="text/ng-template")
                                 radius="{{radius}}",
                                 stroke="{{stroke}}",
                                 semi="isSemi")
+               tab(heading = "Heroics")
+                    div.container.text-center
+                        div.row
+                            div(ng-repeat = "raid in cataHeroicData", class = "guildProgression").col-md-2.col-sm-4
+                                h2.text-center.raidHeaders
+                                    {{raid.name}}
+                                div()
+                                    div.progress-data
+                                        h3
+                                            {{raid.currentKills}}/{{raid.total}}
+                                div(
+                                    round-progress,
+                                    max="raid.total",
+                                    current="raid.currentKills",
+                                    color="{{progressColor}}",
+                                    bgcolor="{{bgColor}}",
+                                    radius="{{radius}}",
+                                    stroke="{{stroke}}",
+                                    semi="isSemi")
 
     div(class = "well").wotlkGradient
         div().container.text-center
