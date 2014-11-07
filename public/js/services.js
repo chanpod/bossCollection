@@ -37,8 +37,6 @@ service.factory('charService', function($http, $q){
                     }
                 });
 
-
-
                 return className;
             },
             getiLvl: function(character){
@@ -117,7 +115,7 @@ var raidProgression = {
          "wodNormalsData" : {
             "0hm": {
                 "name": "Highmaul",
-                "currentKills": 0,
+                "currentKills": 4,
                 "total": 7
             },
             "1brf": {
@@ -133,7 +131,7 @@ var raidProgression = {
             "3total": {
                 "name": "Total",
                 "total": 17,
-                "currentKills": 0
+                "currentKills": 17
             }
         },
      "wodHeroicData" : {
