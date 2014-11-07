@@ -57,6 +57,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 var promise2 = guildServices.checkGuild(data.achievements);
 
                 promise2.then(function(data){
+                    console.log(data);
                     $scope.mopNormalData["4soo"].currentKills = data.killCount;
                 }, function(error){
                     console.log(error);
