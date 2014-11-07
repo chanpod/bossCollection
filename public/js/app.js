@@ -12,8 +12,11 @@ angular.module('BossCollection', [
   'ui.bootstrap'
 
 ]).
-config(function ($routeProvider, $locationProvider) {
-  $routeProvider.
+config(function ($routeProvider, $locationProvider, $httpProvider) {
+
+
+
+    $routeProvider.
     when('/', {
       templateUrl: 'home',
       controller: 'homeController'
@@ -37,6 +40,9 @@ config(function ($routeProvider, $locationProvider) {
     otherwise({
       redirectTo: '/'
     });
+
+    $httpProvider.defaults.useXDomain = true;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
   $locationProvider.html5Mode(true);
 });

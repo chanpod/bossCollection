@@ -52,20 +52,15 @@ service.factory('charService', function($http, $q){
 
     return charApi;
     }).factory('guildServices', function($http, $q){
-        //terrace,
-        //var mopRaidAchIds = ["6689"];
 
         var guildApi = {
             checkGuild: function(achievements) {
 
                 var deferred = $q.defer();
-
-                var url = "http://bosscollection.net/checkGuild";
-                $http({
-                    url: url,
-                    method : "GET",
-                    params: achievements
-                }).success(function (data) {
+                console.log("test");
+                var url = "http://bosscollection.net/checkGuild&jsonp=JSON_CALLBACK";
+                $http.jsonp(url).success(function (data) {
+                    console.log("testInner");
                     deferred.resolve(data);
 
                 },function(error){
@@ -80,17 +75,13 @@ service.factory('charService', function($http, $q){
                 var url = blizzApiRoot + "/guild/" + realm + "/" + guildName + '?' + getGuild + "&" + endUrl;
 
 
-                try {
                     $http.jsonp(url).success(function (data) {
                         console.log(data);
                         deferred.resolve(data)
                     }, function (error) {
                         deferred.reject(error);
                     });
-                }
-                catch(error){
-                    deferred.reject(error);
-                }
+
 
                 return deferred.promise;
             }
