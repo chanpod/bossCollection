@@ -20,11 +20,11 @@ exports.partials = function (req, res) {
 exports.checkGuild = function(req, res){
 
     var killCount = 0;
-
+console.log("Check if good.");
 if(req.query.criteria) {
 
     var guildCriteria = req.query.criteria;
-
+    console.log("Criteria exist.");
 
     sooCriteria.forEach(function (raidID) {
             if (binarySearch(raidID, guildCriteria)) {
