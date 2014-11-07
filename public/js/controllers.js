@@ -4,9 +4,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         function($scope, $location, $http, charService, $timeout, guildServices, raidProgression){
 
 
-        $(".dial").knob({
-            'readOnly' : true
-        });
+
 
         $scope.stroke = 9;
         $scope.radius = 40;
@@ -94,6 +92,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.showLoadingGif = false;
             }, 5000);
         }
+
     }]);
 
 
