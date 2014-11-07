@@ -18,10 +18,7 @@ script#home(type="text/ng-template")
                         div(class = "form-group")
                             label(for="guildName") Guild
                             input(type = "input", class = "form-control", id ="iRealmName", ng-model = "guild", placeholder = "Enter Guild Name")
-                        div(class = "form-group", ng-show = "false")
-                            label(for="characterName") Character
-                            input(type = "input", class = "form-control", id ="iRealmName", ng-model = "characterName", placeholder = "Enter Character Name")
-                        button(type = "button", class = "btn btn-primary", ng-click = "getCharacter()")
+                        button(type = "button", class = "btn btn-primary", ng-click = "getGuild()")
                            | Get Info
                         img(ng-show = "showLoadingGif", src = "images/loading.gif")
     div(class = "well", ng-show = "showGuild").guildWell

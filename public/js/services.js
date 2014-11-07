@@ -3,11 +3,13 @@
 /* Services */
 var service = angular.module("BossCollection.services", ["ngResource"]);
 var local = "locale=en_US";
-var endUrl = "&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d&jsonp=JSON_CALLBACK";
+var endUrl = local + "&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d&jsonp=JSON_CALLBACK";
 var blizzApiRoot = "https://us.api.battle.net/wow/";
 var getItems = "fields=items";
 var getClasses = "data/character/classes";
+var getGuild = "fields=achievements";
 //https://us.api.battle.net/wow/data/character/classes?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
+//https://us.api.battle.net/wow/guild/Zul'jin/crux?fields=achievements&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
 var classes = ["warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
 
 service.factory('charService', function($http, $q){
@@ -50,17 +52,38 @@ service.factory('charService', function($http, $q){
         };
 
     return charApi;
-    }).factory('guildServices', function($http, $q, $resource){
+    }).factory('guildServices', function($http, $q){
         //terrace,
         //var mopRaidAchIds = ["6689"];
 
         var guildApi = {
-            checkGuild: function(guild) {
+            checkGuild: function(achievements) {
 
-                return $resource('/checkGuild', {guild}, {
-                    check: {method:'GET', params:{gameId:''}, isArray:true}
+                var deferred = $q.defer();
+
+                var url = "http://localhost:4000/checkGuild";
+                $http({
+                    url: url,
+                    method : "GET",
+                    params: achievements
+                }).success(function (data) {
+                    deferred.resolve(data);
+
+                });
+                return deferred.promise;
+            },
+
+            getGuild: function(realm, guildName){
+
+                var deferred = $q.defer();
+                var url = blizzApiRoot + "/guild/" + realm + "/" + guildName + '?' + getGuild + "&" + endUrl;
+
+                $http.jsonp(url).success(function (data) {
+                    console.log(data);
+                    deferred.resolve(data)
                 });
 
+                return deferred.promise;
             }
         };
 
