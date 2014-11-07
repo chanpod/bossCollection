@@ -36,9 +36,10 @@ if(req.query.criteria) {
 }
     console.log(killCount);
     console.log(req.query.callback);
-   // res.header('Content-Type', 'application/json');
-    //res.header('Charset', 'utf-8')
+    res.header('Content-Type', 'application/json');
+    res.header('Charset', 'utf-8')
     //res.send(req.query.callback + {"killCount": killCount});
+
         res.json("Hello World");
 }
 

@@ -48,6 +48,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             promise2.then(function(data){
                 $scope.mopData["4soo"].currentKills = data.killCount;
+                console.log("Working?");
             }, function(error){
                 console.log(error);
             });

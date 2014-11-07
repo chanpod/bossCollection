@@ -64,6 +64,7 @@ service.factory('charService', function($http, $q){
                     deferred.resolve(data);
 
                 },function(error){
+                    console.log("failed");
                     deferred.reject(error);
                 });
                 return deferred.promise;
