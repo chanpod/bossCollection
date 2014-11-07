@@ -58,7 +58,7 @@ service.factory('charService', function($http, $q){
 
                 var deferred = $q.defer();
                 console.log("test");
-                var url = "http://bosscollection.net/checkGuild?jsonp=JSONP";
+                var url = "http://bosscollection.net/checkGuild?jsonp=?";
                 $http.jsonp(url).success(function (data) {
                     console.log("testInner");
                     deferred.resolve(data);
