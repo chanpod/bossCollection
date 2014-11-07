@@ -59,7 +59,11 @@ service.factory('charService', function($http, $q){
                 var deferred = $q.defer();
                 console.log("test");
                 var url = "http://bosscollection.net/checkGuild?callback=JSON_CALLBACK";
-                $http.jsonp(url, {"test" : "Hello"}).success(function (data) {
+                $http({
+                    method: "jsonp",
+                    url: url,
+                    params: achievements
+                }).success(function (data) {
                     console.log("testInner");
                     deferred.resolve(data);
 

@@ -20,8 +20,7 @@ exports.partials = function (req, res) {
 exports.checkGuild = function(req, res){
 
     var killCount = 0;
-console.log("Check if good.");
-console.log(req.query.test);
+console.log("Request for Guild kill count...");
 if(req.query.criteria) {
 
     var guildCriteria = req.query.criteria;
@@ -35,7 +34,7 @@ if(req.query.criteria) {
         }
     )
 }
-    console.log(killCount);
+    console.log("Guild kill count: " + killCount);
 
     res.header('Content-Type', 'application/json');
     res.header('Charset', 'utf-8')
