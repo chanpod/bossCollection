@@ -62,7 +62,7 @@ service.factory('charService', function($http, $q){
 
                 var deferred = $q.defer();
 
-                var url = "http://localhost:4000/checkGuild";
+                var url = "http://bosscollection.net/checkGuild";
                 $http({
                     url: url,
                     method : "GET",
@@ -80,13 +80,17 @@ service.factory('charService', function($http, $q){
                 var url = blizzApiRoot + "/guild/" + realm + "/" + guildName + '?' + getGuild + "&" + endUrl;
 
 
-
-                $http.jsonp(url).success(function (data) {
-                    console.log(data);
-                    deferred.resolve(data)
-                },function(error){
+                try {
+                    $http.jsonp(url).success(function (data) {
+                        console.log(data);
+                        deferred.resolve(data)
+                    }, function (error) {
+                        deferred.reject(error);
+                    });
+                }
+                catch(error){
                     deferred.reject(error);
-                });
+                }
 
                 return deferred.promise;
             }

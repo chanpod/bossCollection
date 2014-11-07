@@ -135,7 +135,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         }, true);
 
         $scope.getGuild = function(){
-
+            $scope.showLoadingGif = true;
             var promise = guildServices.getGuild($scope.realm, $scope.guild);
 
             promise.then(function(data){
@@ -144,12 +144,17 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 promise2.then(function(data){
                     $scope.mopData["4soo"].currentKills = data.killCount;
                 })
-            })
+            },function(error){
+                console.log(error);
+                    $scope.showLoadingGif = false;
+            });
+
         }
 
         $scope.getCharacter = function() {
 
             $scope.showLoadingGif = true;
+
             var promise = charService.getCharacter($scope.realm, $scope.characterName);
 
             promise.then(function(result){
@@ -165,8 +170,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             },
             function(error){
+                console.log(error);
                 $scope.showLoadingGif = false;
             });
+
 
             $timeout(function(){
                 $scope.showLoadingGif = false;
