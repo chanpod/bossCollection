@@ -70,6 +70,8 @@ service.factory('charService', function($http, $q){
                 }).success(function (data) {
                     deferred.resolve(data);
 
+                },function(error){
+                    deferred.reject(error);
                 });
                 return deferred.promise;
             },
