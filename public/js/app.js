@@ -21,22 +21,10 @@ config(function ($routeProvider, $locationProvider, $httpProvider) {
       templateUrl: 'home',
       controller: 'homeController'
     }).
-    when('/createEvent', {
-      templateUrl: 'createEvent',
-      controller: 'createEventController'
+    when('/mkdir', {
+      templateUrl: 'mkdirHome',
+      controller: 'mkdirController'
     }).
-      when('/viewEvent/:eventID', {
-          templateUrl: 'viewEvent',
-          controller: 'viewEventController'
-      }).
-      when('/viewEvent', {
-          templateUrl: 'viewAllEvents',
-          controller: 'viewAllEventsController'
-      }).
-      when('/gMaps', {
-          templateUrl: 'gMaps',
-          controller: 'gMapsController'
-      }).
     otherwise({
       redirectTo: '/'
     });

@@ -54,11 +54,14 @@ service.factory('charService', function($http, $q){
     }).factory('guildServices', function($http, $q){
 
         var guildApi = {
+
             checkGuild: function(achievements) {
 
                 var deferred = $q.defer();
-                console.log("test");
+
                 var url = "http://bosscollection.net/checkGuild?callback=JSON_CALLBACK";
+                console.log("Making JSONP call...");
+                console.log(achievements);
                 $http({
                     method: "jsonp",
                     url: url,
@@ -73,7 +76,31 @@ service.factory('charService', function($http, $q){
                 });
                 return deferred.promise;
             },
+            getGuild: function(realm, guildName){
 
+                var deferred = $q.defer();
+
+                var url = "http://localhost:4000/getGuild?callback=JSON_CALLBACK";
+                console.log("Making JSONP call...");
+                var guildRequest = { "realm" : realm,
+                                    "guild" : guildName}
+                $http({
+                    method: "jsonp",
+                    url: url,
+                    params: guildRequest
+                }).success(function (data) {
+                    console.log("testInner");
+                    console.log(data);
+                    deferred.resolve(data);
+
+                },function(error){
+                    console.log("failed");
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            }
+        };
+/*
             getGuild: function(realm, guildName){
 
                 var deferred = $q.defer();
@@ -91,7 +118,7 @@ service.factory('charService', function($http, $q){
                 return deferred.promise;
             }
         };
-
+*/
         return guildApi;
     }).factory('raidProgression', function(){
 

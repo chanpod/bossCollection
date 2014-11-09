@@ -68,6 +68,10 @@ body {
     border: 0px;
 }
 
+.blueLinks a:hover{
+    color:white
+}
+
 .guildWell {
     background-color: #069;
     color:white;
@@ -80,6 +84,7 @@ body {
 .footer{
     background-color:black;
     color:white;
+    height:100%;
 }
 
 .center{

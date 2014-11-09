@@ -51,9 +51,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             var promise = guildServices.getGuild($scope.realm, $scope.guild);
 
             promise.then(function(data){
+                console.log(data);
                 var promise2 = guildServices.checkGuild(data.achievements);
 
                 promise2.then(function(data){
+                    console.log(data);
                     $scope.mopNormalData["4soo"].currentKills = data.killCount;
                 }, function(error){
                     console.log(error);
@@ -93,7 +95,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }, 5000);
         }
 
-    }]);
+    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression',
+        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression){
+
+
+            }]);
 
 
 
