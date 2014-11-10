@@ -113,7 +113,7 @@ var raidProgression = {
     "wodNormalsData" : {
         "0hm": {
             "name": "Highmaul",
-            "currentKills": 4,
+            "currentKills": 0,
             "total": 7
         },
         "1brf": {
@@ -129,7 +129,7 @@ var raidProgression = {
         "3total": {
             "name": "Total",
             "total": 17,
-            "currentKills": 17
+            "currentKills": 0
         }
     },
     "wodHeroicData" : {
