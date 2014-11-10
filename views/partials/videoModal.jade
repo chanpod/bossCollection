@@ -2,4 +2,5 @@ script#videoModal(type="text/ng-template")
     div(class="modal-header")
         h3(class="modal-title")
         div(class="modal-body")
-            iframe(ng-src="{{getIframeSrc()}}", allowfullscreen).videoPlayer
+            div.container-fluid
+                iframe(ng-src="{{getIframeSrc()}}", allowfullscreen).videoPlayer
