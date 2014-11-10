@@ -22,7 +22,7 @@ var port = process.env.PORT || 4000;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.enable("jsonp callback");
 
 /**
  * Routes
@@ -31,35 +31,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 var router = express.Router();
 
 router.get('/', routes.index);
+router.get('/mkdir', routes.index);
 router.get('/checkGuild', routes.checkGuild);
-
-
+router.get('/getGuild', routes.getGuild);
 
 app.use('/', router);
-
-var headers = {
-  'Content-Type': 'application/json'
-};
-
-var options = {
-  host: 'myServer.example.com',
-  port: 80,
-  path: '/user/TheReddest',
-  method: 'POST',
-  headers: headers
-};
-
-var req = http.request(options, function(res) {
-  res.setEncoding('utf-8');
-
-});
-
-req.on('error', function(e) {
-  // TODO: handle error.
-});
-
-
-req.end();
 
 /**
  * Start Server

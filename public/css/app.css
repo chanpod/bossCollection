@@ -5,6 +5,10 @@ body {
 
 }
 
+.tabHeaders a{
+   color:white;
+}
+
 .angular-google-map-container { height: 400px; }
 
 
@@ -15,9 +19,8 @@ body {
 
 .progress-data{
 
-    margin-bottom:-90px;
+    margin-bottom:-75px;
     margin-top:65px;
-
 }
 
 
@@ -65,6 +68,10 @@ body {
     border: 0px;
 }
 
+.blueLinks a:hover{
+    color:white
+}
+
 .guildWell {
     background-color: #069;
     color:white;
@@ -77,6 +84,7 @@ body {
 .footer{
     background-color:black;
     color:white;
+    height:100%;
 }
 
 .center{
