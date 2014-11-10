@@ -60,68 +60,13 @@ service.factory('charService', function($http, $q){
             checkGuild: function(achievements) {
 //moguCriteria, hofCriteria, terraceCriteria,totCriteria, sooCriteria
                 var deferred = $q.defer();
-                var killCount = 0;
+
                 if (achievements.criteria) {
 
                     var guildCriteria = achievements.criteria;
-                    var totalKills = 0;
 
-                        sooCriteria.forEach(function (raidID) {
-                            if (binarySearch(raidID, guildCriteria)) {
-
-                                killCount++;
-                            }
-                        })
-                    raidProgression.mopNormalData["4soo"].currentKills = killCount;
-
-                    totalKills += killCount;
-                    killCount = 0;
-
-                    moguCriteria.forEach(function (raidID) {
-                        if (binarySearch(raidID, guildCriteria)) {
-
-                            killCount++;
-                        }
-                    })
-                    raidProgression.mopNormalData["0msv"].currentKills = killCount;
-
-                    totalKills += killCount;
-                    killCount = 0;
-
-                    hofCriteria.forEach(function (raidID) {
-                        if (binarySearch(raidID, guildCriteria)) {
-
-                            killCount++;
-                        }
-                    })
-                    raidProgression.mopNormalData["1hof"].currentKills = killCount;
-
-                    totalKills += killCount;
-                    killCount = 0;
-
-                    terraceCriteria.forEach(function (raidID) {
-                        if (binarySearch(raidID, guildCriteria)) {
-
-                            killCount++;
-                        }
-                    })
-                    raidProgression.mopNormalData["2tos"].currentKills = killCount;
-
-                    totalKills += killCount;
-                    killCount = 0;
-
-                    totCriteria.forEach(function (raidID) {
-                        if (binarySearch(raidID, guildCriteria)) {
-
-                            killCount++;
-                        }
-                    })
-                    raidProgression.mopNormalData["3tot"].currentKills = killCount;
-
-                    totalKills += killCount;
-                    killCount = 0;
-
-                    raidProgression.mopNormalData["5total"].currentKills = totalKills;
+                    checkMOP(guildCriteria);
+                    checkWOD(guildCriteria);
 
                     deferred.resolve(raidProgression);
 
@@ -159,6 +104,115 @@ service.factory('charService', function($http, $q){
     return progressionApi;
 })
 
+var sooCriteria = [23692, 23693, 23694, 23695,
+    23696, 23697, 23698, 23699,
+    23700, 23702, 23703, 23701,
+    23704, 23705];
+
+var moguCriteria = [22384, 19485, 19486, 19487, 19114, 19488];
+
+var hofCriteria = [19489, 19490, 19491, 19630, 19492, 19493];
+
+var terraceCriteria = [19651, 19652, 19494, 19495];
+
+var totCriteria = [23072, 23073, 23074, 23075, 23076, 23077, 23078, 23079, 23080, 23081, 23082, 23083];
+
+var hmCriteria = [25713, 25714, 25715, 25716, 25717, 25718, 25719];
+
+var brfCriteria = [25720, 25721, 25722, 25723, 25724, 25725, 25726, 25727, 25728, 25729];
+
+var checkMOP = function(guildCriteria){
+
+   var killCount = 0;
+    var totalKills = 0;
+//===================Begin MOP Normals ===============================
+    sooCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.mopNormalData["4soo"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    moguCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.mopNormalData["0msv"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    hofCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.mopNormalData["1hof"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    terraceCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.mopNormalData["2tos"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    totCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.mopNormalData["3tot"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    raidProgression.mopNormalData["5total"].currentKills = totalKills;
+}
+
+var checkWOD = function(guildCriteria){
+
+    var killCount = 0;
+    var totalKills = 0;
+
+    hmCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.wodNormalsData["0hm"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    brfCriteria.forEach(function (raidID) {
+        if (binarySearch(raidID, guildCriteria)) {
+
+            killCount++;
+        }
+    })
+    raidProgression.wodNormalsData["1brf"].currentKills = killCount;
+
+    totalKills += killCount;
+    killCount = 0;
+
+    raidProgression.wodNormalsData["3total"].currentKills = totalKills;
+}
 
 var raidProgression = {
     "wodNormalsData" : {
@@ -411,18 +465,7 @@ var raidProgression = {
     }
 };
 
-var sooCriteria = [23692, 23693, 23694, 23695,
-    23696, 23697, 23698, 23699,
-    23700, 23702, 23703, 23701,
-    23704, 23705];
 
-var moguCriteria = [22384, 19485, 19486, 19487, 19114, 19488];
-
-var hofCriteria = [19489, 19490, 19491, 19630, 19492, 19493];
-
-var terraceCriteria = [19651, 19652, 19494, 19495];
-
-var totCriteria = [23072, 23073, 23074, 23075, 23076, 23077, 23078, 23079, 23080, 23081, 23082, 23083];
 
 function binarySearch(key, inputArray) {
 
