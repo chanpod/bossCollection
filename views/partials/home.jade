@@ -10,10 +10,18 @@ script#home(type="text/ng-template")
                    | Site is still under construction. Some functionality may not work yet.
     div(class = "well")
         div.container
-            h2.text-center
-             | Search for Guild
-            div.container
-                div.container.col-md-12.col-lg-12.col-sm-12.center
+            div.row
+                div.col-md-4
+
+                    ins(class="adsbygoogle",
+                    style="width:300px;height:250px",
+                    data-ad-client="ca-pub-4895481554192451",
+                    data-ad-slot="8518047071")
+
+
+                div.col-md-4
+                    h2.text-center
+                     | Search for Guild
                     form(role="form")
                         div(class = "form-group")
                             label(for="realmName") Realm
@@ -24,6 +32,13 @@ script#home(type="text/ng-template")
                         button(type = "button", class = "btn btn-primary", ng-click = "getGuild()")
                            | Get Info
                         img(ng-show = "showLoadingGif", src = "images/loading.gif")
+                div.col-md-4
+
+                    ins(class="adsbygoogle",
+                        style="display:inline-block;width:300px;height:250px",
+                        data-ad-client="ca-pub-4895481554192451",
+                        data-ad-slot="6699576677")
+
     div(class = "well", ng-show = "showGuild").guildWell
         div().container
             div()

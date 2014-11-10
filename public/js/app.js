@@ -25,6 +25,10 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'mkdirHome',
       controller: 'mkdirController'
     }).
+    when('/google2bb8b269f6a29fd2.html', {
+        templateUrl: 'googleVerify',
+        controller: ''
+    }).
     otherwise({
       redirectTo: '/'
     });
@@ -34,7 +38,8 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
 
     $sceDelegateProvider.resourceUrlWhitelist([
         'self',
-        'https://www.youtube.com/**'
+        'https://www.youtube.com/**',
+        'https://pagead2.googlesyndication.com'
     ]);
 
   $locationProvider.html5Mode(true);

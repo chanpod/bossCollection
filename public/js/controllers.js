@@ -3,8 +3,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression',
         function($scope, $location, $http, charService, $timeout, guildServices, raidProgression){
 
-
-
+            (adsbygoogle = window.adsbygoogle || []).push({});
 
         $scope.stroke = 9;
         $scope.radius = 40;
