@@ -5,6 +5,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             (adsbygoogle = window.adsbygoogle || []).push({});
 
+
+
         $scope.stroke = 9;
         $scope.radius = 40;
         $scope.progressColor = "#069";
