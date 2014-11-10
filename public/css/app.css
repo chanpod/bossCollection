@@ -50,6 +50,10 @@ body {
     color:white;
 }
 
+.stratModal:hover{
+    cursor: pointer;
+}
+
 @media (max-width: 1200px){
     h2{
         font-size: 125%;
