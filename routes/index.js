@@ -1,5 +1,6 @@
 var https = require('https');
 var querystring = require('querystring');
+var Q = require('Q');
 
 exports.checkGuild = function(req, res){
     res.send("Hello World");
@@ -29,6 +30,8 @@ exports.getGuild = function(req,res){
     });
 */
 
+    var deferred = Q.defer();
+
     var post_data = querystring.stringify({});
     var post_options = {
         host: "us.api.battle.net",
@@ -38,15 +41,21 @@ exports.getGuild = function(req,res){
     };
     console.log("Make JSONP calls");
 
-    var response = {};
+    var returnData = {};
 
-    var req = https.request(post_options, function(res) {
-        console.log("statusCode: ", res.statusCode);
-        console.log("headers: ", res.headers);
+    var req = https.request(post_options, function(response) {
+        //console.log("statusCode: ", res.statusCode);
+        //console.log("headers: ", res.headers);
 
-        res.on('data', function(d) {
-            response = process.stdout.write(d.JSON_CALLBACK);
+
+
+        response.on('data', function(d) {
+
+            var buffer = new Buffer(d);
+            deferred.resolve(buffer.toString('utf8', 0, buffer.len));
         });
+        console.log(returnData);
+        res.jsonp(returnData);
     });
     req.end();
 
@@ -54,7 +63,7 @@ exports.getGuild = function(req,res){
         console.error(e);
     });
 
-    res.jsonp(response);
+
 };
 
 exports.checkGuild = function(req, res){
