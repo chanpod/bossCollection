@@ -68,6 +68,27 @@ body {
     border: 0px;
 }
 
+.stratVideos{
+    background-color: #5E2612;
+    color:white;
+}
+
+.videoPlayer{
+    width: 854px;
+    height: 510px;
+
+}
+
+.videoModal{
+    width: 100%;
+    height:950px;
+}
+
+.blueLinks a{
+    color:black;
+
+}
+
 .blueLinks a:hover{
     color:white
 }

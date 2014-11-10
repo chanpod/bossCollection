@@ -12,7 +12,7 @@ angular.module('BossCollection', [
   'ui.bootstrap'
 
 ]).
-config(function ($routeProvider, $locationProvider, $httpProvider) {
+config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
 
 
@@ -31,6 +31,11 @@ config(function ($routeProvider, $locationProvider, $httpProvider) {
 
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+        'self',
+        'https://www.youtube.com/**'
+    ]);
 
   $locationProvider.html5Mode(true);
 });

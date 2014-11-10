@@ -96,11 +96,46 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }, 5000);
         }
 
-    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression',
-        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression){
+    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
+        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal){
 
 
-            }]);
+
+
+            $scope.currentEmbedUrl = "";
+
+            $scope.setUrl = function(newUrl){
+                $scope.currentEmbedUrl = newUrl;
+            }
+
+            $scope.open = function (url) {
+                $scope.setUrl(url);
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'videoModal',
+                    controller: 'videoController',
+                    size: 'lg',
+                    windowClass: "videoModal",
+                    resolve: {
+                        currentUrl: function () {
+                            return  $scope.currentEmbedUrl;
+                        }
+                    }
+                });
+            }
+            }]).controller("videoController", ['$scope', 'currentUrl',
+                function($scope, currentUrl){
+
+                    $scope.url = currentUrl;
+
+                    $scope.getIframeSrc = function() {
+                        return 'https://www.youtube.com/embed/' + $scope.url;
+                    };
+
+                    $scope.embedUrl = $scope.url;
+                }]);
+
+
 
 
 
