@@ -32,8 +32,7 @@ var router = express.Router();
 
 router.get('/', routes.index);
 router.get('/mkdir', routes.index);
-router.get('/checkGuild', routes.checkGuild);
-router.get('/getGuild', routes.getGuild);
+
 
 app.use('/', router);
 
