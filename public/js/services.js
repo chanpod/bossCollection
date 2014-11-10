@@ -78,7 +78,7 @@ service.factory('charService', function($http, $q){
 
 
                 return deferred.promise;
-            },f
+            },
 
             getGuild: function(realm, guildName){
 
