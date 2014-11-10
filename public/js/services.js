@@ -60,18 +60,25 @@ service.factory('charService', function($http, $q){
             checkGuild: function(achievements) {
 
                 var deferred = $q.defer();
+                var killCount = 0;
+                if (achievements.criteria) {
 
-                var url = "http://localhost:4000/checkGuild";
-                $http({
-                    url: url,
-                    method : "GET",
-                    params: achievements
-                }).success(function (data) {
-                    deferred.resolve(data);
+                    var guildCriteria = achievements.criteria;
 
-                });
+                    sooCriteria.forEach(function (raidID) {
+                            if (binarySearch(raidID, guildCriteria)) {
+
+                                killCount++;
+                            }
+                        })
+
+                        deferred.resolve({"killCount": killCount});
+
+                }
+
+
                 return deferred.promise;
-            },
+            },f
 
             getGuild: function(realm, guildName){
 
@@ -89,3 +96,26 @@ service.factory('charService', function($http, $q){
 
         return guildApi;
     })
+
+var sooCriteria = [23692, 23693, 23694, 23695,
+    23696, 23697, 23698, 23699,
+    23700, 23702, 23703, 23701,
+    23704, 23705];
+
+function binarySearch(key, inputArray) {
+
+    var low  = 0,
+        high = inputArray.length - 1,
+        mid;
+
+    while (low <= high) {
+        mid = low + (high - low) / 2;
+        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
+
+        if (key < inputArray[mid]) { high = mid - 1; }
+        else if (key > inputArray[mid]) { low = mid + 1; }
+        else { return mid; }
+    }
+
+    return null;
+}

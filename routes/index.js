@@ -1,9 +1,5 @@
 var mongoose = require('mongoose');
 
-exports.checkGuild = function(req, res){
-    res.send("Hello World");
-};
-
 /*
  * GET home page.
  */
