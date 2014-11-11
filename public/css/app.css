@@ -87,7 +87,13 @@ body {
     color:white;
 }
 
+span.list-group-item{
+    color:black;
+}
 
+span.list-group-item:hover{
+    cursor:pointer;
+}
 
 a.bossNames{
     color:white;
