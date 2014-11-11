@@ -32,7 +32,8 @@ var router = express.Router();
 
 router.get('/', routes.index);
 router.get('/mkdir', routes.index);
-router.get('/google2bb8b269f6a29fd2.jade', routes.index);
+router.get('/strategyRoom', routes.index);
+
 
 app.use('/', router);
 

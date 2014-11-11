@@ -25,9 +25,9 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'mkdirHome',
       controller: 'mkdirController'
     }).
-    when('/google2bb8b269f6a29fd2.html', {
-        templateUrl: 'googleVerify',
-        controller: ''
+    when('/strategyRoom', {
+        templateUrl: 'strategyRoom',
+        controller: 'strategyRoomController'
     }).
     otherwise({
       redirectTo: '/'
