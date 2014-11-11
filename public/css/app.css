@@ -74,13 +74,27 @@ body {
 
 .stratVideos{
     background-color: #5E2612;
-    color:white;
+    color:white!important;
 }
 
 .videoPlayer{
     width:100%;
     height:500px;
+}
 
+.lootList{
+    background-color: #a335ee;
+    color:white;
+}
+
+
+
+a.bossNames{
+    color:white;
+}
+
+a.lootList{
+    color:white;
 }
 
 .videoModal{
