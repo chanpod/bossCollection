@@ -1,187 +1,169 @@
 script#home(type="text/ng-template")
-    div(class = "jumbotron mainJumbo")
-        div(class = "container")
-            h1.
-                {{welcomeMessage}}
-            p
-                | Enter your Realm and Guild name to see your raid progression!
-            p
-                i
-                   | Site is still under construction. Some functionality may not work yet.
-    div(class = "well")
-        div.container
-            div.row
-                div.col-md-4
+    div()
+        div(class = "jumbotron mainJumbo")
+            div(class = "container")
+                h1.
+                    {{welcomeMessage}}
+                p
+                    | Enter your Realm and Guild name to see your raid progression!
+                p
+                    i
+                       | Site is still under construction. Some functionality may not work yet.
+        div(class = "well")
+            div.container
+                div.row
+                    div.col-md-4
 
-                    ins(class="adsbygoogle",
-                    style="width:300px;height:250px",
-                    data-ad-client="ca-pub-4895481554192451",
-                    data-ad-slot="8518047071")
-
-
-                div.col-md-4
-                    h2.text-center
-                     | Search for Guild
-                    form(role="form")
-                        div(class = "form-group")
-                            label(for="realmName") Realm
-                            input(type = "input", class = "form-control", id ="iRealmName", ng-model = "realm", placeholder = "Enter Realm Name")
-                        div(class = "form-group")
-                            label(for="guildName") Guild
-                            input(type = "input", class = "form-control", id ="iRealmName", ng-model = "guild", placeholder = "Enter Guild Name")
-                        button(type = "button", class = "btn btn-primary", ng-click = "getGuild()")
-                           | Get Info
-                        img(ng-show = "showLoadingGif", src = "images/loading.gif")
-                div.col-md-4
-
-                    ins(class="adsbygoogle",
-                        style="display:inline-block;width:300px;height:250px",
+                        ins(class="adsbygoogle",
+                        style="width:300px;height:250px",
                         data-ad-client="ca-pub-4895481554192451",
-                        data-ad-slot="6699576677")
+                        data-ad-slot="8518047071")
 
-    div(class = "well", ng-show = "showGuild").guildWell
-        div().container
-            div()
-                h1.text-center
-                    | Guild Name Here
-            div.container.text-center
-                div.row
 
                     div.col-md-4
-                        h3
-                            | Realm
-                            br
-                            small
-                                | someRealm
+                        h2.text-center
+                         | Search for Guild
+                        form(role="form")
+                            div(class = "form-group")
+                                label(for="realmName") Realm
+                                input(type = "input", class = "form-control", id ="iRealmName", ng-model = "realm", placeholder = "Enter Realm Name")
+                            div(class = "form-group")
+                                label(for="guildName") Guild
+                                input(type = "input", class = "form-control", id ="iRealmName", ng-model = "guild", placeholder = "Enter Guild Name")
+                            button(type = "button", class = "btn btn-primary", ng-click = "getGuild()")
+                               | Get Info
+                            img(ng-show = "showLoadingGif", src = "images/loading.gif")
                     div.col-md-4
-                        h3
-                            | Members
-                            br
-                            small
-                                | #ofMembers
-    div(ng-class = "classColor", ng-show = "false").well
-        div.container
-            img(ng-src = "{{characterImage}}").fixedPosition
-            div()
-                h1.text-center
-                    {{characterName}}
+
+                        ins(class="adsbygoogle",
+                            style="display:inline-block;width:300px;height:250px",
+                            data-ad-client="ca-pub-4895481554192451",
+                            data-ad-slot="6699576677")
+
+        div(class = "well", ng-show = "showGuild").guildWell
+            div().container
+                div()
+                    h1.text-center
+                        | Guild Name Here
+                div.container.text-center
+                    div.row
+
+                        div.col-md-4
+                            h3
+                                | Realm
+                                br
+                                small
+                                    | someRealm
+                        div.col-md-4
+                            h3
+                                | Members
+                                br
+                                small
+                                    | #ofMembers
+        div(ng-class = "classColor", ng-show = "false").well
             div.container
-                div.row
-                    div.col-md-4.text-center
-                        h3
-                            | iLevel
-                            br
-                            small
-                                {{iLvl}}
-                    div.col-md-4.text-center
-                        h3
-                            | Acheivment Points
-                            br
-                            small
-                                {{achievmentPoints}}
-                    div.col-md-4.text-center
-                        h3
-                            | Specs
-                            br
-                            small
-                                | Resto & Elemental
-    div(class = "well").wodGradient
-        div().container.text-center
-            div.container
-                div().row.center
-                    div.col-md-4
-                    div.col-md-4.wodBanner
-            div.container
+                img(ng-src = "{{characterImage}}").fixedPosition
+                div()
+                    h1.text-center
+                        {{characterName}}
+                div.container
+                    div.row
+                        div.col-md-4.text-center
+                            h3
+                                | iLevel
+                                br
+                                small
+                                    {{iLvl}}
+                        div.col-md-4.text-center
+                            h3
+                                | Acheivment Points
+                                br
+                                small
+                                    {{achievmentPoints}}
+                        div.col-md-4.text-center
+                            h3
+                                | Specs
+                                br
+                                small
+                                    | Resto & Elemental
+        div(class = "well").wodGradient
+            div().container.text-center
+                div.container
+                    div().row.center
+                        div.col-md-4
+                        div.col-md-4.wodBanner
+                div.container
+                    tabset()
+                        tab(heading = "Normals")
+                            div.container.text-center
+                                div.row
+                                    div(ng-repeat = "raid in wodNormalsData", class = "guildProgression").col-md-3.col-sm-3
+                                        h2.text-center.raidHeaders
+                                            {{raid.name}}
+                                        div()
+                                            div.progress-data
+                                                h3
+                                                    {{raid.currentKills}}/{{raid.total}}
+                                            div(
+                                                round-progress,
+                                                max="raid.total",
+                                                current="raid.currentKills",
+                                                color="{{progressColor}}",
+                                                bgcolor="{{bgColor}}",
+                                                radius="{{radius}}",
+                                                stroke="{{stroke}}",
+                                                semi="isSemi")
+                        tab(heading = "Heroics")
+                            div.container.text-center
+                                div.row
+                                    div(ng-repeat = "raid in wodHeroicData", class = "guildProgression").col-md-3.col-sm-3
+                                        h2.text-center.raidHeaders
+                                            {{raid.name}}
+                                        div()
+                                            div.progress-data
+                                                h3
+                                                    {{raid.currentKills}}/{{raid.total}}
+                                            div(
+                                                round-progress,
+                                                max="raid.total",
+                                                current="raid.currentKills",
+                                                color="{{progressColor}}",
+                                                bgcolor="{{bgColor}}",
+                                                radius="{{radius}}",
+                                                stroke="{{stroke}}",
+                                                semi="isSemi")
+                        tab(heading = "Mythic")
+                            div.container.text-center
+                                div.row
+                                    div(ng-repeat = "raid in wodMythicData", class = "guildProgression").col-md-3.col-sm-3
+                                        h2.text-center.raidHeaders
+                                            {{raid.name}}
+                                        div()
+                                            div.progress-data
+                                                h3
+                                                    {{raid.currentKills}}/{{raid.total}}
+                                            div(
+                                                round-progress,
+                                                max="raid.total",
+                                                current="raid.currentKills",
+                                                color="{{progressColor}}",
+                                                bgcolor="{{bgColor}}",
+                                                radius="{{radius}}",
+                                                stroke="{{stroke}}",
+                                                semi="isSemi")
+
+
+        div(class = "well").mopGradient
+            div().container.text-center
+                div.container
+                    div().row.center
+                        div.col-md-4
+                        div.col-md-4.mopBanner
                 tabset()
-                    tab(heading = "Normals")
-                        div.container.text-center
-                            div.row
-                                div(ng-repeat = "raid in wodNormalsData", class = "guildProgression").col-md-3.col-sm-3
-                                    h2.text-center.raidHeaders
-                                        {{raid.name}}
-                                    div()
-                                        div.progress-data
-                                            h3
-                                                {{raid.currentKills}}/{{raid.total}}
-                                        div(
-                                            round-progress,
-                                            max="raid.total",
-                                            current="raid.currentKills",
-                                            color="{{progressColor}}",
-                                            bgcolor="{{bgColor}}",
-                                            radius="{{radius}}",
-                                            stroke="{{stroke}}",
-                                            semi="isSemi")
-                    tab(heading = "Heroics")
-                        div.container.text-center
-                            div.row
-                                div(ng-repeat = "raid in wodHeroicData", class = "guildProgression").col-md-3.col-sm-3
-                                    h2.text-center.raidHeaders
-                                        {{raid.name}}
-                                    div()
-                                        div.progress-data
-                                            h3
-                                                {{raid.currentKills}}/{{raid.total}}
-                                        div(
-                                            round-progress,
-                                            max="raid.total",
-                                            current="raid.currentKills",
-                                            color="{{progressColor}}",
-                                            bgcolor="{{bgColor}}",
-                                            radius="{{radius}}",
-                                            stroke="{{stroke}}",
-                                            semi="isSemi")
-                    tab(heading = "Mythic")
-                        div.container.text-center
-                            div.row
-                                div(ng-repeat = "raid in wodMythicData", class = "guildProgression").col-md-3.col-sm-3
-                                    h2.text-center.raidHeaders
-                                        {{raid.name}}
-                                    div()
-                                        div.progress-data
-                                            h3
-                                                {{raid.currentKills}}/{{raid.total}}
-                                        div(
-                                            round-progress,
-                                            max="raid.total",
-                                            current="raid.currentKills",
-                                            color="{{progressColor}}",
-                                            bgcolor="{{bgColor}}",
-                                            radius="{{radius}}",
-                                            stroke="{{stroke}}",
-                                            semi="isSemi")
-
-
-    div(class = "well").mopGradient
-        div().container.text-center
-            div.container
-                div().row.center
-                    div.col-md-4
-                    div.col-md-4.mopBanner
-            tabset()
-               tab(heading = "Normals")
-                   div.container.text-center
-                    div.row
-                        div(ng-repeat = "raid in mopNormalData", class = "guildProgression").col-md-2.col-sm-4
-                            h2.text-center.raidHeaders
-                                {{raid.name}}
-                            div()
-                                div.progress-data
-                                    h3
-                                        {{raid.currentKills}}/{{raid.total}}
-                            div(
-                                round-progress,
-                                max="raid.total",
-                                current="raid.currentKills",
-                                color="{{progressColor}}",
-                                bgcolor="{{bgColor}}",
-                                radius="{{radius}}",
-                                stroke="{{stroke}}",
-                                semi="isSemi")
-               tab(heading = "Heroics")
-                    div.container.text-center
+                   tab(heading = "Normals")
+                       div.container.text-center
                         div.row
-                            div(ng-repeat = "raid in mopHeroicData", class = "guildProgression").col-md-2.col-sm-4
+                            div(ng-repeat = "raid in mopNormalData", class = "guildProgression").col-md-2.col-sm-4
                                 h2.text-center.raidHeaders
                                     {{raid.name}}
                                 div()
@@ -197,36 +179,36 @@ script#home(type="text/ng-template")
                                     radius="{{radius}}",
                                     stroke="{{stroke}}",
                                     semi="isSemi")
-    div(class = "well").cataGradient
-        div().container.text-center
-            div.container
-                div().row.center
-                    div.col-md-4
-                    div.col-md-4.cataBanner
-            tabset()
-               tab(heading = "Normals")
-                   div.container.text-center
-                    div.row
-                        div(ng-repeat = "raid in cataNormalData", class = "guildProgression").col-md-2.col-sm-4
-                            h2.text-center.raidHeaders
-                                {{raid.name}}
-                            div()
-                                div.progress-data
-                                    h3
-                                        {{raid.currentKills}}/{{raid.total}}
-                            div(
-                                round-progress,
-                                max="raid.total",
-                                current="raid.currentKills",
-                                color="{{progressColor}}",
-                                bgcolor="{{bgColor}}",
-                                radius="{{radius}}",
-                                stroke="{{stroke}}",
-                                semi="isSemi")
-               tab(heading = "Heroics")
-                    div.container.text-center
+                   tab(heading = "Heroics")
+                        div.container.text-center
+                            div.row
+                                div(ng-repeat = "raid in mopHeroicData", class = "guildProgression").col-md-2.col-sm-4
+                                    h2.text-center.raidHeaders
+                                        {{raid.name}}
+                                    div()
+                                        div.progress-data
+                                            h3
+                                                {{raid.currentKills}}/{{raid.total}}
+                                    div(
+                                        round-progress,
+                                        max="raid.total",
+                                        current="raid.currentKills",
+                                        color="{{progressColor}}",
+                                        bgcolor="{{bgColor}}",
+                                        radius="{{radius}}",
+                                        stroke="{{stroke}}",
+                                        semi="isSemi")
+        div(class = "well").cataGradient
+            div().container.text-center
+                div.container
+                    div().row.center
+                        div.col-md-4
+                        div.col-md-4.cataBanner
+                tabset()
+                   tab(heading = "Normals")
+                       div.container.text-center
                         div.row
-                            div(ng-repeat = "raid in cataHeroicData", class = "guildProgression").col-md-2.col-sm-4
+                            div(ng-repeat = "raid in cataNormalData", class = "guildProgression").col-md-2.col-sm-4
                                 h2.text-center.raidHeaders
                                     {{raid.name}}
                                 div()
@@ -242,42 +224,61 @@ script#home(type="text/ng-template")
                                     radius="{{radius}}",
                                     stroke="{{stroke}}",
                                     semi="isSemi")
+                   tab(heading = "Heroics")
+                        div.container.text-center
+                            div.row
+                                div(ng-repeat = "raid in cataHeroicData", class = "guildProgression").col-md-2.col-sm-4
+                                    h2.text-center.raidHeaders
+                                        {{raid.name}}
+                                    div()
+                                        div.progress-data
+                                            h3
+                                                {{raid.currentKills}}/{{raid.total}}
+                                    div(
+                                        round-progress,
+                                        max="raid.total",
+                                        current="raid.currentKills",
+                                        color="{{progressColor}}",
+                                        bgcolor="{{bgColor}}",
+                                        radius="{{radius}}",
+                                        stroke="{{stroke}}",
+                                        semi="isSemi")
 
-    div(class = "well").wotlkGradient
-        div().container.text-center
-            div.container
-                div().row.center
-                    div.col-md-4
-                    div.col-md-4.wotlkBanner
-            div.container.text-center
-                div.row
-                    div(ng-repeat = "raid in wotlkData", class = "guildProgression").col-md-3.col-sm-4
-                        h2.text-center.raidHeaders
-                            {{raid.name}}
-                        div()
-                            div.progress-data
-                                h3
-                                    {{raid.currentKills}}/{{raid.total}}
-                            div(
-                                round-progress,
-                                max="raid.total",
-                                current="raid.currentKills",
-                                color="{{progressColor}}",
-                                bgcolor="{{bgColor}}",
-                                radius="{{radius}}",
-                                stroke="{{stroke}}",
-                                semi="isSemi")
+        div(class = "well").wotlkGradient
+            div().container.text-center
+                div.container
+                    div().row.center
+                        div.col-md-4
+                        div.col-md-4.wotlkBanner
+                div.container.text-center
+                    div.row
+                        div(ng-repeat = "raid in wotlkData", class = "guildProgression").col-md-3.col-sm-4
+                            h2.text-center.raidHeaders
+                                {{raid.name}}
+                            div()
+                                div.progress-data
+                                    h3
+                                        {{raid.currentKills}}/{{raid.total}}
+                                div(
+                                    round-progress,
+                                    max="raid.total",
+                                    current="raid.currentKills",
+                                    color="{{progressColor}}",
+                                    bgcolor="{{bgColor}}",
+                                    radius="{{radius}}",
+                                    stroke="{{stroke}}",
+                                    semi="isSemi")
 
-    div(class = "well").bcGradient
-        div().container.text-center
-            div.container
-                div().row.center
-                    div.col-md-4
-                    div.col-md-4.bcBanner
-            div.container.text-center
-                div.row
-                    div(class = "guildProgression").col-md-12.text-center
-                        | At this time it is not possible to determine raid progression using the blizzard api.
+        div(class = "well").bcGradient
+            div().container.text-center
+                div.container
+                    div().row.center
+                        div.col-md-4
+                        div.col-md-4.bcBanner
+                div.container.text-center
+                    div.row
+                        div(class = "guildProgression").col-md-12.text-center
+                            | At this time it is not possible to determine raid progression using the blizzard api.
 
 
 
