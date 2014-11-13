@@ -1,59 +1,54 @@
 extends layout
 
 block body
-    div(snap-drawer)
-        ul
-            li
-                | My list
-    div(snap-content)
-        div( class = "navbar")
-            div(class="container-fluid")
-                div(class="navbar-header")
-                    button( type = "button", class = "navbar-toggle", data-toggle="collapse", data-target="#menuCollapse")
-                        span(class = "sr-only") Toggle Navigation
-                        span(class = "icon-bar")
-                        span(class = "icon-bar")
-                        span(class = "icon-bar")
 
-                    a(class="navbar-brand", href="/") Boss Collection &nbsp
-                        i
-                            | (Beta)
+    header( class = "navbar")
 
-                div(class="collapse navbar-collapse", id="menuCollapse")
-                    ul(class="nav navbar-nav")
-                        li
-                            a(href="/strategyRoom") Strategy Room
+        div(class="container-fluid")
+            div(class="navbar-header")
+                button( type = "button", class = "navbar-toggle", data-toggle="collapse", data-target="#menuCollapse")
+                    span(class = "sr-only") Toggle Navigation
+                    span(class = "icon-bar")
+                    span(class = "icon-bar")
+                    span(class = "icon-bar")
 
+                a(class="navbar-brand", href="/") Boss Collection &nbsp
+                    i
+                        | (Beta)
 
-        div(ng-view)
+            div(class="collapse navbar-collapse", id="menuCollapse")
+                ul(class="nav navbar-nav")
+                    li
+                        a(href="/strategyRoom") Strategy Room
+    div(ng-view)
 
-        div.footer
-            div.container
-                div.row.text-center
-                    h3
-                        | Libraries used
-                    div.col-md-6.text-center
+    div.footer
+        div.container
+            div.row.text-center
+                h3
+                    | Libraries used
+                div.col-md-6.text-center
 
-                        br
-                        span
-                            a(href = "http://getbootstrap.com/")
-                                | Bootstrap
-                        br
-                        span
-                            | Blizzard api
-                    div.col-md-6
-                        br
-                        span
-                            a(a href = "https://github.com/crisbeto/angular-svg-round-progressbar")
-                                | Cirsbeto round progress
-                        br
-                        span
-                            a(a href = "https://angularjs.org/")
-                                | AngularJS
-                        br
-                        span
-                            a(a href = "http://nodejs.org/")
-                                | NodeJS
+                    br
+                    span
+                        a(href = "http://getbootstrap.com/")
+                            | Bootstrap
+                    br
+                    span
+                        | Blizzard api
+                div.col-md-6
+                    br
+                    span
+                        a(a href = "https://github.com/crisbeto/angular-svg-round-progressbar")
+                            | Cirsbeto round progress
+                    br
+                    span
+                        a(a href = "https://angularjs.org/")
+                            | AngularJS
+                    br
+                    span
+                        a(a href = "http://nodejs.org/")
+                            | NodeJS
 
 
     include partials/home
