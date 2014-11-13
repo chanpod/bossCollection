@@ -9,9 +9,7 @@ angular.module('BossCollection', [
   'Imn.directives',
   'ngRoute',
   'angular-svg-round-progress',
-  'ui.bootstrap',
-  'snap'
-
+  'ui.bootstrap'
 ]).
 config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
