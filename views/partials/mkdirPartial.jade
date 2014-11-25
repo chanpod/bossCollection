@@ -4,19 +4,44 @@ script#mkdirHome(type="text/ng-template")
         div.container
             h1
                 | mkdir BossCollection Guild Information
-            h3
-                a(href = "http://blog.askmrrobot.com/wp-content/uploads/2014/11/Garrisons1.png")
+            h3.blueLinks
+                a(href = "http://blog.askmrrobot.com/wp-content/uploads/2014/11/Garrisons1.png").blueLinks
                     | Garrison Information
     div.well
         div.container
-            h1.text-center
-                | Schedule
+            h1.text-center.headerRow
+                | Recruiting
             div.row().text-center
+                div.col-md-6
+                    h3
+                        | Current Needs
+                    div.row()
+                        div.col-md-6
+                            | 1 Healer: Prefer priest
+                        div.col-md-6
+                            | 1 Tank: Pref Pally or DK
+                div.col-md-6
+                    h3
+                        | Don't want
+                    div.row()
+                        div.col-md-12
+                            | No pally healers or leather wearers. We have enough of them already and will have gear
+                            issues if we continue recruiting classes of these types.
+    div.well
+        div.container
+            div.row.headerRow
+                h1.text-center
+                    | Schedule
+                h4.text-center
+                    | Server times
+
+            div.row().text-center
+
                 div.col-md-4
                     h3
                         | Tuesday
                     p
-                        | 6:30pm - 9:00pm
+                        | 7:00pm - 9:30pm
                 div.col-md-4
                     h3
                         | Thursday
@@ -29,7 +54,7 @@ script#mkdirHome(type="text/ng-template")
                         | 6:30pm - 9:00pm
     div.well.mainJumbo
         div.container.text-center
-            h1
+            h1.headerRow
                 | Required Addons
             p
                 | Recommend you use the curse client. Helps keep you up to date.

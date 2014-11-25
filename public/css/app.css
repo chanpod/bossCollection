@@ -50,6 +50,14 @@ body {
     color:white;
 }
 
+.wodHeader{
+    background-image: url("/images/wodBanner.jpg");
+    background-repeat: no-repeat;
+
+    height:256px;
+    display:block;
+}
+
 .stratModal:hover{
     cursor: pointer;
 }
@@ -66,6 +74,10 @@ body {
     }
 }
 
+.headerRow{
+    border-bottom:1px solid black;
+}
+
 .well{
     margin:0px;
 
@@ -73,7 +85,7 @@ body {
 }
 
 .stratVideos{
-    background-color: #5E2612;
+    background-color: black;
     color:white!important;
 }
 
@@ -239,7 +251,7 @@ a.lootList{
 
 .mainJumbo{
     background-color: #069;
-    color: white;
+
 }
 
 .requiredInfo{
