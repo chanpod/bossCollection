@@ -74,6 +74,20 @@ body {
     }
 }
 
+.blackContainer{
+    background-color: black;
+    color:white!important;
+}
+
+.blackContainer .headerRow{
+    border-bottom:1px solid white;
+}
+
+.blackContainer .blueLinks{
+    border-bottom:1px solid white;
+    color:white;
+}
+
 .headerRow{
     border-bottom:1px solid black;
 }
@@ -123,6 +137,10 @@ a.lootList{
 .blueLinks a{
     color:black;
 
+}
+
+.headerRowBlackBackground{
+    border-bottom:1px solid white;
 }
 
 .blueLinks a:hover{
