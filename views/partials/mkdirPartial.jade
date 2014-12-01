@@ -71,7 +71,15 @@ script#mkdirHome(type="text/ng-template")
         div.container.text-center
             h1.headerRow
                 | Weekly consumables needed
-            | To be updated...
+            tabset()
+                tab(heading = "Flask")
+                    div.container.text-center
+                        ul.list-group
+                            a().list-group-item
+                                | Test
+                tab(heading = "Feast")
+                    div.container.text-center
+
     div.well
         div.container.text-center
             h1.headerRow
