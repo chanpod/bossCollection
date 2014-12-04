@@ -47,7 +47,15 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.achievmentPoints = $scope.character.achievementPoints;
         }, true);
 
+            $('#getGuildMessage').popover({
+                content: 'Seems to be taking a while. ' +
+                'Did you spell the guild name correctly? Sometimes this functionality can be blocked by corporate firewalls.' +
+                    'Could be something just broke :( ',
+                trigger: 'manual'
+            })
+
         $scope.getGuild = function(){
+            $('#getGuildMessage').popover("hide");
             $scope.showLoadingGif = true;
             var promise = guildServices.getGuild($scope.realm, $scope.guild);
 
@@ -60,6 +68,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     console.log(data);
                     progressionData = data.killCount;
                     $scope.showLoadingGif = false;
+                    $('#getGuildMessage').popover("hide");
                 }, function(error){
                     console.log(error);
                 })
@@ -70,6 +79,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $timeout(function(){
                 $scope.showLoadingGif = false;
+                $('#getGuildMessage').popover("show");
+
+
             }, 5000)
         };
 

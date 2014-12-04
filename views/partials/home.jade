@@ -30,7 +30,7 @@ script#home(type="text/ng-template")
                             div(class = "form-group")
                                 label(for="guildName") Guild
                                 input(type = "input", class = "form-control", id ="iRealmName", ng-model = "guild", placeholder = "Enter Guild Name")
-                            button(type = "button", class = "btn btn-primary", ng-click = "getGuild()")
+                            button(type = "button", class = "btn btn-primary", ng-click = "getGuild()", id = "getGuildMessage", data-placement = "left")
                                | Get Info
                             img(ng-show = "showLoadingGif", src = "images/loading.gif")
                     div.col-md-4
