@@ -59,6 +59,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     console.log(data);
                     progressionData = data.killCount;
+                    $scope.showLoadingGif = false;
                 }, function(error){
                     console.log(error);
                 })
