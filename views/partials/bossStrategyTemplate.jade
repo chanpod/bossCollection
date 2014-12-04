@@ -1,10 +1,15 @@
 script#bossStrategy(type="text/ng-template")
     div.well.stratVideos
+        div.container.row()
+            ins(class="adsbygoogle",
+                 style="display:inline-block;width:728px;height:90px",
+                 data-ad-client="ca-pub-4895481554192451",
+                 data-ad-slot="3593052672")
         div.container.text-center
             h1
                 | Boss Information
             div.row().text-center
-                div.col-md-10
+                div.col-md-12
                     tabset()
                         tab(heading = "Highmaul")
                             div.container.text-center
@@ -27,8 +32,3 @@ script#bossStrategy(type="text/ng-template")
                                     div().col-md-3.col-sm-3
                                         h2.text-center.raidHeaders
                     div(id="disqus_thread")
-            div.col-md-2
-                ins(class="adsbygoogle",
-                    style="display:inline-block;width:300px;height:600px",
-                    data-ad-client="ca-pub-4895481554192451",
-                    data-ad-slot="9779187079")
