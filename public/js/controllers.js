@@ -147,10 +147,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 function($scope){
 
 
-
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-
-
             }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal',
                 function($scope, bossStrats, $modal){
 
