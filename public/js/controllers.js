@@ -67,6 +67,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 console.log(error);
                     $scope.showLoadingGif = false;
             });
+
+            $timeout(function(){
+                $scope.showLoadingGif = false;
+            }, 5000)
         };
 
         $scope.getCharacter = function() {
