@@ -177,6 +177,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     $scope.raidBossesInfo = bossStrats.getStrats();
 
+                    console.log($scope.raidBossesInfo);
+
                     var disqus_shortname = 'bosscollectionnet'; // required: replace example with your forum shortname
                     var disqus_identifier = '/mkdir';
 
