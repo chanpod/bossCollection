@@ -59,16 +59,26 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.showLoadingGif = true;
             var promise = guildServices.getGuild($scope.realm, $scope.guild);
 
+            var errorTimeout = $timeout(function(){
+                $scope.showLoadingGif = false;
+                $('#getGuildMessage').popover("show");
+
+
+            }, 6000)
+
             promise.then(function(data){
                 console.log(data);
                 var promise2 = guildServices.checkGuild(data.achievements);
 
                 promise2.then(function(data){
 
-                    console.log(data);
+                    $timeout.cancel(errorTimeout);
+
                     progressionData = data.killCount;
+
                     $scope.showLoadingGif = false;
                     $('#getGuildMessage').popover("hide");
+
                 }, function(error){
                     console.log(error);
                 })
@@ -77,12 +87,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.showLoadingGif = false;
             });
 
-            $timeout(function(){
-                $scope.showLoadingGif = false;
-                $('#getGuildMessage').popover("show");
 
-
-            }, 5000)
         };
 
         $scope.getCharacter = function() {
