@@ -4,25 +4,31 @@ script#bossStrategy(type="text/ng-template")
             h1
                 | Boss Information
             div.row().text-center
-                tabset()
-                    tab(heading = "Highmaul")
-                        div.container.text-center
-                            div.row
-                                div(ng-repeat = "boss in raidBossesInfo.highmaulBossInfo").col-md-4.col-sm-4.col-lg-3
-                                    h2.text-center.raidHeaders
-                                        {{boss.name}}
+                div.col-md-10
+                    tabset()
+                        tab(heading = "Highmaul")
+                            div.container.text-center
+                                div.row
+                                    div(ng-repeat = "boss in raidBossesInfo.highmaulBossInfo").col-md-4.col-sm-4.col-lg-3
+                                        h2.text-center.raidHeaders
+                                            {{boss.name}}
 
-                                    img(src = "/images/wodBosses/{{boss.img}}")
-                                    br
-                                    a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
-                                        | Loot
-                                    span(, ng-click = "open(boss.embeddedUrl)").list-group-item
-                                        | Strat Video - Icy -Veins
-                                    a(href = "{{boss.stratUrl}}").list-group-item
-                                        | Detailed Strat
-                    tab(heading = "Blackrock Foundry")
-                        div.container.text-center
-                            div.row
-                                div().col-md-3.col-sm-3
-                                    h2.text-center.raidHeaders
-                div(id="disqus_thread")
+                                        img(src = "/images/wodBosses/{{boss.img}}")
+                                        br
+                                        a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
+                                            | Loot
+                                        span(, ng-click = "open(boss.embeddedUrl)").list-group-item
+                                            | Strat Video - Icy -Veins
+                                        a(href = "{{boss.stratUrl}}").list-group-item
+                                            | Detailed Strat
+                        tab(heading = "Blackrock Foundry")
+                            div.container.text-center
+                                div.row
+                                    div().col-md-3.col-sm-3
+                                        h2.text-center.raidHeaders
+                    div(id="disqus_thread")
+            div.col-md-2
+                ins(class="adsbygoogle",
+                    style="display:inline-block;width:300px;height:600px",
+                    data-ad-client="ca-pub-4895481554192451",
+                    data-ad-slot="9779187079")
