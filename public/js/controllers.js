@@ -169,8 +169,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 function($scope){
 
 
+
             }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal',
                 function($scope, bossStrats, $modal){
+
+                    (adsbygoogle = window.adsbygoogle || []).push({});
 
                     $scope.raidBossesInfo = bossStrats.getStrats();
 
