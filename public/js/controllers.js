@@ -47,9 +47,24 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.achievmentPoints = $scope.character.achievementPoints;
         }, true);
 
+            $('#getGuildMessage').popover({
+                content: 'Seems to be taking a while. ' +
+                'Did you spell the guild name correctly? Sometimes this functionality can be blocked by corporate firewalls.' +
+                    'Could be something just broke :( ',
+                trigger: 'manual'
+            })
+
         $scope.getGuild = function(){
+            $('#getGuildMessage').popover("hide");
             $scope.showLoadingGif = true;
             var promise = guildServices.getGuild($scope.realm, $scope.guild);
+
+            var errorTimeout = $timeout(function(){
+                $scope.showLoadingGif = false;
+                $('#getGuildMessage').popover("show");
+
+
+            }, 6000)
 
             promise.then(function(data){
                 console.log(data);
@@ -57,8 +72,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 promise2.then(function(data){
 
-                    console.log(data);
+                    $timeout.cancel(errorTimeout);
+
                     progressionData = data.killCount;
+
+                    $scope.showLoadingGif = false;
+                    $('#getGuildMessage').popover("hide");
+
                 }, function(error){
                     console.log(error);
                 })
@@ -66,6 +86,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 console.log(error);
                     $scope.showLoadingGif = false;
             });
+
+
         };
 
         $scope.getCharacter = function() {
@@ -146,10 +168,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }]).controller("strategyRoomController", ['$scope',
                 function($scope){
 
+
+
             }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal',
                 function($scope, bossStrats, $modal){
 
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+
                     $scope.raidBossesInfo = bossStrats.getStrats();
+
+                    console.log($scope.raidBossesInfo);
 
                     var disqus_shortname = 'bosscollectionnet'; // required: replace example with your forum shortname
                     var disqus_identifier = '/mkdir';

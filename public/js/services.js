@@ -122,6 +122,7 @@ var raidBossesInfo = {
             "embeddedUrl": "D5QqzwJIPa0",
             "name": "Kargath Bladefist",
             "stratUrl": "http://www.icy-veins.com/wow/kargath-bladefist-strategy-guide-preview",
+            "embeddedUrlFatboss" : "KpzfmKTZp8U",
             "img": "Highmaul/kargath.png",
             "wowheadNPCNum": "87444"
         },
@@ -129,6 +130,7 @@ var raidBossesInfo = {
             "embeddedUrl": "QkLExQUJgW4",
             "name": "The Butcher",
             "stratUrl": "http://www.icy-veins.com/wow/the-butcher-strategy-guide-preview",
+            "embeddedUrlFatboss" : "yIS0jjmcFgE",
             "img": "Highmaul/theButcher.png",
             "wowheadNPCNum": "87447"
         },
@@ -136,6 +138,7 @@ var raidBossesInfo = {
             "embeddedUrl": "C0VYzWNYDF0",
             "name": "Tectus",
             "stratUrl": "http://www.icy-veins.com/wow/tectus-strategy-guide-preview",
+            "embeddedUrlFatboss" : "wNbJmeNLkjo",
             "img": "Highmaul/tectus.png",
             "wowheadNPCNum": "87446"
         },
@@ -143,6 +146,7 @@ var raidBossesInfo = {
             "embeddedUrl": "mIdrE_7iqc8",
             "name": "Brackenspore",
             "stratUrl": "http://www.icy-veins.com/wow/brackenspore-strategy-guide-preview",
+            "embeddedUrlFatboss" : "fsXhQtEKzms",
             "img": "Highmaul/brackenspore.png",
             "wowheadNPCNum": "87441"
         },
@@ -150,13 +154,16 @@ var raidBossesInfo = {
             "embeddedUrl": "AJ4xo4jqJlU",
             "name": "Twin Ogron",
             "stratUrl": "http://www.icy-veins.com/wow/twin-ogron-strategy-guide-preview",
+            "embeddedUrlFatboss" : "",
             "img": "Highmaul/twinOgron.png",
             "wowheadNPCNum": "87449"
         },
+
         "5koragh": {
             "embeddedUrl": "y9ha5_IkI7A",
             "name": "Ko'ragh",
             "stratUrl": "http://www.icy-veins.com/wow/ko-ragh-strategy-guide-preview",
+            "embeddedUrlFatboss" : "XSeMw7-byOA",
             "img": "Highmaul/ko'ragh.png",
             "wowheadNPCNum": "87445"
         },
@@ -164,6 +171,7 @@ var raidBossesInfo = {
             "embeddedUrl": "i4OMq9fYgVY",
             "name": "Imperator Mar'gok",
             "stratUrl": "http://www.icy-veins.com/wow/imperator-mar-gok-strategy-guide-preview",
+            "embeddedUrlFatboss" : "",
             "img": "Highmaul/imperatorMar'gok.png",
             "wowheadNPCNum": "87818"
         }

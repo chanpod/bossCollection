@@ -262,6 +262,7 @@ a.lootList{
     }
 }
 
+
 .raidHeaders{
 
     height:35px;
@@ -269,7 +270,7 @@ a.lootList{
 
 .mainJumbo{
     background-color: #069;
-
+    color:white;
 }
 
 .requiredInfo{
