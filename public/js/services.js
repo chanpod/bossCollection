@@ -7,7 +7,7 @@ var endUrl = local + "&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d&jsonp=JSON_CALLBA
 var blizzApiRoot = "https://us.api.battle.net/wow/";
 var getItems = "fields=items";
 var getClasses = "data/character/classes";
-var getGuild = "fields=achievements";
+var getGuild = "fields=achievements,members";
 //https://us.api.battle.net/wow/data/character/classes?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
 //https://us.api.battle.net/wow/guild/Zul'jin/crux?fields=achievements&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
 var classes = ["warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
