@@ -28,6 +28,10 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController'
     }).
+    when('/progression', {
+        templateUrl: 'progression',
+        controller: 'progressionController'
+    }).
     otherwise({
       redirectTo: '/'
     });

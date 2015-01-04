@@ -33,6 +33,7 @@ var router = express.Router();
 router.get('/', routes.index);
 router.get('/mkdir', routes.index);
 router.get('/strategyRoom', routes.index);
+router.get('/progression', routes.index);
 
 
 app.use('/', router);
