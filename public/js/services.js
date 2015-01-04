@@ -301,14 +301,9 @@ var raidProgression = {
             "currentKills": 0,
             "total": 7
         },
-        "2world": {
-            "name": "World Bosses",
-            "currentKills": 0,
-            "total": 3
-        },
         "3total": {
             "name": "Total",
-            "total": 17,
+            "total": 14,
             "currentKills": 0
         }
     },
