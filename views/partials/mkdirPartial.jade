@@ -5,10 +5,14 @@ script#mkdirHome(type="text/ng-template")
             h1
                 | mkdir BossCollection Guild Information Blah blah I'm adding stuff'
             div.row
-                h3
-                    | Logs
-                a(href = "https://www.warcraftlogs.com/guilds/36279/")
-                    | Warcraft Logs
+                div.col-md-3
+                    h3
+                        | Logs
+                    a(href = "https://www.warcraftlogs.com/guilds/36279/")
+                        | Warcraft Logs
+                div.col-md-3
+                    a(href='http://wowprogress.com/')
+                        img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0')
 
     div.well.blackContainer
         div.container
@@ -69,37 +73,6 @@ script#mkdirHome(type="text/ng-template")
                         | Monday
                     p
                         | 7:00pm - 9:30pm
-    div.well.blackContainer
-        div.container.text-center
-            h1.headerRow
-                | Weekly consumables needed
-            tabset()
-                tab(heading = "Flask")
-                    div.container.text-center
-                        ul.list-group
-                            a().list-group-item
-                                | Intelligence: &nbsp
-                                span.label.label-primary
-                                    | 33
-                            a().list-group-item
-                                | Agility: &nbsp
-                                span.label.label-primary
-                                    | 15
-                            a().list-group-item
-                                | Strength: &nbsp
-                                span.label.label-primary
-                                    | 9
-                            a().list-group-item
-                                | Stamina: &nbsp
-                                span.label.label-primary
-                                    | 18
-               tab(heading = "Feast")
-                    div.container.text-center
-                        ul.list-group
-                            a().list-group-item
-                                | Savage Feast: &nbsp
-                                span.label.label-primary
-                                    | 30 - 50
     div.well
         div.container.text-center
             h1.headerRow
