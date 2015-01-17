@@ -175,8 +175,89 @@ var raidBossesInfo = {
             "img": "Highmaul/imperatorMar'gok.png",
             "wowheadNPCNum": "87818"
         }
+    },
+    "blackrockFoundryBossInfo" : {
+        "00" : {
+            "embeddedUrl": "",
+            "name": "Gruul",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "QrN5W7VxZ7Y",
+            "img": "",
+            "wowheadNPCNum": "76877"
+        },
+        "01" : {
+            "embeddedUrl": "",
+            "name": "Oregorger",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "i0mGJkRLz3A",
+            "img": "",
+            "wowheadNPCNum": "77182"
+        },
+        "02" : {
+            "embeddedUrl": "",
+            "name": "Beastlord Darmac",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "6ThCMYtspNU",
+            "img": "",
+            "wowheadNPCNum": "76865"
+        },
+        "03" : {
+            "embeddedUrl": "",
+            "name": "Flamebender Ka'graz",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "vAViKBYoAFg",
+            "img": "",
+            "wowheadNPCNum": "76814"
+        },
+        "04" : {
+            "embeddedUrl": "",
+            "name": "Hans'gar and Franzok",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "FW4zMMtiXsw",
+            "img": "",
+            "wowheadNPCNum": "76973"
+        },
+        "05" : {
+            "embeddedUrl": "",
+            "name": "Operator Thogar",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "Yb1KCCMXPeU",
+            "img": "",
+            "wowheadNPCNum": "76906"
+        },
+        "06" : {
+            "embeddedUrl": "",
+            "name": "The Blast Furnace",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "tDzhPwDzdOc",
+            "img": "",
+            "wowheadNPCNum": "76806"
+        },
+        "07" : {
+            "embeddedUrl": "",
+            "name": "Kromog",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "0BjCnIuTNbA",
+            "img": "",
+            "wowheadNPCNum": "77692"
+        },
+        "08" : {
+            "embeddedUrl": "",
+            "name": "The Iron Maidens",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "QnXH9Py-8_Y",
+            "img": "",
+            "wowheadNPCNum": "77557"
+        },
+        "09" : {
+            "embeddedUrl": "",
+            "name": "Blackhand",
+            "stratUrl": "",
+            "embeddedUrlFatboss" : "",
+            "img": "",
+            "wowheadNPCNum": "77325"
+        }
     }
-
 }
 
 var sooCriteria = [23692, 23693, 23694, 23695,
@@ -299,11 +380,11 @@ var raidProgression = {
         "1brf": {
             "name": "Blackrock Foundry",
             "currentKills": 0,
-            "total": 7
+            "total": 10
         },
         "3total": {
             "name": "Total",
-            "total": 14,
+            "total": 17,
             "currentKills": 0
         }
     },
@@ -316,11 +397,11 @@ var raidProgression = {
         "1brf": {
             "name": "Blackrock Foundry",
             "currentKills": 0,
-            "total": 7
+            "total": 10
         },
         "2total": {
             "name": "Total",
-            "total": 14,
+            "total": 17,
             "currentKills": 0
         }
     },
@@ -334,11 +415,11 @@ var raidProgression = {
         "1brf": {
             "name": "Blackrock Foundry",
             "currentKills": 0,
-            "total": 7
+            "total": 10
         },
         "2total": {
             "name": "Total",
-            "total": 14,
+            "total": 17,
             "currentKills": 0
         }
     },

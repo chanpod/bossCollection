@@ -35,6 +35,18 @@ script#bossStrategy(type="text/ng-template")
                         tab(heading = "Blackrock Foundry")
                             div.container.text-center
                                 div.row
-                                    div().col-md-3.col-sm-3
+                                    div(ng-repeat = "boss in raidBossesInfo.blackrockFoundryBossInfo").col-md-4.col-sm-4.col-lg-3
                                         h2.text-center.raidHeaders
+                                            {{boss.name}}
+
+                                        img(src = "/images/wodBosses/{{boss.img}}")
+                                        br
+                                        a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
+                                            | Loot
+                                        span(ng-click = "open(boss.embeddedUrl)", ng-show = "boss.embeddedUrl.length > 0").list-group-item
+                                            | Strat Video - Icy Veins
+                                        span(ng-click = "open(boss.embeddedUrlFatboss)", ng-show = "boss.embeddedUrlFatboss.length > 0").list-group-item
+                                            | Strat Video - Fatboss
+                                        a(href = "{{boss.stratUrl}}").list-group-item
+                                            | Detailed Strat
                     div(id="disqus_thread")
