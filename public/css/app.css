@@ -5,6 +5,10 @@ body {
 
 }
 
+.imgContainer{
+    height:705px;
+}
+
 .tabHeaders a{
    color:white;
 }

@@ -1,5 +1,14 @@
 script#progression(type="text/ng-template")
     div.jumbotron.wodHeader
+    div.well.imgContainer
+        div.container
+            div()
+                div(style='height: 305px')
+                    carousel(interval='myInterval')
+                      slide(ng-repeat='slide in slides', active='slide.active')
+                        img(ng-src='{{slide.image}}', style='margin:auto;')
+                        .carousel-caption
+                          p {{slide.text}}
     div.well
         div.container.text-center
             div.panel.panel-primary
@@ -8,7 +17,7 @@ script#progression(type="text/ng-template")
                         | Progression (Normals)
                 div.panel-body
                     tabset()
-                        tab(heading = "Highmaul")
+                        tab(heading = "Highmaul - Cleared")
                             div.row
                                 div.col-md-6
                                     div
@@ -42,8 +51,8 @@ script#progression(type="text/ng-template")
                                                     | Downed
                                             a().list-group-item
                                                 | Imp: &nbsp
-                                                span.label.label-danger
-                                                    | In Progress - 17% (only 6 attempts made)
+                                                span.label.label-success
+                                                    | Downed
 
                         tab(heading = "BlackRock Foundry")
                             div.container.text-center

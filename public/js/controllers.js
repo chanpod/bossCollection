@@ -212,9 +212,19 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     }
 
             }]).controller("progressionController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
-        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal){
+        function($scope){
 
+            $scope.myInterval = 10000;
+            var listofImages = [{image: '/images/BossKills/ImpKill.jpg', text: "Imperator Down!"}];
 
+            var slides = $scope.slides = [];
+            $scope.addSlide = function(index) {
+                slides.push(listofImages[index]);
+            };
+
+            for(var i =0; i < listofImages.length; i++) {
+                $scope.addSlide(i);
+            }
 
         }]);
 
