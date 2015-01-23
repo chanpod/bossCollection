@@ -6,6 +6,17 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             (adsbygoogle = window.adsbygoogle || []).push({});
 
 
+            $scope.myInterval = 10000;
+            var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Imperator Down!"}];
+
+            var slides = $scope.slides = [];
+            $scope.addSlide = function(index) {
+                slides.push(listofImages[index]);
+            };
+
+            for(var i =0; i < listofImages.length; i++) {
+                $scope.addSlide(i);
+            }
 
         $scope.stroke = 9;
         $scope.radius = 40;
@@ -14,7 +25,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.isSemi = false;
         $scope.showGuild = false;
 
-        $scope.welcomeMessage = "Welcome to your Boss Collection";
+        $scope.welcomeMessage = "Welcome Boss Collection's Guild Website.";
         $scope.guild = "";
         $scope.realm = "Zul'jin";
         $scope.characterName = "";
