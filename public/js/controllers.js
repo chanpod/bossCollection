@@ -27,7 +27,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.isSemi = false;
         $scope.showGuild = false;
 
-        $scope.welcomeMessage = "Welcome Boss Collection's Guild Website.";
+        $scope.welcomeMessage = "Welcome to Boss Collection's Guild Website.";
         $scope.guild = "";
         $scope.realm = "Zul'jin";
         $scope.characterName = "";
