@@ -178,68 +178,68 @@ var raidBossesInfo = {
     },
     "blackrockFoundryBossInfo" : {
         "00" : {
-            "embeddedUrl": "",
+            "embeddedUrl": "7w6Cxv3C8lc",
             "name": "Gruul",
-            "stratUrl": "",
+            "stratUrl": "http://www.icy-veins.com/wow/gruul-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "QrN5W7VxZ7Y",
             "img": "",
             "wowheadNPCNum": "76877"
         },
         "01" : {
-            "embeddedUrl": "",
+            "embeddedUrl": "zoZR_twO7VI",
             "name": "Oregorger",
-            "stratUrl": "",
+            "stratUrl": "http://www.icy-veins.com/wow/oregorger-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "i0mGJkRLz3A",
             "img": "",
             "wowheadNPCNum": "77182"
         },
         "02" : {
-            "embeddedUrl": "",
-            "name": "Beastlord Darmac",
-            "stratUrl": "",
-            "embeddedUrlFatboss" : "6ThCMYtspNU",
-            "img": "",
-            "wowheadNPCNum": "76865"
-        },
-        "03" : {
-            "embeddedUrl": "",
-            "name": "Flamebender Ka'graz",
-            "stratUrl": "",
-            "embeddedUrlFatboss" : "vAViKBYoAFg",
-            "img": "",
-            "wowheadNPCNum": "76814"
-        },
-        "04" : {
-            "embeddedUrl": "",
-            "name": "Hans'gar and Franzok",
-            "stratUrl": "",
-            "embeddedUrlFatboss" : "FW4zMMtiXsw",
-            "img": "",
-            "wowheadNPCNum": "76973"
-        },
-        "05" : {
-            "embeddedUrl": "",
-            "name": "Operator Thogar",
-            "stratUrl": "",
-            "embeddedUrlFatboss" : "Yb1KCCMXPeU",
-            "img": "",
-            "wowheadNPCNum": "76906"
-        },
-        "06" : {
-            "embeddedUrl": "",
+            "embeddedUrl": "FUafR44FBKQ",
             "name": "The Blast Furnace",
-            "stratUrl": "",
+            "stratUrl": "http://www.icy-veins.com/wow/the-blast-furnace-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "tDzhPwDzdOc",
             "img": "",
             "wowheadNPCNum": "76806"
         },
-        "07" : {
-            "embeddedUrl": "",
+        "03" : {
+            "embeddedUrl": "H3JYPNYdCWA",
+            "name": "Hans'gar and Franzok",
+            "stratUrl": "http://www.icy-veins.com/wow/hans-gar-and-franzok-strategy-guide-normal-heroic",
+            "embeddedUrlFatboss" : "FW4zMMtiXsw",
+            "img": "",
+            "wowheadNPCNum": "76973"
+        },
+        "04" : {
+            "embeddedUrl": "uRYBm66s3-A",
+            "name": "Flamebender Ka'graz",
+            "stratUrl": "http://www.icy-veins.com/wow/flamebender-ka-graz-strategy-guide-normal-heroic",
+            "embeddedUrlFatboss" : "vAViKBYoAFg",
+            "img": "",
+            "wowheadNPCNum": "76814"
+        },
+        "05" : {
+            "embeddedUrl": "G4SPS2rV3So",
             "name": "Kromog",
-            "stratUrl": "",
+            "stratUrl": "http://www.icy-veins.com/wow/kromog-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "0BjCnIuTNbA",
             "img": "",
             "wowheadNPCNum": "77692"
+        },
+        "06" : {
+            "embeddedUrl": "s9-YdfBoddk",
+            "name": "Beastlord Darmac",
+            "stratUrl": "http://www.icy-veins.com/wow/beastlord-darmac-strategy-guide-normal-heroic",
+            "embeddedUrlFatboss" : "6ThCMYtspNU",
+            "img": "",
+            "wowheadNPCNum": "76865"
+        },
+        "07" : {
+            "embeddedUrl": "",
+            "name": "Operator Thogar",
+            "stratUrl": "http://www.icy-veins.com/wow/operator-thogar-strategy-guide-normal-heroic",
+            "embeddedUrlFatboss" : "Yb1KCCMXPeU",
+            "img": "",
+            "wowheadNPCNum": "76906"
         },
         "08" : {
             "embeddedUrl": "",
