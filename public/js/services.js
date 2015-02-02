@@ -234,7 +234,7 @@ var raidBossesInfo = {
             "wowheadNPCNum": "76865"
         },
         "07" : {
-            "embeddedUrl": "",
+            "embeddedUrl": "xxxx",
             "name": "Operator Thogar",
             "stratUrl": "http://www.icy-veins.com/wow/operator-thogar-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "Yb1KCCMXPeU",
@@ -242,7 +242,7 @@ var raidBossesInfo = {
             "wowheadNPCNum": "76906"
         },
         "08" : {
-            "embeddedUrl": "",
+            "embeddedUrl": "xxxx",
             "name": "The Iron Maidens",
             "stratUrl": "",
             "embeddedUrlFatboss" : "QnXH9Py-8_Y",
@@ -250,7 +250,7 @@ var raidBossesInfo = {
             "wowheadNPCNum": "77557"
         },
         "09" : {
-            "embeddedUrl": "",
+            "embeddedUrl": "xxxx",
             "name": "Blackhand",
             "stratUrl": "",
             "embeddedUrlFatboss" : "",
