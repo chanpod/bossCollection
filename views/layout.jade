@@ -10,8 +10,8 @@ html(ng-app="BossCollection")
     title BossCollection
 
     link(rel='stylesheet', href='js/lib/bootstrap-3.2.0/css/bootstrap.css')
-    link(rel='stylesheet', href='js/lib/angularSnap/snap.css')
-    link(rel='stylesheet', href='js/lib/angularSnap/angular-snap-only.min.css')
+
+
     link(rel='stylesheet', href='/css/app.css')
     script.
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -20,13 +20,12 @@ html(ng-app="BossCollection")
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-56619501-1', 'auto');
         ga('send', 'pageview');
+    script.
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
     body
         script(src='js/lib/angular/angular.js')
         script(src='js/lib/angular/angular-resource.js')
         script(src='js/lib/angular/angular-route.js')
-        script(src="js/lib/roundProgressBar/roundProgress.js")
-        script(src="js/lib/angularSnap/snap.js")
-        script(src="js/lib/angularSnap/angular-snap.min.js")
         script(src='js/lib/jquery-2.1.1.js')
         script(src='js/lib/bootstrap-3.2.0/js/bootstrap.js')
         script(src='js/lib/bootstrap-3.2.0/js/ui-bootstrap-tpls-0.11.2.min.js')

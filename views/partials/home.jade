@@ -3,24 +3,46 @@ script#home(type="text/ng-template")
         div(class = "container")
             h1.
                 {{welcomeMessage}}
-    div(class = "container")
-        div.row
-            div.col-md-6
-                h3
-                    a(href = "https://www.warcraftlogs.com/guilds/36279/")
-                        | Warcraft Logs
-            div.col-md-6
-                a(href='http://wowprogress.com/')
-                    img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0')
-    div.well.imgContainer
-        div(class = "container")
-                h1.center
-                    | Our guilds Interfaces!
+    div.well
         div.container
-            div()
-                div(style='height: 305px')
-                    carousel(interval='myInterval')
-                      slide(ng-repeat='slide in slides', active='slide.active')
-                        img(ng-src='{{slide.image}}', style='margin:auto;')
-                        .carousel-caption
-                          p {{slide.text}}
+            div.center
+
+    div.well
+        div.container
+            div.row
+                div.col-md-6
+                    a(href="https://twitter.com/mkdirBC", data-widget-id="563376732615745538").twitter-timeline
+                        | Tweets by @mkdirBC
+                div.col-md-6
+                    a(href='http://wowprogress.com/')
+                        img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0')
+    div.well
+        div(class = "container")
+            div.panel.panel-primary
+                div.panel-heading.text-center
+                    h3
+                        | Stats
+                div.panel-body
+                    div.row
+                        div.col-md-12
+                            div
+                                ul.list-group
+                                    a(href = "https://www.warcraftlogs.com/guilds/36279/").list-group-item.list-group-item-info
+                                        | Warcraft Logs
+                                    a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection").list-group-item.list-group-item-info
+                                        | Wowprogress
+    div.well
+        div.container
+            div.panel.panel-primary
+                div.panel-heading.text-center
+                    h3
+                        | Interface Screenshots
+                div.panel-body
+                    div.container.imgContainer
+                        div()
+                            div()
+                                carousel(interval='myInterval')
+                                  slide(ng-repeat='slide in slides', active='slide.active')
+                                    img(ng-src='{{slide.image}}', style='margin:auto;')
+                                    .carousel-caption
+                                      p {{slide.text}}
