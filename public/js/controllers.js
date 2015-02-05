@@ -228,7 +228,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         function($scope){
 
             $scope.myInterval = 10000;
-            var listofImages = [{image: '/images/BossKills/ImpKill.jpg', text: "Imperator Down!"}];
+            var listofImages = [
+                {image: '/images/BossKills/ImpKill.jpg', text: "Normal Imperator Down!"},
+                {image: '/images/BossKills/Heroic_Imp_Kill.jpg', text: "Heroic Imperator Down!"},
+                {image: '/images/BossKills/silly_imp_kill.jpg', text: "Goofy Shot for heroic Imp kill"}
+            ];
 
             var slides = $scope.slides = [];
             $scope.addSlide = function(index) {
