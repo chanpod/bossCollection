@@ -224,6 +224,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         });
                     }
 
+
             }]).controller("progressionController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
         function($scope){
 
