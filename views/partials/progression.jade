@@ -18,10 +18,11 @@ script#progression(type="text/ng-template")
                 button(ng-click = "submitMessage()")
                 | Submit
             div.container
-                div(ng-repeat = "message in messages")
-                    div.userName
-                        {{message.userName}}
-                    div.message
+                div(ng-repeat = "message in messages").row
+                    div.userName.col-md.2
+                        b
+                            {{message.userName}}
+                    div.message.col-md-6
                         {{message.message}}
                     br
         div(ng-show = "!hasEnteredUsername").container
