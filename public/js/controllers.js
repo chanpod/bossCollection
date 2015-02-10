@@ -132,8 +132,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }, 5000);
         }
 
-    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
-        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal){
+    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal', 'socket',
+        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal, socket){
+
+
 
 
             /*var disqus_shortname = 'bosscollectionnet'; // required: replace example with your forum shortname
@@ -225,8 +227,27 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     }
 
 
-            }]).controller("progressionController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
-        function($scope){
+            }]).controller("progressionController", ["$scope", function($scope){
+
+            $scope.messages = ["test", "messages"];
+            var socket = io("http://localhost:4001");
+
+
+
+            socket.on("messagesFromServer", function(messages){
+                $scope.messages = messages;
+            });
+
+            $scope.messageToSend = "";
+            $scope.submitMessage = function(){
+                if($scope.messageToSend == ""){
+                    return;
+                }
+                else{
+                    socket.emit("newMessage", $scope.messageToSend);
+                    $scope.messageToSend = "";
+                }
+            };
 
             $scope.myInterval = 10000;
             var listofImages = [

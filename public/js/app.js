@@ -1,6 +1,6 @@
 'use strict';
 
-// Declare app level module which depends on filters, and services
+
 
 angular.module('BossCollection', [
   'BossCollection.controllers',
@@ -8,8 +8,11 @@ angular.module('BossCollection', [
   'BossCollection.services',
   'Imn.directives',
   'ngRoute',
-  'ui.bootstrap'
-]).
+  'ui.bootstrap',
+  'btford.socket-io'
+]).factory('mySocket', function(socketFactory){
+    return socketFactory();
+}).
 config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
 

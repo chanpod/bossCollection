@@ -10,6 +10,16 @@ script#progression(type="text/ng-template")
                         .carousel-caption
                           p {{slide.text}}
     div.well
+        div.container
+            | Chat Room
+            textarea(ng-model = "messageToSend")
+            button(ng-click = "submitMessage()")
+                | Submit
+            div(ng-repeat = "message in messages")
+                {{message}}
+                br
+
+    div.well
         div.container.text-center
             div.panel.panel-primary
                 div.panel-heading.text-center
@@ -69,8 +79,8 @@ script#progression(type="text/ng-template")
                                                     | Downed
                                             a().list-group-item
                                                 | Beastlord Darmac: &nbsp
-                                                span.label.label-danger
-                                                    | Soon...
+                                                span.label.label-success
+                                                    | Downed
                                             a().list-group-item
                                                 | Flamebender Ka'graz: &nbsp
                                                 span.label.label-danger
@@ -84,8 +94,8 @@ script#progression(type="text/ng-template")
                                                     | Soon...
                                             a().list-group-item
                                                 | Operator Thogar: &nbsp
-                                                span.label.label-danger
-                                                    | Soon...
+                                                span.label.label-success
+                                                    | Downed
                                             a().list-group-item
                                                 | The Blast Furnace: &nbsp
                                                 span.label.label-danger

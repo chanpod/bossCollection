@@ -8,11 +8,41 @@ var blizzApiRoot = "https://us.api.battle.net/wow/";
 var getItems = "fields=items";
 var getClasses = "data/character/classes";
 var getGuild = "fields=achievements,members";
+
 //https://us.api.battle.net/wow/data/character/classes?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
 //https://us.api.battle.net/wow/guild/Zul'jin/crux?fields=achievements&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
 var classes = ["warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
 
-service.factory('charService', function($http, $q){
+service.factory('socket', function(mySocket){
+
+    var socket = mySocket;
+    socket.connect('http://localhost:4001/');
+
+    return {
+        on: function (eventName, callback) {
+            console.log("Initializing socket");
+            socket.on(eventName, function () {
+                console.log("Socket initialized.");
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    callback.apply(socket, args);
+                });
+            });
+        },
+        emit: function (eventName, data, callback) {
+            console.log("Emitting...");
+            socket.emit(eventName, data, function () {
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    if (callback) {
+                        callback.apply(socket, args);
+                    }
+                });
+            })
+        }
+    };
+
+}).factory('charService', function($http, $q){
 
         var charApi = {
             getCharacter: function (realm, charName){
