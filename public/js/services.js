@@ -15,32 +15,6 @@ var classes = ["warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman"
 
 service.factory('socket', function(mySocket){
 
-    var socket = mySocket;
-    socket.connect('http://localhost:4001/');
-
-    return {
-        on: function (eventName, callback) {
-            console.log("Initializing socket");
-            socket.on(eventName, function () {
-                console.log("Socket initialized.");
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    callback.apply(socket, args);
-                });
-            });
-        },
-        emit: function (eventName, data, callback) {
-            console.log("Emitting...");
-            socket.emit(eventName, data, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    if (callback) {
-                        callback.apply(socket, args);
-                    }
-                });
-            })
-        }
-    };
 
 }).factory('charService', function($http, $q){
 
