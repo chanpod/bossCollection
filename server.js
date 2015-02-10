@@ -54,9 +54,9 @@ console.log("Listening on port 4000");
 http.listen(4001, function(){
     console.log("Socket listening on 4001");
 })
-
+var messages = [];
 io.on('connection', function(socket){
-    var messages = []
+
     console.log('a user connected');
 
     socket.on("disconnect", function(){
