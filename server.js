@@ -65,7 +65,7 @@ io.on('connection', function(socket){
 
     socket.on("newMessage", function(message){
         messages.push(message);
-        console.log(message);
+        console.log(messages);
         io.emit("messagesFromServer", messages);
     })
 });
