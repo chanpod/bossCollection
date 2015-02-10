@@ -16,7 +16,7 @@ script#progression(type="text/ng-template")
                 textarea(ng-model = "messageToSend")
                 br
                 button(ng-click = "submitMessage()")
-                | Submit
+                    | Submit
             div.container
                 div(ng-repeat = "message in messages").row
                     div.userName.col-md.2
