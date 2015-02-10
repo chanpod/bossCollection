@@ -229,7 +229,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             }]).controller("progressionController", ["$scope", function($scope){
 
-            $scope.messages = ["test", "messages"];
+            $scope.messages = [];
             $scope.userName = "";
             var socket = io("http://bosscollection.net");
 
