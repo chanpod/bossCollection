@@ -11,7 +11,7 @@ var express = require('express'),
 
   path = require('path');
 
-var socket = require('./routes/socket.js');
+
 
 
 var app = express();
