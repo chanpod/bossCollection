@@ -5,6 +5,20 @@ body {
 
 }
 
+.chat{
+    width:400px;
+    height:400px;
+    overflow: scroll;
+}
+
+.userName{
+    width:75px;
+}
+
+.message{
+    width: 300px;
+}
+
 .imgContainer{
     height:705px;
     width:100%;

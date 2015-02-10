@@ -10,14 +10,25 @@ script#progression(type="text/ng-template")
                         .carousel-caption
                           p {{slide.text}}
     div.well
-        div.container
+        div(ng-show = "hasEnteredUsername").container
             | Chat Room
-            textarea(ng-model = "messageToSend")
-            button(ng-click = "submitMessage()")
-                | Submit
-            div(ng-repeat = "message in messages")
-                {{message}}
+            div.container
+                textarea(ng-model = "messageToSend")
                 br
+                button(ng-click = "submitMessage()")
+                | Submit
+            div.container
+                div(ng-repeat = "message in messages")
+                    div.userName
+                        {{message.userName}
+                    div.message
+                        {{message.message}}
+                    br
+        div(ng-show = "!hasEnteredUsername").container
+            | Enter your username
+            div.container
+                input(type = "text", placeholder="Enter Username...", ng-model = "userName")
+                button(ng-click = "enterUsername()") Submit
 
     div.well
         div.container.text-center

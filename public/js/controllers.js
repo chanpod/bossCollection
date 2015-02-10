@@ -230,9 +230,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }]).controller("progressionController", ["$scope", function($scope){
 
             $scope.messages = ["test", "messages"];
+            $scope.userName = "";
             var socket = io("http://bosscollection.net");
 
-
+            $scope.hasEnteredUsername = false;
 
             socket.on("messagesFromServer", function(messages){
                 $scope.messages = messages;
@@ -244,10 +245,22 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     return;
                 }
                 else{
-                    socket.emit("newMessage", $scope.messageToSend);
+                    var message = {userName: $scope.userName,
+                                   message: $scope.messageToSend
+                    }
+                    socket.emit("newMessage", message);
                     $scope.messageToSend = "";
                 }
             };
+
+        $scope.enterUsername = function(){
+            if($scope.userName == ""){
+                alert("invalid username");
+            }
+            else {
+                $scope.hasEnteredUsername = true;
+            }
+        };
 
             $scope.myInterval = 10000;
             var listofImages = [
