@@ -230,6 +230,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }]).controller("progressionController", ["$scope", 'cookies', function($scope, cookies){
 
             $scope.messages = [];
+            $scope.chatFilters = {};
+            $scope.chatFilters.userName = ''
 
             var socket = io("http://bosscollection.net");
 
@@ -244,6 +246,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             socket.on("messagesFromServer", function(messages){
                 $scope.messages = messages;
+                $scope.$apply();
             });
 
             $scope.messageToSend = "";
@@ -259,6 +262,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.messageToSend = "";
                 }
             };
+
+        $scope.hideSystemMessages = function(systemFilter){
+            console.log(systemFilter);
+            if($scope.chatFilters.userName != systemFilter) {
+                $scope.chatFilters.userName = systemFilter
+            }
+            else{
+                $scope.chatFilters.userName = '';
+            }
+        };
 
         $scope.enterUsername = function(){
             if($scope.userName == ""){

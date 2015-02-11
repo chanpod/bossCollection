@@ -10,29 +10,43 @@ script#progression(type="text/ng-template")
                         .carousel-caption
                           p {{slide.text}}
     div.well
-        div(ng-show = "hasEnteredUsername").container
-            h3
-                | Chat Room
-                i
-                    | (Beta - Seems to be faster?)
-            div.container.chat
-                div(ng-repeat = "message in messages").row
-                    div.col-md-1
-                        b
+        div.container
+            div.row
+                div(ng-show = "hasEnteredUsername").col-md-2
+                    h4
+                        | Filter Chat by user name.
+                    input(type = "checkbox", ng-click = "hideSystemMessages('!System')", value = "systemFilter")
+                    | System
+                    div(ng-repeat = "user in messages | filter:chatFilters:unique")
+                        div
+                            b
                             {{message.userName}}
-                    div.col-md-10
-                        {{message.message}}
-                    br
-            div.container
-                input(ng-model = "messageToSend")
-                br
-                button(ng-click = "submitMessage()")
-                    | Submit
-        div(ng-show = "!hasEnteredUsername").container
-            | Enter your username
-            div.container
-                input(type = "text", placeholder="Enter Username...", ng-model = "userName")
-                button(ng-click = "enterUsername()") Submit
+
+
+                div.col-md-10
+                    div(ng-show = "hasEnteredUsername")
+                        h3
+                            | Chat Room
+                            i
+                                | (Beta - Slowness fixed!)
+                        div.container.chat
+                            div(ng-repeat = "message in messages | filter:chatFilters").row
+                                div.col-md-1
+                                    b
+                                        {{message.userName}}
+                                div.col-md-10
+                                    {{message.message}}
+                                br
+                        div.container
+                            input(ng-model = "messageToSend")
+                            br
+                            button(ng-click = "submitMessage()")
+                                | Submit
+                    div(ng-show = "!hasEnteredUsername").container
+                        | Enter your username
+                        div.container
+                            input(type = "text", placeholder="Enter Username...", ng-model = "userName")
+                            button(ng-click = "enterUsername()") Submit
 
     div.well
         div.container.text-center

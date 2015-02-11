@@ -2,6 +2,7 @@
 
 // export function for listening to the socket
 var messages = [];
+var users = [];
 module.exports = function (socket) {
 
 
@@ -13,7 +14,10 @@ module.exports = function (socket) {
             message: "User " +username + " has connected."
         };
         userName = username;
+
+        users.push(username);
         messages.push(message);
+
         console.log("User " +username + " has connected.");
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
@@ -27,6 +31,7 @@ module.exports = function (socket) {
             message: "User: " + userName + " has disconnected."
         };
 
+        users.pop(username);
         messages.push(message);
         socket.broadcast.emit("messageFromServer", message)
         socket.emit("messagesFromServer", messages);
