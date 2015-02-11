@@ -231,7 +231,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $scope.messages = [];
 
-            var socket = io("http://54.173.24.121:4001");
+            var socket = io("http://bosscollection.net");
 
             $scope.hasEnteredUsername = false;
 
