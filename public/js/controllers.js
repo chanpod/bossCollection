@@ -263,6 +263,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             if($scope.userName == ""){
                 alert("invalid username");
             }
+            else if($scope.userName.length > 15){
+                alert("Invalid username. Too long! Must be less than 15 char.");
+            }
             else {
                 $scope.hasEnteredUsername = true;
                 socket.emit("init", $scope.userName);
