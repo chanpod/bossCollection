@@ -239,6 +239,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             if($scope.userName != null){
                 $scope.hasEnteredUsername = true;
+                socket.emit("init", $scope.userName);
             }
 
             socket.on("messagesFromServer", function(messages){
