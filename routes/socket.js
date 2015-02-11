@@ -4,17 +4,18 @@
 var messages = [];
 module.exports = function (socket) {
 
-    console.log("user Connected");
+
     var userName = "";
 
     socket.on("init", function(username){
         var message = {
             userName: "System",
-            message: "User: " +username + " has connected."
+            message: "User " +username + " has connected."
         };
         userName = username;
         messages.push(message);
-        socket.broadcast.emit("messageFromServer", message)
+        console.log("User " +username + " has connected.");
+        socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
     });
 
