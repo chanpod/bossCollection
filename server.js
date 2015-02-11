@@ -57,8 +57,5 @@ http.listen(4001, function(){
 
 io.on('connection', socketapi);
 
-io.on('disconnect', socketapi);
-
-
 
 console.log('...');
