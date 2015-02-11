@@ -227,13 +227,19 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     }
 
 
-            }]).controller("progressionController", ["$scope", function($scope){
+            }]).controller("progressionController", ["$scope", 'cookies', function($scope, cookies){
 
             $scope.messages = [];
-            $scope.userName = "";
+
             var socket = io("http://bosscollection.net");
 
             $scope.hasEnteredUsername = false;
+
+            $scope.userName = cookies.getUserName();
+
+            if($scope.userName != null){
+                $scope.hasEnteredUsername = true;
+            }
 
             socket.on("messagesFromServer", function(messages){
                 $scope.messages = messages;
@@ -259,6 +265,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }
             else {
                 $scope.hasEnteredUsername = true;
+                socket.emit("init", $scope.userName);
+                cookies.saveUserName($scope.userName);
             }
         };
 

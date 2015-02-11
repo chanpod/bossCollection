@@ -117,7 +117,23 @@ service.factory('socket', function(mySocket){
     };
 
     return bossStratsApi;
-})
+}).factory("cookies", function($cookies, $cookieStore){
+    var usernameKey = "username";
+
+    var cookieService = {
+
+        saveUserName: function(userName){
+
+            $cookieStore.put(usernameKey, userName)
+        },
+        getUserName: function(){
+
+            return $cookieStore.get(usernameKey);
+        }
+    };
+
+    return cookieService
+});
 
 var raidBossesInfo = {
 

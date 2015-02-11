@@ -11,20 +11,23 @@ script#progression(type="text/ng-template")
                           p {{slide.text}}
     div.well
         div(ng-show = "hasEnteredUsername").container
-            | Chat Room
+            h3
+                | Chat Room
+                i
+                    | (Beta - Still slow)
+            div.container.chat
+                div(ng-repeat = "message in messages").row
+                    div.col-md-1
+                        b
+                            {{message.userName}}
+                    div.col-md-10
+                        {{message.message}}
+                    br
             div.container
-                textarea(ng-model = "messageToSend")
+                input(ng-model = "messageToSend")
                 br
                 button(ng-click = "submitMessage()")
                     | Submit
-            div.container
-                div(ng-repeat = "message in messages").row
-                    div.userName.col-md.2
-                        b
-                            {{message.userName}}
-                    div.message.col-md-6
-                        {{message.message}}
-                    br
         div(ng-show = "!hasEnteredUsername").container
             | Enter your username
             div.container

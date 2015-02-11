@@ -10,7 +10,7 @@ var express = require('express'),
   api = require('./routes/api'),
 
   path = require('path');
-
+  var socketapi = require('./routes/socket.js');
 
 
 
@@ -52,23 +52,10 @@ app.listen(port);
 console.log("Listening on port 4000");
 
 http.listen(4001, function(){
-    console.log("Socket listening on 4001");
-})
-var messages = [];
-io.on('connection', function(socket){
-
-    console.log('a user connected');
-
-    socket.on("disconnect", function(){
-        console.log("A user disconnected");
-    })
-
-    socket.on("newMessage", function(message){
-        messages.push(message);
-        console.log(messages);
-        io.emit("messagesFromServer", messages);
-    })
+    console.log("Socket server listening on 4001")
 });
+
+io.on('connection', socketapi);
 
 
 

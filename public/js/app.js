@@ -9,7 +9,8 @@ angular.module('BossCollection', [
   'Imn.directives',
   'ngRoute',
   'ui.bootstrap',
-  'btford.socket-io'
+  'btford.socket-io',
+    'ngCookies'
 ]).factory('mySocket', function(socketFactory){
     return socketFactory();
 }).
