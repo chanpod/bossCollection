@@ -231,7 +231,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $scope.messages = [];
 
-            var socket = io("http://bosscollection.net");
+            var socket = io("http://bosscollection.net", {'connect timeout': 1000});
 
             $scope.hasEnteredUsername = false;
 
