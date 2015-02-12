@@ -71,11 +71,8 @@ module.exports = function (socket) {
             users.remove(userToRemove);
         }
 
-        socket.broadcast.emit("messageFromServer", message);
-        socket.emit("messagesFromServer", messages);
-
-        socket.broadcast.emit("userConn_Disc", users);
-        socket.emit("userConn_Disc", users);
+        socket.broadcast.emit("userConn_Disc", users, messages);
+        socket.emit("userConn_Disc", users, messages);
     });
 
     socket.on("newMessage", function(message){
