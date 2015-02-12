@@ -233,7 +233,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.chatFilters = {};
             $scope.chatFilters.userName = ''
 
-            var socket = io("http://bosscollection.net");
+            var socket = io("http://54.173.24.121:4001");
 
             $scope.hasEnteredUsername = false;
 
