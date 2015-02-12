@@ -17,10 +17,10 @@ script#progression(type="text/ng-template")
                         | Filter Chat by user name.
                     input(type = "checkbox", ng-click = "hideSystemMessages('!System')", value = "systemFilter")
                     | System
-                    div(ng-repeat = "user in messages | filter:chatFilters:unique")
+                    div(ng-repeat = "user in users | filter:chatFilters:unique")
                         div
                             b
-                            {{message.userName}}
+                            {{user}}
 
 
                 div.col-md-10

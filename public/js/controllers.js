@@ -249,6 +249,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.$apply();
             });
 
+            socket.on("userConn_Disc", function(userList){
+               $scope.users = userList;
+            });
+
             $scope.messageToSend = "";
             $scope.submitMessage = function(){
                 if($scope.messageToSend == ""){
