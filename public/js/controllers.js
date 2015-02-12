@@ -231,7 +231,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $scope.messages = [];
             $scope.chatFilters = {};
-            $scope.chatFilters.userName = ''
+            $scope.chatFilters.userName = '';
 
             var socket = io("http://54.173.24.121:4001");
 
@@ -244,8 +244,29 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 socket.emit("init", $scope.userName);
             }
 
+            $scope.open = function (url) {
+                $scope.setUrl(url);
+                console.log(url);
+                var modalInstance = $modal.open({
+                    templateUrl: 'videoModal',
+                    controller: 'videoController',
+                    size: 'lg',
+                    windowClass: "videoModal",
+                    resolve: {
+                        currentUrl: function () {
+                            return  $scope.currentEmbedUrl;
+                        }
+                    }
+                });
+            };
+
+            socket.on("rejectUser", function(status){
+                $scope.hasEnteredUsername = false;
+                alert("Username already in use. Try another one.");
+            });
+
             socket.on("messagesFromServer", function(messages){
-                console.log("Message from server!")
+                console.log("Message from server!");
                 $scope.messages = messages;
                 $scope.$apply();
             });

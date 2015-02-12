@@ -42,15 +42,19 @@ module.exports = function (socket) {
 
         if(binarySearch(userName, users) == null){
             users.push(username);
+            messages.push(message);
+
+            console.log("User " +username + " has connected.");
+
+            socket.broadcast.emit("userConn_Disc", users, messages);
+            socket.emit("userConn_Disc", users, messages);
+        }
+        else{
+            socket.emit("rejectUser", false);
         }
 
 
-        messages.push(message);
 
-        console.log("User " +username + " has connected.");
-
-        socket.broadcast.emit("userConn_Disc", users, messages);
-        socket.emit("userConn_Disc", users, messages);
 
 
 

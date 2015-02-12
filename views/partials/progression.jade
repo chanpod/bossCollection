@@ -20,13 +20,13 @@ script#progression(type="text/ng-template")
                     div(ng-repeat = "user in users")
                         div
                             b
-                            {{user}}
+                                {{user}}
                 div.col-md-10
                     div(ng-show = "hasEnteredUsername")
                         h3
                             | Chat Room
                             i
-                                | (Beta - Slowness fixed!)
+                                | (Beta)
                         div.container.chat
                             div(ng-repeat = "message in messages | filter:chatFilters").row
                                 div.col-md-1
