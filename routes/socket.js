@@ -63,9 +63,13 @@ module.exports = function (socket) {
             message: "User: " + userName + " has disconnected."
         };
 
-
         messages.push(message);
-        users.remove(binarySearch(userName, users));
+
+        var userToRemove = binarySearch(userName, users);
+        if(userToRemove != null){
+            users.remove(userToRemove);
+        }
+
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
 
