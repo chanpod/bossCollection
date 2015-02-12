@@ -41,7 +41,7 @@ module.exports = function (socket) {
         socket.broadcast.emit("messageFromServer", message);
         socket.broadcast.emit("userConn_Disc", users);
 
-        callback(messages, users);
+        return callback(messages, users);
 
     });
 
