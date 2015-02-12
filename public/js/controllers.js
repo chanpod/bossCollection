@@ -288,7 +288,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 }
                 else {
                     $scope.hasEnteredUsername = true;
-                    socket.emit("init", $scope.userName, userConDiscCallback(error, messages, users));
+                    socket.emit("init", $scope.userName);
                     cookies.saveUserName($scope.userName);
                 }
             };

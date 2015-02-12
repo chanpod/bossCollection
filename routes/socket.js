@@ -33,7 +33,7 @@ module.exports = function (socket) {
 
     var userName = "";
 
-    socket.on("init", function(username, callback){
+    socket.on("init", function(username){
         var message = {
             userName: "System",
             message: "User " +username + " has connected."
@@ -53,7 +53,7 @@ module.exports = function (socket) {
         socket.emit("messageFromServer", messages);
         socket.emit("userConn_Disc", users);
 
-        //callback('error', messages, users);
+
 
     });
 
