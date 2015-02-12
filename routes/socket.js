@@ -20,7 +20,7 @@ module.exports = function (socket) {
 
         console.log("User " +username + " has connected.");
         socket.broadcast.emit("messageFromServer", message);
-        socket.emit("messagesFromServer", messages);
+
     });
 
     socket.on("disconnect", function(){
@@ -33,15 +33,15 @@ module.exports = function (socket) {
 
         users.pop(username);
         messages.push(message);
-        socket.broadcast.emit("messageFromServer", message)
-        socket.emit("messagesFromServer", messages);
+        socket.broadcast.emit("messageFromServer", message);
+
     });
 
     socket.on("newMessage", function(message){
         messages.push(message);
         console.log(messages);
         socket.broadcast.emit("messagesFromServer", messages);
-        socket.emit("messagesFromServer", messages);
+
     })
 };
 
