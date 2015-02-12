@@ -36,6 +36,7 @@ module.exports = function (socket) {
 
         users.pop(userName);
         messages.push(message);
+
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
 

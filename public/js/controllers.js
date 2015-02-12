@@ -269,37 +269,31 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 }
             };
 
-        $scope.hideSystemMessages = function(systemFilter){
-            console.log(systemFilter);
-            if($scope.chatFilters.userName != systemFilter) {
-                $scope.chatFilters.userName = systemFilter
-            }
-            else{
-                $scope.chatFilters.userName = '';
-            }
-        };
+            $scope.hideSystemMessages = function(systemFilter){
+                console.log(systemFilter);
+                if($scope.chatFilters.userName != systemFilter) {
+                    $scope.chatFilters.userName = systemFilter
+                }
+                else{
+                    $scope.chatFilters.userName = '';
+                }
+            };
 
-        $scope.enterUsername = function(){
-            if($scope.userName == ""){
-                alert("invalid username");
-            }
-            else if($scope.userName.length > 15){
-                alert("Invalid username. Too long! Must be less than 15 char.");
-            }
-            else {
-                $scope.hasEnteredUsername = true;
-                socket.emit("init", $scope.userName, function(error, messages, users){
-                    if(error){
-                        console.log(error);
-                        return;
-                    }
+            $scope.enterUsername = function(){
+                if($scope.userName == ""){
+                    alert("invalid username");
+                }
+                else if($scope.userName.length > 15){
+                    alert("Invalid username. Too long! Must be less than 15 char.");
+                }
+                else {
+                    $scope.hasEnteredUsername = true;
+                    socket.emit("init", $scope.userName, userConDiscCallback(error, messages, users));
+                    cookies.saveUserName($scope.userName);
+                }
+            };
 
-                    $scope.messages = messages;
-                    $scope.users = users;
-                });
-                cookies.saveUserName($scope.userName);
-            }
-        };
+
 
             $scope.myInterval = 10000;
             var listofImages = [
@@ -315,6 +309,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             for(var i =0; i < listofImages.length; i++) {
                 $scope.addSlide(i);
+            }
+
+            var userConDiscCallback = function(error, messages, users){
+                if(error){
+                    console.log(error);
+                    return;
+                }
+
+                $scope.messages = messages;
+                $scope.users = users;
             }
 
         }]);
