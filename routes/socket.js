@@ -50,6 +50,8 @@ module.exports = function (socket) {
         console.log("User " +username + " has connected.");
         socket.broadcast.emit("messageFromServer", messages);
         socket.broadcast.emit("userConn_Disc", users);
+        socket.emit("messageFromServer", messages);
+        socket.emit("userConn_Disc", users);
 
         //callback('error', messages, users);
 
