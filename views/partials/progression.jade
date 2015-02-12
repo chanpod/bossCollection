@@ -14,13 +14,35 @@ script#progression(type="text/ng-template")
             div.row
                 div(ng-show = "hasEnteredUsername").col-md-2
                     h4
-                        | Filter Chat by user name.
-                    input(type = "checkbox", ng-click = "hideSystemMessages('!System')", value = "systemFilter")
-                    | System
+                        | Users
+                    div().btn-group
+                        button(data-toggle ="dropdown").btn-info.dropdown-toggle
+                            | System
+                            Action
+                                span.caret
+                        ul(role="menu").dropdown-menu
+                            li
+                                a(ng-click = "filterUser({userName: 'System'})")
+                                    | Mute
                     div(ng-repeat = "user in users")
-                        div
-                            b
-                                {{user}}
+                        div(ng-show = "user != userName").btn-group
+                            button(data-toggle ="dropdown").btn-info.dropdown-toggle
+                                {{user.userName}}
+                                Action
+                                    span.caret
+                            ul(role="menu").dropdown-menu
+                                li
+                                    a(href="")
+                                        | Personal Chat
+                                li
+                                    a(href="", ng-click = "filterUser(user)", ng-show = "!user.muted")
+                                        | Mute
+                                li
+                                    a(href="", ng-click = "filterUser(user)", ng-show = "user.muted")
+                                        | Unmute
+                                li
+                                    a(href="")
+                                        | View only this person
                 div.col-md-10
                     div(ng-show = "hasEnteredUsername")
                         h3
@@ -28,7 +50,7 @@ script#progression(type="text/ng-template")
                             i
                                 | (Beta)
                         div.container.chat
-                            div(ng-repeat = "message in messages | filter:chatFilters").row
+                            div(ng-repeat = "message in filteredMessages | filter:systemFilter | filter:chatFilters").row
                                 div.col-md-1
                                     b
                                         {{message.userName}}

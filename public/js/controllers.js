@@ -227,11 +227,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     }
 
 
-            }]).controller("progressionController", ["$scope", 'cookies', function($scope, cookies){
+            }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', function($scope, cookies, filterFilter){
 
             $scope.messages = [];
-            $scope.chatFilters = {};
-            $scope.chatFilters.userName = '';
+            $scope.filteredMessages = [];
+            $scope.chatFilters = [];
+            $scope.systemFilter = {};
+            $scope.users = {
+                userName : "",
+                muted : false
+            };
 
             var socket = io("http://54.173.24.121:4001");
 
@@ -272,10 +277,31 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             });
 
             socket.on("userConn_Disc", function(userList, messages){
-                $scope.users = userList;
+
                 $scope.messages = messages;
-                console.log($scope.users);
+                console.log(userList);
+                console.log($scope.messages);
                 $scope.$apply();
+                $scope.buildUsersList(userList);
+                $scope.$apply();
+            });
+
+            $scope.buildUsersList = function(usersList){
+                $scope.users = [];
+
+                for(i = 0; i< usersList.length; i++){
+                    var user = {
+                        userName : usersList[i],
+                        muted : false
+                    };
+                    $scope.users.push(user);
+                }
+
+            };
+
+            $scope.$watch('messages', function(newMessages){
+                $scope.filteredMessages = newMessages;
+                $scope.applyFilter();
             });
 
             $scope.messageToSend = "";
@@ -286,7 +312,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 else{
                     var message = {userName: $scope.userName,
                                    message: $scope.messageToSend
-                    }
+                    };
                     socket.emit("newMessage", message);
                     $scope.messageToSend = "";
                 }
@@ -294,12 +320,44 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $scope.hideSystemMessages = function(systemFilter){
 
-                if($scope.chatFilters.userName != systemFilter) {
-                    $scope.chatFilters.userName = systemFilter
+                if($scope.systemFilter.userName != systemFilter) {
+                    $scope.systemFilter.userName = systemFilter
                 }
                 else{
-                    $scope.chatFilters.userName = '';
+                    $scope.systemFilter.userName = '';
                 }
+            };
+
+            $scope.applyFilter = function(){
+
+                console.log($scope.chatFilters);
+                $scope.filteredMessages = $scope.messages;
+                console.log($scope.chatFilters.length);
+
+                for(i = 0; i < $scope.chatFilters.length; i++) {
+                    console.log("whyyyy");
+                    console.log("Filter: " + $scope.chatFilters[i]);
+                    $scope.filteredMessages = filterFilter($scope.filteredMessages, $scope.chatFilters[i]);
+
+                }
+                console.log($scope.filteredMessages);
+            };
+
+            $scope.filterUser = function(userToFilter){
+
+                userToFilter.muted = !userToFilter.muted; //Reverse the bool
+                var doesExist = null;
+                doesExist = binarySearch($scope.chatFilters, "!"+userToFilter);
+                if(doesExist == null) {
+
+                    $scope.chatFilters.push("!" + userToFilter.userName);
+                }
+                else{
+                    console.log("It exist!");
+                    $scope.chatFilters.remove(doesExist);
+                }
+
+                $scope.applyFilter();
             };
 
             $scope.enterUsername = function(){
@@ -346,7 +404,30 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
         }]);
 
+function binarySearch(key, inputArray) {
 
+    var low  = 0,
+        high = inputArray.length - 1,
+        mid;
+
+    while (low <= high) {
+        mid = low + (high - low) / 2;
+        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
+
+        if (key < inputArray[mid]) { high = mid - 1; }
+        else if (key > inputArray[mid]) { low = mid + 1; }
+        else { return mid; }
+    }
+
+    return null;
+}
+
+    function remove(from, to) {
+        console.log("working");
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+    };
 
 
 
