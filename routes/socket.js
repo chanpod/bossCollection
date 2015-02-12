@@ -38,10 +38,10 @@ module.exports = function (socket) {
         messages.push(message);
 
         console.log("User " +username + " has connected.");
-        socket.broadcast.emit("messageFromServer", message);
+        socket.broadcast.emit("messageFromServer", messages);
         socket.broadcast.emit("userConn_Disc", users);
 
-        callback(error, messages, users);
+        callback('error', messages, users);
 
     });
 
