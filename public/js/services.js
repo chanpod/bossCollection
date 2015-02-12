@@ -143,6 +143,7 @@ var raidBossesInfo = {
             "name": "Kargath Bladefist",
             "stratUrl": "http://www.icy-veins.com/wow/kargath-bladefist-strategy-guide-preview",
             "embeddedUrlFatboss" : "KpzfmKTZp8U",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/kargath.png",
             "wowheadNPCNum": "87444"
         },
@@ -151,6 +152,7 @@ var raidBossesInfo = {
             "name": "The Butcher",
             "stratUrl": "http://www.icy-veins.com/wow/the-butcher-strategy-guide-preview",
             "embeddedUrlFatboss" : "yIS0jjmcFgE",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/theButcher.png",
             "wowheadNPCNum": "87447"
         },
@@ -159,6 +161,7 @@ var raidBossesInfo = {
             "name": "Tectus",
             "stratUrl": "http://www.icy-veins.com/wow/tectus-strategy-guide-preview",
             "embeddedUrlFatboss" : "wNbJmeNLkjo",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/tectus.png",
             "wowheadNPCNum": "87446"
         },
@@ -167,6 +170,7 @@ var raidBossesInfo = {
             "name": "Brackenspore",
             "stratUrl": "http://www.icy-veins.com/wow/brackenspore-strategy-guide-preview",
             "embeddedUrlFatboss" : "fsXhQtEKzms",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/brackenspore.png",
             "wowheadNPCNum": "87441"
         },
@@ -175,6 +179,7 @@ var raidBossesInfo = {
             "name": "Twin Ogron",
             "stratUrl": "http://www.icy-veins.com/wow/twin-ogron-strategy-guide-preview",
             "embeddedUrlFatboss" : "",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/twinOgron.png",
             "wowheadNPCNum": "87449"
         },
@@ -184,6 +189,7 @@ var raidBossesInfo = {
             "name": "Ko'ragh",
             "stratUrl": "http://www.icy-veins.com/wow/ko-ragh-strategy-guide-preview",
             "embeddedUrlFatboss" : "XSeMw7-byOA",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/ko'ragh.png",
             "wowheadNPCNum": "87445"
         },
@@ -192,6 +198,7 @@ var raidBossesInfo = {
             "name": "Imperator Mar'gok",
             "stratUrl": "http://www.icy-veins.com/wow/imperator-mar-gok-strategy-guide-preview",
             "embeddedUrlFatboss" : "",
+            "embeddedUrlLOSgaming": "",
             "img": "Highmaul/imperatorMar'gok.png",
             "wowheadNPCNum": "87818"
         }
@@ -202,6 +209,7 @@ var raidBossesInfo = {
             "name": "Gruul",
             "stratUrl": "http://www.icy-veins.com/wow/gruul-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "QrN5W7VxZ7Y",
+            "embeddedUrlLOSgaming": "ERVxge6_tPU",
             "img": "",
             "wowheadNPCNum": "76877"
         },
@@ -210,6 +218,7 @@ var raidBossesInfo = {
             "name": "Oregorger",
             "stratUrl": "http://www.icy-veins.com/wow/oregorger-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "i0mGJkRLz3A",
+            "embeddedUrlLOSgaming": "DDGEPPf6qAE",
             "img": "",
             "wowheadNPCNum": "77182"
         },
@@ -218,6 +227,7 @@ var raidBossesInfo = {
             "name": "The Blast Furnace",
             "stratUrl": "http://www.icy-veins.com/wow/the-blast-furnace-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "tDzhPwDzdOc",
+            "embeddedUrlLOSgaming": "l772ywX8t0I",
             "img": "",
             "wowheadNPCNum": "76806"
         },
@@ -226,6 +236,7 @@ var raidBossesInfo = {
             "name": "Hans'gar and Franzok",
             "stratUrl": "http://www.icy-veins.com/wow/hans-gar-and-franzok-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "FW4zMMtiXsw",
+            "embeddedUrlLOSgaming": "fVMx0PUJTpk",
             "img": "",
             "wowheadNPCNum": "76973"
         },
@@ -234,6 +245,7 @@ var raidBossesInfo = {
             "name": "Flamebender Ka'graz",
             "stratUrl": "http://www.icy-veins.com/wow/flamebender-ka-graz-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "vAViKBYoAFg",
+            "embeddedUrlLOSgaming": "qikIJxh9wL8",
             "img": "",
             "wowheadNPCNum": "76814"
         },
@@ -242,6 +254,7 @@ var raidBossesInfo = {
             "name": "Kromog",
             "stratUrl": "http://www.icy-veins.com/wow/kromog-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "0BjCnIuTNbA",
+            "embeddedUrlLOSgaming": "FA0nwh-8CRI",
             "img": "",
             "wowheadNPCNum": "77692"
         },
@@ -250,6 +263,7 @@ var raidBossesInfo = {
             "name": "Beastlord Darmac",
             "stratUrl": "http://www.icy-veins.com/wow/beastlord-darmac-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "6ThCMYtspNU",
+            "embeddedUrlLOSgaming": "WZzQdwFjvSg",
             "img": "",
             "wowheadNPCNum": "76865"
         },
@@ -258,6 +272,7 @@ var raidBossesInfo = {
             "name": "Operator Thogar",
             "stratUrl": "http://www.icy-veins.com/wow/operator-thogar-strategy-guide-normal-heroic",
             "embeddedUrlFatboss" : "Yb1KCCMXPeU",
+            "embeddedUrlLOSgaming": "Ccy90cVZiWk",
             "img": "",
             "wowheadNPCNum": "76906"
         },
@@ -266,6 +281,7 @@ var raidBossesInfo = {
             "name": "The Iron Maidens",
             "stratUrl": "",
             "embeddedUrlFatboss" : "QnXH9Py-8_Y",
+            "embeddedUrlLOSgaming": "2Z_B8xhUEe0",
             "img": "",
             "wowheadNPCNum": "77557"
         },
@@ -274,6 +290,7 @@ var raidBossesInfo = {
             "name": "Blackhand",
             "stratUrl": "",
             "embeddedUrlFatboss" : "",
+            "embeddedUrlLOSgaming": "pYyjQQxhP44",
             "img": "",
             "wowheadNPCNum": "77325"
         }
