@@ -55,7 +55,7 @@ module.exports = function (socket) {
 
 
         messages.push(message);
-        console.log(binarySearch(userName, users));
+        //console.log(binarySearch(userName, users));
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
 
