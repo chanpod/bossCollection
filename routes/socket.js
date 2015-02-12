@@ -3,6 +3,25 @@
 // export function for listening to the socket
 var messages = [];
 var users = [];
+
+function binarySearch(key, inputArray) {
+
+    var low  = 0,
+        high = inputArray.length - 1,
+        mid;
+
+    while (low <= high) {
+        mid = low + (high - low) / 2;
+        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
+
+        if (key < inputArray[mid]) { high = mid - 1; }
+        else if (key > inputArray[mid]) { low = mid + 1; }
+        else { return mid; }
+    }
+
+    return null;
+}
+
 module.exports = function (socket) {
 
 
@@ -34,9 +53,9 @@ module.exports = function (socket) {
             message: "User: " + userName + " has disconnected."
         };
 
-        users.pop(userName);
-        messages.push(message);
 
+        messages.push(message);
+        console.log(binarySearch(userName, users));
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
 
