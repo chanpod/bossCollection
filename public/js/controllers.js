@@ -250,8 +250,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.$apply();
             });
 
-            socket.on("userConn_Disc", function(userList){
+            socket.on("userConn_Disc", function(userList, messages){
                 $scope.users = userList;
+                $scope.messages = messages;
                 console.log($scope.users);
                 $scope.$apply();
             });
