@@ -8,7 +8,7 @@ module.exports = function (socket) {
 
     var userName = "";
 
-    socket.on("init", function(username){
+    socket.on("init", function(username, callback){
         var message = {
             userName: "System",
             message: "User " +username + " has connected."
@@ -20,10 +20,10 @@ module.exports = function (socket) {
 
         console.log("User " +username + " has connected.");
         socket.broadcast.emit("messageFromServer", message);
-        socket.emit("messagesFromServer", messages);
-
         socket.broadcast.emit("userConn_Disc", users);
-        socket.emit("userConn_Disc", users);
+
+        callback(messages, users);
+
     });
 
     socket.on("disconnect", function(){
@@ -34,7 +34,7 @@ module.exports = function (socket) {
             message: "User: " + userName + " has disconnected."
         };
 
-        users.pop(username);
+        users.pop(userName);
         messages.push(message);
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);

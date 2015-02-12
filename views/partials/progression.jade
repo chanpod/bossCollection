@@ -17,12 +17,10 @@ script#progression(type="text/ng-template")
                         | Filter Chat by user name.
                     input(type = "checkbox", ng-click = "hideSystemMessages('!System')", value = "systemFilter")
                     | System
-                    div(ng-repeat = "user in users | filter:chatFilters:unique")
+                    div(ng-repeat = "user in users")
                         div
                             b
                             {{user}}
-
-
                 div.col-md-10
                     div(ng-show = "hasEnteredUsername")
                         h3

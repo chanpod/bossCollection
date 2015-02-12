@@ -250,7 +250,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             });
 
             socket.on("userConn_Disc", function(userList){
-               $scope.users = userList;
+                $scope.users = userList;
+                console.log($scope.users);
+                $scope.$apply();
             });
 
             $scope.messageToSend = "";
@@ -286,7 +288,15 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }
             else {
                 $scope.hasEnteredUsername = true;
-                socket.emit("init", $scope.userName);
+                socket.emit("init", $scope.userName, function(error, messages, users){
+                    if(error){
+                        console.log(error);
+                        return;
+                    }
+
+                    $scope.messages = messages;
+                    $scope.users = users;
+                });
                 cookies.saveUserName($scope.userName);
             }
         };
