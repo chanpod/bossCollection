@@ -34,7 +34,7 @@ module.exports = function (socket) {
         };
         userName = username;
 
-        if(binarySearch(userName, users) != null){
+        if(binarySearch(userName, users) == null){
             users.push(username);
         }
 
