@@ -34,7 +34,11 @@ module.exports = function (socket) {
         };
         userName = username;
 
-        users.push(username);
+        if(binarySearch(userName, users) != null){
+            users.push(username);
+        }
+
+
         messages.push(message);
 
         console.log("User " +username + " has connected.");
@@ -55,7 +59,7 @@ module.exports = function (socket) {
 
 
         messages.push(message);
-        //console.log(binarySearch(userName, users));
+        console.log(binarySearch(userName, users));
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
 
