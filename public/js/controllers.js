@@ -245,6 +245,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }
 
             socket.on("messagesFromServer", function(messages){
+                console.log("Message from server!")
                 $scope.messages = messages;
                 $scope.$apply();
             });
@@ -270,7 +271,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             };
 
             $scope.hideSystemMessages = function(systemFilter){
-                console.log(systemFilter);
+
                 if($scope.chatFilters.userName != systemFilter) {
                     $scope.chatFilters.userName = systemFilter
                 }
