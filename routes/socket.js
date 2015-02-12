@@ -22,6 +22,12 @@ function binarySearch(key, inputArray) {
     return null;
 }
 
+Array.prototype.remove = function(from, to) {
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+};
+
 module.exports = function (socket) {
 
 
@@ -59,7 +65,7 @@ module.exports = function (socket) {
 
 
         messages.push(message);
-        console.log(binarySearch(userName, users));
+        users.remove(binarySearch(userName, users));
         socket.broadcast.emit("messageFromServer", message);
         socket.emit("messagesFromServer", messages);
 
