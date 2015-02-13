@@ -8,7 +8,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $scope.myInterval = 10000;
             var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Defragmentors Interface!"},
-                {image: '/images/InterfaceSS/caesarInterface.jpg', text: "Caesar's Interface!"}
+                {image: '/images/InterfaceSS/caesarInterface.jpg', text: "Caesar's Interface!"},
+                {image: 'http://i.imgur.com/TLEGKlY.jpg', text: "Szii's Interface!"}
             ];
 
             var slides = $scope.slides = [];

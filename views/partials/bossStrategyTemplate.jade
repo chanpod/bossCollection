@@ -21,7 +21,7 @@ script#bossStrategy(type="text/ng-template")
                                         h2.text-center.raidHeaders
                                             {{boss.name}}
 
-                                        img(src = "/images/wodBosses/{{boss.img}}")
+                                        img(ng-show = "boss.img != ''", src = "/images/wodBosses/{{boss.img}}")
                                         br
                                         a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                             | Loot
