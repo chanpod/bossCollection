@@ -42,6 +42,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.characterImage = "";
         $scope.showLoadingGif = false;
 
+            /*
         var progressionData = raidProgression.getRaidsData();
 
         $scope.wodNormalsData = progressionData.wodNormalsData;
@@ -59,7 +60,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.cataHeroicData = progressionData.cataHeroicData;
 
         $scope.wotlkData = progressionData.wotlkData;
-
+*/
 
         $scope.$watch('character', function (newValue, oldValue) {
             $scope.achievmentPoints = $scope.character.achievementPoints;
@@ -249,7 +250,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 muted : false
             };
 
-            var socket = io("http://54.173.24.121:4001");
+            var socket = io("http://localhost:4001");
 
             $scope.hasEnteredUsername = false;
 
