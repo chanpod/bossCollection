@@ -198,7 +198,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     socket.on("bossInfoData", function(data){
 
-                        console.log(data);
                         $scope.highmaulBosses = data.highmaul;
                         $scope.brfBosses = data.brf;
                         $scope.$apply();
@@ -206,8 +205,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     });
 
                     bossStrats.getStrats();
-
-                    console.log($scope.raidBossesInfo);
 
                     var disqus_shortname = 'bosscollectionnet'; // required: replace example with your forum shortname
                     var disqus_identifier = '/mkdir';
@@ -292,8 +289,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             socket.on("userConn_Disc", function(userList, messages){
 
                 $scope.messages = messages;
-                console.log(userList);
-                console.log($scope.messages);
+
                 $scope.$apply();
                 $scope.buildUsersList(userList);
                 $scope.$apply();
@@ -343,9 +339,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             $scope.applyFilter = function(){
 
-                console.log($scope.chatFilters);
+
                 $scope.filteredMessages = $scope.messages;
-                console.log($scope.chatFilters.length);
+
 
                 for(i = 0; i < $scope.chatFilters.length; i++) {
                     console.log("whyyyy");
@@ -353,7 +349,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.filteredMessages = filterFilter($scope.filteredMessages, $scope.chatFilters[i]);
 
                 }
-                console.log($scope.filteredMessages);
+
             };
 
             $scope.filterUser = function(userToFilter){
