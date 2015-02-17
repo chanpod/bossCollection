@@ -5,6 +5,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             (adsbygoogle = window.adsbygoogle || []).push({});
 
+            twitter();
 
             $scope.myInterval = 10000;
             var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Defragmentors Interface!"},
