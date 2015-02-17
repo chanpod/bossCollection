@@ -8,8 +8,8 @@ var blizzApiRoot = "https://us.api.battle.net/wow/";
 var getItems = "fields=items";
 var getClasses = "data/character/classes";
 var getGuild = "fields=achievements,members";
-
-var socket = io("http://localhost:4001");
+var socket = io("http://54.173.24.121:4001");
+//var socket = io("http://localhost:4001");
 
 //https://us.api.battle.net/wow/data/character/classes?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
 //https://us.api.battle.net/wow/guild/Zul'jin/crux?fields=achievements&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d
@@ -118,6 +118,8 @@ service.factory('socket', function(mySocket){
     };
 
     return cookieService
+}).factory("socketProvider", function(){
+    return socket;
 });
 
 

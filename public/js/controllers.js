@@ -197,7 +197,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     (adsbygoogle = window.adsbygoogle || []).push({});
 
                     socket.on("bossInfoData", function(data){
-                        console.log(data);
                         $scope.raidBossesInfo = data;
                         $scope.$apply();
                     });
@@ -220,7 +219,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     $scope.setUrl = function(newUrl){
                         $scope.currentEmbedUrl = newUrl;
-                    }
+                    };
 
                     $scope.open = function (url) {
                         $scope.setUrl(url);
@@ -239,7 +238,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     }
 
 
-            }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', function($scope, cookies, filterFilter){
+            }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', function($scope, cookies, filterFilter, socketProvider){
 
             $scope.messages = [];
             $scope.filteredMessages = [];
@@ -250,7 +249,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 muted : false
             };
 
-            var socket = io("http://localhost:4001");
+            var socket = socketProvider;
 
             $scope.hasEnteredUsername = false;
 
@@ -277,7 +276,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 });
             };
 
-            socket.on("rejectUser", function(status){
+            socket.on("rejectUser", function(){
                 $scope.hasEnteredUsername = false;
                 alert("Username already in use. Try another one.");
             });
@@ -319,7 +318,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.messageToSend = "";
             $scope.submitMessage = function(){
                 if($scope.messageToSend == ""){
-                    return;
+                    //Do nothing
                 }
                 else{
                     var message = {userName: $scope.userName,
@@ -358,8 +357,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.filterUser = function(userToFilter){
 
                 userToFilter.muted = !userToFilter.muted; //Reverse the bool
-                var doesExist = null;
-                doesExist = binarySearch($scope.chatFilters, "!"+userToFilter);
+
+                var doesExist = binarySearch($scope.chatFilters, "!"+userToFilter);
                 if(doesExist == null) {
 
                     $scope.chatFilters.push("!" + userToFilter.userName);
@@ -418,27 +417,27 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
 function binarySearch(key, inputArray) {
 
-    var low  = 0,
-        high = inputArray.length - 1,
-        mid;
+        var low  = 0,
+            high = inputArray.length - 1,
+            mid;
 
-    while (low <= high) {
-        mid = low + (high - low) / 2;
-        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
+        while (low <= high) {
+            mid = low + (high - low) / 2;
+            if ((mid % 1) > 0) { mid = Math.ceil(mid); }
 
-        if (key < inputArray[mid]) { high = mid - 1; }
-        else if (key > inputArray[mid]) { low = mid + 1; }
-        else { return mid; }
-    }
+            if (key < inputArray[mid]) { high = mid - 1; }
+            else if (key > inputArray[mid]) { low = mid + 1; }
+            else { return mid; }
+        }
 
-    return null;
-}
+        return null;
+        }
 
-    function remove(from, to) {
-        console.log("working");
-    var rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
+        function remove(from, to) {
+            console.log("working");
+        var rest = this.slice((to || from) + 1 || this.length);
+        this.length = from < 0 ? this.length + from : from;
+        return this.push.apply(this, rest);
     };
 
 
