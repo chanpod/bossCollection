@@ -11,6 +11,7 @@ var express = require('express'),
 
   path = require('path');
   var socketapi = require('./routes/socket.js');
+  var bossInfo = require('./routes/bossInfo.js');
 
 
 

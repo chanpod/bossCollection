@@ -195,7 +195,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     (adsbygoogle = window.adsbygoogle || []).push({});
 
-                    $scope.raidBossesInfo = bossStrats.getStrats();
+                    socket.on("bossInfoData", function(data){
+                        console.log(data);
+                        $scope.raidBossesInfo = data;
+                        $scope.$apply();
+                    });
+
+                    bossStrats.getStrats();
 
                     console.log($scope.raidBossesInfo);
 

@@ -1,4 +1,5 @@
-
+"use strict";
+var bossInfo = require('./bossInfo.js');
 
 // export function for listening to the socket
 var messages = [];
@@ -52,12 +53,6 @@ module.exports = function (socket) {
         else{
             socket.emit("rejectUser", false);
         }
-
-
-
-
-
-
     });
 
     socket.on("disconnect", function(){
@@ -84,6 +79,12 @@ module.exports = function (socket) {
         console.log(messages);
         socket.broadcast.emit("messagesFromServer", messages);
         socket.emit("messagesFromServer", messages);
+    })
+
+    socket.on("getBossInfo", function(){
+        console.log("BossInfo request made.");
+        console.log(typeof bossInfo.raids);
+        socket.emit("bossInfoData", bossInfo.raids());
     })
 };
 

@@ -17,7 +17,7 @@ script#bossStrategy(type="text/ng-template")
                         tab(heading = "Highmaul")
                             div.container.text-center
                                 div.row
-                                    div(ng-repeat = "boss in raidBossesInfo.highmaulBossInfo").col-md-4.col-sm-4.col-lg-3
+                                    div(ng-repeat = "boss in raidBossesInfo.highmaul").col-md-4.col-sm-4.col-lg-3
                                         h2.text-center.raidHeaders
                                             {{boss.name}}
 
@@ -35,7 +35,7 @@ script#bossStrategy(type="text/ng-template")
                         tab(heading = "Blackrock Foundry")
                             div.container.text-center
                                 div.row
-                                    div(ng-repeat = "boss in raidBossesInfo.blackrockFoundryBossInfo").col-md-4.col-sm-4.col-lg-3
+                                    div(ng-repeat = "boss in raidBossesInfo.brf").col-md-4.col-sm-4.col-lg-3
                                         h2.text-center.raidHeaders
                                             {{boss.name}}
 
