@@ -21,6 +21,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.addSlide(i);
             }
 
+
+
+
         $scope.stroke = 9;
         $scope.radius = 40;
         $scope.progressColor = "#069";
@@ -56,6 +59,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.cataHeroicData = progressionData.cataHeroicData;
 
         $scope.wotlkData = progressionData.wotlkData;
+
 
         $scope.$watch('character', function (newValue, oldValue) {
             $scope.achievmentPoints = $scope.character.achievementPoints;

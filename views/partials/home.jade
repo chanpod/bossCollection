@@ -1,36 +1,44 @@
 script#home(type="text/ng-template")
+
     div(class = "jumbotron mainJumbo")
         div(class = "container")
             h1.
                 {{welcomeMessage}}
+            a(href='http://wowprogress.com/')
+                img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0')
     div.well
         div.container
-            div.center
+            div.row()
+                ins(class="adsbygoogle",
+                style="display:block",
+                data-ad-client="ca-pub-4895481554192451",
+                data-ad-slot="4790584276",
+                data-ad-format="auto")
 
     div.well
         div.container
             div.row
                 div.col-md-6
                     a(href="https://twitter.com/mkdirBC", data-widget-id="563376732615745538").twitter-timeline
-                        | Tweets by @mkdirBC
+                       | Tweets by @mkdirBC
                 div.col-md-6
-                    a(href='http://wowprogress.com/')
-                        img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0')
+                    div.panel.panel-primary
+                        div.panel-heading.text-center
+                            h4
+                                | Stats
+                        div.panel-body
+                            div.row
+                                div.col-md-12
+                                    div
+                                        ul.list-group.text-center
+                                            a(href = "https://www.warcraftlogs.com/guilds/36279/").list-group-item.list-group-item-info
+                                                | Warcraft Logs
+                                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection").list-group-item.list-group-item-info
+                                                | Wowprogress
+
     div.well
         div(class = "container")
-            div.panel.panel-primary
-                div.panel-heading.text-center
-                    h3
-                        | Stats
-                div.panel-body
-                    div.row
-                        div.col-md-12
-                            div
-                                ul.list-group
-                                    a(href = "https://www.warcraftlogs.com/guilds/36279/").list-group-item.list-group-item-info
-                                        | Warcraft Logs
-                                    a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection").list-group-item.list-group-item-info
-                                        | Wowprogress
+
     div.well
         div.container
             div.panel.panel-primary
@@ -46,3 +54,5 @@ script#home(type="text/ng-template")
                                     img(ng-src='{{slide.image}}', style='margin:auto;')
                                     .carousel-caption
                                       p {{slide.text}}
+script.
+    twitter();

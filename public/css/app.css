@@ -5,6 +5,10 @@ body {
 
 }
 
+#twitter-widget-0{
+    width:100% !important;
+}
+
 .chat{
 
     height:400px;
