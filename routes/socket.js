@@ -1,5 +1,6 @@
 "use strict";
 var bossInfo = require('./bossInfo.js');
+var mongo = require('./mongoFunctions.js');
 
 // export function for listening to the socket
 var messages = [];
@@ -83,8 +84,13 @@ module.exports = function (socket) {
 
     socket.on("getBossInfo", function(){
         console.log("BossInfo request made.");
-        console.log(typeof bossInfo.raids);
-        socket.emit("bossInfoData", bossInfo.raids());
+
+        mongo.getRaidBossInfo().then(function(data){
+
+            console.log(JSON.stringify(data));
+            socket.emit("bossInfoData", data);
+            return data;
+        });
     })
 };
 

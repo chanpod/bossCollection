@@ -1,5 +1,6 @@
 "use strict";
-
+var mongo = require("./mongoFunctions");
+var q = require('q');
 var raids = function() {
 
     return {
@@ -420,6 +421,17 @@ var raids = function() {
     };
 };
 
+var getRaidBossInfo = function() {
+
+    var raidInfo ={};
+        mongo.getRaidBossInfo().then(function(data){
+        raidInfo = data;
+        return raidInfo;
+    });
+
+
+};
+
 module.exports = {
-    raids:raids
+    raids:getRaidBossInfo
 };

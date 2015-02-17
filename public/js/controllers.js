@@ -197,8 +197,12 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     (adsbygoogle = window.adsbygoogle || []).push({});
 
                     socket.on("bossInfoData", function(data){
-                        $scope.raidBossesInfo = data;
+
+                        console.log(data);
+                        $scope.highmaulBosses = data.highmaul;
+                        $scope.brfBosses = data.brf;
                         $scope.$apply();
+
                     });
 
                     bossStrats.getStrats();
@@ -236,8 +240,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                             }
                         });
                     }
-
-
             }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', function($scope, cookies, filterFilter, socketProvider){
 
             $scope.messages = [];
@@ -384,8 +386,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     cookies.saveUserName($scope.userName);
                 }
             };
-
-
 
             $scope.myInterval = 10000;
             var listofImages = [
