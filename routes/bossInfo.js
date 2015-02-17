@@ -205,9 +205,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "ERVxge6_tPU",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "76877"
@@ -231,9 +228,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "DDGEPPf6qAE",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "77182"
@@ -257,9 +251,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "l772ywX8t0I",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "76806"
@@ -283,9 +274,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "fVMx0PUJTpk",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "76973"
@@ -309,9 +297,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "qikIJxh9wL8",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "76814"
@@ -335,9 +320,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "FA0nwh-8CRI",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "77692"
@@ -361,9 +343,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "WZzQdwFjvSg",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "76865"
@@ -387,9 +366,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "Ccy90cVZiWk",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "76906"
@@ -413,9 +389,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "2Z_B8xhUEe0",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "77557"
@@ -439,9 +412,6 @@ var raids = function() {
                 "embeddedUrlLOSgaming"
                     :
                     "pYyjQQxhP44",
-                "img"
-                    :
-                    "",
                 "wowheadNPCNum"
                     :
                     "77325"

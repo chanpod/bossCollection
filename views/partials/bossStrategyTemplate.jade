@@ -20,8 +20,8 @@ script#bossStrategy(type="text/ng-template")
                                     div(ng-repeat = "boss in raidBossesInfo.highmaul").col-md-4.col-sm-4.col-lg-3
                                         h2.text-center.raidHeaders
                                             {{boss.name}}
-
-                                        img(ng-show = "boss.img != ''", src = "/images/wodBosses/{{boss.img}}")
+                                        div(ng-if = "boss.img != null")
+                                            img(src = "/images/wodBosses/{{boss.img}}")
                                         br
                                         a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                             | Loot
@@ -38,8 +38,8 @@ script#bossStrategy(type="text/ng-template")
                                     div(ng-repeat = "boss in raidBossesInfo.brf").col-md-4.col-sm-4.col-lg-3
                                         h2.text-center.raidHeaders
                                             {{boss.name}}
-
-                                        img(src = "/images/wodBosses/{{boss.img}}")
+                                        div(ng-show = "boss.img != null")
+                                            img(src = "/images/wodBosses/{{boss.img}}")
                                         br
                                         a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                             | Loot
