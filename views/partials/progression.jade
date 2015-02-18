@@ -22,7 +22,7 @@ script#progression(type="text/ng-template")
                                 span.caret
                         ul(role="menu").dropdown-menu
                             li
-                                a(ng-click = "filterUser({userName: 'System'})")
+                                a(ng-click = "filterUser({userName: 'System', muted:false})")
                                     | Mute
                     div(ng-repeat = "user in users")
                         div(ng-show = "user != userName").btn-group
@@ -32,7 +32,7 @@ script#progression(type="text/ng-template")
                                     span.caret
                             ul(role="menu").dropdown-menu
                                 li
-                                    a(href="")
+                                    a(href="", ng-click = "createChatroom(user)")
                                         | Personal Chat
                                 li
                                     a(href="", ng-click = "filterUser(user)", ng-show = "!user.muted")
@@ -50,7 +50,7 @@ script#progression(type="text/ng-template")
                             i
                                 | (Beta)
                         div.container.chat
-                            div(ng-repeat = "message in filteredMessages | filter:systemFilter | filter:chatFilters").row
+                            div(ng-repeat = "message in filteredMessages").row
                                 div.col-md-1
                                     b
                                         {{message.userName}}

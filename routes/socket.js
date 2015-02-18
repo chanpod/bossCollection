@@ -8,17 +8,10 @@ var users = [];
 
 function binarySearch(key, inputArray) {
 
-    var low  = 0,
-        high = inputArray.length - 1,
-        mid;
-
-    while (low <= high) {
-        mid = low + (high - low) / 2;
-        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
-
-        if (key < inputArray[mid]) { high = mid - 1; }
-        else if (key > inputArray[mid]) { low = mid + 1; }
-        else { return mid; }
+    for(var i = 0; i < inputArray.length; i++){
+        if(inputArray[i] == key){
+            return i;
+        }
     }
 
     return null;
@@ -65,8 +58,9 @@ module.exports = function (socket) {
         };
 
         messages.push(message);
-
+        console.log(users);
         var userToRemove = binarySearch(userName, users);
+        console.log(userToRemove);
         if(userToRemove != null){
             users.remove(userToRemove);
         }
@@ -91,6 +85,24 @@ module.exports = function (socket) {
             socket.emit("bossInfoData", data);
             return data;
         });
+    })
+
+    socket.on("createChatroom", function(participants){
+        socket.join(participants.user1 + "&" + participants.user2);
+        socket.broadcast.emit("inviteUsersToChatroom", participants);
+        console.log("Invitations sent");
+    })
+
+    socket.on("acceptInvitation", function(participants){
+        socket.join(participants.user1 + "&" + participants.user2);
+        console.log("User " + participants.user2 + " has joined the chat room");
+    })
+
+    socket.on("chatRoomMessage", function(message){
+        messages.push(message);
+        console.log(messages);
+        socket.to(message.chatRoom).broadcast.emit("messagesFromServer", messages);
+        socket.to(message.chatRoom).emit("messagesFromServer", messages);
     })
 };
 
