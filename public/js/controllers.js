@@ -87,7 +87,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }, 6000)
 
             promise.then(function(data){
-                console.log(data);
+
                 var promise2 = guildServices.checkGuild(data.achievements);
 
                 promise2.then(function(data){
@@ -280,7 +280,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 $scope.open = function (url) {
                     $scope.setUrl(url);
-                    console.log(url);
+
                     var modalInstance = $modal.open({
                         templateUrl: 'videoModal',
                         controller: 'videoController',
@@ -309,7 +309,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     $scope.messages = messages;
 
-                    console.log(userList);
                     $scope.buildUsersList(userList);
                     $scope.$apply();
                 });
@@ -377,14 +376,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.applyFilter = function(){
 
                     $scope.filteredMessages = $scope.messages;
-                    console.log("Filters added: " + $scope.chatFilters.length);
-                    console.log($scope.filteredMessages);
+
+
                     for(i = 0; i < $scope.chatFilters.length; i++) {
 
-                        console.log($scope.chatFilters[i]);
-                        $scope.filteredMessages = filterFilter($scope.filteredMessages, $scope.chatFilters[i]);
+                        $scope.filteredMessages = filterFilter($scope.filteredMessages.userName, $scope.chatFilters[i]);
                     }
-                    console.log($scope.filteredMessages);
+
 
                 };
 
@@ -402,7 +400,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         $scope.chatFilters.push("!" + userToFilter.userName);
                     }
                     else{
-                        console.log("It exist!");
+
                         $scope.chatFilters.remove(doesExist);
                     }
 
