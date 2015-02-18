@@ -22,8 +22,10 @@ script#progression(type="text/ng-template")
                                 span.caret
                         ul(role="menu").dropdown-menu
                             li
-                                a(ng-click = "filterUser({userName: 'System', muted:false})")
+                                a(ng-if = "!systemMute", ng-click = "filterUser({userName: 'System', muted: systemMute})")
                                     | Mute
+                                a(ng-if = "systemMute", ng-click = "filterUser({userName: 'System', muted: systemMute})")
+                                    | UnMute
                     div(ng-repeat = "user in users")
                         div(ng-show = "user != userName").btn-group
                             button(data-toggle ="dropdown").btn-info.dropdown-toggle

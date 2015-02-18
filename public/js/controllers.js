@@ -233,6 +233,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.filteredMessages = [];
                 $scope.chatFilters = [];
                 $scope.systemFilter = {};
+                $scope.systemMute = false;
                 $scope.users = {
                     userName : "",
                     muted : false
@@ -389,6 +390,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 $scope.filterUser = function(userToFilter){
 
+                    if(userToFilter.userName == "System") {
+                        $scope.systemMute = !$scope.systemMute
+                    }
                     userToFilter.muted = !userToFilter.muted; //Reverse the bool
 
                     var doesExist = binarySearch("!"+userToFilter.userName, $scope.chatFilters);
