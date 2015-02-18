@@ -380,7 +380,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                     for(i = 0; i < $scope.chatFilters.length; i++) {
 
-                        $scope.filteredMessages = filterFilter($scope.filteredMessages.userName, $scope.chatFilters[i]);
+                        $scope.filteredMessages = filterFilter($scope.filteredMessages, $scope.chatFilters[i]);
                     }
 
 
