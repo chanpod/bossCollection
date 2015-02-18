@@ -27,14 +27,18 @@ script#progression(type="text/ng-template")
                                 a(ng-if = "systemMute", ng-click = "filterUser({userName: 'System', muted: systemMute})")
                                     | UnMute
                     div(ng-repeat = "user in users")
-                        div(ng-show = "user != userName").btn-group
-                            button(data-toggle ="dropdown").btn-info.dropdown-toggle
+                        div().btn-group
+                            button(ng-show = "user.userName != userName", data-toggle ="dropdown").btn-info.dropdown-toggle
+                                {{user.userName}}
+                                Action
+                                    span.caret
+                            button(ng-show = "user.userName == userName", data-toggle ="dropdown").btn-primary.dropdown-toggle
                                 {{user.userName}}
                                 Action
                                     span.caret
                             ul(role="menu").dropdown-menu
                                 li
-                                    a(href="", ng-click = "createChatroom(user)")
+                                    a(ng-show = "user.userName != userName", href="", ng-click = "createChatroom(user)")
                                         | Personal Chat
                                 li
                                     a(href="", ng-click = "filterUser(user)", ng-show = "!user.muted")
