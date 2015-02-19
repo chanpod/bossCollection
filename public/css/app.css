@@ -195,6 +195,11 @@ a.lootList{
     margin: 0 auto;
 }
 
+.googleSheet{
+    height:600px;
+    width:100%;
+}
+
 @media (max-width: 767px){
     .bcBanner{
         background-image: url("/images/expansionBanners/bc.png");
