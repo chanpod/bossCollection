@@ -5,6 +5,15 @@ body {
 
 }
 
+.bossButton{
+    widht:100%;
+    height:100%;
+}
+
+.bossInfoContainer{
+
+}
+
 #twitter-widget-0{
     width:100% !important;
 }

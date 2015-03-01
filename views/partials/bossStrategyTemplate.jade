@@ -15,40 +15,52 @@ script#bossStrategy(type="text/ng-template")
                 div.col-md-12
                     tabset(class="tab-animation")
                         tab(heading = "Highmaul")
-                            div.container.text-center
-                                div.row
-                                    div(ng-repeat = "boss in highmaulBosses").col-md-4.col-sm-4.col-lg-3
-                                        h2.text-center.raidHeaders
+                            div.row
+                                div(collapse="highmaulBossSelected", ng-repeat = "boss in bossInfo.highmaul").col-md-2
+                                    div().bossSelect
+                                        button(ng-click="changeHMBossInfo(boss)").btn.btn-primary.bossButton.btn-lg
                                             {{boss.name}}
+                            div.container
+                                div(ng-repeat = "boss in bossInfo.highmaul")
+                                    div(collapse="!boss.isSelected")
+                                        div.pull-right
+                                            button(ng-click="changeHMBossInfo(boss)").btn
+                                                span.glyphicon.glyphicon-remove
+                                        br
+                                        h3
+                                            {{boss.name}} {{difficultySelected}}
+                                        button(ng-click = "heroicDifficultySelected(boss)").btn.btn-primary.btn-lg
+                                            | Heroic
+                                        button(ng-click = "mythicDifficultySelected(boss)").btn.btn-primary.btn-lg
+                                            | Mythic
+                                    div(collapse="!boss.heroic.isSelected")
                                         div(ng-if = "boss.img != null")
                                             img(src = "/images/wodBosses/{{boss.img}}")
                                         br
                                         a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                             | Loot
-                                        span(ng-click = "open(boss.embeddedUrl)", ng-show = "boss.embeddedUrl.length > 0").list-group-item
-                                            | Strat Video - Icy Veins
-                                        span(ng-click = "open(boss.embeddedUrlFatboss)", ng-show = "boss.embeddedUrlFatboss.length > 0").list-group-item
-                                            | Strat Video - Fatboss
-                                        a(href = "{{boss.stratUrl}}").list-group-item
-                                            | Detailed Strat
-
-                        tab(heading = "Blackrock Foundry")
-                            div.container.text-center
-                                div.row
-                                    div(ng-repeat = "boss in brfBosses").col-md-4.col-sm-4.col-lg-3
-                                        h2.text-center.raidHeaders
-                                            {{boss.name}}
-                                        div(ng-show = "boss.img != null")
+                                        div(ng-repeat = "video in boss.heroic.videos")
+                                            span(ng-click = "open(video.url)").list-group-item
+                                                {{video.name}}
+                                    div(collapse="!boss.mythic.isSelected")
+                                        div(ng-if = "boss.img != null")
                                             img(src = "/images/wodBosses/{{boss.img}}")
                                         br
                                         a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                             | Loot
-                                        span(ng-click = "open(boss.embeddedUrl)", ng-show = "boss.embeddedUrl.length > 0").list-group-item
-                                            | Strat Video - Icy Veins
-                                        span(ng-click = "open(boss.embeddedUrlFatboss)", ng-show = "boss.embeddedUrlFatboss.length > 0").list-group-item
-                                            | Strat Video - Fatboss
-                                        span(ng-click = "open(boss.embeddedUrlLOSgaming)", ng-show = "boss.embeddedUrlLOSgaming.length > 0").list-group-item
-                                            | Strat Video - Line of Sight Gaming
-                                        a(href = "{{boss.stratUrl}}").list-group-item
-                                            | Detailed Strat
-                    div(id="disqus_thread")
+                                        div(ng-repeat = "video in boss.mythic.videos")
+                                            span(ng-click = "open(video.url)").list-group-item
+                                                {{video.name}}
+                        tab(heading = "Blackrock Foundry")
+                            div(collapse="brfBossSelected", ng-repeat = "boss in bossInfo.brf")
+                                button(ng-click="changeBRFBossInfo(boss)").btn.btn-primary.bossButton
+                                    {{boss.name}}
+                            div.container
+                                div(ng-repeat = "boss in bossInfo.brf")
+                                    div(collapse="!boss.isSelected")
+                                        div.pull-right
+                                            button(ng-click="changeBRFBossInfo(boss)")
+                                                span.glyphicon.glyphicon-remove
+                                        br
+                                        {{boss.name}}
+
