@@ -3,5 +3,8 @@ script#videoModal(type="text/ng-template")
         h3(class="modal-title")
         div(class="modal-body")
             div.container-fluid
+                div.pull-right
+                    button(ng-click="close()").btn
+                        span.glyphicon.glyphicon-remove
                 iframe(ng-src="{{getIframeSrc()}}", allowfullscreen).videoPlayer
 

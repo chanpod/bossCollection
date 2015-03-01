@@ -43,25 +43,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         $scope.characterImage = "";
         $scope.showLoadingGif = false;
 
-            /*
-        var progressionData = raidProgression.getRaidsData();
-
-        $scope.wodNormalsData = progressionData.wodNormalsData;
-
-        $scope.wodHeroicData = progressionData.wodHeroicData;
-
-        $scope.wodMythicData = progressionData.wodMythicData;
-
-        $scope.mopNormalData = progressionData.mopNormalData;
-
-        $scope.mopHeroicData = progressionData.mopHeroicData;
-
-        $scope.cataNormalData = progressionData.cataNormalData;
-
-        $scope.cataHeroicData = progressionData.cataHeroicData;
-
-        $scope.wotlkData = progressionData.wotlkData;
-*/
 
         $scope.$watch('character', function (newValue, oldValue) {
             $scope.achievmentPoints = $scope.character.achievementPoints;
@@ -165,13 +146,17 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 });
             }
 
-        }]).controller("videoController", ['$scope', 'currentUrl',
-            function($scope, currentUrl){
+        }]).controller("videoController", ['$scope', 'currentUrl', '$modalInstance',
+            function($scope, currentUrl, $modalInstance){
 
                 $scope.url = currentUrl;
 
                 $scope.getIframeSrc = function() {
                     return 'https://www.youtube.com/embed/' + $scope.url;
+                };
+
+                $scope.close = function(){
+                    $modalInstance.dismiss('cancel');
                 };
 
                 $scope.embedUrl = $scope.url;
@@ -187,148 +172,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
 
-
-
-                $scope.bossInfo = {
-                    highmaul: [
-                        {
-                            name: "Kargath",
-                            isSelected : false,
-                            wowheadNPCNum : "",
-                            difficultySelected : "",
-                            heroic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "KpzfmKTZp8U"
-                                    },
-                                    1 : {
-                                        name : "LOS Gaming",
-                                        url : "xgHkXndaxKQ"
-                                    }
-                                }
-                            },
-                            mythic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "TEyW7w3obc4"
-                                    },
-                                    1 : {
-                                        name : "LOS Gaming",
-                                        url : "P60yX7KCJho"
-                                    }
-                                }
-                            }
-
-                        },
-                        {
-                            name: "Butcher",
-                            isSelected : false,
-                            wowheadNPCNum : "",
-                            heroic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "KpzfmKTZp8U"
-                                    },
-                                    1 : {
-                                        name : "LOS Gaming",
-                                        url : "eKqrSXc3wUw"
-                                    }
-
-                                }
-                            },
-                            mythic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "TEyW7w3obc4"
-                                    }
-                                }
-                            }
-
-                        },
-                        {
-                            name: "Brackenspore",
-                            isSelected : false,
-                            wowheadNPCNum : "",
-                            heroic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "KpzfmKTZp8U"
-                                    }
-                                }
-                            },
-                            mythic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "TEyW7w3obc4"
-                                    }
-                                }
-                            }
-
-                        },
-                        {
-                            name: "Tectus",
-                            isSelected : false,
-                            wowheadNPCNum : "",
-                            heroic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "KpzfmKTZp8U"
-                                    }
-                                }
-                            },
-                            mythic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "TEyW7w3obc4"
-                                    }
-                                }
-                            }
-
-                        }
-                    ],
-                    brf: [
-                        {
-                            name: "Gruul",
-                            isSelected : false,
-                            wowheadNPCNum : "",
-                            heroic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "KpzfmKTZp8U"
-                                    }
-                                }
-                            },
-                            mythic: {
-                                isSelected : false,
-                                videos: {
-                                    0 : {
-                                        name : "Fatboss",
-                                        url : "TEyW7w3obc4"
-                                    }
-                                }
-                            }
-
-                        }
-                    ]
-                };
 
                 $scope.difficultySelected = "";
 
@@ -360,163 +203,14 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.brfBossSelected = !$scope.brfBossSelected;
                 };
 
-                /*
-                $scope.bossInfoJSON = {
-                    "highmaul" : [
-                        {
-                            "embeddedUrl" : "D5QqzwJIPa0",
-                            "name" : "Kargath Bladefist",
-                            "stratUrl" : "http://www.icy-veins.com/wow/kargath-bladefist-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "KpzfmKTZp8U",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/kargath.png",
-                            "wowheadNPCNum" : "87444"
-                        },
-                        {
-                            "embeddedUrl" : "QkLExQUJgW4",
-                            "name" : "The Butcher",
-                            "stratUrl" : "http://www.icy-veins.com/wow/the-butcher-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "yIS0jjmcFgE",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/theButcher.png",
-                            "wowheadNPCNum" : "87447"
-                        },
-                        {
-                            "embeddedUrl" : "C0VYzWNYDF0",
-                            "name" : "Tectus",
-                            "stratUrl" : "http://www.icy-veins.com/wow/tectus-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "wNbJmeNLkjo",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/tectus.png",
-                            "wowheadNPCNum" : "87446"
-                        },
-                        {
-                            "embeddedUrl" : "mIdrE_7iqc8",
-                            "name" : "Brackenspore",
-                            "stratUrl" : "http://www.icy-veins.com/wow/brackenspore-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "fsXhQtEKzms",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/brackenspore.png",
-                            "wowheadNPCNum" : "87441"
-                        },
-                        {
-                            "embeddedUrl" : "AJ4xo4jqJlU",
-                            "name" : "Twin Ogron",
-                            "stratUrl" : "http://www.icy-veins.com/wow/twin-ogron-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/twinOgron.png",
-                            "wowheadNPCNum" : "87449"
-                        },
-                        {
-                            "embeddedUrl" : "y9ha5_IkI7A",
-                            "name" : "Ko'ragh",
-                            "stratUrl" : "http://www.icy-veins.com/wow/ko-ragh-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "XSeMw7-byOA",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/ko'ragh.png",
-                            "wowheadNPCNum" : "87445"
-                        },
-                        {
-                            "embeddedUrl" : "i4OMq9fYgVY",
-                            "name" : "Imperator Mar'gok",
-                            "stratUrl" : "http://www.icy-veins.com/wow/imperator-mar-gok-strategy-guide-preview",
-                            "embeddedUrlFatboss" : "",
-                            "embeddedUrlLOSgaming" : "",
-                            "img" : "Highmaul/imperatorMar'gok.png",
-                            "wowheadNPCNum" : "87818"
-                        }
-                    ],
-                    "brf" : [
-                        {
-                            "embeddedUrl" : "7w6Cxv3C8lc",
-                            "name" : "Gruul",
-                            "stratUrl" : "http://www.icy-veins.com/wow/gruul-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "QrN5W7VxZ7Y",
-                            "embeddedUrlLOSgaming" : "ERVxge6_tPU",
-                            "wowheadNPCNum" : "76877"
-                        },
-                        {
-                            "embeddedUrl" : "zoZR_twO7VI",
-                            "name" : "Oregorger",
-                            "stratUrl" : "http://www.icy-veins.com/wow/oregorger-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "i0mGJkRLz3A",
-                            "embeddedUrlLOSgaming" : "DDGEPPf6qAE",
-                            "wowheadNPCNum" : "77182"
-                        },
-                        {
-                            "embeddedUrl" : "FUafR44FBKQ",
-                            "name" : "The Blast Furnace",
-                            "stratUrl" : "http://www.icy-veins.com/wow/the-blast-furnace-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "tDzhPwDzdOc",
-                            "embeddedUrlLOSgaming" : "l772ywX8t0I",
-                            "wowheadNPCNum" : "76806"
-                        },
-                        {
-                            "embeddedUrl" : "H3JYPNYdCWA",
-                            "name" : "Hans'gar and Franzok",
-                            "stratUrl" : "http://www.icy-veins.com/wow/hans-gar-and-franzok-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "FW4zMMtiXsw",
-                            "embeddedUrlLOSgaming" : "fVMx0PUJTpk",
-                            "wowheadNPCNum" : "76973"
-                        },
-                        {
-                            "embeddedUrl" : "uRYBm66s3-A",
-                            "name" : "Flamebender Ka'graz",
-                            "stratUrl" : "http://www.icy-veins.com/wow/flamebender-ka-graz-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "vAViKBYoAFg",
-                            "embeddedUrlLOSgaming" : "qikIJxh9wL8",
-                            "wowheadNPCNum" : "76814"
-                        },
-                        {
-                            "embeddedUrl" : "G4SPS2rV3So",
-                            "name" : "Kromog",
-                            "stratUrl" : "http://www.icy-veins.com/wow/kromog-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "0BjCnIuTNbA",
-                            "embeddedUrlLOSgaming" : "FA0nwh-8CRI",
-                            "wowheadNPCNum" : "77692"
-                        },
-                        {
-                            "embeddedUrl" : "s9-YdfBoddk",
-                            "name" : "Beastlord Darmac",
-                            "stratUrl" : "http://www.icy-veins.com/wow/beastlord-darmac-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "6ThCMYtspNU",
-                            "embeddedUrlLOSgaming" : "WZzQdwFjvSg",
-                            "wowheadNPCNum" : "76865"
-                        },
-                        {
-                            "embeddedUrl" : "xxxx",
-                            "name" : "Operator Thogar",
-                            "stratUrl" : "http://www.icy-veins.com/wow/operator-thogar-strategy-guide-normal-heroic",
-                            "embeddedUrlFatboss" : "Yb1KCCMXPeU",
-                            "embeddedUrlLOSgaming" : "Ccy90cVZiWk",
-                            "wowheadNPCNum" : "76906"
-                        },
-                        {
-                            "embeddedUrl" : "xxxx",
-                            "name" : "The Iron Maidens",
-                            "stratUrl" : "",
-                            "embeddedUrlFatboss" : "QnXH9Py-8_Y",
-                            "embeddedUrlLOSgaming" : "2Z_B8xhUEe0",
-                            "wowheadNPCNum" : "77557"
-                        },
-                        {
-                            "embeddedUrl" : "xxxx",
-                            "name" : "Blackhand",
-                            "stratUrl" : "",
-                            "embeddedUrlFatboss" : "",
-                            "embeddedUrlLOSgaming" : "pYyjQQxhP44",
-                            "wowheadNPCNum" : "77325"
-                        }
-                    ]
-
-*/
                 (adsbygoogle = window.adsbygoogle || []).push({});
+
+                $scope.bossInfo = {};
 
                 socket.on("bossInfoData", function(data){
 
-                    $scope.highmaulBosses = data.highmaul;
-                    $scope.brfBosses = data.brf;
+                    $scope.bossInfo.highmaul = data.highmaul;
+                    $scope.bossInfo.brf = data.brf;
                     $scope.$apply();
 
                 });

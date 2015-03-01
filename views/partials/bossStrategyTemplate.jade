@@ -16,9 +16,9 @@ script#bossStrategy(type="text/ng-template")
                     tabset(class="tab-animation")
                         tab(heading = "Highmaul")
                             div.row
-                                div(collapse="highmaulBossSelected", ng-repeat = "boss in bossInfo.highmaul").col-md-2
-                                    div().bossSelect
-                                        button(ng-click="changeHMBossInfo(boss)").btn.btn-primary.bossButton.btn-lg
+                                div(collapse="highmaulBossSelected", ng-repeat = "boss in bossInfo.highmaul").col-md-3
+                                    div(ng-click="changeHMBossInfo(boss)").btn.btn-primary.bossButton
+                                        h3
                                             {{boss.name}}
                             div.container
                                 div(ng-repeat = "boss in bossInfo.highmaul")
@@ -52,15 +52,40 @@ script#bossStrategy(type="text/ng-template")
                                             span(ng-click = "open(video.url)").list-group-item
                                                 {{video.name}}
                         tab(heading = "Blackrock Foundry")
-                            div(collapse="brfBossSelected", ng-repeat = "boss in bossInfo.brf")
-                                button(ng-click="changeBRFBossInfo(boss)").btn.btn-primary.bossButton
-                                    {{boss.name}}
-                            div.container
-                                div(ng-repeat = "boss in bossInfo.brf")
-                                    div(collapse="!boss.isSelected")
-                                        div.pull-right
-                                            button(ng-click="changeBRFBossInfo(boss)")
-                                                span.glyphicon.glyphicon-remove
-                                        br
-                                        {{boss.name}}
+                            div.row
+                                div(collapse="brfBossSelected", ng-repeat = "boss in bossInfo.brf").col-md-3
+                                    div(ng-click="changeBRFBossInfo(boss)").btn.btn-primary.bossButton
+                                        h3
+                                            {{boss.name}}
+                                div.container
+                                    div(ng-repeat = "boss in bossInfo.brf")
+                                        div(collapse="!boss.isSelected")
+                                            div.pull-right
+                                                button(ng-click="changeBRFBossInfo(boss)").btn
+                                                    span.glyphicon.glyphicon-remove
+                                            br
+                                            h3
+                                                {{boss.name}} {{difficultySelected}}
+                                            button(ng-click = "heroicDifficultySelected(boss)").btn.btn-primary.btn-lg
+                                                | Heroic
+                                            button(ng-click = "mythicDifficultySelected(boss)").btn.btn-primary.btn-lg
+                                                | Mythic
+                                        div(collapse="!boss.heroic.isSelected")
+                                            div(ng-if = "boss.img != null")
+                                                img(src = "/images/wodBosses/{{boss.img}}")
+                                            br
+                                            a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
+                                                | Loot
+                                            div(ng-repeat = "video in boss.heroic.videos")
+                                                span(ng-click = "open(video.url)").list-group-item
+                                                    {{video.name}}
+                                        div(collapse="!boss.mythic.isSelected")
+                                            div(ng-if = "boss.img != null")
+                                                img(src = "/images/wodBosses/{{boss.img}}")
+                                            br
+                                            a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
+                                                | Loot
+                                            div(ng-repeat = "video in boss.mythic.videos")
+                                                span(ng-click = "open(video.url)").list-group-item
+                                                    {{video.name}}
 
