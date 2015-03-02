@@ -129,10 +129,7 @@ body {
     color:white!important;
 }
 
-.videoPlayer{
-    width:100%;
-    height:500px;
-}
+
 
 .lootList{
     background-color: #a335ee;
@@ -155,11 +152,30 @@ a.lootList{
     color:white;
 }
 
+@media (max-width: 767px) {
+    .videoPlayer{
+        width:100%;
+        height:350px;
+    }
+}
+
+@media (max-width: 567px) {
+    .videoPlayer{
+        width:100%;
+        height:250px;
+    }
+}
+
+@media (min-width: 768px) {
+    .videoPlayer{
+        width:100%;
+        height:500px;
+    }
+}
 .videoModal{
     width: 100%;
     height:950px;
 }
-
 .blueLinks a{
     color:black;
 
