@@ -4,7 +4,7 @@ script#videoModal(type="text/ng-template")
         div(class="modal-body")
             div.container-fluid
                 div.pull-right
-                    button(ng-click="close()").btn
+                    button(ng-click="close()").btn.btn-danger
                         span.glyphicon.glyphicon-remove
                 iframe(ng-src="{{getIframeSrc()}}", allowfullscreen).col-md-12.videoPlayer
 

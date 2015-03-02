@@ -24,7 +24,7 @@ script#bossStrategy(type="text/ng-template")
                                 div(ng-repeat = "boss in bossInfo.highmaul")
                                     div(collapse="!boss.isSelected")
                                         div.pull-right
-                                            button(ng-click="changeHMBossInfo(boss)").btn
+                                            button(ng-click="changeHMBossInfo(boss)").btn.btn-danger
                                                 span.glyphicon.glyphicon-remove
                                         br
                                         h3
@@ -61,7 +61,7 @@ script#bossStrategy(type="text/ng-template")
                                     div(ng-repeat = "boss in bossInfo.brf")
                                         div(collapse="!boss.isSelected")
                                             div.pull-right
-                                                button(ng-click="changeBRFBossInfo(boss)").btn
+                                                button(ng-click="changeBRFBossInfo(boss)").btn.btn-danger
                                                     span.glyphicon.glyphicon-remove
                                             br
                                             h3
