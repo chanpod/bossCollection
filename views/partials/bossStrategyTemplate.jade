@@ -35,18 +35,10 @@ script#bossStrategy(type="text/ng-template")
                                             button(ng-click = "mythicDifficultySelected(boss)").btn.btn-primary.btn-lg
                                                 | Mythic
                                         div(collapse="!boss.heroic.isSelected")
-
-                                            br
-                                            a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
-                                                | Loot
                                             div(ng-repeat = "video in boss.heroic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
                                         div(collapse="!boss.mythic.isSelected")
-
-                                            br
-                                            a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
-                                                | Loot
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
@@ -71,18 +63,10 @@ script#bossStrategy(type="text/ng-template")
                                             button(ng-click = "mythicDifficultySelected(boss)").btn.btn-primary.btn-lg
                                                 | Mythic
                                         div(collapse="!boss.heroic.isSelected")
-
-
-                                            br
-                                            a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
-                                                | Loot
                                             div(ng-repeat = "video in boss.heroic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
                                         div(collapse="!boss.mythic.isSelected")
-                                            br
-                                            a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
-                                                | Loot
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
