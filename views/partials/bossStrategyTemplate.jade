@@ -15,12 +15,12 @@ script#bossStrategy(type="text/ng-template")
                 div.col-md-12
                     tabset(class="tab-animation")
                         tab(heading = "Highmaul")
-                            div.row
+                            div(class="item animated bounceInRight").row
                                 div(collapse="highmaulBossSelected", ng-repeat = "boss in bossInfo.highmaul").col-md-3
                                     div(ng-click="changeHMBossInfo(boss)").btn.btn-primary.bossButton
                                         h3
                                             {{boss.name}}
-                            div.row
+                            div(class="slide-animation").row
                                 div.container
                                     div(ng-repeat = "boss in bossInfo.highmaul")
                                         div(collapse="!boss.isSelected")
@@ -35,8 +35,7 @@ script#bossStrategy(type="text/ng-template")
                                             button(ng-click = "mythicDifficultySelected(boss)").btn.btn-primary.btn-lg
                                                 | Mythic
                                         div(collapse="!boss.heroic.isSelected")
-                                            div(ng-if = "boss.img != null")
-                                                img(src = "/images/wodBosses/{{boss.img}}")
+
                                             br
                                             a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                                 | Loot
@@ -44,8 +43,7 @@ script#bossStrategy(type="text/ng-template")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
                                         div(collapse="!boss.mythic.isSelected")
-                                            div(ng-if = "boss.img != null")
-                                                img(src = "/images/wodBosses/{{boss.img}}")
+
                                             br
                                             a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                                 | Loot
@@ -73,8 +71,8 @@ script#bossStrategy(type="text/ng-template")
                                             button(ng-click = "mythicDifficultySelected(boss)").btn.btn-primary.btn-lg
                                                 | Mythic
                                         div(collapse="!boss.heroic.isSelected")
-                                            div(ng-if = "boss.img != null")
-                                                img(src = "/images/wodBosses/{{boss.img}}")
+
+
                                             br
                                             a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                                 | Loot
@@ -82,8 +80,6 @@ script#bossStrategy(type="text/ng-template")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
                                         div(collapse="!boss.mythic.isSelected")
-                                            div(ng-if = "boss.img != null")
-                                                img(src = "/images/wodBosses/{{boss.img}}")
                                             br
                                             a(href = "http://www.wowhead.com/npc={{boss.wowheadNPCNum}}").list-group-item.lootList
                                                 | Loot
@@ -91,3 +87,4 @@ script#bossStrategy(type="text/ng-template")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
 
+            div(id="disqus_thread")

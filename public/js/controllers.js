@@ -120,8 +120,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }, 5000);
         }
 
-    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal', 'socket',
-        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal, socket){
+    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
+        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal){
 
 
             $scope.currentEmbedUrl = "";
@@ -165,10 +165,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
 
 
-        }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal',
-            function($scope, bossStrats, $modal){
+        }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
+            function($scope, bossStrats, $modal, socketProvider){
 
-
+                var socket = socketProvider;
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
 
@@ -188,6 +188,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 };
 
                 $scope.changeHMBossInfo = function(boss){
+
                     boss.isSelected = !boss.isSelected;
                     boss.heroic.isSelected = false;
                     boss.mythic.isSelected = false;
