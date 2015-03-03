@@ -171,17 +171,48 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 var socket = socketProvider;
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
+                (adsbygoogle = window.adsbygoogle || []).push({});
 
-
+                $scope.bossInfo = {};
                 $scope.difficultySelected = "";
+                $scope.bossSelected = "HighmaulMainThread";
+                $scope.currentEmbedUrl = "";
+                $scope.HighmaulThreadName = "HighmaulMainThread";
+                $scope.BlackrockThreadName = "blackrockMainThread";
+
+                disqus_shortname = 'bosscollection';
+                disqus_url = 'http://localhost:4000/strategy/#!' + $scope.bossSelected;
+
+                disqus();
+
+                $scope.resetDisqus = function(newRaid){
+
+                    if(newRaid){
+                        disqus_url = 'http://bosscollection.net/strategy/#!' + newRaid;
+                    }
+                    else{
+                        disqus_url = 'http://bosscollection.net/strategy/#!' + $scope.bossSelected;
+                    }
+
+                    console.log(disqus_url);
+                    DISQUS.reset({
+                        reload: true,
+                        config: function () {
+
+                            this.page.url = disqus_url;
+                        }
+                    });
+                };
 
                 $scope.heroicDifficultySelected = function(boss){
+
                     boss.heroic.isSelected = !boss.heroic.isSelected;
                     boss.mythic.isSelected = false;
                     $scope.difficultySelected = "- Heroic";
                 };
 
                 $scope.mythicDifficultySelected = function(boss){
+
                     boss.mythic.isSelected = !boss.mythic.isSelected;
                     boss.heroic.isSelected = false;
                     $scope.difficultySelected = "- Mythic";
@@ -194,6 +225,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     boss.mythic.isSelected = false;
                     $scope.difficultySelected = "";
                     $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
+
+                    $scope.bossSelected = boss.name;
+                    $scope.resetDisqus();
                 };
 
                 $scope.changeBRFBossInfo = function(boss){
@@ -202,11 +236,32 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     boss.mythic.isSelected = false;
                     $scope.difficultySelected = "";
                     $scope.brfBossSelected = !$scope.brfBossSelected;
+
+                    $scope.bossSelected = boss.name;
+                    $scope.resetDisqus();
                 };
 
-                (adsbygoogle = window.adsbygoogle || []).push({});
+                $scope.cancelHMBossSelection = function(currentSelectedBoss){
+                    currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
+                    currentSelectedBoss.heroic.isSelected = false;
+                    currentSelectedBoss.mythic.isSelected = false;
+                    $scope.difficultySelected = "";
+                    $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
 
-                $scope.bossInfo = {};
+                    $scope.bossSelected = $scope.HighmaulThreadName;
+                    $scope.resetDisqus();
+                };
+
+                $scope.cancelBRFBossSelection = function(currentSelectedBoss){
+                    currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
+                    currentSelectedBoss.heroic.isSelected = false;
+                    currentSelectedBoss.mythic.isSelected = false;
+                    $scope.difficultySelected = "";
+                    $scope.brfBossSelected = !$scope.brfBossSelected;
+
+                    $scope.bossSelected = $scope.BlackrockThreadName;
+                    $scope.resetDisqus();
+                };
 
                 socket.on("bossInfoData", function(data){
 
@@ -218,17 +273,6 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 bossStrats.getStrats();
 
-                var disqus_shortname = 'bosscollectionnet'; // required: replace example with your forum shortname
-                var disqus_identifier = '/mkdir';
-
-                /* * * DON'T EDIT BELOW THIS LINE * * */
-                (function() {
-                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                })();
-
-                $scope.currentEmbedUrl = "";
 
                 $scope.setUrl = function(newUrl){
                     $scope.currentEmbedUrl = newUrl;

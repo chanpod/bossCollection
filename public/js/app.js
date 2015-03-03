@@ -11,6 +11,8 @@ angular.module('BossCollection', [
   'ui.bootstrap',
   'btford.socket-io',
     'ngCookies'
+
+
 ]).factory('mySocket', function(socketFactory){
     return socketFactory();
 }).
@@ -27,9 +29,13 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'mkdirHome',
       controller: 'mkdirController'
     }).
-    when('/strategyRoom', {
+    when('/strategyRoom/:chatRoom', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController'
+    }).
+    when('/strategyRoom', {
+        templateUrl: 'strategyRoom',
+        controller: 'strategyRoomController',
     }).
     when('/progression', {
         templateUrl: 'progression',
@@ -39,8 +45,7 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       redirectTo: '/'
     });
 
-    $httpProvider.defaults.useXDomain = true;
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    $locationProvider.hashPrefix('!');
 
     $sceDelegateProvider.resourceUrlWhitelist([
         'self',
@@ -49,4 +54,5 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
     ]);
 
   $locationProvider.html5Mode(true);
+
 });

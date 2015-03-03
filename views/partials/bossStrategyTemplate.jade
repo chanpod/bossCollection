@@ -14,7 +14,7 @@ script#bossStrategy(type="text/ng-template")
             div.row().text-center
                 div.col-md-12
                     tabset(class="tab-animation")
-                        tab(heading = "Highmaul")
+                        tab(ng-click = "resetDisqus(HighmaulThreadName)", heading = "Highmaul")
                             div(class="item animated bounceInRight").row
                                 div(collapse="highmaulBossSelected", ng-repeat = "boss in bossInfo.highmaul").col-md-3
                                     div(ng-click="changeHMBossInfo(boss)").btn.btn-primary.bossButton
@@ -25,7 +25,7 @@ script#bossStrategy(type="text/ng-template")
                                     div(ng-repeat = "boss in bossInfo.highmaul")
                                         div(collapse="!boss.isSelected")
                                             div.pull-right
-                                                button(ng-click="changeHMBossInfo(boss)").btn.btn-danger
+                                                button(ng-click="cancelHMBossSelection(boss)").btn.btn-danger
                                                     span.glyphicon.glyphicon-remove
                                             br
                                             h3
@@ -42,7 +42,7 @@ script#bossStrategy(type="text/ng-template")
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
-                        tab(heading = "Blackrock Foundry")
+                        tab(ng-click = "resetDisqus(BlackrockThreadName)", heading = "Blackrock Foundry")
                             div.row
                                 div(collapse="brfBossSelected", ng-repeat = "boss in bossInfo.brf").col-md-3
                                     div(ng-click="changeBRFBossInfo(boss)").btn.btn-primary.bossButton
@@ -53,7 +53,7 @@ script#bossStrategy(type="text/ng-template")
                                     div(ng-repeat = "boss in bossInfo.brf")
                                         div(collapse="!boss.isSelected")
                                             div.pull-right
-                                                button(ng-click="changeBRFBossInfo(boss)").btn.btn-danger
+                                                button(ng-click="cancelBRFBossSelection(boss)").btn.btn-danger
                                                     span.glyphicon.glyphicon-remove
                                             br
                                             h3
@@ -66,9 +66,11 @@ script#bossStrategy(type="text/ng-template")
                                             div(ng-repeat = "video in boss.heroic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
+
                                         div(collapse="!boss.mythic.isSelected")
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
-
+            div(ng-model="bossSelected")
+                {{bossSelected}}
             div(id="disqus_thread")
