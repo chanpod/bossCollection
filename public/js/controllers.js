@@ -11,7 +11,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Defragmentors Interface!"},
                 {image: '/images/InterfaceSS/caesarInterface.jpg', text: "Caesar's Interface!"},
                 {image: 'http://i.imgur.com/TLEGKlY.jpg', text: "Szii's Interface!"},
-                {image: 'http://i.imgur.com/3VQhGYq.jpg', text: "Natsuri's Interface!"},
+                {image: 'http://i.imgur.com/ePuSV2G.jpg', text: "Natsuri's Interface!"},
                 {image: '/images/InterfaceSS/rayyenInterface.jpg', text: "Rayyan's Interface!"}
             ];
 
