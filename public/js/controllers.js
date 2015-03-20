@@ -1,4 +1,10 @@
 'use Strict'
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
 angular.module("BossCollection.controllers", ['BossCollection.services'])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices',
         function($scope, $location, $http, charService, $timeout, guildServices){
@@ -57,6 +63,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 trigger: 'manual'
             })
 
+        /**
+         *  Gets the guild
+         *
+         *  @method getGuild         *
+         */
         $scope.getGuild = function(){
             $('#getGuildMessage').popover("hide");
             $scope.showLoadingGif = true;
@@ -518,6 +529,14 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
     }]);
 
+/**
+ * Uses a binary searching algorithm to find the key in the array.
+ *
+ * @method binarySearch
+ * @param {string} key The key to find.
+ * @param {array} inputArray The array to look in.
+ * @return Returns the index the key was found at.
+ */
 function binarySearch(key, inputArray) {
 
     for(var i = 0; i < inputArray.length; i++){

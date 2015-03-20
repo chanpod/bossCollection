@@ -49,11 +49,38 @@ script#mkdirHome(type="text/ng-template")
             div.row
                 div.col-md-6
                     h1.text-center.headerRow
-                        | Loot
+                        | Loot - Loot Council
+
                     p
-                        | We will be using a loot council system. Tier gear will be treated special. In general, tier gear
-                        | will prioritize those with no tier gear or those who are about to get a set bonus. Loot council
-                        | will be the final decision.
+                        | We will be using RC Loot Council addon. These are some rules on how we are going to use
+                        | the options provides by the addon.
+                    h3
+                        | General Items
+                    ul
+                        li
+                            | When the item level upgrade is less than 10 ilvls, you should be marking it as a minor upgrade
+                        li
+                            | If the item is bis, you may mark it as an upgrade (main spec/need).
+                        li
+                            | If it's an off-spec request, pick off-spec. Don't pick minor upgrade.
+                    h3
+                        | Tier
+                    ul
+                        li
+                            | When requesting the tier token, provide a note indicating the CURRENT number of pieces you
+                            | own.
+                        li
+                            | Those who are getting their teir bonus will be prioritized over others.
+                        li
+                            | Tier tokens, if not an ilvl upgrade, can still be considered a significant upgrade
+                            | (You can select main spec/need instead of minor upgrade)
+                    p
+                        | If you have recently had a major change in your classes stat priorities, and your old stats are
+                        | hindering you ability to perform well in raid, talk to an officer. If the officer agrees
+                        | that you need new stats to fix your spec, you will be given special permission to roll
+                        | need on items that aren't an ilvl upgrade.
+
+
                 div.col-md-6
                     h1.text-center.headerRow
                         | Alts/New Members
@@ -105,6 +132,10 @@ script#mkdirHome(type="text/ng-template")
                                 | Deadly Boss Mods (DBM)
                             a(href = "http://www.curse.com/addons/wow/recount").list-group-item
                                 | Skada
+                            a(href = "http://www.curse.com/addons/wow").list-group-item
+                                | Exorsus Raid Tools
+                            a(href = "http://www.curse.com/addons/wow").list-group-item
+                                | RCLoot Council
                     div.col-md-6
                         ul.list-group
                             a(href = "http://www.curse.com/addons/wow/heal-bot-continued").list-group-item
