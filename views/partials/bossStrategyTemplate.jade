@@ -71,4 +71,13 @@ script#bossStrategy(type="text/ng-template")
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
-            div(id="disqus_thread")
+            br
+            div(ng-if = "loadChat")
+                button(ng-click="chatLoad()").btn.btn-primary
+                    | Hide Discussion
+            div(ng-if = "loadChat", id="disqus_thread")
+
+            div(ng-if = "!loadChat")
+                button(ng-click="chatLoad()").btn.btn-primary
+                    | Discuss?
+

@@ -68,7 +68,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
         /**
          *  Gets the guild
          *
-         *  @method getGuild         *
+         *  @method getGuild
          */
         $scope.getGuild = function(){
             $('#getGuildMessage').popover("hide");
@@ -189,6 +189,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 (adsbygoogle = window.adsbygoogle || []).push({});
 
                 $scope.bossInfo = {};
+                $scope.loadChat = false;
                 $scope.difficultySelected = "";
                 $scope.bossSelected = "HighmaulMainThread";
                 $scope.currentEmbedUrl = "";
@@ -200,6 +201,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 disqus();
 
+                $scope.chatLoad = function () {
+                    $scope.loadChat = !$scope.loadChat;
+
+                    disqus();
+
+                };
+
                 $scope.resetDisqus = function(newRaid){
 
                     if(newRaid){
@@ -210,13 +218,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     }
 
                     console.log(disqus_url);
-                    DISQUS.reset({
-                        reload: true,
-                        config: function () {
 
-                            this.page.url = disqus_url;
-                        }
-                    });
+                    if($scope.loadChat) {
+                        DISQUS.reset({
+                            reload: true,
+                            config: function () {
+
+                                this.page.url = disqus_url;
+                            }
+                        });
+                    }
                 };
 
                 $scope.heroicDifficultySelected = function(boss){
