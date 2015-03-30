@@ -14,11 +14,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             twitter();
 
             $scope.myInterval = 10000;
-            var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Defragmentors Interface!"},
+            var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Ortharion's Interface!"},
                 {image: '/images/InterfaceSS/caesarInterface.jpg', text: "Caesar's Interface!"},
                 {image: 'http://i.imgur.com/TLEGKlY.jpg', text: "Szii's Interface!"},
                 {image: 'http://i.imgur.com/ePuSV2G.jpg', text: "Natsuri's Interface!"},
                 {image: '/images/InterfaceSS/rayyenInterface.jpg', text: "Rayyan's Interface!"}
+                {image: 'http://i.imgur.com/bf5QUqy.jpg', text: "Ortharion's alternate Interface!"}
+
             ];
 
             var slides = $scope.slides = [];
