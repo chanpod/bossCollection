@@ -95,8 +95,7 @@ module.exports = function (socket) {
 
     socket.on("saveStrats", function(newStrats){
         console.log("Saving New Boss Info");
-
-        if(verifyYoutubeURL(newStrats.url)){
+        if(verifyYoutubeURL(newStrats.newBossInfo.url)){
             mongo.saveRaidBossInfo(newStrats);
         }
         else{

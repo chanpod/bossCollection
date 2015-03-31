@@ -213,12 +213,19 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 };
 
                 $scope.saveNewBossInfo = function(){
-                    var newBossInfo = {
-                        "name" : $scope.name,
-                        "url" : $scope.url
-                    }
+                    var raidInfo = {
+                        isHighmaul: true,
+                        isBRF: false,
+                        isHeroic: true,
+                        isMythic: false,
+                        bossName: "kargath",
+                        newBossInfo: {
+                            "name" : $scope.name,
+                            "url" : $scope.url
+                        }
+                    };
 
-                    bossStrats.saveStrats(newBossInfo);
+                    bossStrats.saveStrats(raidInfo);
                 };
 
                 socket.on("saveFailed", function(erMsg){

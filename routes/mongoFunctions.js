@@ -24,7 +24,24 @@ var saveRaidBossInfo = function(validBossInfo){
         console.log(validBossInfo);
         if(validBossInfo.isHighmaul){
             if(validBossInfo.isHeroic){
+                console.log("Iterating through the data");
+                var highmaul = data.highmaul;
+                highmaul.forEach(function(data){
 
+                    console.log("Valid Boss Info: " + validBossInfo.bossName);
+                    console.log("Data Boss: " + data.name);
+
+                    if(validBossInfo.bossName.toUpperCase() == data.name.toUpperCase()){
+                        var videos = data.heroic.videos;
+                        var videosLength = (Object.keys(videos).length);
+
+                        videos[videosLength] = validBossInfo.newBossInfo;
+
+
+                        data.heroic.videos = videos;
+                        console.log(data);
+                    }
+                })
             }
         }
 
