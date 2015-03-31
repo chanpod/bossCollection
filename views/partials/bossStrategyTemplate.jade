@@ -11,6 +11,11 @@ script#bossStrategy(type="text/ng-template")
         div.container.text-center
             h1
                 | Boss Information
+            div.row
+                input(ng-model = "name").form-control
+                input(ng-model = "url").form-control
+                button(ng-click = "saveNewBossInfo()")
+                    Add Video
             div.row().text-center
                 div.col-md-12
                     tabset(class="tab-animation")

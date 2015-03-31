@@ -17,6 +17,12 @@ function binarySearch(key, inputArray) {
     return null;
 }
 
+
+function verifyYoutubeURL(url){
+
+    return /(?:https?:\/\/|www\.|m\.|^)youtu(?:be\.com\/watch\?(?:.*?&(?:amp;)?)?v=|\.be\/)([\w‌​\-]+)(?:&(?:amp;)?[\w\?=]*)?/.test(url);
+}
+
 Array.prototype.remove = function(from, to) {
     var rest = this.slice((to || from) + 1 || this.length);
     this.length = from < 0 ? this.length + from : from;
@@ -74,7 +80,7 @@ module.exports = function (socket) {
         console.log(messages);
         socket.broadcast.emit("messagesFromServer", messages);
         socket.emit("messagesFromServer", messages);
-    })
+    });
 
     socket.on("getBossInfo", function(){
         console.log("BossInfo request made.");
@@ -85,7 +91,21 @@ module.exports = function (socket) {
             socket.emit("bossInfoData", data);
             return data;
         });
-    })
+    });
+
+    socket.on("saveStrats", function(newStrats){
+        console.log("Saving New Boss Info");
+
+        if(verifyYoutubeURL(newStrats.url)){
+            mongo.saveRaidBossInfo(newStrats);
+        }
+        else{
+            var errMsg = "Invalid URL. Please provide a youtube link.";
+            socket.emit("saveFailed", errMsg);
+        }
+
+
+    });
 
     socket.on("createChatroom", function(participants){
         socket.join(participants.user1 + "&" + participants.user2);

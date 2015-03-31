@@ -3,7 +3,7 @@
 /* Services */
 var service = angular.module("BossCollection.services", ["ngResource"]);
 
-var socket = io("http://54.173.24.121:4001");
+var socket = io("http://localhost:4001");
 //var socket = io("http://localhost:4001");
 
 service.factory('charService', function($http, $q){
@@ -38,6 +38,10 @@ service.factory('charService', function($http, $q){
 
             console.log("Request Boss Info");
             socket.emit("getBossInfo");
+        },
+        saveStrats: function(updatedStrats){
+            console.log("Saving info now");
+            socket.emit("saveStrats", updatedStrats);
         }
     };
 

@@ -17,6 +17,22 @@ var getRaidBossInfo = function() {
     return defer.promise;
 };
 
+var saveRaidBossInfo = function(validBossInfo){
+    var defer = q.defer();
+    var raidInfoId = getRaidBossInfo().then(function(data){
+
+        console.log(validBossInfo);
+        if(validBossInfo.isHighmaul){
+            if(validBossInfo.isHeroic){
+
+            }
+        }
+
+    });
+
+};
+
 module.exports = {
-    getRaidBossInfo:getRaidBossInfo
+    getRaidBossInfo:getRaidBossInfo,
+    saveRaidBossInfo:saveRaidBossInfo
 };

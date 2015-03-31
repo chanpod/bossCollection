@@ -196,6 +196,10 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.HighmaulThreadName = "HighmaulMainThread";
                 $scope.BlackrockThreadName = "blackrockMainThread";
 
+                //New Boss Info
+                $scope.name = "";
+                $scope.url = "";
+
                 disqus_shortname = 'bosscollection';
                 disqus_url = 'http://localhost:4000/strategy/#!' + $scope.bossSelected;
 
@@ -207,6 +211,19 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     disqus();
 
                 };
+
+                $scope.saveNewBossInfo = function(){
+                    var newBossInfo = {
+                        "name" : $scope.name,
+                        "url" : $scope.url
+                    }
+
+                    bossStrats.saveStrats(newBossInfo);
+                };
+
+                socket.on("saveFailed", function(erMsg){
+                    console.log(erMsg);
+                });
 
                 $scope.resetDisqus = function(newRaid){
 
