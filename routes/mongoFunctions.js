@@ -44,10 +44,9 @@ var saveRaidBossInfo = function(validBossInfo){
                 })
             }
         }
-
     });
-
 };
+
 
 module.exports = {
     getRaidBossInfo:getRaidBossInfo,
