@@ -540,9 +540,11 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 $scope.myInterval = 10000;
                 var listofImages = [
+                    {image: '/images/BossKills/heroic_blackhand_kill.jpg', text: "Heroic Blackhand Down 4/15/2015"},
                     {image: '/images/BossKills/ImpKill.jpg', text: "Normal Imperator Down!"},
                     {image: '/images/BossKills/Heroic_Imp_Kill.jpg', text: "Heroic Imperator Down!"},
                     {image: '/images/BossKills/silly_imp_kill.jpg', text: "Goofy Shot for heroic Imp kill"}
+
                 ];
 
                 var slides = $scope.slides = [];
