@@ -503,7 +503,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 };
 
-                $scope.filterUser = function(userToFilter){
+                $scope.filterUser = function(userToFilter){f
 
                     if(userToFilter.userName == "System") {
                         $scope.systemMute = !$scope.systemMute
