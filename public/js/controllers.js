@@ -298,6 +298,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     boss.heroic.isSelected = !boss.heroic.isSelected;
                     boss.mythic.isSelected = false;
                     $scope.difficultySelected = "- Heroic";
+                    $scope.addNewBoss = false;
                 };
 
                 $scope.mythicDifficultySelected = function(boss){
@@ -305,6 +306,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     boss.mythic.isSelected = !boss.mythic.isSelected;
                     boss.heroic.isSelected = false;
                     $scope.difficultySelected = "- Mythic";
+                    $scope.addNewBoss = false;
                 };
 
                 $scope.changeHMBossInfo = function(boss){
@@ -316,6 +318,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
 
                     $scope.bossSelected = boss.name;
+                    $scope.addNewBoss = false;
                     $scope.resetDisqus();
                 };
 
@@ -327,6 +330,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.brfBossSelected = !$scope.brfBossSelected;
 
                     $scope.bossSelected = boss.name;
+                    $scope.addNewBoss = false;
                     $scope.resetDisqus();
                 };
 
@@ -338,6 +342,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
 
                     $scope.bossSelected = $scope.HighmaulThreadName;
+                    $scope.addNewBoss = false;
                     $scope.resetDisqus();
                 };
 
@@ -349,6 +354,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.brfBossSelected = !$scope.brfBossSelected;
 
                     $scope.bossSelected = $scope.BlackrockThreadName;
+                    $scope.addNewBoss = false;
                     $scope.resetDisqus();
                 };
 
