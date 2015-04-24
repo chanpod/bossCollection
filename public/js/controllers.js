@@ -195,6 +195,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.currentEmbedUrl = "";
                 $scope.HighmaulThreadName = "HighmaulMainThread";
                 $scope.BlackrockThreadName = "blackrockMainThread";
+                $scope.addNewBoss = false;
 
                 //New Boss Info
                 $scope.name = "";
@@ -205,6 +206,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 disqus();
 
+
+                $scope.addVideo= function(bossName, difficulty, currentRaid){
+                    console.log("name: " + bossName);
+                    console.log("Difficulty: " + difficulty);
+
+                    $scope.currentBoss = bossName;
+                    $scope.currentDifficulty = difficulty;
+                    $scope.currentRaid = currentRaid;
+                };
+
                 $scope.chatLoad = function () {
                     $scope.loadChat = !$scope.loadChat;
 
@@ -212,20 +223,48 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
                 };
 
-                $scope.saveNewBossInfo = function(){
+                $scope.saveNewBossInfo = function(name, url){
+                    var isHeroic = false;
+                    var isMythic = false;
+                    var isHighmaul = false;
+                    var isBRF = false;
+
+                    console.log(name);
+
+                    if($scope.currentDifficulty == "heroic"){
+                        isHeroic = true;
+                    }
+                    else if ($scope.currentDifficulty == "mythic"){
+                        isMythic = true;
+                    }
+
+                    if($scope.currentRaid == "highmaul"){
+                        isHighmaul = true;
+                    }
+                    else if($scope.currentRaid == "brf"){
+                        isBRF = true;
+                    }
+
                     var raidInfo = {
-                        isHighmaul: true,
-                        isBRF: false,
-                        isHeroic: true,
-                        isMythic: false,
-                        bossName: "kargath",
+                        isHighmaul: isHighmaul,
+                        isBRF: isBRF,
+                        isHeroic: isHeroic,
+                        isMythic: isMythic,
+                        bossName: $scope.currentBoss,
                         newBossInfo: {
-                            "name" : $scope.name,
-                            "url" : $scope.url
+                            "name" : name,
+                            "url" : url
                         }
                     };
 
+                    console.log(raidInfo);
+
                     bossStrats.saveStrats(raidInfo);
+
+                    $scope.name = "";
+                    $scope.url = "";
+
+                    $scope.addNewBoss = !$scope.addNewBoss;
                 };
 
                 socket.on("saveFailed", function(erMsg){

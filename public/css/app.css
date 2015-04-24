@@ -223,6 +223,14 @@ a.lootList{
     margin: 0 auto;
 }
 
+.padding-top{
+    padding-top:15px;
+}
+
+.padding{
+    padding-bottom: 15px;
+}
+
 .googleSheet{
     height:600px;
     width:100%;

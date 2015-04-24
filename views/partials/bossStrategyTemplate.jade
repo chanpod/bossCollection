@@ -11,12 +11,6 @@ script#bossStrategy(type="text/ng-template")
         div.container.text-center
             h1
                 | Boss Information
-
-            div.row
-                input(ng-model = "name").form-control
-                input(ng-model = "url").form-control
-                button(ng-click = "saveNewBossInfo()").btn.btn-primary
-                    | Add Video
             div.row().text-center
                 div.col-md-12
                     tabset(class="tab-animation")
@@ -29,7 +23,7 @@ script#bossStrategy(type="text/ng-template")
                             div(class="slide-animation").row
                                 div.container
                                     div(ng-repeat = "boss in bossInfo.highmaul")
-                                        div(collapse="!boss.isSelected")
+                                        div(collapse="!boss.isSelected").padding
                                             div.pull-right
                                                 button(ng-click="cancelHMBossSelection(boss)").btn.btn-danger
                                                     span.glyphicon.glyphicon-remove
@@ -44,10 +38,48 @@ script#bossStrategy(type="text/ng-template")
                                             div(ng-repeat = "video in boss.heroic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
+                                            span(ng-click = "addVideo(boss.name, 'heroic', 'highmaul');addNewBoss = !addNewBoss").list-group-item.list-group-item-success.padding
+                                                | Add Video
+                                            div(collapse="!addNewBoss").padding-top.text-center
+                                                div.container.text-center
+                                                    div.form-horizontal.text-center
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Video Name: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "name").form-control
+
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Youtube URL: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "url").form-control
+                                                        div.col-sm-7
+                                                            button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
+                                                                | Add Video
                                         div(collapse="!boss.mythic.isSelected")
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
+                                            span(ng-click = "addVideo(boss.name, 'mythic', 'highmaul');addNewBoss = !addNewBoss").list-group-item.list-group-item-success
+                                                | Add Video
+                                            div(collapse="!addNewBoss")
+                                                div.container-fluid
+                                                    div.form-horizontal
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Video Name: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "name").form-control
+
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Youtube URL: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "url").form-control
+                                                        div.col-sm-7
+                                                            button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
+                                                                | Add Video
                         tab(ng-click = "resetDisqus(BlackrockThreadName)", heading = "Blackrock Foundry")
                             div.row
                                 div(collapse="brfBossSelected", ng-repeat = "boss in bossInfo.brf").col-md-3
@@ -57,7 +89,7 @@ script#bossStrategy(type="text/ng-template")
                             div.row
                                 div.container
                                     div(ng-repeat = "boss in bossInfo.brf")
-                                        div(collapse="!boss.isSelected")
+                                        div(collapse="!boss.isSelected").padding
                                             div.pull-right
                                                 button(ng-click="cancelBRFBossSelection(boss)").btn.btn-danger
                                                     span.glyphicon.glyphicon-remove
@@ -72,11 +104,48 @@ script#bossStrategy(type="text/ng-template")
                                             div(ng-repeat = "video in boss.heroic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
+                                            span(ng-click = "addVideo(boss.name, 'heroic', 'brf');addNewBoss = !addNewBoss").list-group-item.list-group-item-success
+                                                | Add Video
+                                            div(collapse="!addNewBoss")
+                                                div.container-fluid
+                                                    div.form-horizontal
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Video Name: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "name").form-control
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Youtube URL: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "url").form-control
+                                                        div.col-sm-7
+                                                            button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
+                                                                | Add Video
 
                                         div(collapse="!boss.mythic.isSelected")
                                             div(ng-repeat = "video in boss.mythic.videos")
                                                 span(ng-click = "open(video.url)").list-group-item
                                                     {{video.name}}
+
+                                            span(ng-click = "addVideo(boss.name, 'mythic', 'brf');addNewBoss = !addNewBoss").list-group-item.list-group-item-success
+                                                | Add Video
+                                            div(collapse="!addNewBoss")
+                                                div
+                                                    div.form-horizontal
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Video Name: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "name").form-control
+                                                        div.form-group
+                                                            label.col-sm-2.control-label
+                                                                | Youtube URL: &nbsp
+                                                            div.col-sm-5
+                                                                input(ng-model = "url").form-control
+                                                        div.col-sm-7
+                                                            button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
+                                                                | Add Video
             br
             div(ng-if = "loadChat")
                 button(ng-click="chatLoad()").btn.btn-primary
