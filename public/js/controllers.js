@@ -268,7 +268,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 };
 
                 socket.on("addVideoSuccess", function(message){
+                    console.log("Success: " + message);
                    if(message == "success"){
+                       console.log("Getting updated boss info");
                        bossStrats.getStrats();
                        $scope.addNewBoss = !$scope.addNewBoss;
                    }
