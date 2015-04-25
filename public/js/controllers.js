@@ -267,6 +267,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.addNewBoss = !$scope.addNewBoss;
                 };
 
+                socket.on("addVideoSuccess", function(message){
+                   if(message == "success"){
+                       bossStrats.getStrats();
+                       $scope.addNewBoss = !$scope.addNewBoss;
+                   }
+                });
+
                 socket.on("saveFailed", function(erMsg){
                     console.log(erMsg);
                 });

@@ -91,9 +91,11 @@ var saveRaidBossInfo = function(validBossInfo){
 
         db.raidBossInfo.save(data, function(){
             console.log("Success")
+                defer.resolve("success");
         },
         function(err){
             console.log(err);
+            defer.resolve(err);
         })
 
     });

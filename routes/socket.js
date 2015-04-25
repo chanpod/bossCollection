@@ -96,7 +96,9 @@ module.exports = function (socket) {
     socket.on("saveStrats", function(newStrats){
         console.log("Saving New Boss Info");
         if(verifyYoutubeURL(newStrats.newBossInfo.url)){
-            mongo.saveRaidBossInfo(newStrats);
+            mongo.saveRaidBossInfo(newStrats).then(result){
+                socket.emit("addVideoSuccess", "success")
+            };
         }
         else{
             var errMsg = "Invalid URL. Please provide a youtube link.";
