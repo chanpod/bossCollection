@@ -27,8 +27,6 @@ var saveRaidBossInfo = function(validBossInfo){
         console.log(parsedUrl);
         if(validBossInfo.isHighmaul){
 
-            if(validBossInfo.isHeroic){
-
                 console.log("Iterating through the data");
                 var highmaul = data.highmaul;
                 highmaul.forEach(function(highmaulData, index){
@@ -37,17 +35,58 @@ var saveRaidBossInfo = function(validBossInfo){
                     //console.log("Data Boss: " + highmaulData.name);
 
                     if(validBossInfo.bossName.toUpperCase() == highmaulData.name.toUpperCase()){
-                        var videos = highmaulData.heroic.videos;
+
+                        if(validBossInfo.isHeroic) {
+                            var videos = highmaulData.heroic.videos;
+                            var videosLength = (Object.keys(videos).length);
+
+                            videos[videosLength] = validBossInfo.newBossInfo;
+
+                            highmaulData.heroic.videos = videos;
+                            data.highmaul[index] = highmaulData;
+                        }
+                        else{
+                            var videos = highmaulData.mythic.videos;
+                            var videosLength = (Object.keys(videos).length);
+
+                            videos[videosLength] = validBossInfo.newBossInfo;
+
+                            highmaulData.mythic.videos = videos;
+                            data.highmaul[index] = highmaulData;
+                        }
+                    }
+                })
+
+        }
+        else if(validBossInfo.isBRF){
+            var brf = data.brf;;
+            brf.forEach(function(brfData, index){
+
+                //console.log("Valid Boss Info: " + validBossInfo.bossName);
+                //console.log("Data Boss: " + highmaulData.name);
+
+                if(validBossInfo.bossName.toUpperCase() == brfData.name.toUpperCase()){
+
+                    if(validBossInfo.isHeroic) {
+                        var videos = brfData.heroic.videos;
                         var videosLength = (Object.keys(videos).length);
 
                         videos[videosLength] = validBossInfo.newBossInfo;
 
-                        highmaulData.heroic.videos = videos;
-                        data.highmaul[index] = highmaulData;
-
+                        brfData.heroic.videos = videos;
+                        data.highmaul[index] = brfData;
                     }
-                })
-            }
+                    else{
+                        var videos = brfData.mythic.videos;
+                        var videosLength = (Object.keys(videos).length);
+
+                        videos[videosLength] = validBossInfo.newBossInfo;
+
+                        brfData.mythic.videos = videos;
+                        data.highmaul[index] = brfData;
+                    }
+                }
+            })
         }
 
         db.raidBossInfo.save(data, function(){
