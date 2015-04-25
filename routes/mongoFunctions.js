@@ -99,6 +99,8 @@ var saveRaidBossInfo = function(validBossInfo){
         })
 
     });
+
+    return defer.promise;
 };
 
 
