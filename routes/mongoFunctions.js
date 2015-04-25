@@ -74,7 +74,7 @@ var saveRaidBossInfo = function(validBossInfo){
                         videos[videosLength] = validBossInfo.newBossInfo;
 
                         brfData.heroic.videos = videos;
-                        data.highmaul[index] = brfData;
+                        data.brf[index] = brfData;
                     }
                     else{
                         var videos = brfData.mythic.videos;
@@ -83,7 +83,7 @@ var saveRaidBossInfo = function(validBossInfo){
                         videos[videosLength] = validBossInfo.newBossInfo;
 
                         brfData.mythic.videos = videos;
-                        data.highmaul[index] = brfData;
+                        data.brf[index] = brfData;
                     }
                 }
             })
