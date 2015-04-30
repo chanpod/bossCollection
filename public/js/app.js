@@ -41,6 +41,10 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
         templateUrl: 'progression',
         controller: 'progressionController'
     }).
+    when('/recruitment', {
+        templateUrl: 'recruitment',
+        controller: 'recruitmentController'
+    }).
     otherwise({
       redirectTo: '/'
     });

@@ -397,6 +397,57 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         }
                     });
                 }
+        }]).controller("recruitmentController", ["$scope", 'cookies', 'filterFilter', 'socketProvider',
+        function($scope, cookies, filterFilter, socketProvider){
+            $scope.currentRosterDropdown = true;
+            $scope.applicantsDropdown = false;
+            
+            
+            
+            $scope.lowLvlTrials = {
+                0: {"name": "Defrag",
+                "class": "Shaman",
+                "ilvl": 620,
+                "spec": "Elemental"
+                },
+                1: {"name": "Ortharion",
+                "class": "Mage",
+                "ilvl": 615,
+                "spec": "Arcane/Fire"
+                }                
+            }
+            
+            $scope.trials = {
+                0: {"name": "Chaunze",
+                "class": "Hunter",
+                "ilvl": 665,
+                "spec": "Survival"
+                },
+                1: {"name": "Szii",
+                "class": "Priest",
+                "ilvl": 685,
+                "spec": "Disc"
+                }                
+            }
+            
+            $scope.raiders = {
+                0: {"name": "Dreklan",
+                "class": "Deathknight",
+                "ilvl": 685,
+                "spec": "Blood"
+                },
+                1: {"name": "Ogoncho",
+                "class": "Monk",
+                "ilvl": 688,
+                "spec": "Mistweaver"
+                },
+                2: {"name": "RandomDood",
+                "class": "Warrior",
+                "ilvl": 688,
+                "spec": "Fury"
+                }                 
+            }
+
         }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', 'socketProvider',
             function($scope, cookies, filterFilter, socketProvider){
 

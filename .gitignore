@@ -1,0 +1,5 @@
+
+.settings/
+node_modules/
+workspace.xml
+watcherTasks.xml

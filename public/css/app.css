@@ -1,8 +1,18 @@
 /* app css stylesheet */
 
 body {
+font-family: helvetica;
 
+}
 
+.playerBox{
+    width:100%;    
+    height:100%;
+    font-size:20px;
+    font-family: helvetica;
+    line-height: 50px;
+    box-shadow: 0px 2px 8px 0px #000000;
+    
 }
 
 .bossButton{
@@ -352,108 +362,108 @@ a.lootList{
 
 }
 
-.shamanClassColor{
+.ShamanClassColor{
 
     background-color: #0070DE;
     color:white;
 }
 
-.shamanClassColor small{
+.ShamanClassColor small{
     color:white;
 }
 
-.dkClassColor{
+.DeathknightClassColor{
 
     background-color: #C41F3B;
     color:white;
 }
 
-.dkClassColor small{
+.DeathknightClassColor small{
     color:white;
 }
 
-.druidClassColor{
+.DruidClassColor{
 
     background-color: #FF7D0A;
     color:white;
 }
 
-.druidClassColor small{
+.DruidClassColor small{
     color:white;
 }
 
-.hunterClassColor{
+.HunterClassColor{
 
     background-color: #ABD473;
-    color:white;
+    color:black;
 }
 
-.hunterClassColor small{
-    color:white;
+.HunterClassColor small{
+    color:black;
 }
 
-.mageClassColor{
+.MageClassColor{
 
     background-color: #69CCF0;
-    color:white;
+    color:black;
 }
 
-.mageClassColor small{
-    color:white;
+.MageClassColor small{
+    color:black;
 }
 
-.monkClassColor{
+.MonkClassColor{
 
     background-color: #00FF96;
     color:black;
 }
 
-.monkClassColor small{
+.MonkClassColor small{
     color:black;
 }
-.paladinClassColor{
+.PaladinClassColor{
 
     background-color: #F58CBA;
     color:white;
 }
 
-.paladinClassColor small{
+.PaladinClassColor small{
     color:white;
 }
-.priestClassColor{
+.PriestClassColor{
 
     background-color: #FFFFFF;
     color:black;
 }
 
-.priestClassColor small{
+.PriestClassColor small{
     color:black;
 }
-.rogueClassColor{
+.RogueClassColor{
 
     background-color: #FFF569;
     color:black;
 }
 
-.rogueClassColor small{
+.RogueClassColor small{
     color:black;
 }
-.warlockClassColor{
+.WarlockClassColor{
 
     background-color: #9482C9;
     color:black;
 }
 
-.warlockClassColor small{
+.WarlockClassColor small{
     color:black;
 }
-.warriorClassColor{
+.WarriorClassColor{
 
     background-color: #C79C6E;
-    color:white;
+    color:black;
 }
 
-.warriorClassColor small{
-    color:white;
+.WarriorClassColor small{
+    color:black;
 }
 

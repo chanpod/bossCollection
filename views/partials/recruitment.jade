@@ -1,3 +1,71 @@
-//
-   Created by cphilpot on 4/30/2015.
-
+script#recruitment(type="text/ng-template")
+   div.jumbotron.wodHeader
+   div.well
+      div.container.text-center
+         div.row
+            div.col-md-6(ng-click = "currentRosterDropdown = !currentRosterDropdown;applicantsDropdown = false")
+               div.btn.btn-primary.bossButton
+                  h3
+                     | Current Roster
+            div.col-md-6(ng-click = "applicantsDropdown = !applicantsDropdown;currentRosterDropdown = false")
+               div.btn.btn-primary.bossButton
+                  h3
+                     | Applicants
+         div(collapse="!currentRosterDropdown").padding
+            div.pull-right
+               button(ng-click="currentRosterDropdown = false").btn.btn-danger
+                   span.glyphicon.glyphicon-remove
+            div.row
+               h1.text-center.headerRow
+                  | Awaiting Trail Phase
+               
+               div(ng-repeat = "player in lowLvlTrials")
+                  div.row
+                     div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
+                        div.row
+                           div.col-md-6                        
+                              | Name: &nbsp{{player.name}}
+                           div.col-md-6                           
+                              | Class: &nbsp{{player.class}}
+                           div.col-md-6      
+                              | iLvL: &nbsp{{player.ilvl}}
+                           div.col-md-6      
+                              | Spec: &nbsp{{player.spec}}
+            div.row
+               h1.text-center.headerRow
+                  | Trials
+               
+               div(ng-repeat = "player in trials")
+                  div.row
+                     div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
+                        div.row
+                           div.col-md-6                        
+                              | Name: &nbsp{{player.name}}
+                           div.col-md-6                           
+                              | Class: &nbsp{{player.class}}
+                           div.col-md-6      
+                              | iLvL: &nbsp{{player.ilvl}}
+                           div.col-md-6      
+                              | Spec: &nbsp{{player.spec}}
+            div.row
+               h1.text-center.headerRow
+                  | Raiders
+               
+               div(ng-repeat = "player in raiders")
+                  div.row
+                     div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
+                        div.row
+                           div.col-md-6                        
+                              | Name: &nbsp{{player.name}}
+                           div.col-md-6                           
+                              | Class: &nbsp{{player.class}}
+                           div.col-md-6      
+                              | iLvL: &nbsp{{player.ilvl}}
+                           div.col-md-6      
+                              | Spec: &nbsp{{player.spec}}
+         
+         div(collapse="!applicantsDropdown").padding
+            div.pull-right
+               button(ng-click="applicantsDropdown = false").btn.btn-danger
+                   span.glyphicon.glyphicon-remove
+            | Not Yet Implemented!

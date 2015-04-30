@@ -39,6 +39,7 @@ router.get('/', routes.index);
 router.get('/mkdir', routes.index);
 router.get('/strategyRoom', routes.index);
 router.get('/progression', routes.index);
+router.get('/recruitment', routes.index);
 
 
 app.use('/', router);
