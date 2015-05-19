@@ -414,6 +414,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             
             var parseMembers = function(membersObject){
                 var ranks = [0, 1, 3, 5];
+                var trialRank = 8;
                 
                 for(var i = 0; i < membersObject.length; i++){
                     var rnk = membersObject[i].rank
@@ -431,7 +432,22 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                             
                             $scope.raiders.push(newMember);
                         }
+                        
                     }
+                    
+                    
+                    if(rnk == trialRank){
+                            var clss = classes[membersObject[i].character.class];
+                            var newMember = {
+                                "name": membersObject[i].character.name,
+                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
+                                "rank" : rnk,
+                                "spec" : membersObject[i].character.spec.name,
+                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
+                            }
+                            
+                            $scope.trials.push(newMember);
+                        }
                 }
                 
                 $scope.raiders.sort(function(a, b){return a.rank-b.rank});
