@@ -397,11 +397,45 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         }
                     });
                 }
-        }]).controller("recruitmentController", ["$scope", 'cookies', 'filterFilter', 'socketProvider',
-        function($scope, cookies, filterFilter, socketProvider){
+        }]).controller("recruitmentController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices',
+        function($scope, cookies, filterFilter, socketProvider, guildServices){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
+            $scope.trials = [];
+            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
+            $scope.raiders = [];
             
+            $scope.getMembers = function(){
+                guildServices.getGuild().then(function(data){
+                    console.log(data);
+                    parseMembers(data);
+                });
+            }
+            
+            var parseMembers = function(membersObject){
+                var ranks = [0, 1, 3, 5];
+                
+                for(var i = 0; i < membersObject.length; i++){
+                    var rnk = membersObject[i].rank
+                    for(var j = 0; j < ranks.length; j++){
+                        if(ranks[j] == rnk){
+                            
+                            var clss = classes[membersObject[i].character.class];
+                            var newMember = {
+                                "name": membersObject[i].character.name,
+                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
+                                "rank" : rnk,
+                                "spec" : membersObject[i].character.spec.name,
+                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
+                            }
+                            
+                            $scope.raiders.push(newMember);
+                        }
+                    }
+                }
+                
+                $scope.raiders.sort(function(a, b){return a.rank-b.rank});
+            }
             
             
             $scope.lowLvlTrials = {
@@ -417,6 +451,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 }                
             }
             
+            /*
             $scope.trials = {
                 0: {"name": "Chaunze",
                 "class": "Hunter",
@@ -429,24 +464,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 "spec": "Disc"
                 }                
             }
-            
-            $scope.raiders = {
-                0: {"name": "Dreklan",
-                "class": "Deathknight",
-                "ilvl": 685,
-                "spec": "Blood"
-                },
-                1: {"name": "Ogoncho",
-                "class": "Monk",
-                "ilvl": 688,
-                "spec": "Mistweaver"
-                },
-                2: {"name": "RandomDood",
-                "class": "Warrior",
-                "ilvl": 688,
-                "spec": "Fury"
-                }                 
-            }
+            */
+           $scope.getMembers()
 
         }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', 'socketProvider',
             function($scope, cookies, filterFilter, socketProvider){

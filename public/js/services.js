@@ -9,13 +9,23 @@ var socket = io("http://54.173.24.121:4001");
 service.factory('charService', function($http, $q){
 
     }).factory('guildServices', function($http, $q){
-
+        
+        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
+        
         var guildApi = {
             checkGuild: function(achievements) {
 
             },
 
             getGuild: function(realm, guildName){
+                var deferred = $q.defer()
+                
+                $http({method: 'GET', url: getMembersUrl}).success(function(data){
+                   
+                   deferred.resolve(data.members);
+                });
+                
+                return deferred.promise;
             }
         };
 

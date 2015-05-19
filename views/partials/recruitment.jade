@@ -1,5 +1,6 @@
 script#recruitment(type="text/ng-template")
    div.jumbotron.wodHeader
+   
    div.well
       div.container.text-center
          div.row
@@ -37,7 +38,7 @@ script#recruitment(type="text/ng-template")
                
                div(ng-repeat = "player in trials")
                   div.row
-                     div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
+                     div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6                        
                         div.row
                            div.col-md-6                        
                               | Name: &nbsp{{player.name}}
@@ -52,16 +53,15 @@ script#recruitment(type="text/ng-template")
                   | Raiders
                
                div(ng-repeat = "player in raiders")
-                  div.row
+                  div.row.heightFix
                      div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
-                        div.row
-                           div.col-md-6                        
+                        img(src= "{{player.avatar}}").pull-left
+                        div
+                           div.col-md-3.heightFix                        
                               | Name: &nbsp{{player.name}}
-                           div.col-md-6                           
-                              | Class: &nbsp{{player.class}}
-                           div.col-md-6      
-                              | iLvL: &nbsp{{player.ilvl}}
-                           div.col-md-6      
+                           div.col-md-3.heightFix                           
+                              | Class: &nbsp{{player.class}}                           
+                           div.col-md-3.heightFix      
                               | Spec: &nbsp{{player.spec}}
          
          div(collapse="!applicantsDropdown").padding
