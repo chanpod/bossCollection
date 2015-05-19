@@ -438,33 +438,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }
             
             
-            $scope.lowLvlTrials = {
-                0: {"name": "Defrag",
-                "class": "Shaman",
-                "ilvl": 620,
-                "spec": "Elemental"
-                },
-                1: {"name": "Ortharion",
-                "class": "Mage",
-                "ilvl": 615,
-                "spec": "Arcane/Fire"
-                }                
-            }
+            $scope.lowLvlTrials = [];
             
-            /*
-            $scope.trials = {
-                0: {"name": "Chaunze",
-                "class": "Hunter",
-                "ilvl": 665,
-                "spec": "Survival"
-                },
-                1: {"name": "Szii",
-                "class": "Priest",
-                "ilvl": 685,
-                "spec": "Disc"
-                }                
-            }
-            */
+            
            $scope.getMembers()
 
         }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', 'socketProvider',
