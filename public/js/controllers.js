@@ -404,22 +404,31 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             $scope.trials = [];
             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
             $scope.raiders = [];
+            $scope.trialRanks = [8];
+            $scope.raiderRanks = [0, 1, 3, 5];
+            $scope.guild = "mkdir bosscollection";
+            $scope.realm = "zul'jin"
             
             $scope.getMembers = function(){
-                guildServices.getGuild().then(function(data){
-                    console.log(data);
+                $scope.raiders = [];
+                $scope.trials = [];
+                
+                guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
+                   
                     parseMembers(data);
                 });
             }
             
+            
+            
             var parseMembers = function(membersObject){
-                var ranks = [0, 1, 3, 5];
-                var trialRank = 8;
+                //var $scope.raiderRanks = [0, 1, 3, 5];
+                //var trialRank = 8;
                 
                 for(var i = 0; i < membersObject.length; i++){
                     var rnk = membersObject[i].rank
-                    for(var j = 0; j < ranks.length; j++){
-                        if(ranks[j] == rnk){
+                    for(var j = 0; j < $scope.raiderRanks.length; j++){
+                        if($scope.raiderRanks[j] == rnk){
                             
                             var clss = classes[membersObject[i].character.class];
                             var newMember = {
@@ -435,8 +444,9 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         
                     }
                     
-                    
-                    if(rnk == trialRank){
+                    for(var j = 0; j < $scope.trialRanks.length; j++){
+                        if($scope.trialRanks[j] == rnk){
+                   
                             var clss = classes[membersObject[i].character.class];
                             var newMember = {
                                 "name": membersObject[i].character.name,
@@ -448,6 +458,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                             
                             $scope.trials.push(newMember);
                         }
+                    }
                 }
                 
                 $scope.raiders.sort(function(a, b){return a.rank-b.rank});

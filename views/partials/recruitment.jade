@@ -3,35 +3,38 @@ script#recruitment(type="text/ng-template")
    
    div.well
       div.container.text-center
-         div.row
-            div.col-md-6(ng-click = "currentRosterDropdown = !currentRosterDropdown;applicantsDropdown = false")
-               div.btn.btn-primary.bossButton
-                  h3
-                     | Current Roster
-            div.col-md-6(ng-click = "applicantsDropdown = !applicantsDropdown;currentRosterDropdown = false")
-               div.btn.btn-primary.bossButton
-                  h3
-                     | Applicants
-         div(collapse="!currentRosterDropdown").padding
-            div.pull-right
-               button(ng-click="currentRosterDropdown = false").btn.btn-danger
-                  span.glyphicon.glyphicon-remove
-            // div.row
-               h1.text-center.headerRow
-                  | Awaiting Trail Phase
-              
-               div(ng-repeat = "player in lowLvlTrials")
-                  div.row
-                     div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
-                        div.row
-                           div.col-md-6                        
-                              | Name: &nbsp{{player.name}}
-                           div.col-md-6                           
-                              | Class: &nbsp{{player.class}}
-                           div.col-md-6      
-                              | iLvL: &nbsp{{player.ilvl}}
-                           div.col-md-6      
-                              | Spec: &nbsp{{player.spec}}
+         div.row           
+            div.row
+               p
+                  b
+                     | Ranks are 1 less than what they are in game. So if your Raider rank is Rank 7 in game, then put 6 for their rank below. This is how Blizzard stores the guild ranks.               
+               div.form-horizontal
+                  div.form-group
+                     label.col-sm-2.control-label
+                        | Guild
+                     div.col-sm-10
+                        input(placeholder = "Guild", ng-model = "guild").form-control
+                  div.form-group
+                     label.col-sm-2.control-label
+                        | Realm
+                     div.col-sm-10
+                        input(placeholder = "Realm", ng-model = "realm").form-control
+                  div.form-group
+                     label.col-sm-2.control-label
+                        | Trial Ranks
+                        i
+                           | Comma Delimited
+                     div.col-sm-10
+                        input(placeholder = "Trial Ranks (Comma Delimited) EG 1,2,3", ng-model = "trialRanks").form-control
+                  div.form-group
+                     label.col-sm-2.control-label
+                        | Raider Ranks 
+                        i
+                           | Comma Delimited
+                     div.col-sm-10
+                        input(placeholder = "Raider Ranks (Comma Delimited) EG 1,2,3", ng-model = "raiderRanks").form-control
+               button(ng-click = "getMembers()").btn.btn-primary
+                  | Get Roster
             div.row
                h1.text-center.headerRow
                   | Trials
@@ -63,8 +66,4 @@ script#recruitment(type="text/ng-template")
                            div.col-md-3.heightFix      
                               | Spec: &nbsp{{player.spec}}
          
-         div(collapse="!applicantsDropdown").padding
-            div.pull-right
-               button(ng-click="applicantsDropdown = false").btn.btn-danger
-                   span.glyphicon.glyphicon-remove
-            | Not Yet Implemented!
+         
