@@ -414,7 +414,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.trials = [];
                 
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
-                   
+                    console.log(data);
                     parseMembers(data);
                 });
             }

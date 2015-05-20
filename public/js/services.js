@@ -10,7 +10,7 @@ service.factory('charService', function($http, $q){
 
     }).factory('guildServices', function($http, $q){
         
-        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
+        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
         
