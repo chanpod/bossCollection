@@ -5,6 +5,8 @@ var collections = ["raidBossInfo"];
 var db = require("mongojs").connect(databaseUrl, collections);
 var q = require('q');
 
+
+
 var getRaidBossInfo = function() {
     var defer = q.defer();
     console.log("Getting data from mongo");
@@ -16,6 +18,7 @@ var getRaidBossInfo = function() {
 
     return defer.promise;
 };
+
 
 var saveRaidBossInfo = function(validBossInfo){
     var defer = q.defer();

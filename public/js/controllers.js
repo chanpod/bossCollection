@@ -180,6 +180,16 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
 
 
+        }]).controller("registerController", ['$scope',
+            function($scope){
+
+
+
+        }]).controller("registerController", ['$scope',
+            function($scope){
+
+                console.log("Hello world");
+
         }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
             function($scope, bossStrats, $modal, socketProvider){
 

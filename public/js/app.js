@@ -45,6 +45,14 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
         templateUrl: 'recruitment',
         controller: 'recruitmentController'
     }).
+    when('/login', {
+        templateUrl: 'login',
+        controller: 'loginController'
+    }).    
+    when('/register', {
+        templateUrl: 'register',
+        controller: 'registerController'
+    }).
     otherwise({
       redirectTo: '/'
     });
