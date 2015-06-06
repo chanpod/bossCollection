@@ -407,8 +407,8 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         }
                     });
                 }
-        }]).controller("recruitmentController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices',
-        function($scope, cookies, filterFilter, socketProvider, guildServices){
+        }]).controller("recruitmentController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
+        function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -429,6 +429,13 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 });
             }
             
+            $scope.getUser = function(){
+                
+                $http({method: 'POST', url: '/getUser'}).success(function(data){
+                   
+                   console.log(data);
+                });
+            }
             
             
             var parseMembers = function(membersObject){

@@ -5,12 +5,19 @@ var https = require('https');
  * GET home page.
  */
 var title = "BossCollection";
+/*
 exports.index = function(req, res, next){
     if (req.isAuthenticated())
       res.render('index', { user: req.user }); 
     res.render('login');
     
        
+};
+*/
+
+exports.index = function(req, res, next){
+   
+   res.render('index');        
 };
 
 exports.partials = function (req, res) {
