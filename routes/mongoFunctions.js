@@ -62,6 +62,7 @@ var saveRaidBossInfo = function(validBossInfo){
 
         }
         else if(validBossInfo.isBRF){
+            
             var brf = data.brf;
             brf.forEach(function(brfData, index){
 
@@ -93,13 +94,16 @@ var saveRaidBossInfo = function(validBossInfo){
         }
         else if(validBossInfo.isHFC){
             var hfc = data.hellfire;
+            console.log("hellfire is valid");
             hfc.forEach(function(hfcData, index){
 
                 //console.log("Valid Boss Info: " + validBossInfo.bossName);
                 //console.log("Data Boss: " + highmaulData.name);
-
+                
+                console.log("in the loop to compare against bosses");
                 if(validBossInfo.bossName.toUpperCase() == hfcData.name.toUpperCase()){
-
+                    
+                    console.log("match found");
                     if(validBossInfo.isHeroic) {
                         var videos = hfcData.heroic.videos;
                         var videosLength = (Object.keys(videos).length);
@@ -121,6 +125,8 @@ var saveRaidBossInfo = function(validBossInfo){
                 }
             })
         }
+        
+        console.log("Saving data...");
 
         db.raidBossInfo.save(data, function(){
             console.log("Success")
