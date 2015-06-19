@@ -27,7 +27,7 @@ var saveRaidBossInfo = function(validBossInfo){
         var parsedUrl = validBossInfo.newBossInfo.url.split("=");
         validBossInfo.newBossInfo.url = parsedUrl[1];
 
-        console.log(data);
+       
         if(validBossInfo.isHighmaul){
 
                 console.log("Iterating through the data");
@@ -101,12 +101,12 @@ var saveRaidBossInfo = function(validBossInfo){
                 //console.log("Valid Boss Info: " + validBossInfo.bossName);
                 //console.log("Data Boss: " + highmaulData.name);
                 
-                console.log("in the loop to compare against bosses");
+                
                 if(validBossInfo.bossName.toUpperCase() == hfcData.name.toUpperCase()){
                     
-                    console.log("match found");
+                    
                     if(validBossInfo.isHeroic) {
-                        console.log("It's heroic");
+                        
                         
                         var videos = hfcData.heroic.videos;
                         var videosLength = (Object.keys(videos).length);
