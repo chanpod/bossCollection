@@ -62,7 +62,7 @@ var saveRaidBossInfo = function(validBossInfo){
 
         }
         else if(validBossInfo.isBRF){
-            var brf = data.brf;;
+            var brf = data.brf;
             brf.forEach(function(brfData, index){
 
                 //console.log("Valid Boss Info: " + validBossInfo.bossName);
@@ -92,7 +92,7 @@ var saveRaidBossInfo = function(validBossInfo){
             })
         }
         else if(validBossInfo.isHFC){
-            var hfc = data.hfc;;
+            var hfc = data.hellfire;
             hfc.forEach(function(hfcData, index){
 
                 //console.log("Valid Boss Info: " + validBossInfo.bossName);
