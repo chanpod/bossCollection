@@ -196,6 +196,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 var socket = socketProvider;
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
+                $scope.hfcBossSelected = false;
                 (adsbygoogle = window.adsbygoogle || []).push({});
 
                 $scope.bossInfo = {};
@@ -205,6 +206,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                 $scope.currentEmbedUrl = "";
                 $scope.HighmaulThreadName = "HighmaulMainThread";
                 $scope.BlackrockThreadName = "blackrockMainThread";
+                $scope.HellfireThreadName = "hellfireMainThread";
                 $scope.addNewBoss = false;
 
                 //New Boss Info
@@ -238,6 +240,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     var isMythic = false;
                     var isHighmaul = false;
                     var isBRF = false;
+                    var isHFC = false;
 
                     console.log(name);
 
@@ -254,10 +257,14 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     else if($scope.currentRaid == "brf"){
                         isBRF = true;
                     }
+                    else if($scope.currentRaid == "hellfire"){
+                        isHFC = true
+                    }
 
                     var raidInfo = {
                         isHighmaul: isHighmaul,
                         isBRF: isBRF,
+                        isHFC: isHFC,
                         isHeroic: isHeroic,
                         isMythic: isMythic,
                         bossName: $scope.currentBoss,
@@ -352,8 +359,22 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.addNewBoss = false;
                     $scope.resetDisqus();
                 };
+                
+                $scope.changeHFCBossInfo = function(boss){
+                    boss.isSelected = !boss.isSelected;
+                    boss.heroic.isSelected = false;
+                    boss.mythic.isSelected = false;
+                    
+                    $scope.difficultySelected = "";
+                    $scope.hfcBossSelected = !$scope.hfcBossSelected;
+
+                    $scope.bossSelected = boss.name;
+                    $scope.addNewBoss = false;
+                    $scope.resetDisqus();
+                };
 
                 $scope.cancelHMBossSelection = function(currentSelectedBoss){
+                    
                     currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
                     currentSelectedBoss.heroic.isSelected = false;
                     currentSelectedBoss.mythic.isSelected = false;
@@ -376,11 +397,26 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                     $scope.addNewBoss = false;
                     $scope.resetDisqus();
                 };
+                
+                $scope.cancelHFCBossSelection = function(currentSelectedBoss){
+                    
+                    currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
+                    currentSelectedBoss.heroic.isSelected = false;
+                    currentSelectedBoss.mythic.isSelected = false;
+                    
+                    $scope.difficultySelected = "";
+                    $scope.hfcBossSelected = !$scope.hfcBossSelected;
+
+                    $scope.bossSelected = $scope.HellfireThreadName;
+                    $scope.addNewBoss = false;
+                    $scope.resetDisqus();
+                };
 
                 socket.on("bossInfoData", function(data){
 
                     $scope.bossInfo.highmaul = data.highmaul;
                     $scope.bossInfo.brf = data.brf;
+                    $scope.bossInfo.hellfire = data.hellfire;
                     $scope.$apply();
 
                 });
