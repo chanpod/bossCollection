@@ -95,6 +95,7 @@ var saveRaidBossInfo = function(validBossInfo){
         else if(validBossInfo.isHFC){
             var hfc = data.hellfire;
             console.log("hellfire is valid");
+            try{
             hfc.forEach(function(hfcData, index){
 
                 //console.log("Valid Boss Info: " + validBossInfo.bossName);
@@ -105,6 +106,8 @@ var saveRaidBossInfo = function(validBossInfo){
                     
                     console.log("match found");
                     if(validBossInfo.isHeroic) {
+                        console.log("It's heroic");
+                        
                         var videos = hfcData.heroic.videos;
                         var videosLength = (Object.keys(videos).length);
 
@@ -124,6 +127,10 @@ var saveRaidBossInfo = function(validBossInfo){
                     }
                 }
             })
+            }
+            catch(err){
+                console.log(err);
+            }
         }
         
         console.log("Saving data...");
