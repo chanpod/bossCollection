@@ -27,7 +27,7 @@ var saveRaidBossInfo = function(validBossInfo){
         var parsedUrl = validBossInfo.newBossInfo.url.split("=");
         validBossInfo.newBossInfo.url = parsedUrl[1];
 
-        console.log(parsedUrl);
+        console.log(data);
         if(validBossInfo.isHighmaul){
 
                 console.log("Iterating through the data");
