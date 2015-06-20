@@ -95,37 +95,38 @@ var saveRaidBossInfo = function(validBossInfo){
         else if(validBossInfo.isHFC){
             var hfc = data.hellfire;
             console.log("hellfire is valid");
-            try{
-            hfc.forEach(function(hfcData, index){
-
-                //console.log("Valid Boss Info: " + validBossInfo.bossName);
-                //console.log("Data Boss: " + highmaulData.name);
-                
-                
-                if(validBossInfo.bossName.toUpperCase() == hfcData.name.toUpperCase()){
+            
+            try{    
+                hfc.forEach(function(hfcData, index){
+    
+                    //console.log("Valid Boss Info: " + validBossInfo.bossName);
+                    //console.log("Data Boss: " + highmaulData.name);
                     
                     
-                    if(validBossInfo.isHeroic) {
+                    if(validBossInfo.bossName.toUpperCase() == hfcData.name.toUpperCase()){
                         
                         
-                        var videos = hfcData.heroic.videos;
-                        var videosLength = (Object.keys(videos).length);
-
-                        videos[videosLength] = validBossInfo.newBossInfo;
-
-                        hfcData.heroic.videos = videos;
-                        data.hfc[index] = hfcData;
+                        if(validBossInfo.isHeroic) {
+                            
+                            
+                            var videos = hfcData.heroic.videos;
+                            var videosLength = (Object.keys(videos).length);
+    
+                            videos[videosLength] = validBossInfo.newBossInfo;
+    
+                            hfcData.heroic.videos = videos;
+                            data.hfc[index] = hfcData;
+                        }
+                        else{
+                            var videos = hfcData.mythic.videos;
+                            var videosLength = (Object.keys(videos).length);
+    
+                            videos[videosLength] = validBossInfo.newBossInfo;
+    
+                            hfcData.mythic.videos = videos;
+                            data.hfc[index] = hfcData;
+                        }
                     }
-                    else{
-                        var videos = hfcData.mythic.videos;
-                        var videosLength = (Object.keys(videos).length);
-
-                        videos[videosLength] = validBossInfo.newBossInfo;
-
-                        hfcData.mythic.videos = videos;
-                        data.hfc[index] = hfcData;
-                    }
-                }
             })
             }
             catch(err){
