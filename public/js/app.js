@@ -3,15 +3,14 @@
 
 
 angular.module('BossCollection', [
-  'BossCollection.controllers',
-  'Imn.filters',
+  'bc',
+  'BossCollection.controllers',  
   'BossCollection.services',
-  'Imn.directives',
+  'BossCollection.directives',
   'ngRoute',
   'ui.bootstrap',
   'btford.socket-io',
-    'ngCookies'
-
+  'ngCookies'
 
 ]).factory('mySocket', function(socketFactory){
     return socketFactory();
@@ -25,33 +24,13 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'home',
       controller: 'homeController'
     }).
-    when('/mkdir', {
-      templateUrl: 'mkdirHome',
-      controller: 'mkdirController'
-    }).
-    when('/strategyRoom/:chatRoom', {
-        templateUrl: 'strategyRoom',
-        controller: 'strategyRoomController'
-    }).
     when('/strategyRoom', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
     }).
-    when('/progression', {
-        templateUrl: 'progression',
-        controller: 'progressionController'
-    }).
-    when('/recruitment', {
-        templateUrl: 'recruitment',
-        controller: 'recruitmentController'
-    }).
-    when('/login', {
-        templateUrl: 'login',
-        controller: 'loginController'
-    }).    
-    when('/register', {
-        templateUrl: 'register',
-        controller: 'registerController'
+    when('/roster', {
+        templateUrl: 'roster',
+        controller: 'rosterController'
     }).
     otherwise({
       redirectTo: '/'

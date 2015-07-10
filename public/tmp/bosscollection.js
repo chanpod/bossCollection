@@ -3,15 +3,14 @@
 
 
 angular.module('BossCollection', [
-  'BossCollection.controllers',
-  'Imn.filters',
+  'bc',
+  'BossCollection.controllers',  
   'BossCollection.services',
-  'Imn.directives',
+  'BossCollection.directives',
   'ngRoute',
   'ui.bootstrap',
   'btford.socket-io',
-    'ngCookies'
-
+  'ngCookies'
 
 ]).factory('mySocket', function(socketFactory){
     return socketFactory();
@@ -25,33 +24,13 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'home',
       controller: 'homeController'
     }).
-    when('/mkdir', {
-      templateUrl: 'mkdirHome',
-      controller: 'mkdirController'
-    }).
-    when('/strategyRoom/:chatRoom', {
-        templateUrl: 'strategyRoom',
-        controller: 'strategyRoomController'
-    }).
     when('/strategyRoom', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
     }).
-    when('/progression', {
-        templateUrl: 'progression',
-        controller: 'progressionController'
-    }).
-    when('/recruitment', {
-        templateUrl: 'recruitment',
-        controller: 'recruitmentController'
-    }).
-    when('/login', {
-        templateUrl: 'login',
-        controller: 'loginController'
-    }).    
-    when('/register', {
-        templateUrl: 'register',
-        controller: 'registerController'
+    when('/roster', {
+        templateUrl: 'roster',
+        controller: 'rosterController'
     }).
     otherwise({
       redirectTo: '/'
@@ -68,14 +47,14 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
   $locationProvider.html5Mode(true);
 
 });
-'use Strict'
+'use strict';
 /**
  * This is the description for my class.
  *
  * @class Controllers
  * @constructor No Controller
  */
-angular.module("BossCollection.controllers", ['BossCollection.services'])
+bc.module("BossCollection.controllers", ['BossCollection.services'])
     .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices',
         function($scope, $location, $http, charService, $timeout, guildServices){
 
@@ -100,9 +79,7 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
 
             for(var i =0; i < listofImages.length; i++) {
                 $scope.addSlide(i);
-            } 
-
-
+            }
 
 
         $scope.stroke = 9;
@@ -205,62 +182,101 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
             }, 5000);
         }
 
-    }]).controller("mkdirController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices', 'raidProgression', '$modal',
-        function($scope, $location, $http, charService, $timeout, guildServices, raidProgression, $modal){
-
-
-            $scope.currentEmbedUrl = "";
-
-            $scope.setUrl = function(newUrl){
-                $scope.currentEmbedUrl = newUrl;
-            }
-
-            $scope.open = function (url) {
-                $scope.setUrl(url);
-                console.log(url);
-                var modalInstance = $modal.open({
-                    templateUrl: 'videoModal',
-                    controller: 'videoController',
-                    size: 'lg',
-                    windowClass: "videoModal",
-                    resolve: {
-                        currentUrl: function () {
-                            return  $scope.currentEmbedUrl;
-                        }
-                    }
+    }])
+'use strict';
+bc.module("BossCollection.controllers", ['BossCollection.services'])    
+    .controller("rosterController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
+        function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
+            $scope.currentRosterDropdown = true;
+            $scope.applicantsDropdown = false;
+            $scope.trials = [];
+            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
+            $scope.raiders = [];
+            $scope.trialRanks = [8];
+            $scope.raiderRanks = [0, 1, 3, 5];
+            $scope.guild = "mkdir bosscollection";
+            $scope.realm = "zul'jin"
+            
+            $scope.getMembers = function(){
+                $scope.raiders = [];
+                $scope.trials = [];
+                
+                guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
+                    console.log(data);
+                    parseMembers(data);
                 });
             }
+            
+            $scope.getUser = function(){
+                
+                $http({method: 'POST', url: '/getUser'}).success(function(data){
+                   
+                   console.log(data);
+                });
+            }
+            
+            
+            var parseMembers = function(membersObject){
+                //var $scope.raiderRanks = [0, 1, 3, 5];
+                //var trialRank = 8;
+                
+                for(var i = 0; i < membersObject.length; i++){
+                    var rnk = membersObject[i].rank
+                    for(var j = 0; j < $scope.raiderRanks.length; j++){
+                        if($scope.raiderRanks[j] == rnk){
+                            
+                            var clss = classes[membersObject[i].character.class];
+                            var newMember = {
+                                "name": membersObject[i].character.name,
+                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
+                                "rank" : rnk,
+                                "spec" : membersObject[i].character.spec.name,
+                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
+                            }
+                            
+                            $scope.raiders.push(newMember);
+                        }
+                        
+                    }
+                    
+                    for(var j = 0; j < $scope.trialRanks.length; j++){
+                        if($scope.trialRanks[j] == rnk){
+                   
+                            var clss = classes[membersObject[i].character.class];
+                            var newMember = {
+                                "name": membersObject[i].character.name,
+                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
+                                "rank" : rnk,
+                                "spec" : membersObject[i].character.spec.name,
+                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
+                            }
+                            
+                            $scope.trials.push(newMember);
+                        }
+                    }
+                }
+                
+                $scope.raiders.sort(function(a, b){return a.rank-b.rank});
+            }
+            
+            
+            $scope.lowLvlTrials = [];
+            
+            
+           $scope.getMembers()
 
-        }]).controller("videoController", ['$scope', 'currentUrl', '$modalInstance',
-            function($scope, currentUrl, $modalInstance){
-
-                $scope.url = currentUrl;
-
-                $scope.getIframeSrc = function() {
-                    return 'https://www.youtube.com/embed/' + $scope.url;
-                };
-
-                $scope.close = function(){
-                    $modalInstance.dismiss('cancel');
-                };
-
-                $scope.embedUrl = $scope.url;
-        }]).controller("strategyRoomController", ['$scope',
-            function($scope){
-
-
-
-        }]).controller("registerController", ['$scope',
-            function($scope){
-
-
-
-        }]).controller("registerController", ['$scope',
-            function($scope){
-
-                console.log("Hello world");
-
-        }]).controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
+        }])
+'use strict'
+bc.module("BossCollection.controllers", ['BossCollection.services'])
+    .controller("strategyRoomController", ['$scope',
+                function($scope){
+    
+    
+    
+    }])
+'use strict'
+bc.module("BossCollection.controllers", ['BossCollection.services'])    
+    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
             function($scope, bossStrats, $modal, socketProvider){
 
                 var socket = socketProvider;
@@ -513,359 +529,12 @@ angular.module("BossCollection.controllers", ['BossCollection.services'])
                         }
                     });
                 }
-        }]).controller("recruitmentController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
-        function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
-            $scope.currentRosterDropdown = true;
-            $scope.applicantsDropdown = false;
-            $scope.trials = [];
-            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
-            $scope.raiders = [];
-            $scope.trialRanks = [8];
-            $scope.raiderRanks = [0, 1, 3, 5];
-            $scope.guild = "mkdir bosscollection";
-            $scope.realm = "zul'jin"
-            
-            $scope.getMembers = function(){
-                $scope.raiders = [];
-                $scope.trials = [];
-                
-                guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
-                    console.log(data);
-                    parseMembers(data);
-                });
-            }
-            
-            $scope.getUser = function(){
-                
-                $http({method: 'POST', url: '/getUser'}).success(function(data){
-                   
-                   console.log(data);
-                });
-            }
-            
-            
-            var parseMembers = function(membersObject){
-                //var $scope.raiderRanks = [0, 1, 3, 5];
-                //var trialRank = 8;
-                
-                for(var i = 0; i < membersObject.length; i++){
-                    var rnk = membersObject[i].rank
-                    for(var j = 0; j < $scope.raiderRanks.length; j++){
-                        if($scope.raiderRanks[j] == rnk){
-                            
-                            var clss = classes[membersObject[i].character.class];
-                            var newMember = {
-                                "name": membersObject[i].character.name,
-                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
-                                "rank" : rnk,
-                                "spec" : membersObject[i].character.spec.name,
-                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
-                            }
-                            
-                            $scope.raiders.push(newMember);
-                        }
-                        
-                    }
-                    
-                    for(var j = 0; j < $scope.trialRanks.length; j++){
-                        if($scope.trialRanks[j] == rnk){
-                   
-                            var clss = classes[membersObject[i].character.class];
-                            var newMember = {
-                                "name": membersObject[i].character.name,
-                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
-                                "rank" : rnk,
-                                "spec" : membersObject[i].character.spec.name,
-                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
-                            }
-                            
-                            $scope.trials.push(newMember);
-                        }
-                    }
-                }
-                
-                $scope.raiders.sort(function(a, b){return a.rank-b.rank});
-            }
-            
-            
-            $scope.lowLvlTrials = [];
-            
-            
-           $scope.getMembers()
-
-        }]).controller("progressionController", ["$scope", 'cookies', 'filterFilter', 'socketProvider',
-            function($scope, cookies, filterFilter, socketProvider){
-
-                $scope.messages = [];
-                $scope.filteredMessages = [];
-                $scope.chatFilters = [];
-                $scope.systemFilter = {};
-                $scope.systemMute = false;
-                $scope.users = {
-                    userName : "",
-                    muted : false
-                };
-
-                $scope.chatRoomName = "";
-
-                var socket = socketProvider;
-
-                $scope.hasEnteredUsername = false;
-
-                $scope.userName = cookies.getUserName();
-
-                $scope.createChatroom = function(userToAdd){
-                    var roomParticipants = {
-                        user1: $scope.userName,
-                        user2: userToAdd
-                    };
-
-                    socket.emit("createChatroom", roomParticipants);
-                    console.log("Joined the chat room");
-                    $scope.chatRoomName = roomParticipants.user1 + "&" + roomParticipants.user2;
-                };
-
-                socket.on("inviteUsersToChatroom", function(users){
-                    console.log("Invited to join chat room");
-                    console.log(users);
-                    if($scope.userName == users.user2){
-
-                        console.log("Accepted invitation to join chat room");
-                        socket.emit("acceptInvitation", users);
-
-                        $scope.chatRoomName = users.user1 + "&" + users.user2;
-                    }
-                    else{
-                        console.log("Invitation was not meant for you.");
-                    }
-                });
-
-                if($scope.userName != null){
-                    $scope.hasEnteredUsername = true;
-                    socket.emit("init", $scope.userName);
-                }
-
-                $scope.open = function (url) {
-                    $scope.setUrl(url);
-
-                    var modalInstance = $modal.open({
-                        templateUrl: 'videoModal',
-                        controller: 'videoController',
-                        size: 'lg',
-                        windowClass: "videoModal",
-                        resolve: {
-                            currentUrl: function () {
-                                return  $scope.currentEmbedUrl;
-                            }
-                        }
-                    });
-                };
-
-                socket.on("rejectUser", function(){
-                    $scope.hasEnteredUsername = false;
-                    alert("Username already in use. Try another one.");
-                });
-
-                socket.on("messagesFromServer", function(messages){
-                    console.log("Message from server!");
-                    $scope.messages = messages;
-                    $scope.$apply();
-                });
-
-                socket.on("userConn_Disc", function(userList, messages){
-
-                    $scope.messages = messages;
-
-                    $scope.buildUsersList(userList);
-                    $scope.$apply();
-                });
-
-                $scope.buildUsersList = function(usersList){
-                    $scope.users = [];
-
-                    for(i = 0; i< usersList.length; i++){
-                        var user = {
-                            userName : usersList[i],
-                            muted : false
-                        };
-                        $scope.users.push(user);
-                    }
-
-                };
-
-                $scope.$watch('messages', function(newMessages){
-                    $scope.filteredMessages = newMessages;
-                    $scope.applyFilter();
-                });
-
-                $scope.messageToSend = "";
-                $scope.submitMessage = function(){
-                    if($scope.chatRoomName == "") {
-                        if ($scope.messageToSend == "") {
-                            //Do nothing
-                        }
-                        else {
-                            var message = {
-                                userName: $scope.userName,
-                                message: $scope.messageToSend
-                            };
-                            socket.emit("newMessage", message);
-                            $scope.messageToSend = "";
-                        }
-                    }
-                    else{
-
-                        if ($scope.messageToSend == "") {
-                            //Do nothing
-                        }
-                        else {
-                            var message = {
-                                userName: $scope.userName,
-                                message: $scope.messageToSend,
-                                chatRoom: $scope.chatRoomName
-                            };
-                            socket.emit("chatRoomMessage", message);
-                            $scope.messageToSend = "";
-                        }
-                    }
-                };
-
-                $scope.hideSystemMessages = function(systemFilter){
-
-                    if($scope.systemFilter.userName != systemFilter) {
-                        $scope.systemFilter.userName = systemFilter
-                    }
-                    else{
-                        $scope.systemFilter.userName = '';
-                    }
-                };
-
-                $scope.applyFilter = function(){
-
-                    $scope.filteredMessages = $scope.messages;
-
-
-                    for(i = 0; i < $scope.chatFilters.length; i++) {
-
-                        $scope.filteredMessages = filterFilter($scope.filteredMessages, $scope.chatFilters[i]);
-                    }
-
-
-                };
-
-                $scope.filterUser = function(userToFilter){f
-
-                    if(userToFilter.userName == "System") {
-                        $scope.systemMute = !$scope.systemMute
-                    }
-                    userToFilter.muted = !userToFilter.muted; //Reverse the bool
-
-                    var doesExist = binarySearch("!"+userToFilter.userName, $scope.chatFilters);
-
-                    if(doesExist == null) {
-
-                        $scope.chatFilters.push("!" + userToFilter.userName);
-                    }
-                    else{
-
-                        $scope.chatFilters.remove(doesExist);
-                    }
-
-                    $scope.applyFilter();
-                };
-
-                $scope.enterUsername = function(){
-                    if($scope.userName == ""){
-                        alert("invalid username");
-                    }
-                    else if($scope.userName.length > 15){
-                        alert("Invalid username. Too long! Must be less than 15 char.");
-                    }
-                    else {
-                        $scope.hasEnteredUsername = true;
-                        socket.emit("init", $scope.userName);
-                        cookies.saveUserName($scope.userName);
-                    }
-                };
-
-                $scope.myInterval = 10000;
-                var listofImages = [
-                    {image: '/images/BossKills/heroic_blackhand_kill.jpg', text: "Heroic Blackhand Down 4/15/2015"},
-                    {image: '/images/BossKills/ImpKill.jpg', text: "Normal Imperator Down!"},
-                    {image: '/images/BossKills/Heroic_Imp_Kill.jpg', text: "Heroic Imperator Down!"},
-                    {image: '/images/BossKills/silly_imp_kill.jpg', text: "Goofy Shot for heroic Imp kill"}
-
-                ];
-
-                var slides = $scope.slides = [];
-                $scope.addSlide = function(index) {
-                    slides.push(listofImages[index]);
-                };
-
-                for(var i =0; i < listofImages.length; i++) {
-                    $scope.addSlide(i);
-                }
-
-                var userConDiscCallback = function(error, messages, users){
-                    if(error){
-                        console.log(error);
-                        return;
-                    }
-
-                    $scope.messages = messages;
-                    $scope.users = users;
-                }
-
-    }]);
-
-/**
- * Uses a binary searching algorithm to find the key in the array.
- *
- * @method binarySearch
- * @param {string} key The key to find.
- * @param {array} inputArray The array to look in.
- * @return Returns the index the key was found at.
- */
-function binarySearch(key, inputArray) {
-
-    for(var i = 0; i < inputArray.length; i++){
-        if(inputArray[i] == key){
-            return i;
-        }
-    }
-
-    return null;
-}
-
-function remove(from, to) {
-
-
-    var rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
-};
-
-Array.prototype.remove = function(from, to) {
-    var rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
-};
-
-
-
-
-
-
-
-
-
-
-
+        }])
 'use strict';
 
 /* Directives */
 
-angular.module('Imn.directives', []).
+bc.module('BossCollection.directives', []).
   directive('bossstrategies', function () {
         return {
             restrict: 'E',
@@ -881,7 +550,7 @@ angular.module('Imn.directives', []).
 
 /* Filters */
 
-angular.module('Imn.filters', []).
+bc.module('BossCollection.filters', []).
   filter('interpolate', function (version) {
     return function (text) {
       return String(text).replace(/\%VERSION\%/mg, version);
@@ -891,14 +560,12 @@ angular.module('Imn.filters', []).
 'use strict';
 
 /* Services */
-var service = angular.module("BossCollection.services", ["ngResource"]);
+var service = bc.module("BossCollection.services", ["ngResource"]);
 
 var socket = io("http://54.173.24.121:4001");
 //var socket = io("http://localhost:4001");
 
-service.factory('charService', function($http, $q){
-
-    }).factory('guildServices', function($http, $q){
+service.factory('guildServices', function($http, $q){
         
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -926,17 +593,7 @@ service.factory('charService', function($http, $q){
         };
 
         return guildApi;
-    }).factory('raidProgression', function(){
-
-    var progressionApi = {
-
-        getRaidsData: function() {
-
-        }
-    };
-
-    return progressionApi;
-}).factory('bossStrats', function(){
+    }).factory('bossStrats', function(){
 
     var bossStratsApi = {
 
@@ -952,42 +609,6 @@ service.factory('charService', function($http, $q){
     };
 
     return bossStratsApi;
-}).factory("cookies", function($cookies, $cookieStore){
-    var usernameKey = "username";
-
-    var cookieService = {
-
-        saveUserName: function(userName){
-
-            $cookieStore.put(usernameKey, userName)
-        },
-        getUserName: function(){
-
-            return $cookieStore.get(usernameKey);
-        }
-    };
-
-    return cookieService
 }).factory("socketProvider", function(){
     return socket;
 });
-
-
-
-function binarySearch(key, inputArray) {
-
-    var low  = 0,
-        high = inputArray.length - 1,
-        mid;
-
-    while (low <= high) {
-        mid = low + (high - low) / 2;
-        if ((mid % 1) > 0) { mid = Math.ceil(mid); }
-
-        if (key < inputArray[mid]) { high = mid - 1; }
-        else if (key > inputArray[mid]) { low = mid + 1; }
-        else { return mid; }
-    }
-
-    return null;
-}

@@ -212,14 +212,3 @@ script#bossStrategy(type="text/ng-template")
                                                         div.col-sm-7
                                                             button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
                                                                 | Add Video
-                        
-            br
-            div(ng-if = "loadChat")
-                button(ng-click="chatLoad()").btn.btn-primary
-                    | Hide Discussion
-            div(ng-if = "loadChat", id="disqus_thread")
-
-            div(ng-if = "!loadChat")
-                button(ng-click="chatLoad()").btn.btn-primary
-                    | Discuss?
-

@@ -9,7 +9,7 @@ module.exports = function (grunt) {
 			 temp: '<%= meta.content %>/tmp'
          },  
          concat: { 
-             options : { stripBanner : true },
+             
              webJS: { 
                  src: [ 
                      '<%= meta.content %>/js/**/*.js',
@@ -37,10 +37,7 @@ module.exports = function (grunt) {
  
      grunt.loadNpmTasks('grunt-contrib-concat');
      grunt.loadNpmTasks('grunt-contrib-clean');
-     grunt.loadNpmTasks('grunt-contrib-watch'); 
- 
-     grunt.registerTask("validate-web", 'Validate web application JS code using JSHint.', ["jshint:web"]); 
-     grunt.registerTask("validate",'Validate web application JS code using JSHint.',["jshint"]);
+     grunt.loadNpmTasks('grunt-contrib-watch');
  
      grunt.registerTask('build', 'Build web application for distribution.', [ 
          'clean:app',

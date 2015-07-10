@@ -2,7 +2,7 @@
 
 /* Directives */
 
-angular.module('Imn.directives', []).
+bc.module('BossCollection.directives', []).
   directive('bossstrategies', function () {
         return {
             restrict: 'E',
