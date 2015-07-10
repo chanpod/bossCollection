@@ -1,13 +1,36 @@
 script#home(type="text/ng-template")
+    div().container.pageContainer   
+        div()
+            h1.text-center
+                | mkdir BossCollection
+            h3
+                b Our Founding
+            span
+                | mkdir BossCollection was founded by a core group of real-life friends on Zul'jin with three criteria in mind. First, we wanted a guild with early raid hours to the benefit of our careers, families and social lives. Second, we required steady and constant progression through relevant content. Finally, it was essential our raid environment be positive and calm to facilitate all the hard work we put into the content and raid team. Since then, we have grown by
+            h3
+                b Our progression
+            span
+                ul
+                    li
+                        h4
+                            | Highmaul: Aotc - 2/3/15
+                    li
+                        h4
+                            | Blackrock Foundry - 4/16/15
+                    li
+                        h4
+                            | Hellfire Citdael - In progress
+            h3
+                b Raid Environment
+            span
+                |  One of the things that sets <mkdir BossCollection> apart is our raid environment. We like to keep things calm, collected and positive during raid. Yes, we still horse around a bit during trash pulls, but when it comes down to progression we're dedicated and serious. Rule number one of our raid environment is, "Don't be a dick!" We keep our raid chat and Teamspeak clear of chart-linking, e-peening, dick-measuring or anything of the like. We're out to progress as a team, so we work together and will not be at each other's throats. During boss progression attempts, our Teamspeak is reserved mainly for officers raid calling and explaining strategies. Our strategies are formulated during officer meetings after tons of research and while we value raider input via officer-whisper or raid-chat, the final word on strategies goes to our officers.  
+            h3
+                b Loot System
+            span
+                | Our chosen loot system is loot council. We have a panel of four officers that make up our council. There are many factors they take into consideration with their decisions, but the main three are attendance, BISs, and largest ilvl upgrade. Attendance is the number one priority of our guild at the moment. Our aim is to move into mythic HFC, so naturally attendance is extremely important to us, and to our raid team. Attendance problems will not only disqualify you from being a part of our mythic roster, but also negatively impact your ability to get upgrades in our raids. Tier gear is distributed through it's own separate system for HFC content. Our loot council uses a chart the shows which classes benefit most from their two and four set bonuses. We have chosen to stack the classes that receive the greatest benefit first, beginning with DPS classes and working out. We feel this will give our progression the best boost. 
 
-    div(class = "jumbotron mainJumbo")
-        div(class = "container")
-            h1.
-                {{welcomeMessage}}
-            a(href='http://wowprogress.com/')
-                img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0')
-    div.well
-        div.container
+
+        div
             div.row()
                 ins(class="adsbygoogle",
                 style="display:block",
@@ -15,44 +38,4 @@ script#home(type="text/ng-template")
                 data-ad-slot="4790584276",
                 data-ad-format="auto")
 
-    div.well
-        div.container
-            div.row
-                div.col-md-6
-                    a(href="https://twitter.com/mkdirBC", data-widget-id="563376732615745538").twitter-timeline
-                       | Tweets by @mkdirBC
-                div.col-md-6
-                    div.panel.panel-primary
-                        div.panel-heading.text-center
-                            h4
-                                | Stats
-                        div.panel-body
-                            div.row
-                                div.col-md-12
-                                    div
-                                        ul.list-group.text-center
-                                            a(href = "https://www.warcraftlogs.com/guilds/36279/").list-group-item.list-group-item-info
-                                                | Warcraft Logs
-                                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection").list-group-item.list-group-item-info
-                                                | Wowprogress
 
-    div.well
-        div(class = "container")
-
-    div.well
-        div.container
-            div.panel.panel-primary
-                div.panel-heading.text-center
-                    h3
-                        | Interface Screenshots
-                div.panel-body
-                    div.container.imgContainer
-                        div()
-                            div()
-                                carousel(interval='myInterval')
-                                  slide(ng-repeat='slide in slides', active='slide.active')
-                                    img(ng-src='{{slide.image}}', style='margin:auto;')
-                                    .carousel-caption
-                                      p {{slide.text}}
-script.
-    twitter();
