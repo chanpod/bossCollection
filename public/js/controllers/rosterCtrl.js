@@ -1,7 +1,7 @@
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
-        function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http',
+        function($scope, filterFilter, socketProvider, guildServices, $http){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -15,10 +15,13 @@ angular.module("BossCollection.controllers")
             $scope.getMembers = function(){
                 $scope.raiders = [];
                 $scope.trials = [];
-                
+                console.log("Function called");
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
                     console.log(data);
                     parseMembers(data);
+                },
+                function(err){
+                    console.log(err);
                 });
             }
             

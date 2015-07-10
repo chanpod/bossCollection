@@ -115,8 +115,8 @@ angular.module("BossCollection.controllers", [])
     }])
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
-        function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http',
+        function($scope, filterFilter, socketProvider, guildServices, $http){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -130,10 +130,13 @@ angular.module("BossCollection.controllers")
             $scope.getMembers = function(){
                 $scope.raiders = [];
                 $scope.trials = [];
-                
+                console.log("Function called");
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
                     console.log(data);
                     parseMembers(data);
+                },
+                function(err){
+                    console.log(err);
                 });
             }
             
@@ -224,15 +227,12 @@ angular.module("BossCollection.controllers")
                 $scope.BlackrockThreadName = "blackrockMainThread";
                 $scope.HellfireThreadName = "hellfireMainThread";
                 $scope.addNewBoss = false;
-
+                
+                console.log("Loading controller");
+                
                 //New Boss Info
                 $scope.name = "";
                 $scope.url = "";
-
-                disqus_shortname = 'bosscollection';
-                disqus_url = 'http://localhost:4000/strategy/#!' + $scope.bossSelected;
-
-                disqus();
 
 
                 $scope.addVideo= function(bossName, difficulty, currentRaid){
@@ -243,13 +243,7 @@ angular.module("BossCollection.controllers")
                     $scope.currentDifficulty = difficulty;
                     $scope.currentRaid = currentRaid;
                 };
-
-                $scope.chatLoad = function () {
-                    $scope.loadChat = !$scope.loadChat;
-
-                    disqus();
-
-                };
+               
 
                 $scope.saveNewBossInfo = function(name, url){
                     var isHeroic = false;
@@ -313,28 +307,6 @@ angular.module("BossCollection.controllers")
                     console.log(erMsg);
                 });
 
-                $scope.resetDisqus = function(newRaid){
-
-                    if(newRaid){
-                        disqus_url = 'http://bosscollection.net/strategy/#!' + newRaid;
-                    }
-                    else{
-                        disqus_url = 'http://bosscollection.net/strategy/#!' + $scope.bossSelected;
-                    }
-
-                    console.log(disqus_url);
-
-                    if($scope.loadChat) {
-                        DISQUS.reset({
-                            reload: true,
-                            config: function () {
-
-                                this.page.url = disqus_url;
-                            }
-                        });
-                    }
-                };
-
                 $scope.heroicDifficultySelected = function(boss){
 
                     boss.heroic.isSelected = !boss.heroic.isSelected;
@@ -361,7 +333,7 @@ angular.module("BossCollection.controllers")
 
                     $scope.bossSelected = boss.name;
                     $scope.addNewBoss = false;
-                    $scope.resetDisqus();
+                    
                 };
 
                 $scope.changeBRFBossInfo = function(boss){
@@ -373,7 +345,7 @@ angular.module("BossCollection.controllers")
 
                     $scope.bossSelected = boss.name;
                     $scope.addNewBoss = false;
-                    $scope.resetDisqus();
+                    
                 };
                 
                 $scope.changeHFCBossInfo = function(boss){
@@ -386,7 +358,7 @@ angular.module("BossCollection.controllers")
 
                     $scope.bossSelected = boss.name;
                     $scope.addNewBoss = false;
-                    $scope.resetDisqus();
+                    
                 };
 
                 $scope.cancelHMBossSelection = function(currentSelectedBoss){
@@ -399,7 +371,7 @@ angular.module("BossCollection.controllers")
 
                     $scope.bossSelected = $scope.HighmaulThreadName;
                     $scope.addNewBoss = false;
-                    $scope.resetDisqus();
+                    
                 };
 
                 $scope.cancelBRFBossSelection = function(currentSelectedBoss){
@@ -411,7 +383,7 @@ angular.module("BossCollection.controllers")
 
                     $scope.bossSelected = $scope.BlackrockThreadName;
                     $scope.addNewBoss = false;
-                    $scope.resetDisqus();
+                    
                 };
                 
                 $scope.cancelHFCBossSelection = function(currentSelectedBoss){
@@ -425,7 +397,7 @@ angular.module("BossCollection.controllers")
 
                     $scope.bossSelected = $scope.HellfireThreadName;
                     $scope.addNewBoss = false;
-                    $scope.resetDisqus();
+                    
                 };
 
                 socket.on("bossInfoData", function(data){
@@ -460,7 +432,28 @@ angular.module("BossCollection.controllers")
                     });
                 }
         }])
-'use strict';
+'use strict'
+angular.module("BossCollection.controllers")
+	.controller("videoController", ['$scope', 'currentUrl', '$modalInstance',
+		function ($scope, currentUrl, $modalInstance) {
+
+
+			$scope.url = currentUrl;
+
+
+			$scope.getIframeSrc = function () {
+				return 'https://www.youtube.com/embed/' + $scope.url;
+			};
+
+
+			$scope.close = function () {
+				$modalInstance.dismiss('cancel');
+			};
+
+
+			$scope.embedUrl = $scope.url;
+		}])
+
 
 /* Directives */
 
