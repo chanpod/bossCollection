@@ -1,5 +1,5 @@
 'use strict'
-bc.module("BossCollection.controllers", ['BossCollection.services'])    
+angular.module("BossCollection.controllers")    
     .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
             function($scope, bossStrats, $modal, socketProvider){
 

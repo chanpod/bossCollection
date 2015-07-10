@@ -1,5 +1,5 @@
 'use strict';
-bc.module("BossCollection.controllers", ['BossCollection.services'])    
+angular.module("BossCollection.controllers")    
     .controller("rosterController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
         function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
             $scope.currentRosterDropdown = true;

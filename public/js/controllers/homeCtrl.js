@@ -5,9 +5,9 @@
  * @class Controllers
  * @constructor No Controller
  */
-bc.module("BossCollection.controllers", ['BossCollection.services'])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices',
-        function($scope, $location, $http, charService, $timeout, guildServices){
+angular.module("BossCollection.controllers", [])
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout',
+        function($scope, $location, $http, $timeout){
 
             (adsbygoogle = window.adsbygoogle || []).push({});
 
@@ -62,75 +62,5 @@ bc.module("BossCollection.controllers", ['BossCollection.services'])
                     'Could be something just broke :( ',
                 trigger: 'manual'
             })
-
-        /**
-         *  Gets the guild
-         *
-         *  @method getGuild
-         */
-        $scope.getGuild = function(){
-            $('#getGuildMessage').popover("hide");
-            $scope.showLoadingGif = true;
-            var promise = guildServices.getGuild($scope.realm, $scope.guild);
-
-            var errorTimeout = $timeout(function(){
-                $scope.showLoadingGif = false;
-                $('#getGuildMessage').popover("show");
-
-
-            }, 6000)
-
-            promise.then(function(data){
-
-                var promise2 = guildServices.checkGuild(data.achievements);
-
-                promise2.then(function(data){
-
-                    $timeout.cancel(errorTimeout);
-
-                    progressionData = data.killCount;
-
-                    $scope.showLoadingGif = false;
-                    $('#getGuildMessage').popover("hide");
-
-                }, function(error){
-                    console.log(error);
-                })
-            },function(error){
-                console.log(error);
-                    $scope.showLoadingGif = false;
-            });
-
-
-        };
-
-        $scope.getCharacter = function() {
-
-            $scope.showLoadingGif = true;
-
-            var promise = charService.getCharacter($scope.realm, $scope.characterName);
-
-            promise.then(function(result){
-                $scope.character = result;
-
-                $scope.classColor = charService.getClass($scope.character) + "ClassColor";
-
-                $scope.iLvl = charService.getiLvl($scope.character);
-
-                $scope.characterImage = staticResources + result.thumbnail;
-                $scope.showGuild = true;
-                $scope.showLoadingGif = false;
-
-            },
-            function(error){
-                console.log(error);
-                $scope.showLoadingGif = false;
-            });
-
-
-            $timeout(function(){
-                $scope.showLoadingGif = false;
-            }, 5000);
-        }
 
     }])

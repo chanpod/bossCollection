@@ -2,13 +2,13 @@
 
 
 
-angular.module('BossCollection', [
-  'bc',
+angular.module('BossCollection', [  
   'BossCollection.controllers',  
   'BossCollection.services',
   'BossCollection.directives',
   'ngRoute',
   'ui.bootstrap',
+  'ngResource',
   'btford.socket-io',
   'ngCookies'
 
@@ -54,9 +54,9 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
  * @class Controllers
  * @constructor No Controller
  */
-bc.module("BossCollection.controllers", ['BossCollection.services'])
-    .controller("homeController", ["$scope", '$location', '$http', 'charService', '$timeout', 'guildServices',
-        function($scope, $location, $http, charService, $timeout, guildServices){
+angular.module("BossCollection.controllers", [])
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout',
+        function($scope, $location, $http, $timeout){
 
             (adsbygoogle = window.adsbygoogle || []).push({});
 
@@ -112,79 +112,9 @@ bc.module("BossCollection.controllers", ['BossCollection.services'])
                 trigger: 'manual'
             })
 
-        /**
-         *  Gets the guild
-         *
-         *  @method getGuild
-         */
-        $scope.getGuild = function(){
-            $('#getGuildMessage').popover("hide");
-            $scope.showLoadingGif = true;
-            var promise = guildServices.getGuild($scope.realm, $scope.guild);
-
-            var errorTimeout = $timeout(function(){
-                $scope.showLoadingGif = false;
-                $('#getGuildMessage').popover("show");
-
-
-            }, 6000)
-
-            promise.then(function(data){
-
-                var promise2 = guildServices.checkGuild(data.achievements);
-
-                promise2.then(function(data){
-
-                    $timeout.cancel(errorTimeout);
-
-                    progressionData = data.killCount;
-
-                    $scope.showLoadingGif = false;
-                    $('#getGuildMessage').popover("hide");
-
-                }, function(error){
-                    console.log(error);
-                })
-            },function(error){
-                console.log(error);
-                    $scope.showLoadingGif = false;
-            });
-
-
-        };
-
-        $scope.getCharacter = function() {
-
-            $scope.showLoadingGif = true;
-
-            var promise = charService.getCharacter($scope.realm, $scope.characterName);
-
-            promise.then(function(result){
-                $scope.character = result;
-
-                $scope.classColor = charService.getClass($scope.character) + "ClassColor";
-
-                $scope.iLvl = charService.getiLvl($scope.character);
-
-                $scope.characterImage = staticResources + result.thumbnail;
-                $scope.showGuild = true;
-                $scope.showLoadingGif = false;
-
-            },
-            function(error){
-                console.log(error);
-                $scope.showLoadingGif = false;
-            });
-
-
-            $timeout(function(){
-                $scope.showLoadingGif = false;
-            }, 5000);
-        }
-
     }])
 'use strict';
-bc.module("BossCollection.controllers", ['BossCollection.services'])    
+angular.module("BossCollection.controllers")    
     .controller("rosterController", ["$scope", 'cookies', 'filterFilter', 'socketProvider', 'guildServices', '$http',
         function($scope, cookies, filterFilter, socketProvider, guildServices, $http){
             $scope.currentRosterDropdown = true;
@@ -267,7 +197,7 @@ bc.module("BossCollection.controllers", ['BossCollection.services'])
 
         }])
 'use strict'
-bc.module("BossCollection.controllers", ['BossCollection.services'])
+angular.module("BossCollection.controllers")
     .controller("strategyRoomController", ['$scope',
                 function($scope){
     
@@ -275,7 +205,7 @@ bc.module("BossCollection.controllers", ['BossCollection.services'])
     
     }])
 'use strict'
-bc.module("BossCollection.controllers", ['BossCollection.services'])    
+angular.module("BossCollection.controllers")    
     .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
             function($scope, bossStrats, $modal, socketProvider){
 
@@ -534,7 +464,7 @@ bc.module("BossCollection.controllers", ['BossCollection.services'])
 
 /* Directives */
 
-bc.module('BossCollection.directives', []).
+angular.module('BossCollection.directives', []).
   directive('bossstrategies', function () {
         return {
             restrict: 'E',
@@ -550,7 +480,7 @@ bc.module('BossCollection.directives', []).
 
 /* Filters */
 
-bc.module('BossCollection.filters', []).
+angular.module('BossCollection.filters', []).
   filter('interpolate', function (version) {
     return function (text) {
       return String(text).replace(/\%VERSION\%/mg, version);
@@ -559,15 +489,34 @@ bc.module('BossCollection.filters', []).
 
 'use strict';
 
-/* Services */
-var service = bc.module("BossCollection.services", ["ngResource"]);
-
-var socket = io("http://54.173.24.121:4001");
-//var socket = io("http://localhost:4001");
-
-service.factory('guildServices', function($http, $q){
+angular.module("BossCollection.services", [])
+    .factory('bossStrats', ['socketProvider', function (socket) {
         
-        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
+        
+        
+        var bossStratsApi = {
+
+            getStrats: function () {
+
+                console.log("Request Boss Info");
+                socket.emit("getBossInfo");
+            },
+            saveStrats: function (updatedStrats) {
+                console.log("Saving info now");
+                socket.emit("saveStrats", updatedStrats);
+            }
+        };
+
+        return bossStratsApi;
+    }])
+'use strict';
+
+
+
+angular.module("BossCollection.services")
+    .factory('guildServices', ['$http','$q',function ($http, $q) {
+
+      var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
         
@@ -593,22 +542,16 @@ service.factory('guildServices', function($http, $q){
         };
 
         return guildApi;
-    }).factory('bossStrats', function(){
+    }])
+'use strict';
 
-    var bossStratsApi = {
 
-        getStrats: function() {
 
-            console.log("Request Boss Info");
-            socket.emit("getBossInfo");
-        },
-        saveStrats: function(updatedStrats){
-            console.log("Saving info now");
-            socket.emit("saveStrats", updatedStrats);
-        }
-    };
-
-    return bossStratsApi;
-}).factory("socketProvider", function(){
-    return socket;
-});
+angular.module("BossCollection.services")
+    .factory('socketProvider', [function () {
+        
+        var socket = io("http://54.173.24.121:4001");
+        //var socket = io("http://localhost:4001");
+        
+        return socket;
+    }])

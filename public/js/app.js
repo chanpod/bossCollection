@@ -2,13 +2,13 @@
 
 
 
-angular.module('BossCollection', [
-  'bc',
+angular.module('BossCollection', [  
   'BossCollection.controllers',  
   'BossCollection.services',
   'BossCollection.directives',
   'ngRoute',
   'ui.bootstrap',
+  'ngResource',
   'btford.socket-io',
   'ngCookies'
 
