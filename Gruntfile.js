@@ -12,27 +12,15 @@ module.exports = function (grunt) {
              options : { stripBanner : true },
              webJS: { 
                  src: [ 
-                     '<%= meta.content %>/**/*.js'
+                     '<%= meta.content %>/js/**/*.js',
+                     '!<%= meta.content %>/js/lib/**/*.js'
                  ], 
                  dest: '<%= meta.temp %>/<%= meta.appName %>.js'
-             }, 
-             mobileJS: { 
-                 src: [ 
-                     '<%= meta.mobileAppJS %>/**/*.module.js', 
-                     '<%= meta.mobileAppJS %>/**/!(app.js|*.module.js)*.js', 
-                     '<%= meta.mobileAppJS %>/**/app.js' 
-                 ], 
-                 dest: '<%= meta.mobileTempDir %>/<%= meta.appName %>.js' 
-             }, 
-             evoDependencies: { 
-                 src: [ 
-                     '<%= meta.sharedDir %>/monkeynaut/dist/js/bundle-ionic.min.js' 
-                 ], 
-                 dest: '<%= meta.sharedDistDir %>/js/evo.js' 
-             } 
+             }
+              
          },
          clean: { 
-             app: ['<%= meta.temp %>/**/*','<%= meta.content %>/**/*']
+             app: ['<%= meta.temp %>/**/*']
          },
          watch: {
              build: { 
