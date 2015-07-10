@@ -1,8 +1,10 @@
 script#home(type="text/ng-template")
     div().container.pageContainer   
         div()
-            h1.text-center
+            h1.text-center.headerLabel
                 | mkdir BossCollection
+                a(href='http://wowprogress.com/').rankingImg
+                    img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0', width = "175px")
             h3
                 b Our Founding
             span
@@ -13,13 +15,16 @@ script#home(type="text/ng-template")
                 ul
                     li
                         h4
-                            | Highmaul: Aotc - 2/3/15
+                            | Highmaul: Aotc - 
+                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17") 2/3/15
                     li
                         h4
-                            | Blackrock Foundry - 4/16/15
+                            | Blackrock Foundry - 
+                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17") 4/16/15
                     li
                         h4
-                            | Hellfire Citdael - In progress
+                            | Hellfire Citdael - 
+                            a(href="http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection") Find our progression on wowprogress
             h3
                 b Raid Environment
             span
@@ -27,7 +32,9 @@ script#home(type="text/ng-template")
             h3
                 b Loot System
             span
-                | Our chosen loot system is loot council. We have a panel of four officers that make up our council. There are many factors they take into consideration with their decisions, but the main three are attendance, BISs, and largest ilvl upgrade. Attendance is the number one priority of our guild at the moment. Our aim is to move into mythic HFC, so naturally attendance is extremely important to us, and to our raid team. Attendance problems will not only disqualify you from being a part of our mythic roster, but also negatively impact your ability to get upgrades in our raids. Tier gear is distributed through it's own separate system for HFC content. Our loot council uses a chart the shows which classes benefit most from their two and four set bonuses. We have chosen to stack the classes that receive the greatest benefit first, beginning with DPS classes and working out. We feel this will give our progression the best boost. 
+                | Our chosen loot system is loot council. We have a panel of four officers that make up our council. There are many factors they take into consideration with their decisions, but the main three are attendance, BISs, and largest ilvl upgrade. Attendance is the number one priority of our guild at the moment. Our aim is to move into mythic HFC, so naturally attendance is extremely important to us, and to our raid team. Attendance problems will not only disqualify you from being a part of our mythic roster, but also negatively impact your ability to get upgrades in our raids. Tier gear is distributed through it's own separate system for HFC content. Our loot council uses a chart the shows which classes benefit most from their two and four set bonuses. We have chosen to stack the classes that receive the greatest benefit first, beginning with DPS classes and working out. We feel this will give our progression the best boost.
+            
+             
 
 
         div

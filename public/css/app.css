@@ -31,6 +31,16 @@ height:100%;
     background-color:black;
 }
 
+.headerLabel{
+    padding-bottom: 50px;
+}
+
+.rankingImg{
+       position: relative;
+  right: -15%;
+  top: 5%
+}
+
 .pageContainer{
     background-color:white;
     height:100%;
