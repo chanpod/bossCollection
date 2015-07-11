@@ -15,8 +15,21 @@ block body
 
             div(class="navbar-collapse collapse", id="menuCollapse")
                 ul(class="nav navbar-nav")
-                    li
-                        a(href="/strategyRoom") Strategy Room                    
+                    li.dropdown
+                        a(href="#", data-toggle="dropdown").dropdown-toggle 
+                            | Strategy Room
+                            span.caret
+                        ul.dropdown-menu
+                            li
+                                a(href="/strategyRoom/hfc")
+                                    | Hellfire Citadel
+                            li
+                                a(href="/strategyRoom/brf")
+                                    | Blackrock Foundry
+                            li
+                                a(href="/strategyRoom/brf")
+                                    | Highmaul
+                                                        
                     li
                         a(href = "https://www.warcraftlogs.com/guilds/36279") Logs
                     li
@@ -84,4 +97,5 @@ block body
     include partials/bossStrategyTemplate
     include partials/videoModal
     include partials/roster
+    
     

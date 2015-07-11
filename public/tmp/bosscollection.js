@@ -24,7 +24,7 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'home',
       controller: 'homeController'
     }).
-    when('/strategyRoom', {
+    when('/strategyRoom/:raid', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
     }).
@@ -211,31 +211,43 @@ angular.module("BossCollection.controllers")
     }])
 'use strict'
 angular.module("BossCollection.controllers")    
-    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider',
-            function($scope, bossStrats, $modal, socketProvider){
+    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider','$routeParams',
+            function($scope, bossStrats, $modal, socketProvider, routeParams){
 
                 var socket = socketProvider;
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
                 (adsbygoogle = window.adsbygoogle || []).push({});
-
+                
+                var desiredRaid = routeParams.raid;
+                
+                $scope.highmaul = "hm";
+                $scope.brf = "brf";
+                $scope.hfc = "hfc";
                 $scope.bossInfo = {};
                 $scope.loadChat = false;
-                $scope.difficultySelected = "";
-                $scope.bossSelected = "HighmaulMainThread";
-                $scope.currentEmbedUrl = "";
-                $scope.HighmaulThreadName = "HighmaulMainThread";
-                $scope.BlackrockThreadName = "blackrockMainThread";
-                $scope.HellfireThreadName = "hellfireMainThread";
+                $scope.difficultySelected = "";                
+                $scope.currentEmbedUrl = "";                
                 $scope.addNewBoss = false;
+                $scope.currentRaid = {}
+                $scope.raidToDisplay = {};
                 
                 console.log("Loading controller");
                 
                 //New Boss Info
                 $scope.name = "";
                 $scope.url = "";
+                
+                
+                
+                function setSideNavHeight(){
+                    console.log("Height of window is: " + window.outerHeight);
+                    document.getElementById("sideNavID").style.height = window.outerHeight/2 + "px";
+                    console.log("Height of sideNav is: " + document.getElementById("sideNavID").style.height);
+                }
 
+                setSideNavHeight();
 
                 $scope.addVideo= function(bossName, difficulty, currentRaid){
                     console.log("name: " + bossName);
@@ -337,6 +349,31 @@ angular.module("BossCollection.controllers")
                     $scope.addNewBoss = false;
                     
                 };
+                
+                $scope.changeBossInfo = function(boss, difficulty){
+                    
+                    boss.isSelected = !boss.isSelected;
+
+                    $scope.bossSelected = boss.name;
+                    $scope.addNewBoss = false;
+                    
+                    
+                }
+                
+                $scope.changeDifficulty = function(boss, difficulty){
+                    boss.difficultySelected = difficulty;
+                    
+                    if(difficulty == "- Heroic"){
+                        
+                        boss.heroic.isSelected = !boss.heroic.isSelected;
+                        boss.mythic.isSelected = false;  
+                    }
+                    else{
+                         boss.mythic.isSelected = !boss.mythic.isSelected;
+                         boss.heroic.isSelected = false;
+                    }
+                    
+                }
 
                 $scope.changeBRFBossInfo = function(boss){
                     boss.isSelected = !boss.isSelected;
@@ -371,7 +408,7 @@ angular.module("BossCollection.controllers")
                     $scope.difficultySelected = "";
                     $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
 
-                    $scope.bossSelected = $scope.HighmaulThreadName;
+                    
                     $scope.addNewBoss = false;
                     
                 };
@@ -383,7 +420,7 @@ angular.module("BossCollection.controllers")
                     $scope.difficultySelected = "";
                     $scope.brfBossSelected = !$scope.brfBossSelected;
 
-                    $scope.bossSelected = $scope.BlackrockThreadName;
+                    
                     $scope.addNewBoss = false;
                     
                 };
@@ -397,7 +434,7 @@ angular.module("BossCollection.controllers")
                     $scope.difficultySelected = "";
                     $scope.hfcBossSelected = !$scope.hfcBossSelected;
 
-                    $scope.bossSelected = $scope.HellfireThreadName;
+                    
                     $scope.addNewBoss = false;
                     
                 };
@@ -407,6 +444,20 @@ angular.module("BossCollection.controllers")
                     $scope.bossInfo.highmaul = data.highmaul;
                     $scope.bossInfo.brf = data.brf;
                     $scope.bossInfo.hellfire = data.hellfire;
+                    
+                    console.log(desiredRaid);
+                    
+                    if(desiredRaid == $scope.hfc){
+                        $scope.raidToDisplay = $scope.bossInfo.hellfire;
+                       
+                    }
+                    else if(desiredRaid == "hm"){
+                        $scope.raidToDisplay = $scope.bossInfo.highmaul;
+                    }
+                    else if(desiredRaid == "brf"){
+                        $scope.raidToDisplay = $scope.bossInfo.brf;
+                        
+                    }
                     $scope.$apply();
 
                 });

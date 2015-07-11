@@ -24,7 +24,7 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
       templateUrl: 'home',
       controller: 'homeController'
     }).
-    when('/strategyRoom', {
+    when('/strategyRoom/:raid', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
     }).

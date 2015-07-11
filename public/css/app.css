@@ -39,10 +39,69 @@ html, body {
     padding-bottom: 50px;
 }
 
+.bossVideoContainer{
+    border-bottom:1px solid black;
+}
+
+.sideNav{
+    background-color:black;
+    color:white;
+}
+
+.noPaddingOrMargin{
+    padding: 0;
+    margin: 0;
+}
+
+.sideNavButtons{
+  width: 100%;
+  background: black;
+  color: white;
+  display: block;
+  border: 0;
+  padding: 15px;
+}
+
+.stratDifficultyButtons{
+  width: 125px;
+  background: black;
+  color: white;
+  display: block;
+  border: 0;
+  padding: 15px;
+}
+
+
+.stratDifficultyButtonsSelected{  
+  background: #FBA026;
+  color: black;
+  border-bottom: 1px solid black;
+}
+
+.stratDifficultyButtons:hover{
+    background:white;
+    color:black;
+}
+
+.sideNavButtons:hover{
+    background:white;
+    color:black;
+}
+
+.sideNavButtonSelected{
+    width:100%;
+    background:#FBA026;
+    color:black;
+}
+
 .rankingImg{
        position: relative;
   right: -15%;
   top: 5%
+}
+
+.boxShadow{
+    box-shadow: 0px 2px 8px 0px #000000;
 }
 
 .pageContainer{
