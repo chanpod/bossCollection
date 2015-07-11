@@ -125,7 +125,9 @@ angular.module("BossCollection.controllers")
             $scope.trialRanks = [9];
             $scope.raiderRanks = [0, 1, 3, 6];
             $scope.guild = "mkdir bosscollection";
-            $scope.realm = "zul'jin"
+            $scope.realm = "zul'jin";
+            
+            
             
             $scope.getMembers = function(){
                 $scope.raiders = [];
