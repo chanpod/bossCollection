@@ -51,19 +51,19 @@ angular.module("BossCollection.controllers")
                
 
                 $scope.saveNewBossInfo = function(name, url, boss, difficulty){
-                    
+                    console.log(boss);
                     if (verifyYoutubeURL(url)) {
                         
                         var parsedUrl = url.split("=");
                         url = parsedUrl[1];
 
                         if (difficulty == "heroic") {
-                            boss.heroic.videos.push(
+                            boss.heroic.videos[boss.heroic.videos.length] =
                                 {
                                     "name": name,
                                     "url": url
                                 }
-                                )
+                                
                         }
                         else if (difficulty == "mythic") {
                             boss.mythic.videos.push(

@@ -262,19 +262,19 @@ angular.module("BossCollection.controllers")
                
 
                 $scope.saveNewBossInfo = function(name, url, boss, difficulty){
-                    
+                    console.log(boss);
                     if (verifyYoutubeURL(url)) {
                         
                         var parsedUrl = url.split("=");
                         url = parsedUrl[1];
 
                         if (difficulty == "heroic") {
-                            boss.heroic.videos.push(
+                            boss.heroic.videos[boss.heroic.videos.length] =
                                 {
                                     "name": name,
                                     "url": url
                                 }
-                                )
+                                
                         }
                         else if (difficulty == "mythic") {
                             boss.mythic.videos.push(
@@ -286,21 +286,22 @@ angular.module("BossCollection.controllers")
                         }
 
                         
-                        boss.isSelected = false;
+                        
                         $scope.raidData.bosses = $scope.raidToDisplay;
-                        boss.isSelected = true;
                         
                         console.log($scope.raidData);
 
                         bossStrats.saveStrats($scope.raidData, url);
-
+                        
+                        $scope.addNewBoss = false;
+                        
                         $scope.name = "";
                         $scope.url = "";
 
                         $scope.addNewBoss = !$scope.addNewBoss;
                     }
                     else{
-                        $("#urlInput").popover('toggle');
+                        $("#urlInput").popover('show');
                     }
                 };
                 
