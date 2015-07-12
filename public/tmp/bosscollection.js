@@ -265,7 +265,8 @@ angular.module("BossCollection.controllers")
                     console.log(boss);
                     if (verifyYoutubeURL(url)) {
                         
-                        var parsedUrl = url.split("=");
+                        var parsedUrl = url.split("&");
+                        parsedUrl = parsedUrl[0].split("=")
                         url = parsedUrl[1];
 
                         if (difficulty == "heroic") {
