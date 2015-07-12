@@ -259,54 +259,48 @@ angular.module("BossCollection.controllers")
                 };
                
 
-                $scope.saveNewBossInfo = function(name, url){
-                    var isHeroic = false;
-                    var isMythic = false;
-                    var isHighmaul = false;
-                    var isBRF = false;
-                    var isHFC = false;
+                $scope.saveNewBossInfo = function(name, url, boss, difficulty){
+                    
+                    if (verifyYoutubeURL(url)) {
+                        
+                        var parsedUrl = url.split("=");
+                        url = parsedUrl[1];
 
-                    console.log(name);
-
-                    if($scope.currentDifficulty == "heroic"){
-                        isHeroic = true;
-                    }
-                    else if ($scope.currentDifficulty == "mythic"){
-                        isMythic = true;
-                    }
-
-                    if($scope.currentRaid == "highmaul"){
-                        isHighmaul = true;
-                    }
-                    else if($scope.currentRaid == "brf"){
-                        isBRF = true;
-                    }
-                    else if($scope.currentRaid == "hellfire"){
-                        isHFC = true
-                    }
-
-                    var raidInfo = {
-                        isHighmaul: isHighmaul,
-                        isBRF: isBRF,
-                        isHFC: isHFC,
-                        isHeroic: isHeroic,
-                        isMythic: isMythic,
-                        bossName: $scope.currentBoss,
-                        newBossInfo: {
-                            "name" : name,
-                            "url" : url
+                        if (difficulty == "heroic") {
+                            boss.heroic.videos.push(
+                                {
+                                    "name": name,
+                                    "url": url
+                                }
+                                )
                         }
-                    };
+                        else if (difficulty == "mythic") {
+                            boss.mythic.videos.push(
+                                {
+                                    "name": name,
+                                    "url": url
+                                }
+                                )
+                        }
 
-                    console.log(raidInfo);
 
-                    bossStrats.saveStrats(raidInfo);
 
-                    $scope.name = "";
-                    $scope.url = "";
+                        $scope.raidData.bosses = $scope.raidToDisplay;
+                        console.log($scope.raidData);
 
-                    $scope.addNewBoss = !$scope.addNewBoss;
+                        bossStrats.saveStrats($scope.raidData, url);
+
+                        $scope.name = "";
+                        $scope.url = "";
+
+                        $scope.addNewBoss = !$scope.addNewBoss;
+                    }
                 };
+                
+                function verifyYoutubeURL(url) {
+
+                    return /(?:https?:\/\/|www\.|m\.|^)youtu(?:be\.com\/watch\?(?:.*?&(?:amp;)?)?v=|\.be\/)([\w‌​\-]+)(?:&(?:amp;)?[\w\?=]*)?/.test(url);
+                }
 
                 socket.on("addVideoSuccess", function(message){
                     console.log("Success: " + message);
@@ -320,35 +314,6 @@ angular.module("BossCollection.controllers")
                 socket.on("saveFailed", function(erMsg){
                     console.log(erMsg);
                 });
-
-                $scope.heroicDifficultySelected = function(boss){
-
-                    boss.heroic.isSelected = !boss.heroic.isSelected;
-                    boss.mythic.isSelected = false;
-                    $scope.difficultySelected = "- Heroic";
-                    $scope.addNewBoss = false;
-                };
-
-                $scope.mythicDifficultySelected = function(boss){
-
-                    boss.mythic.isSelected = !boss.mythic.isSelected;
-                    boss.heroic.isSelected = false;
-                    $scope.difficultySelected = "- Mythic";
-                    $scope.addNewBoss = false;
-                };
-
-                $scope.changeHMBossInfo = function(boss){
-
-                    boss.isSelected = !boss.isSelected;
-                    boss.heroic.isSelected = false;
-                    boss.mythic.isSelected = false;
-                    $scope.difficultySelected = "";
-                    $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
-
-                    $scope.bossSelected = boss.name;
-                    $scope.addNewBoss = false;
-                    
-                };
                 
                 $scope.changeBossInfo = function(boss, difficulty){
                     
@@ -374,75 +339,14 @@ angular.module("BossCollection.controllers")
                     }
                     
                 }
-
-                $scope.changeBRFBossInfo = function(boss){
-                    boss.isSelected = !boss.isSelected;
-                    boss.heroic.isSelected = false;
-                    boss.mythic.isSelected = false;
-                    $scope.difficultySelected = "";
-                    $scope.brfBossSelected = !$scope.brfBossSelected;
-
-                    $scope.bossSelected = boss.name;
-                    $scope.addNewBoss = false;                    
-                };
                 
-                $scope.changeHFCBossInfo = function(boss){
-                    boss.isSelected = !boss.isSelected;
-                    boss.heroic.isSelected = false;
-                    boss.mythic.isSelected = false;
-                    
-                    $scope.difficultySelected = "";
-                    $scope.hfcBossSelected = !$scope.hfcBossSelected;
-
-                    $scope.bossSelected = boss.name;
-                    $scope.addNewBoss = false;
-                    
-                };
-
-                $scope.cancelHMBossSelection = function(currentSelectedBoss){
-                    
-                    currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
-                    currentSelectedBoss.heroic.isSelected = false;
-                    currentSelectedBoss.mythic.isSelected = false;
-                    $scope.difficultySelected = "";
-                    $scope.highmaulBossSelected = !$scope.highmaulBossSelected;
-
-                    
-                    $scope.addNewBoss = false;
-                    
-                };
-
-                $scope.cancelBRFBossSelection = function(currentSelectedBoss){
-                    currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
-                    currentSelectedBoss.heroic.isSelected = false;
-                    currentSelectedBoss.mythic.isSelected = false;
-                    $scope.difficultySelected = "";
-                    $scope.brfBossSelected = !$scope.brfBossSelected;
-
-                    
-                    $scope.addNewBoss = false;
-                    
-                };
-                
-                $scope.cancelHFCBossSelection = function(currentSelectedBoss){
-                    
-                    currentSelectedBoss.isSelected = !currentSelectedBoss.isSelected;
-                    currentSelectedBoss.heroic.isSelected = false;
-                    currentSelectedBoss.mythic.isSelected = false;
-                    
-                    $scope.difficultySelected = "";
-                    $scope.hfcBossSelected = !$scope.hfcBossSelected;
-
-                    
-                    $scope.addNewBoss = false;
-                    
-                };
 
                 socket.on("bossInfoData", function(data){
                     
                     console.log(desiredRaid);
                     
                     $scope.raidToDisplay = data.bosses;
+                    $scope.raidData = data;
                     
                     $scope.$apply();
 
@@ -533,9 +437,13 @@ angular.module("BossCollection.services", [])
                 console.log("Request Boss Info");
                 socket.emit("getBossInfo", boss);
             },
-            saveStrats: function (updatedStrats) {
+            saveStrats: function (updatedStrats, url) {
                 console.log("Saving info now");
-                socket.emit("saveStrats", updatedStrats);
+                var parameters = {
+                    raidData: updatedStrats,
+                    url: url
+                }
+                socket.emit("saveStrats", parameters);
             }
         };
 
@@ -582,8 +490,8 @@ angular.module("BossCollection.services")
 angular.module("BossCollection.services")
     .factory('socketProvider', [function () {
         
-        var socket = io("http://54.173.24.121:4001");
-        //var socket = io("http://localhost:4001");
+        //var socket = io("http://54.173.24.121:4001");
+        var socket = io("http://localhost:4001");
         
         return socket;
     }])

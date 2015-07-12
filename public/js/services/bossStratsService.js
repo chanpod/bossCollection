@@ -12,9 +12,13 @@ angular.module("BossCollection.services", [])
                 console.log("Request Boss Info");
                 socket.emit("getBossInfo", boss);
             },
-            saveStrats: function (updatedStrats) {
+            saveStrats: function (updatedStrats, url) {
                 console.log("Saving info now");
-                socket.emit("saveStrats", updatedStrats);
+                var parameters = {
+                    raidData: updatedStrats,
+                    url: url
+                }
+                socket.emit("saveStrats", parameters);
             }
         };
 

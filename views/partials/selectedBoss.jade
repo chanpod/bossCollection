@@ -36,7 +36,7 @@ div.container-fluid.noPaddingOrMargin.boxShadow.text-center
                                         div.col-sm-5
                                             input(ng-model = "url").form-control
                                     div.col-sm-7
-                                        button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
+                                        button(ng-click = "saveNewBossInfo(name, url, boss, 'heroic')").btn.btn-primary.form-control
                                             | Add Video
             
                 div.col-md-8
@@ -61,5 +61,5 @@ div.container-fluid.noPaddingOrMargin.boxShadow.text-center
                                         div.col-sm-5
                                             input(ng-model = "url").form-control
                                     div.col-sm-7
-                                        button(ng-click = "saveNewBossInfo(name, url)").btn.btn-primary.form-control
+                                        button(ng-click = "saveNewBossInfo(name, url, boss, 'mythic')").btn.btn-primary.form-control
                                             | Add Video

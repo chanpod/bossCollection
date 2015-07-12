@@ -98,17 +98,16 @@ module.exports = function (socket) {
     });
 
     socket.on("saveStrats", function(newStrats){
-        console.log("Saving New Boss Info");
-        if(verifyYoutubeURL(newStrats.newBossInfo.url)){
-            mongo.saveRaidBossInfo(newStrats).then(function(result){
-                console.log(result);
-                socket.emit("addVideoSuccess", "success")
-            })
-        }
-        else{
-            var errMsg = "Invalid URL. Please provide a youtube link.";
-            socket.emit("saveFailed", errMsg);
-        }
+        console.log("Saving New Boss Info");        
+            
+        mongo.saveRaidBossInfo(newStrats).then(function(result){
+            console.log(result);
+            socket.emit("addVideoSuccess", "success")
+        },
+        function(err){
+            socket.emit("saveFailed", err);
+        })
+        
 
 
     });
