@@ -443,6 +443,8 @@ angular.module("BossCollection.services", [])
                     raidData: updatedStrats,
                     url: url
                 }
+                parameters = angular.toJson(parameters);
+                console.log(parameters); 
                 socket.emit("saveStrats", parameters);
             }
         };

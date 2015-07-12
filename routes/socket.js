@@ -98,13 +98,16 @@ module.exports = function (socket) {
     });
 
     socket.on("saveStrats", function(newStrats){
-        console.log("Saving New Boss Info");        
+        console.log("Saving New Boss Info");       
             
-        mongo.saveRaidBossInfo(newStrats).then(function(result){
+        var newStrats = JSON.parse(newStrats);
+        
+        mongo.saveRaidBossInfo(newStrats.raidData).then(function(result){
             console.log(result);
             socket.emit("addVideoSuccess", "success")
         },
         function(err){
+            console.log(err);
             socket.emit("saveFailed", err);
         })
         

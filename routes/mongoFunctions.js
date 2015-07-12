@@ -23,17 +23,20 @@ var getRaidBossInfo = function(raid) {
 
 var saveRaidBossInfo = function(validBossInfo){
     var defer = q.defer();    
-    console.log(validBossInfo.raidData);
-    db.raidBossInfo.save(validBossInfo.raidData, function(){            
+    console.log(validBossInfo);
+    db.raidBossInfo.save(validBossInfo, function(err, result){
+                if(err){
+                    defer.reject(err);    
+                    return;
+                }
+                
                 defer.resolve("success");
-        },
-        function(err){
-            console.log(err);
-            defer.resolve(err);
-    })
+        })
+        return defer.promise;
+    }
 
-    return defer.promise;
-};
+
+
 
 
 module.exports = {
