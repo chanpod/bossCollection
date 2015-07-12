@@ -11,6 +11,7 @@ var getRaidBossInfo = function(raid) {
     var defer = q.defer();
     console.log("Getting data from mongo");
     var raidBossInfo = {};
+    console.log(raid);
     db.raidBossInfo.find(raid, function(err, raidBossInfo){
 
         defer.resolve(raidBossInfo[0]);
