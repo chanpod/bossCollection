@@ -82,14 +82,18 @@ module.exports = function (socket) {
         socket.emit("messagesFromServer", messages);
     });
 
-    socket.on("getBossInfo", function(){
+    socket.on("getBossInfo", function(raid){
         console.log("BossInfo request made.");
-
-        mongo.getRaidBossInfo().then(function(data){
+        var query = {name: raid};
+        console.log(query);
+        mongo.getRaidBossInfo(query).then(function(data){
 
             console.log(JSON.stringify(data));
             socket.emit("bossInfoData", data);
             return data;
+        },
+        function(err){
+            console.log(err);
         });
     });
 

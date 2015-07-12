@@ -172,8 +172,7 @@ angular.module("BossCollection.controllers")
                     $scope.brfBossSelected = !$scope.brfBossSelected;
 
                     $scope.bossSelected = boss.name;
-                    $scope.addNewBoss = false;
-                    
+                    $scope.addNewBoss = false;                    
                 };
                 
                 $scope.changeHFCBossInfo = function(boss){
@@ -251,7 +250,7 @@ angular.module("BossCollection.controllers")
 
                 });
 
-                bossStrats.getStrats();
+                bossStrats.getStrats(desiredRaid);
 
 
                 $scope.setUrl = function(newUrl){

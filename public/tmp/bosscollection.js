@@ -383,8 +383,7 @@ angular.module("BossCollection.controllers")
                     $scope.brfBossSelected = !$scope.brfBossSelected;
 
                     $scope.bossSelected = boss.name;
-                    $scope.addNewBoss = false;
-                    
+                    $scope.addNewBoss = false;                    
                 };
                 
                 $scope.changeHFCBossInfo = function(boss){
@@ -462,7 +461,7 @@ angular.module("BossCollection.controllers")
 
                 });
 
-                bossStrats.getStrats();
+                bossStrats.getStrats(desiredRaid);
 
 
                 $scope.setUrl = function(newUrl){
@@ -542,10 +541,10 @@ angular.module("BossCollection.services", [])
         
         var bossStratsApi = {
 
-            getStrats: function () {
+            getStrats: function (boss) {
 
                 console.log("Request Boss Info");
-                socket.emit("getBossInfo");
+                socket.emit("getBossInfo", boss);
             },
             saveStrats: function (updatedStrats) {
                 console.log("Saving info now");
