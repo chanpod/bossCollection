@@ -7,6 +7,6 @@ angular.module("BossCollection.services")
         
         var socket = io("http://54.173.24.121:4001");
         //var socket = io("http://localhost:4001");
-        
+         
         return socket;
     }])
