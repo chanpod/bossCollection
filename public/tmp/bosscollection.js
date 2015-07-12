@@ -439,24 +439,11 @@ angular.module("BossCollection.controllers")
                 };
 
                 socket.on("bossInfoData", function(data){
-
-                    $scope.bossInfo.highmaul = data.highmaul;
-                    $scope.bossInfo.brf = data.brf;
-                    $scope.bossInfo.hellfire = data.hellfire;
                     
                     console.log(desiredRaid);
                     
-                    if(desiredRaid == $scope.hfc){
-                        $scope.raidToDisplay = $scope.bossInfo.hellfire;
-                       
-                    }
-                    else if(desiredRaid == "hm"){
-                        $scope.raidToDisplay = $scope.bossInfo.highmaul;
-                    }
-                    else if(desiredRaid == "brf"){
-                        $scope.raidToDisplay = $scope.bossInfo.brf;
-                        
-                    }
+                    $scope.raidToDisplay = data.bosses;
+                    
                     $scope.$apply();
 
                 });

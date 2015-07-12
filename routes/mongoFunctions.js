@@ -7,11 +7,11 @@ var q = require('q');
 
 
 
-var getRaidBossInfo = function() {
+var getRaidBossInfo = function(raid) {
     var defer = q.defer();
     console.log("Getting data from mongo");
     var raidBossInfo = {};
-    db.raidBossInfo.find({}, function(err, raidBossInfo){
+    db.raidBossInfo.find(raid, function(err, raidBossInfo){
 
         defer.resolve(raidBossInfo[0]);
     });
