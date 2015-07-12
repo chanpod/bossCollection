@@ -34,7 +34,7 @@ div.container-fluid.noPaddingOrMargin.boxShadow.text-center
                                         label.col-sm-2.control-label
                                             | Youtube URL: &nbsp
                                         div.col-sm-5
-                                            input(ng-model = "url").form-control
+                                            input#urlInput(ng-model = "url", data-container = "body", data-placement = "right", data-content = "Must be a valid youtube URL.").form-control
                                     div.col-sm-7
                                         button(ng-click = "saveNewBossInfo(name, url, boss, 'heroic')").btn.btn-primary.form-control
                                             | Add Video

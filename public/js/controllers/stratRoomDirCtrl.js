@@ -7,7 +7,12 @@ angular.module("BossCollection.controllers")
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
+                try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
+                }
+                catch(err){
+                    console.log("Google broke again");
+                }
                 
                 var desiredRaid = routeParams.raid;
                 
@@ -22,7 +27,7 @@ angular.module("BossCollection.controllers")
                 $scope.currentRaid = {}
                 $scope.raidToDisplay = {};
                 
-                console.log("Loading controller");
+                
                 
                 //New Boss Info
                 $scope.name = "";
@@ -30,17 +35,14 @@ angular.module("BossCollection.controllers")
                 
                 
                 
-                function setSideNavHeight(){
-                    console.log("Height of window is: " + window.outerHeight);
+                function setSideNavHeight(){                    
                     document.getElementById("sideNavID").style.height = window.outerHeight/2 + "px";
-                    console.log("Height of sideNav is: " + document.getElementById("sideNavID").style.height);
                 }
 
                 setSideNavHeight();
 
                 $scope.addVideo= function(bossName, difficulty, currentRaid){
-                    console.log("name: " + bossName);
-                    console.log("Difficulty: " + difficulty);
+                    
 
                     $scope.currentBoss = bossName;
                     $scope.currentDifficulty = difficulty;
@@ -83,6 +85,9 @@ angular.module("BossCollection.controllers")
                         $scope.url = "";
 
                         $scope.addNewBoss = !$scope.addNewBoss;
+                    }
+                    else{
+                        $("#urlInput").popover('toggle');
                     }
                 };
                 
