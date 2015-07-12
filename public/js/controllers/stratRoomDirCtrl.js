@@ -74,20 +74,23 @@ angular.module("BossCollection.controllers")
                                 )
                         }
 
-
-
+                        
+                        
                         $scope.raidData.bosses = $scope.raidToDisplay;
+                        
                         console.log($scope.raidData);
 
                         bossStrats.saveStrats($scope.raidData, url);
-
+                        
+                        $scope.addNewBoss = false;
+                        
                         $scope.name = "";
                         $scope.url = "";
 
                         $scope.addNewBoss = !$scope.addNewBoss;
                     }
                     else{
-                        $("#urlInput").popover('toggle');
+                        $("#urlInput").popover('show');
                     }
                 };
                 
@@ -100,7 +103,7 @@ angular.module("BossCollection.controllers")
                     console.log("Success: " + message);
                    if(message == "success"){
                        console.log("Getting updated boss info");
-                       bossStrats.getStrats();
+                       bossStrats.getStrats(desiredRaid);
                        $scope.addNewBoss = !$scope.addNewBoss;
                    }
                 });

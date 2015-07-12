@@ -285,9 +285,11 @@ angular.module("BossCollection.controllers")
                                 )
                         }
 
-
-
+                        
+                        boss.isSelected = false;
                         $scope.raidData.bosses = $scope.raidToDisplay;
+                        boss.isSelected = true;
+                        
                         console.log($scope.raidData);
 
                         bossStrats.saveStrats($scope.raidData, url);
@@ -311,7 +313,7 @@ angular.module("BossCollection.controllers")
                     console.log("Success: " + message);
                    if(message == "success"){
                        console.log("Getting updated boss info");
-                       bossStrats.getStrats();
+                       bossStrats.getStrats(desiredRaid);
                        $scope.addNewBoss = !$scope.addNewBoss;
                    }
                 });
