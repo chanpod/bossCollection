@@ -67,12 +67,11 @@ angular.module("BossCollection.controllers")
                                 
                         }
                         else if (difficulty == "mythic") {
-                            boss.mythic.videos.push(
+                            boss.mythic.videos[boss.heroic.videos.length] =
                                 {
                                     "name": name,
                                     "url": url
                                 }
-                                )
                         }
 
                         
