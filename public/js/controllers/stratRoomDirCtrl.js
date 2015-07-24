@@ -7,6 +7,7 @@ angular.module("BossCollection.controllers")
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
+                
                 try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
                 }

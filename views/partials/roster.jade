@@ -42,11 +42,17 @@ script#roster(type="text/ng-template")
                                        | Comma Delimited
                                  div.col-sm-10
                                     input(placeholder = "Raider Ranks (Comma Delimited) EG 1,2,3", ng-model = "raiderRanks").form-control
-                           button(ng-click = "getMembers()").btn.btn-primary
-                              | Get Roster
+                           div.row
+                              
+                              div.col-md-offset-4.col-md-2.padding
+                                 button(ng-click = "getMembers()").btn.btn-primary
+                                    | Get Roster
+                              div.col-md-2.padding
+                                 button(ng-click = "saveRanksList()").btn.btn-primary
+                                    | Save Ranks
                         div.row
                            h1.text-center.headerRow
-                              | Trials
+                              | Trials ({{trials.length}})
                            
                            div(ng-repeat = "player in trials")
                               div.row.heightFix
@@ -61,7 +67,7 @@ script#roster(type="text/ng-template")
                                           | Spec: &nbsp{{player.spec}}
                         div.row
                            h1.text-center.headerRow
-                              | Raiders
+                              | Raiders ({{raiders.length}})
                            
                            div(ng-repeat = "player in raiders")
                               div.row.heightFix

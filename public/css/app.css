@@ -73,9 +73,10 @@ html, body {
 
 
 .stratDifficultyButtonsSelected{  
-  background: #FBA026;
-  color: black;
+  background: #2c3e50;
+  color: white;
   border-bottom: 1px solid black;
+  
 }
 
 .stratDifficultyButtons:hover{
@@ -90,8 +91,8 @@ html, body {
 
 .sideNavButtonSelected{
     width:100%;
-    background:#FBA026;
-    color:black;
+    background:#2c3e50;
+    color:white;
 }
 
 .rankingImg{

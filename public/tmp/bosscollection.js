@@ -219,6 +219,7 @@ angular.module("BossCollection.controllers")
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
+                
                 try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
                 }
@@ -413,7 +414,7 @@ angular.module("BossCollection.controllers")
 /* Directives */
 
 angular.module('BossCollection.directives', []).
-  directive('bossstrategies', function () {
+  directive('bossstrategies', [function () {
         return {
             restrict: 'E',
             templateUrl: 'bossStrategy',
@@ -422,7 +423,7 @@ angular.module('BossCollection.directives', []).
             link: function(scope, elm, attrs) {
             }
         } 
-  }); 
+  }]); 
  
 'use strict';
 

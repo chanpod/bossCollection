@@ -2,7 +2,7 @@
 /* Directives */
 
 angular.module('BossCollection.directives', []).
-  directive('bossstrategies', function () {
+  directive('bossstrategies', [function () {
         return {
             restrict: 'E',
             templateUrl: 'bossStrategy',
@@ -11,5 +11,5 @@ angular.module('BossCollection.directives', []).
             link: function(scope, elm, attrs) {
             }
         } 
-  }); 
+  }]); 
  
