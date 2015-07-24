@@ -61,7 +61,7 @@ angular.module("BossCollection.controllers", [])
 
             (adsbygoogle = window.adsbygoogle || []).push({});
 
-            twitter();
+            
 
             $scope.myInterval = 10000;
             var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Ortharion's Interface!"},

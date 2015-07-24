@@ -37,34 +37,7 @@ block body
                     li
                         a(href="/roster") Guild Roster
                             
-    div(ng-view)
-        script.
-            function twitter() {!function(d,s,id){
-                var js,
-                    fjs=d.getElementsByTagName(s)[0],
-                    p=/^http:/.test(d.location)?'http':'https';
-
-                    js=d.createElement(s);
-                    js.id=id;js.src=p+"://platform.twitter.com/widgets.js";
-                    fjs.parentNode.insertBefore(js,fjs);
-                    console.log(id);
-            }(document,"script","twitter-wjs");
-                console.log("Twitter loading...");
-            }
-
-            var disqus_shortname = 'bosscollection'; // Required - Replace example with your forum shortname
-            var disqus_identifier = '';
-            var disqus_title = '';
-            var disqus_url = '';
-
-            function disqus() {(function() {
-                var dsq = document.createElement('script');
-                    dsq.type = 'text/javascript';
-                    dsq.async = true;
-                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                })();
-            }
+    div(ng-view)        
 
     div.footer
         div.container
