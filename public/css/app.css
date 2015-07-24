@@ -20,7 +20,7 @@ html, body {
 }
 
 .navbar{
-    margin-bottom:0;
+    margin-bottom:0; 
 }
 
 .navbar-inverse .navbar-nav > li > a{
@@ -31,8 +31,12 @@ html, body {
     color:white;
 }
 
+.container{
+    background-color: #2c3e50;
+}
+
 .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse{
-    background-color:black;
+    background-color:#2c3e50;
 }
 
 .headerLabel{
@@ -336,104 +340,12 @@ background-color: black;
     padding-bottom: 15px;
 }
 
-.googleSheet{
-    height:600px;
-    width:100%;
-}
-
 @media (max-width: 767px){
-    .bcBanner{
-        background-image: url("/images/expansionBanners/bc.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        width:250px;
-        height:125px;
-        color:white;
-    }
-
-    .wodBanner{
-        background-image: url("/images/expansionBanners/wod.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        width:250px;
-        height:125px;
-        color:white;
-    }
-
-    .wotlkBanner{
-        background-image: url("/images/expansionBanners/wotlk.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        width:250px;
-        height:125px;
-        color:white;
-    }
-
-    .mopBanner{
-        background-image: url("/images/expansionBanners/mop.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        width:250px;
-        height:125px;
-        color:white;
-    }
-
-    .cataBanner{
-        background-image: url("/images/expansionBanners/cata.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        width:250px;
-        height:125px;
-        color:white;
-    }
+    
 }
 
 @media (min-width: 767px){
-    .wodBanner{
-        background-image: url("/images/expansionBanners/wod.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        width:450px;
-        height:200px;
-        color:white;
-    }
-
-    .bcBanner{
-        background-image: url("/images/expansionBanners/bc.png");
-        background-repeat: no-repeat;
-        background-size: 450px;
-        width:450px;
-        height:200px;
-        color:white;
-    }
-
-
-    .wotlkBanner{
-        background-image: url("/images/expansionBanners/wotlk.png");
-        background-repeat: no-repeat;
-        background-size: 450px;
-        width:450px;
-        height:200px;
-        color:white;
-    }
-
-    .mopBanner{
-        background-image: url("/images/expansionBanners/mop.png");
-        background-repeat: no-repeat;
-        background-size: 450px;
-        width:450px;
-        height:200px;
-        color:white;
-    }
-
-    .cataBanner{
-        background-image: url("/images/expansionBanners/cata.png");
-        background-repeat: no-repeat;
-        background-size: 450px;
-        width:450px;
-        height:200px;
-        color:white;
-    }
+    
 }
 
 
@@ -457,8 +369,6 @@ background-color: black;
 
 .guildProgression{
     text-shadow: 1px 1px 1px #000000;
-
-
 }
 
 .ShamanClassColor{
@@ -467,7 +377,7 @@ background-color: black;
     color:white;
 }
 
-.ShamanClassColor small{
+.ShamanClassColor small{ 
     color:white;
 }
 

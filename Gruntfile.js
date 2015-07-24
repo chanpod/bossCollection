@@ -25,6 +25,7 @@ module.exports = function (grunt) {
          watch: {
              build: { 
                  files: ['public/js/**/*',
+                         'public/css/app.css',
                          '!public/tmp/**/*'
                      ], 
                  tasks: ['build'], 

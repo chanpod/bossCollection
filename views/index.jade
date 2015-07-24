@@ -3,7 +3,7 @@ extends layout
 block body
 
     header( class = "navbar navbar-inverse navbar-fixed-top")
-        div(class="container-fluid")
+        div(class="container")
             div(class="navbar-header")
                 button( type = "button", class = "navbar-toggle", data-toggle="collapse", data-target=".navbar-collapse")
                     span(class = "sr-only") Toggle Navigation
@@ -14,7 +14,7 @@ block body
                 a(class="navbar-brand", href="/") Boss Collection &nbsp
 
             div(class="navbar-collapse collapse", id="menuCollapse")
-                ul(class="nav navbar-nav")
+                ul(class="nav navbar-nav", data-toggle="collapse", data-target=".navbar-collapse.in")
                     li.dropdown
                         a(href="#", data-toggle="dropdown").dropdown-toggle 
                             | Strategy Room
