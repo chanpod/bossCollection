@@ -1,8 +1,116 @@
 /* app css stylesheet */
 
-body {
-font-family: helvetica;
+html, body {
+    font-family: helvetica;
+    background: linear-gradient(#b8312f, #FBA026);
+    height:100%;
 
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.navbar-inverse{
+    background-color: black;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form{
+    background-color:black;
+    
+}
+
+.navbar{
+    margin-bottom:0;
+}
+
+.navbar-inverse .navbar-nav > li > a{
+    color:white;
+}
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
+    color:white;
+}
+
+.container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse{
+    background-color:black;
+}
+
+.headerLabel{
+    padding-bottom: 50px;
+}
+
+.bossVideoContainer{
+    border-bottom:1px solid black;
+}
+
+.sideNav{
+    background-color:black;
+    color:white;
+}
+
+.noPaddingOrMargin{
+    padding: 0;
+    margin: 0;
+}
+
+.sideNavButtons{
+  width: 100%;
+  background: black;
+  color: white;
+  display: block;
+  border: 0;
+  padding: 15px;
+}
+
+.stratDifficultyButtons{
+  width: 125px;
+  background: black;
+  color: white;
+  display: block;
+  border: 0;
+  padding: 15px;
+}
+
+
+.stratDifficultyButtonsSelected{  
+  background: #FBA026;
+  color: black;
+  border-bottom: 1px solid black;
+}
+
+.stratDifficultyButtons:hover{
+    background:white;
+    color:black;
+}
+
+.sideNavButtons:hover{
+    background:white;
+    color:black;
+}
+
+.sideNavButtonSelected{
+    width:100%;
+    background:#FBA026;
+    color:black;
+}
+
+.rankingImg{
+       position: relative;
+  right: -15%;
+  top: 5%
+}
+
+.boxShadow{
+    box-shadow: 0px 2px 8px 0px #000000;
+}
+
+.pageContainer{
+      background-color: white;
+  height: 100%;
+  overflow: scroll;
+  padding-bottom: 250px;
+  padding-top:50px;
+  box-shadow: 0px 2px 8px 0px #000000;
 }
 
 .playerBox{
@@ -19,22 +127,6 @@ font-family: helvetica;
     width:100%;
     height:100px;
     margin-bottom:5px;
-}
-
-#twitter-widget-0{
-    width:100% !important;
-}
-
-.chat{
-
-    height:400px;
-    overflow: scroll;
-
-}
-
-.imgContainer{
-    height:705px;
-    width:100%;
 }
 
 .tabHeaders a{
@@ -223,9 +315,12 @@ a.lootList{
 }
 
 .footer{
-    background-color:black;
-    color:white;
-    height:100%;
+background-color: black;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  
+  width: 100%;
 }
 
 .center{

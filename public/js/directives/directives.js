@@ -1,8 +1,7 @@
-'use strict';
 
 /* Directives */
 
-angular.module('Imn.directives', []).
+angular.module('BossCollection.directives', []).
   directive('bossstrategies', function () {
         return {
             restrict: 'E',

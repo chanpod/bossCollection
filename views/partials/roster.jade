@@ -1,0 +1,78 @@
+script#roster(type="text/ng-template")
+      div.container.pageContainer   
+            div.jumbotron.wodHeader   
+            div
+                  div.row()
+                      ins(class="adsbygoogle",
+                      style="display:block;padding-top:75px",
+                      data-ad-client="ca-pub-4895481554192451",
+                      data-ad-slot="4790584276",
+                      data-ad-format="auto")
+            div.container-fluid  
+                  div.text-center
+                     div.row           
+                        
+                           p
+                              b
+                                 | Ranks are 1 less than what they are in game. So if your Raider rank is Rank 7 in game, then put 6 for their rank below. This is how Blizzard stores the guild ranks.               
+                           div.form-horizontal
+                              div.form-group
+                                 label.col-sm-2.control-label
+                                    | Guild
+                                 div.col-sm-10
+                                    input(placeholder = "Guild", ng-model = "guild").form-control
+                              div.form-group
+                                 label.col-sm-2.control-label
+                                    | Realm
+                                 div.col-sm-10
+                                    input(placeholder = "Realm", ng-model = "realm").form-control
+                              div.form-group
+                                 label.col-sm-2.control-label
+                                    | Trial Ranks
+                                    br
+                                    i
+                                       | Comma Delimited
+                                 div.col-sm-10
+                                    input(placeholder = "Trial Ranks (Comma Delimited) EG 1,2,3", ng-model = "trialRanks").form-control
+                              div.form-group
+                                 label.col-sm-2.control-label
+                                    | Raider Ranks 
+                                    br
+                                    i
+                                       | Comma Delimited
+                                 div.col-sm-10
+                                    input(placeholder = "Raider Ranks (Comma Delimited) EG 1,2,3", ng-model = "raiderRanks").form-control
+                           button(ng-click = "getMembers()").btn.btn-primary
+                              | Get Roster
+                        div.row
+                           h1.text-center.headerRow
+                              | Trials
+                           
+                           div(ng-repeat = "player in trials")
+                              div.row.heightFix
+                                 div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6             
+                                    img(src= "{{player.avatar}}").pull-left           
+                                    div.row
+                                       div.col-md-3.heightFix                        
+                                          | Name: &nbsp{{player.name}}
+                                       div.col-md-3.heightFix                          
+                                          | Class: &nbsp{{player.class}}                           
+                                       div.col-md-3.heightFix      
+                                          | Spec: &nbsp{{player.spec}}
+                        div.row
+                           h1.text-center.headerRow
+                              | Raiders
+                           
+                           div(ng-repeat = "player in raiders")
+                              div.row.heightFix
+                                 div(ng-class = "player.class + 'ClassColor'").playerBox.col-md-6
+                                    img(src= "{{player.avatar}}").pull-left
+                                    div
+                                       div.col-md-3.heightFix                        
+                                          | Name: &nbsp{{player.name}}
+                                       div.col-md-3.heightFix                           
+                                          | Class: &nbsp{{player.class}}                           
+                                       div.col-md-3.heightFix      
+                                          | Spec: &nbsp{{player.spec}}
+                     
+               

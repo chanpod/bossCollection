@@ -82,29 +82,35 @@ module.exports = function (socket) {
         socket.emit("messagesFromServer", messages);
     });
 
-    socket.on("getBossInfo", function(){
+    socket.on("getBossInfo", function(raid){
         console.log("BossInfo request made.");
-
-        mongo.getRaidBossInfo().then(function(data){
+        var query = {name: raid};
+        console.log(query);
+        mongo.getRaidBossInfo(query).then(function(data){
 
             console.log(JSON.stringify(data));
             socket.emit("bossInfoData", data);
             return data;
+        },
+        function(err){
+            console.log(err);
         });
     });
 
     socket.on("saveStrats", function(newStrats){
-        console.log("Saving New Boss Info");
-        if(verifyYoutubeURL(newStrats.newBossInfo.url)){
-            mongo.saveRaidBossInfo(newStrats).then(function(result){
-                console.log(result);
-                socket.emit("addVideoSuccess", "success")
-            })
-        }
-        else{
-            var errMsg = "Invalid URL. Please provide a youtube link.";
-            socket.emit("saveFailed", errMsg);
-        }
+        console.log("Saving New Boss Info");       
+            
+        var newStrats = JSON.parse(newStrats);
+        
+        mongo.saveRaidBossInfo(newStrats.raidData).then(function(result){
+            console.log(result);
+            socket.emit("addVideoSuccess", "success")
+        },
+        function(err){
+            console.log(err);
+            socket.emit("saveFailed", err);
+        })
+        
 
 
     });

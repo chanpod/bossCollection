@@ -1,0 +1,65 @@
+
+div.container-fluid.noPaddingOrMargin.boxShadow.text-center
+    div(ng-repeat = "boss in raidToDisplay").bossVideoContainer
+        div(collapse="!boss.isSelected").padding
+            div.row
+                h3
+                    {{boss.name}} {{boss.difficultySelected}}
+            div.row
+                div.col-md-2
+                    
+                    div.container-fluid                
+                        button(ng-click = "changeDifficulty(boss, '- Heroic')", ng-class = "boss.heroic.isSelected ? 'stratDifficultyButtonsSelected' : ''").stratDifficultyButtons
+                            | Heroic
+                        button(ng-click = "changeDifficulty(boss, '- Mythic')", ng-class = "boss.mythic.isSelected ? 'stratDifficultyButtonsSelected' : ''").stratDifficultyButtons
+                            | Mythic
+            
+                div.col-md-8
+                    div(collapse="!boss.heroic.isSelected")
+                        div(ng-repeat = "video in boss.heroic.videos")
+                            span(ng-click = "open(video.url)").list-group-item
+                                {{video.name}}
+                        span(ng-click = "addVideo(boss.name, 'heroic', 'hellfire');addNewBoss = !addNewBoss").list-group-item.list-group-item-success.padding
+                            | Add Video
+                        div(collapse="!addNewBoss").padding-top.text-center
+                            div.container.text-center
+                                div.form-horizontal.text-center
+                                    div.form-group
+                                        label.col-sm-2.control-label
+                                            | Video Name: &nbsp
+                                        div.col-sm-5
+                                            input(ng-model = "name").form-control
+            
+                                    div.form-group
+                                        label.col-sm-2.control-label
+                                            | Youtube URL: &nbsp
+                                        div.col-sm-5
+                                            input#urlInput(ng-model = "url", data-container = "body", data-placement = "right", data-content = "Must be a valid youtube URL.").form-control
+                                    div.col-sm-7
+                                        button(ng-click = "saveNewBossInfo(name, url, boss, 'heroic')").btn.btn-primary.form-control
+                                            | Add Video
+            
+                div.col-md-8
+                    div(collapse="!boss.mythic.isSelected")
+                        div(ng-repeat = "video in boss.mythic.videos")
+                            span(ng-click = "open(video.url)").list-group-item
+                                {{video.name}}
+                        span(ng-click = "addVideo(boss.name, 'mythic', 'hellfire');addNewBoss = !addNewBoss").list-group-item.list-group-item-success
+                            | Add Video
+                        div(collapse="!addNewBoss").padding-top
+                            div.container-fluid
+                                div.form-horizontal
+                                    div.form-group
+                                        label.col-sm-2.control-label
+                                            | Video Name: &nbsp
+                                        div.col-sm-5
+                                            input(ng-model = "name").form-control
+            
+                                    div.form-group
+                                        label.col-sm-2.control-label
+                                            | Youtube URL: &nbsp
+                                        div.col-sm-5
+                                            input(ng-model = "url").form-control
+                                    div.col-sm-7
+                                        button(ng-click = "saveNewBossInfo(name, url, boss, 'mythic')").btn.btn-primary.form-control
+                                            | Add Video
