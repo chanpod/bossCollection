@@ -116,8 +116,8 @@ angular.module("BossCollection.controllers", [])
     }])
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http',
-        function($scope, filterFilter, socketProvider, guildServices, $http){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -128,7 +128,7 @@ angular.module("BossCollection.controllers")
             $scope.guild = "mkdir bosscollection";
             $scope.realm = "zul'jin";
             
-            
+            getSavedRanksList();
             
             $scope.getMembers = function(){
                 $scope.raiders = [];
@@ -151,6 +151,29 @@ angular.module("BossCollection.controllers")
                 });
             }
             
+            $scope.saveRanksList = function(){
+                
+                var ranksList = {
+                    guild: $scope.guild,
+                    realm: $scope.realm, 
+                    trialRanks: $scope.trialRanks,
+                    raiderRanks: $scope.raiderRanks
+                }
+                
+                $cookies.putObject("ranksList", ranksList);
+            }
+            
+            function getSavedRanksList(){
+                
+                var ranksList = $cookies.getObject("ranksList");
+                
+                if(ranksList){
+                    $scope.raiderRanks = ranksList.raiderRanks;
+                    $scope.trialRanks = ranksList.trialRanks;
+                    $scope.guild = ranksList.guild;
+                    $scope.realm = ranksList.realm;
+                }
+            }
             
             var parseMembers = function(membersObject){
                 //var $scope.raiderRanks = [0, 1, 3, 5];
