@@ -19,6 +19,10 @@ html, body {
     
 }
 
+.wellGradient{
+    background-image: linear-gradient(to bottom, #2c3e50, #34495e)
+}
+
 .navbar{
     margin-bottom:0; 
 }
@@ -321,10 +325,10 @@ a.lootList{
 }
 
 .footer{
-background-color: black;
+  background-color: black;
   color: white;  
   bottom: 0;  
-  width: 100%;
+  
 } 
  
 .center{
@@ -338,6 +342,10 @@ background-color: black;
 
 .padding{
     padding-bottom: 15px;
+}
+
+.margin-bottom{
+    margin-bottom: 15px;
 }
 
 @media (max-width: 767px){
