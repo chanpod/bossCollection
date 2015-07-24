@@ -24,13 +24,32 @@ module.exports = function (grunt) {
          },
          watch: {
              build: { 
-                 files: ['content/**/*.js'], 
+                 files: ['public/js/**/*',
+                         '!public/tmp/**/*'
+                     ], 
                  tasks: ['build'], 
                  options: { 
                      spawn: true, 
                      livereload: true 
                  } 
              }              
+         },
+         uglify: {
+             webJS:{
+                 src: [
+                     '<%= meta.temp %>/bosscollection.js'
+                     
+                 ],
+                 dest: '<%= meta.temp %>/<%= meta.appName %>.min.js'
+             }
+         },
+         cssmin:{
+             css:{
+                 src:[
+                     '<%= meta.content %>/css/**/*.css'
+                 ],
+                 dest:'<%= meta.temp %>/<%= meta.appName %>.min.css'
+             }
          }
      }); 
  
@@ -38,9 +57,13 @@ module.exports = function (grunt) {
      grunt.loadNpmTasks('grunt-contrib-concat');
      grunt.loadNpmTasks('grunt-contrib-clean');
      grunt.loadNpmTasks('grunt-contrib-watch');
+     grunt.loadNpmTasks('grunt-contrib-uglify');
+     grunt.loadNpmTasks('grunt-contrib-cssmin');
  
      grunt.registerTask('build', 'Build web application for distribution.', [ 
-         'clean:app',
-         'concat:js'
+         'clean',
+         'concat',
+         'uglify',
+         'cssmin'
      ]);
 }; 

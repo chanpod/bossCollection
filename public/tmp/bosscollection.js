@@ -12,12 +12,13 @@ angular.module('BossCollection', [
   'btford.socket-io',
   'ngCookies'
 
-]).factory('mySocket', function(socketFactory){
+]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
-}).
-config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+}]).
+config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', 
+    function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
-
+ 
 
     $routeProvider.
     when('/', {
@@ -46,7 +47,7 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
 
   $locationProvider.html5Mode(true);
 
-});
+}]);
 'use strict';
 /**
  * This is the description for my class.
@@ -283,16 +284,13 @@ angular.module("BossCollection.controllers")
                                     "name": name,
                                     "url": url
                                 }
-                        }
-
-                        
+                        }                        
                         
                         $scope.raidData.bosses = $scope.raidToDisplay;
                         
                         console.log($scope.raidData);
 
-                        bossStrats.saveStrats($scope.raidData, url);
-                        
+                        bossStrats.saveStrats($scope.raidData, url);                        
                         $scope.addNewBoss = false;
                         
                         $scope.name = "";
@@ -355,10 +353,16 @@ angular.module("BossCollection.controllers")
                     
                     $scope.raidToDisplay = data.bosses;
                     $scope.raidData = data;
-                    
+                    resetSelectedBosses();
                     $scope.$apply();
-
                 });
+                
+                
+                function resetSelectedBosses(){
+                    for(var boss in $scope.raidToDisplay){
+                        $scope.raidToDisplay[boss].isSelected = false;
+                    }
+                }
 
                 bossStrats.getStrats(desiredRaid);
 
@@ -414,12 +418,12 @@ angular.module('BossCollection.directives', []).
             restrict: 'E',
             templateUrl: 'bossStrategy',
             controller: 'bossStrategyController',
-
+ 
             link: function(scope, elm, attrs) {
             }
-        }
-  });
-
+        } 
+  }); 
+ 
 'use strict';
 
 /* Filters */

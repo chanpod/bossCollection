@@ -72,16 +72,13 @@ angular.module("BossCollection.controllers")
                                     "name": name,
                                     "url": url
                                 }
-                        }
-
-                        
+                        }                        
                         
                         $scope.raidData.bosses = $scope.raidToDisplay;
                         
                         console.log($scope.raidData);
 
-                        bossStrats.saveStrats($scope.raidData, url);
-                        
+                        bossStrats.saveStrats($scope.raidData, url);                        
                         $scope.addNewBoss = false;
                         
                         $scope.name = "";
@@ -144,10 +141,16 @@ angular.module("BossCollection.controllers")
                     
                     $scope.raidToDisplay = data.bosses;
                     $scope.raidData = data;
-                    
+                    resetSelectedBosses();
                     $scope.$apply();
-
                 });
+                
+                
+                function resetSelectedBosses(){
+                    for(var boss in $scope.raidToDisplay){
+                        $scope.raidToDisplay[boss].isSelected = false;
+                    }
+                }
 
                 bossStrats.getStrats(desiredRaid);
 

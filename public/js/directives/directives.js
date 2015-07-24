@@ -7,8 +7,9 @@ angular.module('BossCollection.directives', []).
             restrict: 'E',
             templateUrl: 'bossStrategy',
             controller: 'bossStrategyController',
-
+ 
             link: function(scope, elm, attrs) {
             }
-        }
-  });
+        } 
+  }); 
+ 

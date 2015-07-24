@@ -12,12 +12,13 @@ angular.module('BossCollection', [
   'btford.socket-io',
   'ngCookies'
 
-]).factory('mySocket', function(socketFactory){
+]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
-}).
-config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+}]).
+config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', 
+    function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
-
+ 
 
     $routeProvider.
     when('/', {
@@ -46,4 +47,4 @@ config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateP
 
   $locationProvider.html5Mode(true);
 
-});
+}]);
