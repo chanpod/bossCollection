@@ -97,7 +97,18 @@ angular.module("BossCollection.controllers")
                     return /(?:https?:\/\/|www\.|m\.|^)youtu(?:be\.com\/watch\?(?:.*?&(?:amp;)?)?v=|\.be\/)([\w‌​\-]+)(?:&(?:amp;)?[\w\?=]*)?/.test(url);
                 }
 
-                
+                socket.on("addVideoSuccess", function(message){
+                    console.log("Success: " + message);
+                   if(message == "success"){
+                       console.log("Getting updated boss info");
+                       bossStrats.getStrats(desiredRaid);
+                       $scope.addNewBoss = !$scope.addNewBoss;
+                   }
+                });
+
+                socket.on("saveFailed", function(erMsg){
+                    console.log(erMsg);
+                });
                 
                 $scope.changeBossInfo = function(boss, difficulty){
                     
@@ -124,20 +135,7 @@ angular.module("BossCollection.controllers")
                     
                 }
                 
-                
-                socket.on("addVideoSuccess", function(message){
-                    console.log("Success: " + message);
-                   if(message == "success"){
-                       console.log("Getting updated boss info");
-                       bossStrats.getStrats(desiredRaid);
-                       $scope.addNewBoss = !$scope.addNewBoss;
-                   }
-                });
 
-                socket.on("saveFailed", function(erMsg){
-                    console.log(erMsg);
-                });
-                
                 socket.on("bossInfoData", function(data){
                     
                     console.log(desiredRaid);
@@ -155,11 +153,7 @@ angular.module("BossCollection.controllers")
                     }
                 }
 
-                bossStrats.getStrats(desiredRaid).then(function(bossData){
-                    $scope.raidToDisplay = bossData.bosses;
-                    $scope.raidData = bossData;
-                    resetSelectedBosses();
-                })
+                bossStrats.getStrats(desiredRaid);
 
 
                 $scope.setUrl = function(newUrl){

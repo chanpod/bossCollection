@@ -1,33 +1,16 @@
 'use strict';
 
 angular.module("BossCollection.services", [])
-    .factory('bossStrats', ['socketProvider', '$resource', '$q', function (socket, $resource, $q) {
+    .factory('bossStrats', ['socketProvider', function (socket) {
         
-        var stratsAPI = $resource('/api/bossStrats', {
-            update: {
-                method: 'PUT'
-            }
-        })
         
         
         var bossStratsApi = {
 
             getStrats: function (boss) {
-                
-                var defer = $q.defer();
-                
+
                 console.log("Request Boss Info");
-                //socket.emit("getBossInfo", boss);
-                
-                var data = {name: boss};
-                
-                stratsAPI.save(data).$promise.then(function(result){
-                    console.log("Result: " );
-                    console.log(result);
-                    defer.resolve(result.result);
-                })
-                
-                return defer.promise;
+                socket.emit("getBossInfo", boss);
             },
             saveStrats: function (updatedStrats, url) {
                 console.log("Saving info now");
@@ -37,12 +20,7 @@ angular.module("BossCollection.services", [])
                 }
                 parameters = angular.toJson(parameters);
                 console.log(parameters); 
-                //socket.emit("saveStrats", parameters);
-                stratsAPI.data = parameters;
-                
-                stratsAPI.$update(function(result){
-                    console.log("Result: " + result);
-                })
+                socket.emit("saveStrats", parameters);
             }
         };
 
