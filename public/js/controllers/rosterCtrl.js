@@ -1,7 +1,8 @@
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$resource',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $resource){
+            
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -13,6 +14,25 @@ angular.module("BossCollection.controllers")
             $scope.realm = "zul'jin";
             
             getSavedRanksList();
+            
+            var guildRoster = $resource('/api/test');
+            
+            $scope.restTestGet = function(){
+                guildRoster.get(function(response){
+                    
+                    console.log(response.message);
+                    console.log("We got a response!");
+                })
+            }
+            
+            $scope.restTestPost = function(){
+                var data = {postData: "Message from client"};
+                guildRoster.save(data, function(response){
+                    
+                    console.log(response.message);
+                    console.log("We got a response!");
+                })   
+            }
             
             $scope.getMembers = function(){
                 $scope.raiders = [];

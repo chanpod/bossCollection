@@ -8,8 +8,9 @@ var express = require('express'),
   methodOverride = require('method-override'),
   routes = require('./routes'),
   api = require('./routes/api'),
-
+  mongoApi = require('./routes/mongoREST')
   path = require('path');
+  
   var socketapi = require('./routes/socket.js');
   var bossInfo = require('./routes/bossInfo.js');
   
@@ -37,7 +38,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://54.173.24.121:27017/passport_local_mongoose_express4');
+//mongoose.connect('mongodb://54.173.24.121:27017/bosscollection');
 
 
 /**
@@ -48,8 +49,13 @@ mongoose.connect('mongodb://54.173.24.121:27017/passport_local_mongoose_express4
 
 var router = express.Router();
 
-router.get('/*', routes.index);
-app.use('/', router);
+
+router.get('/', routes.index);
+
+
+app.use('/api', mongoApi);
+app.use('/*', router);
+
 
 /**
  * Start Server

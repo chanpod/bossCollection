@@ -116,8 +116,9 @@ angular.module("BossCollection.controllers", [])
     }])
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$resource',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $resource){
+            
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -129,6 +130,25 @@ angular.module("BossCollection.controllers")
             $scope.realm = "zul'jin";
             
             getSavedRanksList();
+            
+            var guildRoster = $resource('/api/test');
+            
+            $scope.restTestGet = function(){
+                guildRoster.get(function(response){
+                    
+                    console.log(response.message);
+                    console.log("We got a response!");
+                })
+            }
+            
+            $scope.restTestPost = function(){
+                var data = {postData: "Message from client"};
+                guildRoster.save(data, function(response){
+                    
+                    console.log(response.message);
+                    console.log("We got a response!");
+                })   
+            }
             
             $scope.getMembers = function(){
                 $scope.raiders = [];
@@ -332,18 +352,7 @@ angular.module("BossCollection.controllers")
                     return /(?:https?:\/\/|www\.|m\.|^)youtu(?:be\.com\/watch\?(?:.*?&(?:amp;)?)?v=|\.be\/)([\w‌​\-]+)(?:&(?:amp;)?[\w\?=]*)?/.test(url);
                 }
 
-                socket.on("addVideoSuccess", function(message){
-                    console.log("Success: " + message);
-                   if(message == "success"){
-                       console.log("Getting updated boss info");
-                       bossStrats.getStrats(desiredRaid);
-                       $scope.addNewBoss = !$scope.addNewBoss;
-                   }
-                });
-
-                socket.on("saveFailed", function(erMsg){
-                    console.log(erMsg);
-                });
+                
                 
                 $scope.changeBossInfo = function(boss, difficulty){
                     
@@ -370,7 +379,20 @@ angular.module("BossCollection.controllers")
                     
                 }
                 
+                
+                socket.on("addVideoSuccess", function(message){
+                    console.log("Success: " + message);
+                   if(message == "success"){
+                       console.log("Getting updated boss info");
+                       bossStrats.getStrats(desiredRaid);
+                       $scope.addNewBoss = !$scope.addNewBoss;
+                   }
+                });
 
+                socket.on("saveFailed", function(erMsg){
+                    console.log(erMsg);
+                });
+                
                 socket.on("bossInfoData", function(data){
                     
                     console.log(desiredRaid);
@@ -388,7 +410,11 @@ angular.module("BossCollection.controllers")
                     }
                 }
 
-                bossStrats.getStrats(desiredRaid);
+                bossStrats.getStrats(desiredRaid).then(function(bossData){
+                    $scope.raidToDisplay = bossData.bosses;
+                    $scope.raidData = bossData;
+                    resetSelectedBosses();
+                })
 
 
                 $scope.setUrl = function(newUrl){
@@ -462,16 +488,33 @@ angular.module('BossCollection.filters', []).
 'use strict';
 
 angular.module("BossCollection.services", [])
-    .factory('bossStrats', ['socketProvider', function (socket) {
+    .factory('bossStrats', ['socketProvider', '$resource', '$q', function (socket, $resource, $q) {
         
+        var stratsAPI = $resource('/api/bossStrats', {
+            update: {
+                method: 'PUT'
+            }
+        })
         
         
         var bossStratsApi = {
 
             getStrats: function (boss) {
-
+                
+                var defer = $q.defer();
+                
                 console.log("Request Boss Info");
-                socket.emit("getBossInfo", boss);
+                //socket.emit("getBossInfo", boss);
+                
+                var data = {name: boss};
+                
+                stratsAPI.save(data).$promise.then(function(result){
+                    console.log("Result: " );
+                    console.log(result);
+                    defer.resolve(result.result);
+                })
+                
+                return defer.promise;
             },
             saveStrats: function (updatedStrats, url) {
                 console.log("Saving info now");
@@ -481,7 +524,12 @@ angular.module("BossCollection.services", [])
                 }
                 parameters = angular.toJson(parameters);
                 console.log(parameters); 
-                socket.emit("saveStrats", parameters);
+                //socket.emit("saveStrats", parameters);
+                stratsAPI.data = parameters;
+                
+                stratsAPI.$update(function(result){
+                    console.log("Result: " + result);
+                })
             }
         };
 
