@@ -3,24 +3,6 @@ var mongo = require('./mongoFunctions.js');
 var router = express.Router();
 var q = require('q');
 
-router.use(function(req,res, next){
-  console.log("It's working?");
-  next();
-})
-
-router.route('/test')
-  .post(function(req, res){
-    
-    console.log("Route is working as intended");
-    console.log(req.body);
-    
-    res.json({message: "Here's a response for a POST!"});
-  })
-  .get(function(req, res){
-    console.log("Getting some data");
-    res.json({message: "heres your response for a GET"});
-  })
-  
 router.route('/bossStrats')
   .put(function(req, res){
     
@@ -39,7 +21,7 @@ router.route('/bossStrats')
   .post(function(req, res){
     
     
-    console.log("Getting bossStrats for: ");
+    console.log("Getting bossStrats for3: ");
     console.log(req.body);
     
     var query = req.body;
@@ -68,4 +50,4 @@ router.route('/bossStrats')
   })
   
   
-module.exports = router;
+  module.exports = router;

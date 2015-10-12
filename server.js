@@ -6,15 +6,11 @@
 var express = require('express'),
   bodyParser = require('body-parser'),
   methodOverride = require('method-override'),
-  routes = require('./routes'),
-  api = require('./routes/api'),
-  mongoApi = require('./routes/mongoREST')
+  routes = require('./routes'),  
+  mongoApi = require('./routes/RestRoutes/REST.js')
   path = require('path');
   
-  var socketapi = require('./routes/socket.js');
-  var bossInfo = require('./routes/bossInfo.js');
-  
-
+var socketapi = require('./routes/socket.js');  
 var authentication = require('./routes/authentication.js');
   
 var mongoose = require('mongoose');  
@@ -52,8 +48,6 @@ var router = express.Router();
 
 router.get('/', routes.index);
 
-
-app.use('/api', mongoApi);
 app.use('/*', router);
 
 
