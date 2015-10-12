@@ -4,6 +4,7 @@ Runs like a typical express app:
 
     node server.js
 or
+
     npm start
 
 For more information on AngularJS please check out http://angularjs.org/
