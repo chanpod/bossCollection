@@ -1,15 +1,19 @@
 var express = require('express');
 var path = require('path');
-var mongo = require(path.dirname('/routes/mongoFunctions.js'));
+console.log("================")
+console.log(path.resolve(__dirname));
+var mongo = require('../mongoFunctions');
 var router = express.Router();
 var q = require('q');
-var bossStrats = require('./bossStratsREST.js');
+var bossStrats = require('./bossStratsREST');
+
 
 router.use(function(req,res, next){
   console.log("It's working?");
   next();
 })
 
+//Playing around with REST routes
 router.route('/test')
   .post(function(req, res){
     

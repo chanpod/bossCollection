@@ -1,5 +1,5 @@
 var express = require('express');
-var mongo = require('./mongoFunctions.js');
+var mongo = require('../mongoFunctions.js');
 var router = express.Router();
 var q = require('q');
 
@@ -21,7 +21,7 @@ router.route('/bossStrats')
   .post(function(req, res){
     
     
-    console.log("Getting bossStrats for3: ");
+    console.log("Getting bossStrats for: ");
     console.log(req.body);
     
     var query = req.body;
@@ -50,4 +50,4 @@ router.route('/bossStrats')
   })
   
   
-  module.exports = router;
+module.exports = router;

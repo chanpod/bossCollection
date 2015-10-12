@@ -49,6 +49,7 @@ var router = express.Router();
 router.get('/', routes.index);
 
 app.use('/*', router);
+app.use('/api', mongoApi)
 
 
 /**

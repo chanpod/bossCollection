@@ -36,11 +36,19 @@ angular.module("BossCollection.controllers")
                 
                 
                 
-                function setSideNavHeight(){                    
-                    document.getElementById("sideNavID").style.height = window.outerHeight/2 + "px";
-                }
+                $scope.init = function(){
+                    
+                    setSideNavHeight();
+                        
+                    bossStrats.getStrats(desiredRaid).then(function (bossData) {
+                        $scope.raidToDisplay = bossData.bosses;
+                        $scope.raidData = bossData;
+                        resetSelectedBosses();
+                    })
 
-                setSideNavHeight();
+                }
+                
+                
 
                 $scope.addVideo= function(bossName, difficulty, currentRaid){
                     
@@ -52,7 +60,9 @@ angular.module("BossCollection.controllers")
                
 
                 $scope.saveNewBossInfo = function(name, url, boss, difficulty){
+                    
                     console.log(boss);
+                     
                     if (verifyYoutubeURL(url)) {
                         
                         var parsedUrl = url.split("&");
@@ -92,11 +102,6 @@ angular.module("BossCollection.controllers")
                     }
                 };
                 
-                function verifyYoutubeURL(url) {
-
-                    return /(?:https?:\/\/|www\.|m\.|^)youtu(?:be\.com\/watch\?(?:.*?&(?:amp;)?)?v=|\.be\/)([\w‌​\-]+)(?:&(?:amp;)?[\w\?=]*)?/.test(url);
-                }
-
                 
                 
                 $scope.changeBossInfo = function(boss, difficulty){
@@ -124,42 +129,6 @@ angular.module("BossCollection.controllers")
                     
                 }
                 
-                
-                socket.on("addVideoSuccess", function(message){
-                    console.log("Success: " + message);
-                   if(message == "success"){
-                       console.log("Getting updated boss info");
-                       bossStrats.getStrats(desiredRaid);
-                       $scope.addNewBoss = !$scope.addNewBoss;
-                   }
-                });
-
-                socket.on("saveFailed", function(erMsg){
-                    console.log(erMsg);
-                });
-                
-                socket.on("bossInfoData", function(data){
-                    
-                    console.log(desiredRaid);
-                    
-                    $scope.raidToDisplay = data.bosses;
-                    $scope.raidData = data;
-                    resetSelectedBosses();
-                    $scope.$apply();
-                });
-                
-                
-                function resetSelectedBosses(){
-                    for(var boss in $scope.raidToDisplay){
-                        $scope.raidToDisplay[boss].isSelected = false;
-                    }
-                }
-
-                bossStrats.getStrats(desiredRaid).then(function(bossData){
-                    $scope.raidToDisplay = bossData.bosses;
-                    $scope.raidData = bossData;
-                    resetSelectedBosses();
-                })
 
 
                 $scope.setUrl = function(newUrl){
@@ -181,4 +150,38 @@ angular.module("BossCollection.controllers")
                         }
                     });
                 }
+                
+                socket.on("addVideoSuccess", function(message){
+                    console.log("Success: " + message);
+                   if(message == "success"){
+                       console.log("Getting updated boss info");
+                       bossStrats.getStrats(desiredRaid);
+                       $scope.addNewBoss = !$scope.addNewBoss;
+                   }
+                });
+
+                socket.on("saveFailed", function(erMsg){
+                    console.log(erMsg);
+                });
+                
+                function resetSelectedBosses(){
+                    for(var boss in $scope.raidToDisplay){
+                        $scope.raidToDisplay[boss].isSelected = false;
+                    }
+                }
+                
+                function setSideNavHeight(){                    
+                    document.getElementById("sideNavID").style.height = window.outerHeight/2 + "px";
+                }
+                
+                function verifyYoutubeURL(url) {
+
+                    return /(?:https?:\/\/|www\.|m\.|^)youtu(?:be\.com\/watch\?(?:.*?&(?:amp;)?)?v=|\.be\/)([\w‌​\-]+)(?:&(?:amp;)?[\w\?=]*)?/.test(url);
+                }
+                
+                
+                
+                
+                
+                $scope.init();
         }])

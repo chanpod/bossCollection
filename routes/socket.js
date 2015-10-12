@@ -1,5 +1,4 @@
 "use strict";
-var bossInfo = require('./bossInfo.js');
 var mongo = require('./mongoFunctions.js');
 
 // export function for listening to the socket

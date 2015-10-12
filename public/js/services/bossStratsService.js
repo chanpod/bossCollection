@@ -3,11 +3,12 @@
 angular.module("BossCollection.services", [])
     .factory('bossStrats', ['socketProvider', '$resource', '$q', function (socket, $resource, $q) {
         
-        var stratsAPI = $resource('/api/bossStrats', {
-            update: {
-                method: 'PUT'
-            }
-        })
+        var stratsAPI = $resource('/api/bossStrats', {},
+            {
+                update: {
+                    method: 'PUT'
+                }
+            })
         
         
         var bossStratsApi = {
@@ -17,7 +18,7 @@ angular.module("BossCollection.services", [])
                 var defer = $q.defer();
                 
                 console.log("Request Boss Info");
-                //socket.emit("getBossInfo", boss);
+                //socket.emit("getBossInfo", boss); 
                 
                 var data = {name: boss};
                 
