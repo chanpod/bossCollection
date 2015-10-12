@@ -8,7 +8,7 @@ angular.module("BossCollection.controllers")
             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
             $scope.raiders = [];
             $scope.trialRanks = [9];
-            $scope.raiderRanks = [0, 1, 3, 6];
+            $scope.raiderRanks = [0, 2, 6];
             $scope.guild = "mkdir bosscollection";
             $scope.realm = "zul'jin";
             
