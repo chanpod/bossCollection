@@ -102,7 +102,7 @@ angular.module("BossCollection.controllers")
                     }
                 };
                 
-                
+
                 
                 $scope.changeBossInfo = function(boss, difficulty){
                     
@@ -129,6 +129,8 @@ angular.module("BossCollection.controllers")
                     
                 }
                 
+
+
 
 
                 $scope.setUrl = function(newUrl){

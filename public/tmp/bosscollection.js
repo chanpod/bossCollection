@@ -116,39 +116,19 @@ angular.module("BossCollection.controllers", [])
     }])
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$resource',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $resource){
-            
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
             $scope.raiders = [];
             $scope.trialRanks = [9];
-            $scope.raiderRanks = [0, 1, 3, 6];
+            $scope.raiderRanks = [0, 2, 6];
             $scope.guild = "mkdir bosscollection";
             $scope.realm = "zul'jin";
             
             getSavedRanksList();
-            
-            var guildRoster = $resource('/api/test');
-            
-            $scope.restTestGet = function(){
-                guildRoster.get(function(response){
-                    
-                    console.log(response.message);
-                    console.log("We got a response!");
-                })
-            }
-            
-            $scope.restTestPost = function(){
-                var data = {postData: "Message from client"};
-                guildRoster.save(data, function(response){
-                    
-                    console.log(response.message);
-                    console.log("We got a response!");
-                })   
-            }
             
             $scope.getMembers = function(){
                 $scope.raiders = [];
@@ -357,7 +337,7 @@ angular.module("BossCollection.controllers")
                     }
                 };
                 
-                
+
                 
                 $scope.changeBossInfo = function(boss, difficulty){
                     
@@ -384,6 +364,8 @@ angular.module("BossCollection.controllers")
                     
                 }
                 
+
+
 
 
                 $scope.setUrl = function(newUrl){
