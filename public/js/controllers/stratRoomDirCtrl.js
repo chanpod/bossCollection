@@ -78,7 +78,7 @@ angular.module("BossCollection.controllers")
                                 
                         }
                         else if (difficulty == "mythic") {
-                            boss.mythic.videos[boss.heroic.videos.length] =
+                            boss.mythic.videos[boss.mythic.videos.length] =
                                 {
                                     "name": name,
                                     "url": url
@@ -150,19 +150,6 @@ angular.module("BossCollection.controllers")
                         }
                     });
                 }
-                
-                socket.on("addVideoSuccess", function(message){
-                    console.log("Success: " + message);
-                   if(message == "success"){
-                       console.log("Getting updated boss info");
-                       bossStrats.getStrats(desiredRaid);
-                       $scope.addNewBoss = !$scope.addNewBoss;
-                   }
-                });
-
-                socket.on("saveFailed", function(erMsg){
-                    console.log(erMsg);
-                });
                 
                 function resetSelectedBosses(){
                     for(var boss in $scope.raidToDisplay){

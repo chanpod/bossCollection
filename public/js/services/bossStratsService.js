@@ -41,7 +41,7 @@ angular.module("BossCollection.services", [])
                 //socket.emit("saveStrats", parameters);
                 stratsAPI.data = parameters;
                 
-                stratsAPI.$update(function(result){
+                stratsAPI.update(parameters, function(result){
                     console.log("Result: " + result);
                 })
             }

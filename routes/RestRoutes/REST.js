@@ -9,7 +9,7 @@ var bossStrats = require('./bossStratsREST');
 
 
 router.use(function(req,res, next){
-  console.log("It's working?");
+  //console.log("It's working?");
   next();
 })
 

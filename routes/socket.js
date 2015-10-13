@@ -81,38 +81,6 @@ module.exports = function (socket) {
         socket.emit("messagesFromServer", messages);
     });
 
-    socket.on("getBossInfo", function(raid){
-        console.log("BossInfo request made.");
-        var query = {name: raid};
-        console.log(query);
-        mongo.getRaidBossInfo(query).then(function(data){
-
-            console.log(JSON.stringify(data));
-            socket.emit("bossInfoData", data);
-            return data;
-        },
-        function(err){
-            console.log(err);
-        });
-    });
-
-    socket.on("saveStrats", function(newStrats){
-        console.log("Saving New Boss Info");       
-            
-        var newStrats = JSON.parse(newStrats);
-        
-        mongo.saveRaidBossInfo(newStrats.raidData).then(function(result){
-            console.log(result);
-            socket.emit("addVideoSuccess", "success")
-        },
-        function(err){
-            console.log(err);
-            socket.emit("saveFailed", err);
-        })
-        
-
-
-    });
 
     socket.on("createChatroom", function(participants){
         socket.join(participants.user1 + "&" + participants.user2);

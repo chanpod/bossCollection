@@ -6,7 +6,8 @@ var q = require('q');
 router.route('/bossStrats')
   .put(function(req, res){
     
-    var newStrats = JSON.parse(newStrats);    
+    console.log(req.body);
+    var newStrats = req.body;    
     
     mongo.saveRaidBossInfo(newStrats.raidData).then(function (result) {
       console.log(result);
