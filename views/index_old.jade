@@ -1,0 +1,73 @@
+extends layout
+
+block body
+
+    header( class = "navbar navbar-inverse navbar-fixed-top")
+        div(class="container")
+            div(class="navbar-header")
+                button( type = "button", class = "navbar-toggle", data-toggle="collapse", data-target=".navbar-collapse")
+                    span(class = "sr-only") Toggle Navigation
+                    span(class = "icon-bar")
+                    span(class = "icon-bar")
+                    span(class = "icon-bar")
+
+                a(class="navbar-brand", href="/") Boss Collection &nbsp
+
+            div(class="navbar-collapse collapse", id="menuCollapse")
+                ul(class="nav navbar-nav", data-toggle="collapse", data-target=".navbar-collapse.in")
+                    li.dropdown
+                        a(href="#", data-toggle="dropdown").dropdown-toggle 
+                            | Strategy Room
+                            span.caret
+                        ul.dropdown-menu
+                            li
+                                a(href="/strategyRoom/hfc")
+                                    | Hellfire Citadel
+                            li
+                                a(href="/strategyRoom/brf")
+                                    | Blackrock Foundry
+                            li
+                                a(href="/strategyRoom/hm")
+                                    | Highmaul
+                                                        
+                    li
+                        a(href = "https://www.warcraftlogs.com/guilds/36279") Logs
+                    li
+                        a(href="http://bosscollection.enjin.com/forum") Forums
+                    li
+                        a(href="/roster") Guild Roster
+                            
+    div(ng-view)        
+
+    div
+        div.container.footer
+            div.row.text-center
+                h3
+                    | Libraries used
+                div.col-md-6.text-center
+
+                    br
+                    span
+                        a(href = "http://getbootstrap.com/")
+                            | Bootstrap
+                    br
+                    span
+                        | Blizzard api
+                div.col-md-6
+                    br
+                    span
+                        a(a href = "https://angularjs.org/")
+                            | AngularJS
+                    br
+                    span
+                        a(a href = "http://nodejs.org/")
+                            | NodeJS
+
+
+    include partials/home    
+    include partials/strategyRoom
+    include ../public/js/directives/bossStrategyTemplate
+    include partials/videoModal
+    include partials/roster
+    
+    

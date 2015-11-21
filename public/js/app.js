@@ -2,12 +2,12 @@
 
 
 
-angular.module('BossCollection', [  
-  'BossCollection.controllers',  
+angular.module('BossCollection', [
+  'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
   'ngRoute',
-  'ui.bootstrap',
+  //'ui.bootstrap',
   'ngResource',
   'btford.socket-io',
   'ngCookies'
@@ -15,10 +15,11 @@ angular.module('BossCollection', [
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
 }]).
-config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', 
+config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
- 
+
+
 
     $routeProvider.
     when('/', {
