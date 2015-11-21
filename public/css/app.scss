@@ -1,0 +1,461 @@
+/* app css stylesheet */
+
+html, body {
+    font-family: helvetica;
+    background-image: linear-gradient(to bottom, transparent, #2c3e50);
+    height:0;
+    background-color:black;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+
+
+.wellGradient{
+    background-image: linear-gradient(to bottom, #2c3e50, #34495e)
+}
+
+.navbar{
+    margin-bottom:0;
+}
+
+
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
+    color:white;
+}
+
+
+.container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse{
+    background-color:#2c3e50;
+}
+
+.headerLabel{
+    padding-bottom: 50px;
+}
+
+.bossVideoContainer{
+    border-bottom:1px solid black;
+}
+
+.sideNav{
+    background-color:black;
+    color:white;
+}
+
+.noPaddingOrMargin{
+    padding: 0;
+    margin: 0;
+}
+
+.sideNavButtons{
+  width: 100%;
+  background: black;
+  color: white;
+  display: block;
+  border: 0;
+  padding: 15px;
+}
+
+.stratDifficultyButtons{
+  width: 125px;
+  background: black;
+  color: white;
+  display: block;
+  border: 0;
+  padding: 15px;
+}
+
+
+.stratDifficultyButtonsSelected{
+  background: #2c3e50;
+  color: white;
+  border-bottom: 1px solid black;
+
+}
+
+.stratDifficultyButtons:hover{
+    background:white;
+    color:black;
+}
+
+.sideNavButtons:hover{
+    background:white;
+    color:black;
+}
+
+.sideNavButtonSelected{
+    width:100%;
+    background:#2c3e50;
+    color:white;
+}
+
+.rankingImg{
+       position: relative;
+  right: -15%;
+  top: 5%
+}
+
+.boxShadow{
+    box-shadow: 0px 2px 8px 0px #000000;
+}
+
+.pageContainer{
+    background-color: #333;
+  height: 100%;
+  /* overflow: scroll; */
+  padding-bottom: 250px;
+  padding-top: 50px;
+  color: #fff;
+}
+
+.playerBox{
+    width:0;
+    height:100%;
+    font-size:20px;
+    font-family: helvetica;
+    line-height: 50px;
+    box-shadow: 0px 2px 8px 0px #000000;
+
+}
+
+.bossButton{
+    width:100%;
+    height:100px;
+    margin-bottom:5px;
+
+}
+
+.tabHeaders a{
+   color:white;
+}
+
+.angular-google-map-container { height: 400px; }
+
+
+#map-canvas {
+    height: 400px;
+    width:100%;
+}
+
+.progress-data{
+
+    margin-bottom:-75px;
+    margin-top:65px;
+}
+
+
+.wodHeader{
+    background-image: url("/images/expansionBanners/wodbanner.jpg");
+    background-repeat: no-repeat;
+    background-position: 70% 40%;
+    display:block;
+    color:white;
+    background-size: 100%;
+    height:400px;
+
+}
+
+.wodGradient{
+    background-image: linear-gradient(#9D3A00, #CE8000);
+    color:white;
+}
+
+.mopGradient{
+    background-image: linear-gradient(#02403B, #019373);
+    color:white;
+}
+
+.cataGradient{
+    background-image: linear-gradient(#4F1F12, #D57C19);
+    color:white;
+}
+
+.wotlkGradient{
+    background-image: linear-gradient(#0F3352  , #2E8CD0);
+    color:white;
+}
+
+.bcGradient{
+    background-image: linear-gradient(#0D2A14, #718343);
+    color:white;
+}
+
+
+
+.stratModal:hover{
+    cursor: pointer;
+}
+
+@media (max-width: 1200px){
+    h2{
+        font-size: 125%;
+    }
+}
+
+@media (min-width: 1200px){
+    h2{
+        font-size: 150%;
+    }
+}
+
+
+
+.headerRow{
+    border-bottom:1px solid black;
+}
+
+.well{
+    margin:0px;
+
+    border: 0px;
+}
+
+.stratVideos{
+    background-color: black;
+    color:white!important;
+}
+
+
+
+.lootList{
+    background-color: #a335ee;
+    color:white;
+}
+
+span.list-group-item{
+    color:black;
+}
+
+span.list-group-item:hover{
+    cursor:pointer;
+}
+
+a.bossNames{
+    color:white;
+}
+
+.slide.ng-enter, .slide.ng-leave {
+    -webkit-transition:0.5s linear all;
+    transition:0.5s linear all;
+}
+
+.slide.ng-enter { }        /* starting animations for enter */
+.slide.ng-enter.ng-enter-active { } /* terminal animations for enter */
+.slide.ng-leave { }        /* starting animations for leave */
+.slide.ng-leave.ng-leave-active { } /* terminal animations for leave */
+
+.closeButton{
+
+}
+
+a.lootList{
+    color:white;
+}
+
+@media (max-width: 767px) {
+    .videoPlayer{
+        width:100%;
+        height:350px;
+    }
+}
+
+@media (max-width: 567px) {
+    .videoPlayer{
+        width:100%;
+        height:250px;
+    }
+}
+
+@media (min-width: 768px) {
+    .videoPlayer{
+        width:100%;
+        height:500px;
+    }
+}
+.videoModal{
+    width: 100%;
+    height:950px;
+}
+.blueLinks a{
+    color:black;
+
+}
+
+.headerRowBlackBackground{
+    border-bottom:1px solid white;
+}
+
+.blueLinks a:hover{
+    color:white
+}
+
+.guildWell {
+    background-color: #069;
+    color:white;
+}
+
+.guildWell small{
+    color:white;
+}
+
+.footer{
+  background-color: black;
+  color: white;
+  bottom: 0;
+
+}
+
+.center{
+    display: table;
+    margin: 0 auto;
+}
+
+.padding-top{
+    padding-top:15px;
+}
+
+.padding{
+    padding-bottom: 15px;
+}
+
+.margin-bottom{
+    margin-bottom: 15px;
+}
+
+@media (max-width: 767px){
+
+}
+
+@media (min-width: 767px){
+
+}
+
+
+.raidHeaders{
+
+    height:35px;
+}
+
+.heightFix{
+    padding-top:15px;
+}
+
+.mainJumbo{
+    background-color: #069;
+    color:white;
+}
+
+.requiredInfo{
+    width: 100%;
+}
+
+.guildProgression{
+    text-shadow: 1px 1px 1px #000000;
+}
+
+.ShamanClassColor{
+
+    background-color: #0070DE;
+    color:white;
+}
+
+.ShamanClassColor small{
+    color:white;
+}
+
+.DkClassColor{
+
+    background-color: #C41F3B;
+    color:white;
+}
+
+.DkClassColor small{
+    color:white;
+}
+
+.DruidClassColor{
+
+    background-color: #FF7D0A;
+    color:white;
+}
+
+.DruidClassColor small{
+    color:white;
+}
+
+.HunterClassColor{
+
+    background-color: #ABD473;
+    color:black;
+}
+
+.HunterClassColor small{
+    color:black;
+}
+
+.MageClassColor{
+
+    background-color: #69CCF0;
+    color:black;
+}
+
+.MageClassColor small{
+    color:black;
+}
+
+.MonkClassColor{
+
+    background-color: #00FF96;
+    color:black;
+}
+
+.MonkClassColor small{
+    color:black;
+}
+.PaladinClassColor{
+
+    background-color: #F58CBA;
+    color:white;
+}
+
+.PaladinClassColor small{
+    color:white;
+}
+.PriestClassColor{
+
+    background-color: #FFFFFF;
+    color:black;
+}
+
+.PriestClassColor small{
+    color:black;
+}
+.RogueClassColor{
+
+    background-color: #FFF569;
+    color:black;
+}
+
+.RogueClassColor small{
+    color:black;
+}
+.WarlockClassColor{
+
+    background-color: #9482C9;
+    color:black;
+}
+
+.WarlockClassColor small{
+    color:black;
+}
+.WarriorClassColor{
+
+    background-color: #C79C6E;
+    color:black;
+}
+
+.WarriorClassColor small{
+    color:black;
+}
