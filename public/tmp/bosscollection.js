@@ -2,12 +2,12 @@
 
 
 
-angular.module('BossCollection', [  
-  'BossCollection.controllers',  
+angular.module('BossCollection', [
+  'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
   'ngRoute',
-  'ui.bootstrap',
+  //'ui.bootstrap',
   'ngResource',
   'btford.socket-io',
   'ngCookies'
@@ -15,10 +15,11 @@ angular.module('BossCollection', [
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
 }]).
-config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', 
+config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
- 
+
+
 
     $routeProvider.
     when('/', {
@@ -48,6 +49,7 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
   $locationProvider.html5Mode(true);
 
 }]);
+
 'use strict';
 /**
  * This is the description for my class.
@@ -58,62 +60,29 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
 angular.module("BossCollection.controllers", [])
     .controller("homeController", ["$scope", '$location', '$http', '$timeout',
         function($scope, $location, $http, $timeout){
-
+            try{
             (adsbygoogle = window.adsbygoogle || []).push({});
-
-            
-
-            $scope.myInterval = 10000;
-            var listofImages = [{image: '/images/InterfaceSS/defragInterface.jpg', text: "Ortharion's Interface!"},
-                {image: '/images/InterfaceSS/caesarInterface.jpg', text: "Caesar's Interface!"},
-                {image: 'http://i.imgur.com/MGgMDok.jpg', text: "Szii's Interface!"},
-                {image: 'http://i.imgur.com/ePuSV2G.jpg', text: "Natsuri's Interface!"},
-                {image: '/images/InterfaceSS/rayyenInterface.jpg', text: "Rayyan's Interface!"},
-                {image: 'http://i.imgur.com/bf5QUqy.jpg', text: "Ortharion's alternate Interface!"}
-
-            ];
-
-            var slides = $scope.slides = [];
-            $scope.addSlide = function(index) {
-                slides.push(listofImages[index]);
-            };
-
-            for(var i =0; i < listofImages.length; i++) {
-                $scope.addSlide(i);
+            }
+            catch(err){
+              //Don't care, keep going
             }
 
+              $('.parallax').parallax();
 
-        $scope.stroke = 9;
-        $scope.radius = 40;
-        $scope.progressColor = "#069";
-        $scope.bgColor = '#eaeaea';
-        $scope.isSemi = false;
-        $scope.showGuild = false;
+              var options = [
+                {selector: '#staggered-test', offset: 50, callback: 'Materialize.toast("This is our ScrollFire Demo!", 1500 )' },
+                {selector: '#staggered-test', offset: 205, callback: 'Materialize.toast("Please continue scrolling!", 1500 )' },
+                {selector: '#staggered-test', offset: 400, callback: 'Materialize.showStaggeredList("#staggered-test")' },
+                {selector: '#image-test', offset: 500, callback: 'Materialize.fadeInImage("#image-test")' }
+              ];
 
-        $scope.welcomeMessage = "Welcome to Boss Collection's Guild Website.";
-        $scope.guild = "";
-        $scope.realm = "Zul'jin";
-        $scope.characterName = "";
-        $scope.character = {};
-        $scope.classColor = "shamanClassColor";
-        $scope.iLvl = "";
-        $scope.achievmentPoints = $scope.character.achievementPoints;
-        $scope.characterImage = "";
-        $scope.showLoadingGif = false;
+              Materialize.scrollFire(options);
 
 
-        $scope.$watch('character', function (newValue, oldValue) {
-            $scope.achievmentPoints = $scope.character.achievementPoints;
-        }, true);
 
-            $('#getGuildMessage').popover({
-                content: 'Seems to be taking a while. ' +
-                'Did you spell the guild name correctly? Sometimes this functionality can be blocked by corporate firewalls.' +
-                    'Could be something just broke :( ',
-                trigger: 'manual'
-            })
 
     }])
+
 'use strict';
 angular.module("BossCollection.controllers")    
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies',

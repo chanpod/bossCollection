@@ -9,7 +9,9 @@ html(ng-app="BossCollection")
     base(href='/')
     title BossCollection
 
-    link(rel='stylesheet', href='js/lib/bootstrap-3.3.5/css/bootstrap.min.css')
+    //link(rel='stylesheet', href='js/lib/bootstrap-3.3.5/css/bootstrap.min.css')
+    link(rel = "stylesheet", href="http://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel = "stylesheet", href="js/lib/materialize/css/materialize.min.css")
 
 
     link(rel='stylesheet', href='/tmp/bosscollection.min.css')
@@ -22,6 +24,8 @@ html(ng-app="BossCollection")
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-56619501-1', 'auto');
         ga('send', 'pageview');
+        
+        
 
     body
         script(src='js/lib/angular/angular.js')
@@ -31,8 +35,9 @@ html(ng-app="BossCollection")
         script(src='js/lib/angular/angular-resource.js')
         script(src='js/lib/angular/angular-route.js')
         script(src='js/lib/jquery-2.1.1.js')
-        script(src='js/lib/bootstrap-3.3.5/js/bootstrap.min.js')
-        script(src='js/lib/bootstrap-3.3.5/js/ui-bootstrap-tpls-0.13.1.min.js')
+        script(src='js/lib/materialize/js/materialize.min.js')
+        //script(src='js/lib/bootstrap-3.3.5/js/bootstrap.min.js')
+        //script(src='js/lib/bootstrap-3.3.5/js/ui-bootstrap-tpls-0.13.1.min.js')
         script(src='js/lib/angular-socket-io-master/mock/socket-io.js')
         script(src='js/lib/angular-socket-io-master/socket.js')
         script(src='js/lib/socket.io.js')
@@ -42,4 +47,8 @@ html(ng-app="BossCollection")
 
 
         block body
-
+          
+        script.
+          $(".dropdown-button").dropdown();
+          $(".button-collapse").sideNav();
+          
