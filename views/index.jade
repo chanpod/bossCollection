@@ -55,19 +55,16 @@ block body
         div.col.16.s6
           h5.white-text
             | Libraries
-        div.col.14.offset-12.s6
-          h5.white-text
-            | Links
-          ul  
-            li
-              a(href = "http://materializecss.com/").grey-text.text-lighten-3
+        div.col.14.offset-12.s6          
+          div.collection
+              a(href = "http://materializecss.com/", class = "waves-effect waves-light collection-item btn")
                 | Materialize
-                a(href = "#!").grey-text.text-lighten-3
-                  | Blizzard api
-                a(href = "http://angularjs.org/").grey-text.text-lighten-3
-                  | AngularJS
-                a(href = "http://nodejs.org/").grey-text.text-lighten-3
-                  | NodeJS
+              a(href = "#!", class = "waves-effect waves-light collection-item btn")
+                | Blizzard api
+              a(href = "http://angularjs.org/", class = "waves-effect waves-light collection-item btn")
+                | AngularJS
+              a(href = "http://nodejs.org/", class = "waves-effect waves-light collection-item btn")
+                | NodeJS
 
 
     include partials/home    
