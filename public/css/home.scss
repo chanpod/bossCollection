@@ -1,3 +1,7 @@
 .nav{
   @extend .blue, .darken-4;  
 }
+
+.adjustForHomepage{
+  padding-top:0 !important;
+}
