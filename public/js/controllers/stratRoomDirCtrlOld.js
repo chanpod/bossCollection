@@ -1,14 +1,12 @@
 'use strict'
 angular.module("BossCollection.controllers")    
-    .controller("bossStrategyController", ['$scope', 'bossStrats', 'socketProvider','$routeParams',
-            function($scope, bossStrats, socketProvider, routeParams){
+    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider','$routeParams',
+            function($scope, bossStrats, $modal, socketProvider, routeParams){
 
                 var socket = socketProvider;
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
-                
-                $('.modal-trigger').leanModal();
                 
                 try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -142,8 +140,17 @@ angular.module("BossCollection.controllers")
                 $scope.open = function (url) {
                     $scope.setUrl(url);
                     console.log(url);
-                    $('#bossVideo').openModal();
-                    
+                    var modalInstance = $modal.open({
+                        templateUrl: 'videoModal',
+                        controller: 'videoController',
+                        size: 'lg',
+                        windowClass: "videoModal",
+                        resolve: {
+                            currentUrl: function () {
+                                return  $scope.currentEmbedUrl;
+                            }
+                        }
+                    });
                 }
                 
                 function resetSelectedBosses(){
