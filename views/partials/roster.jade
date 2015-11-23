@@ -53,9 +53,12 @@ script#roster(type="text/ng-template")
                         div.col.s6.center-align
                               button(ng-click = "saveRanksList()").btn.btn-primary.waves-effect.waves-light
                                     | Save Ranks
-      div.card
+      div.card            
+  
             div.row.card-content
-                  div.row
+                  div(ng-show = "loading").row
+                        div.progress
+                              div.indeterminate
                   h1.text-center.headerRow
                         | Trials ({{trials.length}})
                   

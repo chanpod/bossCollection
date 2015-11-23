@@ -11,18 +11,25 @@ angular.module("BossCollection.controllers")
             $scope.raiderRanks = [0, 2, 6];
             $scope.guild = "mkdir bosscollection";
             $scope.realm = "zul'jin";
-            
+            $scope.loading = true;
             getSavedRanksList();
             
             $scope.getMembers = function(){
+                
                 $scope.raiders = [];
                 $scope.trials = [];
-                console.log("Function called");
+                
+                $scope.loading = true;
+                
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
+                    
                     console.log(data);
+                    $scope.loading = false;
                     parseMembers(data);
                 },
                 function(err){
+                    
+                    $scope.loading = false;
                     console.log(err);
                 });
             }
