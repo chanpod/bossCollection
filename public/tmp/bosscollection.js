@@ -85,8 +85,8 @@ angular.module("BossCollection.controllers", [])
 
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             $scope.trials = [];
@@ -97,6 +97,9 @@ angular.module("BossCollection.controllers")
             $scope.guild = "mkdir bosscollection";
             $scope.realm = "zul'jin";
             $scope.loading = true;
+            $scope.genders = ['Male', 'Female']
+            
+            
             getSavedRanksList();
             
             $scope.getMembers = function(){
@@ -125,6 +128,12 @@ angular.module("BossCollection.controllers")
                    
                    console.log(data);
                 });
+            }
+            
+            $scope.openArmoryProfile = function(name, realm){
+                
+                var armoryURL = "http://us.battle.net/wow/en/character/" + realm +"/" + name + "/simple";
+                window.open(armoryURL);
             }
             
             $scope.saveRanksList = function(){
@@ -165,7 +174,10 @@ angular.module("BossCollection.controllers")
                                 "name": membersObject[i].character.name,
                                 "class": clss.charAt(0).toUpperCase() + clss.slice(1),
                                 "rank" : rnk,
+                                "gender" : $scope.genders[membersObject[i].character.gender],
+                                "race" : membersObject[i].character.race,
                                 "spec" : membersObject[i].character.spec.name,
+                                "achievementPoints": membersObject[i].character.achievementPoints,
                                 "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
                             }
                             
