@@ -101,6 +101,7 @@ angular.module("BossCollection.controllers")
             
             
             getSavedRanksList();
+            $('ul.tabs').tabs();
             
             $scope.getMembers = function(){
                 
