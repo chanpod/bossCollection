@@ -87,21 +87,27 @@ angular.module("BossCollection.controllers", [])
 angular.module("BossCollection.controllers")    
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
         function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
+            
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
-            $scope.trials = [];
-            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock","monk","druid"]
+            
+            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
             $scope.raiders = [];
+            $scope.trials = [];
+            
             $scope.trialRanks = [9];
             $scope.raiderRanks = [0, 2, 6];
+            
             $scope.guild = "mkdir bosscollection";
             $scope.realm = "zul'jin";
+            
             $scope.loading = true;
             $scope.genders = ['Male', 'Female']
             
             
             getSavedRanksList();
-            $('ul.tabs').tabs();
+            $('ul.tabs').tabs(); //jquery
             
             $scope.getMembers = function(){
                 
@@ -112,7 +118,7 @@ angular.module("BossCollection.controllers")
                 
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
                     
-                    console.log(data);
+                    //console.log(data);
                     $scope.loading = false;
                     parseMembers(data);
                 },
@@ -154,6 +160,7 @@ angular.module("BossCollection.controllers")
                 var ranksList = $cookies.getObject("ranksList");
                 
                 if(ranksList){
+                    
                     $scope.raiderRanks = ranksList.raiderRanks;
                     $scope.trialRanks = ranksList.trialRanks;
                     $scope.guild = ranksList.guild;
@@ -161,46 +168,51 @@ angular.module("BossCollection.controllers")
                 }
             }
             
-            var parseMembers = function(membersObject){
-                //var $scope.raiderRanks = [0, 1, 3, 5];
-                //var trialRank = 8;
+            var buildRaiderObject = function(raider, rank, classType){
+                
+                try {
+
+                    var newMember = {
+                        "name": raider.character.name,
+                        "class": classType.charAt(0).toUpperCase() + classType.slice(1),
+                        "rank": rank,
+                        "gender": $scope.genders[raider.character.gender],
+                        "race": raider.character.race,
+                        "spec": raider.character.spec.name,
+                        "achievementPoints": raider.character.achievementPoints,
+                        "avatar": "http://us.battle.net/static-render/us/" + raider.character.thumbnail
+                    }
+
+                    return newMember;
+                }
+                catch(err){
+                    console.log(raider);
+                }
+            }
+            
+            var parseMembers = function(membersObject){               
                 
                 for(var i = 0; i < membersObject.length; i++){
-                    var rnk = membersObject[i].rank
-                    for(var j = 0; j < $scope.raiderRanks.length; j++){
-                        if($scope.raiderRanks[j] == rnk){
-                            
-                            var clss = classes[membersObject[i].character.class];
-                            var newMember = {
-                                "name": membersObject[i].character.name,
-                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
-                                "rank" : rnk,
-                                "gender" : $scope.genders[membersObject[i].character.gender],
-                                "race" : membersObject[i].character.race,
-                                "spec" : membersObject[i].character.spec.name,
-                                "achievementPoints": membersObject[i].character.achievementPoints,
-                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
-                            }
-                            
-                            $scope.raiders.push(newMember);
-                        }
-                        
+                    
+                    var memberRank = membersObject[i].rank
+                    
+                    var raiderRankValid = _.find($scope.raiderRanks, function(rank){
+                        return memberRank == rank;
+                    })
+                    
+                    var trialRankValid = _.find($scope.trialRanks, function(rank){
+                        return memberRank == rank;
+                    })
+                    
+                    var classType = classes[membersObject[i].character.class];
+                    
+                    if (raiderRankValid) {
+
+                        $scope.raiders.push(buildRaiderObject(membersObject[i], memberRank, classType));
                     }
                     
-                    for(var j = 0; j < $scope.trialRanks.length; j++){
-                        if($scope.trialRanks[j] == rnk){
-                   
-                            var clss = classes[membersObject[i].character.class];
-                            var newMember = {
-                                "name": membersObject[i].character.name,
-                                "class": clss.charAt(0).toUpperCase() + clss.slice(1),
-                                "rank" : rnk,
-                                "spec" : membersObject[i].character.spec.name,
-                                "avatar" : "http://us.battle.net/static-render/us/" + membersObject[i].character.thumbnail
-                            }
-                            
-                            $scope.trials.push(newMember);
-                        }
+                    if(trialRankValid){
+                        $scope.trials.push(buildRaiderObject(membersObject[i], memberRank, classType));
                     }
                 }
                 

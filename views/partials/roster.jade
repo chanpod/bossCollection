@@ -52,7 +52,7 @@ script#roster(type="text/ng-template")
                                     | Get Roster
                         div.col.s6.center-align
                               button(ng-click = "saveRanksList()").btn.btn-primary.waves-effect.waves-light
-                                    | Save Ranks
+                                    | Save Settings
       div.card            
             div(ng-show = "loading").row
                         div.progress
@@ -63,50 +63,54 @@ script#roster(type="text/ng-template")
                         
                               ul.tabs
                                     li.tab.col.s6
-                                          div.collapsible-header
+                                          div
                                                 a(href = "#trials")
                                                       | Trials ({{trials.length}})
                                     li.tab.col.s6
-                                          div.collapsible-header
+                                          div
                                                 a(href = "#raiders")
                                                       | Raiders ({{raiders.length}})
                         div(id="trials").col.s12
-                              div.collapsible-body
-                                    div(ng-repeat = "player in trials", data-max-size = "10", data-num-pages = "5", data-current-page = "0", data-boundary-links = "true")
-                                          div().col.s12.m6
-                                                div().card.blue-grey.darken-1.white-text.z-depth-3                  
-                                                      div.cart-content
-                                                            div.row
-                                                                  div.col.s2.m2
-                                                                        p
-                                                                              img(src= "{{player.avatar}}").pull-left.circle
-                                                                  div.col.s8.m8
-                                                                        span.card-title.center
-                                                                              | {{player.name}}
-                                                                              
-                                                                  div.right.hide-on-small-only
-                                                                        a(target="_blank", href = "http://us.battle.net/wow/en/character/{{realm}}/{{player.name}}/simple", class = "btn-floating btn-large waves-effect waves-light")
-                                                                              i.material-icons
-                                                                                    | open_in_new
-                                                            div.row
-                                                                  a.btn.activator                                          
-                                                                        | More...
-                                                      div.card-reveal.grey-text.text-darken-4
-                                                            span.card-title
-                                                                  | {{player.name}}
-                                                                  i.material-icons.right
-                                                                        | close
-                                                            div.row
-                                                                  div.col.s6.offset-s2.m6.center-align
-                                                                        | Class: &nbsp{{player.class}}   
-                                                                  div.col.s6.m6.center-align
-                                                                        | Spec: &nbsp{{player.spec}}
-                                                            div.row
-                                                                  div.col.s6.m6.center-align
-                                                                        | Gender: &nbsp{{player.gender}}
-                                                                  div.col.s6.m6.center-align
-                                                                        | Achievements: &nbsp {{player.achievementPoints}}
-                                          ul.pagination
+                              div(ng-repeat = "player in trials | filter:filterRoster")
+                                    div().col.s12.m6
+                                          div().card.blue-grey.darken-1.white-text.z-depth-3                  
+                                                div.cart-content
+                                                      div.row
+                                                            div.col.s2.m2
+                                                                  p
+                                                                        img(src= "{{player.avatar}}").pull-left.circle
+                                                            div.col.s8.m8
+                                                                  span.card-title.center
+                                                                        | {{player.name}}
+                                                                        
+                                                            div.right.hide-on-small-only
+                                                                  a(target="_blank", href = "http://us.battle.net/wow/en/character/{{realm}}/{{player.name}}/simple", class = "btn-floating btn-large waves-effect waves-light")
+                                                                        i.material-icons
+                                                                              | open_in_new
+                                                      div.row
+                                                            a.btn.activator                                          
+                                                                  | More...
+                                                div.card-reveal.grey-text.text-darken-4
+                                                      span.card-title
+                                                            | {{player.name}}
+                                                            i.material-icons.right
+                                                                  | close
+                                                      div.row
+                                                            div.col.s6.offset-s2.m6.center-align
+                                                                  | Class: &nbsp{{player.class}}   
+                                                            div.col.s6.m6.center-align
+                                                                  | Spec: &nbsp{{player.spec}}
+                                                      div.row
+                                                            div.col.s6.m6.center-align
+                                                                  | Gender: &nbsp{{player.gender}}
+                                                            div.col.s6.m6.center-align
+                                                                  | Achievements: &nbsp {{player.achievementPoints}}
+                  div.row
+                        div().col.s12.m12
+                              div.row
+                                    div.input-field.col.s12
+                                          input(placeholder = "Search...", id="filterInput", type = "text", ng-model = "filterRoster")
+                                          label(for = "filterInput") Search
                   div(id="raiders").col.s12
                         div.row.hide                        
                               div.col.s0
@@ -145,7 +149,7 @@ script#roster(type="text/ng-template")
                               div.col.s0
                                     div.chip
                                           | Mage 3
-                        div(ng-repeat = "player in raiders")
+                        div(ng-repeat = "player in raiders | filter:filterRoster")
                               div().col.s12.m6
                                     div().card.blue-grey.darken-1.white-text.z-depth-3                  
                                           div.cart-content
