@@ -70,6 +70,12 @@ script#roster(type="text/ng-template")
                                           div
                                                 a(href = "#raiders")
                                                       | Raiders ({{raiders.length}})
+                        div.row
+                              div().col.s12.m12
+                                    div.row
+                                          div.input-field.col.s12
+                                                input(placeholder = "Search...", id="filterInput", type = "text", ng-model = "filterRoster")
+                                                label(for = "filterInput") Search
                         div(id="trials").col.s12
                               div(ng-repeat = "player in trials | filter:filterRoster")
                                     div().col.s12.m6
@@ -105,12 +111,7 @@ script#roster(type="text/ng-template")
                                                                   | Gender: &nbsp{{player.gender}}
                                                             div.col.s6.m6.center-align
                                                                   | Achievements: &nbsp {{player.achievementPoints}}
-                  div.row
-                        div().col.s12.m12
-                              div.row
-                                    div.input-field.col.s12
-                                          input(placeholder = "Search...", id="filterInput", type = "text", ng-model = "filterRoster")
-                                          label(for = "filterInput") Search
+                  
                   div(id="raiders").col.s12
                         div.row.hide                        
                               div.col.s0
