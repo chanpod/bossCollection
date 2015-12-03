@@ -112,61 +112,28 @@ script#roster(type="text/ng-template")
                                                             div.col.s6.m6.center-align
                                                                   | Achievements: &nbsp {{player.achievementPoints}}
                   
-                  div(id="raiders").col.s12
-                        div.row.hide                        
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
-                              div.col.s0
-                                    div.chip
-                                          | Mage 3
+                  div(id="raiders").col.s12                        
                         div(ng-repeat = "player in raiders | filter:filterRoster")
-                              div().col.s12.m6
-                                    div().card.blue-grey.darken-1.white-text.z-depth-3                  
+                              div().col.s12.m6                                    
+                                    div().card.blue.lighten-5                 
+                                          div(class="card-image")
+                                                img(src="images/classBackdrops/{{player.class}}.jpg")
+                                                span(class="card-title") {{player.name}}
+                                                      
                                           div.cart-content
                                                 div.row
                                                       div.col.s2.m2
                                                             p
-                                                                  img(src= "{{player.avatar}}").pull-left.circle
+                                                                  //img(src= "{{player.avatar}}").pull-left.circle
                                                       div.col.s8.m8
                                                             span.card-title.center
-                                                                  | {{player.name}}
+                                                                  //| {{player.name}}
                                                                   
                                                       div.right.hide-on-small-only
-                                                            a(target="_blank", href = "http://us.battle.net/wow/en/character/{{realm}}/{{player.name}}/simple", class = "btn-floating btn-large waves-effect waves-light")
+                                                            a(target="_blank", href = "http://us.battle.net/wow/en/character/{{realm}}/{{player.name}}/simple", class = "btn waves-effect waves-light")
                                                                   i.material-icons
                                                                         | open_in_new
-                                                div.row
+                                                
                                                       a.btn.activator                                          
                                                             | More...
                                           div.card-reveal.grey-text.text-darken-4
