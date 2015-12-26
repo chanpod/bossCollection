@@ -27,7 +27,7 @@
     "grunt": "~0.4.5"
   },
   "scripts": {
-    "start": "node server"
+    "start": "node server/server"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

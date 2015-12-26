@@ -33,7 +33,7 @@ angular.module("BossCollection.controllers")
                 
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
                     
-                    //console.log(data);
+                    console.log(data);
                     $scope.loading = false;
                     parseMembers(data);
                 },
