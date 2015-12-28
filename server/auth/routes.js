@@ -14,20 +14,50 @@ var router = express.Router();
         next();
     })
     
+    router.post('/loggedin', function(req, res){
+        
+        console.log("Checking user...");
+        
+        if(req.session.user){
+            console.log("We're logged in...");
+            
+            console.log(req.session.user);
+            res.json({loggedIn: true, user: req.session.user});
+        }
+        else{
+            console.log("Not logged in...");
+            res.json({loggedIn: false});
+        }
+    })
+    
+    router.post('/logout', function(req, res){
+        
+        console.log("Logging out...");
+        req.session.destroy();
+        
+        res.json({loggedOut: true});;
+    })
+    
 	router.get('/login', function(req, res){
         console.log("get auth /login")
 	// check if the user's credentials are saved in a cookie //
         console.log(req.cookies);
-		if (req.cookies.user == undefined || req.cookies.pass == undefined){
+        console.log(req.cookies.name);
+        console.log(req.cookies.password);
+		if (req.cookies.name == undefined || req.cookies.password == undefined){
             console.log("Rendering auth view");
 			res.render('index', { title: 'Hello - Please Login To Your Account' });
 		}	else{
 	// attempt automatic login //
-			AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){
-				if (o != null){
-				    req.session.user = o;
-					res.redirect('/forum');
+            console.log("auto logging in");
+			AM.autoLogin(req.cookies.name, req.cookies.password, function(user){
+				if (user != null){
+                    console.log("setting user to session");
+				    req.session.user = user;
+					res.redirect('/');
 				}	else{
+                    console.log("Log in failed...");
+                    console.log(user);
 					res.render('index', { title: 'Hello - Please Login To Your Account' });
 				}
 			});
@@ -40,16 +70,22 @@ var router = express.Router();
         console.log(req.body);
 		AM.manualLogin(req.body.name, req.body.password, function(err, user){
             
+            console.log(user);
+            
 			if (!user){
 				res.status(400).send(err);
 			}	else{
                 
 				req.session.user = user;
                 
-				if (req.body.rememberMe == 'true'){
+				if (req.body.rememberMe == true){
+                    console.log("Remember me set...");
 					res.cookie('name', user.name, { maxAge: 900000 });
 					res.cookie('password', user.password, { maxAge: 900000 });
 				}
+                else{
+                    console.log("REmember me not set");
+                }
 				res.status(200).send(user);
 			}
 		});
@@ -61,11 +97,9 @@ var router = express.Router();
         console.log("auth /forum")
 		if (req.session.user == null){
 	// if user is not logged-in redirect back to login page //
-			res.redirect('/login');
+			res.redirect('/auth/login');
 		}	else{
-			res.render('login', {
-				title : 'Login',
-				countries : CT,
+			res.render('index', {							
 				udata : req.session.user
 			});
 		}

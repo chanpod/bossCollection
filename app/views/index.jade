@@ -1,21 +1,19 @@
 extends layout
 
 block body
-
-    //-ul(id="dropdown1", class = "dropdown-content")
+  div(ng-controller = "navbar")
+    ul(id="userDropdown", class = "dropdown-content")
       li
-        a(href="#!", class = "waves-effect waves-light") Hellfire Citdael
+        a(href="#!", class = "waves-effect waves-light") Edit (doesn't work yet)
+      li()
+        a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
+      
+      
+    ul(id="userDropdownMobile", class = "dropdown-content")
       li
-        a(href="#!", class = "waves-effect waves-light") Blackrock Foundry
-      li
-        a(href="/strategyRoom/hm", class = "waves-effect waves-light") Highmaul
-    //-ul(id="dropdown2", class = "dropdown-content")
-      li
-        a(href="#!", class = "waves-effect waves-light") Hellfire Citdael
-      li
-        a(href="#!", class = "waves-effect waves-light") Blackrock Foundry
-      li
-        a(href="/strategyRoom/hm", class = "waves-effect waves-light") Highmaul
+        a(href="#!", class = "waves-effect waves-light") Edit (doesn't work yet)
+      li()
+        a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
     nav(class = "transparent")
       div(class = "nav-wrapper")
         a(href="/", class = "brand-logo waves-effect waves-light") BossCollection
@@ -30,11 +28,11 @@ block body
             a(href="/roster", class = "waves-effect waves-light") Guild Roster
           li
             a(href="http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection", class = "waves-effect waves-light")
-              | Progression
-          //-li
-            a(data-activates = "dropdown1", class = "waves-effect waves-light dropdown-button")
-              | Strategy Room
+              | Progression           
+            a(ng-show = "loggedIn", data-activates = "userDropdown", class = "waves-effect waves-light dropdown-button")
+              | {{user.name}}
               i(class = "material-icons right") arrow_drop_down
+            a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
         ul(id = "sideNavMobile", class = "side-nav")
           li
             a(href="https://www.warcraftlogs.com/guilds/36279", class = "waves-effect waves-light") Logs
@@ -42,8 +40,13 @@ block body
             a(href="http://bosscollection.enjin.com/forum", class = "waves-effect waves-light") Forums
           li
             a(href="/roster", class = "waves-effect waves-light") Guild Roster
+          li
+            a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
+            a(ng-show = "loggedIn", data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
+              | {{user.name}}
+              i(class = "material-icons right") arrow_drop_down
           //-li
-            a(data-activates = "dropdown2", class = "waves-effect waves-light dropdown-button")
+            a(data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
               | Strategy Room
               i(class = "material-icons right") arrow_drop_down
             

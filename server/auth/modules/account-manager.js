@@ -22,11 +22,11 @@ var accounts = db.collection('accounts');
 
 /* login validation methods */
 
-exports.autoLogin = function(user, pass, callback)
+exports.autoLogin = function(name, password, callback)
 {
-	accounts.findOne({user:user}, function(e, o) {
+	accounts.findOne({name:name}, function(e, o) {
 		if (o){
-			o.pass == pass ? callback(o) : callback(null);
+			o.password == password ? callback(o) : callback(null);
 		}	else{
 			callback(null);
 		}
@@ -35,11 +35,14 @@ exports.autoLogin = function(user, pass, callback)
 
 exports.manualLogin = function(user, pass, callback)
 {
-	accounts.findOne({user:user}, function(e, o) {
+	accounts.findOne({name:user}, function(e, o) {
+        
 		if (o == null){
 			callback('user-not-found');
 		}	else{
-			validatePassword(pass, o.pass, function(err, res) {
+            console.log(pass);
+            console.log(o.password);
+			validatePassword(pass, o.password, function(err, res) {
 				if (res){
 					callback(null, o);
 				}	else{
@@ -55,7 +58,7 @@ exports.manualLogin = function(user, pass, callback)
 exports.addNewAccount = function(newData, callback)
 {
     
-	accounts.findOne({user:newData.user}, function(e, o) {
+	accounts.findOne({name:newData.name}, function(e, o) {
 		if (o){
 			callback('username-taken');
 		}	else{
@@ -63,8 +66,8 @@ exports.addNewAccount = function(newData, callback)
 				if (o){
 					callback('email-taken');
 				}	else{
-					saltAndHash(newData.pass, function(hash){
-						newData.pass = hash;
+					saltAndHash(newData.password, function(hash){
+						newData.password = hash;
 					// append date stamp when record was created //
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 						accounts.insert(newData, {safe: true}, callback);
@@ -77,19 +80,23 @@ exports.addNewAccount = function(newData, callback)
 
 exports.updateAccount = function(newData, callback)
 {
-	accounts.findOne({user:newData.user}, function(e, o){
+	accounts.findOne({name:newData.name}, function(e, o){
+        
 		o.name 		= newData.name;
 		o.email 	= newData.email;
-		o.country 	= newData.country;
-		if (newData.pass == ''){
+
+		if (newData.password == ''){
 			accounts.save(o, {safe: true}, function(err) {
 				if (err) callback(err);
 				else callback(null, o);
 			});
 		}	else{
-			saltAndHash(newData.pass, function(hash){
-				o.pass = hash;
+            
+			saltAndHash(newData.password, function(hash){
+                
+				o.password = hash;
 				accounts.save(o, {safe: true}, function(err) {
+                    
 					if (err) callback(err);
 					else callback(null, o);
 				});
@@ -101,11 +108,14 @@ exports.updateAccount = function(newData, callback)
 exports.updatePassword = function(email, newPass, callback)
 {
 	accounts.findOne({email:email}, function(e, o){
+        
 		if (e){
 			callback(e, null);
 		}	else{
+            
 			saltAndHash(newPass, function(hash){
-		        o.pass = hash;
+                
+		        o.password = hash;
 		        accounts.save(o, {safe: true}, callback);
 			});
 		}
@@ -126,7 +136,7 @@ exports.getAccountByEmail = function(email, callback)
 
 exports.validateResetLink = function(email, passHash, callback)
 {
-	accounts.find({ $and: [{email:email, pass:passHash}] }, function(e, o){
+	accounts.find({ $and: [{email:email, password:passHash}] }, function(e, o){
 		callback(o ? 'ok' : null);
 	});
 }
@@ -172,6 +182,7 @@ var validatePassword = function(plainPass, hashedPass, callback)
 {
 	var salt = hashedPass.substr(0, 10);
 	var validHash = salt + md5(plainPass + salt);
+    console.log(validHash);
 	callback(null, hashedPass === validHash);
 }
 
