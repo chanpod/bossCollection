@@ -3,6 +3,8 @@ var express = require('express');
 var router = express.Router();
 var authentication = require('../auth/routes.js');
 var RESTserver = require('./RestRoutes/REST.js');
+var forums = require('./forums/routes.js');
+
 
 /*
  * GET home page.
@@ -19,9 +21,14 @@ exports.index = function(req, res, next){
 */
 
 module.exports = function(app){
-
+    
+    router.use(function(req, res, next){
+        console.log("All routes go through me first.");
+        next();
+    })
 
     app.use('/auth', authentication);
+    app.use('/forum', forums);
 
 
     router.get('/', function(req, res){

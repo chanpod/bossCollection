@@ -118,6 +118,63 @@ angular.module("BossCollection.controllers")
     }])
 
 'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
+        function($scope, $location, $http, userLoginSrvc, $rootScope){
+            
+        console.log("Working?");
+
+        $scope.user = {};
+        $scope.user.name = userLoginSrvc.getUser();
+        $scope.loggedIn = false;
+        
+        
+        
+        $rootScope.$on("loggedin", function(event, user){
+            
+            console.log(user);
+            
+            if(user.name){
+                $scope.user.name = user.name;
+            }
+            else{
+                
+                $scope.user.name = userLoginSrvc.getUser();    
+            }
+            
+            $scope.loggedIn = user.loggedIn;
+            
+        })
+        
+        $scope.logout = function(){
+            
+            userLoginSrvc.logout().then(function(response){
+                //navigate to some page
+                
+            },
+            function(err){
+                console.log(err);
+            })
+        }
+        
+        
+        $scope.areWeLoggedIn = function(){
+            
+            userLoginSrvc.currentlyLoggedIn().then(function(response){
+                
+                console.log(response);
+                $scope.loggedIn = response;
+            })
+        }
+        
+        $scope.areWeLoggedIn();
+
+    }])
+
+'use strict';
 angular.module("BossCollection.controllers")    
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
         function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
@@ -787,7 +844,7 @@ angular.module("BossCollection.services")
 'use strict';
 
 angular.module("BossCollection.services")
-    .factory('userLoginSrvc', ['$resource', '$q', function ($resource, $q) {
+    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope', function ($resource, $q, $location, $cookies, $rootScope) {
         
         var registration = $resource('/auth/signup', {},
             {
@@ -795,10 +852,78 @@ angular.module("BossCollection.services")
             })
         
         var login = $resource('/auth/login', {}, {})
-        
+        var logout = $resource('/auth/logout', {}, {});
+        var loggedIn = $resource('/auth/loggedin', {}, {});
         
         var loginApi = {
-
+            
+            getUser: function(){
+                
+                return $cookies.get("name");  
+            },
+            currentlyLoggedIn: function(){
+                
+                var defer = $q.defer();
+                var loggedInBool = false;
+                
+                loggedIn.save({}).$promise.then(function(response){                
+                    
+                    if(response.loggedIn == true){
+                        $cookies.put("name", response.user.name);
+                        loggedInBool = true;    
+                        $rootScope.$broadcast("loggedin", {name: response.user.name, loggedIn: true});
+                    }
+                    else{
+                        
+                        loggedInBool = false;
+                    }
+                    
+                    
+                    console.log(response);
+                    defer.resolve(loggedInBool);
+                    
+                    //$cookies.set("name", response)
+                },
+                function(err){
+                    
+                    console.log(err);
+                    defer.reject(err);
+                    
+                })
+                
+                return defer.promise; 
+            },
+            logout: function(){
+                
+                var defer = $q.defer();
+               
+                
+                logout.save({}).$promise.then(function(result){
+                    
+                    if(result.loggedOut == true){
+                        
+                        $cookies.remove("name");
+                        $cookies.remove("password");
+                        $rootScope.$broadcast("loggedin" , {loggedIn: false});
+                    }
+                    
+                    $location.path("/");
+                    
+                }, function(){
+                    
+                    console.log("WTF, delete cookies anyways...");
+                    
+                    $cookies.remove("name");
+                    $cookies.remove("password");
+                    $rootScope.$broadcast("loggedin", {loggedIn: false});
+                    
+                    $location.path("/");
+                })
+                
+                
+                
+                return defer.promise;
+            },
             registerNewUser: function (newUser) {
                 
                 var defer = $q.defer();
@@ -810,10 +935,26 @@ angular.module("BossCollection.services")
                 
                 registration.save(newUser).$promise.then(function(result){
                     
-                    console.log("Result: " );
+                    console.log("Registration successfull. Attempting login");
                     console.log(result);
                     
-                    defer.resolve(result.result);
+                    var userAutoLogin = {
+                        name: result.name,
+                        password: newUser.password
+                    }
+                    
+                    login(userAutoLogin).then(function(result){
+                        console.log("Auto login successfull.");
+                        defer.resolve(true);
+                    },
+                    function(err){
+                        
+                        console.log(err);
+                        defer.reject(err);
+                    })
+                    
+                    
+                    $location.path("/auth/login");
                 })
                 
                 return defer.promise;
@@ -823,7 +964,9 @@ angular.module("BossCollection.services")
                 
                 login.save(user).$promise.then(function(result){
                     
-                    
+                    $cookies.put("name", user.name);
+                    $rootScope.$broadcast("loggedin", {name: user.name, loggedIn:true});
+                    $location.path("/");
                     
                 })
                 
