@@ -34,6 +34,14 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'roster',
         controller: 'rosterController'
     }).
+    when('/auth/login', {
+        templateUrl: 'login',
+        controller: 'loginController'
+    }).
+    when('/auth/signup', {
+        templateUrl: 'signup',
+        controller: 'signupController'
+    }).
     otherwise({
       redirectTo: '/'
     });

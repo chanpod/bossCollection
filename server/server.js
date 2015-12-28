@@ -5,17 +5,20 @@
 
 var express = require('express'),
   bodyParser = require('body-parser'),
-  methodOverride = require('method-override'),
-  routes = require('./routes'),  
-  mongoApi = require('./routes/RestRoutes/REST.js'),
-  path = require('path');
+  methodOverride = require('method-override'),  
+  RESTserver = require('./routes/RestRoutes/REST.js'),
+  path = require('path'),
+  session = require('express-session'),
+  MongoStore = require('connect-mongo')(session),
+  mongoose = require('mongoose'),  
+  cookieParser = require('cookie-parser'),
+  socketapi = require('./routes/socket.js');
   
-var socketapi = require('./routes/socket.js');  
+  
+//var authentication = require('./routes/authentication.js');
 
-var authentication = require('./routes/authentication.js');
   
-var mongoose = require('mongoose');  
-var cookieParser = require('cookie-parser');
+
 
 var app = express();
 var port = process.env.PORT || 4000;
@@ -43,19 +46,25 @@ app.use(cookieParser());
 
 mongoose.connect('mongodb://127.0.0.1:27017/passport_local_mongoose_express4');
 
+app.use(session({
+	secret: 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4',
+	proxy: true,
+	resave: true,
+	saveUninitialized: true,
+	store: new MongoStore({ host: 'localhost', port: 27017, db: 'node-login'})
+	})
+);
 
 /**
  * Routes
  */
 
-//app.use(authentication);
+
+
 
 var router = express.Router();
+var routes = require('./routes/router.js')(app);
 
-router.get('/', routes.index);
-
-app.use('/*', router);
-app.use('/api', mongoApi)
 
 
 

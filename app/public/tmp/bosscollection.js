@@ -34,6 +34,14 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'roster',
         controller: 'rosterController'
     }).
+    when('/auth/login', {
+        templateUrl: 'login',
+        controller: 'loginController'
+    }).
+    when('/auth/signup', {
+        templateUrl: 'signup',
+        controller: 'signupController'
+    }).
     otherwise({
       redirectTo: '/'
     });
@@ -60,11 +68,12 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
 angular.module("BossCollection.controllers", [])
     .controller("homeController", ["$scope", '$location', '$http', '$timeout',
         function($scope, $location, $http, $timeout){
+            
             try{
             (adsbygoogle = window.adsbygoogle || []).push({});
             }
             catch(err){
-              //Don't care, keep going
+              //Don't care, keep going df
             }
 
               $('.parallax').parallax();
@@ -80,6 +89,31 @@ angular.module("BossCollection.controllers", [])
 
 
 
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 
+        function($scope, $location, $http, userLoginSrvc){
+            
+        console.log("Working?");
+
+        $scope.user = {};
+        
+        $scope.login = function(){
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                //navigate to some page
+                console.log(response);
+            },
+            function(err){
+                console.log(err);
+            })
+        }
 
     }])
 
@@ -226,6 +260,32 @@ angular.module("BossCollection.controllers")
            $scope.getMembers()
 
         }])
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, userLoginSrvc){
+            
+        console.log("Working?");
+        
+        $scope.user = {};
+        
+        $scope.register = function(){
+            
+            userLoginSrvc.registerNewUser($scope.user).then(function(result){
+                //save user to cookie
+                console.log(result);
+            },
+            function(err){
+                console.log(err);
+            }) 
+            
+        }
+
+    }])
+
 'use strict'
 angular.module("BossCollection.controllers")
     .controller("strategyRoomController", ['$scope',
@@ -685,7 +745,7 @@ angular.module("BossCollection.services", [])
 angular.module("BossCollection.services")
     .factory('guildServices', ['$http','$q',function ($http, $q) {
 
-      var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
+        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
         
@@ -719,8 +779,57 @@ angular.module("BossCollection.services")
 angular.module("BossCollection.services")
     .factory('socketProvider', [function () {
         
-        var socket = io("http://54.173.24.121:4001");
+        var socket = io("http://bosscollection.net:4001");
         //var socket = io("http://localhost:4001");
          
         return socket;
+    }])
+'use strict';
+
+angular.module("BossCollection.services")
+    .factory('userLoginSrvc', ['$resource', '$q', function ($resource, $q) {
+        
+        var registration = $resource('/auth/signup', {},
+            {
+                
+            })
+        
+        var login = $resource('/auth/login', {}, {})
+        
+        
+        var loginApi = {
+
+            registerNewUser: function (newUser) {
+                
+                var defer = $q.defer();
+                
+                console.log("Register new user");
+                //socket.emit("getBossInfo", boss); 
+                
+      
+                
+                registration.save(newUser).$promise.then(function(result){
+                    
+                    console.log("Result: " );
+                    console.log(result);
+                    
+                    defer.resolve(result.result);
+                })
+                
+                return defer.promise;
+            },
+            login: function (user) {
+                var defer = $q.defer();
+                
+                login.save(user).$promise.then(function(result){
+                    
+                    
+                    
+                })
+                
+                return defer.promise;
+            }
+        };
+
+        return loginApi;
     }])

@@ -8,11 +8,12 @@
 angular.module("BossCollection.controllers", [])
     .controller("homeController", ["$scope", '$location', '$http', '$timeout',
         function($scope, $location, $http, $timeout){
+            
             try{
             (adsbygoogle = window.adsbygoogle || []).push({});
             }
             catch(err){
-              //Don't care, keep going
+              //Don't care, keep going df
             }
 
               $('.parallax').parallax();

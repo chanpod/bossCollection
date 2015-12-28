@@ -1,15 +1,16 @@
 var express = require('express');
 var path = require('path');
-console.log("================")
-console.log(path.resolve(__dirname));
 var mongo = require('../mongoFunctions');
 var router = express.Router();
 var q = require('q');
 var bossStrats = require('./bossStratsREST');
+var app = express();
+
+
 
 
 router.use(function(req,res, next){
-  //console.log("It's working?");
+  console.log("It's working?");
   next();
 })
 
@@ -27,8 +28,8 @@ router.route('/test')
     res.json({message: "heres your response for a GET"});
   })
   
-
-router.use(bossStrats);
+//router.use(authentication);
+//router.use(bossStrats);
   
   
 module.exports = router;

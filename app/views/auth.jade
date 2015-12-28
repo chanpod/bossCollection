@@ -46,7 +46,9 @@ block body
             a(data-activates = "dropdown2", class = "waves-effect waves-light dropdown-button")
               | Strategy Room
               i(class = "material-icons right") arrow_drop_down
-            
+    
+    
+    
     div(ng-view)     
     
     
@@ -65,13 +67,7 @@ block body
                 | AngularJS
               a(href = "http://nodejs.org/", class = "waves-effect waves-light collection-item btn")
                 | NodeJS
-
-
-    include partials/home    
-    include partials/strategyRoom
-    include ../public/js/directives/bossStrategyTemplate
-    include partials/videoModal
-    include partials/roster
-    include partials/login
-    include partials/signup
     
+    include partials/login
+
+
