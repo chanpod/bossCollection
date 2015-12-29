@@ -14,11 +14,24 @@ block body
         a(href="#!", class = "waves-effect waves-light") Edit (doesn't work yet)
       li()
         a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
+        
+    ul(id="raidDropdownNavbar", class = "dropdown-content")
+        li
+            a(href="#!", class = "waves-effect waves-light") Report Absence 
+        li
+            a(href="#!", class = "waves-effect waves-light") Who's out
+            
+    ul(id="raidDropdownNavbarMobile", class = "dropdown-content")
+        li
+            a(href="#!", class = "waves-effect waves-light") Report Absence 
+        li
+            a(href="#!", class = "waves-effect waves-light") Who's out
     nav(class = "transparent")
       div(class = "nav-wrapper")
         a(href="/", class = "brand-logo waves-effect waves-light") BossCollection
         a(href="#", data-activates="sideNavMobile", class="button-collapse")
             i(class="material-icons") menu
+            
         ul(class="center hide-on-med-and-down")
           li
             a(href = "https://www.warcraftlogs.com/guilds/36279", class = "waves-effect waves-light") Logs
@@ -33,6 +46,9 @@ block body
               | {{user.name}}
               i(class = "material-icons right") arrow_drop_down
             a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
+          li
+            a(ng-show = "loggedIn", data-activates = "raidDropdownNavbar", class = "waves-effect waves-light dropdown-button") Raid Tools
+                i(class = "material-icons right") arrow_drop_down
         ul(id = "sideNavMobile", class = "side-nav")
           li
             a(href="https://www.warcraftlogs.com/guilds/36279", class = "waves-effect waves-light") Logs
@@ -44,6 +60,10 @@ block body
             a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
             a(ng-show = "loggedIn", data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
               | {{user.name}}
+              i(class = "material-icons right") arrow_drop_down
+          li
+            a(ng-show = "loggedIn", data-activates = "raidDropdownNavbarMobile", class = "waves-effect waves-light dropdown-button")
+              | Raid Tools
               i(class = "material-icons right") arrow_drop_down
           //-li
             a(data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
