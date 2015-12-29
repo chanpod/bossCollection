@@ -71,9 +71,11 @@ var router = express.Router();
 		AM.manualLogin(req.body.name, req.body.password, function(err, user){
             
             console.log(user);
-            
+            console.log(err);
 			if (!user){
-				res.status(400).send(err);
+                
+                res.status(400).send(err);
+                				
 			}	else{
                 
 				req.session.user = user;
@@ -84,7 +86,7 @@ var router = express.Router();
 					res.cookie('password', user.password, { maxAge: 900000 });
 				}
                 else{
-                    console.log("REmember me not set");
+                    console.log("Remember me not set");
                 }
 				res.status(200).send(user);
 			}

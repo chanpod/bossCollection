@@ -6,7 +6,7 @@ var moment 		= require('moment');
 
 var dbPort 		= 27017;
 var dbHost 		= 'localhost';
-var dbName 		= 'node-login';
+var dbName 		= 'bosscollection';
 
 /* establish the database connection */
 
@@ -57,23 +57,34 @@ exports.manualLogin = function(user, pass, callback)
 
 exports.addNewAccount = function(newData, callback)
 {
+    if(newData.name == '' || newData.name == undefined){
+        callback('user name missing');
+        return;
+    }
+    
+    if(newData.password == undefined || newData.password.length == 0){
+        callback('password is empty');
+        return;
+    }
     
 	accounts.findOne({name:newData.name}, function(e, o) {
 		if (o){
 			callback('username-taken');
 		}	else{
-			accounts.findOne({email:newData.email}, function(e, o) {
-				if (o){
-					callback('email-taken');
-				}	else{
+			//accounts.findOne({email:newData.email}, function(e, o) {
+				//if (o){
+				//	callback('email-taken');
+				//}	else{
+                    
 					saltAndHash(newData.password, function(hash){
 						newData.password = hash;
 					// append date stamp when record was created //
 						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 						accounts.insert(newData, {safe: true}, callback);
 					});
-				}
-			});
+                    
+				//}
+			//});
 		}
 	});
 }

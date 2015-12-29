@@ -17,6 +17,7 @@ angular.module("BossCollection.controllers")
                 console.log(result);
             },
             function(err){
+                Materialize.toast(err)
                 console.log(err);
             }) 
             

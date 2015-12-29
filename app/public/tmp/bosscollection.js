@@ -42,6 +42,10 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'signup',
         controller: 'signupController'
     }).
+    when('/forum', {
+        templateUrl: 'forums',
+        controller: 'forumsController'
+    }).
     otherwise({
       redirectTo: '/'
     });
@@ -60,12 +64,29 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
 
 'use strict';
 /**
+ *
+ */
+angular.module("BossCollection.controllers", [])
+    .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
+        function($scope, $location, $http, userLoginSrvc, $rootScope){
+            
+        $scope.user.name = userLoginSrvc.getUser();
+        
+        if($scope.user.name == undefined){
+            $location.path('/');
+        }
+        
+
+    }])
+
+'use strict';
+/**
  * This is the description for my class.
  *
  * @class Controllers
  * @constructor No Controller
  */
-angular.module("BossCollection.controllers", [])
+angular.module("BossCollection.controllers")
     .controller("homeController", ["$scope", '$location', '$http', '$timeout',
         function($scope, $location, $http, $timeout){
             
@@ -107,10 +128,13 @@ angular.module("BossCollection.controllers")
         $scope.login = function(){
             
             userLoginSrvc.login($scope.user).then(function(response){
+                
                 //navigate to some page
                 console.log(response);
             },
             function(err){
+                
+                Materialize.toast(err)
                 console.log(err);
             })
         }
@@ -336,6 +360,7 @@ angular.module("BossCollection.controllers")
                 console.log(result);
             },
             function(err){
+                Materialize.toast(err)
                 console.log(err);
             }) 
             
@@ -935,26 +960,13 @@ angular.module("BossCollection.services")
                 
                 registration.save(newUser).$promise.then(function(result){
                     
-                    console.log("Registration successfull. Attempting login");
+                    console.log("Registration successfull. Redirecting to login page");
                     console.log(result);
                     
-                    var userAutoLogin = {
-                        name: result.name,
-                        password: newUser.password
-                    }
-                    
-                    login(userAutoLogin).then(function(result){
-                        console.log("Auto login successfull.");
-                        defer.resolve(true);
-                    },
-                    function(err){
-                        
-                        console.log(err);
-                        defer.reject(err);
-                    })
-                    
-                    
                     $location.path("/auth/login");
+                }, function(err){
+                    console.log(err.data);
+                    defer.reject(err.data);
                 })
                 
                 return defer.promise;
@@ -968,6 +980,10 @@ angular.module("BossCollection.services")
                     $rootScope.$broadcast("loggedin", {name: user.name, loggedIn:true});
                     $location.path("/");
                     
+                },
+                function(err){
+                    
+                    defer.reject(err.data);
                 })
                 
                 return defer.promise;

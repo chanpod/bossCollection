@@ -51,7 +51,7 @@ app.use(session({
 	proxy: true,
 	resave: true,
 	saveUninitialized: true,
-	store: new MongoStore({ host: 'localhost', port: 27017, db: 'node-login'})
+	store: new MongoStore({ host: 'localhost', port: 27017, db: 'bosscollection'})
 	})
 );
 

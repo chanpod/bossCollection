@@ -42,6 +42,10 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'signup',
         controller: 'signupController'
     }).
+    when('/forum', {
+        templateUrl: 'forums',
+        controller: 'forumsController'
+    }).
     otherwise({
       redirectTo: '/'
     });

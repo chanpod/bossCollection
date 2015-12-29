@@ -21,7 +21,7 @@ var router = express.Router();
       
       console.log("Successfully accessed forum route");
       
-      res.status(200).send({});
+      res.render('index', {});
   });
   
   module.exports = router;

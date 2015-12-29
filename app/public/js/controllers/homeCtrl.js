@@ -5,7 +5,7 @@
  * @class Controllers
  * @constructor No Controller
  */
-angular.module("BossCollection.controllers", [])
+angular.module("BossCollection.controllers")
     .controller("homeController", ["$scope", '$location', '$http', '$timeout',
         function($scope, $location, $http, $timeout){
             

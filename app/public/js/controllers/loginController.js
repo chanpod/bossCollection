@@ -13,10 +13,13 @@ angular.module("BossCollection.controllers")
         $scope.login = function(){
             
             userLoginSrvc.login($scope.user).then(function(response){
+                
                 //navigate to some page
                 console.log(response);
             },
             function(err){
+                
+                Materialize.toast(err)
                 console.log(err);
             })
         }
