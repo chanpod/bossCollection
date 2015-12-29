@@ -73,7 +73,7 @@ var routes = require('./routes/router.js')(app);
  */
 
 app.listen(port);
-console.log("Listening on port 4000");
+console.log("Listening on port " + port);
 
 http.listen(4001, function(){
     console.log("Socket server listening on 4001")
