@@ -126,7 +126,13 @@ var router = express.Router();
         console.log("auth /auth/updateAccount");
         console.log(req.body);
 
-        AM.validatePassword(req.body.currentPassword, req.session.user.password, function (isValid) {
+        AM.validatePassword(req.body.currentPassword, req.session.user.password, function (err, isValid) {            
+            
+            if(err){
+                
+                res.status(400).send(err);
+                return;
+            }
             
             AM.updateAccount({
                 name: req.body['name'],
@@ -143,15 +149,17 @@ var router = express.Router();
                 } else {
 
                     req.session.user = user;
+                    req.session.save(function () {
+                        // update the user's login cookies if they exists //
+                        if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+
+                            res.cookie('user', user.name, { maxAge: 900000 });
+                            res.cookie('pass', user.password, { maxAge: 900000 });
+                        }
+
+                        res.status(200).send('ok');
+                    });
                     
-                    // update the user's login cookies if they exists //
-                    if (req.cookies.user != undefined && req.cookies.pass != undefined) {
-
-                        res.cookie('user', user.name, { maxAge: 900000 });
-                        res.cookie('pass', user.pass, { maxAge: 900000 });
-                    }
-
-                    res.status(200).send('ok');
                 }
             });
         }, function(err){

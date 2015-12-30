@@ -4,7 +4,7 @@ script#editAccount(type="text/ng-template")
             h4
                 | Edit your settings
             div.row
-                form().col.s12                
+                form( ng-submit = "updateAccount()").col.s12                
                     div.row
                         div.col.s6.input-field                            
                             input(placeholder = "User Name", type = "text", id = "uName", class = "validate", required = "required", ng-model = "user.name", disabled)
@@ -22,15 +22,15 @@ script#editAccount(type="text/ng-template")
                             label(for="password") Current Password (required to change settings)
                     div.row
                         div.col.s12.input-field
-                            input(id = "password", type = "password", class = "validate", ng-model = "user.newPassword")
+                            input(id = "password", type = "password", ng-model = "user.newPassword")
                             label(for="password") New Password
                     div.row
                         div.col.s12.input-field
-                            input(id = "password_validate", type = "password", class = "validate", ng-model = "user.passwordVerify")
+                            input(id = "password_validate", type = "password",  ng-model = "user.passwordVerify")
                             label(for="password_validate") Verify Password
                     div.row
                         div.s6.col
-                            button(type="submit", ng-click = "updateAccount()")#btn-login.btn.btn-primary
+                            button(type="submit")#btn-login.btn.btn-primary
                                 i.icon-lock.icon-white
                                 | Save
                             

@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var mongooseDB  = mongoose.createConnection("mongodb://localhost");
+var mongooseDB  = mongoose.createConnection("mongodb://localhost/bosscollection");
 
 var Schema = mongoose.Schema;
 var userSchema = new Schema({

@@ -1,7 +1,7 @@
 
 var crypto 		= require('crypto');
-var MongoDB 	= require('mongodb').Db;
-var Server 		= require('mongodb').Server;
+//var MongoDB 	= require('mongodb').Db;
+//var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 
 
@@ -10,13 +10,30 @@ var moment 		= require('moment');
 var dbPort 		= 27017;
 var dbHost 		= 'localhost';
 var dbName 		= 'bosscollection';
-var collections = ["accounts"];
-var mongoose    = require('mongoose');
-var mongooseDB  = mongoose.createConnection(dbHost);
-var userModel   = require('../../models/user');
+var collections = ["UserModel"];
+//var mongoose    = require('mongoose');
+//var mongooseDB  = mongoose.createConnection(dbHost);
+
+
+var mongoose = require('mongoose');
+var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
+
+var Schema = mongoose.Schema;
+var UserSchema = new Schema({
+    name: String,
+    password: String,
+    email: String,
+    battleTag: String,
+    characters: Array
+})
+
+var UserModel = mongoose.model('accounts', UserSchema);
+
+
+//var UserModel   = require('../../models/user');
 //var mongoosedb = require("mongojs").connect(dbHost, collections);
 
-/* establish the database connection */
+/* establish the database connection 
 
 var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
 	db.open(function(e, d){
@@ -27,13 +44,13 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 	}
 });
 
-var accounts = db.collection('accounts');
-
+var UserModel = db.collection('UserModel');
+*/
 /* login validation methods */
 
 exports.autoLogin = function(name, password, callback)
 {
-	accounts.findOne({name:name}, function(e, o) {
+	UserModel.findOne({name:name}, function(e, o) {
 		if (o){
 			o.password == password ? callback(o) : callback(null);
 		}	else{
@@ -44,11 +61,29 @@ exports.autoLogin = function(name, password, callback)
 
 exports.manualLogin = function(user, pass, callback)
 {
-	accounts.findOne({name:user}, function(e, o) {
+	UserModel.findOne({name:user}, function(e, userFound) {
         
-		if (o == null){
-			callback('user-not-found');
+		if (userFound == null){
+            
+            UserModel.findOne({email: user}, function(err, userFound){
+                
+                if(err){
+                    
+                    callback('Username or Email not found.');
+                }
+
+                validatePassword(pass, userFound.password, function (err, res) {
+                    if (res) {
+                        callback(null, userFound);
+                    } else {
+                        callback('invalid-password');
+                    }
+                });
+            })
+            
+			
 		}	else{
+            
             console.log(pass);
             console.log(o.password);
 			validatePassword(pass, o.password, function(err, res) {
@@ -76,11 +111,11 @@ exports.addNewAccount = function(newUser, callback)
         return;
     }
     
-	accounts.findOne({name:newUser.name}, function(e, o) {
+	UserModel.findOne({name:newUser.name}, function(e, o) {
 		if (o){
 			callback('username-taken');
 		}	else{
-			accounts.findOne({email:newUser.email}, function(e, o) {
+			UserModel.findOne({email:newUser.email}, function(e, o) {
 				if (o){
 					callback('email-taken');
 				}	else{
@@ -90,7 +125,8 @@ exports.addNewAccount = function(newUser, callback)
 					// append date stamp when record was created //
 						newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
                         console.log("Adding new user: " + newUser);
-						accounts.insert(newUser, {safe: true}, callback);
+                        var user = new UserModel(newUser);
+						user.save(callback);
 					});
                     
 				}
@@ -103,60 +139,24 @@ exports.updateAccount = function(userAccount, callback)
 {
     
     console.log("Saving account: " + JSON.stringify(userAccount));
-    console.log(userModel);
-    var user = new userModel(userAccount);
-    
-    user.findOne({"name": userAccount.name}, userAccount, function (err, user) {
+    //console.log(userModel);
 
-        if (err) {
-            console.log("It broke");
+    var query = {"name" : userAccount.name};
+    
+    UserModel.findOneAndUpdate(query, userAccount, function(err, savedUser){
+        
+        if(err){
             console.log(err);
             callback(err);
         }
         
-        console.log("????")
-        console.log(user);
-        user.email = userAccount.email
-        user.battleTag = userAccount.battleTag
-        user.password = userAccount.password
-         
-        user.save();
-        callback(null, user);
+        callback(null, userAccount);
     })
-    /*
-	accounts.findOne({name:newData.name}, function(e, userAccount){
-        
-		userAccount = newData;
-        
-        
-
-        if (newData.password == '') {
-            
-            console.log("Saving account: " + JSON.stringify(userAccount));
-            accounts.save(userAccount, { safe: true }, function (err) {
-
-                if (err) callback(err);
-                else callback(null, userAccount);
-            });
-        } else {
-
-            saltAndHash(newData.password, function (hash) {
-
-                userAccount.password = hash;
-                accounts.save(userAccount, { safe: true }, function (err) {
-
-                    if (err) callback(err);
-                    else callback(null, userAccount);
-                });
-            });
-        }
-	});
-    */
 }
 
 exports.updatePassword = function(email, newPass, callback)
 {
-	accounts.findOne({email:email}, function(e, o){
+	UserModel.findOne({email:email}, function(e, o){
         
 		if (e){
 			callback(e, null);
@@ -165,7 +165,7 @@ exports.updatePassword = function(email, newPass, callback)
 			saltAndHash(newPass, function(hash){
                 
 		        o.password = hash;
-		        accounts.save(o, {safe: true}, callback);
+		        UserModel.save(o, {safe: true}, callback);
 			});
 		}
 	});
@@ -175,24 +175,24 @@ exports.updatePassword = function(email, newPass, callback)
 
 exports.deleteAccount = function(id, callback)
 {
-	accounts.remove({_id: getObjectId(id)}, callback);
+	UserModel.remove({_id: getObjectId(id)}, callback);
 }
 
 exports.getAccountByEmail = function(email, callback)
 {
-	accounts.findOne({email:email}, function(e, o){ callback(o); });
+	UserModel.findOne({email:email}, function(e, o){ callback(o); });
 }
 
 exports.validateResetLink = function(email, passHash, callback)
 {
-	accounts.find({ $and: [{email:email, password:passHash}] }, function(e, o){
+	UserModel.find({ $and: [{email:email, password:passHash}] }, function(e, o){
 		callback(o ? 'ok' : null);
 	});
 }
 
 exports.getAllRecords = function(callback)
 {
-	accounts.find().toArray(
+	UserModel.find().toArray(
 		function(e, res) {
 		if (e) callback(e)
 		else callback(null, res)
@@ -201,13 +201,22 @@ exports.getAllRecords = function(callback)
 
 exports.delAllRecords = function(callback)
 {
-	accounts.remove({}, callback); // reset accounts collection for testing //
+	UserModel.remove({}, callback); // reset UserModel collection for testing //
 }
 
 exports.validatePassword = function(plainPass, hashedPass, callback){
     
     console.log(hashedPass);
-    validatePassword(plainPass, hashedPass, callback);
+    validatePassword(plainPass, hashedPass, function(err, isValid){
+        
+        if(isValid == true){
+            
+            callback(null, isValid);
+        }
+        else{
+            callback("Invalid Password", isValid);
+        }
+    });
 }
 
 /* private encryption & validation methods */
@@ -250,7 +259,7 @@ var getObjectId = function(id)
 
 var findById = function(id, callback)
 {
-	accounts.findOne({_id: getObjectId(id)},
+	UserModel.findOne({_id: getObjectId(id)},
 		function(e, res) {
 		if (e) callback(e)
 		else callback(null, res)
@@ -261,7 +270,7 @@ var findById = function(id, callback)
 var findByMultipleFields = function(a, callback)
 {
 // this takes an array of name/val pairs to search against {fieldName : 'value'} //
-	accounts.find( { $or : a } ).toArray(
+	UserModel.find( { $or : a } ).toArray(
 		function(e, results) {
 		if (e) callback(e)
 		else callback(null, results)

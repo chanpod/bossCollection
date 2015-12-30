@@ -7,7 +7,7 @@ angular.module("BossCollection.controllers")
         function($scope, $location, $http, userLoginSrvc){
 
         $scope.user = {};
-        $scope.user.name = userLoginSrvc.getUser()
+        $scope.user = userLoginSrvc.getUser()
         
         $scope.alreadyLoggedIn = function(){
             
