@@ -25,28 +25,32 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     when('/', {
       templateUrl: 'home',
       controller: 'homeController'
-    }).
-    when('/strategyRoom/:raid', {
+    })
+    .when('/strategyRoom/:raid', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
-    }).
-    when('/roster', {
+    })
+    .when('/roster', {
         templateUrl: 'roster',
         controller: 'rosterController'
-    }).
-    when('/auth/login', {
+    })
+    .when('/auth/login', {
         templateUrl: 'login',
         controller: 'loginController'
-    }).
-    when('/auth/signup', {
+    })
+    .when('/auth/signup', {
         templateUrl: 'signup',
         controller: 'signupController'
-    }).
-    when('/forum', {
+    })
+    .when('/forum', {
         templateUrl: 'forums',
         controller: 'forumsController'
-    }).
-    otherwise({
+    })
+    .when('/auth/updateAccount', {
+        templateUrl: 'editAccount',
+        controller: 'editAccountController' 
+    })
+    .otherwise({
       redirectTo: '/'
     });
 
@@ -67,6 +71,104 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
  *
  */
 angular.module("BossCollection.controllers", [])
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 
+        function($scope, $location, $http, userLoginSrvc){
+        
+        userLoginSrvc.getUser().then(function(user){
+            
+            console.log("Got the user");
+            
+            $scope.user = user;
+            
+        })
+        
+        $scope.updateAccount = function () {
+            
+            console.log("Updating account");
+            userLoginSrvc.updateAccount($scope.user).then(function (response) {
+                Materialize.toast("User updated");
+            },
+                function (err) {
+
+                    Materialize.toast(err);
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+            
+            if(userLoginSrvc.loggedIn() != true){
+                $location.path('/auth/login');
+            }
+        }
+        
+        
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 
+        function($scope, $location, $http, userLoginSrvc){
+
+        $scope.user = {};
+        $scope.user.name = userLoginSrvc.getUser()
+        
+        $scope.alreadyLoggedIn = function(){
+            
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.login = function(){
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                console.log(response);
+            },
+            function(err){
+                
+                Materialize.toast(err)
+                console.log(err);
+            })
+        }
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, userLoginSrvc){
+        
+        $scope.user = {};
+        
+        $scope.register = function(){
+            
+            userLoginSrvc.registerNewUser($scope.user).then(function(result){
+                //save user to cookie
+                console.log(result);
+            },
+            function(err){
+                Materialize.toast(err)
+                console.log(err);
+            }) 
+            
+        }
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
     .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
         function($scope, $location, $http, userLoginSrvc, $rootScope){
             
@@ -110,34 +212,6 @@ angular.module("BossCollection.controllers")
 
 
 
-
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 
-        function($scope, $location, $http, userLoginSrvc){
-            
-        console.log("Working?");
-
-        $scope.user = {};
-        
-        $scope.login = function(){
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                console.log(response);
-            },
-            function(err){
-                
-                Materialize.toast(err)
-                console.log(err);
-            })
-        }
 
     }])
 
@@ -195,176 +269,6 @@ angular.module("BossCollection.controllers")
         }
         
         $scope.areWeLoggedIn();
-
-    }])
-
-'use strict';
-angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
-            
-            $scope.currentRosterDropdown = true;
-            $scope.applicantsDropdown = false;
-            
-            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
-            
-            $scope.raiders = [];
-            $scope.trials = [];
-            
-            $scope.trialRanks = [9];
-            $scope.raiderRanks = [0, 2, 6];
-            
-            $scope.guild = "mkdir bosscollection";
-            $scope.realm = "zul'jin";
-            
-            $scope.loading = true;
-            $scope.genders = ['Male', 'Female']
-            
-            
-            getSavedRanksList();
-            $('ul.tabs').tabs(); //jquery
-            
-            $scope.getMembers = function(){
-                
-                $scope.raiders = [];
-                $scope.trials = [];
-                
-                $scope.loading = true;
-                
-                guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
-                    
-                    console.log(data);
-                    $scope.loading = false;
-                    parseMembers(data);
-                },
-                function(err){
-                    
-                    $scope.loading = false;
-                    console.log(err);
-                });
-            }
-            
-            $scope.getUser = function(){
-                
-                $http({method: 'POST', url: '/getUser'}).success(function(data){
-                   
-                   console.log(data);
-                });
-            }
-            
-            $scope.openArmoryProfile = function(name, realm){
-                
-                var armoryURL = "http://us.battle.net/wow/en/character/" + realm +"/" + name + "/simple";
-                window.open(armoryURL);
-            }
-            
-            $scope.saveRanksList = function(){
-                
-                var ranksList = {
-                    guild: $scope.guild,
-                    realm: $scope.realm, 
-                    trialRanks: $scope.trialRanks,
-                    raiderRanks: $scope.raiderRanks
-                }
-                
-                $cookies.putObject("ranksList", ranksList);
-            }
-            
-            function getSavedRanksList(){
-                
-                var ranksList = $cookies.getObject("ranksList");
-                
-                if(ranksList){
-                    
-                    $scope.raiderRanks = ranksList.raiderRanks;
-                    $scope.trialRanks = ranksList.trialRanks;
-                    $scope.guild = ranksList.guild;
-                    $scope.realm = ranksList.realm;
-                }
-            }
-            
-            var buildRaiderObject = function(raider, rank, classType){
-                
-                try {
-
-                    var newMember = {
-                        "name": raider.character.name,
-                        "class": classType.charAt(0).toUpperCase() + classType.slice(1),
-                        "rank": rank,
-                        "gender": $scope.genders[raider.character.gender],
-                        "race": raider.character.race,
-                        "spec": raider.character.spec.name,
-                        "achievementPoints": raider.character.achievementPoints,
-                        "avatar": "http://us.battle.net/static-render/us/" + raider.character.thumbnail
-                    }
-
-                    return newMember;
-                }
-                catch(err){
-                    console.log(raider);
-                }
-            }
-            
-            var parseMembers = function(membersObject){               
-                
-                for(var i = 0; i < membersObject.length; i++){
-                    
-                    var memberRank = membersObject[i].rank
-                    
-                    var raiderRankValid = _.find($scope.raiderRanks, function(rank){
-                        return memberRank == rank;
-                    })
-                    
-                    var trialRankValid = _.find($scope.trialRanks, function(rank){
-                        return memberRank == rank;
-                    })
-                    
-                    var classType = classes[membersObject[i].character.class];
-                    
-                    if (raiderRankValid) {
-
-                        $scope.raiders.push(buildRaiderObject(membersObject[i], memberRank, classType));
-                    }
-                    
-                    if(trialRankValid){
-                        $scope.trials.push(buildRaiderObject(membersObject[i], memberRank, classType));
-                    }
-                }
-                
-                $scope.raiders.sort(function(a, b){return a.rank-b.rank});
-            }
-            
-            
-            $scope.lowLvlTrials = [];
-            
-            
-           $scope.getMembers()
-
-        }])
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, userLoginSrvc){
-            
-        console.log("Working?");
-        
-        $scope.user = {};
-        
-        $scope.register = function(){
-            
-            userLoginSrvc.registerNewUser($scope.user).then(function(result){
-                //save user to cookie
-                console.log(result);
-            },
-            function(err){
-                Materialize.toast(err)
-                console.log(err);
-            }) 
-            
-        }
 
     }])
 
@@ -743,6 +647,149 @@ angular.module("BossCollection.controllers")
 			$scope.embedUrl = $scope.url;
 		}])
 
+'use strict';
+angular.module("BossCollection.controllers")    
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
+            
+            $scope.currentRosterDropdown = true;
+            $scope.applicantsDropdown = false;
+            
+            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
+            $scope.raiders = [];
+            $scope.trials = [];
+            
+            $scope.trialRanks = [9];
+            $scope.raiderRanks = [0, 2, 6];
+            
+            $scope.guild = "mkdir bosscollection";
+            $scope.realm = "zul'jin";
+            
+            $scope.loading = true;
+            $scope.genders = ['Male', 'Female']
+            
+            
+            getSavedRanksList();
+            $('ul.tabs').tabs(); //jquery
+            
+            $scope.getMembers = function(){
+                
+                $scope.raiders = [];
+                $scope.trials = [];
+                
+                $scope.loading = true;
+                
+                guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
+                    
+                    console.log(data);
+                    $scope.loading = false;
+                    parseMembers(data);
+                },
+                function(err){
+                    
+                    $scope.loading = false;
+                    console.log(err);
+                });
+            }
+            
+            $scope.getUser = function(){
+                
+                $http({method: 'POST', url: '/getUser'}).success(function(data){
+                   
+                   console.log(data);
+                });
+            }
+            
+            $scope.openArmoryProfile = function(name, realm){
+                
+                var armoryURL = "http://us.battle.net/wow/en/character/" + realm +"/" + name + "/simple";
+                window.open(armoryURL);
+            }
+            
+            $scope.saveRanksList = function(){
+                
+                var ranksList = {
+                    guild: $scope.guild,
+                    realm: $scope.realm, 
+                    trialRanks: $scope.trialRanks,
+                    raiderRanks: $scope.raiderRanks
+                }
+                
+                $cookies.putObject("ranksList", ranksList);
+            }
+            
+            function getSavedRanksList(){
+                
+                var ranksList = $cookies.getObject("ranksList");
+                
+                if(ranksList){
+                    
+                    $scope.raiderRanks = ranksList.raiderRanks;
+                    $scope.trialRanks = ranksList.trialRanks;
+                    $scope.guild = ranksList.guild;
+                    $scope.realm = ranksList.realm;
+                }
+            }
+            
+            var buildRaiderObject = function(raider, rank, classType){
+                
+                try {
+
+                    var newMember = {
+                        "name": raider.character.name,
+                        "class": classType.charAt(0).toUpperCase() + classType.slice(1),
+                        "rank": rank,
+                        "gender": $scope.genders[raider.character.gender],
+                        "race": raider.character.race,
+                        "spec": raider.character.spec.name,
+                        "achievementPoints": raider.character.achievementPoints,
+                        "avatar": "http://us.battle.net/static-render/us/" + raider.character.thumbnail
+                    }
+
+                    return newMember;
+                }
+                catch(err){
+                    console.log(raider);
+                }
+            }
+            
+            var parseMembers = function(membersObject){               
+                
+                for(var i = 0; i < membersObject.length; i++){
+                    
+                    var memberRank = membersObject[i].rank
+                    
+                    var raiderRankValid = _.find($scope.raiderRanks, function(rank){
+                        return memberRank == rank;
+                    })
+                    
+                    var trialRankValid = _.find($scope.trialRanks, function(rank){
+                        return memberRank == rank;
+                    })
+                    
+                    var classType = classes[membersObject[i].character.class];
+                    
+                    if (raiderRankValid) {
+
+                        $scope.raiders.push(buildRaiderObject(membersObject[i], memberRank, classType));
+                    }
+                    
+                    if(trialRankValid){
+                        $scope.trials.push(buildRaiderObject(membersObject[i], memberRank, classType));
+                    }
+                }
+                
+                $scope.raiders.sort(function(a, b){return a.rank-b.rank});
+            }
+            
+            
+            $scope.lowLvlTrials = [];
+            
+            
+           $scope.getMembers()
+
+        }])
 
 /* Directives */
 
@@ -879,12 +926,39 @@ angular.module("BossCollection.services")
         var login = $resource('/auth/login', {}, {})
         var logout = $resource('/auth/logout', {}, {});
         var loggedIn = $resource('/auth/loggedin', {}, {});
+        var updateAccount = $resource('/auth/updateAccount', {}, {});
+        var getUser = $resource('/auth/currentUser', {}, {});
         
-        var loginApi = {
+        
+        
+        var accountApi = {
             
+            updateAccount: function(updatedUser){
+                
+                var defer = $q.defer();
+                
+                updateAccount.save(updatedUser).$promise.then(function(response){
+                    
+                    
+                    defer.resolve(response);
+                },
+                function(err){
+                    console.log(err);
+                    defer.reject(err.data);
+                })
+                
+                return defer.promise;
+            },
             getUser: function(){
                 
-                return $cookies.get("name");  
+                var defer = $q.defer();
+                
+                getUser.get().$promise.then(function(user){
+                    
+                    console.log(user);
+                    defer.resolve(user);
+                })
+                return defer.promise;  
             },
             currentlyLoggedIn: function(){
                 
@@ -925,10 +999,8 @@ angular.module("BossCollection.services")
                 
                 logout.save({}).$promise.then(function(result){
                     
-                    if(result.loggedOut == true){
+                    if(result.loggedOut == true){                        
                         
-                        $cookies.remove("name");
-                        $cookies.remove("password");
                         $rootScope.$broadcast("loggedin" , {loggedIn: false});
                     }
                     
@@ -990,5 +1062,5 @@ angular.module("BossCollection.services")
             }
         };
 
-        return loginApi;
+        return accountApi;
     }])

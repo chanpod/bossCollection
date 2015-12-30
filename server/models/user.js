@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
- 
-module.exports = mongoose.model('User',{
+var mongooseDB  = mongoose.createConnection("mongodb://localhost");
+
+var Schema = mongoose.Schema;
+var userSchema = new Schema({
     name: String,
     password: String,
     email: String,
     battleTag: String,
-    characters: []
-});
+    characters: Array
+})
+ 
+module.exports = mongoose.model('accounts', userSchema);

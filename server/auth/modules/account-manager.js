@@ -4,9 +4,17 @@ var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 
+
+
+
 var dbPort 		= 27017;
 var dbHost 		= 'localhost';
 var dbName 		= 'bosscollection';
+var collections = ["accounts"];
+var mongoose    = require('mongoose');
+var mongooseDB  = mongoose.createConnection(dbHost);
+var userModel   = require('../../models/user');
+//var mongoosedb = require("mongojs").connect(dbHost, collections);
 
 /* establish the database connection */
 
@@ -18,6 +26,7 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 		console.log('connected to database :: ' + dbName);
 	}
 });
+
 var accounts = db.collection('accounts');
 
 /* login validation methods */
@@ -90,31 +99,59 @@ exports.addNewAccount = function(newUser, callback)
 	});
 }
 
-exports.updateAccount = function(newData, callback)
+exports.updateAccount = function(userAccount, callback)
 {
-	accounts.findOne({name:newData.name}, function(e, o){
-        
-		o.name 		= newData.name;
-		o.email 	= newData.email;
+    
+    console.log("Saving account: " + JSON.stringify(userAccount));
+    console.log(userModel);
+    var user = new userModel(userAccount);
+    
+    user.findOne({"name": userAccount.name}, userAccount, function (err, user) {
 
-		if (newData.password == ''){
-			accounts.save(o, {safe: true}, function(err) {
-				if (err) callback(err);
-				else callback(null, o);
-			});
-		}	else{
+        if (err) {
+            console.log("It broke");
+            console.log(err);
+            callback(err);
+        }
+        
+        console.log("????")
+        console.log(user);
+        user.email = userAccount.email
+        user.battleTag = userAccount.battleTag
+        user.password = userAccount.password
+         
+        user.save();
+        callback(null, user);
+    })
+    /*
+	accounts.findOne({name:newData.name}, function(e, userAccount){
+        
+		userAccount = newData;
+        
+        
+
+        if (newData.password == '') {
             
-			saltAndHash(newData.password, function(hash){
-                
-				o.password = hash;
-				accounts.save(o, {safe: true}, function(err) {
-                    
-					if (err) callback(err);
-					else callback(null, o);
-				});
-			});
-		}
+            console.log("Saving account: " + JSON.stringify(userAccount));
+            accounts.save(userAccount, { safe: true }, function (err) {
+
+                if (err) callback(err);
+                else callback(null, userAccount);
+            });
+        } else {
+
+            saltAndHash(newData.password, function (hash) {
+
+                userAccount.password = hash;
+                accounts.save(userAccount, { safe: true }, function (err) {
+
+                    if (err) callback(err);
+                    else callback(null, userAccount);
+                });
+            });
+        }
 	});
+    */
 }
 
 exports.updatePassword = function(email, newPass, callback)
@@ -165,6 +202,12 @@ exports.getAllRecords = function(callback)
 exports.delAllRecords = function(callback)
 {
 	accounts.remove({}, callback); // reset accounts collection for testing //
+}
+
+exports.validatePassword = function(plainPass, hashedPass, callback){
+    
+    console.log(hashedPass);
+    validatePassword(plainPass, hashedPass, callback);
 }
 
 /* private encryption & validation methods */

@@ -10,7 +10,7 @@ var router = express.Router();
     
     
     router.use(function(req, res, next){
-        console.log("We made it this far.");
+        
         next();
     })
     
@@ -106,35 +106,76 @@ var router = express.Router();
 			});
 		}
 	});
+    
+    router.get('/currentUser', function(req, res){
+        console.log("Getting user...");
+        console.log(req.session.user);
+        if(req.session.user){            
+            
+            res.status(200).send(req.session.user);
+        }
+    })
 	
-	router.post('/editUser', function(req, res){
-        console.log("auth /api/auth/editUser");
+    router.get('/updateAccount', function(req, res){
         
-		if (req.body['user'] != undefined) {
-			AM.updateAccount({
-				user 	: req.body['user'],
-				name 	: req.body['name'],
-				email 	: req.body['email'],
-				pass	: req.body['pass'],
-				country : req.body['country']
-			}, function(e, o){
-				if (e){
-					res.status(400).send('error-updating-account');
-				}	else{
-					req.session.user = o;
-			// update the user's login cookies if they exists //
-					if (req.cookies.user != undefined && req.cookies.pass != undefined){
-						res.cookie('user', o.user, { maxAge: 900000 });
-						res.cookie('pass', o.pass, { maxAge: 900000 });	
-					}
-					res.status(200).send('ok');
-				}
-			});
+        res.render('index');
+    })
+    
+	router.post('/updateAccount', function(req, res){
+        
+        console.log("auth /auth/updateAccount");
+        console.log(req.body);
+
+        AM.validatePassword(req.body.currentPassword, req.session.user.password, function (isValid) {
+            
+            AM.updateAccount({
+                name: req.body['name'],
+                battleTag: req.body['battleTag'],
+                email: req.body['email'],
+                password: req.session.user.password
+
+            }, function (err, user) {
+
+                if (err) {
+
+                    console.log("Error updating account: " + err)
+                    res.status(400).send('Error updating account: ' + err);
+                } else {
+
+                    req.session.user = user;
+                    
+                    // update the user's login cookies if they exists //
+                    if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+
+                        res.cookie('user', user.name, { maxAge: 900000 });
+                        res.cookie('pass', user.pass, { maxAge: 900000 });
+                    }
+
+                    res.status(200).send('ok');
+                }
+            });
+        }, function(err){
+            
+            res.status(400).send("Invalid password");
+        })
+        
+        /*
+		if (req.body.currentPassword === req.body.passwordVerify  && req.session.user.password === req.body.currentPassword ) {
+            
+            console.log("Updating account...");
+            
+			
 		}	else if (req.body['logout'] == 'true'){
+            
 			res.clearCookie('user');
 			res.clearCookie('pass');
 			req.session.destroy(function(e){ res.status(200).send('ok'); });
 		}
+        else{
+            
+            res.status(400).send("Something went wrong");
+        }
+        */
 	});
 	
 // creating new accounts //

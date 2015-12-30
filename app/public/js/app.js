@@ -25,28 +25,32 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     when('/', {
       templateUrl: 'home',
       controller: 'homeController'
-    }).
-    when('/strategyRoom/:raid', {
+    })
+    .when('/strategyRoom/:raid', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
-    }).
-    when('/roster', {
+    })
+    .when('/roster', {
         templateUrl: 'roster',
         controller: 'rosterController'
-    }).
-    when('/auth/login', {
+    })
+    .when('/auth/login', {
         templateUrl: 'login',
         controller: 'loginController'
-    }).
-    when('/auth/signup', {
+    })
+    .when('/auth/signup', {
         templateUrl: 'signup',
         controller: 'signupController'
-    }).
-    when('/forum', {
+    })
+    .when('/forum', {
         templateUrl: 'forums',
         controller: 'forumsController'
-    }).
-    otherwise({
+    })
+    .when('/auth/updateAccount', {
+        templateUrl: 'editAccount',
+        controller: 'editAccountController' 
+    })
+    .otherwise({
       redirectTo: '/'
     });
 
