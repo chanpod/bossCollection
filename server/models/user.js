@@ -4,6 +4,6 @@ module.exports = mongoose.model('User',{
     name: String,
     password: String,
     email: String,
-    battlenet: String,
+    battleTag: String,
     characters: []
 });

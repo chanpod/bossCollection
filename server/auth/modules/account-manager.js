@@ -55,36 +55,37 @@ exports.manualLogin = function(user, pass, callback)
 
 /* record insertion, update & deletion methods */
 
-exports.addNewAccount = function(newData, callback)
+exports.addNewAccount = function(newUser, callback)
 {
-    if(newData.name == '' || newData.name == undefined){
-        callback('user name missing');
+    if(newUser.name == '' || newUser.name == undefined){
+        callback('User name missing!');
         return;
     }
     
-    if(newData.password == undefined || newData.password.length == 0){
-        callback('password is empty');
+    if(newUser.password == undefined || newUser.password.length == 0){
+        callback('Password is empty!');
         return;
     }
     
-	accounts.findOne({name:newData.name}, function(e, o) {
+	accounts.findOne({name:newUser.name}, function(e, o) {
 		if (o){
 			callback('username-taken');
 		}	else{
-			//accounts.findOne({email:newData.email}, function(e, o) {
-				//if (o){
-				//	callback('email-taken');
-				//}	else{
+			accounts.findOne({email:newUser.email}, function(e, o) {
+				if (o){
+					callback('email-taken');
+				}	else{
                     
-					saltAndHash(newData.password, function(hash){
-						newData.password = hash;
+					saltAndHash(newUser.password, function(hash){
+						newUser.password = hash;
 					// append date stamp when record was created //
-						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-						accounts.insert(newData, {safe: true}, callback);
+						newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+                        console.log("Adding new user: " + newUser);
+						accounts.insert(newUser, {safe: true}, callback);
 					});
                     
-				//}
-			//});
+				}
+			});
 		}
 	});
 }

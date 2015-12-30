@@ -153,7 +153,9 @@ var router = express.Router();
             
             var newUser = {
                 name: req.body.name,
-                password: req.body.password
+                password: req.body.password,
+                email: req.body.email,
+                battleTag: req.body.battleTag
             }
             
             AM.addNewAccount(newUser, function (error) {
