@@ -1,0 +1,28 @@
+script#signup(type="text/ng-template")    
+    div.container
+        div.card
+            h4
+                | Please tell us a little about yourself.
+            div.row
+                form().col.s12                
+                    div.row
+                        div.col.s6.input-field
+                            input(placeholder = "User Name", type = "text", id = "uName", class = "validate", required = "required", ng-model = "user.name")
+                            label(for = "uName") User Name
+                        div.col.s6.input-field
+                            input(placeholder = "Battle Tag", id="battleTag", type = "text", class = "validate", ng-model = "user.battleTag")
+                            label(for="battleTag") Battle Tag
+                    div.row
+                        div.col.s12.input-field
+                            input(id = "password", type = "password", class = "validate", required = "required", ng-model = "user.password")
+                            label(for="password") Password
+                    div.row
+                        div.col.s12.input-field
+                            input(id = "password_validate", type = "password", class = "validate", required = "required", ng-model = "user.password_verify")
+                            label(for="password_validate") Verify Password
+                    div.row
+                        div.s6.col
+                            button(type="submit", ng-click = "register()")#btn-login.btn.btn-primary
+                                i.icon-lock.icon-white
+                                | Register
+                            

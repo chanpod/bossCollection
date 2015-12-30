@@ -3,7 +3,7 @@ module.exports = function (grunt) {
          pkg: grunt.file.readJSON('package.json'),
          meta: {
              appName: 'bosscollection',
-             content : 'public',
+             content : 'app/public',
              js: '<%= meta.content %>/js',
              css : '<%= meta.content %>/css',
 			 temp: '<%= meta.content %>/tmp'
