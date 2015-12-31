@@ -6,6 +6,7 @@ var express = require('express');
 var router = express.Router();
 
 
+
 // main login page //
     
     
@@ -64,34 +65,37 @@ var router = express.Router();
 		}
 	});
 	
-	router.post('/login', function(req, res){
-        
+    router.post('/login', function (req, res) {
+
         console.log("post auth /api/auth")
         console.log(req.body);
-		AM.manualLogin(req.body.name, req.body.password, function(err, user){
-            
-            console.log(user);
-            console.log(err);
-			if (!user){
-                
-                res.status(400).send(err);
-                				
-			}	else{
-                
-				req.session.user = user;
-                
-				if (req.body.rememberMe == true){
+        
+        AM.manualLogin(req.body.name, req.body.password)
+            .then(function (user) {
+
+                console.log(user);
+
+                req.session.user = user;
+
+                if (req.body.rememberMe == true) {
+                    
                     console.log("Remember me set...");
-					res.cookie('name', user.name, { maxAge: 900000 });
-					res.cookie('password', user.password, { maxAge: 900000 });
-				}
-                else{
+                    
+                    res.cookie('name', user.name, { maxAge: 900000 });
+                    res.cookie('password', user.password, { maxAge: 900000 });
+                }
+                else {
+                    
                     console.log("Remember me not set");
                 }
-				res.status(200).send(user);
-			}
-		});
-	});
+                
+                res.status(200).send(user);
+            })
+            .fail(function (err) {
+
+                res.status(400).send(err);
+            })
+    });
 	
 // logged-in user homepage //
 	
@@ -102,7 +106,7 @@ var router = express.Router();
 			res.redirect('/auth/login');
 		}	else{
 			res.render('index', {							
-				udata : req.session.user
+				udata : req.session.user    
 			});
 		}
 	});
@@ -126,30 +130,30 @@ var router = express.Router();
         console.log("auth /auth/updateAccount");
         console.log(req.body);
 
-        AM.validatePassword(req.body.currentPassword, req.session.user.password, function (err, isValid) {            
-            
-            if(err){
+        AM.validatePassword(req.body.currentPassword, req.session.user.password)
+            .then(function (isValid) {
+
+                if (req.body.newPassword.length > 1 && (req.body.newPassword === req.body.passwordVerify)) {
+
+                    AM.updatePassword(req.body.email, req.body.newPassword);
+                }
+
+            })
+            .then(function(){
                 
-                res.status(400).send(err);
-                return;
-            }
-            
-            AM.updateAccount({
-                name: req.body['name'],
-                battleTag: req.body['battleTag'],
-                email: req.body['email'],
-                password: req.session.user.password
-
-            }, function (err, user) {
-
-                if (err) {
-
-                    console.log("Error updating account: " + err)
-                    res.status(400).send('Error updating account: ' + err);
-                } else {
+                AM.updateAccount({
+                    name: req.body['name'],
+                    battleTag: req.body['battleTag'],
+                    email: req.body['email'],
+                    password: req.session.user.password
+                })
+                
+            })
+            .then(function (user) {
 
                     req.session.user = user;
                     req.session.save(function () {
+                        
                         // update the user's login cookies if they exists //
                         if (req.cookies.user != undefined && req.cookies.pass != undefined) {
 
@@ -159,13 +163,14 @@ var router = express.Router();
 
                         res.status(200).send('ok');
                     });
-                    
-                }
-            });
-        }, function(err){
-            
-            res.status(400).send("Invalid password");
-        })
+            })
+            .fail(function (err) {
+
+                res.status(400).send(err);
+            })
+    
+        
+        
         
         /*
 		if (req.body.currentPassword === req.body.passwordVerify  && req.session.user.password === req.body.currentPassword ) {

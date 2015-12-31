@@ -3,7 +3,7 @@ var crypto 		= require('crypto');
 //var MongoDB 	= require('mongodb').Db;
 //var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
-
+var q = require('Q');
 
 
 
@@ -61,22 +61,29 @@ exports.autoLogin = function(name, password, callback)
 
 exports.manualLogin = function(user, pass, callback)
 {
+    var defer = q.defer();
+    
 	UserModel.findOne({name:user}, function(e, userFound) {
         
 		if (userFound == null){
             
             UserModel.findOne({email: user}, function(err, userFound){
                 
-                if(err){
+                if(err || userFound == null){
                     
-                    callback('Username or Email not found.');
+                    defer.reject('Username or Email not found.')
+                    return; //We're done here. 
                 }
-
+                
+                
                 validatePassword(pass, userFound.password, function (err, res) {
+                    
                     if (res) {
-                        callback(null, userFound);
+                        
+                        defer.resolve(userFound);                        
                     } else {
-                        callback('invalid-password');
+                        
+                        defer.reject('invalid password');
                     }
                 });
             })
@@ -85,16 +92,21 @@ exports.manualLogin = function(user, pass, callback)
 		}	else{
             
             console.log(pass);
-            console.log(o.password);
-			validatePassword(pass, o.password, function(err, res) {
+            console.log(userFound.password);
+            
+			validatePassword(pass, userFound.password, function(err, res) {
 				if (res){
-					callback(null, o);
+					
+                    defer.resolve(userFound);
 				}	else{
-					callback('invalid-password');
+                    
+					defer.reject('invalid password: ' + err);
 				}
 			});
 		}
 	});
+    
+    return defer.promise;
 }
 
 /* record insertion, update & deletion methods */
@@ -116,7 +128,9 @@ exports.addNewAccount = function(newUser, callback)
 			callback('username-taken');
 		}	else{
 			UserModel.findOne({email:newUser.email}, function(e, o) {
+                
 				if (o){
+                    
 					callback('email-taken');
 				}	else{
                     
@@ -128,7 +142,6 @@ exports.addNewAccount = function(newUser, callback)
                         var user = new UserModel(newUser);
 						user.save(callback);
 					});
-                    
 				}
 			});
 		}
@@ -137,38 +150,55 @@ exports.addNewAccount = function(newUser, callback)
 
 exports.updateAccount = function(userAccount, callback)
 {
+    var defer = q.defer();
     
     console.log("Saving account: " + JSON.stringify(userAccount));
     //console.log(userModel);
 
     var query = {"name" : userAccount.name};
     
-    UserModel.findOneAndUpdate(query, userAccount, function(err, savedUser){
-        
-        if(err){
-            console.log(err);
-            callback(err);
-        }
-        
-        callback(null, userAccount);
-    })
+    UserModel.findOneAndUpdate(query, userAccount)
+        .then(function (savedUser) {
+            
+            
+            //callback(null, userAccount);
+            defer.resolve(userAccount);
+        },
+        function(err){
+            defer.reject(err);
+        })        
+    
+    return defer.promise;
 }
 
 exports.updatePassword = function(email, newPass, callback)
 {
-	UserModel.findOne({email:email}, function(e, o){
+    var defer = q.defer();
+    
+	UserModel.findOne({email:email}, function(err, user){
         
-		if (e){
-			callback(e, null);
+		if (err){
+			//callback(e, null);
+            defer.reject(err);
 		}	else{
             
 			saltAndHash(newPass, function(hash){
                 
-		        o.password = hash;
-		        UserModel.save(o, {safe: true}, callback);
+		        user.password = hash;
+		        UserModel.save(user, {safe: true})
+                    .then(function(err, updatedUser){
+                        
+                        if(err){
+                            defer.reject(err);
+                        }
+                        
+                        defer.resolve(updatedUser);
+                    })
 			});
 		}
 	});
+    
+    return defer.promise;
 }
 
 /* account lookup methods */
@@ -205,18 +235,24 @@ exports.delAllRecords = function(callback)
 }
 
 exports.validatePassword = function(plainPass, hashedPass, callback){
+    var defer = q.defer();
     
     console.log(hashedPass);
+    
     validatePassword(plainPass, hashedPass, function(err, isValid){
         
         if(isValid == true){
             
-            callback(null, isValid);
+            defer.resolve(isValid);
+            //callback(null, isValid);
         }
         else{
-            callback("Invalid Password", isValid);
+            defer.reject("Invalid password");
+            //callback("Invalid Password", isValid);
         }
     });
+    
+    return defer.promise;
 }
 
 /* private encryption & validation methods */
@@ -238,8 +274,13 @@ var md5 = function(str) {
 
 var saltAndHash = function(pass, callback)
 {
+    var defer = q.defer();
+    
 	var salt = generateSalt();
-	callback(salt + md5(pass + salt));
+	
+    defer.resolve(salt + md5(pass + salt))
+    
+    return defer.promise;
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
