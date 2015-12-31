@@ -132,22 +132,27 @@ var router = express.Router();
 
         AM.validatePassword(req.body.currentPassword, req.session.user.password)
             .then(function (isValid) {
+                
+                var newPassword = req.body.newPassword; 
+                try {
+                    if (newPassword || (newPassword.length > 1 && (newPassword === req.body.passwordVerify))) {
 
-                if (req.body.newPassword.length > 1 && (req.body.newPassword === req.body.passwordVerify)) {
-
-                    AM.updatePassword(req.body.email, req.body.newPassword);
+                        AM.updatePassword(req.body.email, req.body.newPassword);
+                    }
+                }
+                catch(err){
+                    console.log(err);
                 }
 
             })
             .then(function(){
                 
-                AM.updateAccount({
+                return AM.updateAccount({
                     name: req.body['name'],
                     battleTag: req.body['battleTag'],
                     email: req.body['email'],
                     password: req.session.user.password
                 })
-                
             })
             .then(function (user) {
 
@@ -169,26 +174,6 @@ var router = express.Router();
                 res.status(400).send(err);
             })
     
-        
-        
-        
-        /*
-		if (req.body.currentPassword === req.body.passwordVerify  && req.session.user.password === req.body.currentPassword ) {
-            
-            console.log("Updating account...");
-            
-			
-		}	else if (req.body['logout'] == 'true'){
-            
-			res.clearCookie('user');
-			res.clearCookie('pass');
-			req.session.destroy(function(e){ res.status(200).send('ok'); });
-		}
-        else{
-            
-            res.status(400).send("Something went wrong");
-        }
-        */
 	});
 	
 // creating new accounts //
