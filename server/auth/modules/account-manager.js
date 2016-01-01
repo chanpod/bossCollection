@@ -30,6 +30,30 @@ exports.autoLogin = function(name, password, callback)
 	});
 }
 
+exports.verifyPasswordsMatch = function(pass1, pass2){
+    
+    var defer = q.defer();
+    
+    if(pass1 && pass2){
+        
+        if(pass1 === pass2){
+            
+            defer.resolve(true);
+        }
+        else{
+            
+            defer.reject("Passwords dont match");
+        }
+    }
+    else{
+        defer.reject("Passwords don't match");
+    }
+    
+    return defer.promise;
+    
+    
+}
+
 exports.manualLogin = function(user, pass, callback)
 {
     var defer = q.defer();

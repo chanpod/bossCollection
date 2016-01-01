@@ -132,39 +132,20 @@ var q = require('q');
         
         var sessionPassword = req.session.user.password;
         var currentPassword = req.body.currentPassword;
+        
+        var newPassword = req.body.newPassword; 
+        var verifyPassword = req.body.passwordVerify;
+        
         console.log("Current password: " + sessionPassword);
         
         AM.validatePassword(currentPassword, sessionPassword)
-            .then(function (isValid) {
+            .then(function () {
                 
-                var defer = q.defer();
+                return AM.verifyPasswordsMatch(newPassword, verifyPassword)
+            })
+            .then(function () {
                 
-                try {
-                    
-                    var newPassword = req.body.newPassword; 
-                    var verifyPassword = req.body.passwordVerify;
-                    
-                    if ((newPassword || newPassword.length > 1) && newPassword === verifyPassword) {
-
-                        return AM.updatePassword(req.body.email, newPassword);
-                    }
-                    else{
-                    
-                        throw("Passwords don't match")
-                    }
-                }
-                catch(err){
-                    
-                    console.log(err);
-                    
-                    
-                    defer.reject(err);                    
-                }
-                finally{
-                    
-                    return defer.promise;
-                }
-
+                return AM.updatePassword(req.body.email, newPassword)
             })
             .then(function(updatedUser){
                 
