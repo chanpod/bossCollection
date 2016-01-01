@@ -129,15 +129,22 @@ var router = express.Router();
         
         console.log("auth /auth/updateAccount");
         console.log(req.body);
-
-        AM.validatePassword(req.body.currentPassword, req.session.user.password)
+        
+        var sessionPassword = req.session.user.password;
+        var currentPassword = req.body.currentPassword;
+        console.log("Current password: " + sessionPassword);
+        
+        AM.validatePassword(currentPassword, sessionPassword)
             .then(function (isValid) {
                 
-                var newPassword = req.body.newPassword; 
                 try {
-                    if ((newPassword || (newPassword.length > 1) && (newPassword === req.body.passwordVerify))) {
+                    
+                    var newPassword = req.body.newPassword; 
+                    var verifyPassword = req.body.passwordVerify;
+                    
+                    if ((newPassword || (newPassword.length > 1) && (newPassword === verifyPassword))) {
 
-                        return AM.updatePassword(req.body.email, req.body.newPassword);
+                        return AM.updatePassword(req.body.email, newPassword);
                     }
                 }
                 catch(err){
@@ -168,7 +175,7 @@ var router = express.Router();
                         if (req.cookies.user != undefined && req.cookies.pass != undefined) {
 
                             res.cookie('user', user.name, { maxAge: 900000 });
-                            res.cookie('pass', user.password, { maxAge: 900000 });
+                            res.cookie('password', user.password, { maxAge: 900000 });
                         }
 
                         res.status(200).send('ok');

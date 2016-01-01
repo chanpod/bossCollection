@@ -197,19 +197,20 @@ exports.updatePassword = function(email, newPass, callback)
 		}	
         else{
             
+            console.log("Creating new passwith with pass: " + newPass);
+            
             var newHash = saltAndHash(newPass);
             
-            console.log(user._doc.password);
+            
+            
             
             user._doc.password = newHash;
+            console.log("New Password: " + user._doc.password);
             
-            var query = {"name" : user.name};
-            
-            
-            UserModel.findOneAndUpdate(query, user)
+            user.save()
                 .then(function (updatedUser) {
                     
-                    
+                    console.log("User updated with new password: " + updatedUser._doc.password);
                     defer.resolve(updatedUser);
                 },
                 function(err){
@@ -259,7 +260,7 @@ exports.delAllRecords = function(callback)
 exports.validatePassword = function(plainPass, hashedPass, callback){
     var defer = q.defer();
     
-    console.log(hashedPass);
+    //console.log(hashedPass);
     
     validatePassword(plainPass, hashedPass, function(err, isValid){
         
@@ -299,14 +300,15 @@ var saltAndHash = function(pass, callback)
     
 	var salt = generateSalt();
     
-    return salt + md5(pass + salt)
+    return (salt + md5(pass + salt))
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
 {
 	var salt = hashedPass.substr(0, 10);
+    console.log("Creating hash with password: " + plainPass);
 	var validHash = salt + md5(plainPass + salt);
-    console.log(validHash);
+    //console.log(validHash);
 	callback(null, hashedPass === validHash);
 }
 
