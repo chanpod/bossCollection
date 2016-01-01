@@ -1,19 +1,7 @@
 
 var crypto 		= require('crypto');
-//var MongoDB 	= require('mongodb').Db;
-//var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 var q = require('q');
-
-
-
-var dbPort 		= 27017;
-var dbHost 		= 'localhost';
-var dbName 		= 'bosscollection';
-var collections = ["UserModel"];
-//var mongoose    = require('mongoose');
-//var mongooseDB  = mongoose.createConnection(dbHost);
-
 
 var mongoose = require('mongoose');
 var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
@@ -30,23 +18,6 @@ var UserSchema = new Schema({
 var UserModel = mongoose.model('accounts', UserSchema);
 
 
-//var UserModel   = require('../../models/user');
-//var mongoosedb = require("mongojs").connect(dbHost, collections);
-
-/* establish the database connection 
-
-var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
-	db.open(function(e, d){
-	if (e) {
-		console.log(e);
-	}	else{
-		console.log('connected to database :: ' + dbName);
-	}
-});
-
-var UserModel = db.collection('UserModel');
-*/
-/* login validation methods */
 
 exports.autoLogin = function(name, password, callback)
 {

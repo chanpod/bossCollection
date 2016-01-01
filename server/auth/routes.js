@@ -4,7 +4,7 @@ var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
 var express = require('express');
 var router = express.Router();
-
+var q = require('q');
 
 
 // main login page //
@@ -137,18 +137,32 @@ var router = express.Router();
         AM.validatePassword(currentPassword, sessionPassword)
             .then(function (isValid) {
                 
+                var defer = q.defer();
+                
                 try {
                     
                     var newPassword = req.body.newPassword; 
                     var verifyPassword = req.body.passwordVerify;
                     
-                    if ((newPassword || (newPassword.length > 1) && (newPassword === verifyPassword))) {
+                    if ((newPassword || newPassword.length > 1) && newPassword === verifyPassword) {
 
                         return AM.updatePassword(req.body.email, newPassword);
                     }
+                    else{
+                    
+                        throw("Passwords don't match")
+                    }
                 }
                 catch(err){
+                    
                     console.log(err);
+                    
+                    
+                    defer.reject(err);                    
+                }
+                finally{
+                    
+                    return defer.promise;
                 }
 
             })
