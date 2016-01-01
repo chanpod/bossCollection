@@ -13,7 +13,7 @@ script#editAccount(type="text/ng-template")
                         div.col.s6.input-field
                             
                             input(placeholder = "Battle Tag", id="battleTag", type = "text", class = "validate", ng-model = "user.battleTag")
-                            label(for="battleTag") Battle Tag
+                            label(for="battleTag").active Battle Tag
                     div.row
                         div.col.s12.input-field
                             i(class="material-icons prefix") email
@@ -33,7 +33,7 @@ script#editAccount(type="text/ng-template")
                         div.col.s12.input-field
                             i(class="material-icons prefix") lock
                             input(id = "password_validate", type = "password",  ng-model = "user.passwordVerify")
-                            label(for="password_validate") Verify Password
+                            label(for="password_validate") Verify New Password
                     div.row
                         div.s6.col
                             button(type="submit")#btn-login.btn.btn-primary

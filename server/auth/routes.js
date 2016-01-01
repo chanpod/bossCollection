@@ -135,9 +135,9 @@ var router = express.Router();
                 
                 var newPassword = req.body.newPassword; 
                 try {
-                    if (newPassword || (newPassword.length > 1 && (newPassword === req.body.passwordVerify))) {
+                    if ((newPassword || (newPassword.length > 1) && (newPassword === req.body.passwordVerify))) {
 
-                        AM.updatePassword(req.body.email, req.body.newPassword);
+                        return AM.updatePassword(req.body.email, req.body.newPassword);
                     }
                 }
                 catch(err){
@@ -145,7 +145,12 @@ var router = express.Router();
                 }
 
             })
-            .then(function(){
+            .then(function(updatedUser){
+                
+                if(updatedUser != null){
+                    
+                    req.session.user = updatedUser._doc;
+                }
                 
                 return AM.updateAccount({
                     name: req.body['name'],

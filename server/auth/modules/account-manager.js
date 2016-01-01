@@ -113,39 +113,53 @@ exports.manualLogin = function(user, pass, callback)
 
 exports.addNewAccount = function(newUser, callback)
 {
+    var defer = q.defer();
+    
     if(newUser.name == '' || newUser.name == undefined){
-        callback('User name missing!');
+        //callback('User name missing!');
+        defer.reject('User name missing!');
         return;
     }
     
     if(newUser.password == undefined || newUser.password.length == 0){
-        callback('Password is empty!');
+        //callback('Password is empty!');
+        defer.reject('Password is empty');
         return;
     }
     
-	UserModel.findOne({name:newUser.name}, function(e, o) {
-		if (o){
-			callback('username-taken');
+	UserModel.findOne({name:newUser.name}, function(e, user) {
+		if (user){
+            
+			//callback('username-taken');
+            defer.reject('username taken');
 		}	else{
-			UserModel.findOne({email:newUser.email}, function(e, o) {
+			UserModel.findOne({email:newUser.email}, function(e, user) {
                 
-				if (o){
+				if (user){
                     
-					callback('email-taken');
-				}	else{
-                    
-					saltAndHash(newUser.password, function(hash){
-						newUser.password = hash;
-					// append date stamp when record was created //
-						newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-                        console.log("Adding new user: " + newUser);
-                        var user = new UserModel(newUser);
-						user.save(callback);
-					});
-				}
-			});
+					//callback('email-taken');
+                    defer.reject('email taken');
+				}	
+                else {
+
+                    var newHash = saltAndHash(newUser.password)
+
+                    newUser.password = newHash;
+                    // append date stamp when record was created //
+                    newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+                    console.log("Adding new user: " + newUser);
+                    newUser = new UserModel(newUser);
+                    newUser.save(function(savedUser){
+                        
+                        defer.resolve(savedUser);
+                    });
+
+                }
+            });
 		}
 	});
+    
+    return defer.promise;
 }
 
 exports.updateAccount = function(userAccount, callback)
@@ -180,22 +194,30 @@ exports.updatePassword = function(email, newPass, callback)
 		if (err){
 			//callback(e, null);
             defer.reject(err);
-		}	else{
+		}	
+        else{
             
-			saltAndHash(newPass, function(hash){
-                
-		        user.password = hash;
-		        UserModel.save(user, {safe: true})
-                    .then(function(err, updatedUser){
-                        
-                        if(err){
-                            defer.reject(err);
-                        }
-                        
-                        defer.resolve(updatedUser);
-                    })
-			});
-		}
+            var newHash = saltAndHash(newPass);
+            
+            console.log(user._doc.password);
+            
+            user._doc.password = newHash;
+            
+            var query = {"name" : user.name};
+            
+            
+            UserModel.findOneAndUpdate(query, user)
+                .then(function (updatedUser) {
+                    
+                    
+                    defer.resolve(updatedUser);
+                },
+                function(err){
+                    
+                    defer.reject(err);
+                })
+
+        }
 	});
     
     return defer.promise;
@@ -273,14 +295,11 @@ var md5 = function(str) {
 }
 
 var saltAndHash = function(pass, callback)
-{
-    var defer = q.defer();
+{ 
     
 	var salt = generateSalt();
-	
-    defer.resolve(salt + md5(pass + salt))
     
-    return defer.promise;
+    return salt + md5(pass + salt)
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
