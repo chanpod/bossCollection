@@ -44,12 +44,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-mongoose.connect('mongodb://127.0.0.1:27017/passport_local_mongoose_express4');
+//mongoose.connect('mongodb://127.0.0.1:27017/passport_local_mongoose_express4');
 
 app.use(session({
 	secret: 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4',
 	proxy: true,
-	resave: true,
+	resave: false,
 	saveUninitialized: true,
 	store: new MongoStore({ host: 'localhost', port: 27017, db: 'bosscollection'})
 	})

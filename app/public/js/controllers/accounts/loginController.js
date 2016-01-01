@@ -5,10 +5,16 @@
 angular.module("BossCollection.controllers")
     .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 
         function($scope, $location, $http, userLoginSrvc){
-            
-        console.log("Working?");
 
         $scope.user = {};
+        $scope.user = userLoginSrvc.getUser()
+        
+        $scope.alreadyLoggedIn = function(){
+            
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
         
         $scope.login = function(){
             

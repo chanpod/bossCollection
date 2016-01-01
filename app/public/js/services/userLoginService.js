@@ -11,12 +11,39 @@ angular.module("BossCollection.services")
         var login = $resource('/auth/login', {}, {})
         var logout = $resource('/auth/logout', {}, {});
         var loggedIn = $resource('/auth/loggedin', {}, {});
+        var updateAccount = $resource('/auth/updateAccount', {}, {});
+        var getUser = $resource('/auth/currentUser', {}, {});
         
-        var loginApi = {
+        
+        
+        var accountApi = {
             
+            updateAccount: function(updatedUser){
+                
+                var defer = $q.defer();
+                
+                updateAccount.save(updatedUser).$promise.then(function(response){
+                    
+                    
+                    defer.resolve(response);
+                },
+                function(err){
+                    console.log(err);
+                    defer.reject(err.data);
+                })
+                
+                return defer.promise;
+            },
             getUser: function(){
                 
-                return $cookies.get("name");  
+                var defer = $q.defer();
+                
+                getUser.get().$promise.then(function(user){
+                    
+                    console.log(user);
+                    defer.resolve(user);
+                })
+                return defer.promise;  
             },
             currentlyLoggedIn: function(){
                 
@@ -57,10 +84,8 @@ angular.module("BossCollection.services")
                 
                 logout.save({}).$promise.then(function(result){
                     
-                    if(result.loggedOut == true){
+                    if(result.loggedOut == true){                        
                         
-                        $cookies.remove("name");
-                        $cookies.remove("password");
                         $rootScope.$broadcast("loggedin" , {loggedIn: false});
                     }
                     
@@ -122,5 +147,5 @@ angular.module("BossCollection.services")
             }
         };
 
-        return loginApi;
+        return accountApi;
     }])

@@ -2,7 +2,7 @@
 /**
  *
  */
-angular.module("BossCollection.controllers", [])
+angular.module("BossCollection.controllers")
     .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
         function($scope, $location, $http, userLoginSrvc, $rootScope){
             

@@ -6,11 +6,12 @@ var express = require('express');
 var router = express.Router();
 
 
+
 // main login page //
     
     
     router.use(function(req, res, next){
-        console.log("We made it this far.");
+        
         next();
     })
     
@@ -64,34 +65,37 @@ var router = express.Router();
 		}
 	});
 	
-	router.post('/login', function(req, res){
-        
+    router.post('/login', function (req, res) {
+
         console.log("post auth /api/auth")
         console.log(req.body);
-		AM.manualLogin(req.body.name, req.body.password, function(err, user){
-            
-            console.log(user);
-            console.log(err);
-			if (!user){
-                
-                res.status(400).send(err);
-                				
-			}	else{
-                
-				req.session.user = user;
-                
-				if (req.body.rememberMe == true){
+        
+        AM.manualLogin(req.body.name, req.body.password)
+            .then(function (user) {
+
+                console.log(user);
+
+                req.session.user = user;
+
+                if (req.body.rememberMe == true) {
+                    
                     console.log("Remember me set...");
-					res.cookie('name', user.name, { maxAge: 900000 });
-					res.cookie('password', user.password, { maxAge: 900000 });
-				}
-                else{
+                    
+                    res.cookie('name', user.name, { maxAge: 900000 });
+                    res.cookie('password', user.password, { maxAge: 900000 });
+                }
+                else {
+                    
                     console.log("Remember me not set");
                 }
-				res.status(200).send(user);
-			}
-		});
-	});
+                
+                res.status(200).send(user);
+            })
+            .fail(function (err) {
+
+                res.status(400).send(err);
+            })
+    });
 	
 // logged-in user homepage //
 	
@@ -102,39 +106,79 @@ var router = express.Router();
 			res.redirect('/auth/login');
 		}	else{
 			res.render('index', {							
-				udata : req.session.user
+				udata : req.session.user    
 			});
 		}
 	});
+    
+    router.get('/currentUser', function(req, res){
+        console.log("Getting user...");
+        console.log(req.session.user);
+        if(req.session.user){            
+            
+            res.status(200).send(req.session.user);
+        }
+    })
 	
-	router.post('/editUser', function(req, res){
-        console.log("auth /api/auth/editUser");
+    router.get('/updateAccount', function(req, res){
         
-		if (req.body['user'] != undefined) {
-			AM.updateAccount({
-				user 	: req.body['user'],
-				name 	: req.body['name'],
-				email 	: req.body['email'],
-				pass	: req.body['pass'],
-				country : req.body['country']
-			}, function(e, o){
-				if (e){
-					res.status(400).send('error-updating-account');
-				}	else{
-					req.session.user = o;
-			// update the user's login cookies if they exists //
-					if (req.cookies.user != undefined && req.cookies.pass != undefined){
-						res.cookie('user', o.user, { maxAge: 900000 });
-						res.cookie('pass', o.pass, { maxAge: 900000 });	
-					}
-					res.status(200).send('ok');
-				}
-			});
-		}	else if (req.body['logout'] == 'true'){
-			res.clearCookie('user');
-			res.clearCookie('pass');
-			req.session.destroy(function(e){ res.status(200).send('ok'); });
-		}
+        res.render('index');
+    })
+    
+	router.post('/updateAccount', function(req, res){
+        
+        console.log("auth /auth/updateAccount");
+        console.log(req.body);
+
+        AM.validatePassword(req.body.currentPassword, req.session.user.password)
+            .then(function (isValid) {
+                
+                var newPassword = req.body.newPassword; 
+                try {
+                    if ((newPassword || (newPassword.length > 1) && (newPassword === req.body.passwordVerify))) {
+
+                        return AM.updatePassword(req.body.email, req.body.newPassword);
+                    }
+                }
+                catch(err){
+                    console.log(err);
+                }
+
+            })
+            .then(function(updatedUser){
+                
+                if(updatedUser != null){
+                    
+                    req.session.user = updatedUser._doc;
+                }
+                
+                return AM.updateAccount({
+                    name: req.body['name'],
+                    battleTag: req.body['battleTag'],
+                    email: req.body['email'],
+                    password: req.session.user.password
+                })
+            })
+            .then(function (user) {
+
+                    req.session.user = user;
+                    req.session.save(function () {
+                        
+                        // update the user's login cookies if they exists //
+                        if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+
+                            res.cookie('user', user.name, { maxAge: 900000 });
+                            res.cookie('pass', user.password, { maxAge: 900000 });
+                        }
+
+                        res.status(200).send('ok');
+                    });
+            })
+            .fail(function (err) {
+
+                res.status(400).send(err);
+            })
+    
 	});
 	
 // creating new accounts //
@@ -153,7 +197,9 @@ var router = express.Router();
             
             var newUser = {
                 name: req.body.name,
-                password: req.body.password
+                password: req.body.password,
+                email: req.body.email,
+                battleTag: req.body.battleTag
             }
             
             AM.addNewAccount(newUser, function (error) {

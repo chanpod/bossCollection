@@ -1,14 +1,39 @@
 
 var crypto 		= require('crypto');
-var MongoDB 	= require('mongodb').Db;
-var Server 		= require('mongodb').Server;
+//var MongoDB 	= require('mongodb').Db;
+//var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
+var q = require('Q');
+
+
 
 var dbPort 		= 27017;
 var dbHost 		= 'localhost';
 var dbName 		= 'bosscollection';
+var collections = ["UserModel"];
+//var mongoose    = require('mongoose');
+//var mongooseDB  = mongoose.createConnection(dbHost);
 
-/* establish the database connection */
+
+var mongoose = require('mongoose');
+var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
+
+var Schema = mongoose.Schema;
+var UserSchema = new Schema({
+    name: String,
+    password: String,
+    email: String,
+    battleTag: String,
+    characters: Array
+})
+
+var UserModel = mongoose.model('accounts', UserSchema);
+
+
+//var UserModel   = require('../../models/user');
+//var mongoosedb = require("mongojs").connect(dbHost, collections);
+
+/* establish the database connection 
 
 var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
 	db.open(function(e, d){
@@ -18,13 +43,14 @@ var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}),
 		console.log('connected to database :: ' + dbName);
 	}
 });
-var accounts = db.collection('accounts');
 
+var UserModel = db.collection('UserModel');
+*/
 /* login validation methods */
 
 exports.autoLogin = function(name, password, callback)
 {
-	accounts.findOne({name:name}, function(e, o) {
+	UserModel.findOne({name:name}, function(e, o) {
 		if (o){
 			o.password == password ? callback(o) : callback(null);
 		}	else{
@@ -35,126 +61,190 @@ exports.autoLogin = function(name, password, callback)
 
 exports.manualLogin = function(user, pass, callback)
 {
-	accounts.findOne({name:user}, function(e, o) {
+    var defer = q.defer();
+    
+	UserModel.findOne({name:user}, function(e, userFound) {
         
-		if (o == null){
-			callback('user-not-found');
+		if (userFound == null){
+            
+            UserModel.findOne({email: user}, function(err, userFound){
+                
+                if(err || userFound == null){
+                    
+                    defer.reject('Username or Email not found.')
+                    return; //We're done here. 
+                }
+                
+                
+                validatePassword(pass, userFound.password, function (err, res) {
+                    
+                    if (res) {
+                        
+                        defer.resolve(userFound);                        
+                    } else {
+                        
+                        defer.reject('invalid password');
+                    }
+                });
+            })
+            
+			
 		}	else{
+            
             console.log(pass);
-            console.log(o.password);
-			validatePassword(pass, o.password, function(err, res) {
+            console.log(userFound.password);
+            
+			validatePassword(pass, userFound.password, function(err, res) {
 				if (res){
-					callback(null, o);
+					
+                    defer.resolve(userFound);
 				}	else{
-					callback('invalid-password');
+                    
+					defer.reject('invalid password: ' + err);
 				}
 			});
 		}
 	});
+    
+    return defer.promise;
 }
 
 /* record insertion, update & deletion methods */
 
-exports.addNewAccount = function(newData, callback)
+exports.addNewAccount = function(newUser, callback)
 {
-    if(newData.name == '' || newData.name == undefined){
-        callback('user name missing');
+    var defer = q.defer();
+    
+    if(newUser.name == '' || newUser.name == undefined){
+        //callback('User name missing!');
+        defer.reject('User name missing!');
         return;
     }
     
-    if(newData.password == undefined || newData.password.length == 0){
-        callback('password is empty');
+    if(newUser.password == undefined || newUser.password.length == 0){
+        //callback('Password is empty!');
+        defer.reject('Password is empty');
         return;
     }
     
-	accounts.findOne({name:newData.name}, function(e, o) {
-		if (o){
-			callback('username-taken');
+	UserModel.findOne({name:newUser.name}, function(e, user) {
+		if (user){
+            
+			//callback('username-taken');
+            defer.reject('username taken');
 		}	else{
-			//accounts.findOne({email:newData.email}, function(e, o) {
-				//if (o){
-				//	callback('email-taken');
-				//}	else{
+			UserModel.findOne({email:newUser.email}, function(e, user) {
+                
+				if (user){
                     
-					saltAndHash(newData.password, function(hash){
-						newData.password = hash;
-					// append date stamp when record was created //
-						newData.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-						accounts.insert(newData, {safe: true}, callback);
-					});
-                    
-				//}
-			//});
+					//callback('email-taken');
+                    defer.reject('email taken');
+				}	
+                else {
+
+                    var newHash = saltAndHash(newUser.password)
+
+                    newUser.password = newHash;
+                    // append date stamp when record was created //
+                    newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+                    console.log("Adding new user: " + newUser);
+                    newUser = new UserModel(newUser);
+                    newUser.save(function(savedUser){
+                        
+                        defer.resolve(savedUser);
+                    });
+
+                }
+            });
 		}
 	});
+    
+    return defer.promise;
 }
 
-exports.updateAccount = function(newData, callback)
+exports.updateAccount = function(userAccount, callback)
 {
-	accounts.findOne({name:newData.name}, function(e, o){
-        
-		o.name 		= newData.name;
-		o.email 	= newData.email;
+    var defer = q.defer();
+    
+    console.log("Saving account: " + JSON.stringify(userAccount));
+    //console.log(userModel);
 
-		if (newData.password == ''){
-			accounts.save(o, {safe: true}, function(err) {
-				if (err) callback(err);
-				else callback(null, o);
-			});
-		}	else{
+    var query = {"name" : userAccount.name};
+    
+    UserModel.findOneAndUpdate(query, userAccount)
+        .then(function (savedUser) {
             
-			saltAndHash(newData.password, function(hash){
-                
-				o.password = hash;
-				accounts.save(o, {safe: true}, function(err) {
-                    
-					if (err) callback(err);
-					else callback(null, o);
-				});
-			});
-		}
-	});
+            
+            //callback(null, userAccount);
+            defer.resolve(userAccount);
+        },
+        function(err){
+            defer.reject(err);
+        })        
+    
+    return defer.promise;
 }
 
 exports.updatePassword = function(email, newPass, callback)
 {
-	accounts.findOne({email:email}, function(e, o){
+    var defer = q.defer();
+    
+	UserModel.findOne({email:email}, function(err, user){
         
-		if (e){
-			callback(e, null);
-		}	else{
+		if (err){
+			//callback(e, null);
+            defer.reject(err);
+		}	
+        else{
             
-			saltAndHash(newPass, function(hash){
-                
-		        o.password = hash;
-		        accounts.save(o, {safe: true}, callback);
-			});
-		}
+            var newHash = saltAndHash(newPass);
+            
+            console.log(user._doc.password);
+            
+            user._doc.password = newHash;
+            
+            var query = {"name" : user.name};
+            
+            
+            UserModel.findOneAndUpdate(query, user)
+                .then(function (updatedUser) {
+                    
+                    
+                    defer.resolve(updatedUser);
+                },
+                function(err){
+                    
+                    defer.reject(err);
+                })
+
+        }
 	});
+    
+    return defer.promise;
 }
 
 /* account lookup methods */
 
 exports.deleteAccount = function(id, callback)
 {
-	accounts.remove({_id: getObjectId(id)}, callback);
+	UserModel.remove({_id: getObjectId(id)}, callback);
 }
 
 exports.getAccountByEmail = function(email, callback)
 {
-	accounts.findOne({email:email}, function(e, o){ callback(o); });
+	UserModel.findOne({email:email}, function(e, o){ callback(o); });
 }
 
 exports.validateResetLink = function(email, passHash, callback)
 {
-	accounts.find({ $and: [{email:email, password:passHash}] }, function(e, o){
+	UserModel.find({ $and: [{email:email, password:passHash}] }, function(e, o){
 		callback(o ? 'ok' : null);
 	});
 }
 
 exports.getAllRecords = function(callback)
 {
-	accounts.find().toArray(
+	UserModel.find().toArray(
 		function(e, res) {
 		if (e) callback(e)
 		else callback(null, res)
@@ -163,7 +253,28 @@ exports.getAllRecords = function(callback)
 
 exports.delAllRecords = function(callback)
 {
-	accounts.remove({}, callback); // reset accounts collection for testing //
+	UserModel.remove({}, callback); // reset UserModel collection for testing //
+}
+
+exports.validatePassword = function(plainPass, hashedPass, callback){
+    var defer = q.defer();
+    
+    console.log(hashedPass);
+    
+    validatePassword(plainPass, hashedPass, function(err, isValid){
+        
+        if(isValid == true){
+            
+            defer.resolve(isValid);
+            //callback(null, isValid);
+        }
+        else{
+            defer.reject("Invalid password");
+            //callback("Invalid Password", isValid);
+        }
+    });
+    
+    return defer.promise;
 }
 
 /* private encryption & validation methods */
@@ -184,9 +295,11 @@ var md5 = function(str) {
 }
 
 var saltAndHash = function(pass, callback)
-{
+{ 
+    
 	var salt = generateSalt();
-	callback(salt + md5(pass + salt));
+    
+    return salt + md5(pass + salt)
 }
 
 var validatePassword = function(plainPass, hashedPass, callback)
@@ -206,7 +319,7 @@ var getObjectId = function(id)
 
 var findById = function(id, callback)
 {
-	accounts.findOne({_id: getObjectId(id)},
+	UserModel.findOne({_id: getObjectId(id)},
 		function(e, res) {
 		if (e) callback(e)
 		else callback(null, res)
@@ -217,7 +330,7 @@ var findById = function(id, callback)
 var findByMultipleFields = function(a, callback)
 {
 // this takes an array of name/val pairs to search against {fieldName : 'value'} //
-	accounts.find( { $or : a } ).toArray(
+	UserModel.find( { $or : a } ).toArray(
 		function(e, results) {
 		if (e) callback(e)
 		else callback(null, results)

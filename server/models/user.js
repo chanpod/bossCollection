@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
- 
-module.exports = mongoose.model('User',{
+var mongooseDB  = mongoose.createConnection("mongodb://localhost/bosscollection");
+
+var Schema = mongoose.Schema;
+var userSchema = new Schema({
     name: String,
     password: String,
     email: String,
-    battlenet: String,
-    characters: []
-});
+    battleTag: String,
+    characters: Array
+})
+ 
+module.exports = mongoose.model('accounts', userSchema);

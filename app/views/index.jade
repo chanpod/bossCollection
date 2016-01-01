@@ -4,14 +4,14 @@ block body
   div(ng-controller = "navbar")
     ul(id="userDropdown", class = "dropdown-content")
       li
-        a(href="#!", class = "waves-effect waves-light") Edit (doesn't work yet)
+        a(href="/auth/updateAccount", class = "waves-effect waves-light") Edit 
       li()
         a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
       
       
     ul(id="userDropdownMobile", class = "dropdown-content")
       li
-        a(href="#!", class = "waves-effect waves-light") Edit (doesn't work yet)
+        a(href="/auth/updateAccount", class = "waves-effect waves-light") Edit 
       li()
         a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
         
@@ -95,6 +95,7 @@ block body
     include ../public/js/directives/bossStrategyTemplate
     include partials/videoModal
     include partials/roster
-    include partials/login
-    include partials/signup
-    include partials/forum
+    include partials/accounts/login
+    include partials/accounts/signup
+    include partials/forums/forum
+    include partials/accounts/editAccount

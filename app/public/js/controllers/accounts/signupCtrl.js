@@ -5,8 +5,6 @@
 angular.module("BossCollection.controllers")
     .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc',
         function($scope, $location, $http, $timeout, userLoginSrvc){
-            
-        console.log("Working?");
         
         $scope.user = {};
         
