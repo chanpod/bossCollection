@@ -34,19 +34,35 @@ exports.verifyPasswordsMatch = function(pass1, pass2){
     
     var defer = q.defer();
     
-    if(pass1 && pass2){
-        
-        if(pass1 === pass2){
-            
-            defer.resolve(true);
+    if (pass1 && pass2) {
+
+        if (pass1.length != 0) {
+
+            if (pass1.length > 1) {
+
+                if (pass1 === pass2) {
+
+                    defer.resolve(true);
+                }
+                else {
+
+                    defer.reject("Passwords dont match");
+                }
+
+            }
+            else {
+
+                defer.reject("Password must be longer than 1 chacter")
+            }
         }
         else{
             
-            defer.reject("Passwords dont match");
+            defer.resolve(false); //Not updating the password
         }
     }
     else{
-        defer.reject("Passwords don't match");
+        
+        defer.resolve(false);
     }
     
     return defer.promise;

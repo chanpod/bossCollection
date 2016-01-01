@@ -143,9 +143,12 @@ var q = require('q');
                 
                 return AM.verifyPasswordsMatch(newPassword, verifyPassword)
             })
-            .then(function () {
+            .then(function (doMatch) {
                 
-                return AM.updatePassword(req.body.email, newPassword)
+                if(doMatch == true){
+                    
+                    return AM.updatePassword(req.body.email, newPassword)
+                }
             })
             .then(function(updatedUser){
                 
