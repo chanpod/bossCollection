@@ -36,10 +36,11 @@ module.exports = function(app){
         console.log("Rendering index");
         res.render('index');  
     });
-
+    
+    app.use('/api', RESTserver);
     app.use(router);
 
-    app.use('/api', RESTserver);
+    
     
     
 }

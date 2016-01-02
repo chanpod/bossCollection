@@ -4,14 +4,18 @@ script#application(type="text/ng-template")
             h4
                 | Please fill out all fields
             div.row
-                form( ng-submit = "updateAccount()").col.s12                
+                form(ng-submit = "submitApplication()").col.s12                
                     div.row
-                        div.col.s6.input-field                    
-                            i(class="material-icons prefix") label        
-                            input(placeholder = "Realm", type = "text", id = "realmInput", class = "validate", required = "required", ng-model = "application.realm")
-                            label(for = "realmInput") Realm Your Character resides on
+                        div.col.s6          
+                            
+                            label() Materialize Select
+                            select(ng-blur = "validateCharactername()", ng-options = "realm as realm.name for realm in realms track by realm.name", ng-model = "application.realm").browser-default.active
+                                option(value="", disabled, selected) Choose your option
+                            
+                            
                         div.col.s6.input-field
-                            input(placeholder = "Battle Tag", placeholder = "Character Name",  id="characterNameInput", type = "text", class = "validate", ng-model = "application.characterName")
+                            i(ng-show = "!validCharacterName",class="material-icons prefix", data-position="top", data-delay="50", data-tooltip="Character not found").tooltipped.error error   
+                            input(ng-blur = "validateCharactername()", placeholder = "Battle Tag", placeholder = "Character Name",  id="characterNameInput", type = "text", class = "validate", ng-model = "application.characterName", required = "required")
                             label(for="characterNameInput") Character Name
                     div.row
                         div.col.s12.input-field
@@ -25,11 +29,16 @@ script#application(type="text/ng-template")
                             label(for="itemLevelInput") Item Level
                     div.row
                         div.col.s12.input-field
+                            i(class="material-icons prefix") info
+                            input(id = "desiredRoleInput", type = "text", class = "validate", ng-model = "application.desiredRole", placeholder = "Desired Role")
+                            label(for="desiredRoleInput") Desired Role if applicable
+                    div.row
+                        div.col.s12.input-field
                             i(class="material-icons prefix") message
-                            <textarea id="textarea1" class="materialize-textarea" ng-model = "application.comments"></textarea>
-                            <label for="textarea1">Anything else?</label>
+                            textarea(id="textarea1", class="materialize-textarea", ng-model = "application.comments")
+                            label(for="textarea1") Anything else?
                     div.row
                         div.s6.col
                             button(type="submit")#btn-login.btn.btn-primary
                                 i.icon-lock.icon-white
-                                | Submit
+                                | Submit 

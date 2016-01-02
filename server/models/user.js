@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
-var mongooseDB  = mongoose.createConnection("mongodb://localhost/bosscollection");
+
 
 var Schema = mongoose.Schema;
-var userSchema = new Schema({
+var UserSchema = new Schema({
     name: String,
     password: String,
     email: String,
@@ -10,4 +10,4 @@ var userSchema = new Schema({
     characters: Array
 })
  
-module.exports = mongoose.model('accounts', userSchema);
+module.exports = mongoose.model('accounts', UserSchema);

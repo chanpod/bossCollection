@@ -3,19 +3,9 @@ var crypto 		= require('crypto');
 var moment 		= require('moment');
 var q = require('q');
 
-var mongoose = require('mongoose');
-var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
-
-var Schema = mongoose.Schema;
-var UserSchema = new Schema({
-    name: String,
-    password: String,
-    email: String,
-    battleTag: String,
-    characters: Array
-})
-
-var UserModel = mongoose.model('accounts', UserSchema);
+//var mongoose = require('mongoose');
+//var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
+var UserModel = require('../../models/user.js');
 
 
 exports.verifyLoggedIn = function (req, res) {
