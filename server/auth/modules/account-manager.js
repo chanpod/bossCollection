@@ -18,6 +18,18 @@ var UserSchema = new Schema({
 var UserModel = mongoose.model('accounts', UserSchema);
 
 
+exports.verifyLoggedIn = function (req, res) {
+
+    if (req.session.user == null) {
+        // if user is not logged-in redirect back to login page //
+        res.redirect('/auth/login');
+    } else {
+        res.render('index', {
+            udata: req.session.user
+        });
+    }
+}
+
 
 exports.autoLogin = function(name, password, callback)
 {

@@ -1,0 +1,54 @@
+script#reviewApplications(type="text/ng-template")    
+      div.container        
+        div.card            
+                div(ng-show = "loading").row
+                            div.progress
+                                div.indeterminate
+                div.row.card-content
+                    div.row              
+                        div(id="raiders").col.s12                        
+                                div(ng-repeat = "player in applications")
+                                    div().col.s12.m6                                    
+                                            div().card.blue.lighten-5                 
+                                                div(class="card-image")
+                                                        img(src="images/classBackdrops/{{player.class}}.jpg")
+                                                        span(class="card-title") {{player.name}}
+                                                            
+                                                div.cart-content
+                                                        div.row
+                                                            div.col.s2.m2
+                                                                    p
+                                                                        //img(src= "{{player.avatar}}").pull-left.circle
+                                                            div.col.s8.m8
+                                                                    span.card-title.center
+                                                                        //| {{player.name}} d
+                                                                        
+                                                            div.right.hide-on-small-only
+                                                                    a(target="_blank", href = "http://us.battle.net/wow/en/character/{{realm}}/{{player.name}}/simple", class = "btn waves-effect waves-light")
+                                                                        i.material-icons
+                                                                                | open_in_new
+                                                        
+                                                            a.btn.activator                                          
+                                                                    | More...
+                                                div.card-reveal.grey-text.text-darken-4
+                                                        span.card-title
+                                                            | {{player.name}}
+                                                            i.material-icons.right
+                                                                    | close
+                                                        div.row
+                                                            div.col.s6.offset-s2.m6.center-align
+                                                                    | Class: &nbsp{{player.class}}   
+                                                            div.col.s6.m6.center-align
+                                                                    | Spec: &nbsp{{player.spec}}
+                                                        div.row
+                                                            div.col.s6.m6.center-align
+                                                                    | Gender: &nbsp{{player.gender}}
+                                                            div.col.s6.m6.center-align
+                                                                    | Achievements: &nbsp {{player.achievementPoints}}
+            div.row()
+                ins(class="adsbygoogle",
+                style="display:block;padding-top:75px",
+                data-ad-client="ca-pub-4895481554192451",
+                data-ad-slot="4790584276",
+                data-ad-format="auto")    
+                                            

@@ -31,6 +31,11 @@ var q = require('q');
         }
     })
     
+    router.get('/application', function(req, res){
+        
+        AM.verifyLoggedIn(req, res);
+    })
+    
     router.post('/logout', function(req, res){
         
         console.log("Logging out...");
@@ -102,7 +107,7 @@ var q = require('q');
 	router.get('/forum', function(req, res) {
         console.log("auth /forum")
 		if (req.session.user == null){
-	// if user is not logged-in redirect back to login page //
+	   // if user is not logged-in redirect back to login page //
 			res.redirect('/auth/login');
 		}	else{
 			res.render('index', {							

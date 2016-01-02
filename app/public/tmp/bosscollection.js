@@ -50,6 +50,14 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'editAccount',
         controller: 'editAccountController' 
     })
+    .when('/auth/application', {
+        templateUrl: 'application',
+        controller: 'applicationController'
+    })
+    .when('/reviewApplications', {
+        templateUrl: 'reviewApplications',
+        controller: 'applicationsReviewController'
+    })
     .otherwise({
       redirectTo: '/'
     });
@@ -161,6 +169,48 @@ angular.module("BossCollection.controllers")
             }) 
             
         }
+
+    }])
+
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.controllers")
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout',
+        function($scope, $location, $http, $timeout){
+            
+            try{
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              //Don't care, keep going df
+            }
+            
+            
+
+    }])
+
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.controllers")
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout',
+        function($scope, $location, $http, $timeout){
+            
+            try{
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              //Don't care, keep going df
+            }
+            
+            
 
     }])
 

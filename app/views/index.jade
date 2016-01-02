@@ -20,12 +20,16 @@ block body
             a(href="#!", class = "waves-effect waves-light") Report Absence 
         li
             a(href="#!", class = "waves-effect waves-light") Who's out
+        li
+            a(href="/reviewApplications", class = "waves-effect waves-light") Applications
             
     ul(id="raidDropdownNavbarMobile", class = "dropdown-content")
         li
             a(href="#!", class = "waves-effect waves-light") Report Absence 
         li
             a(href="#!", class = "waves-effect waves-light") Who's out
+        li
+            a(href="/reviewApplications", class = "waves-effect waves-light") Applications
     nav(class = "transparent")
       div(class = "nav-wrapper")
         a(href="/", class = "brand-logo waves-effect waves-light") BossCollection
@@ -38,10 +42,13 @@ block body
           li
             a(href="http://bosscollection.enjin.com/forum", class = "waves-effect waves-light") Forums
           li
+            a(href="http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection", class = "waves-effect waves-light")
+              | Progression 
+          li
             a(href="/roster", class = "waves-effect waves-light") Guild Roster
           li
-            a(href="http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection", class = "waves-effect waves-light")
-              | Progression           
+            a(href="/auth/application", class = "waves-effect waves-light") Apply
+          li                     
             a(ng-show = "loggedIn", data-activates = "userDropdown", class = "waves-effect waves-light dropdown-button")
               | {{user.name}}
               i(class = "material-icons right") arrow_drop_down
@@ -99,3 +106,5 @@ block body
     include partials/accounts/signup
     include partials/forums/forum
     include partials/accounts/editAccount
+    include partials/applications/application
+    include partials/applications/reviewApplications

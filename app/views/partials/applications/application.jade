@@ -1,0 +1,35 @@
+script#application(type="text/ng-template")    
+    div.container
+        div.card
+            h4
+                | Please fill out all fields
+            div.row
+                form( ng-submit = "updateAccount()").col.s12                
+                    div.row
+                        div.col.s6.input-field                    
+                            i(class="material-icons prefix") label        
+                            input(placeholder = "Realm", type = "text", id = "realmInput", class = "validate", required = "required", ng-model = "application.realm")
+                            label(for = "realmInput") Realm Your Character resides on
+                        div.col.s6.input-field
+                            input(placeholder = "Battle Tag", placeholder = "Character Name",  id="characterNameInput", type = "text", class = "validate", ng-model = "application.characterName")
+                            label(for="characterNameInput") Character Name
+                    div.row
+                        div.col.s12.input-field
+                            i(class="material-icons prefix") group_work
+                            input(id = "previousGuildInput", placeholder = "Previous/Current Guild", type = "text", required = "required", ng-model = "application.previousGuild")
+                            label(for="previousGuildInput") Previous/Current Guild (We won't tell we promise)      
+                    div.row
+                        div.col.s12.input-field
+                            i(class="material-icons prefix") info
+                            input(id = "itemLevelInput", type = "text", class = "validate", required = "required", ng-model = "application.itemLevel", placeholder = "Item Level")
+                            label(for="itemLevelInput") Item Level
+                    div.row
+                        div.col.s12.input-field
+                            i(class="material-icons prefix") message
+                            <textarea id="textarea1" class="materialize-textarea" ng-model = "application.comments"></textarea>
+                            <label for="textarea1">Anything else?</label>
+                    div.row
+                        div.s6.col
+                            button(type="submit")#btn-login.btn.btn-primary
+                                i.icon-lock.icon-white
+                                | Submit

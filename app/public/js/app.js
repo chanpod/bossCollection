@@ -50,6 +50,14 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'editAccount',
         controller: 'editAccountController' 
     })
+    .when('/auth/application', {
+        templateUrl: 'application',
+        controller: 'applicationController'
+    })
+    .when('/reviewApplications', {
+        templateUrl: 'reviewApplications',
+        controller: 'applicationsReviewController'
+    })
     .otherwise({
       redirectTo: '/'
     });
