@@ -7,7 +7,7 @@ angular.module("BossCollection.controllers", [])
         function($scope, $location, $http, userLoginSrvc){
         
         userLoginSrvc.getUser().then(function(user){
-            
+             
             console.log("Got the user");
             
             $scope.user = user;
@@ -17,7 +17,7 @@ angular.module("BossCollection.controllers", [])
         $scope.updateAccount = function () {
             
             console.log("Updating account");
-            userLoginSrvc.updateAccount($scope.user).then(function (response) {
+            userLoginSrvc.updateAccount($scope.user).then(function (response) { 
                 Materialize.toast("User updated");
             },
                 function (err) {

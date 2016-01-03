@@ -22,7 +22,7 @@ angular.module("BossCollection.services", [])
                 
                 var data = {name: boss};
                 
-                stratsAPI.save(data).$promise.then(function(result){
+                stratsAPI.save(data).$promise.then(function(result){ 
                     console.log("Result: " );
                     console.log(result);
                     defer.resolve(result.result);

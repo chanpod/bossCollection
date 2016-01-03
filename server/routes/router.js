@@ -31,15 +31,16 @@ module.exports = function(app){
     app.use('/forum', forums);
 
 
-    router.get('/', function(req, res){
+    router.get('/*', function(req, res){
         
         console.log("Rendering index");
         res.render('index');  
     });
-
+    
+    app.use('/api', RESTserver);
     app.use(router);
 
-    app.use('/api', RESTserver);
+    
     
     
 }

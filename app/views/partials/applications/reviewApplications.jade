@@ -1,0 +1,59 @@
+script#reviewApplications(type="text/ng-template")    
+      div.container        
+        div.card            
+            div(ng-show = "loading").row
+                        div.progress
+                            div.indeterminate
+            div.row.card-content
+                div.row              
+                    div(id="raiders").col.s12                        
+                            div(ng-repeat = "application in applications | orderBy: '-dateApplied'")
+                                div().col.s12.m12                                   
+                                        div().card.blue.lighten-5            
+                                            div(class="card-image")
+                                                    img(src="images/classBackdrops/{{application.character.class}}.jpg")
+                                                    span(class="card-title") {{application.character.name}} - {{application.dateApplied | date: format}}
+                                                        
+                                            div.cart-content
+                                                    div.row
+                                                                    
+                                                        div.col.s2.m2.right.hide-on-small-only
+                                                                a(target="_blank", href = "http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple", class = "btn waves-effect waves-light")
+                                                                    i.material-icons
+                                                                            | open_in_new
+                                                        div.col.s6.m2
+                                                            a.btn.activator                                          
+                                                                    | More...
+                                                        div.col.s12.m8
+                                                                p
+                                                                    table
+                                                                        tr
+                                                                            th(data-field = "class") Class
+                                                                            th(data-field = "role") Desired Role
+                                                                            th(data-field = "previousGuild") Previous Guild
+                                                                            th(data-field = "itemLevel") Item Level
+                                                                        tr
+                                                                            td()
+                                                                                | {{application.character.class}}   
+                                                                            td()
+                                                                                | {{application.desiredRole}}
+                                                                            td()
+                                                                                | {{application.previousGuild}} 
+                                                                            td()
+                                                                                | {{application.itemLevel}}
+                                            div.card-reveal.grey-text.text-darken-4
+                                                    span.card-title
+                                                        | Comments
+                                                        i.material-icons.right
+                                                                | close
+                                                    
+                                                    div.row                                                    
+                                                        div.col.s12
+                                                            {{application.comments}}
+            div.row()
+                ins(class="adsbygoogle",
+                style="display:block;padding-top:75px",
+                data-ad-client="ca-pub-4895481554192451",
+                data-ad-slot="4790584276",
+                data-ad-format="auto")    
+                                            

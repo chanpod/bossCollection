@@ -50,6 +50,14 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'editAccount',
         controller: 'editAccountController' 
     })
+    .when('/auth/application', {
+        templateUrl: 'application',
+        controller: 'applicationController'
+    })
+    .when('/reviewApplications', {
+        templateUrl: 'reviewApplications',
+        controller: 'applicationsReviewController'
+    })
     .otherwise({
       redirectTo: '/'
     });
@@ -75,7 +83,7 @@ angular.module("BossCollection.controllers", [])
         function($scope, $location, $http, userLoginSrvc){
         
         userLoginSrvc.getUser().then(function(user){
-            
+             
             console.log("Got the user");
             
             $scope.user = user;
@@ -85,7 +93,7 @@ angular.module("BossCollection.controllers", [])
         $scope.updateAccount = function () {
             
             console.log("Updating account");
-            userLoginSrvc.updateAccount($scope.user).then(function (response) {
+            userLoginSrvc.updateAccount($scope.user).then(function (response) { 
                 Materialize.toast("User updated");
             },
                 function (err) {
@@ -166,6 +174,128 @@ angular.module("BossCollection.controllers")
 
 'use strict';
 /**
+ 
+ *
+
+ */
+angular.module("BossCollection.controllers")
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices',
+        function($scope, $location, $http, $timeout, realmServices, guildServices){
+            
+            
+            console.log("Loading application ctrl...");
+            $scope.application = {};            
+            try{
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              //Don't care, keep going 
+            }
+            
+            $scope.validCharacterName = false;
+            
+            realmServices.getRealms()
+                .then(function(realms){
+                    
+                    $scope.realms = realms;
+                    
+                    $timeout(function(){ //waiting for angular digest cycle so select updates properly
+
+                        $('select').material_select();
+                       
+                    }, 100)
+                    
+                    
+                });
+            
+            
+            $scope.validateCharactername = function(){
+                
+                $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                
+                guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
+                    .then(function(character){
+                        
+                        $scope.validCharacterName = true;
+                        $scope.application.character = character;
+                    },
+                    function(err){
+                        $scope.validCharacterName = false;
+                        
+                    })
+                
+            }
+            
+            
+            $scope.submitApplication = function(){
+                
+                if($scope.validCharacterName == false){
+                    
+                    Materialize.toast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                }
+                else{
+                    guildServices.submitApplication($scope.application)
+                        .then(function(result){
+                            
+                            $location.path('/reviewApplications');
+                        },
+                        function(err){
+                            
+                            Materialize.toast(err);
+                        })
+                }
+            }
+            
+    }])
+
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.controllers")
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices',
+        function($scope, $location, $http, $timeout, guildServices){
+            
+            try{
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              //Don't care, keep going df
+            }
+            
+             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
+            $scope.loading = true;
+            
+            guildServices.getApplications()
+                .then(function(applications){
+                    $scope.loading = false;
+                    $scope.applications = applications.applications; //object to array
+                    console.log($scope.applications);
+                    
+                    convertClasses();
+                },
+                function(err){
+                    
+                    $scope.loading = false;
+                    console.log(err);
+                    Materialize.toast("Seems something broke. Try again in a few...");
+                })
+                
+            function convertClasses(){
+                
+                for(var i = 0; i < $scope.applications.length; i++){
+                    
+                    $scope.applications[i].character.class = classes[$scope.applications[i].character.class];
+                }
+            }
+
+    }])
+
+'use strict';
+/**
  *
  */
 angular.module("BossCollection.controllers")
@@ -209,7 +339,7 @@ angular.module("BossCollection.controllers")
               ];
 
               Materialize.scrollFire(options);
-
+  
 
 
 
@@ -840,7 +970,7 @@ angular.module("BossCollection.services", [])
                 
                 var data = {name: boss};
                 
-                stratsAPI.save(data).$promise.then(function(result){
+                stratsAPI.save(data).$promise.then(function(result){ 
                     console.log("Result: " );
                     console.log(result);
                     defer.resolve(result.result);
@@ -872,34 +1002,146 @@ angular.module("BossCollection.services", [])
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http','$q',function ($http, $q) {
+    .factory('guildServices', ['$http','$q', '$resource', function ($http, $q, $resource) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
         
+        
+        
+        var apply = $resource('/api/applicationSubmission', {}, {});
+        var getApplicationsUrl = $resource('/api/getApplications', {}, {});
+        
         var guildApi = {
-            checkGuild: function(achievements) {
-
+            getApplications: function(){
+                
+                var defer = $q.defer();
+                
+              getApplicationsUrl.get().$promise
+                .then(function(applications){
+                    
+                    defer.resolve(applications);
+                },
+                function(err){
+                    
+                    defer.reject(err);
+                })  
+                
+                return defer.promise;
             },
-
+            validateCharacterName: function(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";        
+                
+                var getCharacter = $resource(getCharacterUrl, {}, {});
+                
+                getCharacter.get().$promise.then(function(data){
+                   
+                   defer.resolve(data);
+                },
+                function(err){
+                    
+                    defer.reject("Character not found");
+                });
+                
+                return defer.promise;
+            },
+            
             getGuild: function(realm, guildName){
-                var deferred = $q.defer()
+                var defer = $q.defer()
                 
                 if(realm != "" && guildName != ""){
                     var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
                 }
                 
-                $http({method: 'GET', url: getMembersUrl}).success(function(data){
+                $http({method: 'GET', url: getMembersUrl}).then(function(data){
                    
-                   deferred.resolve(data.members);
+                   defer.resolve(data.data.members);
                 });
                 
-                return deferred.promise;
+                return defer.promise;
+            },
+            submitApplication: function(newApplicant){
+                var defer = $q.defer();
+                
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";      
+                
+                var getCharacter = $resource(getCharacterUrl, {}, {});
+                
+                getCharacter.get().$promise
+                    .then(function (characterWithSpec) {
+
+                            return characterWithSpec;
+                        },
+                        function (err) {
+
+                            defer.reject("Character not found");
+                        })
+                    .then(function (characterWithSpec) {
+                        
+                        newApplicant.character.specs = characterWithSpec.talents;
+                        
+                        apply.save({ "newApplicant": newApplicant }).$promise.then(function (submitted) {
+
+                            defer.resolve(submitted);
+                        },
+                        function (err) {
+
+                            defer.reject(err);
+                        })
+
+                    })
+                return defer.promise;
             }
         };
 
         return guildApi;
+    }])
+'use strict';
+
+
+
+angular.module("BossCollection.services")
+    .factory('realmServices', ['$http','$q',function ($http, $q) {
+
+        var getRealmsUrl = "https://us.api.battle.net/wow/realm/status?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
+        var realms = [];
+        
+        function parseRealNames() {
+            
+            
+
+        }
+        
+        parseRealNames();
+        
+        var realmApi = {             
+
+            getRealms: function(){
+                var defer = $q.defer();
+
+                if (realms.length == 0) {
+
+                    $http({ method: 'GET', url: getRealmsUrl }).success(function (returnedRealms) {
+
+                        //realms = _.pluck(returnedRealms.realms, "name");
+                        realms = returnedRealms.realms;
+                        defer.resolve(realms);
+                        realms = realms;
+                        //realms
+                    });
+
+                }
+                else {
+                    defer.resolve(realms);
+                }
+                
+                return defer.promise; 
+            } 
+        };
+
+        return realmApi;
     }])
 'use strict';
 

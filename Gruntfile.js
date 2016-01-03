@@ -40,8 +40,8 @@ module.exports = function (grunt) {
              ]
          },
          watch: {
-             build: {
-                 files: ['public/js/**/*',
+             all: {
+                 files: ['<%= meta.content %>/js/**/*.js',
                          'public/css/*.scss',
                          '!public/tmp/**/*'
                      ],

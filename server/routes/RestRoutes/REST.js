@@ -1,6 +1,6 @@
 var express = require('express');
 var path = require('path');
-var mongo = require('../mongoFunctions');
+var application = require('./applications');
 var router = express.Router();
 var q = require('q');
 var bossStrats = require('./bossStratsREST');
@@ -13,6 +13,8 @@ router.use(function(req,res, next){
   console.log("It's working?");
   next();
 })
+
+router.use(application);
 
 //Playing around with REST routes
 router.route('/test')

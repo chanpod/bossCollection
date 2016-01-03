@@ -3,20 +3,22 @@ var crypto 		= require('crypto');
 var moment 		= require('moment');
 var q = require('q');
 
-var mongoose = require('mongoose');
-var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
+//var mongoose = require('mongoose');
+//var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
+var UserModel = require('../../models/user.js');
 
-var Schema = mongoose.Schema;
-var UserSchema = new Schema({
-    name: String,
-    password: String,
-    email: String,
-    battleTag: String,
-    characters: Array
-})
 
-var UserModel = mongoose.model('accounts', UserSchema);
+exports.verifyLoggedIn = function (req, res) {
 
+    if (req.session.user == null) {
+        // if user is not logged-in redirect back to login page //
+        res.redirect('/auth/login');
+    } else {
+        res.render('index', {
+            udata: req.session.user
+        });
+    }
+}
 
 
 exports.autoLogin = function(name, password, callback)
