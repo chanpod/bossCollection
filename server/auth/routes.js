@@ -60,7 +60,7 @@ var q = require('q');
 				if (user != null){
                     console.log("setting user to session");
 				    req.session.user = user;
-					res.redirect('/');
+					//res.redirect('/');
 				}	else{
                     console.log("Log in failed...");
                     console.log(user);

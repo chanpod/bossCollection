@@ -22,6 +22,14 @@ angular.module("BossCollection.controllers")
                 
                 //navigate to some page
                 console.log(response);
+                
+                if($location.path() == "/auth/application"){
+                    $('#logInModal').closeModal();    
+                }
+                else{
+                    $location.path("/");
+                }
+                
             },
             function(err){
                 

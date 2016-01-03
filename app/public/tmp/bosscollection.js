@@ -137,6 +137,14 @@ angular.module("BossCollection.controllers")
                 
                 //navigate to some page
                 console.log(response);
+                
+                if($location.path() == "/auth/application"){
+                    $('#logInModal').closeModal();    
+                }
+                else{
+                    $location.path("/");
+                }
+                
             },
             function(err){
                 
@@ -156,6 +164,8 @@ angular.module("BossCollection.controllers")
         function($scope, $location, $http, $timeout, userLoginSrvc){
         
         $scope.user = {};
+        
+        $('#logInModal').closeModal();    
         
         $scope.register = function(){
             
@@ -179,8 +189,8 @@ angular.module("BossCollection.controllers")
 
  */
 angular.module("BossCollection.controllers")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices',
-        function($scope, $location, $http, $timeout, realmServices, guildServices){
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, realmServices, guildServices, userLoginSrvc){
             
             
             console.log("Loading application ctrl...");
@@ -207,6 +217,30 @@ angular.module("BossCollection.controllers")
                     
                     
                 });
+            
+            
+            $scope.areWeLoggedIn = function () {
+
+                userLoginSrvc.currentlyLoggedIn().then(function (response) {
+                    
+                    
+                    if(response == true){
+                        //don't care, stay here
+                    }
+                    else{
+                        
+                        $('#logInModal').openModal({
+                            dismissible: false, // Modal can be dismissed by clicking outside of the modal
+                            opacity: .5, // Opacity of modal background
+                            in_duration: 300, // Transition in duration
+                            out_duration: 200, // Transition out duration
+                            //ready: function () { alert('Ready'); }, // Callback for Modal open
+                            complete: function () {  } // Callback for Modal close
+                        });
+                        
+                    }
+                })
+            }
             
             
             $scope.validateCharactername = function(){
@@ -245,6 +279,11 @@ angular.module("BossCollection.controllers")
                         })
                 }
             }
+            
+            $scope.areWeLoggedIn();
+            
+            
+  
             
     }])
 
@@ -937,6 +976,21 @@ angular.module('BossCollection.directives', []).
         } 
   }]); 
  
+
+/* Directives */
+
+angular.module('BossCollection.directives', []).
+  directive('logIn', [function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'login',
+            controller: 'loginController',
+ 
+            link: function(scope, elm, attrs) {
+            }
+        } 
+  }]); 
+ 
 'use strict';
 
 /* Filters */
@@ -1294,7 +1348,7 @@ angular.module("BossCollection.services")
                     
                     $cookies.put("name", user.name);
                     $rootScope.$broadcast("loggedin", {name: user.name, loggedIn:true});
-                    $location.path("/");
+                    defer.resolve(true);
                     
                 },
                 function(err){

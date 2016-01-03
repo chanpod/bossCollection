@@ -135,7 +135,7 @@ angular.module("BossCollection.services")
                     
                     $cookies.put("name", user.name);
                     $rootScope.$broadcast("loggedin", {name: user.name, loggedIn:true});
-                    $location.path("/");
+                    defer.resolve(true);
                     
                 },
                 function(err){
