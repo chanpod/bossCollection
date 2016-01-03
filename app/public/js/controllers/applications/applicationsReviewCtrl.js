@@ -15,6 +15,8 @@ angular.module("BossCollection.controllers")
               //Don't care, keep going df
             }
             
+             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
             $scope.loading = true;
             
             guildServices.getApplications()
@@ -23,6 +25,7 @@ angular.module("BossCollection.controllers")
                     $scope.applications = applications.applications; //object to array
                     console.log($scope.applications);
                     
+                    convertClasses();
                 },
                 function(err){
                     
@@ -30,5 +33,13 @@ angular.module("BossCollection.controllers")
                     console.log(err);
                     Materialize.toast("Seems something broke. Try again in a few...");
                 })
+                
+            function convertClasses(){
+                
+                for(var i = 0; i < $scope.applications.length; i++){
+                    
+                    $scope.applications[i].character.class = classes[$scope.applications[i].character.class];
+                }
+            }
 
     }])

@@ -182,6 +182,7 @@ angular.module("BossCollection.controllers")
     .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices',
         function($scope, $location, $http, $timeout, realmServices, guildServices){
             
+            
             console.log("Loading application ctrl...");
             $scope.application = {};            
             try{
@@ -264,6 +265,8 @@ angular.module("BossCollection.controllers")
               //Don't care, keep going df
             }
             
+             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
             $scope.loading = true;
             
             guildServices.getApplications()
@@ -272,6 +275,7 @@ angular.module("BossCollection.controllers")
                     $scope.applications = applications.applications; //object to array
                     console.log($scope.applications);
                     
+                    convertClasses();
                 },
                 function(err){
                     
@@ -279,6 +283,14 @@ angular.module("BossCollection.controllers")
                     console.log(err);
                     Materialize.toast("Seems something broke. Try again in a few...");
                 })
+                
+            function convertClasses(){
+                
+                for(var i = 0; i < $scope.applications.length; i++){
+                    
+                    $scope.applications[i].character.class = classes[$scope.applications[i].character.class];
+                }
+            }
 
     }])
 
@@ -1045,7 +1057,7 @@ angular.module("BossCollection.services")
                 
                 $http({method: 'GET', url: getMembersUrl}).then(function(data){
                    
-                   defer.resolve(data.members);
+                   defer.resolve(data.data.members);
                 });
                 
                 return defer.promise;

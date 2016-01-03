@@ -11,7 +11,8 @@ var applicationSchema = new Schema({
     itemLevel: String,
     role: String,
     comments: String,
-    dateApplied: Date    
+    desiredRole: String,
+    dateApplied: Date   
 })
 
 module.exports = mongoose.model('applications', applicationSchema);

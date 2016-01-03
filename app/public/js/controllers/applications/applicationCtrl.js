@@ -8,6 +8,7 @@ angular.module("BossCollection.controllers")
     .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices',
         function($scope, $location, $http, $timeout, realmServices, guildServices){
             
+            
             console.log("Loading application ctrl...");
             $scope.application = {};            
             try{

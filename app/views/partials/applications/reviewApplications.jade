@@ -1,45 +1,55 @@
 script#reviewApplications(type="text/ng-template")    
       div.container        
         div.card            
-                div(ng-show = "loading").row
-                            div.progress
-                                div.indeterminate
-                div.row.card-content
-                    div.row              
-                        div(id="raiders").col.s12                        
-                                div(ng-repeat = "application in applications")
-                                    div().col.s12.m6                                    
-                                            div().card.blue.lighten-5                 
-                                                div(class="card-image")
-                                                        img(src="images/classBackdrops/{{player.class}}.jpg")
-                                                        span(class="card-title") {{application.character.name}}
-                                                            
-                                                div.cart-content
-                                                        div.row
-                                                            div.col.s2.m2
-                                                                    p
-                                                                        //img(src= "{{player.avatar}}").pull-left.circle
-                                                            div.col.s8.m8
-                                                                    span.card-title.center
-                                                                        //| {{player.name}} d
-                                                                        
-                                                            div.right.hide-on-small-only
-                                                                    a(target="_blank", href = "http://us.battle.net/wow/en/character/{{realm}}/{{application.character.name}}/simple", class = "btn waves-effect waves-light")
-                                                                        i.material-icons
-                                                                                | open_in_new
+            div(ng-show = "loading").row
+                        div.progress
+                            div.indeterminate
+            div.row.card-content
+                div.row              
+                    div(id="raiders").col.s12                        
+                            div(ng-repeat = "application in applications | orderBy: '-dateApplied'")
+                                div().col.s12.m12                                   
+                                        div().card.blue.lighten-5            
+                                            div(class="card-image")
+                                                    img(src="images/classBackdrops/{{application.character.class}}.jpg")
+                                                    span(class="card-title") {{application.character.name}} - {{application.dateApplied | date: format}}
                                                         
+                                            div.cart-content
+                                                    div.row
+                                                                    
+                                                        div.col.s2.m2.right.hide-on-small-only
+                                                                a(target="_blank", href = "http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple", class = "btn waves-effect waves-light")
+                                                                    i.material-icons
+                                                                            | open_in_new
+                                                        div.col.s6.m2
                                                             a.btn.activator                                          
                                                                     | More...
-                                                div.card-reveal.grey-text.text-darken-4
-                                                        span.card-title
-                                                            | {{application.character.name}}
-                                                            i.material-icons.right
-                                                                    | close
-                                                        div.row
-                                                            div.col.s6.offset-s2.m6.center-align
-                                                                    | Class: &nbsp{{application.character.class}}   
-                                                            div.col.s6.m6.center-align
-                                                                    | Role: &nbsp{{application.character.spec}}
+                                                        div.col.s12.m8
+                                                                p
+                                                                    table
+                                                                        tr
+                                                                            th(data-field = "class") Class
+                                                                            th(data-field = "role") Desired Role
+                                                                            th(data-field = "previousGuild") Previous Guild
+                                                                            th(data-field = "itemLevel") Item Level
+                                                                        tr
+                                                                            td()
+                                                                                | {{application.character.class}}   
+                                                                            td()
+                                                                                | {{application.desiredRole}}
+                                                                            td()
+                                                                                | {{application.previousGuild}} 
+                                                                            td()
+                                                                                | {{application.itemLevel}}
+                                            div.card-reveal.grey-text.text-darken-4
+                                                    span.card-title
+                                                        | Comments
+                                                        i.material-icons.right
+                                                                | close
+                                                    
+                                                    div.row                                                    
+                                                        div.col.s12
+                                                            {{application.comments}}
             div.row()
                 ins(class="adsbygoogle",
                 style="display:block;padding-top:75px",

@@ -58,7 +58,7 @@ angular.module("BossCollection.services")
                 
                 $http({method: 'GET', url: getMembersUrl}).then(function(data){
                    
-                   defer.resolve(data.members);
+                   defer.resolve(data.data.members);
                 });
                 
                 return defer.promise;
