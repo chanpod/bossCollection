@@ -38,7 +38,9 @@ angular.module("BossCollection.controllers")
                 
                 for(var i = 0; i < $scope.applications.length; i++){
                     
-                    $scope.applications[i].character.class = classes[$scope.applications[i].character.class];
+                    var classType = classes[$scope.applications[i].character.class];
+                    $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+                    
                 }
             }
 
