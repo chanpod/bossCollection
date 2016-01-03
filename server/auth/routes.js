@@ -212,13 +212,13 @@ var q = require('q');
                 battleTag: req.body.battleTag
             }
             
-            AM.addNewAccount(newUser, function (error) {
+            AM.addNewAccount(newUser).then(function (success) {
                 
-                if (error) {
-                    res.status(400).send(error);
-                } else {
-                    res.status(200).send(newUser);
-                }
+               
+                res.status(200).send(newUser);
+               
+            }, function(err){
+                res.status(400).send(err);
             });
         }
         else{
