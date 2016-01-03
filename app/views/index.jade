@@ -64,6 +64,8 @@ block body
           li
             a(href="/roster", class = "waves-effect waves-light") Guild Roster
           li
+            a(href="/auth/application", class = "waves-effect waves-light") Apply
+          li
             a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
             a(ng-show = "loggedIn", data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
               | {{user.name}}
