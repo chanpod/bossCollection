@@ -1,7 +1,7 @@
-
+'use strict';
 /* Directives */
 
-angular.module('BossCollection.directives', []).
+angular.module('BossCollection.directives').
   directive('logIn', [function () {
         return {
             restrict: 'E',
@@ -10,6 +10,6 @@ angular.module('BossCollection.directives', []).
  
             link: function(scope, elm, attrs) {
             }
-        } 
+        }  
   }]); 
  

@@ -17,16 +17,17 @@ script#login(type = "text/ng-template")
                             button(type="submit", ng-click = "login()")#btn-login.btn.btn-primary
                                 i.icon-lock.icon-white
                                 | Sign in
+                                md-progress-circular(md-mode="indeterminate")
                         div.s6.col
                             input(type="checkbox", checked='checked', id = "loginCheckbox", ng-model = "user.rememberMe")
                             label(for = "loginCheckbox") | Remember Me
                     hr
                     div.row
                         div.s6.col
-                            a().btn.btn-primary#forgot-password Forgot Your Password?
+                            a().btn.btn-primary#forgot-password Forgot Your Password? (not working)
                         
                         div.s6.col
-                            
+                             
                             a(href='/auth/signup').btn.btn-primary#create-account Create An Account
 
                     

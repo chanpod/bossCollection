@@ -2,7 +2,7 @@
 /**
  *
  */
-angular.module("BossCollection.controllers", [])
+angular.module("BossCollection.controllers")
     .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 
         function($scope, $location, $http, userLoginSrvc){
         
