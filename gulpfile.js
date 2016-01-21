@@ -134,7 +134,11 @@ gulp.task('clean', function () {
 
 gulp.task('minify', function () {
 
-    return gulp.src('./app/public/tmp/*.js')
+    return gulp.src(
+        [
+            './app/public/tmp/*.js',
+            '!./app/public/tmp/vendor.min.js'
+            ])
         .pipe(minify())
         .pipe(gulp.dest('./app/public/tmp'));
 })
