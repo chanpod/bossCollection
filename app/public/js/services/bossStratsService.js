@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module("BossCollection.services", [])
+angular.module("BossCollection.services")
     .factory('bossStrats', ['socketProvider', '$resource', '$q', function (socket, $resource, $q) {
         
         var stratsAPI = $resource('/api/bossStrats', {},

@@ -1,7 +1,3 @@
-'use strict';
-
-
-
 angular.module("BossCollection.services")
     .factory('realmServices', ['$http','$q',function ($http, $q) {
 

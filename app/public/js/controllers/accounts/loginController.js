@@ -31,6 +31,7 @@ angular.module("BossCollection.controllers")
         }
         
         $scope.login = function(){
+             
             
             userLoginSrvc.login($scope.user).then(function(response){
                 
