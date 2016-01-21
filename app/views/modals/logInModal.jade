@@ -2,7 +2,7 @@ div(id="logInModal", class="modal bottom-sheet")
     div(class="modal-content")     
         div.row
             div.col.m2.s12
-                a(href="#!", ng-click = "cancelNavigation()", class="right modal-action modal-close waves-effect waves-green btn-flat") Cancel
+                button(ng-click = "cancelNavigation()", class="right modal-action modal-close waves-effect waves-green btn-flat")#btn-login.btn.btn-primary Cancel
         div.row
             div.col.m12.s12
                 log-in

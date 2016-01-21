@@ -8,9 +8,9 @@ script#application(type="text/ng-template")
                     div.row
                         div.col.s6          
                             
-                            label() Materialize Select
+                            label() Characters Realm
                             select(ng-change = "validateCharactername()", ng-options = "realm as realm.name for realm in realms track by realm.name", ng-model = "application.realm").browser-default.active
-                                option(value="", disabled, selected) Choose your option
+                                option(value="", disabled, selected) Select Realm
                             
                             
                         div.col.s6.input-field
