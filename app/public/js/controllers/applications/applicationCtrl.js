@@ -62,16 +62,21 @@ angular.module("BossCollection.controllers")
             $scope.validateCharactername = function(){
                 
                 $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                $scope.searchingForUser = true;
                 
                 guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                     .then(function(character){
+                        
                         
                         $scope.validCharacterName = true;
                         $scope.application.character = character;
                     },
                     function(err){
-                        $scope.validCharacterName = false;
                         
+                        $scope.validCharacterName = false;
+                    })
+                    .finally(function(){
+                        $scope.searchingForUser = false;
                     })
                 
             }

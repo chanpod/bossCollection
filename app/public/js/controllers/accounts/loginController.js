@@ -7,7 +7,21 @@ angular.module("BossCollection.controllers")
         function($scope, $location, $http, userLoginSrvc){
 
         $scope.user = {};
+        
         $scope.user = userLoginSrvc.getUser()
+            .then(function(user){
+                
+                if(typeof user.name != 'string'){
+                    user.name = "";
+                }
+                
+                return user;
+            },
+            function(err){
+                return {};
+            })
+        
+        
         
         $scope.alreadyLoggedIn = function(){
             
@@ -36,6 +50,11 @@ angular.module("BossCollection.controllers")
                 Materialize.toast(err)
                 console.log(err);
             })
+        }
+        
+        $scope.cancelNavigation = function(){
+            $('#logInModal').closeModal();    
+            $location.path("/");
         }
 
     }])

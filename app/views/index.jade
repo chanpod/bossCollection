@@ -68,8 +68,9 @@ block body
           li
             a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
             a(ng-show = "loggedIn", data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
-              | {{user.name}}
               i(class = "material-icons right") arrow_drop_down
+              | {{user.name}}
+              
           li
             a(ng-show = "loggedIn", data-activates = "raidDropdownNavbarMobile", class = "waves-effect waves-light dropdown-button")
               | Raid Tools
@@ -80,6 +81,7 @@ block body
               i(class = "material-icons right") arrow_drop_down
             
     div(ng-view)     
+        
     
     
     footer.page-footer.transparent
@@ -112,3 +114,4 @@ block body
     include partials/applications/reviewApplications
     
     include modals/logInModal
+    include modals/loadingModal

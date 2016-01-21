@@ -3,7 +3,7 @@
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http','$q', '$resource', function ($http, $q, $resource) {
+    .factory('guildServices', ['$http','$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -19,6 +19,8 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                 
+                siteServices.startLoading();
+                
               getApplicationsUrl.get().$promise
                 .then(function(applications){
                     
@@ -28,10 +30,14 @@ angular.module("BossCollection.services")
                     
                     defer.reject(err);
                 })  
+                .finally(function () {
+                    siteServices.loadingFinished();
+                }) 
                 
                 return defer.promise;
             },
             validateCharacterName: function(characterName, realm) {
+                
                 var defer = $q.defer();
                 var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";        
                 
@@ -52,14 +58,23 @@ angular.module("BossCollection.services")
             getGuild: function(realm, guildName){
                 var defer = $q.defer()
                 
+                siteServices.startLoading();
+                
                 if(realm != "" && guildName != ""){
                     var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
                 }
                 
-                $http({method: 'GET', url: getMembersUrl}).then(function(data){
+                $http({method: 'GET', url: getMembersUrl})
+                    .then(function(data){
                    
-                   defer.resolve(data.data.members);
-                });
+                        defer.resolve(data.data.members);
+                    },
+                    function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    }) 
                 
                 return defer.promise;
             },
@@ -70,9 +85,12 @@ angular.module("BossCollection.services")
                 
                 var getCharacter = $resource(getCharacterUrl, {}, {});
                 
+                siteServices.startLoading();
+                
                 getCharacter.get().$promise
                     .then(function (characterWithSpec) {
-
+                            
+                            
                             return characterWithSpec;
                         },
                         function (err) {
@@ -84,7 +102,8 @@ angular.module("BossCollection.services")
                         newApplicant.character.specs = characterWithSpec.talents;
                         
                         apply.save({ "newApplicant": newApplicant }).$promise.then(function (submitted) {
-
+                            
+                            siteServices.loadingFinished();
                             defer.resolve(submitted);
                         },
                         function (err) {
@@ -92,6 +111,10 @@ angular.module("BossCollection.services")
                             defer.reject(err);
                         })
 
+                    })
+                    .finally(function(){
+                        
+                        siteServices.loadingFinished();
                     })
                 return defer.promise;
             }

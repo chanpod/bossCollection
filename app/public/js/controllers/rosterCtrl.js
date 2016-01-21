@@ -3,6 +3,13 @@ angular.module("BossCollection.controllers")
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
         function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
             
+            try{
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              //Don't care, keep going df
+            }
+            
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             

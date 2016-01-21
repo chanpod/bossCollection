@@ -122,7 +122,21 @@ angular.module("BossCollection.controllers")
         function($scope, $location, $http, userLoginSrvc){
 
         $scope.user = {};
+        
         $scope.user = userLoginSrvc.getUser()
+            .then(function(user){
+                
+                if(typeof user.name != 'string'){
+                    user.name = "";
+                }
+                
+                return user;
+            },
+            function(err){
+                return {};
+            })
+        
+        
         
         $scope.alreadyLoggedIn = function(){
             
@@ -151,6 +165,11 @@ angular.module("BossCollection.controllers")
                 Materialize.toast(err)
                 console.log(err);
             })
+        }
+        
+        $scope.cancelNavigation = function(){
+            $('#logInModal').closeModal();    
+            $location.path("/");
         }
 
     }])
@@ -246,16 +265,21 @@ angular.module("BossCollection.controllers")
             $scope.validateCharactername = function(){
                 
                 $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                $scope.searchingForUser = true;
                 
                 guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                     .then(function(character){
+                        
                         
                         $scope.validCharacterName = true;
                         $scope.application.character = character;
                     },
                     function(err){
-                        $scope.validCharacterName = false;
                         
+                        $scope.validCharacterName = false;
+                    })
+                    .finally(function(){
+                        $scope.searchingForUser = false;
                     })
                 
             }
@@ -406,13 +430,18 @@ angular.module("BossCollection.controllers")
             
             console.log(user);
             
-            if(user.name){
-                $scope.user.name = user.name;
-            }
-            else{
+            
                 
-                $scope.user.name = userLoginSrvc.getUser();    
-            }
+            userLoginSrvc.getUser()
+                .then(function(user){
+                    
+                    $scope.user = user;
+                    return user;
+                },
+                function(err){
+                    
+                    console.log(err);
+                })             
             
             $scope.loggedIn = user.loggedIn;
             
@@ -823,6 +852,13 @@ angular.module("BossCollection.controllers")
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
         function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
             
+            try{
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              //Don't care, keep going df
+            }
+            
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             
@@ -1058,7 +1094,7 @@ angular.module("BossCollection.services", [])
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http','$q', '$resource', function ($http, $q, $resource) {
+    .factory('guildServices', ['$http','$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -1074,6 +1110,8 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                 
+                siteServices.startLoading();
+                
               getApplicationsUrl.get().$promise
                 .then(function(applications){
                     
@@ -1083,10 +1121,14 @@ angular.module("BossCollection.services")
                     
                     defer.reject(err);
                 })  
+                .finally(function () {
+                    siteServices.loadingFinished();
+                }) 
                 
                 return defer.promise;
             },
             validateCharacterName: function(characterName, realm) {
+                
                 var defer = $q.defer();
                 var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";        
                 
@@ -1107,14 +1149,23 @@ angular.module("BossCollection.services")
             getGuild: function(realm, guildName){
                 var defer = $q.defer()
                 
+                siteServices.startLoading();
+                
                 if(realm != "" && guildName != ""){
                     var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
                 }
                 
-                $http({method: 'GET', url: getMembersUrl}).then(function(data){
+                $http({method: 'GET', url: getMembersUrl})
+                    .then(function(data){
                    
-                   defer.resolve(data.data.members);
-                });
+                        defer.resolve(data.data.members);
+                    },
+                    function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    }) 
                 
                 return defer.promise;
             },
@@ -1125,9 +1176,12 @@ angular.module("BossCollection.services")
                 
                 var getCharacter = $resource(getCharacterUrl, {}, {});
                 
+                siteServices.startLoading();
+                
                 getCharacter.get().$promise
                     .then(function (characterWithSpec) {
-
+                            
+                            
                             return characterWithSpec;
                         },
                         function (err) {
@@ -1139,7 +1193,8 @@ angular.module("BossCollection.services")
                         newApplicant.character.specs = characterWithSpec.talents;
                         
                         apply.save({ "newApplicant": newApplicant }).$promise.then(function (submitted) {
-
+                            
+                            siteServices.loadingFinished();
                             defer.resolve(submitted);
                         },
                         function (err) {
@@ -1147,6 +1202,10 @@ angular.module("BossCollection.services")
                             defer.reject(err);
                         })
 
+                    })
+                    .finally(function(){
+                        
+                        siteServices.loadingFinished();
                     })
                 return defer.promise;
             }
@@ -1204,6 +1263,29 @@ angular.module("BossCollection.services")
 
 
 angular.module("BossCollection.services")
+    .factory('siteServices', [function () {
+        
+        function startLoading(){
+            
+            $('#loadingModal').openModal({
+                dismissible: false
+            });
+        }
+        
+        function loadingFinished(){
+            $('#loadingModal').closeModal();
+        }
+        
+        return {
+            startLoading:startLoading,
+            loadingFinished:loadingFinished
+        }
+    }])
+'use strict';
+
+
+
+angular.module("BossCollection.services")
     .factory('socketProvider', [function () {
         
         var socket = io("http://bosscollection.net:4001");
@@ -1214,7 +1296,9 @@ angular.module("BossCollection.services")
 'use strict';
 
 angular.module("BossCollection.services")
-    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope', function ($resource, $q, $location, $cookies, $rootScope) {
+    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+    'siteServices', 
+    function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
         
         var registration = $resource('/auth/signup', {},
             {
@@ -1235,15 +1319,22 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                 
-                updateAccount.save(updatedUser).$promise.then(function(response){
+                siteServices.startLoading();
+                
+                updateAccount.save(updatedUser).$promise
+                    .then(function(response){
                     
-                    
-                    defer.resolve(response);
-                },
-                function(err){
-                    console.log(err);
-                    defer.reject(err.data);
-                })
+                          
+                        defer.resolve(response);
+                    },
+                    function(err){
+                        
+                        console.log(err);
+                        defer.reject(err.data);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();  
+                    })
                 
                 return defer.promise;
             },
@@ -1251,11 +1342,21 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                 
-                getUser.get().$promise.then(function(user){
-                    
-                    console.log(user);
-                    defer.resolve(user);
-                })
+                getUser.get().$promise
+                    .then(function (user) {
+
+                        console.log(user);
+                          
+                        defer.resolve(user);
+                    },
+                    function (err) {
+                        
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();  
+                    })
+                        
                 return defer.promise;  
             },
             currentlyLoggedIn: function(){
@@ -1263,30 +1364,35 @@ angular.module("BossCollection.services")
                 var defer = $q.defer();
                 var loggedInBool = false;
                 
-                loggedIn.save({}).$promise.then(function(response){                
+                
+                loggedIn.save({}).$promise
+                    .then(function(response){                
                     
-                    if(response.loggedIn == true){
-                        $cookies.put("name", response.user.name);
-                        loggedInBool = true;    
-                        $rootScope.$broadcast("loggedin", {name: response.user.name, loggedIn: true});
-                    }
-                    else{
+                        if(response.loggedIn == true){
+                            
+                            $cookies.put("name", response.user.name);
+                            loggedInBool = true;    
+                            
+                            $rootScope.$broadcast("loggedin", {name: response.user.name, loggedIn: true});
+                        }
+                        else{
+                            
+                            loggedInBool = false;
+                        }
+                                                
+                        console.log(response);                        
+                        defer.resolve(loggedInBool);
                         
-                        loggedInBool = false;
-                    }
-                    
-                    
-                    console.log(response);
-                    defer.resolve(loggedInBool);
-                    
-                    //$cookies.set("name", response)
-                },
-                function(err){
-                    
-                    console.log(err);
-                    defer.reject(err);
-                    
-                })
+                        //$cookies.set("name", response)
+                    },
+                    function(err){
+                        
+                        console.log(err);                        
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();  
+                    })
                 
                 return defer.promise; 
             },
@@ -1294,6 +1400,7 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                
+                siteServices.startLoading();
                 
                 logout.save({}).$promise.then(function(result){
                     
@@ -1302,17 +1409,17 @@ angular.module("BossCollection.services")
                         $rootScope.$broadcast("loggedin" , {loggedIn: false});
                     }
                     
+                      
                     $location.path("/");
                     
                 }, function(){
                     
-                    console.log("WTF, delete cookies anyways...");
-                    
-                    $cookies.remove("name");
-                    $cookies.remove("password");
                     $rootScope.$broadcast("loggedin", {loggedIn: false});
-                    
+                    siteServices.loadingFinished();
                     $location.path("/");
+                })
+                .finally(function () {
+                    siteServices.loadingFinished();
                 })
                 
                 
@@ -1326,35 +1433,58 @@ angular.module("BossCollection.services")
                 console.log("Register new user");
                 //socket.emit("getBossInfo", boss); 
                 
-      
+                siteServices.startLoading();
                 
                 registration.save(newUser).$promise.then(function(result){
                     
                     console.log("Registration successfull. Redirecting to login page");
                     console.log(result);
-                    
+                      
                     $location.path("/auth/login");
                 }, function(err){
                     console.log(err.data);
+                    
+                      
                     defer.reject(err.data);
                 })
+                .finally(function(){
+                        siteServices.loadingFinished();
+                    })
                 
                 return defer.promise;
             },
             login: function (user) {
                 var defer = $q.defer();
                 
-                login.save(user).$promise.then(function(result){
+                siteServices.startLoading();
+                
+                login.save(user).$promise
+                    .then(function(result){
                     
-                    $cookies.put("name", user.name);
-                    $rootScope.$broadcast("loggedin", {name: user.name, loggedIn:true});
-                    defer.resolve(true);
-                    
-                },
-                function(err){
-                    
-                    defer.reject(err.data);
-                })
+                        accountApi.currentlyLoggedIn()
+                            .then(function(areWeLoggedIn){
+                                
+                                $rootScope.$broadcast("loggedin");
+                                  
+                                defer.resolve(true);        
+                            },
+                            function(err){
+                                
+                                console.log(err);
+                                
+                                defer.reject(false);
+                            })
+                        
+                        
+                    },
+                    function(err){
+                        
+                          
+                        defer.reject(err.data);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })                 
                 
                 return defer.promise;
             }

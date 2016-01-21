@@ -9,12 +9,15 @@ script#application(type="text/ng-template")
                         div.col.s6          
                             
                             label() Materialize Select
-                            select(ng-blur = "validateCharactername()", ng-options = "realm as realm.name for realm in realms track by realm.name", ng-model = "application.realm").browser-default.active
+                            select(ng-change = "validateCharactername()", ng-options = "realm as realm.name for realm in realms track by realm.name", ng-model = "application.realm").browser-default.active
                                 option(value="", disabled, selected) Choose your option
                             
                             
                         div.col.s6.input-field
-                            i(ng-show = "!validCharacterName",class="material-icons prefix", data-position="top", data-delay="50", data-tooltip="Character not found").tooltipped.error error   
+                            i(ng-show = "!validCharacterName",class="material-icons prefix", data-position="top", data-delay="50", data-tooltip="Character not found").tooltipped.error error
+                            div(ng-show = "searchingForUser")
+                                .progress
+                                    .indeterminate
                             input(ng-blur = "validateCharactername()", placeholder = "Battle Tag", placeholder = "Character Name",  id="characterNameInput", type = "text", class = "validate", ng-model = "application.characterName", required = "required")
                             label(for="characterNameInput") Character Name
                     div.row

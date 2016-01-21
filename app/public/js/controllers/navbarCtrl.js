@@ -18,13 +18,18 @@ angular.module("BossCollection.controllers")
             
             console.log(user);
             
-            if(user.name){
-                $scope.user.name = user.name;
-            }
-            else{
+            
                 
-                $scope.user.name = userLoginSrvc.getUser();    
-            }
+            userLoginSrvc.getUser()
+                .then(function(user){
+                    
+                    $scope.user = user;
+                    return user;
+                },
+                function(err){
+                    
+                    console.log(err);
+                })             
             
             $scope.loggedIn = user.loggedIn;
             
