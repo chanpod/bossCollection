@@ -28,6 +28,7 @@ angular.module("BossCollection.controllers")
                 console.log(err);  
             })
         }
+        
          
         $scope.submitNewAbsence = function(){
             
@@ -49,6 +50,10 @@ angular.module("BossCollection.controllers")
             })
         }
         
+        
+        function filterOutOldDates(){
+            
+        }
     
 
     }])

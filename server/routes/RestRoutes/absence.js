@@ -18,10 +18,12 @@ router.route('/absence')
   .post(function(req, res){
     
     var newAbsence = new AbsenceModel(req.body.newApplicant);
-    var date = new Date(req.body.date);
+    var date = moment(req.body.date);
+    
+    
     
     newAbsence.user = req.session.user.name;    
-    newAbsence.date = date;
+    newAbsence.date = date.toISOString();
     newAbsence.reason = req.body.reason;
     newAbsence.absent = req.body.absent;
     newAbsence.late = req.body.late;
@@ -40,7 +42,15 @@ router.route('/absence')
 router.route('/absence')
     .get(function(req, res){
         console.log("Getting absences...");
-        AbsenceModel.find({})
+        
+        var date = moment();
+        date.toISOString();
+        
+        AbsenceModel.find({
+            date:{
+                $gte:date.toISOString()
+            }
+        })
             .then(function(absences){
                 
                 res.status(200).send({"absences" : absences});
