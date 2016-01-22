@@ -1,9 +1,13 @@
 var mongoose = require('mongoose');
- 
-module.exports = mongoose.model('absence',{
-    "user": "",
-    "date": "",
-    "reason": "",
-    "absent": false,
-    "late": false    
-});
+
+var Schema = mongoose.Schema;
+
+var absenceSchema = new Schema({
+    user: String, //gathered From session
+    date: Object,
+    reason: String,
+    absent: Boolean,
+    late: Boolean
+})
+
+module.exports = mongoose.model('absence', absenceSchema);

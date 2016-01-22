@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var application = require('./applications');
+var absence = require('./absence');
 var router = express.Router();
 var q = require('q');
 var bossStrats = require('./bossStratsREST');
@@ -15,6 +16,7 @@ router.use(function(req,res, next){
 })
 
 router.use(application);
+router.use(absence);
 
 //Playing around with REST routes
 router.route('/test')

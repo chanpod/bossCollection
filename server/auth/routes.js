@@ -36,6 +36,11 @@ var q = require('q');
         AM.verifyLoggedIn(req, res);
     })
     
+    router.get('/absence', function(req, res){
+        
+        AM.verifyLoggedIn(req, res);
+    })
+    
     router.post('/logout', function(req, res){
         
         console.log("Logging out...");

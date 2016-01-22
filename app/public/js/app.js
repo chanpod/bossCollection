@@ -53,10 +53,18 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/auth/application', {
         templateUrl: 'application',
         controller: 'applicationController'
+    }) 
+    .when('/auth/absence', {
+        templateUrl: 'absence',
+        controller: 'absenceController'
     })
     .when('/reviewApplications', {
         templateUrl: 'reviewApplications',
         controller: 'applicationsReviewController'
+    })
+    .when('/whosOut', {
+        templateUrl: 'absenceSubmissions',
+        controller: 'absenceController'
     })
     .otherwise({
       redirectTo: '/'

@@ -1,0 +1,37 @@
+script#absence(type="text/ng-template")    
+    div.container
+        div.card
+            h4
+                | Missing raid or going to be late? Let us know.
+            div.row
+                form( ng-submit = "submitNewAbsence()").col.s12                
+                    div.row
+                        div.col.s6.input-field                    
+                            i(class="material-icons prefix") label        
+                            input(placeholder = "User Name", type = "text", id = "uName", class = "validate", required = "required", ng-model = "user.name", disabled)
+                            label(for = "uName") User Name
+                        div.col.s6.input-field
+                            
+                            input(id="date", type = "date", required = "required", ng-model = "newAbsence.date").datepicker
+                            label(for="date").active Date
+                    div.row
+                        div.col.s2
+                            p
+                                input(name = "lateOrAbsent", type = "radio", id="late", required = "required", ng-click = "newAbsence.late = true; newAbsence.absent = false")
+                                label(for="late") Late
+                            p
+                                input(name = "lateOrAbsent", type = "radio", id="absent", required = "required", ng-click = "newAbsence.late = false; newAbsence.absent = true")
+                                label(for="absent") Absent
+                        div.col.s10
+                            //-i(class="material-icons prefix") email
+                            label(for="reason", class = "active", ng-touched).active Reason...   
+                            textarea(id = "reason", required = "required", ng-model = "newAbsence.reason", ng-touched).materialize-textarea
+                              
+                    div.row
+                        
+                    div.row
+                        div.s6.col
+                            button(type="submit")#btn-login.btn.btn-primary
+                                i.icon-lock.icon-white
+                                | Submit
+                            

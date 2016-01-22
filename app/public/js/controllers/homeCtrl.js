@@ -27,7 +27,4 @@ angular.module("BossCollection.controllers")
 
               Materialize.scrollFire(options);
   
-
-
-
     }])

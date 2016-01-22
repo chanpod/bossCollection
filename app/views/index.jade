@@ -17,17 +17,17 @@ block body
         
     ul(id="raidDropdownNavbar", class = "dropdown-content")
         li
-            a(href="#!", class = "waves-effect waves-light") Report Absence (not working)
+            a(href="/auth/absence", class = "waves-effect waves-light") Report Absence
         li
-            a(href="#!", class = "waves-effect waves-light") Who's out (not working) 
+            a(href="/whosOut", class = "waves-effect waves-light") Who's out  
         li
             a(href="/reviewApplications", class = "waves-effect waves-light") Applications
             
     ul(id="raidDropdownNavbarMobile", class = "dropdown-content")
         li
-            a(href="#!", class = "waves-effect waves-light") Report Absence (not working)
+            a(href="/auth/absence", class = "waves-effect waves-light") Report Absence
         li
-            a(href="#!", class = "waves-effect waves-light") Who's out (not working)
+            a(href="/whosOut", class = "waves-effect waves-light") Who's out 
         li
             a(href="/reviewApplications", class = "waves-effect waves-light") Applications
     nav(class = "transparent")
@@ -108,6 +108,8 @@ block body
     include partials/roster
     include partials/accounts/login
     include partials/accounts/signup
+    include partials/absence/absence
+    include partials/absence/absenceSubmissions
     include partials/forums/forum
     include partials/accounts/editAccount
     include partials/applications/application

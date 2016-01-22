@@ -53,10 +53,18 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/auth/application', {
         templateUrl: 'application',
         controller: 'applicationController'
+    }) 
+    .when('/auth/absence', {
+        templateUrl: 'absence',
+        controller: 'absenceController'
     })
     .when('/reviewApplications', {
         templateUrl: 'reviewApplications',
         controller: 'applicationsReviewController'
+    })
+    .when('/whosOut', {
+        templateUrl: 'absenceSubmissions',
+        controller: 'absenceController'
     })
     .otherwise({
       redirectTo: '/'
@@ -109,9 +117,6 @@ angular.module("BossCollection.controllers")
 
               Materialize.scrollFire(options);
   
-
-
-
     }])
 
 'use strict';
@@ -326,6 +331,61 @@ angular.module("BossCollection.controllers")
            $scope.getMembers()
 
         }])
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService',
+        function($scope, $location, userLoginSrvc, absenceService){
+        
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 15 // Creates a dropdown of 15 years to control year
+        });
+
+        $scope.getAbsences = function(){
+            $scope.loading = true;
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                Materialize.toast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+         
+        $scope.submitNewAbsence = function(){
+            
+            var dateInput = $('.datepicker').pickadate()
+
+            // Use the picker object directly.
+            var picker = dateInput.pickadate('picker')
+                 
+            $scope.newAbsence.date = picker.get();
+            
+            absenceService.submitNewAbsence($scope.newAbsence).then(function(result){
+                
+                //TODO: Redirect to list of absences.
+                 $location.path("/whosOut");
+            },
+            function(err){
+                Materialize.toast(err) 
+                console.log(err); 
+            })
+        }
+        
+    
+
+    }])
+
 'use strict';
 /**
  *
@@ -1051,6 +1111,65 @@ angular.module('BossCollection.filters').
 
 'use strict';
 angular.module("BossCollection.services", []) 
+'use strict';
+
+angular.module("BossCollection.services")
+    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices',
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
+
+            var absence = $resource('/api/absence', {}, {})
+
+
+            var absenceApi = {
+
+                submitNewAbsence: function (newAbsence) {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    absence.save(newAbsence).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+
+                getAbsences: function () {
+
+                    var defer = $q.defer();
+
+                    absence.get().$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                }
+            };
+
+            return absenceApi;
+        }])
 'use strict';
 
 angular.module("BossCollection.services")
