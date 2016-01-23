@@ -20,7 +20,10 @@ router.route('/absence')
     var newAbsence = new AbsenceModel(req.body.newApplicant);
     var date = moment(req.body.date);
     
-    
+    date.millisecond(0);
+    date.seconds(0);
+    date.minutes(0);
+    date.hour(0);
     
     newAbsence.user = req.session.user.name;    
     newAbsence.date = date.toISOString();
@@ -44,7 +47,12 @@ router.route('/absence')
         console.log("Getting absences...");
         
         var date = moment();
-        date.toISOString();
+        date.millisecond(0);
+        date.seconds(0);
+        date.minutes(0);
+        date.hours(0);
+        
+        console.log(date.toISOString());
         
         AbsenceModel.find({
             date:{
