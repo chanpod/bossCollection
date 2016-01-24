@@ -3,35 +3,37 @@ script#absence(type="text/ng-template")
         div.card
             h4
                 | Missing raid or going to be late? Let us know.
-            div.row
-                form( ng-submit = "submitNewAbsence()").col.s12                
-                    div.row
-                        div.col.s6.input-field                    
-                            i(class="material-icons prefix") label        
-                            input(placeholder = "User Name", type = "text", id = "uName", class = "validate", required = "required", ng-model = "user.name", disabled)
-                            label(for = "uName") User Name
-                        div.col.s6.input-field
+            div()
+                form(ng-submit = "submitNewAbsence()")
+                    div(layout, layout-align = "space-around center")
+                        div()
+                            md-input-container
+                                label Title
+                                input(ng-model="user.name", disabled)
+                                    
+                                
+                           
+                        div()
+                            md-input-container
+                                label(for="date").active Date
+                                input(id="date", type = "date", required = "required", ng-model = "newAbsence.date").datepicker
+                    div(layout)
+                        div()
+                            label(for="reason") Late or Absent?
+                            md-radio-group(ng-model="newAbsence.type", required = "required")
+                                md-radio-button(value="late", class="md-primary")
+                                    | Late
+                                md-radio-button(value="absent") 
+                                    | Absent
                             
-                            input(id="date", type = "date", required = "required", ng-model = "newAbsence.date").datepicker
-                            label(for="date").active Date
-                    div.row
-                        div.col.s2
-                            p
-                                input(name = "lateOrAbsent", type = "radio", id="late", required = "required", ng-click = "newAbsence.late = true; newAbsence.absent = false")
-                                label(for="late") Late
-                            p
-                                input(name = "lateOrAbsent", type = "radio", id="absent", required = "required", ng-click = "newAbsence.late = false; newAbsence.absent = true")
-                                label(for="absent") Absent
-                        div.col.s10
-                            //-i(class="material-icons prefix") email
-                            label(for="reason", class = "active", ng-touched).active Reason...   
-                            textarea(id = "reason", required = "required", ng-model = "newAbsence.reason", ng-touched).materialize-textarea
+                    
+                    md-input-container.md-block
+                        label(for="reason") Reason...   
+                        textarea(id = "reason", required = "required", ng-model = "newAbsence.reason")
                               
-                    div.row
-                        
-                    div.row
-                        div.s6.col
-                            button(type="submit")#btn-login.btn.btn-primary
-                                i.icon-lock.icon-white
-                                | Submit
+                    
+                    div
+                        button(type="submit")#btn-login.btn.btn-primary
+                            i.icon-lock.icon-white
+                            | Submit
                             

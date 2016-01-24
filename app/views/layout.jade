@@ -11,9 +11,9 @@ html(ng-app="BossCollection")
     
     link(rel = "stylesheet", href="http://fonts.googleapis.com/icon?family=Material+Icons")
     link(rel = "stylesheet", href="js/lib/materialize/css/materialize.min.css")
-    link(rel="stylesheet",   href="/node_modules/angular-material/angular-material.css")
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 
-
+    
     link(rel='stylesheet', href='/tmp/bosscollection.min.css')
 
     //Google analytics script
@@ -28,7 +28,11 @@ html(ng-app="BossCollection")
         
 
     body
+        
         script(src='/tmp/vendor.min.js')
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+        
         script(src='/tmp/bosscollection.js')
         
         script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")

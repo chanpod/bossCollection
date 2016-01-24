@@ -10,7 +10,8 @@ angular.module('BossCollection', [
   //'ui.bootstrap',
   'ngResource',
   'btford.socket-io',
-  'ngCookies'
+  'ngCookies',
+  'ngMaterial'
 
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();

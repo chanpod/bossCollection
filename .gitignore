@@ -3,4 +3,5 @@
 node_modules/
 workspace.xml
 watcherTasks.xml
-app/public/js/tmp/
+app/public/tmp/
+app/public/css/compiled.scss
