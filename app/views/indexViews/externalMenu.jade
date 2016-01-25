@@ -1,0 +1,17 @@
+md-menu()
+    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
+        i(class="material-icons") navigation
+        | External Links
+    md-menu-content(width = "4")
+        md-menu-item
+            md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")
+                i(class="material-icons") equalizer
+                | Logs
+        md-menu-item
+            md-button(ng-click = "goToExternal('http://bosscollection.enjin.com/forum')")
+                i(class="material-icons") question_answer
+                | Forums
+        md-menu-item
+            md-button(ng-click = "goToExternal('http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection')")
+                <i class="material-icons">trending_up</i>
+                | Progression

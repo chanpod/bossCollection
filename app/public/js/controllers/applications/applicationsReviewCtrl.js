@@ -5,8 +5,10 @@
 
  */
 angular.module("BossCollection.controllers")
-    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices',
-        function($scope, $location, $http, $timeout, guildServices){
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
+        function($scope, $location, $http, $timeout, guildServices, siteServices){
+            
+            siteServices.updateTitle('View Applications');    
             
             try{
             (adsbygoogle = window.adsbygoogle || []).push({});

@@ -117,7 +117,7 @@ angular.module("BossCollection.services")
                       
                     $location.path("/");
                     
-                }, function(){
+                }, function(err){
                     
                     $rootScope.$broadcast("loggedin", {loggedIn: false});
                     siteServices.loadingFinished();
@@ -158,18 +158,18 @@ angular.module("BossCollection.services")
                 
                 return defer.promise;
             },
-            login: function (user) {
-                var defer = $q.defer();
+            login: function (user) { 
+                var defer = $q.defer(); 
                 
                 siteServices.startLoading();
-                
-                login.save(user).$promise
+                 
+                login.save(user).$promise 
                     .then(function(result){
                     
                         accountApi.currentlyLoggedIn()
                             .then(function(areWeLoggedIn){
                                 
-                                $rootScope.$broadcast("loggedin");
+                                
                                   
                                 defer.resolve(true);        
                             },
@@ -188,6 +188,8 @@ angular.module("BossCollection.services")
                         defer.reject(err.data);
                     })
                     .finally(function(){
+                        
+                        siteServices.hideLoadingBottomSheet();
                         siteServices.loadingFinished();
                     })                 
                 

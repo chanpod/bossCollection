@@ -5,9 +5,10 @@
 
  */
 angular.module("BossCollection.controllers")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, realmServices, guildServices, userLoginSrvc){
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, $timeout, realmServices, guildServices, userLoginSrvc, siteServices){
             
+            siteServices.updateTitle('Applications');
             
             console.log("Loading application ctrl...");
             $scope.application = {};            

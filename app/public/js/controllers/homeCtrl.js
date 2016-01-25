@@ -6,8 +6,8 @@
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout',
-        function($scope, $location, $http, $timeout){
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
+        function($scope, $location, $http, $timeout, siteServices){
             
             try{
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -26,5 +26,6 @@ angular.module("BossCollection.controllers")
               ];
 
               Materialize.scrollFire(options);
-  
+            
+            siteServices.updateTitle('Home');
     }])

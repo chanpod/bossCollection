@@ -1,108 +1,42 @@
 extends layout
 
 block body
-  div(ng-controller = "navbar")
-    ul(id="userDropdown", class = "dropdown-content")
-      li
-        a(href="/auth/updateAccount", class = "waves-effect waves-light") Edit 
-      li()
-        a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
-      
-      
-    ul(id="userDropdownMobile", class = "dropdown-content")
-      li
-        a(href="/auth/updateAccount", class = "waves-effect waves-light") Edit 
-      li()
-        a(href="#!", class = "waves-effect waves-light", ng-click = "logout()") Logout
-        
-    ul(id="raidDropdownNavbar", class = "dropdown-content")
-        li
-            a(href="/auth/absence", class = "waves-effect waves-light") Report Absence
-        li
-            a(href="/whosOut", class = "waves-effect waves-light") Who's out  
-        li
-            a(href="/reviewApplications", class = "waves-effect waves-light") Applications
+    section(ng-controller = "navbar",layout = "row", flex)
+        include indexViews/sideNav
+                    
+        div(layout = "column", flex)
+            md-toolbar
+                div().md-toolbar-tools
+                    md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
+                        i(class = "material-icons") menu
+                    div(layout = "row", flex)
+                        h2
+                            | {{title}}
+                        span(flex)
+                    
             
-    ul(id="raidDropdownNavbarMobile", class = "dropdown-content")
-        li
-            a(href="/auth/absence", class = "waves-effect waves-light") Report Absence
-        li
-            a(href="/whosOut", class = "waves-effect waves-light") Who's out 
-        li
-            a(href="/reviewApplications", class = "waves-effect waves-light") Applications
-    nav(class = "transparent")
-      div(class = "nav-wrapper")
-        a(href="/", class = "brand-logo waves-effect waves-light") BossCollection
-        a(href="#", data-activates="sideNavMobile", class="button-collapse")
-            i(class="material-icons") menu
-            
-        ul(class="center hide-on-med-and-down")
-          li
-            a(href = "https://www.warcraftlogs.com/guilds/36279", class = "waves-effect waves-light") Logs
-          li
-            a(href="http://bosscollection.enjin.com/forum", class = "waves-effect waves-light") Forums
-          li
-            a(href="http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection", class = "waves-effect waves-light")
-              | Progression 
-          li
-            a(href="/roster", class = "waves-effect waves-light") Guild Roster
-          li
-            a(href="/auth/application", class = "waves-effect waves-light") Apply
-          li                     
-            a(ng-show = "loggedIn", data-activates = "userDropdown", class = "waves-effect waves-light dropdown-button")
-              | {{user.name}}
-              i(class = "material-icons right") arrow_drop_down
-            a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
-          li
-            a(ng-show = "loggedIn", data-activates = "raidDropdownNavbar", class = "waves-effect waves-light dropdown-button") Raid Tools
-                i(class = "material-icons right") arrow_drop_down
-            
-        ul(id = "sideNavMobile", class = "side-nav")
-          li
-            a(href="https://www.warcraftlogs.com/guilds/36279", class = "waves-effect waves-light") Logs
-          li
-            a(href="http://bosscollection.enjin.com/forum", class = "waves-effect waves-light") Forums
-          li
-            a(href="/roster", class = "waves-effect waves-light") Guild Roster
-          li
-            a(href="/auth/application", class = "waves-effect waves-light") Apply
-          li
-            a(ng-show = "!loggedIn", href="/auth/login", class = "waves-effect waves-light") Login
-            a(ng-show = "loggedIn", data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
-              i(class = "material-icons right") arrow_drop_down
-              | {{user.name}}
-              
-          li
-            a(ng-show = "loggedIn", data-activates = "raidDropdownNavbarMobile", class = "waves-effect waves-light dropdown-button")
-              | Raid Tools
-              i(class = "material-icons right") arrow_drop_down
-              
-          //-li
-            a(data-activates = "userDropdownMobile", class = "waves-effect waves-light dropdown-button")
-              | Strategy Room
-              i(class = "material-icons right") arrow_drop_down
-            
-    div(ng-view)     
+            md-content(flex, layout-padding).contentBackgroundImage
+                div(ng-view)     
         
     
-    
-    footer.page-footer.transparent
-      div.container.transparent
-        div.col.16.s6
-          h5.white-text
-            | Libraries
-        div.col.14.offset-12.s6          
-          div.collection
-              a(href = "http://materializecss.com/", class = "waves-effect waves-light collection-item btn")
-                | Materialize
-              a(href = "#!", class = "waves-effect waves-light collection-item btn")
-                | Blizzard api
-              a(href = "http://angularjs.org/", class = "waves-effect waves-light collection-item btn")
-                | AngularJS
-              a(href = "http://nodejs.org/", class = "waves-effect waves-light collection-item btn")
-                | NodeJS
-              a(href = "https://github.com/chanpod/bossCollection", class = "waves-effect waves-light collection-item btn")
-                | Issues? Report them on github 
+    //-
+        footer.page-footer.transparent
+        div.container.transparent
+            div.col.16.s6
+            h5.white-text
+                | Libraries
+            div.col.14.offset-12.s6          
+            div.collection
+                a(href = "http://materializecss.com/", class = "waves-effect waves-light collection-item btn")
+                    | Materialize
+                a(href = "#!", class = "waves-effect waves-light collection-item btn")
+                    | Blizzard api
+                a(href = "http://angularjs.org/", class = "waves-effect waves-light collection-item btn")
+                    | AngularJS
+                a(href = "http://nodejs.org/", class = "waves-effect waves-light collection-item btn")
+                    | NodeJS
+                a(href = "https://github.com/chanpod/bossCollection", class = "waves-effect waves-light collection-item btn")
+                    | Issues? Report them on github 
 
 
     include partials/home    

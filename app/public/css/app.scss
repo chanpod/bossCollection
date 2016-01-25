@@ -1,6 +1,7 @@
 /* app css stylesheet */
 
 html, body {
+    /*
     font-family: helvetica;
     background-image: linear-gradient(to bottom, transparent, #2c3e50);
     height:0;
@@ -8,8 +9,9 @@ html, body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
-}
- s
+    */
+} 
+ 
 
 
 .wellGradient{
@@ -20,6 +22,9 @@ html, body {
     margin-bottom:0;
 }
 
+.contentBackgroundImage{
+    background-image: url("images/siteParallaxImages/illidan-large.jpg");
+}
 
 
 .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
@@ -32,7 +37,7 @@ html, body {
 }
 
 .headerLabel{
-    padding-bottom: 50px;
+    padding-bottom: 50px; 
 }
 
 .bossVideoContainer{

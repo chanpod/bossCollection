@@ -1,7 +1,7 @@
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location, siteServices){
             
             try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -9,6 +9,8 @@ angular.module("BossCollection.controllers")
             catch(err){
               //Don't care, keep going df
             }
+            
+            siteServices.updateTitle('Guild Roster');
             
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;

@@ -3,8 +3,10 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 
-        function($scope, $location, $http, userLoginSrvc){
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, userLoginSrvc, siteServices){
+        
+        siteServices.updateTitle('Account');
         
         userLoginSrvc.getUser().then(function(user){
              

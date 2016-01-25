@@ -1,0 +1,19 @@
+md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
+    md-toolbar().md-theme-indigo  
+        md-list
+                md-list-item(ng-click = "alert('test')").md-1-line 
+                    h1(ng-click = "goTo('/')").md-toolbar-tools
+                            | Bosscollection
+                md-list-item(ng-show = "loggedIn", ng-click = "alert('test')").md-1-line 
+                    h1(ng-click = "goTo('/auth/updateAccount')").md-toolbar-tools
+                        | {{user.name}}
+    md-content(flex, layout-padding, role = "navigation")
+        md-list
+            md-subheader().md-no-sticky
+                include accountMenu
+            md-divider
+            md-subheader().md-no-sticky
+                include externalMenu
+            md-divider
+            md-subheader(ng-show = "loggedIn").md-no-sticky
+                include raidMenu

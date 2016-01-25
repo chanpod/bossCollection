@@ -3,12 +3,21 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService',
-        function($scope, $location, userLoginSrvc, absenceService){
+    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices){
         
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
+        
+        if($location.url() == "/auth/absence"){
+            siteServices.updateTitle('Report Absence');    
+        }
+        else{
+            siteServices.updateTitle('Upcoming Absences');    
+        }
+        
+        
         
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month

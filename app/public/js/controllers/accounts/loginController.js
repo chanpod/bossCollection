@@ -3,10 +3,17 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 
-        function($scope, $location, $http, userLoginSrvc){
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, userLoginSrvc, siteServices){
 
         $scope.user = {};
+        $scope.user.name = "";
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        console.log("Login Controller");
         
         $scope.user = userLoginSrvc.getUser()
             .then(function(user){

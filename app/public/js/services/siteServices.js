@@ -3,7 +3,8 @@
 
 
 angular.module("BossCollection.services")
-    .factory('siteServices', [function () {
+    .factory('siteServices', ['$rootScope', '$mdBottomSheet', 
+    function ($rootScope, $mdBottomSheet) {
         
         function startLoading(){
             
@@ -16,8 +17,32 @@ angular.module("BossCollection.services")
             $('#loadingModal').closeModal();
         }
         
+        function updateTitle(newTitle){
+            
+            $rootScope.$broadcast('navbarTitle', newTitle)
+        }
+        
+        function showLoadingBottomSheet($event){
+            
+
+                $mdBottomSheet.show({
+                    templateUrl: 'logInModal',
+                    controller: 'loginController',
+                    targetEvent: $event
+                })
+            
+        }
+        
+        function hideLoadingBottomSheet(){
+            
+            $mdBottomSheet.hide();
+        }
+        
         return {
             startLoading:startLoading,
-            loadingFinished:loadingFinished
+            loadingFinished:loadingFinished,
+            updateTitle:updateTitle,
+            showLoadingBottomSheet:showLoadingBottomSheet,
+            hideLoadingBottomSheet:hideLoadingBottomSheet
         }
     }])

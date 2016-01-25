@@ -43,7 +43,7 @@ gulp.task('watch', function(){
 gulp.task('build', function(){
     //['clean', 'concatJS', 'concatSass', 'css', 'cssRename', 'minify', 'minifyCss']
     
-    runSequence('clean', 'concatJS', 'concatSass', 'css', 'cssRename', 'minify', 'minifyCss');
+    runSequence('clean', 'concatJS', 'concatSass', 'css', 'cssRename', 'minify', 'minifyCss', 'vendorCss');
 })
 
 /**
@@ -70,6 +70,7 @@ gulp.task('concatVendor', function(){
         './node_modules/angular-messages/angular-messages.min.js',
         './node_modules/angular-aria/angular-aria.min.js',
         './node_modules/angular-material/angular-material.min.js',
+        './app/public/js/vendor/angular-parallax.js',
         './app/public/js/lib/jquery-2.1.1.js',
         './app/public/js/lib/underscoreJS.js',
         './app/public/js/lib/materialize/js/materialize.min.js',
@@ -98,6 +99,15 @@ gulp.task('concatJS', function () {
         .pipe(gulp.dest('./app/public/tmp/'));
 
 
+})
+
+gulp.task('vendorCss', function(){
+    
+    return gulp.src([
+        './node_modules/angular-material/angular-material.min.css'
+    ])
+        .pipe(concat('angular-material.min.css'))
+        .pipe(gulp.dest('./app/public/tmp/'));
 })
 
 gulp.task('concatSass', function () {

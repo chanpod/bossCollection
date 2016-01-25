@@ -15,12 +15,12 @@ angular.module('BossCollection', [
 
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
-}]).
+}]). 
 config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+ 
 
-
-
+  
 
     $routeProvider.
     when('/', {

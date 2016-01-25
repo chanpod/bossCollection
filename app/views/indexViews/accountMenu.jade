@@ -1,0 +1,21 @@
+md-menu
+    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
+        i(class="material-icons") account_circle
+        | Account
+    md-menu-content(width = "4")
+        md-menu-item(ng-show = "loggedIn")
+            md-button(ng-click = "goTo('/auth/updateAccount')")
+                i(class="material-icons") mode_edit
+                | Edit
+        md-menu-item(ng-show = "loggedIn")
+            md-button(ng-click = "logout()")
+                i(class="material-icons") exit_to_app
+                | Logout
+        md-menu-item(ng-show = "!loggedIn")
+            md-button(ng-click = "showLoginBottomSheet($event)")
+                | Log In
+            //md-button(ng-click = "goTo('auth/login')")
+                | Log In
+        md-menu-item(ng-show = "!loggedIn")
+            md-button(ng-click = "goTo('auth/signup')")
+                | Register

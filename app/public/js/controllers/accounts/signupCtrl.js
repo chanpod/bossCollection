@@ -8,6 +8,8 @@ angular.module("BossCollection.controllers")
         
         $scope.user = {};
         
+        
+        
         $('#logInModal').closeModal();    
         
         $scope.register = function(){

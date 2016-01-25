@@ -1,12 +1,18 @@
-div(id="logInModal", class="modal bottom-sheet")
-    div(class="modal-content")     
-        div.row
-            div.col.m2.s12
-                button(ng-click = "cancelNavigation()", class="right modal-action modal-close waves-effect waves-green btn-flat")#btn-login.btn.btn-primary Cancel
-        div.row
-            div.col.m12.s12
-                log-in
+script#logInModal(type="text/ng-template")
+    md-bottom-sheet().md-list.md-has-header
+        div
+            form(name = "logInForm")
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        label() Username
+                        input(ng-model = "user.name", required)
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        label() Password
+                        input(type="password", ng-model="user.password", id='pass-tf', required)
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        md-button(ng-click = "login()").md-primary.md-raised
+                            | Sign in
     
-    div(class="modal-footer")
-     
     

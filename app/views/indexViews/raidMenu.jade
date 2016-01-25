@@ -1,0 +1,25 @@
+md-menu
+    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
+        i(class="material-icons") account_circle
+        | Guild Services
+    md-menu-content(width = "4")
+        md-menu-item
+            md-button(ng-click = "goTo('/auth/absence')")
+                i(class="material-icons") today
+                | Report Absence
+        md-menu-item
+            md-button(ng-click = "goTo('/whosOut')")
+                i(class="material-icons") today
+                | Upcoming Absences
+        md-menu-item
+            md-button(ng-click = "goTo('/auth/application')")
+                <i class="material-icons">send</i>
+                | Apply to our Guild
+        md-menu-item
+            md-button(ng-click = "goTo('/reviewApplications')")
+                <i class="material-icons">inbox</i>
+                | View Applications
+        md-menu-item
+            md-button(ng-click = "goTo('/roster')")
+                <i class="material-icons">group</i>
+                | Guild Roster

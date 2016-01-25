@@ -15,12 +15,12 @@ angular.module('BossCollection', [
 
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
-}]).
+}]). 
 config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+ 
 
-
-
+  
 
     $routeProvider.
     when('/', {
@@ -97,8 +97,8 @@ angular.module("BossCollection.controllers", [])
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout',
-        function($scope, $location, $http, $timeout){
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
+        function($scope, $location, $http, $timeout, siteServices){
             
             try{
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -117,7 +117,8 @@ angular.module("BossCollection.controllers")
               ];
 
               Materialize.scrollFire(options);
-  
+            
+            siteServices.updateTitle('Home');
     }])
 
 'use strict';
@@ -125,37 +126,77 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
-        function($scope, $location, $http, userLoginSrvc, $rootScope){
-            
-        console.log("Working?");
-
+    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices',
+        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices){
+        
+        var originatorEv;
+        var bossCollectionWowProgressUrl = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/json_rank";
         $scope.user = {};
-        $scope.user.name = userLoginSrvc.getUser();
+        $scope.user.name = "";
         $scope.loggedIn = false;
+        $scope.guildRank = {};
+        $scope.title = "";
         
+        $scope.init = function(){
+            
+            $scope.areWeLoggedIn();
+            
+            userLoginSrvc.getUser()
+                .then(function(user){
+                    if(user){
+                        $scope.user = user;
+                    }
+                },
+                function(err){
+                    $scope.user.name = "";
+                })
+        }
         
+        $scope.showLoginBottomSheet = function($event){
+            
+            siteServices.showLoadingBottomSheet($event);
+        }
+        
+        $scope.openMenu = function ($mdOpenMenu, ev) {
+            originatorEv = ev;
+            $mdOpenMenu(ev);
+        };
+        
+        $scope.goTo = function(path){
+            $location.url(path);
+            $scope.toggle();
+        }
+        
+        $scope.goToExternal = function (path) {
+            window.open(
+                path,
+                '_blank' // <- This is what makes it open in a new window.
+                );
+        }
+    
+            
+        $rootScope.$on('navbarTitle', function(event, newTitle){
+            
+            $scope.title = newTitle;
+        })
         
         $rootScope.$on("loggedin", function(event, user){
             
             console.log(user);
             
-            
+            if(user.loggedIn === true){
                 
-            userLoginSrvc.getUser()
-                .then(function(user){
-                    
-                    $scope.user = user;
-                    return user;
-                },
-                function(err){
-                    
-                    console.log(err);
-                })             
+                $scope.user = user;    
+            }
+            else{
+                $scope.user = "";
+            }
+            
+            
             
             $scope.loggedIn = user.loggedIn;
             
-        })
+        }) 
         
         $scope.logout = function(){
             
@@ -178,14 +219,28 @@ angular.module("BossCollection.controllers")
             })
         }
         
-        $scope.areWeLoggedIn();
+        $scope.toggle = buildToggler('left');
+        
+        function buildToggler(navID) {
+            return function () {
+                
+                $mdSidenav(navID)
+                    .toggle();
+            }
+        }
+        
+        
+        
+        
+        $scope.init();
+        
 
     }])
 
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location){
+    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
+        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location, siteServices){
             
             try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -193,6 +248,8 @@ angular.module("BossCollection.controllers")
             catch(err){
               //Don't care, keep going df
             }
+            
+            siteServices.updateTitle('Guild Roster');
             
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
@@ -337,12 +394,21 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService',
-        function($scope, $location, userLoginSrvc, absenceService){
+    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices){
         
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
+        
+        if($location.url() == "/auth/absence"){
+            siteServices.updateTitle('Report Absence');    
+        }
+        else{
+            siteServices.updateTitle('Upcoming Absences');    
+        }
+        
+        
         
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
@@ -397,8 +463,10 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 
-        function($scope, $location, $http, userLoginSrvc){
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, userLoginSrvc, siteServices){
+        
+        siteServices.updateTitle('Account');
         
         userLoginSrvc.getUser().then(function(user){
              
@@ -436,10 +504,17 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 
-        function($scope, $location, $http, userLoginSrvc){
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, userLoginSrvc, siteServices){
 
         $scope.user = {};
+        $scope.user.name = "";
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        console.log("Login Controller");
         
         $scope.user = userLoginSrvc.getUser()
             .then(function(user){
@@ -503,6 +578,8 @@ angular.module("BossCollection.controllers")
         
         $scope.user = {};
         
+        
+        
         $('#logInModal').closeModal();    
         
         $scope.register = function(){
@@ -527,9 +604,10 @@ angular.module("BossCollection.controllers")
 
  */
 angular.module("BossCollection.controllers")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, realmServices, guildServices, userLoginSrvc){
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, $timeout, realmServices, guildServices, userLoginSrvc, siteServices){
             
+            siteServices.updateTitle('Applications');
             
             console.log("Loading application ctrl...");
             $scope.application = {};            
@@ -637,8 +715,10 @@ angular.module("BossCollection.controllers")
 
  */
 angular.module("BossCollection.controllers")
-    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices',
-        function($scope, $location, $http, $timeout, guildServices){
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
+        function($scope, $location, $http, $timeout, guildServices, siteServices){
+            
+            siteServices.updateTitle('View Applications');    
             
             try{
             (adsbygoogle = window.adsbygoogle || []).push({});
@@ -1397,7 +1477,8 @@ angular.module("BossCollection.services")
 
 
 angular.module("BossCollection.services")
-    .factory('siteServices', [function () {
+    .factory('siteServices', ['$rootScope', '$mdBottomSheet', 
+    function ($rootScope, $mdBottomSheet) {
         
         function startLoading(){
             
@@ -1410,9 +1491,33 @@ angular.module("BossCollection.services")
             $('#loadingModal').closeModal();
         }
         
+        function updateTitle(newTitle){
+            
+            $rootScope.$broadcast('navbarTitle', newTitle)
+        }
+        
+        function showLoadingBottomSheet($event){
+            
+
+                $mdBottomSheet.show({
+                    templateUrl: 'logInModal',
+                    controller: 'loginController',
+                    targetEvent: $event
+                })
+            
+        }
+        
+        function hideLoadingBottomSheet(){
+            
+            $mdBottomSheet.hide();
+        }
+        
         return {
             startLoading:startLoading,
-            loadingFinished:loadingFinished
+            loadingFinished:loadingFinished,
+            updateTitle:updateTitle,
+            showLoadingBottomSheet:showLoadingBottomSheet,
+            hideLoadingBottomSheet:hideLoadingBottomSheet
         }
     }])
 'use strict';
@@ -1546,7 +1651,7 @@ angular.module("BossCollection.services")
                       
                     $location.path("/");
                     
-                }, function(){
+                }, function(err){
                     
                     $rootScope.$broadcast("loggedin", {loggedIn: false});
                     siteServices.loadingFinished();
@@ -1587,18 +1692,18 @@ angular.module("BossCollection.services")
                 
                 return defer.promise;
             },
-            login: function (user) {
-                var defer = $q.defer();
+            login: function (user) { 
+                var defer = $q.defer(); 
                 
                 siteServices.startLoading();
-                
-                login.save(user).$promise
+                 
+                login.save(user).$promise 
                     .then(function(result){
                     
                         accountApi.currentlyLoggedIn()
                             .then(function(areWeLoggedIn){
                                 
-                                $rootScope.$broadcast("loggedin");
+                                
                                   
                                 defer.resolve(true);        
                             },
@@ -1617,6 +1722,8 @@ angular.module("BossCollection.services")
                         defer.reject(err.data);
                     })
                     .finally(function(){
+                        
+                        siteServices.hideLoadingBottomSheet();
                         siteServices.loadingFinished();
                     })                 
                 
