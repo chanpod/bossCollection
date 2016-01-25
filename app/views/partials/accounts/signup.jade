@@ -1,36 +1,36 @@
 script#signup(type="text/ng-template")    
-    div.container
-        div.card
-            h4
-                | Please tell us a little about yourself.
-            div.row
-                form(ng-submit = "register()").col.s12                
-                    div.row
-                        div.col.s6.input-field
-                            i(class="material-icons prefix") label    
-                            input(placeholder = "User Name", type = "text", id = "uName", class = "validate", required = "required", ng-model = "user.name")
-                            label(for = "uName") User Name
-                        div.col.s6.input-field
-                            input(placeholder = "Battle Tag", id="battleTag", type = "text", class = "validate", ng-model = "user.battleTag")
-                            label(for="battleTag") Battle Tag
-                    div.row
-                        div.col.s12.input-field
-                            i(class="material-icons prefix") email
-                            input(id = "email", type = "email", class = "validate", required = "required", ng-model = "user.email")
-                            label(for="email") Email
-                    div.row
-                        div.col.s12.input-field
-                            i(class="material-icons prefix") lock
-                            input(id = "password", type = "password", class = "validate", required = "required", ng-model = "user.password")
-                            label(for="password") Password
-                    div.row
-                        div.col.s12.input-field
-                            i(class="material-icons prefix") lock
-                            input(id = "password_validate", type = "password", class = "validate", required = "required", ng-model = "user.password_verify")
-                            label(for="password_validate") Verify Password
-                    div.row
-                        div.s6.col
-                            button(type="submit")#btn-login.btn.btn-primary
-                                i.icon-lock.icon-white
-                                | Register
-                            
+    div
+        form(name = "logInForm", layout = "column", ng-submit = "register()")
+            div(layout = "row")
+                div(flex)
+                    md-input-container(flex).md-block
+                        label() User Name
+                        md-icon(md-font-library="material-icons") person
+                        input(ng-model = "user.name", required)
+                div(flex)
+                    md-input-container(flex).md-block
+                        label() Battle Tag
+                        input(ng-model = "user.battleTag", required)
+            div(flex)
+                md-input-container(flex).md-block                    
+                    label() Email
+                    md-icon(md-font-library="material-icons") email
+                    input(type="email", ng-model="user.email", id='emailInput', required)
+            div(flex)
+                md-input-container(flex).md-block
+                    label() Password
+                    md-icon(md-font-library="material-icons") vpn_key
+                    input(type="password", ng-model="user.password", id='pwordInput', required)
+            div(flex)
+                md-input-container(flex).md-block
+                    label() Password Validate
+                    md-icon(md-font-library="material-icons") vpn_key
+                    input(type="password", ng-model="user.password_verify", id='pwordVerifyInput', name = "pwordVerifyInput", required)
+                    div(ng-messages="logInForm.pwordVerifyInput.$error")
+                        div(ng-message="required") Passwords must match.                   
+                    
+            div(flex)
+                md-input-container(flex).md-block
+                    md-button(type = "submit", ng-click = "login()").md-primary.md-raised
+                        | Register
+    

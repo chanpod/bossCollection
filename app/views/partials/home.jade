@@ -1,9 +1,11 @@
 script#home(type="text/ng-template")
   section(layout="column", flex = "80")
+    
     md-tabs(md-dynamic-height, md-border-bottom)
         md-tab(label = "About Us")
             md-content().md-padding
                  md-card()
+                        
                     md-card-title
                         md-card-title-text
                             span().md-headline
@@ -54,8 +56,17 @@ script#home(type="text/ng-template")
             md-content().md-padding
                 h2.center
                     | Trial Guidelines
-                div(layout = "row", layout-xs="column")
+                div(layout = "column", layout-xs="column")
                     md-card()
+                        
+                        md-card-title
+                            md-card-title-text
+                                span().md-headline
+                                    | Applying?
+                        md-card-content
+                            | Register, log in, and click on Guild Services -> Apply to Our Guild 
+                    md-card()
+                        
                         md-card-title
                             md-card-title-text
                                 span().md-headline
@@ -87,8 +98,9 @@ script#home(type="text/ng-template")
             md-content().md-padding
                 h2.center
                     | Raiding
-                div(layout = "row", layout-xs="column")
-                    md-card()
+                div(layout = "column", layout-xs="column")
+                    md-card(flex)
+                        
                         md-card-title
                             md-card-title-text
                                 span().md-headline
@@ -96,7 +108,7 @@ script#home(type="text/ng-template")
                         md-card-content
                             p
                                 | One of the things that sets us apart is our raid environment. We like to keep things calm, collected and positive during raid. Yes, we still horse around a bit during trash pulls, but when it comes down to progression we're dedicated and serious. Rule number one of our raid environment is, "Don't be a dick!" We keep our raid chat and Teamspeak clear of chart-linking, e-peening, dick-measuring or anything of the like. We're out to progress as a team, so we work together and will not be at each other's throats. During boss progression attempts, our Teamspeak is reserved mainly for officers raid calling and explaining strategies. Our strategies are formulated during officer meetings after tons of research and while we value raider input via officer-whisper or raid-chat, the final word on strategies goes to our officers.
-                    md-card()
+                    md-card(flex)
                         md-card-title
                             md-card-title-text
                                 span().md-headline

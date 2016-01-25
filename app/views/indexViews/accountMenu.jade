@@ -5,11 +5,11 @@ md-menu
     md-menu-content(width = "4")
         md-menu-item(ng-show = "loggedIn")
             md-button(ng-click = "goTo('/auth/updateAccount')")
-                i(class="material-icons") mode_edit
+                md-icon(md-font-library="material-icons") mode_edit
                 | Edit
         md-menu-item(ng-show = "loggedIn")
             md-button(ng-click = "logout()")
-                i(class="material-icons") exit_to_app
+                md-icon(md-font-library="material-icons") exit_to_app
                 | Logout
         md-menu-item(ng-show = "!loggedIn")
             md-button(ng-click = "showLoginBottomSheet($event)")

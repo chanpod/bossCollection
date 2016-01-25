@@ -5,13 +5,13 @@ md-menu()
     md-menu-content(width = "4")
         md-menu-item
             md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")
-                i(class="material-icons") equalizer
+                md-icon(md-font-library="material-icons") equalizer
                 | Logs
         md-menu-item
             md-button(ng-click = "goToExternal('http://bosscollection.enjin.com/forum')")
-                i(class="material-icons") question_answer
+                md-icon(md-font-library="material-icons") question_answer
                 | Forums
         md-menu-item
             md-button(ng-click = "goToExternal('http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection')")
-                <i class="material-icons">trending_up</i>
+                md-icon(md-font-library="material-icons") trending_up
                 | Progression

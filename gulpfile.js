@@ -28,7 +28,9 @@ gulp.task('default', function () {
 gulp.task('watch', function(){
     
     watch([
-        './app/public/js/**/*.js', 
+        './app/public/js/**/*.js',
+        './app/public/css/**/*.scss',
+        '!./app/public/css/compiled.scss',  
         './app/public/js/**/*.sass',
         '!./app/public/js/tmp/**'
         ], batch(function (events, done) {
@@ -138,6 +140,7 @@ gulp.task('clean', function () {
     
    return gulp.src([
         './app/public/tmp/*.js',
+        './app/public/css/compiled.scss',
         '!./app/public/tmp/vendor.min.js',
         './app/public/tmp/*.css'
     ], { read: false })
