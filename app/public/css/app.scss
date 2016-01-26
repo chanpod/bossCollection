@@ -12,7 +12,21 @@ html, body {
     */
 } 
  
+.datePickerAdjust .md-datepicker-button{
+    
+    left:-10px;
+}
 
+.datePickerAdjust .md-datepicker-input-container{
+    
+    left: -30px;
+}
+
+.radioButtonFix{
+    padding-top: 40px;
+    left: 5px;
+    position: relative;
+}
 
 .wellGradient{
     background-image: linear-gradient(to bottom, #2c3e50, #34495e)

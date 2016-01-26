@@ -20,11 +20,11 @@ angular.module("BossCollection.controllers")
             
             console.log("Updating account");
             userLoginSrvc.updateAccount($scope.user).then(function (response) { 
-                Materialize.toast("User updated");
+                siteServices.showMessageToast("User updated");
             },
                 function (err) {
 
-                    Materialize.toast(err);
+                    $scope.openFromLeft(err);
                 })
         }
         
@@ -35,6 +35,9 @@ angular.module("BossCollection.controllers")
             }
         }
         
-        
+        $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
 
     }])

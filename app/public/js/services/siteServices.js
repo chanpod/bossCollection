@@ -3,8 +3,8 @@
 
 
 angular.module("BossCollection.services")
-    .factory('siteServices', ['$rootScope', '$mdBottomSheet', 
-    function ($rootScope, $mdBottomSheet) {
+    .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast',
+    function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast) {
         
         function startLoading(){
             
@@ -38,11 +38,41 @@ angular.module("BossCollection.services")
             $mdBottomSheet.hide();
         }
         
+        function showMessageModal(message){
+            $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(true)
+                        .title('Error')
+                        .textContent(message)
+                        .ariaLabel('message popup')
+                        .ok('Got it!')
+                        .openFrom({
+                            left: -50,
+                            width: 30,
+                            height: 80
+                        })
+                        .closeTo({
+                            right: 1500
+                        })
+                    );
+        }
+        
+        function showMessageToast(message){
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .position("top")
+                    .hideDelay(4000)
+                );
+        }
+        
         return {
             startLoading:startLoading,
             loadingFinished:loadingFinished,
             updateTitle:updateTitle,
             showLoadingBottomSheet:showLoadingBottomSheet,
-            hideLoadingBottomSheet:hideLoadingBottomSheet
+            hideLoadingBottomSheet:hideLoadingBottomSheet,
+            showMessageModal:showMessageModal,
+            showMessageToast:showMessageToast
         }
     }])

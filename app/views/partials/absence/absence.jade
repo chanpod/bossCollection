@@ -1,4 +1,27 @@
 script#absence(type="text/ng-template")    
+    form(ng-submit = "submitNewAbsence()")
+        div(layout-gt-xs="row")
+            md-input-container(flex-gt-xs = "30").md-block
+                label() User Name
+                md-icon(md-font-library="material-icons") person
+                input(ng-model = "user.name", disabled)
+            
+        md-datepicker(ng-model = "newAbsence.date", md-placeholder="Enter date", required).datePickerAdjust
+        
+        div(layout-gt-xs="row").radioButtonFix
+            md-radio-group(ng-model="newAbsence.type", required)
+                md-radio-button(value="late", class="md-primary")
+                    | Late
+                md-radio-button(value="absent") 
+                    | Absent
+        md-input-container(flex-gt-md = "70").md-block
+            label(for="reason") Reason...   
+            textarea(id = "reason", required = "required", ng-model = "newAbsence.reason")
+        div(layout)
+            md-input-container().md-block
+               md-button(type = "submit").md-primary.md-raised
+                    | Submit
+//-
     div.container
         div.card
             h4

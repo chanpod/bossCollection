@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', '$mdDialog',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, $mdDialog) {
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
 
             $scope.user = {};
 
@@ -27,22 +27,8 @@ angular.module("BossCollection.controllers")
             }
 
             $scope.openFromLeft = function (errorMessage) {
-                $mdDialog.show(
-                    $mdDialog.alert()
-                        .clickOutsideToClose(true)
-                        .title('Error')
-                        .textContent(errorMessage)
-                        .ariaLabel('error popup')
-                        .ok('Got it!')
-                        .openFrom({
-                            left: -50,
-                            width: 30,
-                            height: 80
-                        })
-                        .closeTo({
-                            right: 1500
-                        })
-                    );
+                
+                siteServices.showMessageModal(errorMessage);
             };
 
         }])

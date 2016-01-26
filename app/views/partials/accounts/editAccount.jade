@@ -1,4 +1,37 @@
-script#editAccount(type="text/ng-template")    
+script#editAccount(type="text/ng-template")
+    div
+        form(name = "editAccountForm", ng-submit = "updateAccount()")
+            div(layout)
+                md-input-container(flex).md-block
+                    label() Username
+                    input(id = "uName", ng-model = "user.name", disabled)
+                md-input-container(flex).md-block
+                    label() Battle Tag
+                    input(id="battleTag", ng-model = "user.battleTag")
+            div(layout)
+                md-input-container(flex).md-block
+                    label() Email
+                    input(id="battleTag", ng-model = "user.email")
+            div(layout)
+                md-input-container(flex).md-block
+                    label() Current Password
+                    input(id="password", type = "password", ng-model = "user.currentPassword", name = "password", required)
+                    div(ng-messages="editAccountForm.password.$error")
+                        div(ng-message="required") Need password to update account.
+            div(layout)
+                md-input-container(flex).md-block
+                    label() New Password
+                    input(id="newPassword", type = "password", ng-model = "user.newPassword")
+                     
+            div(layout)
+                md-input-container(flex).md-block
+                    label() Verify Password
+                    input(id="password_validate", type = "password", ng-model = "user.passwordVerify")
+            div(layout)
+                md-input-container(flex).md-block
+                    md-button(type = "submit").md-primary.md-raised
+                        | Save
+//-
     div.container
         div.card
             h4
