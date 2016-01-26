@@ -15,9 +15,9 @@ script#reviewApplications(type="text/ng-template")
                                 {{application.previousGuild}}
                     md-card-title
                         md-card-title-text.md-headline
-                    md-card-content(layout, layout-align = "space-between")
-                        img(src="images/classBackdrops/{{application.character.class}}.jpg").md-media-xl.card-media
-                        md-card-actions(layout = "column")
+                    md-card-content(layout = "column")
+                        img(src="images/classBackdrops/{{application.character.class}}.jpg", style = "width:100%;height:100%").md-media-xl.card-media
+                        md-card-actions(layout = "row", layout-align = "start center")
                             md-button(ng-click = "openComments(application.comments)").md-icon.button
                                 md-icon(md-font-library="material-icons") message
                             md-button().md-icon.button
