@@ -116,7 +116,8 @@ gulp.task('concatSass', function () {
 
 
     return gulp.src([
-        './app/public/css/**/*.scss',
+        
+        './app/public/css/**/*.scss'
     ])
         .pipe(concat('compiled.scss'))
         .pipe(gulp.dest('./app/public/css/'));
@@ -124,7 +125,10 @@ gulp.task('concatSass', function () {
 
 gulp.task('css', function () {
 
-    return gulp.src('./app/public/css/compiled.scss')
+    return gulp.src([
+        './app/public/css/compiled.scss'
+        
+    ])
         .pipe(sass())
         .pipe(gulp.dest('./app/public/tmp/'));
 })

@@ -1,0 +1,53 @@
+{
+  "name": "octicons",
+  "version": "3.4.1",
+  "description": "GitHub's icon font",
+  "main": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github/octicons.git"
+  },
+  "keywords": [
+    "GitHub",
+    "icons",
+    "font",
+    "web font",
+    "icon font"
+  ],
+  "author": {
+    "name": "GitHub",
+    "email": "support@github.com"
+  },
+  "license": "(OFL-1.1 AND MIT)",
+  "bugs": {
+    "url": "https://github.com/github/octicons/issues"
+  },
+  "homepage": "https://octicons.github.com",
+  "gitHead": "92dc50046c07ac3983569f9d1b14f4b16bbd95a9",
+  "_id": "octicons@3.4.1",
+  "scripts": {},
+  "_shasum": "042c3e433a0176212da3f2e61a4867e7b95557b1",
+  "_from": "octicons@latest",
+  "_npmVersion": "2.14.7",
+  "_nodeVersion": "4.2.2",
+  "_npmUser": {
+    "name": "aaronshekey",
+    "email": "aaronshekey@github.com"
+  },
+  "dist": {
+    "shasum": "042c3e433a0176212da3f2e61a4867e7b95557b1",
+    "tarball": "http://registry.npmjs.org/octicons/-/octicons-3.4.1.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "aaronshekey",
+      "email": "aaronshekey@github.com"
+    },
+    {
+      "name": "cameronmcefee",
+      "email": "cameron@github.com"
+    }
+  ],
+  "directories": {},
+  "_resolved": "http://registry.npmjs.org/octicons/-/octicons-3.4.1.tgz"
+}

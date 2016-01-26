@@ -1,23 +1,25 @@
 extends layout
 
 block body
-    section(ng-controller = "navbar",layout = "row", flex)
+    section(ng-controller = "navbar", layout = "row", flex)
         include indexViews/sideNav
                     
         div(layout = "column", flex)
-            md-toolbar
+            md-toolbar()
                 div().md-toolbar-tools
                     md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
                         i(class = "material-icons") menu
-                    div(layout = "row", flex)
+                    div(flex = "70")
                         h2
                             | {{title}}
-                        span(flex)
+                    span(flex)
+                        a(href = "https://github.com/chanpod/bossCollection", target = "_blank")    
+                            span(flex, class="mega-octicon octicon-mark-github")
                     
             
             md-content(flex, layout-padding)
                 div(ng-view)     
-        
+                
     
     //-
         footer.page-footer.transparent

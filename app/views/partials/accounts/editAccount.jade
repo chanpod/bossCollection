@@ -16,8 +16,7 @@ script#editAccount(type="text/ng-template")
                 md-input-container(flex).md-block
                     label() Current Password
                     input(id="password", type = "password", ng-model = "user.currentPassword", name = "password", required)
-                    div(ng-messages="editAccountForm.password.$error")
-                        div(ng-message="required") Need password to update account.
+                    
             div(layout)
                 md-input-container(flex).md-block
                     label() New Password
