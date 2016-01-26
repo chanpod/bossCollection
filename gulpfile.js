@@ -1,3 +1,4 @@
+require('es6-promise').polyfill();
 var gulp = require('gulp');
 var jade = require('gulp-jade');
 var concat = require('gulp-concat');
@@ -57,7 +58,6 @@ gulp.task('templates', function(){
         }))
         .pipe(gulp.dest('./app/views/'))
 });
-
  */
 
 
