@@ -785,7 +785,12 @@ angular.module("BossCollection.controllers")
             
             $scope.loading = true;
             
-            guildServices.getApplications()
+            $scope.openComments = function (comments) {
+                
+                siteServices.showMessageModal(comments, "Comments");
+            } 
+            
+            guildServices.getApplications() 
                 .then(function(applications){
                     $scope.loading = false;
                     $scope.applications = applications.applications; //object to array
@@ -797,7 +802,7 @@ angular.module("BossCollection.controllers")
                     
                     $scope.loading = false;
                     console.log(err);
-                    Materialize.toast("Seems something broke. Try again in a few...");
+                    siteServices.showMessageToast("Seems something broke. Try again in a few...");
                 })
                 
             function convertClasses(){
@@ -1566,11 +1571,11 @@ angular.module("BossCollection.services")
             $mdBottomSheet.hide();
         }
         
-        function showMessageModal(message){
+        function showMessageModal(message, title){
             $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(true)
-                        .title('Error')
+                        .title(title)
                         .textContent(message)
                         .ariaLabel('message popup')
                         .ok('Got it!')

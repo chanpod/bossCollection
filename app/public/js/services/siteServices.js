@@ -38,11 +38,11 @@ angular.module("BossCollection.services")
             $mdBottomSheet.hide();
         }
         
-        function showMessageModal(message){
+        function showMessageModal(message, title){
             $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(true)
-                        .title('Error')
+                        .title(title)
                         .textContent(message)
                         .ariaLabel('message popup')
                         .ok('Got it!')
