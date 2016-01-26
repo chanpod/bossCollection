@@ -5,12 +5,15 @@ script#home(type="text/ng-template")
         md-tabs(md-dynamic-height, md-border-bottom)
             md-tab(label = "About Us")
                 md-content().md-padding
+                    h2.center
+                        | Welcome
                     md-card()
                             
                         md-card-title
                             md-card-title-text
-                                span().md-headline
-                                    | General
+                                span()
+                                    h2
+                                        | General
                         md-card-content
                             div(layout = "row", flex)
                             p()
@@ -22,31 +25,27 @@ script#home(type="text/ng-template")
                                 | environment be positive and calm to facilitate all the hard work we 
                                 | put into the content and raid team.
                             div(layout = "row", layout-xs="column")
-                                div(flex)
+                                div(flex = "80")
                                     div(layout = "column")
                                         div(flex)
                                             h2
                                                 | Progression
                                         div(flex)
-                                            md-list()
-                                                md-list-item().md-2-line
-                                                    div().md-list-item-text
-                                                        h3
-                                                            | Highmaul
-                                                        h4
-                                                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17", target = "_blank") AOTC - 2/3/15
-                                                md-list-item().md-2-line
-                                                    div().md-list-item-text
-                                                        h3
-                                                            | Blackrock Foundry
-                                                        h4
-                                                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17", target = "_blank") AOTC - 2/3/15
-                                                md-list-item().md-2-line
-                                                    div().md-list-item-text
-                                                        h3
-                                                            | Hellfire Citadel
-                                                        h4
-                                                            a(href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection", target = "_blank") AOTC - 2/3/15
+                                            div(layout, layout-xs="column")
+                                                a(flex, href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17", target = "_blank").md-primary.md-raised.md-ink-ripple.md-button
+                                                    h3 Highmaul
+                                                    h4
+                                                        | AOTC - 2/3/15
+                                                a(flex, href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17", target = "_blank").md-primary.md-raised.md-ink-ripple.md-button
+                                                    h3 Blackrock Foundry
+                                                    h4
+                                                        | AOTC - 4/16/15
+                                                a(flex, href = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/rating.tier17", target = "_blank").md-primary.md-raised.md-ink-ripple.md-button
+                                                    h3 Hellfire Citadel
+                                                    h4
+                                                        | AOTC - 9/2/15
+                                                    
+                                            
                                 div(layout = "row", layout-align = "end end", flex)       
                                     div()
                                         a(href='http://wowprogress.com/', target = "_blank")
@@ -66,7 +65,7 @@ script#home(type="text/ng-template")
                                         | Applying?
                             md-card-content
                                 | Register, log in, and click on Guild Services -> Apply to Our Guild 
-                        md-card()
+                        
                             
                             md-card-title
                                 md-card-title-text
@@ -77,7 +76,7 @@ script#home(type="text/ng-template")
                                 | trialing process is to see whether or not you’re willing to learn with us. We’ve figured 
                                 | out what works for our group pretty well, but once you’re promoted to raider if you’ve
                                 | got input please feel free to share with our officers (Ortharion, Ogonchó, Didimao and Claaptrap) via whisper!
-                        md-card()
+                        
                             md-card-title
                                 md-card-title-text
                                     span().md-headline
@@ -85,7 +84,7 @@ script#home(type="text/ng-template")
                             md-card-content
                                 | During trash or boss encounters alike, do not pop the ring unless specifically instructed. 
                                 | Even in the event of a split cooldown situation, officers will handle corrections.
-                        md-card()
+                        
                             md-card-title
                                 md-card-title-text
                                     span().md-headline
@@ -109,7 +108,7 @@ script#home(type="text/ng-template")
                             md-card-content
                                 p
                                     | One of the things that sets us apart is our raid environment. We like to keep things calm, collected and positive during raid. Yes, we still horse around a bit during trash pulls, but when it comes down to progression we're dedicated and serious. Rule number one of our raid environment is, "Don't be a dick!" We keep our raid chat and Teamspeak clear of chart-linking, e-peening, dick-measuring or anything of the like. We're out to progress as a team, so we work together and will not be at each other's throats. During boss progression attempts, our Teamspeak is reserved mainly for officers raid calling and explaining strategies. Our strategies are formulated during officer meetings after tons of research and while we value raider input via officer-whisper or raid-chat, the final word on strategies goes to our officers.
-                        md-card(flex)
+                        
                             md-card-title
                                 md-card-title-text
                                     span().md-headline
