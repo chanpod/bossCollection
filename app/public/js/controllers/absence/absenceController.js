@@ -10,6 +10,12 @@ angular.module("BossCollection.controllers")
         $scope.absences = {};
         $scope.loading = false;
         $scope.typePicked = false;
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        }
+        $scope.currentlySelected = "Today";
+        
         
         if($location.url() == "/auth/absence"){
             siteServices.updateTitle('Report Absence');    
@@ -20,7 +26,25 @@ angular.module("BossCollection.controllers")
         
         
         
+       $scope.showToday = function () {
+           
+           $scope.currentlySelected = "Today";
+       }
        
+       $scope.showTuesday = function () {
+           
+           $scope.currentlySelected = "Tuesday";
+       }
+       
+       $scope.showWednesday = function () {
+           
+           $scope.currentlySelected = "Wednesday";
+       }
+       
+       $scope.showThursday = function () {
+           
+           $scope.currentlySelected = "Thursday";
+       }
 
         $scope.getAbsences = function(){
             $scope.loading = true;

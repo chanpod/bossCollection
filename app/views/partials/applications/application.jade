@@ -1,4 +1,48 @@
 script#application(type="text/ng-template")    
+    md-content
+        section(layout="column", flex = "80")
+            form(name = "editAccountForm", ng-submit = "submitApplication()")
+                div(layout, layout-xs="column")
+                    div(ng-show = "searchingForUser")
+                        md-progress-linear (md-mode="indeterminate")
+                    md-input-container(flex).md-block
+                        label() Character Name
+                        md-icon(ng-show = "validCharacterName", md-font-library="material-icons", style = "color:green") check_circle
+                        md-icon(ng-show = "!validCharacterName", md-font-library="material-icons", style = "color:red") error
+                        input(id = "characterNameInput", ng-model = "application.characterName", ng-blur = "validateCharactername", required)
+                        
+                    md-autocomplete(md-min-length = "0",
+                                    md-item-text = "realm.name",
+                                    md-selected-item = "application.realm",
+                                    md-selected-item-change="validateCharactername()"
+                                    md-search-text = "realm",
+                                    md-floating-label = "Select Realm",
+                                    md-items = "realm in filterSearch(realm)",
+                                    flex)
+                        md-item-template
+                            span(md-highlight-text = "realm"){{realm.name}}
+                div(layout, layout-xs="column")
+                    md-input-container(flex).md-block
+                        label() Item Level
+                        input(ng-model = "application.itemLevel", required)
+                    md-input-container(flex).md-block
+                        label() Previous Guild
+                        input(ng-model = "application.previousGuild", required)
+                div(layout, layout-xs="column")
+                    md-input-container(flex).md-block
+                        label() Desired Role
+                        input(ng-model = "application.desiredRole", required)
+                div(layout, layout-xs="column")
+                    md-input-container(flex).md-block
+                        label()
+                            | Anything Else?
+                        textarea(ng-model = "application.comments")
+                div(layout, layout-xs="column")
+                    md-input-container().md-block
+                    md-button(type = "submit").md-primary.md-raised
+                            | Submit
+                        
+//-
     div.container
         div.card
             h4

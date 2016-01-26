@@ -5,12 +5,12 @@
 
  */
 angular.module("BossCollection.controllers")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, $timeout, realmServices, guildServices, userLoginSrvc, siteServices){
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
             
             siteServices.updateTitle('Applications');
             
-            console.log("Loading application ctrl...");
+            console.log("Loading application ctrl..."); 
             $scope.application = {};            
             try{
                 (adsbygoogle = window.adsbygoogle || []).push({});
@@ -20,21 +20,31 @@ angular.module("BossCollection.controllers")
             }
             
             $scope.validCharacterName = false;
+            $scope.charRequirementsIncomplete = false;
+            $scope.charRealmError = false;
+            $scope.searchingForUser = false;
             
             realmServices.getRealms()
                 .then(function(realms){
                     
                     $scope.realms = realms;
-                    
+                     
                     $timeout(function(){ //waiting for angular digest cycle so select updates properly
-
+ 
                         $('select').material_select();
                        
-                    }, 100)
+                    }, 100) 
+                })
+                .catch(function (err) {
                     
                     
+                    console.log(err);
                 });
             
+            $scope.filterSearch = function(filterSearch){
+                
+                return $filter('filter')($scope.realms, filterSearch);
+            }
             
             $scope.areWeLoggedIn = function () {
 
@@ -59,27 +69,32 @@ angular.module("BossCollection.controllers")
                 })
             }
             
-            
-            $scope.validateCharactername = function(){
-                
-                $scope.validCharacterName = false; //Immediately invalidate until response comes back
-                $scope.searchingForUser = true;
-                
-                guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
-                    .then(function(character){
-                        
-                        
-                        $scope.validCharacterName = true;
-                        $scope.application.character = character;
-                    },
-                    function(err){
-                        
-                        $scope.validCharacterName = false;
-                    })
-                    .finally(function(){
-                        $scope.searchingForUser = false;
-                    })
-                
+
+            $scope.validateCharactername = function (realm) {
+
+                if ($scope.application.realm) {
+                    $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                    $scope.searchingForUser = true;
+
+
+
+                    guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
+                        .then(function (character) {
+
+
+                            $scope.validCharacterName = true;
+                            $scope.application.character = character;
+                        },
+                            function (err) {
+
+                                $scope.validCharacterName = false;
+                            })
+                        .finally(function () {
+                            $scope.searchingForUser = false;
+                        })
+
+                }
+
             }
             
             
@@ -87,7 +102,7 @@ angular.module("BossCollection.controllers")
                 
                 if($scope.validCharacterName == false){
                     
-                    Materialize.toast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
                 }
                 else{
                     guildServices.submitApplication($scope.application)
@@ -97,7 +112,7 @@ angular.module("BossCollection.controllers")
                         },
                         function(err){
                             
-                            Materialize.toast(err);
+                            siteServices.showMessageToast(err);
                         })
                 }
             }

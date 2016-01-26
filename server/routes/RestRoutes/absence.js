@@ -27,9 +27,9 @@ router.route('/absence')
     
     newAbsence.user = req.session.user.name;    
     newAbsence.date = date.toISOString();
-    newAbsence.reason = req.body.reason;
-    newAbsence.absent = req.body.absent;
+    newAbsence.type = req.body.type;    
     newAbsence.late = req.body.late;
+    newAbsence.reason = req.body.reason;
     
     newAbsence.save().then(function(result){
         
