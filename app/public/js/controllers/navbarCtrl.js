@@ -63,7 +63,7 @@ angular.module("BossCollection.controllers")
         
         $rootScope.$on("loggedin", function(event, user){
             
-            console.log(user);
+            
             
             if(user.loggedIn === true){
                 
@@ -95,7 +95,7 @@ angular.module("BossCollection.controllers")
             
             userLoginSrvc.currentlyLoggedIn().then(function(response){
                 
-                console.log(response);
+                
                 $scope.loggedIn = response;
             })
         }

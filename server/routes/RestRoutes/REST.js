@@ -11,7 +11,7 @@ var app = express();
 
 
 router.use(function(req,res, next){
-  console.log("It's working?");
+  
   next();
 })
 

@@ -23,7 +23,7 @@ exports.index = function(req, res, next){
 module.exports = function(app){
      
     router.use(function(req, res, next){
-        console.log("All routes go through me first.");
+        
         next();
     })
 
@@ -32,8 +32,6 @@ module.exports = function(app){
 
 
     router.get('/*', function(req, res){
-        
-        console.log("Rendering index");
         res.render('index');  
     });
     

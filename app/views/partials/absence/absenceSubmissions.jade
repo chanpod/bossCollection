@@ -1,39 +1,29 @@
 script#absenceSubmissions(type="text/ng-template")
     md-content
         section(layout="column", flex = "80")
-            div(ng-init = "getAbsences()")
-                md-fab-toolbar(md-open = "toolbar.isOpen", md-direction = "toolbar.Direction")
-                    md-fab-trigger().align-with-text
-                        md-button().md-fab.md-primary
-                            md-icon(md-font-library="material-icons") menu
-                        {{currentlySelected}} - This doesn't work yet
-                    md-toolbar
-                        md-fab-actions().md-toolbar-tools
-                            md-button(ng-click = "showToday()").md-primary                                
-                                | Today 
-                        
-                            md-button(ng-click = "showTuesday()").md-primary
-                                | Tuesday 
-                        
-                            md-button(ng-click = "showWednesday()").md-primary
-                                | Wednesday
-                        
-                            md-button(ng-click = "showThursday()").md-primary
-                                | Thursday 
-                
+            div(ng-init = "getAbsences()") 
+                div(layout)
+                    div(flex, layout = "row", layout-md-sm = "column", layout-align = "space-between center")
+                        md-datepicker(flex, ng-model = "dayDesired", ng-change = "updateList()", md-placeholder="Enter date")
+                        md-button(flex, ng-click = "getAbsences()").md-primary.md-raised
+                            | Get All future Absences
+                div(layout = "column")
+                    div(flex)
+                        h2
+                            {{currentlySelected | date: 'dddd'}}
                     
-                md-list()
-                    md-list-item(ng-repeat = "absence in absences | orderBy: 'date'").md-3-line
-                        div(layout = "column").md-list-item-text
-                            h3  
-                                md-icon(md-font-library="material-icons") person
-                                {{absence.user}}
-                            
-                            h4 
-                                md-icon(md-font-library="material-icons") date_range
-                                {{absence.type}} - {{absence.date | date: 'EEEE, MMM d'}}
-                            p 
-                                md-icon(md-font-library="material-icons") message
-                                {{absence.reason}}
-                        md-divider
+                    md-list(flex)
+                        md-list-item(ng-repeat = "absence in absences | orderBy: 'date'").md-3-line
+                            div(layout = "column").md-list-item-text
+                                h3  
+                                    md-icon(md-font-library="material-icons") person
+                                    {{absence.user}}
+                                
+                                h4 
+                                    md-icon(md-font-library="material-icons") date_range
+                                    {{absence.type}} - {{absence.date | date: 'EEEE, MMM d'}}
+                                p 
+                                    md-icon(md-font-library="material-icons") message
+                                    {{absence.reason}}
+                            md-divider
     

@@ -10,7 +10,7 @@ angular.module("BossCollection.controllers")
         
         userLoginSrvc.getUser().then(function(user){
              
-            console.log("Got the user");
+            
             
             $scope.user = user;
             

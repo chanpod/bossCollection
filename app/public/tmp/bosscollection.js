@@ -175,7 +175,7 @@ angular.module("BossCollection.controllers")
         
         $rootScope.$on("loggedin", function(event, user){
             
-            console.log(user);
+            
             
             if(user.loggedIn === true){
                 
@@ -207,7 +207,7 @@ angular.module("BossCollection.controllers")
             
             userLoginSrvc.currentlyLoggedIn().then(function(response){
                 
-                console.log(response);
+                
                 $scope.loggedIn = response;
             })
         }
@@ -385,16 +385,24 @@ angular.module("BossCollection.controllers")
     .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices',
         function($scope, $location, userLoginSrvc, absenceService, siteServices){
         
+        var currentDay = moment().day();
+        
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
         $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        
         $scope.toolbar = {
             isOpen: false,
             direction: "right"
         }
-        $scope.currentlySelected = "Today";
         
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
         
         if($location.url() == "/auth/absence"){
             siteServices.updateTitle('Report Absence');    
@@ -402,33 +410,32 @@ angular.module("BossCollection.controllers")
         else{
             siteServices.updateTitle('Upcoming Absences');    
         }
+       
         
-        
-        
-       $scope.showToday = function () {
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
            
-           $scope.currentlySelected = "Today";
+           $scope.getAbsencesByDate();
        }
        
-       $scope.showTuesday = function () {
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
            
-           $scope.currentlySelected = "Tuesday";
-       }
-       
-       $scope.showWednesday = function () {
+           var nextDate = dayDesired - currentDay;
            
-           $scope.currentlySelected = "Wednesday";
-       }
-       
-       $scope.showThursday = function () {
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
            
-           $scope.currentlySelected = "Thursday";
+           
+           
+           return nextDate;
        }
 
         $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
             $scope.loading = true;
-            
-            
             
             absenceService.getAbsences().then(function(result){
                 
@@ -442,6 +449,21 @@ angular.module("BossCollection.controllers")
             })
         }
         
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
          
         $scope.submitNewAbsence = function () {
 
@@ -488,7 +510,7 @@ angular.module("BossCollection.controllers")
         
         userLoginSrvc.getUser().then(function(user){
              
-            console.log("Got the user");
+            
             
             $scope.user = user;
             
@@ -1270,6 +1292,7 @@ angular.module("BossCollection.services")
         function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
 
             var absence = $resource('/api/absence', {}, {})
+            var absenceByDate = $resource('/api/absenceByDate', {}, {})
 
 
             var absenceApi = {
@@ -1296,10 +1319,11 @@ angular.module("BossCollection.services")
 
                     return defer.promise;
                 },
-
                 getAbsences: function () {
 
                     var defer = $q.defer();
+
+
 
                     absence.get().$promise
                         .then(function (response) {
@@ -1314,6 +1338,32 @@ angular.module("BossCollection.services")
                         .finally(function () {
                             siteServices.loadingFinished();
                         })
+
+
+
+
+                    return defer.promise;
+                },
+                getAbsencesByDate: function (date) {
+
+                    var defer = $q.defer();
+
+                    absenceByDate.save({date:date}).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
 
                     return defer.promise;
                 }
@@ -1684,7 +1734,7 @@ angular.module("BossCollection.services")
                 getUser.get().$promise
                     .then(function (user) {
 
-                        console.log(user);
+                        
                           
                         defer.resolve(user);
                     },
@@ -1719,7 +1769,7 @@ angular.module("BossCollection.services")
                             loggedInBool = false;
                         }
                                                 
-                        console.log(response);                        
+                                         
                         defer.resolve(loggedInBool);
                         
                         //$cookies.set("name", response)

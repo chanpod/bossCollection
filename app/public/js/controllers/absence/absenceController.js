@@ -6,16 +6,24 @@ angular.module("BossCollection.controllers")
     .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices',
         function($scope, $location, userLoginSrvc, absenceService, siteServices){
         
+        var currentDay = moment().day();
+        
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
         $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        
         $scope.toolbar = {
             isOpen: false,
             direction: "right"
         }
-        $scope.currentlySelected = "Today";
         
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
         
         if($location.url() == "/auth/absence"){
             siteServices.updateTitle('Report Absence');    
@@ -23,33 +31,32 @@ angular.module("BossCollection.controllers")
         else{
             siteServices.updateTitle('Upcoming Absences');    
         }
+       
         
-        
-        
-       $scope.showToday = function () {
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
            
-           $scope.currentlySelected = "Today";
+           $scope.getAbsencesByDate();
        }
        
-       $scope.showTuesday = function () {
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
            
-           $scope.currentlySelected = "Tuesday";
-       }
-       
-       $scope.showWednesday = function () {
+           var nextDate = dayDesired - currentDay;
            
-           $scope.currentlySelected = "Wednesday";
-       }
-       
-       $scope.showThursday = function () {
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
            
-           $scope.currentlySelected = "Thursday";
+           
+           
+           return nextDate;
        }
 
         $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
             $scope.loading = true;
-            
-            
             
             absenceService.getAbsences().then(function(result){
                 
@@ -63,6 +70,21 @@ angular.module("BossCollection.controllers")
             })
         }
         
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
          
         $scope.submitNewAbsence = function () {
 

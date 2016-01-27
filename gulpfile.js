@@ -72,6 +72,7 @@ gulp.task('concatVendor', function(){
         './node_modules/angular-messages/angular-messages.min.js',
         './node_modules/angular-aria/angular-aria.min.js',
         './node_modules/angular-material/angular-material.min.js',
+        './node_modules/moment/min/moment.min.js',
         './app/public/js/vendor/angular-parallax.js',
         './app/public/js/lib/jquery-2.1.1.js',
         './app/public/js/lib/underscoreJS.js',

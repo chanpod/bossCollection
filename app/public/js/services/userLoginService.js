@@ -50,7 +50,7 @@ angular.module("BossCollection.services")
                 getUser.get().$promise
                     .then(function (user) {
 
-                        console.log(user);
+                        
                           
                         defer.resolve(user);
                     },
@@ -85,7 +85,7 @@ angular.module("BossCollection.services")
                             loggedInBool = false;
                         }
                                                 
-                        console.log(response);                        
+                                         
                         defer.resolve(loggedInBool);
                         
                         //$cookies.set("name", response)
