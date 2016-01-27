@@ -57,8 +57,17 @@ router.route('/absenceByDate')
         var date;
         
         date = standardiseTime(req.body.date);
-        
-        getAbsences(date, req, res);
+
+        AbsenceModel.find({
+            date: date.toISOString()
+        })
+            .then(function (absences) {
+
+                res.status(200).send({ "absences": absences });
+            },
+                function (err) {
+                    res.status(400).send(err);
+                })
     })
 
 function standardiseTime(date){
