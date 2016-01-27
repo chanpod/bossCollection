@@ -1,8 +1,7 @@
 script#home(type="text/ng-template")
   md-content
     section().wodHeader
-    section(layout="column", flex = "80")
-        
+    section(layout="column", flex = "90")
         md-tabs(md-dynamic-height, md-border-bottom).md-background
             md-tab(label = "About Us")
                 md-content().md-padding
@@ -51,6 +50,8 @@ script#home(type="text/ng-template")
                                     div()
                                         a(href='http://wowprogress.com/', target = "_blank")
                                             img(alt='WoW Guild Rankings', src='http://wowprogress.com/guild_img/1073486/out/type.site', border='0', width = "175px")
+                                
+                            ad()
                     
                     
             md-tab(label = "Trials")
@@ -73,27 +74,32 @@ script#home(type="text/ng-template")
                                     span().md-headline
                                         | Strats
                             md-card-content
-                                | You may have used different strats in the past with other groups, but part of our 
-                                | trialing process is to see whether or not you’re willing to learn with us. We’ve figured 
-                                | out what works for our group pretty well, but once you’re promoted to raider if you’ve
-                                | got input please feel free to share with our officers (Ortharion, Ogonchó, Didimao and Claaptrap) via whisper!
+                                p
+                                    | You may have used different strats in the past with other groups, but part of our 
+                                    | trialing process is to see whether or not you’re willing to learn with us. We’ve figured 
+                                    | out what works for our group pretty well, but once you’re promoted to raider if you’ve
+                                    | got input please feel free to share with our officers (Ortharion, Ogonchó, Didimao and Claaptrap) via whisper!
+                                
                         
                             md-card-title
                                 md-card-title-text
                                     span().md-headline
                                         | Raid Wide Cooldowns    
                             md-card-content
-                                | During trash or boss encounters alike, do not pop the ring unless specifically instructed. 
-                                | Even in the event of a split cooldown situation, officers will handle corrections.
+                                p
+                                    | During trash or boss encounters alike, do not pop the ring unless specifically instructed. 
+                                    | Even in the event of a split cooldown situation, officers will handle corrections.
                         
                             md-card-title
                                 md-card-title-text
                                     span().md-headline
                                         | Teamspeak    
                             md-card-content
-                                | Feel free to goof off in teamspeak during trash, but once it’s boss time keep things 
-                                | clear for raid calls. During encounters we like our TS to stay as clear and calm as possible. 
-                                | Mute your mic if you have to!
+                                p
+                                    | Feel free to goof off in teamspeak during trash, but once it’s boss time keep things 
+                                    | clear for raid calls. During encounters we like our TS to stay as clear and calm as possible. 
+                                    | Mute your mic if you have to!
+                                ad(flex)
                     
             md-tab(label = "Raiding")
                 md-content().md-padding
@@ -117,4 +123,7 @@ script#home(type="text/ng-template")
                             md-card-content
                                 p
                                     | Our chosen loot system is loot council. We have a panel of four officers that make up our council. There are many factors they take into consideration with their decisions, but the main three are attendance, BISs, and largest ilvl upgrade. Attendance is the number one priority of our guild at the moment. Our aim is to move into mythic HFC, so naturally attendance is extremely important to us, and to our raid team. Attendance problems will not only disqualify you from being a part of our mythic roster, but also negatively impact your ability to get upgrades in our raids. Tier gear is distributed through it's own separate system for HFC content. Our loot council uses a chart the shows which classes benefit most from their two and four set bonuses. We have chosen to stack the classes that receive the greatest benefit first, beginning with DPS classes and working out. We feel this will give our progression the best boost.
-        ad
+                                ad(flex)
+            
+        
+        
