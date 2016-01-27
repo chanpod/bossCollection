@@ -16,11 +16,17 @@ angular.module('BossCollection', [
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
 }]). 
-config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider',
-    function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
+    function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  
 
-  
+    $mdThemingProvider.theme('default')
+    .primaryPalette('deep-orange', {
+        'default': 'A700'
+    })
+    .accentPalette('grey', {
+        'default': '900'
+    });
 
     $routeProvider.
     when('/', {

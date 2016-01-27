@@ -5,7 +5,7 @@ block body
         include indexViews/sideNav
                     
         div(layout = "column", flex)
-            md-toolbar()
+            md-toolbar().md-accent.md-whiteframe-3dp
                 div().md-toolbar-tools
                     md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
                         i(class = "material-icons") menu
@@ -18,7 +18,7 @@ block body
                     
             
             md-content(layout-padding)
-                div(ng-view)     
+                div(ng-view)    
                 
     
     //-
@@ -43,9 +43,9 @@ block body
 
     include partials/home    
     include partials/strategyRoom
-    include ../public/js/directives/bossStrategyTemplate
+    
     include partials/videoModal
-    include partials/roster
+    
     include partials/accounts/login
     include partials/accounts/signup
     include partials/absence/absence

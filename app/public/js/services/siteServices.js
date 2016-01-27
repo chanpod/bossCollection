@@ -8,13 +8,11 @@ angular.module("BossCollection.services")
         
         function startLoading(){
             
-            $('#loadingModal').openModal({
-                dismissible: false
-            });
+            
         }
         
         function loadingFinished(){
-            $('#loadingModal').closeModal();
+            
         }
         
         function updateTitle(newTitle){
@@ -28,12 +26,18 @@ angular.module("BossCollection.services")
                 $mdBottomSheet.show({
                     templateUrl: 'logInModal',
                     controller: 'loginController',
-                    targetEvent: $event
+                    targetEvent: $event,
+                    escapeToClose: false
                 })
             
         }
         
         function hideLoadingBottomSheet(){
+            
+            $mdBottomSheet.hide();
+        }
+        
+        function hideBottomSheet(){
             
             $mdBottomSheet.hide();
         }
@@ -73,6 +77,7 @@ angular.module("BossCollection.services")
             showLoadingBottomSheet:showLoadingBottomSheet,
             hideLoadingBottomSheet:hideLoadingBottomSheet,
             showMessageModal:showMessageModal,
-            showMessageToast:showMessageToast
+            showMessageToast:showMessageToast,
+            hideBottomSheet:hideBottomSheet
         }
     }])

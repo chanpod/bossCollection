@@ -21,8 +21,8 @@ script#reviewApplications(type="text/ng-template")
                             md-button(ng-click = "openComments(application.comments)").md-icon.button
                                 md-icon(md-font-library="material-icons") message
                             md-button().md-icon.button
-                                md-icon(md-font-library="material-icons") call_made
-                                    a(target="_blank", href = "http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple")
+                                md-icon(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)", md-font-library="material-icons") call_made
+                                    
                     
                     
  

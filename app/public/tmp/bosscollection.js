@@ -16,11 +16,17 @@ angular.module('BossCollection', [
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
 }]). 
-config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider',
-    function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
+    function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  
 
-  
+    $mdThemingProvider.theme('default')
+    .primaryPalette('deep-orange', {
+        'default': 'A700'
+    })
+    .accentPalette('grey', {
+        'default': '900'
+    });
 
     $routeProvider.
     when('/', {
@@ -99,24 +105,7 @@ angular.module("BossCollection.controllers", [])
 angular.module("BossCollection.controllers")
     .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
         function($scope, $location, $http, $timeout, siteServices){
-            
-            try{
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going df
-            }
-
-              $('.parallax').parallax();
-
-              var options = [
-                {selector: '#staggered-test', offset: 50, callback: 'Materialize.toast("This is our ScrollFire Demo!", 1500 )' },
-                {selector: '#staggered-test', offset: 205, callback: 'Materialize.toast("Please continue scrolling!", 1500 )' },
-                {selector: '#staggered-test', offset: 400, callback: 'Materialize.showStaggeredList("#staggered-test")' },
-                {selector: '#image-test', offset: 500, callback: 'Materialize.fadeInImage("#image-test")' }
-              ];
-
-              Materialize.scrollFire(options);
+          
             
             siteServices.updateTitle('Home');
     }])
@@ -137,7 +126,18 @@ angular.module("BossCollection.controllers")
         $scope.guildRank = {};
         $scope.title = "";
         
+        try{
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            }
+            catch(err){
+              console.log("Add code broke");
+              console.log(err);
+              //Don't care, keep going df
+            }
+        
         $scope.init = function(){
+            
+            
             
             $scope.areWeLoggedIn();
             
@@ -242,12 +242,7 @@ angular.module("BossCollection.controllers")
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
         function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location, siteServices){
             
-            try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going df
-            }
+            
             
             siteServices.updateTitle('Guild Roster');
             
@@ -549,9 +544,12 @@ angular.module("BossCollection.controllers")
         
         console.log("Login Controller");
         
+        $scope.init = function () {
+        }
+        
         $scope.user = userLoginSrvc.getUser()
             .then(function(user){
-                
+                 
                 if(typeof user.name != 'string'){
                     user.name = "";
                 }
@@ -580,7 +578,7 @@ angular.module("BossCollection.controllers")
                 console.log(response);
                 
                 if($location.path() == "/auth/application"){
-                    $('#logInModal').closeModal();    
+                        
                 }
                 else{
                     $location.path("/");
@@ -589,16 +587,16 @@ angular.module("BossCollection.controllers")
             },
             function(err){
                 
-                Materialize.toast(err)
+                siteServices.showMessageModal(err);
                 console.log(err);
             })
         }
         
-        $scope.cancelNavigation = function(){
-            $('#logInModal').closeModal();    
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
             $location.path("/");
         }
-
     }])
 
 'use strict';
@@ -650,12 +648,7 @@ angular.module("BossCollection.controllers")
             
             console.log("Loading application ctrl..."); 
             $scope.application = {};            
-            try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going 
-            }
+            
             
             $scope.validCharacterName = false;
             $scope.charRequirementsIncomplete = false;
@@ -774,12 +767,7 @@ angular.module("BossCollection.controllers")
             
             siteServices.updateTitle('View Applications');    
             
-            try{
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going df
-            }
+          
             
              var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
             
@@ -789,6 +777,19 @@ angular.module("BossCollection.controllers")
                 
                 siteServices.showMessageModal(comments, "Comments");
             } 
+            
+            $scope.goTo = function(url){
+                
+                var win = window.open(url, '_blank');
+                win.focus();
+            }
+            //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+            
+            $scope.buildArmoryUrl = function (realm, character) {
+                var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+                
+                $scope.goTo(url);
+            }
             
             guildServices.getApplications() 
                 .then(function(applications){
@@ -854,12 +855,7 @@ angular.module("BossCollection.controllers")
                 
                 $('.modal-trigger').leanModal();
                 
-                try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                }
-                catch(err){
-                    console.log("Google broke again");
-                }
+               
                 
                 var desiredRaid = routeParams.raid;
                 
@@ -1021,13 +1017,7 @@ angular.module("BossCollection.controllers")
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
                 
-                try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                }
-                catch(err){
-                    console.log("Google broke again");
-                }
-                
+               
                 var desiredRaid = routeParams.raid;
                 
                 $scope.highmaul = "hm";
@@ -1541,13 +1531,11 @@ angular.module("BossCollection.services")
         
         function startLoading(){
             
-            $('#loadingModal').openModal({
-                dismissible: false
-            });
+            
         }
         
         function loadingFinished(){
-            $('#loadingModal').closeModal();
+            
         }
         
         function updateTitle(newTitle){
@@ -1561,12 +1549,18 @@ angular.module("BossCollection.services")
                 $mdBottomSheet.show({
                     templateUrl: 'logInModal',
                     controller: 'loginController',
-                    targetEvent: $event
+                    targetEvent: $event,
+                    escapeToClose: false
                 })
             
         }
         
         function hideLoadingBottomSheet(){
+            
+            $mdBottomSheet.hide();
+        }
+        
+        function hideBottomSheet(){
             
             $mdBottomSheet.hide();
         }
@@ -1606,7 +1600,8 @@ angular.module("BossCollection.services")
             showLoadingBottomSheet:showLoadingBottomSheet,
             hideLoadingBottomSheet:hideLoadingBottomSheet,
             showMessageModal:showMessageModal,
-            showMessageToast:showMessageToast
+            showMessageToast:showMessageToast,
+            hideBottomSheet:hideBottomSheet
         }
     }])
 'use strict';
@@ -1793,13 +1788,13 @@ angular.module("BossCollection.services")
                             .then(function(areWeLoggedIn){
                                 
                                 
-                                  
+                                siteServices.hideLoadingBottomSheet();
                                 defer.resolve(true);        
                             },
                             function(err){
                                 
                                 console.log(err);
-                                
+                                siteServices.hideLoadingBottomSheet();
                                 defer.reject(false);
                             })
                         
@@ -1812,7 +1807,7 @@ angular.module("BossCollection.services")
                     })
                     .finally(function(){
                         
-                        siteServices.hideLoadingBottomSheet();
+                        
                         siteServices.loadingFinished();
                     })                 
                 

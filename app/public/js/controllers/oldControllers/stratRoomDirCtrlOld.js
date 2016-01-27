@@ -8,13 +8,7 @@ angular.module("BossCollection.controllers")
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
                 
-                try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                }
-                catch(err){
-                    console.log("Google broke again");
-                }
-                
+               
                 var desiredRaid = routeParams.raid;
                 
                 $scope.highmaul = "hm";

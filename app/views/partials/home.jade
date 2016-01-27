@@ -1,8 +1,9 @@
 script#home(type="text/ng-template")
   md-content
+    section().wodHeader
     section(layout="column", flex = "80")
         
-        md-tabs(md-dynamic-height, md-border-bottom)
+        md-tabs(md-dynamic-height, md-border-bottom).md-background
             md-tab(label = "About Us")
                 md-content().md-padding
                     h2.center

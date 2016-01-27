@@ -10,12 +10,7 @@ angular.module("BossCollection.controllers")
                 
                 $('.modal-trigger').leanModal();
                 
-                try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                }
-                catch(err){
-                    console.log("Google broke again");
-                }
+               
                 
                 var desiredRaid = routeParams.raid;
                 

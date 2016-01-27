@@ -15,9 +15,12 @@ angular.module("BossCollection.controllers")
         
         console.log("Login Controller");
         
+        $scope.init = function () {
+        }
+        
         $scope.user = userLoginSrvc.getUser()
             .then(function(user){
-                
+                 
                 if(typeof user.name != 'string'){
                     user.name = "";
                 }
@@ -46,7 +49,7 @@ angular.module("BossCollection.controllers")
                 console.log(response);
                 
                 if($location.path() == "/auth/application"){
-                    $('#logInModal').closeModal();    
+                        
                 }
                 else{
                     $location.path("/");
@@ -55,14 +58,14 @@ angular.module("BossCollection.controllers")
             },
             function(err){
                 
-                Materialize.toast(err)
+                siteServices.showMessageModal(err);
                 console.log(err);
             })
         }
         
-        $scope.cancelNavigation = function(){
-            $('#logInModal').closeModal();    
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
             $location.path("/");
         }
-
     }])

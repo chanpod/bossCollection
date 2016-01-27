@@ -3,12 +3,7 @@ angular.module("BossCollection.controllers")
     .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
         function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location, siteServices){
             
-            try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going df
-            }
+            
             
             siteServices.updateTitle('Guild Roster');
             

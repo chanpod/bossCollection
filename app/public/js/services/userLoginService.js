@@ -170,13 +170,13 @@ angular.module("BossCollection.services")
                             .then(function(areWeLoggedIn){
                                 
                                 
-                                  
+                                siteServices.hideLoadingBottomSheet();
                                 defer.resolve(true);        
                             },
                             function(err){
                                 
                                 console.log(err);
-                                
+                                siteServices.hideLoadingBottomSheet();
                                 defer.reject(false);
                             })
                         
@@ -189,7 +189,7 @@ angular.module("BossCollection.services")
                     })
                     .finally(function(){
                         
-                        siteServices.hideLoadingBottomSheet();
+                        
                         siteServices.loadingFinished();
                     })                 
                 

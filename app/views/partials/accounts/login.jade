@@ -1,0 +1,17 @@
+script#logIn(type="text/ng-template")
+    md-bottom-sheet().md-list.md-has-header
+        div
+            form(name = "logInForm")
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        label() Username
+                        input(ng-model = "user.name", required)
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        label() Password
+                        input(type="password", ng-model="user.password", id='pass-tf', required)
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        md-button(ng-click = "login()").md-primary.md-raised
+                            | Sign in
+            

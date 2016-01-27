@@ -10,12 +10,7 @@ angular.module("BossCollection.controllers")
             
             siteServices.updateTitle('View Applications');    
             
-            try{
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going df
-            }
+          
             
              var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
             
@@ -25,6 +20,19 @@ angular.module("BossCollection.controllers")
                 
                 siteServices.showMessageModal(comments, "Comments");
             } 
+            
+            $scope.goTo = function(url){
+                
+                var win = window.open(url, '_blank');
+                win.focus();
+            }
+            //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+            
+            $scope.buildArmoryUrl = function (realm, character) {
+                var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+                
+                $scope.goTo(url);
+            }
             
             guildServices.getApplications() 
                 .then(function(applications){

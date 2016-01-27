@@ -12,12 +12,7 @@ angular.module("BossCollection.controllers")
             
             console.log("Loading application ctrl..."); 
             $scope.application = {};            
-            try{
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              //Don't care, keep going 
-            }
+            
             
             $scope.validCharacterName = false;
             $scope.charRequirementsIncomplete = false;
