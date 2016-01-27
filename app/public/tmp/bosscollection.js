@@ -126,14 +126,7 @@ angular.module("BossCollection.controllers")
         $scope.guildRank = {};
         $scope.title = "";
         
-        try{
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              console.log("Add code broke");
-              console.log(err);
-              //Don't care, keep going df
-            }
+        
         
         $scope.init = function(){
             
@@ -712,7 +705,7 @@ angular.module("BossCollection.controllers")
                     guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                         .then(function (character) {
 
-
+                            
                             $scope.validCharacterName = true;
                             $scope.application.character = character;
                         },
@@ -1201,6 +1194,29 @@ angular.module("BossCollection.controllers")
 
 'use strict';
 angular.module('BossCollection.directives', [])
+'use strict';
+/* Directives */
+
+angular.module('BossCollection.directives').
+  directive('ad', [function () {
+        return {
+            restrict: 'E',
+            template: '<ins class="adsbygoogle"style="display:block;"data-ad-client="ca-pub-4895481554192451"data-ad-slot="1814022675"data-ad-format="auto">',
+ 
+            link: function (scope, elm, attrs) {
+
+                try {
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                }
+                catch (err) {
+                    console.log("Add code broke");
+                    console.log(err);
+                    
+                }  
+            }
+        }  
+  }]); 
+ 
 'use strict';
 /* Directives */
  

@@ -76,7 +76,7 @@ angular.module("BossCollection.controllers")
                     guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                         .then(function (character) {
 
-
+                            
                             $scope.validCharacterName = true;
                             $scope.application.character = character;
                         },

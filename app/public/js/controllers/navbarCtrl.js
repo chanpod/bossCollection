@@ -14,14 +14,7 @@ angular.module("BossCollection.controllers")
         $scope.guildRank = {};
         $scope.title = "";
         
-        try{
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            }
-            catch(err){
-              console.log("Add code broke");
-              console.log(err);
-              //Don't care, keep going df
-            }
+        
         
         $scope.init = function(){
             

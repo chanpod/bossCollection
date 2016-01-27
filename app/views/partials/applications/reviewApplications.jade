@@ -9,22 +9,35 @@ script#reviewApplications(type="text/ng-template")
                                 {{application.character.name}} - {{application.dateApplied | date: format}}
                             span().md-subhead
                                 {{application.character.class}} - {{application.itemLevel}}
-                            span().md-subhead
-                                {{application.desiredRole}}
-                            span().md-subhead
-                                {{application.previousGuild}}
-                    md-card-title
-                        md-card-title-text.md-headline
+                            
                     md-card-content(layout = "column")
                         img(src="images/classBackdrops/{{application.character.class}}.jpg", style = "width:100%;height:100%").md-media-xl.card-media
-                        md-card-actions(layout = "row", layout-align = "start center")
+                        div(layout, layout-align = "space-around center")
+                            div(flex)
+                                div(layout = "column")
+                                    h3
+                                        | Role 
+                                    span {{application.desiredRole}}
+                            div(flex)
+                                div(layout = "column")
+                                    h3
+                                        | Previous Guild
+                                    span {{application.previousGuild}}
+                            div(flex)
+                                div(layout="column")
+                                    h3
+                                        | Realm
+                                    span {{application.realm.name}}
+                            
+                                
+                        md-card-actions(layout = "row", layout-align = "end end")
                             md-button(ng-click = "openComments(application.comments)").md-icon.button
                                 md-icon(md-font-library="material-icons") message
                             md-button().md-icon.button
                                 md-icon(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)", md-font-library="material-icons") call_made
                                     
                     
-                    
+    ad()                    
  
         
                                         
