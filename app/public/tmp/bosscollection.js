@@ -435,7 +435,7 @@ angular.module("BossCollection.controllers")
        
        $scope.formatDate = function(date){
            
-           return $filter('date')(date, 'EEEE, MMM d');
+           return moment(date).format('dddd, MMM D');
        }
 
         $scope.getAbsences = function(){
