@@ -3,38 +3,47 @@ var router = express.Router();
 var q = require('q');
 var GuildModel = require('../../models/guild.js');
 var moment = require('moment');
-var ranks = [1,2,3,4];
+var ranks = [1, 2, 3, 4];
 
 router.route('/addGuild')
     .post(function (req, res) {
-        
+
         var guildName = req.body.guildName;
         var guildManager = req.session.user.name
-        
-        GuildModel.findOne({name: guildName})
-            .then(function(guild){
-                
-                if(guild != null){
-                    res.statu(400).send("Guild already exist");
-                    return;
-                }
-                
-                var newGuild = new GuildModel();
-                
-                newGuild.name = guildName;
-                newGuild.members.push({
-                    user: guildManager,
-                    rank: ranks.length
-                })
-                
-                newGuild.save(function(savedGuild){
+
+        router.findUsersGuild(guildManager)
+            .then(function(guildExist){
+                if(guildExist){
                     
-                    res.status(200).send(savedGuild);
-                });
-                
-            }, function(err){
-                res.status(400).send(err);
+                    throw new Error("You already belong to a guild");
+                }
+                return GuildModel.findOne({ name: guildName })
             })
+            .then(
+                function (guild) {
+
+                    if (guild != null) {
+                        res.status(400).send("Guild already exist");
+                        return;
+                    }
+
+                    var newGuild = new GuildModel();
+
+                    newGuild.name = guildName;
+                    newGuild.members.push({
+                        user: guildManager,
+                        rank: ranks.length
+                    })
+
+                    newGuild.save(function (savedGuild) {
+
+                        res.status(200).send(savedGuild);
+                    });
+                })
+                .fail(function(err){
+                    res.status(400).send(err.message);
+                })
+        
     })
     
 /**
@@ -44,7 +53,7 @@ router.route('/addGuild')
  * update object
  * save to DB
  *  
- */ 
+ */
 router.route('/updateRank')
     .post(function (req, res) {
 
@@ -52,7 +61,7 @@ router.route('/updateRank')
         var guildMemberName = req.session.user.name
         var requester = req.session.user.name
         var guildMemberNewRank = req.body.newRank;
-        
+
 
         findGuild(guildName)
             .then(function (response) {
@@ -86,43 +95,43 @@ router.route('/updateRank')
                 res.status(400).send(err);
             })
 
-        
+
     })
 
 router.route('/changeGuildName')
     .post(function (req, res) {
 
     })
-    
+
 router.route('/addMember')
     .post(function (req, res) {
-        
+
         var guildName = req.body.guildName;
         var memberName = req.session.user.name;
-         
+
         var newMember = {
             user: memberName,
             rank: 0
         }
-        
+
         findGuild(guildName)
             .then(function (guild) {
-                
+
                 var indexOfMember = doesMemberExist(guild.members, memberName);
                 if (indexOfMember != -1) {
-                    
+
                     res.status(400).send("You are already a part of this guild.");
                 }
-                
+
                 var guildModel = new GuildModel(guild);
-                
+
                 guildModel.members.push(newMember);
 
                 guildModel.findOneAndUpdate(function (savedGuild) {
 
                     res.status(200).send(savedGuild);
-                }, function(err){
-                    
+                }, function (err) {
+
                     res.status(400).send(err);
                 });
             })
@@ -130,33 +139,52 @@ router.route('/addMember')
 
                 res.status(400).send(err);
             })
-        
+
     })
-    
+
 router.route('/removeMember')
     .post(function (req, res) {
 
     })
 
+router.findUsersGuild = function (username) {
+    var defer = q.defer();
+
+    GuildModel.findOne({ members: {$elemMatch:{user: username }}})
+        .then(function (guildFound) {
+
+            
+            defer.resolve(guildFound);
+            
+        },function (err) {
+
+            defer.reject(err);
+        })
+
+    return defer.promise;
+}
+
 module.exports = router;
 
-function isAdmin(memberList, memberName){
-    
+
+
+function isAdmin(memberList, memberName) {
+
     var isAdmin = false;
     var indexOfMember = doesMemberExist(memberList, memberName);
-    
-    if(indexOfMember != -1){
-        
+
+    if (indexOfMember != -1) {
+
         var memberRank = memberList[indexOfMember].rank
-        
-        if(memberRank < 3){
+
+        if (memberRank < 3) {
             isAdmin = false;
         }
-        else{
+        else {
             isAdmin = true;
         }
     }
-    
+
     return isAdmin;
 }
 
@@ -164,27 +192,27 @@ function isAdmin(memberList, memberName){
  * Returns index of member if they exist.
  * Returns -1 if no matches found.
  */
-function doesMemberExist(memberList, memberName){
-    
-    var doesExist = _.findIndex(memberList, {'user': memberName});
-    
+function doesMemberExist(memberList, memberName) {
+
+    var doesExist = _.findIndex(memberList, { 'user': memberName });
+
     return doesExist; // -1 if member doesn't exist. Otherwise, it's the index of the array.
 }
 
-function findGuild(name){
-    
+function findGuild(name) {
+
     var defer = q.defer();
-    
-    GuildModel.findOne({name: name})
-            .then(function(guild){
-                
-                if(guild == null){
-                    defer.reject("Guild doesn't exist");
-                    return;
-                }
-                
-                defer.resolve(guild);
-            })
-    
+
+    GuildModel.findOne({ name: name })
+        .then(function (guild) {
+
+            if (guild == null) {
+                defer.reject("Guild doesn't exist");
+                return;
+            }
+
+            defer.resolve(guild);
+        })
+
     return defer.promise;
 }

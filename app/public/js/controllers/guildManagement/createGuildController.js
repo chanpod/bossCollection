@@ -6,9 +6,23 @@
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("createGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
-        function($scope, $location, $http, $timeout, siteServices){
+    .controller("createGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices',
+        function($scope, $location, $http, $timeout, siteServices, guildServices){
           
             
             siteServices.updateTitle('Create Guild');
+            
+            $scope.guildName = "";
+            
+            $scope.joinGuild = function(){
+                
+                guildServices.createGuild($scope.guildName)
+                    .then(function(response){
+                        
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err);
+                    })
+            }
     }])

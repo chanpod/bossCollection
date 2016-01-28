@@ -13,8 +13,29 @@ angular.module("BossCollection.services")
         
         var apply = $resource('/api/applicationSubmission', {}, {});
         var getApplicationsUrl = $resource('/api/getApplications', {}, {});
+        var addGuild = $resource('/api/addGuild', {}, {});
+        var updateRank = $resource('/api/updateRank', {}, {});
+        var changeGuildName = $resource('/api/changeGuildName', {}, {});
+        var addMember = $resource('/api/addMember', {}, {});
+        var removeMember = $resource('/api/removeMember', {}, {});
         
         var guildApi = {
+            
+            createGuild: function(guildName){
+                var defer = $q.defer();
+
+                addGuild.save({ guildName: guildName }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.data);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+                
+                return defer.promise;
+            },
             getApplications: function(){
                 
                 var defer = $q.defer();

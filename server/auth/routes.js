@@ -2,6 +2,7 @@
 var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
+var guildManagement = require('../routes/RestRoutes/guild-manager')
 var express = require('express');
 var router = express.Router();
 var q = require('q');
@@ -23,6 +24,7 @@ var q = require('q');
             console.log("We're logged in...");
             
             console.log(req.session.user);
+            
             res.json({loggedIn: true, user: req.session.user});
         }
         else{
@@ -124,9 +126,37 @@ var q = require('q');
     router.get('/currentUser', function(req, res){
         console.log("Getting user...");
         console.log(req.session.user);
+        
         if(req.session.user){            
             
-            res.status(200).send(req.session.user);
+            guildManagement.findUsersGuild(req.session.user.name)
+                .then(function(guild){
+                    
+                    if(guild){
+                        
+                        req.session.user.guild = guild._doc;
+                        req.session.save(function () {
+                        
+                            // update the user's login cookies if they exists //
+                            if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+
+                                res.cookie('user', req.session.user.name, { maxAge: 900000 });
+                                res.cookie('password', req.session.password, { maxAge: 900000 });
+                            }
+
+                            res.status(200).send(req.session.user);
+                        });
+                    }
+                    else{
+                        res.status(200).send(req.session.user);    
+                    }
+                    
+                            
+                })  
+                .fail(function(err){
+                    res.status(200).send(req.session.user);
+                })  
+            
         }
     })
 	
