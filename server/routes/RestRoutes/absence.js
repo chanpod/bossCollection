@@ -72,7 +72,11 @@ router.route('/absenceByDate')
 
 function standardiseTime(date){
     
+    console.log(date)
+    
     date = moment(date);
+    
+    console.log(date);
         
     date.millisecond(0);
     date.seconds(0);

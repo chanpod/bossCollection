@@ -1,7 +1,7 @@
 extends layout
 
 block body
-    section(ng-controller = "navbar", layout = "row", flex)
+    section(ng-controller = "navbar", layout = "row", flex, ng-cloak)
         include indexViews/sideNav
                     
         div(layout = "column", flex)
