@@ -100,6 +100,16 @@ angular.module("BossCollection.controllers")
             })
         }
         
+        $scope.openSideBar = function(navID){
+            $mdSidenav(navID)
+                    .open();
+        }
+         
+        $scope.closeSideBar = function(navID){
+            $mdSidenav(navID)
+                    .close();
+        }
+        
         $scope.toggle = buildToggler('left');
         
         function buildToggler(navID) {

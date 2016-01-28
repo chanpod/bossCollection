@@ -162,6 +162,7 @@ exports.addNewAccount = function(newUser, callback)
                     newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
                     console.log("Adding new user: " + newUser);
                     newUser = new UserModel(newUser);
+                    
                     newUser.save(function(savedUser){
                         
                         defer.resolve(savedUser);
@@ -186,7 +187,6 @@ exports.updateAccount = function(userAccount, callback)
     
     UserModel.findOneAndUpdate(query, userAccount)
         .then(function (savedUser) {
-            
             
             //callback(null, userAccount);
             defer.resolve(userAccount);
