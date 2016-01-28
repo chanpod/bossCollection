@@ -40,11 +40,7 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/roster', {
         templateUrl: 'roster',
         controller: 'rosterController'
-    })
-    .when('/auth/login', {
-        templateUrl: 'login',
-        controller: 'loginController'
-    })
+    })    
     .when('/auth/signup', {
         templateUrl: 'signup',
         controller: 'signupController'
@@ -68,6 +64,18 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/reviewApplications', {
         templateUrl: 'reviewApplications',
         controller: 'applicationsReviewController'
+    })
+    .when('/createGuild', {
+        templateUrl: 'createGuild',
+        controller: 'createGuildController'
+    })
+    .when('/joinGuild', {
+        templateUrl: 'joinGuild',
+        controller: 'joinGuildController'
+    })
+    .when('/manageMembers', {
+        templateUrl: 'manageMembers',
+        controller: 'manageMembersController'
     })
     .when('/whosOut', {
         templateUrl: 'absenceSubmissions',

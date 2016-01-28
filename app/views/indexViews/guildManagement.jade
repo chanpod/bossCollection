@@ -1,0 +1,17 @@
+md-menu
+    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
+        i(class="material-icons") account_circle
+        | Guild Management
+    md-menu-content(width = "4")
+        md-menu-item
+            md-button(ng-click = "goTo('/createGuild')")
+                md-icon(md-font-library="material-icons") inbox
+                | Create Guild
+        md-menu-item
+            md-button(ng-click = "goTo('/joinGuild')")
+                md-icon(md-font-library="material-icons") inbox
+                | Join Guild
+        md-menu-item
+            md-button(ng-click = "goTo('/manageMembers')")
+                md-icon(md-font-library="material-icons") inbox
+                | Manage Members

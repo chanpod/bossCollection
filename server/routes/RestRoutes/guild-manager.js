@@ -9,7 +9,7 @@ router.route('/addGuild')
     .post(function (req, res) {
         
         var guildName = req.body.guildName;
-        var guildManager = req.body.user
+        var guildManager = req.session.user.name
         
         GuildModel.findOne({name: guildName})
             .then(function(guild){
@@ -137,6 +137,8 @@ router.route('/removeMember')
     .post(function (req, res) {
 
     })
+
+module.exports = router;
 
 function isAdmin(memberList, memberName){
     

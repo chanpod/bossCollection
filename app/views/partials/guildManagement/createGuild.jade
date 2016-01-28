@@ -1,0 +1,20 @@
+script#createGuild(type="text/ng-template")    
+    md-content
+        section(layout="column", flex = "80")
+            form(ng-submit = "joinGuild()")
+                div(layout-gt-xs="row")
+                    md-input-container(flex-gt-xs = "30").md-block
+                        label() User Name
+                        md-icon(md-font-library="material-icons") person
+                        input(ng-model = "user.name", disabled)
+                md-input-container(flex-gt-md = "70").md-block
+                    label() Guild name   
+                    md-input(id = "guildName", required = "required", ng-model = "guildName")
+                div(layout)
+                    md-input-container().md-block
+                    md-button(type = "submit").md-primary.md-raised
+                        | Join Guild
+                br
+                br
+                div(layout)
+                    ad(flex)
