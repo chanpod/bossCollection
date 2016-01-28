@@ -77,7 +77,11 @@ function standardiseTime(date){
     date = moment(date);
     
     console.log(date);
-        
+    
+    console.log("ISO String");
+    console.log(date.toISOString());
+
+    
     date.millisecond(0);
     date.seconds(0);
     date.minutes(0);

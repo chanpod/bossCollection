@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices){
+    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
         var currentDay = moment().day();
         
@@ -52,6 +52,11 @@ angular.module("BossCollection.controllers")
            
            
            return nextDate;
+       }
+       
+       $scope.formatDate = function(date){
+           
+           return $filter('date')(date, 'EEEE, MMM d');
        }
 
         $scope.getAbsences = function(){

@@ -21,7 +21,7 @@ script#absenceSubmissions(type="text/ng-template")
                                 
                                 h4 
                                     md-icon(md-font-library="material-icons") date_range
-                                    {{absence.type}} - {{absence.date | date: 'EEEE, MMM d'}}
+                                    {{absence.type}} - {{formatDate(absence.date)}}
                                 p 
                                     md-icon(md-font-library="material-icons") message
                                     {{absence.reason}}
