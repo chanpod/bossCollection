@@ -140,25 +140,30 @@ router.route('/addMember')
 
         var newMember = {
             user: memberName,
-            rank: 0
+            rank: 1
         }
 
         findGuild(guildName)
             .then(function (guild) {
+                
+                if(!guild){
+                    throw new Error("Guild doesn't exist. You can create it if you're the GM");
+                    return;
+                }
 
                 var indexOfMember = doesMemberExist(guild.members, memberName);
                 if (indexOfMember != -1) {
-
-                    res.status(400).send("You are already a part of this guild.");
+                    
+                    throw new Error("You are already a part of this guild.");
+                    return;
                 }
 
-                var guildModel = new GuildModel(guild);
+                
+                guild.members.push(newMember);
 
-                guildModel.members.push(newMember);
+                guild.save(function () {
 
-                guildModel.findOneAndUpdate(function (savedGuild) {
-
-                    res.status(200).send(savedGuild);
+                    res.status(200).send({response: true});
                 }, function (err) {
 
                     res.status(400).send(err);
@@ -166,7 +171,7 @@ router.route('/addMember')
             })
             .fail(function (err) {
 
-                res.status(400).send(err);
+                res.status(400).send({message: err.message});
             })
 
     })

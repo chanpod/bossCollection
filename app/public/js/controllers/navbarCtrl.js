@@ -67,7 +67,7 @@ angular.module("BossCollection.controllers")
             
             if(user.loggedIn === true){
                 
-                $scope.user = user;    
+                $scope.user = user.user;    
             }
             else{
                 $scope.user = "";

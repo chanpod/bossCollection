@@ -47,13 +47,16 @@ angular.module("BossCollection.controllers")
                 
                 //navigate to some page
                 console.log(response);
-                
-                if($location.path() == "/auth/application"){
-                        
-                }
-                else{
-                    $location.path("/");
-                }
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
                 
             },
             function(err){

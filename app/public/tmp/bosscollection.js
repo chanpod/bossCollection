@@ -188,7 +188,7 @@ angular.module("BossCollection.controllers")
             
             if(user.loggedIn === true){
                 
-                $scope.user = user;    
+                $scope.user = user.user;    
             }
             else{
                 $scope.user = "";
@@ -615,13 +615,16 @@ angular.module("BossCollection.controllers")
                 
                 //navigate to some page
                 console.log(response);
-                
-                if($location.path() == "/auth/application"){
-                        
-                }
-                else{
-                    $location.path("/");
-                }
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
                 
             },
             function(err){
@@ -911,11 +914,43 @@ angular.module("BossCollection.controllers")
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("joinGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
-        function($scope, $location, $http, $timeout, siteServices){
+    .controller("joinGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
           
+            $scope.user = {};
             
             siteServices.updateTitle('Join Guild');
+            
+            $scope.init = function () {
+
+                userLoginSrvc.getUser()
+                    .then(function (user) {
+                        $scope.user = user;
+                    })
+                    .then(function () {
+                        return guildServices.getGuildMembers($scope.user.guild.name);
+                    })
+                    .then(function (guildMembers) {
+                        $scope.guildMembers = guildMembers
+                    })
+
+            }
+            
+            $scope.joinGuild = function(){
+                
+                guildServices.joinGuild($scope.guildName, $scope.user.name)
+                    .then(function(result){
+                        
+                        siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
+                        $location.path('/');
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err);
+                    })
+            }
+            
+            $scope.init();
     }])
 
 'use strict';
@@ -1431,8 +1466,6 @@ angular.module("BossCollection.filters")
                  
                 return applicantsFiltered.length;
             }
-            
-            
     }])
 
 'use strict';
@@ -1591,14 +1624,14 @@ angular.module("BossCollection.services")
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http','$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
+    .factory('guildServices', ['$http', '$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        
-        
-        
+
+
+
         var apply = $resource('/api/applicationSubmission', {}, {});
         var getApplicationsUrl = $resource('/api/getApplications', {}, {});
         var addGuild = $resource('/api/addGuild', {}, {});
@@ -1606,11 +1639,11 @@ angular.module("BossCollection.services")
         var changeGuildName = $resource('/api/changeGuildName', {}, {});
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
-        var getGuildMembers = $resource("/api/getGuildMembers", {},{});
-        
+        var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
+
         var guildApi = {
-            updateRank: function(guildName, member){
-                
+            updateRank: function (guildName, member) {
+
                 var defer = $q.defer();
 
                 updateRank.save(
@@ -1627,10 +1660,10 @@ angular.module("BossCollection.services")
                         defer.reject(err.data);
                     })
 
-                return defer.promise;    
+                return defer.promise;
             },
-            getGuildMembers: function(guildName){
-                
+            getGuildMembers: function (guildName) {
+
                 var defer = $q.defer();
 
                 getGuildMembers.save({ guildName: guildName }).$promise
@@ -1645,7 +1678,7 @@ angular.module("BossCollection.services")
 
                 return defer.promise;
             },
-            createGuild: function(guildName){
+            createGuild: function (guildName) {
                 var defer = $q.defer();
 
                 addGuild.save({ guildName: guildName }).$promise
@@ -1657,108 +1690,141 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
-                
+
                 return defer.promise;
             },
-            getApplications: function(){
-                
+            joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
-                
+
+                addMember.save({
+                    guildName: guildName,
+                    memberName: memberName
+                }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.data);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data.message);
+                    })
+
+                return defer.promise;
+            },
+            leaveGuild: function (guildName) {
+                var defer = $q.defer();
+
+                removeMember.save({ guildName: guildName }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.data);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+
+                return defer.promise;
+            },
+            getApplications: function () {
+
+                var defer = $q.defer();
+
                 siteServices.startLoading();
-                
-              getApplicationsUrl.get().$promise
-                .then(function(applications){
-                    
-                    defer.resolve(applications);
-                },
-                function(err){
-                    
-                    defer.reject(err);
-                })  
-                .finally(function () {
-                    siteServices.loadingFinished();
-                }) 
-                
+
+                getApplicationsUrl.get().$promise
+                    .then(function (applications) {
+
+                        defer.resolve(applications);
+                    },
+                        function (err) {
+
+                            defer.reject(err);
+                        })
+                    .finally(function () {
+                        siteServices.loadingFinished();
+                    })
+
                 return defer.promise;
             },
-            validateCharacterName: function(characterName, realm) {
-                
+            validateCharacterName: function (characterName, realm) {
+
                 var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";        
-                
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+
                 var getCharacter = $resource(getCharacterUrl, {}, {});
-                
-                getCharacter.get().$promise.then(function(data){
-                   
-                   defer.resolve(data);
+
+                getCharacter.get().$promise.then(function (data) {
+
+                    defer.resolve(data);
                 },
-                function(err){
-                    
-                    defer.reject("Character not found");
-                });
-                
+                    function (err) {
+
+                        defer.reject("Character not found");
+                    });
+
                 return defer.promise;
             },
-            
-            getGuild: function(realm, guildName){
+
+            getGuild: function (realm, guildName) {
                 var defer = $q.defer()
-                
+
                 siteServices.startLoading();
-                
-                if(realm != "" && guildName != ""){
+
+                if (realm != "" && guildName != "") {
                     var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
                 }
-                
-                $http({method: 'GET', url: getMembersUrl})
-                    .then(function(data){
-                   
+
+                $http({ method: 'GET', url: getMembersUrl })
+                    .then(function (data) {
+
                         defer.resolve(data.data.members);
                     },
-                    function(err){
-                        defer.reject(err);
-                    })
-                    .finally(function(){
+                        function (err) {
+                            defer.reject(err);
+                        })
+                    .finally(function () {
                         siteServices.loadingFinished();
-                    }) 
-                
+                    })
+
                 return defer.promise;
             },
-            submitApplication: function(newApplicant){
+            submitApplication: function (newApplicant) {
                 var defer = $q.defer();
-                
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";      
-                
+
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+
                 var getCharacter = $resource(getCharacterUrl, {}, {});
-                
+
                 siteServices.startLoading();
-                
+
                 getCharacter.get().$promise
                     .then(function (characterWithSpec) {
-                            
-                            
-                            return characterWithSpec;
-                        },
+
+
+                        return characterWithSpec;
+                    },
                         function (err) {
 
                             defer.reject("Character not found");
                         })
                     .then(function (characterWithSpec) {
-                        
+
                         newApplicant.character.specs = characterWithSpec.talents;
-                        
+
                         apply.save({ "newApplicant": newApplicant }).$promise.then(function (submitted) {
-                            
+
                             siteServices.loadingFinished();
                             defer.resolve(submitted);
                         },
-                        function (err) {
+                            function (err) {
 
-                            defer.reject(err);
-                        })
+                                defer.reject(err);
+                            })
 
                     })
-                    .finally(function(){
-                        
+                    .finally(function () {
+
                         siteServices.loadingFinished();
                     })
                 return defer.promise;
@@ -1920,7 +1986,7 @@ angular.module("BossCollection.services")
         var loggedIn = $resource('/auth/loggedin', {}, {});
         var updateAccount = $resource('/auth/updateAccount', {}, {});
         var getUser = $resource('/auth/currentUser', {}, {});
-        
+        var savedUser = null;
         
         
         var accountApi = {
@@ -1952,21 +2018,33 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                 
-                getUser.get().$promise
-                    .then(function (user) {
+                if (savedUser == null) {
+                    getUser.get().$promise
+                        .then(function (user) {
 
-                        
-                          
-                        defer.resolve(user);
-                    },
-                    function (err) {
-                        
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        siteServices.loadingFinished();  
-                    })
-                        
+                            if(user.result == false){
+                                savedUser = null;
+                                
+                            }
+                            else{
+                                savedUser = user;
+                                    
+                            }
+                            user.rank = saveUsersRank(user);
+                            defer.resolve(user);
+                        },
+                            function (err) {
+
+                                defer.reject(err);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                }
+                else{
+                    defer.resolve(savedUser);
+                }   
                 return defer.promise;  
             },
             currentlyLoggedIn: function(){
@@ -1975,15 +2053,17 @@ angular.module("BossCollection.services")
                 var loggedInBool = false;
                 
                 
-                loggedIn.save({}).$promise
-                    .then(function(response){                
+                accountApi.getUser()
+                    .then(function(user){                
                     
-                        if(response.loggedIn == true){
+                        if(user.result != false){
                             
-                            $cookies.put("name", response.user.name);
+                            saveUsersRank(user);
+                            user.rank = savedUser.rank
+                            $cookies.put("name", user.name);
                             loggedInBool = true;    
                             
-                            $rootScope.$broadcast("loggedin", {name: response.user.name, loggedIn: true});
+                            $rootScope.$broadcast("loggedin", {user:user, loggedIn: true});
                         }
                         else{
                             
@@ -2011,6 +2091,7 @@ angular.module("BossCollection.services")
                 var defer = $q.defer();
                
                 siteServices.startLoading();
+                savedUser = null;
                 
                 logout.save({}).$promise.then(function(result){
                     
@@ -2074,7 +2155,6 @@ angular.module("BossCollection.services")
                         accountApi.currentlyLoggedIn()
                             .then(function(areWeLoggedIn){
                                 
-                                
                                 siteServices.hideLoadingBottomSheet();
                                 defer.resolve(true);        
                             },
@@ -2101,6 +2181,24 @@ angular.module("BossCollection.services")
                 return defer.promise;
             }
         };
+        
+        function saveUsersRank(user){
+            var memberListing;
+            if(savedUser && savedUser.guild){
+                memberListing = _.find(savedUser.guild.members, {user: savedUser.name});
+                savedUser.rank = memberListing.rank
+                return memberListing.rank;
+            }
+            else{
+                if (user.guild) {
+                    memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+                    return memberListing.rank;
+                }
+                else{
+                    return 0;
+                }
+            }
+        }
 
         return accountApi;
     }])

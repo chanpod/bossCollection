@@ -3,14 +3,14 @@
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http','$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
+    .factory('guildServices', ['$http', '$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        
-        
-        
+
+
+
         var apply = $resource('/api/applicationSubmission', {}, {});
         var getApplicationsUrl = $resource('/api/getApplications', {}, {});
         var addGuild = $resource('/api/addGuild', {}, {});
@@ -18,11 +18,11 @@ angular.module("BossCollection.services")
         var changeGuildName = $resource('/api/changeGuildName', {}, {});
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
-        var getGuildMembers = $resource("/api/getGuildMembers", {},{});
-        
+        var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
+
         var guildApi = {
-            updateRank: function(guildName, member){
-                
+            updateRank: function (guildName, member) {
+
                 var defer = $q.defer();
 
                 updateRank.save(
@@ -39,10 +39,10 @@ angular.module("BossCollection.services")
                         defer.reject(err.data);
                     })
 
-                return defer.promise;    
+                return defer.promise;
             },
-            getGuildMembers: function(guildName){
-                
+            getGuildMembers: function (guildName) {
+
                 var defer = $q.defer();
 
                 getGuildMembers.save({ guildName: guildName }).$promise
@@ -57,7 +57,7 @@ angular.module("BossCollection.services")
 
                 return defer.promise;
             },
-            createGuild: function(guildName){
+            createGuild: function (guildName) {
                 var defer = $q.defer();
 
                 addGuild.save({ guildName: guildName }).$promise
@@ -69,108 +69,141 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
-                
+
                 return defer.promise;
             },
-            getApplications: function(){
-                
+            joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
-                
+
+                addMember.save({
+                    guildName: guildName,
+                    memberName: memberName
+                }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.data);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data.message);
+                    })
+
+                return defer.promise;
+            },
+            leaveGuild: function (guildName) {
+                var defer = $q.defer();
+
+                removeMember.save({ guildName: guildName }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.data);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+
+                return defer.promise;
+            },
+            getApplications: function () {
+
+                var defer = $q.defer();
+
                 siteServices.startLoading();
-                
-              getApplicationsUrl.get().$promise
-                .then(function(applications){
-                    
-                    defer.resolve(applications);
-                },
-                function(err){
-                    
-                    defer.reject(err);
-                })  
-                .finally(function () {
-                    siteServices.loadingFinished();
-                }) 
-                
+
+                getApplicationsUrl.get().$promise
+                    .then(function (applications) {
+
+                        defer.resolve(applications);
+                    },
+                        function (err) {
+
+                            defer.reject(err);
+                        })
+                    .finally(function () {
+                        siteServices.loadingFinished();
+                    })
+
                 return defer.promise;
             },
-            validateCharacterName: function(characterName, realm) {
-                
+            validateCharacterName: function (characterName, realm) {
+
                 var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";        
-                
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+
                 var getCharacter = $resource(getCharacterUrl, {}, {});
-                
-                getCharacter.get().$promise.then(function(data){
-                   
-                   defer.resolve(data);
+
+                getCharacter.get().$promise.then(function (data) {
+
+                    defer.resolve(data);
                 },
-                function(err){
-                    
-                    defer.reject("Character not found");
-                });
-                
+                    function (err) {
+
+                        defer.reject("Character not found");
+                    });
+
                 return defer.promise;
             },
-            
-            getGuild: function(realm, guildName){
+
+            getGuild: function (realm, guildName) {
                 var defer = $q.defer()
-                
+
                 siteServices.startLoading();
-                
-                if(realm != "" && guildName != ""){
+
+                if (realm != "" && guildName != "") {
                     var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
                 }
-                
-                $http({method: 'GET', url: getMembersUrl})
-                    .then(function(data){
-                   
+
+                $http({ method: 'GET', url: getMembersUrl })
+                    .then(function (data) {
+
                         defer.resolve(data.data.members);
                     },
-                    function(err){
-                        defer.reject(err);
-                    })
-                    .finally(function(){
+                        function (err) {
+                            defer.reject(err);
+                        })
+                    .finally(function () {
                         siteServices.loadingFinished();
-                    }) 
-                
+                    })
+
                 return defer.promise;
             },
-            submitApplication: function(newApplicant){
+            submitApplication: function (newApplicant) {
                 var defer = $q.defer();
-                
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";      
-                
+
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+
                 var getCharacter = $resource(getCharacterUrl, {}, {});
-                
+
                 siteServices.startLoading();
-                
+
                 getCharacter.get().$promise
                     .then(function (characterWithSpec) {
-                            
-                            
-                            return characterWithSpec;
-                        },
+
+
+                        return characterWithSpec;
+                    },
                         function (err) {
 
                             defer.reject("Character not found");
                         })
                     .then(function (characterWithSpec) {
-                        
+
                         newApplicant.character.specs = characterWithSpec.talents;
-                        
+
                         apply.save({ "newApplicant": newApplicant }).$promise.then(function (submitted) {
-                            
+
                             siteServices.loadingFinished();
                             defer.resolve(submitted);
                         },
-                        function (err) {
+                            function (err) {
 
-                            defer.reject(err);
-                        })
+                                defer.reject(err);
+                            })
 
                     })
-                    .finally(function(){
-                        
+                    .finally(function () {
+
                         siteServices.loadingFinished();
                     })
                 return defer.promise;

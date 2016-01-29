@@ -15,7 +15,7 @@ angular.module("BossCollection.services")
         var loggedIn = $resource('/auth/loggedin', {}, {});
         var updateAccount = $resource('/auth/updateAccount', {}, {});
         var getUser = $resource('/auth/currentUser', {}, {});
-        
+        var savedUser = null;
         
         
         var accountApi = {
@@ -47,21 +47,33 @@ angular.module("BossCollection.services")
                 
                 var defer = $q.defer();
                 
-                getUser.get().$promise
-                    .then(function (user) {
+                if (savedUser == null) {
+                    getUser.get().$promise
+                        .then(function (user) {
 
-                        
-                          
-                        defer.resolve(user);
-                    },
-                    function (err) {
-                        
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        siteServices.loadingFinished();  
-                    })
-                        
+                            if(user.result == false){
+                                savedUser = null;
+                                
+                            }
+                            else{
+                                savedUser = user;
+                                    
+                            }
+                            user.rank = saveUsersRank(user);
+                            defer.resolve(user);
+                        },
+                            function (err) {
+
+                                defer.reject(err);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                }
+                else{
+                    defer.resolve(savedUser);
+                }   
                 return defer.promise;  
             },
             currentlyLoggedIn: function(){
@@ -70,15 +82,17 @@ angular.module("BossCollection.services")
                 var loggedInBool = false;
                 
                 
-                loggedIn.save({}).$promise
-                    .then(function(response){                
+                accountApi.getUser()
+                    .then(function(user){                
                     
-                        if(response.loggedIn == true){
+                        if(user.result != false){
                             
-                            $cookies.put("name", response.user.name);
+                            saveUsersRank(user);
+                            user.rank = savedUser.rank
+                            $cookies.put("name", user.name);
                             loggedInBool = true;    
                             
-                            $rootScope.$broadcast("loggedin", {name: response.user.name, loggedIn: true});
+                            $rootScope.$broadcast("loggedin", {user:user, loggedIn: true});
                         }
                         else{
                             
@@ -106,6 +120,7 @@ angular.module("BossCollection.services")
                 var defer = $q.defer();
                
                 siteServices.startLoading();
+                savedUser = null;
                 
                 logout.save({}).$promise.then(function(result){
                     
@@ -169,7 +184,6 @@ angular.module("BossCollection.services")
                         accountApi.currentlyLoggedIn()
                             .then(function(areWeLoggedIn){
                                 
-                                
                                 siteServices.hideLoadingBottomSheet();
                                 defer.resolve(true);        
                             },
@@ -196,6 +210,24 @@ angular.module("BossCollection.services")
                 return defer.promise;
             }
         };
+        
+        function saveUsersRank(user){
+            var memberListing;
+            if(savedUser && savedUser.guild){
+                memberListing = _.find(savedUser.guild.members, {user: savedUser.name});
+                savedUser.rank = memberListing.rank
+                return memberListing.rank;
+            }
+            else{
+                if (user.guild) {
+                    memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+                    return memberListing.rank;
+                }
+                else{
+                    return 0;
+                }
+            }
+        }
 
         return accountApi;
     }])

@@ -3,19 +3,19 @@ md-menu
         i(class="material-icons") account_circle
         | Guild Services
     md-menu-content(width = "4")
-        md-menu-item
+        md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/auth/absence')")
                 md-icon(md-font-library="material-icons") today
                 | Report Absence
-        md-menu-item
+        md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/whosOut')")
                 md-icon(md-font-library="material-icons") today
                 | Upcoming Absences
-        md-menu-item
+        md-menu-item()
             md-button(ng-click = "goTo('/auth/application')")
                 md-icon(md-font-library="material-icons") send
                 | Apply to our Guild
-        md-menu-item
+        md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/reviewApplications')")
                 md-icon(md-font-library="material-icons") inbox
                 | View Applications

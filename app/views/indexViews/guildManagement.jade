@@ -11,7 +11,7 @@ md-menu
             md-button(ng-click = "goTo('/joinGuild')")
                 md-icon(md-font-library="material-icons") inbox
                 | Join Guild
-        md-menu-item
+        md-menu-item(ng-if = "user.rank > 2")
             md-button(ng-click = "goTo('/manageMembers')")
                 md-icon(md-font-library="material-icons") inbox
                 | Manage Members
