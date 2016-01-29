@@ -3,6 +3,7 @@ var router = express.Router();
 var q = require('q');
 var GuildModel = require('../../models/guild.js');
 var moment = require('moment');
+var _ = require('lodash');
 var ranks = [1, 2, 3, 4];
 
 router.route('/addGuild')
@@ -58,28 +59,26 @@ router.route('/updateRank')
     .post(function (req, res) {
 
         var guildName = req.body.guildName;
-        var guildMemberName = req.session.user.name
+        var guildMemberName = req.body.member.user;
         var requester = req.session.user.name
-        var guildMemberNewRank = req.body.newRank;
+        var guildMemberNewRank = req.body.member.rank;
 
 
         findGuild(guildName)
-            .then(function (response) {
+            .then(function (guild) {
 
-                if (isAdmin(response.members, requester)) {
+                if (isAdmin(guild.members, requester)) {
 
-                    var indexOfMember = doesMemberExist(response.members, guildMemberName);
+                    var indexOfMember = doesMemberExist(guild.members, guildMemberName);
                     if (indexOfMember == -1) {
                         res.status(400).send("Member doesn't exist.");
                     }
 
-                    var guild = new GuildModel(response);
-
                     guild.members[indexOfMember].rank = guildMemberNewRank;
 
-                    guild.findOneAndUpdate(function (savedGuild) {
+                    guild.save(function (savedGuild) {
 
-                        res.status(200).send(savedGuild);
+                        res.status(200).send({response: true});
                     }, function (err) {
 
                         res.status(400).send(err);
@@ -101,6 +100,36 @@ router.route('/updateRank')
 router.route('/changeGuildName')
     .post(function (req, res) {
 
+    })
+    
+router.route('/getGuildMembers')
+    .post(function(req, res){
+        
+        var guildName = req.body.guildName;
+        
+        findGuild(guildName)
+            .then(function (guild) {
+                var nonMongooseGuild = guild.toObject();
+                var members = nonMongooseGuild.members;
+                if(guild){
+                    
+                    if(isAdmin(members, req.session.user.name)){
+                        
+                        res.status(200).send({members: members})
+                    }
+                    else{
+                        throw new Error("You don't have sufficient priveleges.")    
+                    }
+                }
+                else{
+                    throw new Error("You don't belong to a guild.")
+                }
+                
+            })
+            .fail(function(err){
+                
+                res.status(400).send(err);
+            })
     })
 
 router.route('/addMember')

@@ -18,9 +18,45 @@ angular.module("BossCollection.services")
         var changeGuildName = $resource('/api/changeGuildName', {}, {});
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
+        var getGuildMembers = $resource("/api/getGuildMembers", {},{});
         
         var guildApi = {
-            
+            updateRank: function(guildName, member){
+                
+                var defer = $q.defer();
+
+                updateRank.save(
+                    {
+                        guildName: guildName,
+                        member: member
+                    }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.members);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+
+                return defer.promise;    
+            },
+            getGuildMembers: function(guildName){
+                
+                var defer = $q.defer();
+
+                getGuildMembers.save({ guildName: guildName }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.members);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+
+                return defer.promise;
+            },
             createGuild: function(guildName){
                 var defer = $q.defer();
 

@@ -400,6 +400,132 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
+    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+        
+        var currentDay = moment().day();
+        
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        }
+        
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        
+        if($location.url() == "/auth/absence"){
+            siteServices.updateTitle('Report Absence');    
+        }
+        else{
+            siteServices.updateTitle('Upcoming Absences');    
+        }
+       
+        
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+           
+           $scope.getAbsencesByDate();
+       }
+       
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
+           
+           var nextDate = dayDesired - currentDay;
+           
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
+           
+           
+           
+           return nextDate;
+       }
+       
+       $scope.formatDate = function(date){
+           
+           return moment.utc(date).format('dddd, MMM D');
+       }
+
+        $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
+            $scope.loading = true;
+            
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+        
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+         
+        $scope.submitNewAbsence = function () {
+
+            if ($scope.newAbsence.date == null) {
+
+                siteServices.showMessageModal("Must select a date")
+            }
+            else if($scope.newAbsence.type == null){
+                siteServices.showMessageModal("Must select a type: Late or Absent")
+            }
+            else {
+                
+                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
+                
+                    //TODO: Redirect to list of absences.
+                    $location.path("/whosOut");
+                },
+                    function (err) {
+                        Materialize.toast(err)
+                        console.log(err);
+                    })
+            }
+
+
+        }
+        
+        
+        function filterOutOldDates(){
+            
+        }
+    
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
     .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
         function($scope, $location, $http, userLoginSrvc, siteServices){
         
@@ -799,12 +925,72 @@ angular.module("BossCollection.controllers")
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("manageMembersController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
-        function($scope, $location, $http, $timeout, siteServices){
-          
+    .controller("manageMembersController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
             
+            //user comes from parent controller navbar
+            $scope.user = {};
+            $scope.guildMembers;
+            $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
+
+            $scope.init = function () {
+
+                userLoginSrvc.getUser()
+                    .then(function (user) {
+                        $scope.user = user;
+                    })
+                    .then(function () {
+                        return guildServices.getGuildMembers($scope.user.guild.name);
+                    })
+                    .then(function (guildMembers) {
+                        $scope.guildMembers = guildMembers
+                    })
+
+            }
+
+            $scope.promote = function (user) {
+
+                if (user.rank == 3) {
+                    siteServices.showMessageModal("Can't promote any further");
+                }
+                else {
+                    user.rank++
+
+                    guildServices.updateRank($scope.user.guild.name, user)
+                        .then(function () {
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                }
+
+
+            }
+
+            $scope.demote = function (user) {
+                if (user.rank == 1) {
+                    siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
+                }
+                else {
+                    user.rank--;
+
+                    guildServices.updateRank($scope.user.guild.name, user)
+                        .then(function () {
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                }
+
+
+            }
+
+            $scope.init();
             siteServices.updateTitle('Manage Members');
-    }])
+        }])
 
 'use strict'
 angular.module("BossCollection.controllers")
@@ -1171,132 +1357,6 @@ angular.module("BossCollection.controllers")
 		}])
 
 'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
-        
-        var currentDay = moment().day();
-        
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment(); 
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
-        
-        
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        }
-        
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        
-        if($location.url() == "/auth/absence"){
-            siteServices.updateTitle('Report Absence');    
-        }
-        else{
-            siteServices.updateTitle('Upcoming Absences');    
-        }
-       
-        
-       $scope.updateList = function(){
-           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
-           
-           $scope.getAbsencesByDate();
-       }
-       
-       function calculateNumOfDaysUntil(dayDesired){
-           var numOfDaysInWeek = 7;
-           
-           var nextDate = dayDesired - currentDay;
-           
-           if(nextDate < 0){
-               
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
-           }
-           
-           
-           
-           return nextDate;
-       }
-       
-       $scope.formatDate = function(date){
-           
-           return moment.utc(date).format('dddd, MMM D');
-       }
-
-        $scope.getAbsences = function(){
-            $scope.currentlySelected = "All absences"
-            $scope.loading = true;
-            
-            absenceService.getAbsences().then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-        
-        $scope.getAbsencesByDate = function(){
-            
-            $scope.loading = true;
-            
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-         
-        $scope.submitNewAbsence = function () {
-
-            if ($scope.newAbsence.date == null) {
-
-                siteServices.showMessageModal("Must select a date")
-            }
-            else if($scope.newAbsence.type == null){
-                siteServices.showMessageModal("Must select a type: Late or Absent")
-            }
-            else {
-                
-                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
-                
-                    //TODO: Redirect to list of absences.
-                    $location.path("/whosOut");
-                },
-                    function (err) {
-                        Materialize.toast(err)
-                        console.log(err);
-                    })
-            }
-
-
-        }
-        
-        
-        function filterOutOldDates(){
-            
-        }
-    
-
-    }])
-
-'use strict';
 angular.module('BossCollection.directives', [])
 'use strict';
 /* Directives */
@@ -1524,9 +1584,45 @@ angular.module("BossCollection.services")
         var changeGuildName = $resource('/api/changeGuildName', {}, {});
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
+        var getGuildMembers = $resource("/api/getGuildMembers", {},{});
         
         var guildApi = {
-            
+            updateRank: function(guildName, member){
+                
+                var defer = $q.defer();
+
+                updateRank.save(
+                    {
+                        guildName: guildName,
+                        member: member
+                    }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.members);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+
+                return defer.promise;    
+            },
+            getGuildMembers: function(guildName){
+                
+                var defer = $q.defer();
+
+                getGuildMembers.save({ guildName: guildName }).$promise
+                    .then(function (result) {
+
+                        defer.resolve(result.members);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err.data);
+                    })
+
+                return defer.promise;
+            },
             createGuild: function(guildName){
                 var defer = $q.defer();
 
