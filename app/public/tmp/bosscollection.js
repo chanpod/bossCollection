@@ -6,6 +6,7 @@ angular.module('BossCollection', [
   'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
+  'BossCollection.filters',
   'ngRoute',
   //'ui.bootstrap',
   'ngResource',
@@ -926,8 +927,8 @@ angular.module("BossCollection.controllers")
  */
 angular.module("BossCollection.controllers")
     .controller("manageMembersController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
             
             //user comes from parent controller navbar
             $scope.user = {};
@@ -984,10 +985,9 @@ angular.module("BossCollection.controllers")
                             siteServices.showMessageModal(err);
                         })
                 }
-
-
             }
-
+            
+          
             $scope.init();
             siteServices.updateTitle('Manage Members');
         }])
@@ -1413,6 +1413,28 @@ angular.module('BossCollection.directives').
  
 'use strict';
 angular.module('BossCollection.filters', [])
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.filters")
+    .filter("applicants", [function(){
+            
+            return function(applicants){
+                 var applicantsFiltered = [];
+                 applicantsFiltered = _.filter(applicants, function(applicant){ 
+                    return applicant.rank == 1;
+                })
+                 
+                return applicantsFiltered.length;
+            }
+            
+            
+    }])
+
 'use strict';
 
 /* Filters */

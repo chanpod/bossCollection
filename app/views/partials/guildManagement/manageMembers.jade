@@ -36,7 +36,7 @@ script#manageMembers(type="text/ng-template")
                                             md-button(ng-click = "demote(member)").md-primary.md-raised
                                                 | Demote
                                     md-divider(ng-if="!$last")
-                md-tab(label = "Applicants")
+                md-tab(label = "Applicants - {{guildMembers | applicants:guildMembers}}")
                     md-content.md-padding
                         md-card
                             md-list()

@@ -7,8 +7,8 @@
  */
 angular.module("BossCollection.controllers")
     .controller("manageMembersController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
             
             //user comes from parent controller navbar
             $scope.user = {};
@@ -65,10 +65,9 @@ angular.module("BossCollection.controllers")
                             siteServices.showMessageModal(err);
                         })
                 }
-
-
             }
-
+            
+          
             $scope.init();
             siteServices.updateTitle('Manage Members');
         }])
