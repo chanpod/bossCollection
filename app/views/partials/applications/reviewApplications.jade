@@ -1,7 +1,7 @@
 script#reviewApplications(type="text/ng-template")
     md-content
         section(layout-xs="column", layout="row")
-            div(flex-xs, flex-gt-xs="50")
+            div(flex-xs, flex-gt-xs="40")
                 md-card(ng-repeat = "application in applications | orderBy: '-dateApplied'")
                     md-card-header
                         md-card-header-text
@@ -11,7 +11,7 @@ script#reviewApplications(type="text/ng-template")
                                 {{application.character.class}} - {{application.itemLevel}}
                             
                     md-card-content(layout = "column")
-                        img(src="images/classBackdrops/{{application.character.class}}.jpg", style = "width:100%;height:100%").md-media-xl.card-media
+                        img(src="images/classBackdrops/{{application.character.class}}.jpg", style = "width:100%;height:100%").md-media-xl.card-media.applicationReviewImageAdjust
                         div(layout, layout-align = "space-around center")
                             div(flex)
                                 div(layout = "column")
