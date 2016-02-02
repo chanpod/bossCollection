@@ -1,8 +1,8 @@
 md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
     md-toolbar().md-primary
         md-list.md-primary
-                md-list-item(layout = "column").md-1-line
-                    img(ng-click = "goTo('/')", src = "/images/wodLogo.png", style = "width:100%;height:200px") 
+                md-list-item()
+                    img(ng-click = "goTo('/')", src = "/images/wodLogo.png", style = "width:100%") 
                 md-list-item
                     h1(ng-click = "goTo('/')").md-toolbar-tools
                         | Bosscollection
@@ -10,7 +10,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                 md-list-item(ng-show = "loggedIn", ng-click = "alert('test')").md-1-line 
                     h1(ng-click = "goTo('/auth/updateAccount')").md-toolbar-tools
                         | {{user.name}}
-    md-content(flex, layout-padding, role = "navigation").md-primary
+    md-content(role = "navigation").md-primary
         md-list.md-primary
             md-subheader().md-no-sticky
                 include accountMenu
