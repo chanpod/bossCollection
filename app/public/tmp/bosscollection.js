@@ -1465,7 +1465,7 @@ angular.module("BossCollection.filters")
                 })
                  
                 return applicantsFiltered.length;
-            }
+            } 
     }])
 
 'use strict';
