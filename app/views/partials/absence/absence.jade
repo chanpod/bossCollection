@@ -1,13 +1,12 @@
 script#absence(type="text/ng-template")    
-    md-content
-        
-        section(layout="column", flex = "80")
+    md-content.autoScroll
+        section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
                 div(layout-gt-xs="row")
-                    md-input-container(flex-gt-xs = "30").md-block
+                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
                         label() User Name
-                        md-icon(md-font-library="material-icons") person
-                        input(ng-model = "user.name", disabled)
+                        md-icon(md-font-library="material-icons").name person
+                        input(type = "text", ng-model = "user.name", disabled).floatingLableFix
                     
                 md-datepicker(ng-model = "newAbsence.date", md-placeholder="Enter date", required).datePickerAdjust
                 
@@ -24,7 +23,4 @@ script#absence(type="text/ng-template")
                     md-input-container().md-block
                     md-button(type = "submit").md-primary.md-raised
                             | Submit
-                br
-                br
-                div(layout)
-                    ad(flex)
+            ad(flex)

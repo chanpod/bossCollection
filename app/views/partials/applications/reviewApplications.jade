@@ -1,7 +1,7 @@
 script#reviewApplications(type="text/ng-template")
-    md-content
+    md-content(ng-cloak)
         section(layout-xs="column", layout="row")
-            div(flex-xs, flex-gt-xs="40")
+            div(flex-xs, flex-gt-xs="60")
                 md-card(ng-repeat = "application in applications | orderBy: '-dateApplied'")
                     md-card-header
                         md-card-header-text

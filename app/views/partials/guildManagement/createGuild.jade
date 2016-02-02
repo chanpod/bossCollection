@@ -2,11 +2,11 @@ script#createGuild(type="text/ng-template")
     md-content
         section(layout="column", flex = "80")
             form(ng-submit = "joinGuild()")
-                div(layout-gt-xs="row")
+                div(layout="column")
                     md-input-container(flex-gt-xs = "30").md-block
                         label() User Name
                         md-icon(md-font-library="material-icons") person
-                        input(ng-model = "user.name", disabled)
+                        input(ng-model = "user.name", disabled).floatingLableFix
                     md-input-container(flex).md-block
                         label() Guild name
                         input(id="guildName", ng-model = "guildName", required)
