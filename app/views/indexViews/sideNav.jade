@@ -18,11 +18,11 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
             md-subheader().md-no-sticky
                 include externalMenu
             md-divider
-            md-subheader(ng-show = "loggedIn").md-no-sticky
+            md-subheader(ng-if = "user.rank", ng-show = "loggedIn").md-no-sticky
                 include raidMenu
             md-divider
-            md-subheader(ng-show = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
-                include guildManagement
+            include guildManagement
+                
     
         
                 

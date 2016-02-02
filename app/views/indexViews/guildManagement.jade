@@ -1,17 +1,18 @@
-md-menu
-    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
-        i(class="material-icons") account_circle
-        | Guild Management
-    md-menu-content(width = "4")
-        md-menu-item(ng-if = "!user.guild")
-            md-button(ng-click = "goTo('/createGuild')")
-                md-icon(md-font-library="material-icons") inbox
-                | Create Guild
-        md-menu-item(ng-if = "!user.guild")
-            md-button(ng-click = "goTo('/joinGuild')")
-                md-icon(md-font-library="material-icons") inbox
-                | Join Guild
-        md-menu-item(ng-if = "user.rank > 2")
-            md-button(ng-click = "goTo('/manageMembers')")
-                md-icon(md-font-library="material-icons") inbox
-                | Manage Members
+md-subheader(ng-if = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
+    md-menu
+        md-button(ng-if = "!user.guild", aria-label = "Account options...", ng-click = "goTo('/createGuild')")
+            i(class="material-icons") create
+            | Create Guild
+md-divider
+md-subheader(ng-if = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
+    md-menu
+        md-button(ng-if = "!user.guild", aria-label = "Account options...", ng-click = "goTo('/joinGuild')")
+            i(class="material-icons") home
+            | Join Guild
+md-divider
+md-subheader(ng-if = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
+    md-menu
+        md-button(ng-if = "user.rank > 2", aria-label = "Account options...", ng-click = "goTo('/manageMembers')")
+            i(class="material-icons") people
+            | Manage Members
+        

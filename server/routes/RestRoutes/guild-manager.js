@@ -41,9 +41,14 @@ router.route('/addGuild')
                         res.status(200).send(savedGuild);
                     });
                 })
-                .fail(function(err){
-                    res.status(400).send(err.message);
-                })
+            .fail(function (err) {
+                if (err.message) {
+                    res.status(400).send({ message: err.message });
+                }
+                else {
+                    res.status(400).send({ message: err });
+                }
+            })
         
     })
     
@@ -170,8 +175,14 @@ router.route('/addMember')
                 });
             })
             .fail(function (err) {
-
-                res.status(400).send({message: err.message});
+                
+                if(err.message){
+                    res.status(400).send({message: err.message});    
+                }
+                else{
+                    res.status(400).send({message: err});    
+                }
+                
             })
 
     })
