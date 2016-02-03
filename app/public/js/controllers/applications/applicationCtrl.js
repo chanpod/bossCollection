@@ -19,48 +19,51 @@ angular.module("BossCollection.controllers")
             $scope.charRealmError = false;
             $scope.searchingForUser = false;
             
-            realmServices.getRealms()
-                .then(function(realms){
+            
+                
+            $scope.init = function(){
+                
+                realmServices.getRealms()
+                    .then(function (realms) {
+
+                        $scope.realms = realms;
+                    })
+                    .then(function(){
+                        return $scope.loggedIn()
+                    })
+                    .catch(function (err) {
+
+
+                        console.log(err);
+                    })
+                    .finally(function () {
+                        $timeout(function(){
+                            siteServices.hideLoadingModal();    
+                        }, 500)
+                        
+                    })  
                     
-                    $scope.realms = realms;
-                     
-                    $timeout(function(){ //waiting for angular digest cycle so select updates properly
- 
-                        $('select').material_select();
-                       
-                    }, 100) 
-                })
-                .catch(function (err) {
-                    
-                    
-                    console.log(err);
-                });
+            }
             
             $scope.filterSearch = function(filterSearch){
                 
                 return $filter('filter')($scope.realms, filterSearch);
             }
             
-            $scope.areWeLoggedIn = function () {
+            $scope.loggedIn = function () {
 
                 userLoginSrvc.currentlyLoggedIn().then(function (response) {
-                    
                     
                     if(response == true){
                         //don't care, stay here
                     }
                     else{
-                        
-                        $('#logInModal').openModal({
-                            dismissible: false, // Modal can be dismissed by clicking outside of the modal
-                            opacity: .5, // Opacity of modal background
-                            in_duration: 300, // Transition in duration
-                            out_duration: 200, // Transition out duration
-                            //ready: function () { alert('Ready'); }, // Callback for Modal open
-                            complete: function () {  } // Callback for Modal close
-                        });
-                        
+                        siteServices.showMessageModal("Please log in before attempting to apply.")
+                        $location.path('/')   
                     }
+                })
+                .finally(function(){
+                    siteServices.loadingFinished();
                 })
             }
             
@@ -112,7 +115,7 @@ angular.module("BossCollection.controllers")
                 }
             }
             
-            $scope.areWeLoggedIn();
+            $scope.init();
             
             
   

@@ -10,10 +10,10 @@ script#manageMembers(type="text/ng-template")
                                     div(layout = "row", layout-xs = "column").md-list-item-text
                                         p(flex)
                                             {{member.user}}
-                                        div(hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
+                                        div(ng-if = "user.rank == 4", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
                                             md-button(ng-click = "demote(member)").md-primary.md-raised
                                                 | Demote
-                                        div(hide-gt-xs , flex, layout = "row",  layout-align = "end center")
+                                        div(ng-if = "user.rank == 4", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
                                             md-button(ng-click = "demote(member)").md-primary.md-raised
                                                 | Demote
                                     md-divider(ng-if="!$last")
@@ -25,13 +25,13 @@ script#manageMembers(type="text/ng-template")
                                     div(layout = "row", layout-xs = "column", layout-align = "space-between center").md-list-item-text
                                         p(flex)
                                             {{member.user}}
-                                        div(hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
-                                            md-button(ng-click = "promote(member)").md-primary.md-raised
+                                        div(ng-if = "user.rank > 2", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
+                                            md-button(ng-if = "user.rank > 3", ng-click = "promote(member)").md-primary.md-raised
                                                 | Promote
                                             md-button(ng-click = "demote(member)").md-primary.md-raised
                                                 | Demote
-                                        div(hide-gt-xs , flex, layout = "row",  layout-align = "end center")
-                                            md-button(ng-click = "promote(member)").md-primary.md-raised
+                                        div(ng-if = "user.rank > 2", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
+                                            md-button(ng-if = "user.rank > 3", ng-click = "promote(member)").md-primary.md-raised
                                                 | Promote
                                             md-button(ng-click = "demote(member)").md-primary.md-raised
                                                 | Demote
@@ -44,10 +44,10 @@ script#manageMembers(type="text/ng-template")
                                     div(layout = "row", layout-xs = "column", layout-align = "space-between center").md-list-item-text
                                         p(flex)
                                             {{member.user}}
-                                        div(hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
+                                        div(ng-if = "user.rank > 2", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
                                             md-button(ng-click = "promote(member)").md-primary.md-raised
                                                 | Promote
-                                        div(hide-gt-xs , flex, layout = "row",  layout-align = "end center")
+                                        div(ng-if = "user.rank > 2", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
                                             md-button(ng-click = "promote(member)").md-primary.md-raised
                                                 | Promote
                                     md-divider(ng-if="!$last")

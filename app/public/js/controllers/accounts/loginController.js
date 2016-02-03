@@ -18,18 +18,7 @@ angular.module("BossCollection.controllers")
         $scope.init = function () {
         }
         
-        $scope.user = userLoginSrvc.getUser()
-            .then(function(user){
-                 
-                if(typeof user.name != 'string'){
-                    user.name = "";
-                }
-                
-                return user;
-            },
-            function(err){
-                return {};
-            })
+        
         
         
         

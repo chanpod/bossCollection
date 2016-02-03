@@ -10,17 +10,14 @@ angular.module("BossCollection.controllers")
         "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
         function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter){
           
-            $scope.user = {};
+            
             $scope.listOfGuilds = [];
             
             siteServices.updateTitle('Join Guild');
             
             $scope.init = function () {
 
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        $scope.user = user;
-                    })                   
+                      
                     
                 $scope.getGuilds();
 

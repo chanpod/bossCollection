@@ -27,6 +27,8 @@ angular.module("BossCollection.services")
             getListOfGuilds: function(){
                 var defer = $q.defer();
                 
+                siteServices.startLoading();
+                
                 getListOfGuilds.get().$promise
                     .then(function(guilds){
                          
@@ -35,13 +37,17 @@ angular.module("BossCollection.services")
                     .catch(function(err){
                         
                         defer.reject(err);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
                     }) 
+                    
                 return defer.promise;
             },
             updateRank: function (guildName, member) {
 
                 var defer = $q.defer();
-
+                
                 updateRank.save(
                     {
                         guildName: guildName,
@@ -55,13 +61,18 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             getGuildMembers: function (guildName) {
 
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 getGuildMembers.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
@@ -71,12 +82,17 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             createGuild: function (guildName) {
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 addGuild.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
@@ -86,12 +102,17 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 addMember.save({
                     guildName: guildName,
                     memberName: memberName
@@ -104,12 +125,17 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data.message);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             leaveGuild: function (guildName) {
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 removeMember.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
@@ -118,6 +144,9 @@ angular.module("BossCollection.services")
                     .catch(function (err) {
 
                         defer.reject(err.message);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
                     })
 
                 return defer.promise;

@@ -1,12 +1,4 @@
-div(id="loadingModal", class="modal").loadingModal 
-    div(class="modal-content").center    
-        .preloader-wrapper.big.active
-            .spinner-layer.spinner-blue-only
-                .circle-clipper.left
-                    .circle
-                .gap-patch
-                    .circle
-                .circle-clipper.right
-                    .circle
-    
+script#loadingModal(type="text/ng-template")
+    md-dialog(ng-cloak, layout-align = "center center")    
+        md-progress-circular(md-mode="indeterminate")
     

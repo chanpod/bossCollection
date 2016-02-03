@@ -166,7 +166,7 @@ angular.module("BossCollection.controllers")
         
         $scope.goTo = function(path){
             $location.url(path);
-            $scope.toggle();
+            $scope.closeSideBar();
         }
         
         $scope.goToExternal = function (path) {
@@ -215,7 +215,6 @@ angular.module("BossCollection.controllers")
         $scope.areWeLoggedIn = function(){
             
             userLoginSrvc.currentlyLoggedIn().then(function(response){
-                
                 
                 $scope.loggedIn = response;
             })
@@ -532,11 +531,6 @@ angular.module("BossCollection.controllers")
         
         siteServices.updateTitle('Account');
         
-        userLoginSrvc.getUser().then(function(user){
-            
-            $scope.user = user;
-        })
-        
         $scope.leaveGuild = function(){
             
             var guildName = $scope.user.guild.name;
@@ -604,18 +598,7 @@ angular.module("BossCollection.controllers")
         $scope.init = function () {
         }
         
-        $scope.user = userLoginSrvc.getUser()
-            .then(function(user){
-                 
-                if(typeof user.name != 'string'){
-                    user.name = "";
-                }
-                
-                return user;
-            },
-            function(err){
-                return {};
-            })
+        
         
         
         
@@ -715,48 +698,51 @@ angular.module("BossCollection.controllers")
             $scope.charRealmError = false;
             $scope.searchingForUser = false;
             
-            realmServices.getRealms()
-                .then(function(realms){
+            
+                
+            $scope.init = function(){
+                
+                realmServices.getRealms()
+                    .then(function (realms) {
+
+                        $scope.realms = realms;
+                    })
+                    .then(function(){
+                        return $scope.loggedIn()
+                    })
+                    .catch(function (err) {
+
+
+                        console.log(err);
+                    })
+                    .finally(function () {
+                        $timeout(function(){
+                            siteServices.hideLoadingModal();    
+                        }, 500)
+                        
+                    })  
                     
-                    $scope.realms = realms;
-                     
-                    $timeout(function(){ //waiting for angular digest cycle so select updates properly
- 
-                        $('select').material_select();
-                       
-                    }, 100) 
-                })
-                .catch(function (err) {
-                    
-                    
-                    console.log(err);
-                });
+            }
             
             $scope.filterSearch = function(filterSearch){
                 
                 return $filter('filter')($scope.realms, filterSearch);
             }
             
-            $scope.areWeLoggedIn = function () {
+            $scope.loggedIn = function () {
 
                 userLoginSrvc.currentlyLoggedIn().then(function (response) {
-                    
                     
                     if(response == true){
                         //don't care, stay here
                     }
                     else{
-                        
-                        $('#logInModal').openModal({
-                            dismissible: false, // Modal can be dismissed by clicking outside of the modal
-                            opacity: .5, // Opacity of modal background
-                            in_duration: 300, // Transition in duration
-                            out_duration: 200, // Transition out duration
-                            //ready: function () { alert('Ready'); }, // Callback for Modal open
-                            complete: function () {  } // Callback for Modal close
-                        });
-                        
+                        siteServices.showMessageModal("Please log in before attempting to apply.")
+                        $location.path('/')   
                     }
+                })
+                .finally(function(){
+                    siteServices.loadingFinished();
                 })
             }
             
@@ -808,7 +794,7 @@ angular.module("BossCollection.controllers")
                 }
             }
             
-            $scope.areWeLoggedIn();
+            $scope.init();
             
             
   
@@ -936,17 +922,14 @@ angular.module("BossCollection.controllers")
         "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
         function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter){
           
-            $scope.user = {};
+            
             $scope.listOfGuilds = [];
             
             siteServices.updateTitle('Join Guild');
             
             $scope.init = function () {
 
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        $scope.user = user;
-                    })                   
+                      
                     
                 $scope.getGuilds();
 
@@ -1001,19 +984,14 @@ angular.module("BossCollection.controllers")
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
             
             //user comes from parent controller navbar
-            $scope.user = {};
+            
             $scope.guildMembers;
             $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
 
             $scope.init = function () {
 
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        $scope.user = user;
-                    })
-                    .then(function () {
-                        return guildServices.getGuildMembers($scope.user.guild.name);
-                    })
+                
+                guildServices.getGuildMembers($scope.user.guild.name)
                     .then(function (guildMembers) {
                         $scope.guildMembers = guildMembers
                     })
@@ -1683,6 +1661,8 @@ angular.module("BossCollection.services")
             getListOfGuilds: function(){
                 var defer = $q.defer();
                 
+                siteServices.startLoading();
+                
                 getListOfGuilds.get().$promise
                     .then(function(guilds){
                          
@@ -1691,13 +1671,17 @@ angular.module("BossCollection.services")
                     .catch(function(err){
                         
                         defer.reject(err);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
                     }) 
+                    
                 return defer.promise;
             },
             updateRank: function (guildName, member) {
 
                 var defer = $q.defer();
-
+                
                 updateRank.save(
                     {
                         guildName: guildName,
@@ -1711,13 +1695,18 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             getGuildMembers: function (guildName) {
 
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 getGuildMembers.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
@@ -1727,12 +1716,17 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             createGuild: function (guildName) {
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 addGuild.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
@@ -1742,12 +1736,17 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 addMember.save({
                     guildName: guildName,
                     memberName: memberName
@@ -1760,12 +1759,17 @@ angular.module("BossCollection.services")
 
                         defer.reject(err.data.message);
                     })
+                    .finally(function(){
+                        siteServices.loadingFinished();
+                    })
 
                 return defer.promise;
             },
             leaveGuild: function (guildName) {
                 var defer = $q.defer();
-
+                
+                siteServices.startLoading();
+                
                 removeMember.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
@@ -1774,6 +1778,9 @@ angular.module("BossCollection.services")
                     .catch(function (err) {
 
                         defer.reject(err.message);
+                    })
+                    .finally(function(){
+                        siteServices.loadingFinished();
                     })
 
                 return defer.promise;
@@ -1897,37 +1904,34 @@ angular.module("BossCollection.services")
         
     }])
 angular.module("BossCollection.services")
-    .factory('realmServices', ['$http','$q',function ($http, $q) {
+    .factory('realmServices', [
+        '$http','$q', 'siteServices',
+        function ($http, $q, siteServices) {
 
         var getRealmsUrl = "https://us.api.battle.net/wow/realm/status?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var realms = [];
         
-        function parseRealNames() {
-            
-            
-
-        }
-        
-        parseRealNames();
         
         var realmApi = {             
-
+ 
             getRealms: function(){
-                var defer = $q.defer();
+                var defer = $q.defer(); 
 
                 if (realms.length == 0) {
 
                     $http({ method: 'GET', url: getRealmsUrl }).success(function (returnedRealms) {
-
-                        //realms = _.pluck(returnedRealms.realms, "name");
+                        
+                        siteServices.hideLoadingModal();
+                        
                         realms = returnedRealms.realms;
                         defer.resolve(realms);
                         realms = realms;
-                        //realms
+                        
                     });
 
                 }
                 else {
+                    siteServices.hideLoadingModal();
                     defer.resolve(realms);
                 }
                 
@@ -1945,13 +1949,23 @@ angular.module("BossCollection.services")
     .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast',
     function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast) {
         
+        var alreadyLoading = false;
+        
         function startLoading(){
             
+            if(alreadyLoading){
+                
+            }
+            else{
+                alreadyLoading = true;
+                showLoadingModal();    
+            }
             
         }
         
         function loadingFinished(){
-            
+            hideLoadingModal();
+            alreadyLoading = false;
         }
         
         function updateTitle(newTitle){
@@ -2009,6 +2023,38 @@ angular.module("BossCollection.services")
                 );
         }
         
+        function hideLoadingModal(){
+            
+            if(alreadyLoading == false){
+                
+            }
+            else{
+                alreadyLoading = false;
+                $mdDialog.hide();
+            }
+        }
+        
+        function shouldWeBeLoading(){
+            return alreadyLoading;
+        }
+        
+        function showLoadingModal(){
+            
+            $mdDialog.show(
+                {
+                    templateUrl: 'loadingModal',
+                    onComplete: function(){
+                        
+                        if(!alreadyLoading){
+                            
+                            $mdDialog.hide();
+                        }
+                    }           
+                    
+                }
+            )
+        }
+        
         return {
             startLoading:startLoading,
             loadingFinished:loadingFinished,
@@ -2017,7 +2063,9 @@ angular.module("BossCollection.services")
             hideLoadingBottomSheet:hideLoadingBottomSheet,
             showMessageModal:showMessageModal,
             showMessageToast:showMessageToast,
-            hideBottomSheet:hideBottomSheet
+            hideBottomSheet:hideBottomSheet,
+            showLoadingModal:showLoadingModal,
+            hideLoadingModal:hideLoadingModal
         }
     }])
 'use strict';
@@ -2086,6 +2134,7 @@ angular.module("BossCollection.services")
             getUser: function(){
                 
                 var defer = $q.defer();
+                siteServices.startLoading();
                 
                 if (savedUser == null) {
                     getUser.get().$promise
@@ -2112,6 +2161,7 @@ angular.module("BossCollection.services")
 
                 }
                 else{
+                    siteServices.loadingFinished();  
                     defer.resolve(savedUser);
                 }   
                 return defer.promise;  
@@ -2121,6 +2171,7 @@ angular.module("BossCollection.services")
                 var defer = $q.defer();
                 var loggedInBool = false;
                 
+                siteServices.startLoading();
                 
                 accountApi.getUser()
                     .then(function(user){                
@@ -2175,7 +2226,6 @@ angular.module("BossCollection.services")
                 }, function(err){
                     
                     $rootScope.$broadcast("loggedin", {loggedIn: false});
-                    siteServices.loadingFinished();
                     $location.path("/");
                 })
                 .finally(function () {
@@ -2195,21 +2245,22 @@ angular.module("BossCollection.services")
                 
                 siteServices.startLoading();
                 
-                registration.save(newUser).$promise.then(function(result){
-                    
+                registration.save(newUser).$promise
+                .then(function (result) {
+
                     console.log("Registration successfull. Redirecting to login page");
                     console.log(result);
-                      
+
                     $location.path("/auth/login");
-                }, function(err){
+                }, function (err) {
                     console.log(err.data);
-                    
-                      
+
+
                     defer.reject(err.data);
                 })
-                .finally(function(){
-                        siteServices.loadingFinished();
-                    })
+                .finally(function () {
+                    siteServices.loadingFinished();
+                })
                 
                 return defer.promise;
             },

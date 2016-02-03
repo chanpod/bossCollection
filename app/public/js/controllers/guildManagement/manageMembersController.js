@@ -11,19 +11,14 @@ angular.module("BossCollection.controllers")
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
             
             //user comes from parent controller navbar
-            $scope.user = {};
+            
             $scope.guildMembers;
             $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
 
             $scope.init = function () {
 
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        $scope.user = user;
-                    })
-                    .then(function () {
-                        return guildServices.getGuildMembers($scope.user.guild.name);
-                    })
+                
+                guildServices.getGuildMembers($scope.user.guild.name)
                     .then(function (guildMembers) {
                         $scope.guildMembers = guildMembers
                     })

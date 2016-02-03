@@ -8,11 +8,6 @@ angular.module("BossCollection.controllers")
         
         siteServices.updateTitle('Account');
         
-        userLoginSrvc.getUser().then(function(user){
-            
-            $scope.user = user;
-        })
-        
         $scope.leaveGuild = function(){
             
             var guildName = $scope.user.guild.name;

@@ -3,29 +3,30 @@ script#signup(type="text/ng-template")
         form(name = "logInForm", layout = "column", ng-submit = "register()")
             div(layout = "row")
                 div(flex)
-                    md-input-container(flex).md-block
-                        label() User Name
+                    md-input-container(flex).md-block.md-icon-float
+                        label().floatingIconLabel User Name
                         md-icon(md-font-library="material-icons") person
-                        input(ng-model = "user.name", required)
+                        input(type = "text", ng-model = "user.name", required).floatingIconInput
                 div(flex)
                     md-input-container(flex).md-block
                         label() Battle Tag
                         input(ng-model = "user.battleTag", required)
             div(flex)
                 md-input-container(flex).md-block                    
-                    label() Email
+                    label().floatingIconLabel Email
                     md-icon(md-font-library="material-icons") email
-                    input(type="email", ng-model="user.email", id='emailInput', required)
+                    input(type="email", ng-model="user.email", id='emailInput', required).floatingIconInput
             div(flex)
                 md-input-container(flex).md-block
-                    label() Password
+                    label().floatingIconLabel Password
                     md-icon(md-font-library="material-icons") vpn_key
-                    input(type="password", ng-model="user.password", id='pwordInput', required)
+                    input(type="password", ng-model="user.password", id='pwordInput', required).floatingIconInput
             div(flex)
                 md-input-container(flex).md-block
-                    label() Password Validate
+                    label().floatingIconLabel Password Validate
                     md-icon(md-font-library="material-icons") vpn_key
-                    input(type="password", ng-model="user.password_verify", id='pwordVerifyInput', name = "pwordVerifyInput", required)
+                    input(type="password", ng-model="user.password_verify", 
+                        id='pwordVerifyInput', name = "pwordVerifyInput", required).floatingIconInput
                     div(ng-messages="logInForm.pwordVerifyInput.$error")
                         div(ng-message="required") Passwords must match.                   
                     

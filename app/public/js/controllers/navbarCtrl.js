@@ -45,7 +45,7 @@ angular.module("BossCollection.controllers")
         
         $scope.goTo = function(path){
             $location.url(path);
-            $scope.toggle();
+            $scope.closeSideBar();
         }
         
         $scope.goToExternal = function (path) {
@@ -94,7 +94,6 @@ angular.module("BossCollection.controllers")
         $scope.areWeLoggedIn = function(){
             
             userLoginSrvc.currentlyLoggedIn().then(function(response){
-                
                 
                 $scope.loggedIn = response;
             })

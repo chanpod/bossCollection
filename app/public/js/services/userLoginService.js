@@ -52,6 +52,7 @@ angular.module("BossCollection.services")
             getUser: function(){
                 
                 var defer = $q.defer();
+                siteServices.startLoading();
                 
                 if (savedUser == null) {
                     getUser.get().$promise
@@ -78,6 +79,7 @@ angular.module("BossCollection.services")
 
                 }
                 else{
+                    siteServices.loadingFinished();  
                     defer.resolve(savedUser);
                 }   
                 return defer.promise;  
@@ -87,6 +89,7 @@ angular.module("BossCollection.services")
                 var defer = $q.defer();
                 var loggedInBool = false;
                 
+                siteServices.startLoading();
                 
                 accountApi.getUser()
                     .then(function(user){                
@@ -141,7 +144,6 @@ angular.module("BossCollection.services")
                 }, function(err){
                     
                     $rootScope.$broadcast("loggedin", {loggedIn: false});
-                    siteServices.loadingFinished();
                     $location.path("/");
                 })
                 .finally(function () {
@@ -161,21 +163,22 @@ angular.module("BossCollection.services")
                 
                 siteServices.startLoading();
                 
-                registration.save(newUser).$promise.then(function(result){
-                    
+                registration.save(newUser).$promise
+                .then(function (result) {
+
                     console.log("Registration successfull. Redirecting to login page");
                     console.log(result);
-                      
+
                     $location.path("/auth/login");
-                }, function(err){
+                }, function (err) {
                     console.log(err.data);
-                    
-                      
+
+
                     defer.reject(err.data);
                 })
-                .finally(function(){
-                        siteServices.loadingFinished();
-                    })
+                .finally(function () {
+                    siteServices.loadingFinished();
+                })
                 
                 return defer.promise;
             },

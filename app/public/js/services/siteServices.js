@@ -6,13 +6,23 @@ angular.module("BossCollection.services")
     .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast',
     function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast) {
         
+        var alreadyLoading = false;
+        
         function startLoading(){
             
+            if(alreadyLoading){
+                
+            }
+            else{
+                alreadyLoading = true;
+                showLoadingModal();    
+            }
             
         }
         
         function loadingFinished(){
-            
+            hideLoadingModal();
+            alreadyLoading = false;
         }
         
         function updateTitle(newTitle){
@@ -70,6 +80,38 @@ angular.module("BossCollection.services")
                 );
         }
         
+        function hideLoadingModal(){
+            
+            if(alreadyLoading == false){
+                
+            }
+            else{
+                alreadyLoading = false;
+                $mdDialog.hide();
+            }
+        }
+        
+        function shouldWeBeLoading(){
+            return alreadyLoading;
+        }
+        
+        function showLoadingModal(){
+            
+            $mdDialog.show(
+                {
+                    templateUrl: 'loadingModal',
+                    onComplete: function(){
+                        
+                        if(!alreadyLoading){
+                            
+                            $mdDialog.hide();
+                        }
+                    }           
+                    
+                }
+            )
+        }
+        
         return {
             startLoading:startLoading,
             loadingFinished:loadingFinished,
@@ -78,6 +120,8 @@ angular.module("BossCollection.services")
             hideLoadingBottomSheet:hideLoadingBottomSheet,
             showMessageModal:showMessageModal,
             showMessageToast:showMessageToast,
-            hideBottomSheet:hideBottomSheet
+            hideBottomSheet:hideBottomSheet,
+            showLoadingModal:showLoadingModal,
+            hideLoadingModal:hideLoadingModal
         }
     }])
