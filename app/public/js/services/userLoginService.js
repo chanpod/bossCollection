@@ -43,6 +43,12 @@ angular.module("BossCollection.services")
                 
                 return defer.promise;
             },
+            updateUser: function(newUser){
+                savedUser = newUser;
+                if(savedUser.guild){
+                    saveUsersRank(savedUser);
+                }
+            },
             getUser: function(){
                 
                 var defer = $q.defer();

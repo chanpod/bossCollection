@@ -48,6 +48,8 @@ angular.module("BossCollection.controllers")
                         siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
                         
                         $scope.user.guild = guild;
+                        userLoginSrvc.updateUser($scope.user);
+                        
                         $location.path('/');        
                         
                         

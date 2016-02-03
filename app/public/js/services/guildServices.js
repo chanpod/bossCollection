@@ -3,7 +3,9 @@
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http', '$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
+    .factory('guildServices', [
+        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 
+    function ($http, $q, $resource, siteServices, userLoginSrvc) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -111,11 +113,11 @@ angular.module("BossCollection.services")
                 removeMember.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
-                        defer.resolve(result.data);
+                        defer.resolve(result.user);
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.data);
+                        defer.reject(err.message);
                     })
 
                 return defer.promise;
@@ -225,5 +227,16 @@ angular.module("BossCollection.services")
             }
         };
 
+        function getUsersRank(userName, guild) {
+
+            var memberListing;
+
+            memberListing = _.find(guild.members, { user: userName });
+            return memberListing.rank;
+        }
+        
         return guildApi;
+        
+        
+        
     }])

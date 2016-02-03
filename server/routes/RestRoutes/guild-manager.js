@@ -217,7 +217,55 @@ router.route('/addMember')
 
 router.route('/removeMember')
     .post(function (req, res) {
+        
+        var guildName = req.body.guildName;
+        var guildMemberName = req.session.user.name;
+        
+        findGuild(guildName)
+            .then(function (guild) {
 
+                if (guild) {
+
+                    var indexOfMember = doesMemberExist(guild.members, guildMemberName);
+                    
+                    if (indexOfMember == -1) {
+                        throw new Error("Member doesn't exist.");
+                        return;
+                    }
+
+                    guild.members.splice(indexOfMember, 1);
+                    
+                    guild.save(function (savedGuild) {
+                        delete req.session.user.guild;    
+                        req.session.save(function () {
+                        
+                            // update the user's login cookies if they exists //
+                            if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+
+                                res.cookie('user', req.session.user.name, { maxAge: 900000 });
+                                res.cookie('password', req.session.password, { maxAge: 900000 });
+                            }
+
+                            req.session.reload(function () {
+
+                                res.status(200).send({user: req.session.user});
+                            })
+                        });
+
+                        
+                    }, function (err) {
+
+                        res.status(400).send(err);
+                    });
+                }
+                else {
+                    throw new Error("Guild no longer exists? Don't ask...");
+                }
+            })
+            .fail(function (err) {
+
+                res.status(400).send(err);
+            })
     })
 
 router.findUsersGuild = function (username) {

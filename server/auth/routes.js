@@ -80,8 +80,12 @@ router.get('/login', function (req, res) {
                                     res.cookie('user', req.session.user.name, { maxAge: 900000 });
                                     res.cookie('password', req.session.password, { maxAge: 900000 });
                                 }
-
-                                res.status(200).send(req.session.user);
+                                
+                                req.session.reload(function(){
+                                    
+                                    res.status(200).send(req.session.user);    
+                                })
+                                
                             });
                         }
                         else {
@@ -131,7 +135,10 @@ router.post('/login', function (req, res) {
                             }
                             
                             console.log(req.session.user.guild)
-                            res.status(200).send(req.session.user);
+                            req.session.reload(function(){
+                                    
+                                    res.status(200).send(req.session.user);    
+                                })
                         });
                     }
                     else {
@@ -187,7 +194,10 @@ router.get('/currentUser', function (req, res) {
                             res.cookie('password', req.session.password, { maxAge: 900000 });
                         }
 
-                        res.status(200).send(req.session.user);
+                        req.session.reload(function () {
+
+                            res.status(200).send(req.session.user);
+                        })
                     });
                 }
                 else {

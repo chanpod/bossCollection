@@ -527,18 +527,36 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, userLoginSrvc, siteServices){
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function($scope, $location, $http, userLoginSrvc, siteServices, guildServices){
         
         siteServices.updateTitle('Account');
         
         userLoginSrvc.getUser().then(function(user){
-             
-            
             
             $scope.user = user;
-            
         })
+        
+        $scope.leaveGuild = function(){
+            
+            var guildName = $scope.user.guild.name;
+            
+            guildServices.leaveGuild(guildName)
+                .then(function(user){
+                    
+                    delete user.rank;
+                    
+                    userLoginSrvc.updateUser(user);
+                    $scope.user = user;
+                    
+                    userLoginSrvc.currentlyLoggedIn()
+                        .then(function(){
+                            
+                            
+                            console.log("User updated");
+                        })
+                })
+        }
         
         $scope.updateAccount = function () {
             
@@ -956,6 +974,8 @@ angular.module("BossCollection.controllers")
                         siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
                         
                         $scope.user.guild = guild;
+                        userLoginSrvc.updateUser($scope.user);
+                        
                         $location.path('/');        
                         
                         
@@ -1639,7 +1659,9 @@ angular.module("BossCollection.services")
 
 
 angular.module("BossCollection.services")
-    .factory('guildServices', ['$http', '$q', '$resource', 'siteServices', function ($http, $q, $resource, siteServices) {
+    .factory('guildServices', [
+        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 
+    function ($http, $q, $resource, siteServices, userLoginSrvc) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -1747,11 +1769,11 @@ angular.module("BossCollection.services")
                 removeMember.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
-                        defer.resolve(result.data);
+                        defer.resolve(result.user);
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.data);
+                        defer.reject(err.message);
                     })
 
                 return defer.promise;
@@ -1861,7 +1883,18 @@ angular.module("BossCollection.services")
             }
         };
 
+        function getUsersRank(userName, guild) {
+
+            var memberListing;
+
+            memberListing = _.find(guild.members, { user: userName });
+            return memberListing.rank;
+        }
+        
         return guildApi;
+        
+        
+        
     }])
 angular.module("BossCollection.services")
     .factory('realmServices', ['$http','$q',function ($http, $q) {
@@ -2043,6 +2076,12 @@ angular.module("BossCollection.services")
                     })
                 
                 return defer.promise;
+            },
+            updateUser: function(newUser){
+                savedUser = newUser;
+                if(savedUser.guild){
+                    saveUsersRank(savedUser);
+                }
             },
             getUser: function(){
                 

@@ -3,18 +3,36 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, userLoginSrvc, siteServices){
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function($scope, $location, $http, userLoginSrvc, siteServices, guildServices){
         
         siteServices.updateTitle('Account');
         
         userLoginSrvc.getUser().then(function(user){
-             
-            
             
             $scope.user = user;
-            
         })
+        
+        $scope.leaveGuild = function(){
+            
+            var guildName = $scope.user.guild.name;
+            
+            guildServices.leaveGuild(guildName)
+                .then(function(user){
+                    
+                    delete user.rank;
+                    
+                    userLoginSrvc.updateUser(user);
+                    $scope.user = user;
+                    
+                    userLoginSrvc.currentlyLoggedIn()
+                        .then(function(){
+                            
+                            
+                            console.log("User updated");
+                        })
+                })
+        }
         
         $scope.updateAccount = function () {
             
