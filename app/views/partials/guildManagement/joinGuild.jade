@@ -7,9 +7,16 @@ script#joinGuild(type="text/ng-template")
                         label() User Name
                         md-icon(md-font-library="material-icons") person
                         input(ng-model = "user.name", disabled).floatingLableFix
-                    md-input-container(flex).md-block
-                        label() Guild name
-                        input(id="guildName", ng-model = "guildName", required)
+                    md-autocomplete(md-min-length = "0",
+                                md-item-text = "guild.name",
+                                md-selected-item = "guildName",                                    
+                                md-search-text = "guild",
+                                md-floating-label = "Select Realm",
+                                md-items = "guild in filterSearch(guild)",
+                                flex)
+                        md-item-template
+                            span(md-highlight-text = "guild"){{guild.name}}
+                        //-input(id="guildName", ng-model = "guildName", required)
                 div(layout)
                     md-input-container().md-block
                     md-button(type = "submit").md-primary.md-raised

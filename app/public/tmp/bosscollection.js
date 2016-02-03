@@ -915,10 +915,11 @@ angular.module("BossCollection.controllers")
  */
 angular.module("BossCollection.controllers")
     .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter){
           
             $scope.user = {};
+            $scope.listOfGuilds = [];
             
             siteServices.updateTitle('Join Guild');
             
@@ -927,23 +928,37 @@ angular.module("BossCollection.controllers")
                 userLoginSrvc.getUser()
                     .then(function (user) {
                         $scope.user = user;
-                    })
-                    .then(function () {
-                        return guildServices.getGuildMembers($scope.user.guild.name);
-                    })
-                    .then(function (guildMembers) {
-                        $scope.guildMembers = guildMembers
-                    })
+                    })                   
+                    
+                $scope.getGuilds();
 
             }
             
+            $scope.filterSearch = function(filterSearch){
+                
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
+            }
+            
+            $scope.getGuilds = function(){
+                
+                guildServices.getListOfGuilds()
+                    .then(function(guilds){
+                        
+                        $scope.listOfGuilds = guilds;
+                    })
+            } 
+             
             $scope.joinGuild = function(){
                 
-                guildServices.joinGuild($scope.guildName, $scope.user.name)
-                    .then(function(result){
+                guildServices.joinGuild($scope.guildName.name, $scope.user.name)
+                    .then(function(guild){
                         
                         siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                        $location.path('/');
+                        
+                        $scope.user.guild = guild;
+                        $location.path('/');        
+                        
+                        
                     })
                     .catch(function(err){
                         siteServices.showMessageModal(err);
@@ -1640,8 +1655,23 @@ angular.module("BossCollection.services")
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
         var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
+        var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
 
         var guildApi = {
+            getListOfGuilds: function(){
+                var defer = $q.defer();
+                
+                getListOfGuilds.get().$promise
+                    .then(function(guilds){
+                         
+                        defer.resolve(guilds.guilds);
+                    })
+                    .catch(function(err){
+                        
+                        defer.reject(err);
+                    }) 
+                return defer.promise;
+            },
             updateRank: function (guildName, member) {
 
                 var defer = $q.defer();
@@ -1702,7 +1732,7 @@ angular.module("BossCollection.services")
                 }).$promise
                     .then(function (result) {
 
-                        defer.resolve(result.data);
+                        defer.resolve(result.guild);
                     })
                     .catch(function (err) {
 

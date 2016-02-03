@@ -19,8 +19,23 @@ angular.module("BossCollection.services")
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
         var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
+        var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
 
         var guildApi = {
+            getListOfGuilds: function(){
+                var defer = $q.defer();
+                
+                getListOfGuilds.get().$promise
+                    .then(function(guilds){
+                         
+                        defer.resolve(guilds.guilds);
+                    })
+                    .catch(function(err){
+                        
+                        defer.reject(err);
+                    }) 
+                return defer.promise;
+            },
             updateRank: function (guildName, member) {
 
                 var defer = $q.defer();
@@ -81,7 +96,7 @@ angular.module("BossCollection.services")
                 }).$promise
                     .then(function (result) {
 
-                        defer.resolve(result.data);
+                        defer.resolve(result.guild);
                     })
                     .catch(function (err) {
 

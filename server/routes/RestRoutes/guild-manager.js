@@ -6,6 +6,19 @@ var moment = require('moment');
 var _ = require('lodash');
 var ranks = [1, 2, 3, 4];
 
+router.route('/listOfGuilds')
+    .get(function(req, res){
+        
+        GuildModel.find({})
+            .then(function(guilds){
+               
+                res.status(200).send({guilds: guilds});
+            }, function(err){
+                res.status(400).send(err);
+            })
+        
+    })
+
 router.route('/addGuild')
     .post(function (req, res) {
 
@@ -165,10 +178,25 @@ router.route('/addMember')
 
                 
                 guild.members.push(newMember);
-
+                
                 guild.save(function () {
+                    
+                    
 
-                    res.status(200).send({response: true});
+                    req.session.user.guild = guild._doc;
+                    req.session.save(function () {
+                        
+                        // update the user's login cookies if they exists //
+                        if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+
+                            res.cookie('user', req.session.user.name, { maxAge: 900000 });
+                            res.cookie('password', req.session.password, { maxAge: 900000 });
+                        }
+
+                       res.status(200).send({response: true, guild: guild._doc});
+                    });
+                    
+                    
                 }, function (err) {
 
                     res.status(400).send(err);
