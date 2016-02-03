@@ -1,7 +1,7 @@
 md-menu()
     md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
-        i(class="material-icons") navigation
         | External Links
+        i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")
         md-menu-item
             md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")

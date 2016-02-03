@@ -51,7 +51,7 @@ router.route('/addGuild')
 
                     newGuild.save(function (savedGuild) {
 
-                        res.status(200).send(savedGuild);
+                        res.status(200).send({guild: newGuild});
                     });
                 })
             .fail(function (err) {

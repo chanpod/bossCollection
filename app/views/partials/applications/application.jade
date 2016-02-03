@@ -6,21 +6,25 @@ script#application(type="text/ng-template")
                     div(ng-show = "searchingForUser")
                         md-progress-linear (md-mode="indeterminate")
                     md-input-container(flex).md-block.md-icon-float
-                        label() Character Name
+                        label().floatingIconLabel Character Name
                         md-icon(ng-show = "validCharacterName", md-font-library="material-icons", style = "color:green") check_circle
                         md-icon(ng-show = "!validCharacterName", md-font-library="material-icons", style = "color:red") error
-                        input(id = "characterNameInput", ng-model = "application.characterName", ng-blur = "validateCharactername()", required)
+                        input(id = "characterNameInput", ng-model = "application.characterName", 
+                            ng-blur = "validateCharactername()", required).floatingInputFix
+                        
                         
                     md-autocomplete(md-min-length = "0",
                                     md-item-text = "realm.name",
                                     md-selected-item = "application.realm",
                                     md-selected-item-change="validateCharactername()"
-                                    md-search-text = "realm",
+                                    md-search-text = "realm",                                                                      
                                     md-floating-label = "Select Realm",
                                     md-items = "realm in filterSearch(realm)",
-                                    flex)
+                                    flex,
+                                    ng-blur = "validateCharactername()")
                         md-item-template
                             span(md-highlight-text = "realm"){{realm.name}}
+                        div().hint Actually click/tap on the item in the dropdown
                 div(layout, layout-xs="column")
                     md-input-container(flex).md-block
                         label() Item Level

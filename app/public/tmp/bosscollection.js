@@ -166,7 +166,7 @@ angular.module("BossCollection.controllers")
         
         $scope.goTo = function(path){
             $location.url(path);
-            $scope.closeSideBar();
+            $scope.toggle();
         }
         
         $scope.goToExternal = function (path) {
@@ -747,7 +747,7 @@ angular.module("BossCollection.controllers")
             }
             
 
-            $scope.validateCharactername = function (realm) {
+            $scope.validateCharactername = function (callback) {
 
                 if ($scope.application.realm) {
                     $scope.validCharacterName = false; //Immediately invalidate until response comes back
@@ -761,9 +761,14 @@ angular.module("BossCollection.controllers")
                             
                             $scope.validCharacterName = true;
                             $scope.application.character = character;
+                            
+                            if(callback){
+                                callback();
+                            }
                         },
                             function (err) {
-
+                                
+                                siteServices.showMessageToast(err);
                                 $scope.validCharacterName = false;
                             })
                         .finally(function () {
@@ -771,32 +776,40 @@ angular.module("BossCollection.controllers")
                         })
 
                 }
-
+                else{
+                    $scope.validCharacterName = false;
+                    if (callback) {
+                        callback();
+                    }
+                }
             }
             
             
             $scope.submitApplication = function(){
                 
-                if($scope.validCharacterName == false){
-                    
-                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                }
-                else{
-                    guildServices.submitApplication($scope.application)
-                        .then(function(result){
+                $scope.validateCharactername(function () {
+                        
+                        if ($scope.validCharacterName == false) {
+
+                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                        }
+                        else {
                             
-                            $location.path('/reviewApplications');
-                        },
-                        function(err){
-                            
-                            siteServices.showMessageToast(err);
-                        })
-                }
+                            guildServices.submitApplication($scope.application)
+                                .then(function (result) {
+
+                                    $location.path('/reviewApplications');
+                                },
+                                    function (err) {
+
+                                        siteServices.showMessageToast(err);
+                                    })
+                        }
+                    })
             }
             
+            
             $scope.init();
-            
-            
   
             
     }])
@@ -890,22 +903,30 @@ angular.module("BossCollection.controllers")
  */
 angular.module("BossCollection.controllers")
     .controller("createGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices',
-        function($scope, $location, $http, $timeout, siteServices, guildServices){
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
           
             
             siteServices.updateTitle('Create Guild');
             
             $scope.guildName = "";
+            $scope.loading = false;
             
             $scope.joinGuild = function(){
-                
+                $scope.loading = true;
                 guildServices.createGuild($scope.guildName)
-                    .then(function(response){
+                    .then(function(guild){
+                        $scope.user.guild = guild;
+                        siteServices.showMessageModal("Successfully created " + guild.name);
+                        userLoginSrvc.updateUser($scope.user);
                         
+                        $location.path('/');           
                     })
                     .catch(function(err){
                         siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
                     })
             }
     }])
@@ -924,6 +945,7 @@ angular.module("BossCollection.controllers")
           
             
             $scope.listOfGuilds = [];
+            $scope.loading = false;
             
             siteServices.updateTitle('Join Guild');
             
@@ -950,7 +972,7 @@ angular.module("BossCollection.controllers")
             } 
              
             $scope.joinGuild = function(){
-                
+                $scope.loading = true;
                 guildServices.joinGuild($scope.guildName.name, $scope.user.name)
                     .then(function(guild){
                         
@@ -965,6 +987,9 @@ angular.module("BossCollection.controllers")
                     })
                     .catch(function(err){
                         siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
                     })
             }
             
@@ -990,11 +1015,23 @@ angular.module("BossCollection.controllers")
 
             $scope.init = function () {
 
-                
-                guildServices.getGuildMembers($scope.user.guild.name)
-                    .then(function (guildMembers) {
-                        $scope.guildMembers = guildMembers
-                    })
+                if($scope.user.name != ""){
+                    
+                    guildServices.getGuildMembers($scope.user.guild.name)
+                        .then(function (guildMembers) {
+                            $scope.guildMembers = guildMembers
+                        })
+                }
+                else{
+                    userLoginSrvc.getUser()
+                        .then(function(user){
+                            
+                            guildServices.getGuildMembers(user.guild.name)
+                                .then(function (guildMembers) {
+                                    $scope.guildMembers = guildMembers
+                                })
+                        })
+                }
 
             }
 
@@ -1725,19 +1762,19 @@ angular.module("BossCollection.services")
             createGuild: function (guildName) {
                 var defer = $q.defer();
                 
-                siteServices.startLoading();
+                
                 
                 addGuild.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
-                        defer.resolve(result.data);
+                        defer.resolve(result.guild);
                     })
                     .catch(function (err) {
 
                         defer.reject(err.data);
                     })
                     .finally(function(){
-                        siteServices.loadingFinished();
+                        
                     })
 
                 return defer.promise;
@@ -1745,7 +1782,7 @@ angular.module("BossCollection.services")
             joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
                 
-                siteServices.startLoading();
+                
                 
                 addMember.save({
                     guildName: guildName,
@@ -1760,7 +1797,7 @@ angular.module("BossCollection.services")
                         defer.reject(err.data.message);
                     })
                     .finally(function(){
-                        siteServices.loadingFinished();
+                        
                     })
 
                 return defer.promise;

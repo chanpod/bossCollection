@@ -68,7 +68,7 @@ angular.module("BossCollection.controllers")
             }
             
 
-            $scope.validateCharactername = function (realm) {
+            $scope.validateCharactername = function (callback) {
 
                 if ($scope.application.realm) {
                     $scope.validCharacterName = false; //Immediately invalidate until response comes back
@@ -82,9 +82,14 @@ angular.module("BossCollection.controllers")
                             
                             $scope.validCharacterName = true;
                             $scope.application.character = character;
+                            
+                            if(callback){
+                                callback();
+                            }
                         },
                             function (err) {
-
+                                
+                                siteServices.showMessageToast(err);
                                 $scope.validCharacterName = false;
                             })
                         .finally(function () {
@@ -92,32 +97,40 @@ angular.module("BossCollection.controllers")
                         })
 
                 }
-
+                else{
+                    $scope.validCharacterName = false;
+                    if (callback) {
+                        callback();
+                    }
+                }
             }
             
             
             $scope.submitApplication = function(){
                 
-                if($scope.validCharacterName == false){
-                    
-                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                }
-                else{
-                    guildServices.submitApplication($scope.application)
-                        .then(function(result){
+                $scope.validateCharactername(function () {
+                        
+                        if ($scope.validCharacterName == false) {
+
+                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                        }
+                        else {
                             
-                            $location.path('/reviewApplications');
-                        },
-                        function(err){
-                            
-                            siteServices.showMessageToast(err);
-                        })
-                }
+                            guildServices.submitApplication($scope.application)
+                                .then(function (result) {
+
+                                    $location.path('/reviewApplications');
+                                },
+                                    function (err) {
+
+                                        siteServices.showMessageToast(err);
+                                    })
+                        }
+                    })
             }
             
+            
             $scope.init();
-            
-            
   
             
     }])

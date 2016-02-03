@@ -91,19 +91,19 @@ angular.module("BossCollection.services")
             createGuild: function (guildName) {
                 var defer = $q.defer();
                 
-                siteServices.startLoading();
+                
                 
                 addGuild.save({ guildName: guildName }).$promise
                     .then(function (result) {
 
-                        defer.resolve(result.data);
+                        defer.resolve(result.guild);
                     })
                     .catch(function (err) {
 
                         defer.reject(err.data);
                     })
                     .finally(function(){
-                        siteServices.loadingFinished();
+                        
                     })
 
                 return defer.promise;
@@ -111,7 +111,7 @@ angular.module("BossCollection.services")
             joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
                 
-                siteServices.startLoading();
+                
                 
                 addMember.save({
                     guildName: guildName,
@@ -126,7 +126,7 @@ angular.module("BossCollection.services")
                         defer.reject(err.data.message);
                     })
                     .finally(function(){
-                        siteServices.loadingFinished();
+                        
                     })
 
                 return defer.promise;

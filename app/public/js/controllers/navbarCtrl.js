@@ -45,7 +45,7 @@ angular.module("BossCollection.controllers")
         
         $scope.goTo = function(path){
             $location.url(path);
-            $scope.closeSideBar();
+            $scope.toggle();
         }
         
         $scope.goToExternal = function (path) {

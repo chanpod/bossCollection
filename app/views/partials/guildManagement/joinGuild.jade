@@ -1,5 +1,6 @@
 script#joinGuild(type="text/ng-template")    
     md-content
+        md-progress-linear(ng-show = "loading", md-mode="indeterminate")
         section(layout="column", flex = "80")
             form(ng-submit = "joinGuild()")
                 div(layout="column")

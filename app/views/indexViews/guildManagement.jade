@@ -1,15 +1,14 @@
-md-subheader(ng-if = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
-    md-button(ng-if = "!user.guild", aria-label = "Account options...", ng-click = "goTo('/createGuild')")
-        i(class="material-icons") create
+md-subheader(ng-if = "loggedIn && !user.guild").md-no-sticky
+    md-button(aria-label = "Account options...", ng-click = "goTo('/createGuild')")
         | Create Guild
-md-divider
-md-subheader(ng-if = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
-    md-button(ng-if = "!user.guild", aria-label = "Account options...", ng-click = "goTo('/joinGuild')")
+md-divider(ng-if = "!user.guild && loggedIn")
+md-subheader(ng-if = "!user.guild && loggedIn").md-no-sticky
+    md-button(aria-label = "Account options...", ng-click = "goTo('/joinGuild')")
         i(class="material-icons") home
         | Join Guild
-md-divider
-md-subheader(ng-if = "loggedIn", ng-if = "user.rank > 2 || !user.guild").md-no-sticky
-    md-button(ng-if = "user.rank > 2", aria-label = "Account options...", ng-click = "goTo('/manageMembers')")
+md-divider(ng-if = "(user.rank > 2 || user.guild) && loggedIn")
+md-subheader(ng-if = "(user.rank > 2 || user.guild) && loggedIn").md-no-sticky
+    md-button(aria-label = "Account options...", ng-click = "goTo('/manageMembers')")
         i(class="material-icons") people
         | Manage Members
         

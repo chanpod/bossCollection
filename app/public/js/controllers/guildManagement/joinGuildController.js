@@ -12,6 +12,7 @@ angular.module("BossCollection.controllers")
           
             
             $scope.listOfGuilds = [];
+            $scope.loading = false;
             
             siteServices.updateTitle('Join Guild');
             
@@ -38,7 +39,7 @@ angular.module("BossCollection.controllers")
             } 
              
             $scope.joinGuild = function(){
-                
+                $scope.loading = true;
                 guildServices.joinGuild($scope.guildName.name, $scope.user.name)
                     .then(function(guild){
                         
@@ -53,6 +54,9 @@ angular.module("BossCollection.controllers")
                     })
                     .catch(function(err){
                         siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
                     })
             }
             

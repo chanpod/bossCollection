@@ -17,11 +17,23 @@ angular.module("BossCollection.controllers")
 
             $scope.init = function () {
 
-                
-                guildServices.getGuildMembers($scope.user.guild.name)
-                    .then(function (guildMembers) {
-                        $scope.guildMembers = guildMembers
-                    })
+                if($scope.user.name != ""){
+                    
+                    guildServices.getGuildMembers($scope.user.guild.name)
+                        .then(function (guildMembers) {
+                            $scope.guildMembers = guildMembers
+                        })
+                }
+                else{
+                    userLoginSrvc.getUser()
+                        .then(function(user){
+                            
+                            guildServices.getGuildMembers(user.guild.name)
+                                .then(function (guildMembers) {
+                                    $scope.guildMembers = guildMembers
+                                })
+                        })
+                }
 
             }
 

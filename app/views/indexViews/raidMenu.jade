@@ -1,7 +1,8 @@
 md-menu()
     md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
-        i(class="material-icons") account_circle
+        
         | Guild Services
+        i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/auth/absence')")
