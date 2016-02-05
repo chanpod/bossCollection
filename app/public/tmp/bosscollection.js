@@ -2087,7 +2087,7 @@ angular.module("BossCollection.services")
         var socket = io("http://localhost:4001/guilds");
          
         return socket;
-    }])
+    }]) 
 'use strict';
 
 angular.module("BossCollection.services")

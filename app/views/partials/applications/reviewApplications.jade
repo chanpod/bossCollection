@@ -28,6 +28,11 @@ script#reviewApplications(type="text/ng-template")
                                     h3
                                         | Realm
                                     span {{application.realm.name}}
+                            div(flex)
+                                div(layout="column")
+                                    h3
+                                        | battle tag
+                                    span {{application.battleTag}}
                             
                                 
                         md-card-actions(layout = "row", layout-align = "end end")

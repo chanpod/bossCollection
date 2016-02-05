@@ -11,6 +11,7 @@ router.route('/applicationSubmission')
     var dateApplied = moment();
     
     newApplication.user = req.session.user.name;    
+    newApplication.battleTag = req.session.user.battleTag;
     newApplication.dateApplied = dateApplied;
     
     newApplication.save().then(function(result){

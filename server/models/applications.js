@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 
 var applicationSchema = new Schema({
     user: String, //gathered From session
+    battleTag: String,
     character: Object,
     realm: Object,
     previousGuild: String,
