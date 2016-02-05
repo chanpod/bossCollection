@@ -43,45 +43,32 @@ angular.module("BossCollection.services")
                 
                 return defer.promise;
             },
-            updateUser: function(newUser){
-                savedUser = newUser;
+            updateUser: function(){
+                
+                savedUser = getUserFromCookie;
+                
                 if(savedUser.guild){
                     saveUsersRank(savedUser);
                 }
+                
+                $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
+                
+                return savedUser;
+                
             },
             getUser: function(){
                 
                 var defer = $q.defer();
-                siteServices.startLoading();
                 
-                if (savedUser == null) {
-                    getUser.get().$promise
-                        .then(function (user) {
-
-                            if(user.result == false){
-                                savedUser = null;
-                                
-                            }
-                            else{
-                                savedUser = user;
-                                    
-                            }
-                            user.rank = saveUsersRank(user);
-                            defer.resolve(user);
-                        },
-                            function (err) {
-
-                                defer.reject(err);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
+                var user = getUserFromCookie();
+                if(user){
+                    defer.resolve(user);    
                 }
                 else{
-                    siteServices.loadingFinished();  
-                    defer.resolve(savedUser);
-                }   
+                    defer.reject("User doesn't exist");
+                }
+                
+                
                 return defer.promise;  
             },
             currentlyLoggedIn: function(){
@@ -96,12 +83,7 @@ angular.module("BossCollection.services")
                     
                         if(user.result != false){
                             
-                            saveUsersRank(user);
-                            user.rank = savedUser.rank
-                            $cookies.put("name", user.name);
-                            loggedInBool = true;    
                             
-                            $rootScope.$broadcast("loggedin", {user:user, loggedIn: true});
                         }
                         else{
                             
@@ -189,21 +171,12 @@ angular.module("BossCollection.services")
                  
                 login.save(user).$promise 
                     .then(function(result){
-                    
-                        accountApi.currentlyLoggedIn()
-                            .then(function(areWeLoggedIn){
-                                
-                                siteServices.hideLoadingBottomSheet();
-                                defer.resolve(true);        
-                            },
-                            function(err){
-                                
-                                console.log(err);
-                                siteServices.hideLoadingBottomSheet();
-                                defer.reject(false);
-                            })
                         
-                        
+                        savedUser = getUserFromCookie;
+                        saveUsersRank(savedUser);
+
+                        $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
+                        siteServices.hideLoadingBottomSheet();
                     },
                     function(err){
                         
@@ -219,6 +192,19 @@ angular.module("BossCollection.services")
                 return defer.promise;
             }
         };
+        
+        function getUserFromCookie() {
+            
+            var userCookie = $cookies.get("user");
+            var user = undefined;
+            
+            if (userCookie) {
+                var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
+                user = JSON.parse(jsonString);
+            }
+            
+            return user;
+        }
         
         function saveUsersRank(user){
             var memberListing;

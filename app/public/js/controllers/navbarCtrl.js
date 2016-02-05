@@ -11,26 +11,12 @@ angular.module("BossCollection.controllers")
         $scope.user = {};
         $scope.user.name = "";
         $scope.loggedIn = false;
-        $scope.guildRank = {};
         $scope.title = "";
-        
         
         
         $scope.init = function(){
             
-            
-            
-            $scope.areWeLoggedIn();
-            
-            userLoginSrvc.getUser()
-                .then(function(user){
-                    if(user){
-                        $scope.user = user;
-                    }
-                },
-                function(err){
-                    $scope.user.name = "";
-                })
+           getUser();
         }
         
         $scope.showLoginBottomSheet = function($event){
@@ -63,20 +49,7 @@ angular.module("BossCollection.controllers")
         
         $rootScope.$on("loggedin", function(event, user){
             
-            
-            
-            if(user.loggedIn === true){
-                
-                $scope.user = user.user;    
-            }
-            else{
-                $scope.user = "";
-            }
-            
-            
-            
-            $scope.loggedIn = user.loggedIn;
-            
+            getUser();
         }) 
         
         $scope.logout = function(){
@@ -93,9 +66,12 @@ angular.module("BossCollection.controllers")
         
         $scope.areWeLoggedIn = function(){
             
-            userLoginSrvc.currentlyLoggedIn().then(function(response){
+            userLoginSrvc.getUser().then(function(user){
                 
-                $scope.loggedIn = response;
+                $scope.loggedIn = true;
+            })
+            .catch(function(err){
+                $scope.loggedIn = false;
             })
         }
         
@@ -119,10 +95,19 @@ angular.module("BossCollection.controllers")
             }
         }
         
-        
-        
+        function getUser(){
+            userLoginSrvc.getUser()
+                .then(function(user){
+                    if(user){
+                        $scope.user = user;
+                        $scope.loggedIn = true;
+                    }
+                },
+                function(err){
+                    $scope.user.name = "";
+                    $scope.loggedIn = false;
+                })
+        }
         
         $scope.init();
-        
-
     }])

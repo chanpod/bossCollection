@@ -6,6 +6,7 @@ var guildManagement = require('../routes/RestRoutes/guild-manager')
 var express = require('express');
 var router = express.Router();
 var q = require('q');
+var util = require('../utility');
 
 
 // main login page //
@@ -47,64 +48,48 @@ router.post('/logout', function (req, res) {
 
     console.log("Logging out...");
     req.session.destroy();
-
+    res.clearCookie("user");
     res.json({ loggedOut: true });;
 })
 
 router.get('/login', function (req, res) {
-    
-    // check if the user's credentials are saved in a cookie //
+   
+    // attempt automatic login //
+    console.log("auto logging in");
+    AM.autoLogin(req.cookies.name, req.cookies.password, function (user) {
+        if (user != null) {
+            console.log("setting user to session");
+            req.session.user = user;
 
-    if (req.cookies.name == undefined || req.cookies.password == undefined) {
-        
-        res.render('index', { title: 'Hello - Please Login To Your Account' });
-    } else {
-        // attempt automatic login //
-        console.log("auto logging in");
-        AM.autoLogin(req.cookies.name, req.cookies.password, function (user) {
-            if (user != null) {
-                console.log("setting user to session");
-                req.session.user = user;
-                
-                guildManagement.findUsersGuild(req.session.user.name)
-                    .then(function (guild) {
+            guildManagement.findUsersGuild(req.session.user.name)
+                .then(function (guild) {
 
-                        if (guild) {
+                    if (guild) {
 
-                            req.session.user.guild = guild._doc;
-                            req.session.save(function () {
-                        
-                                // update the user's login cookies if they exists //
-                                if (req.cookies.user != undefined && req.cookies.pass != undefined) {
-
-                                    res.cookie('user', req.session.user.name, { maxAge: 900000 });
-                                    res.cookie('password', req.session.password, { maxAge: 900000 });
-                                }
-                                
-                                req.session.reload(function(){
-                                    
-                                    res.status(200).send(req.session.user);    
-                                })
-                                
-                            });
-                        }
-                        else {
-                            res.status(200).send(req.session.user);
-                        }
-
-
-                    })
-                    .fail(function (err) {
+                        req.session.user.guild = guild._doc;
+                        return util.saveSession(req, res)
+                    }
+                    else {
                         res.status(200).send(req.session.user);
-                    })
-                //res.redirect('/');
-            } else {
-                console.log("Log in failed...");
-                console.log(user);
-                res.render('index', { title: 'Hello - Please Login To Your Account' });
-            }
-        });
-    }
+                    }
+
+
+                })
+                .then(function (user) {
+
+                    res.status(200).send(user);
+                })
+                .fail(function (err) {
+                    res.status(200).send(req.session.user);
+                })
+            //res.redirect('/');
+        } else {
+            console.log("Log in failed...");
+            console.log(user);
+            res.render('index', { title: 'Hello - Please Login To Your Account' });
+        }
+    });
+    
 });
 
 router.post('/login', function (req, res) {
@@ -125,27 +110,15 @@ router.post('/login', function (req, res) {
                     if (guild) {
 
                         req.session.user.guild = guild._doc;
-                        req.session.save(function () {
-                        
-                            // update the user's login cookies if they exists //
-                            if (req.cookies.user != undefined && req.cookies.pass != undefined) {
-
-                                res.cookie('user', req.session.user.name, { maxAge: 900000 });
-                                res.cookie('password', req.session.password, { maxAge: 900000 });
-                            }
-                            
-                            console.log(req.session.user.guild)
-                            req.session.reload(function(){
-                                    
-                                    res.status(200).send(req.session.user);    
-                                })
-                        });
+                        return util.saveSession(req, res)
                     }
                     else {
                         res.status(200).send(req.session.user);
                     }
+                })
+                .then(function(user){
 
-
+                    res.status(200).send(user);
                 })
                 .fail(function (err) {
                     res.status(200).send(req.session.user);

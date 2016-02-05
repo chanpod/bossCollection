@@ -51,19 +51,18 @@ angular.module("BossCollection.controllers")
             }
             
             $scope.loggedIn = function () {
-
-                userLoginSrvc.currentlyLoggedIn().then(function (response) {
+                
+                userLoginSrvc.getUser().then(function (user) {
                     
-                    if(response == true){
-                        //don't care, stay here
-                    }
-                    else{
-                        siteServices.showMessageModal("Please log in before attempting to apply.")
-                        $location.path('/')   
-                    }
+                    //Success, let them fill out the form.
+                })
+                .catch(function(err){
+                    
+                    siteServices.showMessageModal("Please log in before attempting to apply.")
+                    $location.path('/')   
                 })
                 .finally(function(){
-                    siteServices.loadingFinished();
+                    
                 })
             }
             
@@ -73,8 +72,6 @@ angular.module("BossCollection.controllers")
                 if ($scope.application.realm) {
                     $scope.validCharacterName = false; //Immediately invalidate until response comes back
                     $scope.searchingForUser = true;
-
-
 
                     guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                         .then(function (character) {
