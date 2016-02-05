@@ -6,17 +6,14 @@ var myExports = {
     saveSession: function(req, res){
         var defer = q.defer();
         console.log("Updating session");
+        res.cookie('user', req.session.user, { maxAge: 900000 });
+        
         req.session.save(function () {
                         
             // update the user's login cookies if they exists //
-            if (req.session.user != undefined) {
+            if (req.session.user != undefined) {                
 
-                res.cookie('user', req.session.user, { maxAge: 900000 });
-                
-                req.session.reload(function () {
-
-                    defer.resolve(req.session.user);
-                })
+                defer.resolve(req.session.user);                
             }
             else{
                 defer.reject("No session user defined.")
@@ -26,8 +23,15 @@ var myExports = {
         return defer.promise;
     },
     handleErrors: function(err){
+        var errObject = {}
+        if (err.message) {
+            errObject = {message: err.message };
+        }
+        else {
+            errObject = {message: err };
+        }
         
-        return {message: err};
+        return errObject;
     }
 }
 

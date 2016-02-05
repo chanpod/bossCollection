@@ -4,8 +4,8 @@
 
 angular.module("BossCollection.services")
     .factory('guildServices', [
-        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 
-    function ($http, $q, $resource, siteServices, userLoginSrvc) {
+        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 'socketProvider',
+    function ($http, $q, $resource, siteServices, userLoginSrvc, socketProvider) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -22,8 +22,10 @@ angular.module("BossCollection.services")
         var removeMember = $resource('/api/removeMember', {}, {});
         var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
         var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
-
+        
+        
         var guildApi = {
+            
             getListOfGuilds: function(){
                 var defer = $q.defer();
                 
@@ -36,7 +38,7 @@ angular.module("BossCollection.services")
                     })
                     .catch(function(err){
                         
-                        defer.reject(err);
+                        defer.reject(err.data.message);
                     })
                     .finally(function(){
                         siteServices.loadingFinished();
@@ -59,7 +61,7 @@ angular.module("BossCollection.services")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.data);
+                        defer.reject(err.data.message);
                     })
                     .finally(function(){
                         siteServices.loadingFinished();
@@ -80,7 +82,7 @@ angular.module("BossCollection.services")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.data);
+                        defer.reject(err.data.message);
                     })
                     .finally(function(){
                         siteServices.loadingFinished();
@@ -100,7 +102,7 @@ angular.module("BossCollection.services")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.data);
+                        defer.reject(err.data.message);
                     })
                     .finally(function(){
                         
@@ -143,7 +145,7 @@ angular.module("BossCollection.services")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.message);
+                        defer.reject(err.data.message);
                     })
                     .finally(function(){
                         siteServices.loadingFinished();
@@ -263,6 +265,8 @@ angular.module("BossCollection.services")
             memberListing = _.find(guild.members, { user: userName });
             return memberListing.rank;
         }
+        
+        
         
         return guildApi;
         

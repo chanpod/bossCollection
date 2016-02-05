@@ -19,10 +19,11 @@ angular.module("BossCollection.controllers")
             $scope.joinGuild = function(){
                 $scope.loading = true;
                 guildServices.createGuild($scope.guildName)
-                    .then(function(guild){
-                        $scope.user.guild = guild;
-                        siteServices.showMessageModal("Successfully created " + guild.name);
-                        userLoginSrvc.updateUser($scope.user);
+                    .then(function(){
+                        
+                        var user = userLoginSrvc.updateUser();
+                        
+                        siteServices.showMessageModal("Successfully created " + user.guild.name);
                         
                         $location.path('/');           
                     })

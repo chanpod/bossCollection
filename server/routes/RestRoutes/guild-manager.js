@@ -5,18 +5,20 @@ var GuildModel = require('../../models/guild.js');
 var moment = require('moment');
 var _ = require('lodash');
 var ranks = [1, 2, 3, 4];
+var util = require('../../utility');
 
 router.route('/listOfGuilds')
-    .get(function(req, res){
-        
+    .get(function (req, res) {
+
         GuildModel.find({})
-            .then(function(guilds){
-               
-                res.status(200).send({guilds: guilds});
-            }, function(err){
-                res.status(400).send(err);
+            .then(function (guilds) {
+
+                res.status(200).send({ guilds: guilds });
+            }, function (err) {
+                
+                res.status(400).send(util.handleErrors(err));
             })
-        
+
     })
 
 router.route('/addGuild')
@@ -26,9 +28,9 @@ router.route('/addGuild')
         var guildManager = req.session.user.name
 
         router.findUsersGuild(guildManager)
-            .then(function(guildExist){
-                if(guildExist){
-                    
+            .then(function (guildExist) {
+                if (guildExist) {
+
                     throw new Error("You already belong to a guild");
                 }
                 return GuildModel.findOne({ name: guildName })
@@ -49,20 +51,21 @@ router.route('/addGuild')
                         rank: ranks.length
                     })
 
-                    newGuild.save(function (savedGuild) {
+                    return newGuild.save(function (savedGuild) {
 
-                        res.status(200).send({guild: newGuild});
+                        req.session.user.guild = newGuild;
+                        return util.saveSession(req, res);
                     });
                 })
-            .fail(function (err) {
-                if (err.message) {
-                    res.status(400).send({ message: err.message });
-                }
-                else {
-                    res.status(400).send({ message: err });
-                }
+            .then(function (user) {
+
+                res.status(200).send(user);
             })
-        
+            .fail(function (err) {
+                
+                res.status(400).send(util.handleErrors(err));
+            })
+
     })
     
 /**
@@ -81,7 +84,6 @@ router.route('/updateRank')
         var requester = req.session.user.name
         var guildMemberNewRank = req.body.member.rank;
 
-
         findGuild(guildName)
             .then(function (guild) {
 
@@ -96,10 +98,16 @@ router.route('/updateRank')
 
                     guild.save(function (savedGuild) {
 
-                        res.status(200).send({response: true});
+                        req.session.user.guild = guild;
+
+                        util.saveSession(req, res)
+                            .then(function (user) {
+
+                                res.status(200).send(user);
+                            })
                     }, function (err) {
 
-                        res.status(400).send(err);
+                        res.status(400).send(util.handleErrors(err));
                     });
 
                 }
@@ -109,7 +117,7 @@ router.route('/updateRank')
             })
             .fail(function (err) {
 
-                res.status(400).send(err);
+                res.status(400).send(util.handleErrors(err));
             })
 
 
@@ -119,34 +127,36 @@ router.route('/changeGuildName')
     .post(function (req, res) {
 
     })
-    
+
 router.route('/getGuildMembers')
-    .post(function(req, res){
-        
+    .post(function (req, res) {
+
         var guildName = req.body.guildName;
-        
+
         findGuild(guildName)
             .then(function (guild) {
+
                 var nonMongooseGuild = guild.toObject();
                 var members = nonMongooseGuild.members;
-                if(guild){
-                    
-                    if(isAdmin(members, req.session.user.name)){
-                        
-                        res.status(200).send({members: members})
+
+                if (guild) {
+
+                    if (isAdmin(members, req.session.user.name)) {
+
+                        res.status(200).send({ members: members })
                     }
-                    else{
-                        throw new Error("You don't have sufficient priveleges.")    
+                    else {
+                        throw new Error("You don't have sufficient priveleges.")
                     }
                 }
-                else{
+                else {
                     throw new Error("You don't belong to a guild.")
                 }
-                
+
             })
-            .fail(function(err){
-                
-                res.status(400).send(err);
+            .fail(function (err) {
+
+                res.status(400).send(util.handleErrors(err));
             })
     })
 
@@ -163,99 +173,76 @@ router.route('/addMember')
 
         findGuild(guildName)
             .then(function (guild) {
-                
-                if(!guild){
+
+                if (!guild) {
                     throw new Error("Guild doesn't exist. You can create it if you're the GM");
                     return;
                 }
 
                 var indexOfMember = doesMemberExist(guild.members, memberName);
                 if (indexOfMember != -1) {
-                    
+
                     throw new Error("You are already a part of this guild.");
                     return;
                 }
 
-                
+
                 guild.members.push(newMember);
-                
+
                 guild.save(function () {
-                    
-                    
 
                     req.session.user.guild = guild._doc;
-                    req.session.save(function () {
-                        
-                        // update the user's login cookies if they exists //
-                        if (req.cookies.user != undefined && req.cookies.pass != undefined) {
 
-                            res.cookie('user', req.session.user.name, { maxAge: 900000 });
-                            res.cookie('password', req.session.password, { maxAge: 900000 });
-                        }
+                    util.saveSession(req, res)
+                        .then(function (user) {
+                            res.status(200).send(user);
+                        })
 
-                       res.status(200).send({response: true, guild: guild._doc});
-                    });
-                    
-                    
+
                 }, function (err) {
 
-                    res.status(400).send(err);
+                    res.status(400).send(util.handleErrors(err));
                 });
             })
             .fail(function (err) {
-                
-                if(err.message){
-                    res.status(400).send({message: err.message});    
-                }
-                else{
-                    res.status(400).send({message: err});    
-                }
-                
+
+                res.status(400).send(util.handleErrors(err));
+
             })
 
     })
 
 router.route('/removeMember')
     .post(function (req, res) {
-        
+
         var guildName = req.body.guildName;
         var guildMemberName = req.session.user.name;
-        
+
         findGuild(guildName)
             .then(function (guild) {
 
                 if (guild) {
 
                     var indexOfMember = doesMemberExist(guild.members, guildMemberName);
-                    
+
                     if (indexOfMember == -1) {
                         throw new Error("Member doesn't exist.");
                         return;
                     }
 
                     guild.members.splice(indexOfMember, 1);
-                    
+
                     guild.save(function (savedGuild) {
-                        delete req.session.user.guild;    
-                        req.session.save(function () {
-                        
-                            // update the user's login cookies if they exists //
-                            if (req.cookies.user != undefined && req.cookies.pass != undefined) {
+                        delete req.session.user.guild;
 
-                                res.cookie('user', req.session.user.name, { maxAge: 900000 });
-                                res.cookie('password', req.session.password, { maxAge: 900000 });
-                            }
+                        util.saveSession(req, res)
+                            .then(function (user) {
 
-                            req.session.reload(function () {
-
-                                res.status(200).send({user: req.session.user});
+                                res.status(200).send(user);
                             })
-                        });
-
-                        
                     }, function (err) {
 
-                        res.status(400).send(err);
+                        res.status(400).send(util.handleErrors(err));
                     });
                 }
                 else {
@@ -264,20 +251,20 @@ router.route('/removeMember')
             })
             .fail(function (err) {
 
-                res.status(400).send(err);
+                res.status(400).send(util.handleErrors(err));
             })
     })
 
 router.findUsersGuild = function (username) {
     var defer = q.defer();
 
-    GuildModel.findOne({ members: {$elemMatch:{user: username }}})
+    GuildModel.findOne({ members: { $elemMatch: { user: username } } })
         .then(function (guildFound) {
 
-            
+
             defer.resolve(guildFound);
-            
-        },function (err) {
+
+        }, function (err) {
 
             defer.reject(err);
         })

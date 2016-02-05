@@ -33,7 +33,6 @@ angular.module("BossCollection.controllers")
                     })
                     .catch(function (err) {
 
-
                         console.log(err);
                     })
                     .finally(function () {

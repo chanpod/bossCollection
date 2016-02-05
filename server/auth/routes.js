@@ -24,7 +24,7 @@ router.post('/loggedin', function (req, res) {
     if (req.session.user) {
         console.log("We're logged in...");
 
-        console.log(req.session.user);
+        //console.log(req.session.user);
 
         res.json({ loggedIn: true, user: req.session.user });
     }
@@ -61,26 +61,14 @@ router.get('/login', function (req, res) {
             console.log("setting user to session");
             req.session.user = user;
 
-            guildManagement.findUsersGuild(req.session.user.name)
-                .then(function (guild) {
+            setUser(req, res)
+                .then(function (result) {
 
-                    if (guild) {
-
-                        req.session.user.guild = guild._doc;
-                        return util.saveSession(req, res)
-                    }
-                    else {
-                        res.status(200).send(req.session.user);
-                    }
-
-
-                })
-                .then(function (user) {
-
-                    res.status(200).send(user);
+                    res.status(200).send(result);
                 })
                 .fail(function (err) {
-                    res.status(200).send(req.session.user);
+
+                    res.status(400).send(util.handleErrors(err));
                 })
             //res.redirect('/');
         } else {
@@ -88,14 +76,14 @@ router.get('/login', function (req, res) {
             console.log(user);
             res.render('index', { title: 'Hello - Please Login To Your Account' });
         }
-    });
-    
+    })
+
 });
 
 router.post('/login', function (req, res) {
 
     console.log("post auth /api/auth")
-    console.log(req.body);
+    //console.log(req.body);
 
     AM.manualLogin(req.body.name, req.body.password)
         .then(function (user) {
@@ -104,31 +92,21 @@ router.post('/login', function (req, res) {
 
             req.session.user = user;
 
-            guildManagement.findUsersGuild(req.session.user.name)
-                .then(function (guild) {
+            setUser(req, res)
+                .then(function (result) {
 
-                    if (guild) {
-
-                        req.session.user.guild = guild._doc;
-                        return util.saveSession(req, res)
-                    }
-                    else {
-                        res.status(200).send(req.session.user);
-                    }
-                })
-                .then(function(user){
-
-                    res.status(200).send(user);
-                })
-                .fail(function (err) {
                     res.status(200).send(req.session.user);
                 })
+                .fail(function (err) {
 
-            
+                    res.status(400).send(util.handleErrors(err));
+                })
+
+
         })
         .fail(function (err) {
 
-            res.status(400).send(err);
+            res.status(400).send(util.handleErrors(err));
         })
 });
 	
@@ -148,42 +126,23 @@ router.get('/forum', function (req, res) {
 
 router.get('/currentUser', function (req, res) {
     console.log("Getting user...");
-    console.log(req.session.user);
+    //console.log(req.session.user);
 
     if (req.session.user) {
 
-        guildManagement.findUsersGuild(req.session.user.name)
-            .then(function (guild) {
+        setUser(req, res)
+            .then(function (result) {
 
-                if (guild) {
-
-                    req.session.user.guild = guild._doc;
-                    req.session.save(function () {
-                        
-                        // update the user's login cookies if they exists //
-                        if (req.cookies.user != undefined && req.cookies.pass != undefined) {
-
-                            res.cookie('user', req.session.user.name, { maxAge: 900000 });
-                            res.cookie('password', req.session.password, { maxAge: 900000 });
-                        }
-
-                        req.session.reload(function () {
-
-                            res.status(200).send(req.session.user);
-                        })
-                    });
-                }
-                else {
-                    res.status(200).send(req.session.user);
-                }
+                res.status(200).send(result);
             })
             .fail(function (err) {
-                res.status(200).send(req.session.user);
+
+                res.status(400).send(util.handleErrors(err));
             })
 
     }
-    else{
-        res.status(200).send({result: false});
+    else {
+        res.status(200).send({ result: false });
     }
 })
 
@@ -234,21 +193,19 @@ router.post('/updateAccount', function (req, res) {
         .then(function (user) {
 
             req.session.user = user;
-            req.session.save(function () {
-                        
-                // update the user's login cookies if they exists //
-                if (req.cookies.user != undefined && req.cookies.pass != undefined) {
 
-                    res.cookie('user', user.name, { maxAge: 900000 });
-                    res.cookie('password', user.password, { maxAge: 900000 });
-                }
+            return setUser(req, res)
+        })
+        .then(function (user) {
 
-                res.status(200).send('ok');
-            });
+            return util.saveSession(req, res)
+        })
+        .then(function (user) {
+            res.status(200).send(user);
         })
         .fail(function (err) {
 
-            res.status(400).send(err);
+            res.status(400).send(util.handleErrors(err));
         })
 
 });
@@ -274,17 +231,30 @@ router.post('/signup', function (req, res) {
             battleTag: req.body.battleTag
         }
 
-        AM.addNewAccount(newUser).then(function (success) {
+        AM.addNewAccount(newUser)
+            .then(function (success) {
 
+            })
+            .then(function () {
 
-            res.status(200).send(newUser);
+                return AM.manualLogin(newUser.name, req.body.password)
+            })
+            .then(function (user) {
 
-        }, function (err) {
-            res.status(400).send(err);
-        });
+                req.session.user = user;
+
+                setUser(req, res)
+                    .then(function (result) {
+
+                        res.status(200).send(req.session.user);
+                    })
+            })
+            .fail(function (err) {
+                res.status(400).send(util.handleErrors(err));
+            })
     }
     else {
-        res.status(400).send("Passwords don't match.");
+        res.status(400).send(util.handleErrors("Passwords don't match."));
     }
 
 
@@ -303,11 +273,11 @@ router.post('/lost-password', function (req, res) {
                     res.status(200).send('ok');
                 } else {
                     for (k in e) console.log('ERROR : ', k, e[k]);
-                    res.status(400).send('unable to dispatch password reset');
+                    res.status(400).send(util.handleErrors('unable to dispatch password reset'));
                 }
             });
         } else {
-            res.status(400).send('email-not-found');
+            res.status(400).send(util.handleErrors('email-not-found'));
         }
     });
 });
@@ -336,7 +306,7 @@ router.post('/reset-password', function (req, res) {
         if (o) {
             res.status(200).send('ok');
         } else {
-            res.status(400).send('unable to update password');
+            res.status(400).send(util.handleErrors('unable to update password'));
         }
     })
 });
@@ -356,7 +326,7 @@ router.post('/delete', function (req, res) {
             res.clearCookie('pass');
             req.session.destroy(function (e) { res.status(200).send('ok'); });
         } else {
-            res.status(400).send('record not found');
+            res.status(400).send(util.handleErrors('record not found'));
         }
     });
 });
@@ -368,5 +338,32 @@ router.get('/reset', function (req, res) {
 });
 
 router.get('*', function (req, res) { res.render('404', { title: 'Page Not Found' }); });
+
+function setUser(req, res) {
+    var defer = q.defer();
+
+    guildManagement.findUsersGuild(req.session.user.name)
+        .then(function (guild) {
+
+            if (guild) {
+
+                req.session.user.guild = guild._doc;
+                return util.saveSession(req, res)
+            }
+            else {
+                return util.saveSession(req, res)
+            }
+        })
+        .then(function (user) {
+
+            defer.resolve(user);
+        })
+        .fail(function (err) {
+            defer.reject(err);
+        })
+
+
+    return defer.promise;
+}
 
 module.exports = router

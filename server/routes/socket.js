@@ -28,11 +28,32 @@ Array.prototype.remove = function(from, to) {
     return this.push.apply(this, rest);
 };
 
+var roomName;
+
 module.exports = function (socket) {
-
-
-    var userName = "";
-
+    
+    console.log("It worked?");
+    
+    socket.on("init", function(data){
+        
+        console.log(data);
+        console.log("Someone connected");
+    });
+    
+    socket.on("joinGuildRoom", function(data){
+        
+        console.log("User joined room: " + data.guildName);
+        roomName = data.guildName;
+        socket.join(roomName);
+        
+        socket.to(roomName).emit("guildMessageBroadcast", {message: "Hello from server"});
+    })
+    
+    socket.on("disconnect", function(){
+        
+        console.log("User disconnected");
+    })
+/*
     socket.on("init", function(username){
         var message = {
             userName: "System",
@@ -99,5 +120,7 @@ module.exports = function (socket) {
         socket.to(message.chatRoom).broadcast.emit("messagesFromServer", messages);
         socket.to(message.chatRoom).emit("messagesFromServer", messages);
     })
+    
+    */
 };
 

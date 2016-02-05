@@ -7,7 +7,8 @@ var UserSchema = new Schema({
     password: String,
     email: String,
     battleTag: String,
-    characters: Array
+    characters: Array,
+    guild: Object
 })
  
 module.exports = mongoose.model('accounts', UserSchema);

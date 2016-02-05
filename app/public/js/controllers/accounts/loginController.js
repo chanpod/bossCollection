@@ -19,9 +19,6 @@ angular.module("BossCollection.controllers")
         }
         
         
-        
-        
-        
         $scope.alreadyLoggedIn = function(){
             
             if(userLoginSrvc.loggedIn() == true){
