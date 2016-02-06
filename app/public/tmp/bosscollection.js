@@ -508,138 +508,6 @@ angular.module("BossCollection.controllers")
 
 'use strict';
 /**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
-
-            siteServices.updateTitle('Account');
-
-            $scope.leaveGuild = function () {
-
-                var guildName = $scope.user.guild.name;
-
-                guildServices.leaveGuild(guildName)
-                    .then(function (user) {
-
-                        $scope.user = userLoginSrvc.updateUser();
-                    })
-            }
-
-            $scope.updateAccount = function () {
-
-                console.log("Updating account");
-                userLoginSrvc.updateAccount($scope.user).then(function (response) {
-
-                    $scope.user = userLoginSrvc.updateUser();
-                    siteServices.showMessageToast("User updated");
-                },
-                    function (err) {
-
-                        siteServices.showMessageModal(err);
-                    })
-            }
-        }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, userLoginSrvc, siteServices){
-
-        $scope.user = {};
-        $scope.user.name = "";
-        
-        if($location.url() == "/auth/login"){
-            siteServices.updateTitle('Login');    
-        }
-        
-        console.log("Login Controller");
-        
-        $scope.init = function () {
-        }
-        
-        
-        $scope.alreadyLoggedIn = function(){
-            
-            if(userLoginSrvc.loggedIn() == true){
-                $location.path('/');
-            }
-        }
-        
-        $scope.login = function(){
-             
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                console.log(response);
-                userLoginSrvc.getUser()
-                    .then(function () {
-
-                        if ($location.path() == "/auth/application") {
-
-                        }
-                        else {
-                            $location.path("/");
-                        }
-                    })
-                
-            },
-            function(err){
-                
-                siteServices.showMessageModal(err);
-                console.log(err);
-            })
-        }
-        
-        $scope.cancelLogin = function () {
-            
-            siteServices.hideBottomSheet();
-            $location.path("/");
-        }
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
-
-            $scope.user = {};
-
-            $scope.passwordsMatch = false;
-
-            $('#logInModal').closeModal();
-
-            $scope.register = function () {
-
-                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
-                    //save user to cookie
-                    console.log(result);
-                },
-                    function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
-                        console.log(err);
-                    })
-
-            }
-
-            $scope.openFromLeft = function (errorMessage) {
-                
-                siteServices.showMessageModal(errorMessage);
-            };
-
-        }])
-
-'use strict';
-/**
  
  *
 
@@ -833,6 +701,174 @@ angular.module("BossCollection.controllers")
             }
 
     }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
+
+            siteServices.updateTitle('Account');
+
+            $scope.leaveGuild = function () {
+
+                var guildName = $scope.user.guild.name;
+
+                guildServices.leaveGuild(guildName)
+                    .then(function (user) {
+
+                        $scope.user = userLoginSrvc.updateUser();
+                    })
+            }
+
+            $scope.updateAccount = function () {
+
+                console.log("Updating account");
+                userLoginSrvc.updateAccount($scope.user).then(function (response) {
+
+                    $scope.user = userLoginSrvc.updateUser();
+                    siteServices.showMessageToast("User updated");
+                },
+                    function (err) {
+
+                        siteServices.showMessageModal(err);
+                    })
+            }
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
+
+        $scope.user = {};
+        $scope.user.name = "";
+        $scope.loading = false;
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        console.log("Login Controller");
+        
+        $scope.init = function () {
+        }
+        
+        $scope.resetPassword = function(){
+            
+            $scope.loading = true;
+             
+            userLoginSrvc.lostPassword($scope.user.email)
+                .then(function(response){
+                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
+                })
+                .catch(function(err){
+                    siteServices.showMessageModal(err);
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+             
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.openPasswordResetWindow = function($event){
+            $mdBottomSheet.show({
+                    templateUrl: 'resetPassword',
+                    controller: 'loginController',
+                    targetEvent: $event,
+                    escapeToClose: false
+                })
+        }
+        
+        $scope.cancelPasswordReset = function(){ 
+            
+            $mdBottomSheet.hide();
+            $timeout(function(){
+                
+                siteServices.showLoadingBottomSheet();    
+            }, 500);
+            
+        }
+        
+        $scope.login = function(){
+             
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                console.log(response);
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
+                
+            },
+            function(err){
+                
+                siteServices.showMessageModal(err);
+                console.log(err);
+            })
+        }
+        
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
+            $location.path("/");
+        }
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
+
+            $scope.user = {};
+
+            $scope.passwordsMatch = false;
+
+            $('#logInModal').closeModal();
+
+            $scope.register = function () {
+
+                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
+                    //save user to cookie
+                    console.log(result);
+                },
+                    function (err) {
+                        $scope.passwordsMatch = true;
+                        $scope.openFromLeft(err);
+                        console.log(err);
+                    })
+
+            }
+
+            $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
+
+        }])
 
 'use strict';
 /**
@@ -2105,13 +2141,27 @@ angular.module("BossCollection.services")
             var loggedIn = $resource('/auth/loggedin', {}, {});
             var updateAccount = $resource('/auth/updateAccount', {}, {});
             var getUser = $resource('/auth/currentUser', {}, {});
+            var lostPassword = $resource('/auth/lost-password', {}, {}); 
             var savedUser = null;
 
             var accountApi = {
-
+                lostPassword: function(email){
+                    
+                    var defer = $q.defer();
+                    
+                  lostPassword.save({"email": email}).$promise
+                    .then(function(response){
+                        
+                        defer.resolve(response);
+                    }, function(err){
+                        defer.reject(err.data.message);
+                    })  
+                    
+                    return defer.promise;
+                },
                 updateAccount: function (updatedUser) {
 
-                    var defer = $q.defer();
+                    var defer = $q.defer(); 
 
                     siteServices.startLoading();
 

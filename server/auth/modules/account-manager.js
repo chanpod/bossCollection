@@ -2,6 +2,7 @@
 var crypto 		= require('crypto');
 var moment 		= require('moment');
 var q = require('q');
+var util = require('../../utility');
 
 //var mongoose = require('mongoose');
 //var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
@@ -48,13 +49,13 @@ exports.verifyPasswordsMatch = function(pass1, pass2){
                 }
                 else {
 
-                    defer.reject("Passwords dont match");
+                    defer.reject(util.handleErrors("Passwords dont match"));
                 }
 
             }
             else {
 
-                defer.reject("Password must be longer than 1 chacter")
+                defer.reject(util.handleErrors("Password must be longer than 1 chacter"));
             }
         }
         else{
@@ -96,7 +97,7 @@ exports.manualLogin = function(user, pass, callback)
                         defer.resolve(userFound);                        
                     } else {
                         
-                        defer.reject('invalid password');
+                        defer.reject(util.handleErrors('invalid password'));
                     }
                 });
             })
@@ -113,7 +114,7 @@ exports.manualLogin = function(user, pass, callback)
                     defer.resolve(userFound);
 				}	else{
                     
-					defer.reject('invalid password: ' + err);
+					defer.reject(util.handleErrors('invalid password: ' + err));
 				}
 			});
 		}
@@ -136,7 +137,7 @@ exports.addNewAccount = function(newUser, callback)
     
     if(newUser.password == undefined || newUser.password.length == 0){
         //callback('Password is empty!');
-        defer.reject('Password is empty');
+        defer.reject(util.handleErrors('Password is empty'));
         return;
     }
     
@@ -144,14 +145,14 @@ exports.addNewAccount = function(newUser, callback)
 		if (user){
             
 			//callback('username-taken');
-            defer.reject('username taken');
+            defer.reject(util.handleErrors('username taken'));
 		}	else{
 			UserModel.findOne({email:newUser.email}, function(e, user) {
                 
 				if (user){
                     
 					//callback('email-taken');
-                    defer.reject('email taken');
+                    defer.reject(util.handleErrors('email taken'));
 				}	
                 else {
 
@@ -192,7 +193,7 @@ exports.updateAccount = function(userAccount, callback)
             defer.resolve(userAccount);
         },
         function(err){
-            defer.reject(err);
+            defer.reject(util.handleErrors(err));
         })        
     
     return defer.promise;
@@ -206,7 +207,7 @@ exports.updatePassword = function(email, newPass, callback)
         
 		if (err){
 			//callback(e, null);
-            defer.reject(err);
+            defer.reject(util.handleErrors(err));
 		}	
         else{
             
@@ -217,8 +218,8 @@ exports.updatePassword = function(email, newPass, callback)
             
             
             
-            user._doc.password = newHash;
-            console.log("New Password: " + user._doc.password);
+            user.password = newHash;
+            console.log("New Password: " + user.password);
             
             user.save()
                 .then(function (updatedUser) {
@@ -228,7 +229,7 @@ exports.updatePassword = function(email, newPass, callback)
                 },
                 function(err){
                     
-                    defer.reject(err);
+                    defer.reject(util.handleErrors(err));
                 })
 
         }

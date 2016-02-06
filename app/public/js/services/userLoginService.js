@@ -15,13 +15,27 @@ angular.module("BossCollection.services")
             var loggedIn = $resource('/auth/loggedin', {}, {});
             var updateAccount = $resource('/auth/updateAccount', {}, {});
             var getUser = $resource('/auth/currentUser', {}, {});
+            var lostPassword = $resource('/auth/lost-password', {}, {}); 
             var savedUser = null;
 
             var accountApi = {
-
+                lostPassword: function(email){
+                    
+                    var defer = $q.defer();
+                    
+                  lostPassword.save({"email": email}).$promise
+                    .then(function(response){
+                        
+                        defer.resolve(response);
+                    }, function(err){
+                        defer.reject(err.data.message);
+                    })  
+                    
+                    return defer.promise;
+                },
                 updateAccount: function (updatedUser) {
 
-                    var defer = $q.defer();
+                    var defer = $q.defer(); 
 
                     siteServices.startLoading();
 
