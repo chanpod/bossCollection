@@ -2,5 +2,6 @@
 /**
  *
  */
-angular.module("BossCollection.controllers", [])
-   
+angular.module("BossCollection.controllers", [
+    
+])

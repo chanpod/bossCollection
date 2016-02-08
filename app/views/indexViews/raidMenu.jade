@@ -1,9 +1,13 @@
 md-menu()
     md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
         
-        | Guild Services
+        | Guild
         i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")
+        md-menu-item(ng-if = "user.rank > 1")
+            md-button(ng-click = "goTo('/forums')")
+                md-icon(md-font-library="material-icons") today
+                | Forums
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/auth/absence')")
                 md-icon(md-font-library="material-icons") today

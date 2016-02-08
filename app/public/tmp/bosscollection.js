@@ -2,18 +2,18 @@
 
 
 
-angular.module('BossCollection', [
+angular.module('BossCollection', [ 
   'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
   'BossCollection.filters',
+  'BossCollection.forums',
   'ngRoute',
-  //'ui.bootstrap',
   'ngResource',
-  'btford.socket-io',
-  'ngCookies',
-  'ngMaterial'
-
+  'btford.socket-io', 
+  'ngCookies', 
+  'ngMaterial'  
+ 
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
 }]). 
@@ -45,10 +45,6 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/auth/signup', {
         templateUrl: 'signup',
         controller: 'signupController'
-    })
-    .when('/forum', {
-        templateUrl: 'forums',
-        controller: 'forumsController'
     })
     .when('/auth/updateAccount', {
         templateUrl: 'editAccount',
@@ -98,12 +94,31 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
 
 }]);
 
+'user strict'
+
+angular.module("BossCollection.forums", ['ngRoute'])
+    .config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider.when('/forum', {
+            templateUrl: 'forum',
+            controller: 'forumsController'
+        })
+
+    }]);
+angular.module("BossCollection.forums")
+    .controller('forumController', ['$scope', function($scope){
+        
+        console.log("Forum Controller loaded");
+        $scope.markdown = "";
+    }])
+
 'use strict';
 /**
  *
  */
-angular.module("BossCollection.controllers", [])
-   
+angular.module("BossCollection.controllers", [
+    
+])
 'use strict';
 /**
  * This is the description for my class.
@@ -112,13 +127,13 @@ angular.module("BossCollection.controllers", [])
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
-        function($scope, $location, $http, $timeout, siteServices){
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', '$sce',
+        function($scope, $location, $http, $timeout, siteServices, $sce){
           
             
             siteServices.updateTitle('Home');
     }])
-
+ 
 'use strict';
 /**
  *
@@ -508,6 +523,174 @@ angular.module("BossCollection.controllers")
 
 'use strict';
 /**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
+
+            siteServices.updateTitle('Account');
+
+            $scope.leaveGuild = function () {
+
+                var guildName = $scope.user.guild.name;
+
+                guildServices.leaveGuild(guildName)
+                    .then(function (user) {
+
+                        $scope.user = userLoginSrvc.updateUser();
+                    })
+            }
+
+            $scope.updateAccount = function () {
+
+                console.log("Updating account");
+                userLoginSrvc.updateAccount($scope.user).then(function (response) {
+
+                    $scope.user = userLoginSrvc.updateUser();
+                    siteServices.showMessageToast("User updated");
+                },
+                    function (err) {
+
+                        siteServices.showMessageModal(err);
+                    })
+            }
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
+
+        $scope.user = {};
+        $scope.user.name = "";
+        $scope.loading = false;
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        console.log("Login Controller");
+        
+        $scope.init = function () {
+        }
+        
+        $scope.resetPassword = function(){
+            
+            $scope.loading = true;
+             
+            userLoginSrvc.lostPassword($scope.user.email)
+                .then(function(response){
+                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
+                })
+                .catch(function(err){
+                    siteServices.showMessageModal(err);
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+             
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.openPasswordResetWindow = function($event){
+            $mdBottomSheet.show({
+                    templateUrl: 'resetPassword',
+                    controller: 'loginController',
+                    targetEvent: $event,
+                    escapeToClose: false
+                })
+        }
+        
+        $scope.cancelPasswordReset = function(){ 
+            
+            $mdBottomSheet.hide();
+            $timeout(function(){
+                
+                siteServices.showLoadingBottomSheet();    
+            }, 500);
+            
+        }
+        
+        $scope.login = function(){
+             
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                console.log(response);
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
+                
+            },
+            function(err){
+                
+                siteServices.showMessageModal(err);
+                console.log(err);
+            })
+        }
+        
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
+            $location.path("/");
+        }
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
+
+            $scope.user = {};
+
+            $scope.passwordsMatch = false;
+
+            $('#logInModal').closeModal();
+
+            $scope.register = function () {
+
+                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
+                    //save user to cookie
+                    console.log(result);
+                },
+                    function (err) {
+                        $scope.passwordsMatch = true;
+                        $scope.openFromLeft(err);
+                        console.log(err);
+                    })
+
+            }
+
+            $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
+
+        }])
+
+'use strict';
+/**
  
  *
 
@@ -701,174 +884,6 @@ angular.module("BossCollection.controllers")
             }
 
     }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
-
-            siteServices.updateTitle('Account');
-
-            $scope.leaveGuild = function () {
-
-                var guildName = $scope.user.guild.name;
-
-                guildServices.leaveGuild(guildName)
-                    .then(function (user) {
-
-                        $scope.user = userLoginSrvc.updateUser();
-                    })
-            }
-
-            $scope.updateAccount = function () {
-
-                console.log("Updating account");
-                userLoginSrvc.updateAccount($scope.user).then(function (response) {
-
-                    $scope.user = userLoginSrvc.updateUser();
-                    siteServices.showMessageToast("User updated");
-                },
-                    function (err) {
-
-                        siteServices.showMessageModal(err);
-                    })
-            }
-        }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
-        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
-
-        $scope.user = {};
-        $scope.user.name = "";
-        $scope.loading = false;
-        
-        if($location.url() == "/auth/login"){
-            siteServices.updateTitle('Login');    
-        }
-        
-        console.log("Login Controller");
-        
-        $scope.init = function () {
-        }
-        
-        $scope.resetPassword = function(){
-            
-            $scope.loading = true;
-             
-            userLoginSrvc.lostPassword($scope.user.email)
-                .then(function(response){
-                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
-                })
-                .catch(function(err){
-                    siteServices.showMessageModal(err);
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-        
-        $scope.alreadyLoggedIn = function(){
-             
-            if(userLoginSrvc.loggedIn() == true){
-                $location.path('/');
-            }
-        }
-        
-        $scope.openPasswordResetWindow = function($event){
-            $mdBottomSheet.show({
-                    templateUrl: 'resetPassword',
-                    controller: 'loginController',
-                    targetEvent: $event,
-                    escapeToClose: false
-                })
-        }
-        
-        $scope.cancelPasswordReset = function(){ 
-            
-            $mdBottomSheet.hide();
-            $timeout(function(){
-                
-                siteServices.showLoadingBottomSheet();    
-            }, 500);
-            
-        }
-        
-        $scope.login = function(){
-             
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                console.log(response);
-                userLoginSrvc.getUser()
-                    .then(function () {
-
-                        if ($location.path() == "/auth/application") {
-
-                        }
-                        else {
-                            $location.path("/");
-                        }
-                    })
-                
-            },
-            function(err){
-                
-                siteServices.showMessageModal(err);
-                console.log(err);
-            })
-        }
-        
-        $scope.cancelLogin = function () {
-            
-            siteServices.hideBottomSheet();
-            $location.path("/");
-        }
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
-
-            $scope.user = {};
-
-            $scope.passwordsMatch = false;
-
-            $('#logInModal').closeModal();
-
-            $scope.register = function () {
-
-                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
-                    //save user to cookie
-                    console.log(result);
-                },
-                    function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
-                        console.log(err);
-                    })
-
-            }
-
-            $scope.openFromLeft = function (errorMessage) {
-                
-                siteServices.showMessageModal(errorMessage);
-            };
-
-        }])
 
 'use strict';
 /**
@@ -1499,6 +1514,38 @@ angular.module('BossCollection.directives').
         }  
   }]); 
  
+angular.module('BossCollection.directives')
+    .directive('inputMarkdown', ['$sce', function($sce){
+        
+        return {
+            restrict: 'E',
+            scope: {
+                input: '=input'
+            },
+            link: function(scope){
+                
+                var converter = new showdown.Converter();                
+                scope.markdown = scope.input;
+                
+                scope.goToExternal = function (path) {
+                    window.open(
+                        path,
+                        '_blank' // <- This is what makes it open in a new window.
+                        );
+                }
+                
+                scope.converToHtml = function (){
+                    
+                    scope.html = $sce.trustAsHtml(converter.makeHtml(scope.markdown));   
+                    scope.input = scope.markdown;
+                }
+                
+                scope.converToHtml(scope.markdown);    
+            },
+            templateUrl: 'inputField'
+        } 
+        
+    }])
 'use strict';
 angular.module('BossCollection.filters', [])
 'use strict';

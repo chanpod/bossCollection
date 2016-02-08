@@ -2,18 +2,18 @@
 
 
 
-angular.module('BossCollection', [
+angular.module('BossCollection', [ 
   'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
   'BossCollection.filters',
+  'BossCollection.forums',
   'ngRoute',
-  //'ui.bootstrap',
   'ngResource',
-  'btford.socket-io',
-  'ngCookies',
-  'ngMaterial'
-
+  'btford.socket-io', 
+  'ngCookies', 
+  'ngMaterial'  
+ 
 ]).factory('mySocket', ['socketFactory', function(socketFactory){
     return socketFactory();
 }]). 
@@ -45,10 +45,6 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/auth/signup', {
         templateUrl: 'signup',
         controller: 'signupController'
-    })
-    .when('/forum', {
-        templateUrl: 'forums',
-        controller: 'forumsController'
     })
     .when('/auth/updateAccount', {
         templateUrl: 'editAccount',

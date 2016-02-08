@@ -6,9 +6,10 @@
  * @constructor No Controller
  */
 angular.module("BossCollection.controllers")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices',
-        function($scope, $location, $http, $timeout, siteServices){
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', '$sce',
+        function($scope, $location, $http, $timeout, siteServices, $sce){
           
             
             siteServices.updateTitle('Home');
     }])
+ 

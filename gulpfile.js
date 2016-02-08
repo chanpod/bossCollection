@@ -31,6 +31,8 @@ gulp.task('watch', function(){
     watch([
         './app/public/js/**/*.js',
         './app/public/css/**/*.scss',
+        './app/public/components/**/*.js',
+        './app/public/components/**/*.scss',
         '!./app/public/css/compiled.scss',  
         './app/public/js/**/*.sass',
         '!./app/public/js/tmp/**'
@@ -70,7 +72,8 @@ gulp.task('concatVendor', function(){
         './node_modules/angular-route/angular-route.min.js',
         './node_modules/angular-animate/angular-animate.min.js',
         './node_modules/angular-messages/angular-messages.min.js',
-        './node_modules/angular-aria/angular-aria.min.js',
+        './node_modules/angular-aria/angular-aria.min.js',        
+        './node_modules/showdown/dist/showdown.min.js',        
         './node_modules/angular-material/angular-material.min.js',
         './node_modules/moment/min/moment.min.js',
         './app/public/js/vendor/angular-parallax.js',
@@ -89,6 +92,8 @@ gulp.task('concatJS', function () {
 
     return gulp.src([
         './app/public/js/app.js',
+        './app/public/components/**/*.module.js',
+        './app/public/components/**/*.js',
         './app/public/js/controllers/**/*.module.js',
         './app/public/js/controllers/**/*.js',
         './app/public/js/directives/**/*.module.js',
@@ -99,8 +104,12 @@ gulp.task('concatJS', function () {
         './app/public/js/services/**/*.js'
     ])
         .pipe(concat('bosscollection.js'))
+        .on('error', function(err){
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest('./app/public/tmp/'));
-
+        
 
 })
 
@@ -118,7 +127,8 @@ gulp.task('concatSass', function () {
 
     return gulp.src([
         
-        './app/public/css/**/*.scss'
+        './app/public/css/**/*.scss',
+        './app/public/components/**/*.scss'
     ])
         .pipe(concat('compiled.scss'))
         .pipe(gulp.dest('./app/public/css/'));
@@ -160,6 +170,10 @@ gulp.task('minify', function () {
             '!./app/public/tmp/vendor.min.js'
             ])
         .pipe(minify())
+        .on('error', function(err){
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest('./app/public/tmp'));
 })
 
