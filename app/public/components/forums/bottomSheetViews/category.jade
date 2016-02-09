@@ -1,0 +1,20 @@
+script#category(type="text/ng-template")
+    md-dialog(layout = "column").md-list.md-has-header
+        div(layout, layout-align = "center center")
+            h4
+                | Category
+        div()
+            form(name = "logInForm")
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        label() Category Name
+                        input(ng-model = "category.name", required)                        
+                div(layout = "row", layout-align = "space-around center")
+                    md-input-container().md-block
+                        md-button(ng-click = "login()").md-primary.md-raised
+                            | Save
+                    md-input-container().md-block
+                        md-button(ng-click = "cancel()").md-primary.md-raised
+                            | Cancel
+               
+            

@@ -10,11 +10,12 @@ script#inputField(type="text/ng-template")
                         span Preview
                     span(flex)
                     md-button(ng-click = "goToExternal('http://showdownjs.github.io/demo/')", 
-                            aria-label = "Help with formatting?").md-raised.md-accent
-                        | Help with formatting?
-                    md-button(aria-label = "hidePreview").md-fab.md-mini
-                        md-icon(md-font-library="material-icons") trending_up
-            md-content
+                            aria-label = "Help with formatting?").md-icon-button
+                        md-icon(md-font-library="material-icons") help
+                    md-button(ng-click = "hideShowPreview()", aria-label = "hidePreview").md-icon-button
+                        md-icon(ng-show = "!showPreview", md-font-library="material-icons") expand_less
+                        md-icon(ng-show = "showPreview", md-font-library="material-icons") expand_more
+            md-content(ng-show = "showPreview")
                 div(ng-bind-html = "html")
     
     md-divider

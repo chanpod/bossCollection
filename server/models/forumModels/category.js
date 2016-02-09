@@ -3,10 +3,12 @@ var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
 
-var forumSchema = new Schema({
+var categorySchema = new Schema({
     
     name: String,    
-    threads: Array,
+    forums: Array,
+    guild: String
+     
 })
 
 module.exports = mongoose.model('forums', forumSchema);

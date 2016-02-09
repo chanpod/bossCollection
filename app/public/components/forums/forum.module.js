@@ -1,11 +1,16 @@
 'user strict'
 
 angular.module("BossCollection.forums", ['ngRoute'])
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider',  function ($routeProvider) {
 
-        $routeProvider.when('/forum', {
+        $routeProvider
+        .when('/forum', {
             templateUrl: 'forum',
-            controller: 'forumsController'
+            controller: 'forumController'
+        })
+        .when('/forum/:forum', {
+            templateUrl: 'threads',
+            controller: 'threadController'
         })
 
     }]);

@@ -10,6 +10,7 @@ angular.module('BossCollection.directives')
                 
                 var converter = new showdown.Converter();                
                 scope.markdown = scope.input;
+                scope.showPreview = true;
                 
                 scope.goToExternal = function (path) {
                     window.open(
@@ -24,8 +25,13 @@ angular.module('BossCollection.directives')
                     scope.input = scope.markdown;
                 }
                 
+                scope.hideShowPreview = function(){
+                    
+                    scope.showPreview = !scope.showPreview
+                }
+                
                 scope.converToHtml(scope.markdown);    
-            },
+            }, 
             templateUrl: 'inputField'
         } 
         

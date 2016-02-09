@@ -50,13 +50,18 @@ block body
     include partials/accounts/signup
     include partials/absence/absence
     include partials/absence/absenceSubmissions
-    include ../public/components/forums/forumTemplate
+    
     include partials/accounts/editAccount
     include partials/applications/application
     include partials/applications/reviewApplications
     include partials/guildManagement/createGuild
     include partials/guildManagement/joinGuild
     include partials/guildManagement/manageMembers
+    
+    //-Forum
+    include ../public/components/forums/forumTemplate
+    include ../public/components/forums/bottomSheetViews/category
+    include ../public/components/forums/bottomSheetViews/forumEdit
     
     
     include ../public/js/directives/inputMarkdown/inputMarkdownTemplate

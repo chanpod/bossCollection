@@ -97,21 +97,136 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
 'user strict'
 
 angular.module("BossCollection.forums", ['ngRoute'])
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider',  function ($routeProvider) {
 
-        $routeProvider.when('/forum', {
+        $routeProvider
+        .when('/forum', {
             templateUrl: 'forum',
-            controller: 'forumsController'
+            controller: 'forumController'
+        })
+        .when('/forum/:forum', {
+            templateUrl: 'threads',
+            controller: 'threadController'
         })
 
     }]);
 angular.module("BossCollection.forums")
-    .controller('forumController', ['$scope', function($scope){
-        
-        console.log("Forum Controller loaded");
-        $scope.markdown = "";
-    }])
+    .controller('forumController', [
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog) {
 
+            console.log("Forum Controller loaded");
+            siteServices.updateTitle('Forums');
+            $scope.testListCount = [];
+
+            for (var i = 0; i < 5; i++) {
+                $scope.testListCount.push(i);
+            }
+
+
+            $scope.markdown = "";
+
+            $scope.newCategory = function () {
+
+                $scope.category = {};
+                openBottomSheet('category');
+            }
+
+            $scope.editCategory = function (category) {
+
+                //$scope.category = category;
+                $scope.category = {name: "Test"};
+                openBottomSheet('category');
+            } 
+
+            $scope.deleteCategory = function (category) {
+
+                $mdDialog.show(confirmDelete())
+                    .then(function(result){
+                        console.log("You deleted it.");
+                        //forumService.deleteCategory(category);
+                    },
+                    function(){
+                        $scope.cancel();
+                    })
+            }
+            
+            $scope.createForum = function () {
+                
+                $mdDialog.show({
+                    templateUrl: 'forumEdit',
+                    scope: $scope,
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false
+                })
+                    .then(function(){
+                        console.log("successfully closed");
+                    },
+                    function(){
+                        console.log("It broke?");
+                    })
+                
+                //openBottomSheet('forumEdit');
+            }
+
+            $scope.cancel = function () {
+                $mdDialog.hide();
+            }
+
+            $scope.goToForum = function (forum) {
+
+                forumService.setForum(forum);
+                $location.url('/forum/' + forum.name)
+            }
+
+
+            function confirmDelete(event) {
+
+                return $mdDialog.confirm()
+                    .title('Are you sure you want to delete this?')
+                    .textContent('This is irreversable once you click Yes!')
+                    .ariaLabel('Confirm Delete')
+                    .targetEvent(event)
+                    .ok('Delete')
+                    .cancel('Nevermind');
+            }
+
+
+            function openBottomSheet(template) {
+
+                $mdDialog.show({
+                    templateUrl: template,
+                    scope: $scope,
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false
+                })
+                    .then(function(){
+                        console.log("successfully closed");
+                    },
+                    function(){
+                        console.log("It broke?");
+                    })
+            }
+        }]) 
+angular.module("BossCollection.forums")
+    .service('forumService', [
+        '$location', 'siteServices', 
+        function($location, siteServices){
+        
+        var currentForum = {};
+        
+        function setForum(forum){
+            currentForum = forum;
+        }
+        
+        function getThread(thread){
+            
+        } 
+        
+        return {
+            setForum:setForum
+        }
+    }]) 
 'use strict';
 /**
  *
@@ -887,23 +1002,6 @@ angular.module("BossCollection.controllers")
 
 'use strict';
 /**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
-        function($scope, $location, $http, userLoginSrvc, $rootScope){
-            
-        $scope.user.name = userLoginSrvc.getUser();
-        
-        if($scope.user.name == undefined){
-            $location.path('/');
-        }
-        
-
-    }])
-
-'use strict';
-/**
  * This is the description for my class.
  *
  * @class Controllers
@@ -1094,6 +1192,23 @@ angular.module("BossCollection.controllers")
             $scope.init();
             siteServices.updateTitle('Manage Members');
         }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
+        function($scope, $location, $http, userLoginSrvc, $rootScope){
+            
+        $scope.user.name = userLoginSrvc.getUser();
+        
+        if($scope.user.name == undefined){
+            $location.path('/');
+        }
+        
+
+    }])
 
 'use strict'
 angular.module("BossCollection.controllers")
@@ -1526,6 +1641,7 @@ angular.module('BossCollection.directives')
                 
                 var converter = new showdown.Converter();                
                 scope.markdown = scope.input;
+                scope.showPreview = true;
                 
                 scope.goToExternal = function (path) {
                     window.open(
@@ -1540,8 +1656,13 @@ angular.module('BossCollection.directives')
                     scope.input = scope.markdown;
                 }
                 
+                scope.hideShowPreview = function(){
+                    
+                    scope.showPreview = !scope.showPreview
+                }
+                
                 scope.converToHtml(scope.markdown);    
-            },
+            }, 
             templateUrl: 'inputField'
         } 
         
@@ -1745,7 +1866,7 @@ angular.module("BossCollection.services")
         var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
         
         
-        var guildApi = {
+        var guildApi = { 
             
             getListOfGuilds: function(){
                 var defer = $q.defer();
@@ -2374,12 +2495,13 @@ angular.module("BossCollection.services")
                     return defer.promise;
                 }
             };
-
+            
+            
             function getUserFromCookie() {
 
                 var userCookie = $cookies.get("user");
                 var user = undefined;
-
+                
                 if (userCookie) {
                     var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
                     user = JSON.parse(jsonString);
