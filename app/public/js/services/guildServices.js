@@ -24,7 +24,7 @@ angular.module("BossCollection.services")
         var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
         
         
-        var guildApi = {
+        var guildApi = { 
             
             getListOfGuilds: function(){
                 var defer = $q.defer();

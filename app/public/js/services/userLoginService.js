@@ -201,12 +201,13 @@ angular.module("BossCollection.services")
                     return defer.promise;
                 }
             };
-
+            
+            
             function getUserFromCookie() {
 
                 var userCookie = $cookies.get("user");
                 var user = undefined;
-
+                
                 if (userCookie) {
                     var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
                     user = JSON.parse(jsonString);
