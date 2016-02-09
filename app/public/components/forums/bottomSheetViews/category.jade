@@ -8,10 +8,10 @@ script#category(type="text/ng-template")
                 div(layout = "row")
                     md-input-container(flex).md-block
                         label() Category Name
-                        input(ng-model = "category.name", required)                        
+                        input(ng-model = "object.name", required)                        
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block
-                        md-button(ng-click = "login()").md-primary.md-raised
+                        md-button(ng-click = "saveCategory()").md-primary.md-raised
                             | Save
                     md-input-container().md-block
                         md-button(ng-click = "cancel()").md-primary.md-raised

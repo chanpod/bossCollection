@@ -18,7 +18,7 @@ angular.module("BossCollection.controllers")
             $scope.charRequirementsIncomplete = false;
             $scope.charRealmError = false;
             $scope.searchingForUser = false;
-            
+            $scope.icon = "error";
             
                 
             $scope.init = function(){
@@ -77,6 +77,7 @@ angular.module("BossCollection.controllers")
 
                             
                             $scope.validCharacterName = true;
+                            $scope.icon = "check_circle";
                             $scope.application.character = character;
                             
                             if(callback){
@@ -84,7 +85,7 @@ angular.module("BossCollection.controllers")
                             }
                         },
                             function (err) {
-                                
+                                $scope.icon = "error";
                                 siteServices.showMessageToast(err);
                                 $scope.validCharacterName = false;
                             })

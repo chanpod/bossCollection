@@ -111,6 +111,66 @@ angular.module("BossCollection.forums", ['ngRoute'])
 
     }]);
 angular.module("BossCollection.forums")
+    .controller('dialogController', [
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data) {
+
+            $scope.object = {};
+            $scope.loading = false;
+            
+            if(data){
+                
+                $scope.object = data.object; 
+            }
+            else{
+                $scope.object = {};
+            }
+            
+
+            $scope.cancel = function () {
+
+                $mdDialog.cancel();
+            }
+            
+            $scope.close = function(){
+                $mdDialog.hide($scope.object);
+            }
+
+            $scope.saveCategory = function () {
+
+                $scope.loading = false;
+
+                forumService.createNewCategory()
+                    .then(function (result) {
+
+                        $scope.close();
+                    })
+                    .catch(function (err) {
+
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
+            }
+
+            $scope.saveForum = function () {
+                
+                $scope.loading = false;
+
+                forumService.createNewForum()
+                    .then(function () {
+
+                        $scope.close();
+                    })
+                    .catch(function (err) {
+
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
+            }
+        }]);
+angular.module("BossCollection.forums")
     .controller('forumController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog',
         function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog) {
@@ -125,52 +185,72 @@ angular.module("BossCollection.forums")
 
 
             $scope.markdown = "";
-
+            
+            $scope.init = function(){
+                
+                forumService.getForums()
+                    .then(function(forums){
+                        
+                        $scope.forums = forums;
+                    })
+            }
+            
             $scope.newCategory = function () {
 
                 $scope.category = {};
-                openBottomSheet('category');
+                forumService.openBottomSheet('category');
             }
 
             $scope.editCategory = function (category) {
 
                 //$scope.category = category;
-                $scope.category = {name: "Test"};
-                openBottomSheet('category');
+                
+                forumService.openBottomSheet('category', {object: category})
+                    .then(function(result){
+                        
+                    })
+                    .catch(function(err){
+                        //Didn't save
+                    })
             } 
 
             $scope.deleteCategory = function (category) {
 
-                $mdDialog.show(confirmDelete())
+                forumService.confirmDelete()
                     .then(function(result){
-                        console.log("You deleted it.");
-                        //forumService.deleteCategory(category);
-                    },
-                    function(){
-                        $scope.cancel();
+                        
+                        if(result){
+                            console.log("Deleting the category")
+                            forumService.deleteCategory(category);
+                        }
                     })
             }
             
             $scope.createForum = function () {
                 
-                $mdDialog.show({
-                    templateUrl: 'forumEdit',
-                    scope: $scope,
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false
-                })
-                    .then(function(){
-                        console.log("successfully closed");
-                    },
-                    function(){
-                        console.log("It broke?");
-                    })
+                forumService.openBottomSheet('forumEdit');
                 
-                //openBottomSheet('forumEdit');
             }
 
-            $scope.cancel = function () {
-                $mdDialog.hide();
+            $scope.editForum = function(forum){
+                
+                forumService.openBottomSheet('category', { object: forum })
+                    .then(function (result) {
+
+                        console.log(result);
+                    })
+            }
+            
+            $scope.deleteForum = function(forum){
+                
+                 forumService.confirmDelete()
+                    .then(function(result){
+                        
+                        if(result){
+                            console.log("Deleting the forum")
+                            forumService.deleteForum(forum);
+                        }
+                    })
             }
 
             $scope.goToForum = function (forum) {
@@ -180,53 +260,180 @@ angular.module("BossCollection.forums")
             }
 
 
-            function confirmDelete(event) {
+            $scope.init();
+        }]) 
+angular.module("BossCollection.forums")
+    .service('forumService', [
+        '$location', '$mdDialog', '$q', 'siteServices',
+        function ($location, $mdDialog, $q, siteServices) {
 
-                return $mdDialog.confirm()
+            var currentForum = {};
+            var forums = {               
+                
+                    "categories": [
+                        {
+                            "name": "Strategy",
+                            "forums": [
+                                {
+                                    "name": "HM"
+                                },
+                                {
+                                    "name": "BRF"
+                                },
+                                {
+                                    "name": "HFC"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "General",
+                            "forums": [
+                                {
+                                    "name": "Whatever"
+                                },
+                                {
+                                    "name": "Real Life"
+                                },
+                                {
+                                    "name": "Other Games"
+                                }
+                            ]
+                        }
+                    ]
+            }
+
+            function setForum(forum) {
+                currentForum = forum;
+            }
+
+            function getThread(thread) {
+
+            }
+
+            function deleteCategory(category) {
+
+            }
+
+            function createNewCategory(category) {
+
+                var defer = $q.defer();
+
+                defer.resolve(category);
+
+                return defer.promise;
+            }
+            
+            function getForums(){
+                
+                var defer = $q.defer();
+
+                defer.resolve(forums);
+
+                return defer.promise;
+            }
+
+            function editCategory(category) {
+
+                var defer = $q.defer();
+
+                defer.resolve(category);
+
+                return defer.promise;
+            }
+
+            function deleteForum(forum) {
+
+                var defer = $q.defer();
+
+                defer.resolve(forum);
+
+                return defer.promise;
+            }
+
+            function createNewForum(forum) {
+
+                var defer = $q.defer();
+
+                defer.resolve(forum);
+
+                return defer.promise;
+            }
+
+            function editForum(forum) {
+
+                var defer = $q.defer();
+
+                defer.resolve(forum);
+
+                return defer.promise;
+            }
+
+            function confirmDelete(event, callback) {
+
+                var defer = $q.defer();
+
+                var confirm = $mdDialog.confirm()
                     .title('Are you sure you want to delete this?')
                     .textContent('This is irreversable once you click Yes!')
                     .ariaLabel('Confirm Delete')
                     .targetEvent(event)
                     .ok('Delete')
                     .cancel('Nevermind');
+
+                $mdDialog.show(confirm)
+                    .then(function () {
+
+                        defer.resolve(true);
+                    }, function (err) {
+
+                        defer.reject(false);
+                    })
+
+                return defer.promise;
             }
 
 
-            function openBottomSheet(template) {
-
+            function openBottomSheet(template, locals) {
+                var defer = $q.defer();
+                var localCopy = angular.copy(locals);
+                
                 $mdDialog.show({
                     templateUrl: template,
-                    scope: $scope,
+                    controller: 'dialogController',
                     parent: angular.element(document.body),
-                    clickOutsideToClose: false
+                    clickOutsideToClose: false,
+                    locals: { data: localCopy }
                 })
-                    .then(function(){
-                        console.log("successfully closed");
+                    .then(function (result) {
+
+                        defer.resolve(result);
                     },
-                    function(){
-                        console.log("It broke?");
-                    })
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                return defer.promise;
+            }
+
+            function cancel() {
+
+                $mdDialog.hide();
+            }
+
+            return {
+                setForum: setForum,
+                confirmDelete: confirmDelete,
+                openBottomSheet: openBottomSheet,
+                createNewCategory: createNewCategory,
+                deleteCategory: deleteCategory,
+                editForum:editForum,
+                createNewForum:createNewForum,
+                deleteForum:deleteForum,
+                cancel: cancel,
+                getForums: getForums
             }
         }]) 
-angular.module("BossCollection.forums")
-    .service('forumService', [
-        '$location', 'siteServices', 
-        function($location, siteServices){
-        
-        var currentForum = {};
-        
-        function setForum(forum){
-            currentForum = forum;
-        }
-        
-        function getThread(thread){
-            
-        } 
-        
-        return {
-            setForum:setForum
-        }
-    }]) 
 'use strict';
 /**
  *
@@ -824,7 +1031,7 @@ angular.module("BossCollection.controllers")
             $scope.charRequirementsIncomplete = false;
             $scope.charRealmError = false;
             $scope.searchingForUser = false;
-            
+            $scope.icon = "error";
             
                 
             $scope.init = function(){
@@ -883,6 +1090,7 @@ angular.module("BossCollection.controllers")
 
                             
                             $scope.validCharacterName = true;
+                            $scope.icon = "check_circle";
                             $scope.application.character = character;
                             
                             if(callback){
@@ -890,7 +1098,7 @@ angular.module("BossCollection.controllers")
                             }
                         },
                             function (err) {
-                                
+                                $scope.icon = "error";
                                 siteServices.showMessageToast(err);
                                 $scope.validCharacterName = false;
                             })
@@ -997,6 +1205,23 @@ angular.module("BossCollection.controllers")
                     
                 }
             }
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
+        function($scope, $location, $http, userLoginSrvc, $rootScope){
+            
+        $scope.user.name = userLoginSrvc.getUser();
+        
+        if($scope.user.name == undefined){
+            $location.path('/');
+        }
+        
 
     }])
 
@@ -1192,23 +1417,6 @@ angular.module("BossCollection.controllers")
             $scope.init();
             siteServices.updateTitle('Manage Members');
         }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
-        function($scope, $location, $http, userLoginSrvc, $rootScope){
-            
-        $scope.user.name = userLoginSrvc.getUser();
-        
-        if($scope.user.name == undefined){
-            $location.path('/');
-        }
-        
-
-    }])
 
 'use strict'
 angular.module("BossCollection.controllers")

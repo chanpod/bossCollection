@@ -4,9 +4,9 @@ script#absence(type="text/ng-template")
             form(ng-submit = "submitNewAbsence()")
                 div(layout-gt-xs="row")
                     md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                        label().floatingIconLabel User Name
+                        label() User Name
                         md-icon(md-font-library="material-icons") person
-                        input(type = "text", ng-model = "user.name", disabled).floatingIconInput
+                        input(type = "text", ng-model = "user.name", disabled)
                     
                 md-datepicker(ng-model = "newAbsence.date", md-placeholder="Enter date", required).datePickerAdjust
                 

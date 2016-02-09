@@ -6,12 +6,10 @@ script#application(type="text/ng-template")
                     div(ng-show = "searchingForUser")
                         md-progress-linear (md-mode="indeterminate")
                     md-input-container(flex).md-block.md-icon-float
-                        label().floatingIconLabel Character Name
-                        md-icon(ng-show = "validCharacterName", md-font-library="material-icons", style = "color:green") check_circle
-                        md-icon(ng-show = "!validCharacterName", md-font-library="material-icons", style = "color:red") error
+                        label() Character Name
+                        md-icon(md-font-library="material-icons", ng-class = "validCharacterName ? 'characterSuccess' : 'characterError' ") {{icon}}
                         input(id = "characterNameInput", ng-model = "application.characterName", 
-                            ng-blur = "validateCharactername()", required).floatingInputFix
-                        
+                            ng-blur = "validateCharactername()", required)
                         
                     md-autocomplete(md-min-length = "0",
                                     md-item-text = "realm.name",

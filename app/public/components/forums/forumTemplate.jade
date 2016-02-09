@@ -1,39 +1,33 @@
 script#forum(type="text/ng-template")    
     md-content(layout = "column", flex, layout-fill)
+        div(ng-repeat = "category in forums.categories")
+            md-toolbar().md-scroll-shrink
+                div().md-toolbar-tools
+                    {{category.name}}
+                    span(flex)
+                    div(ng-show = "user.rank == 4")
+                        md-button(ng-click = "deleteCategory(category)").md-icon-button
+                            md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                        md-button(ng-click = "editCategory(category)").md-icon-button
+                            md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                        md-button(ng-click = "createForum()").md-icon-button
+                            md-icon(md-font-library="material-icons", aria-label = "add new forum") add
+            md-list
+                md-list-item(ng-repeat = "forum in category.forums").md-2-line
+                    div(ng-click = "goToForum()", layout-padding).md-list-item-text
+                        h3
+                            {{forum.name}}
+                        div().md-secondary
+                            md-button(ng-click = "deleteForum(forum)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                            md-button(ng-click = "editForum(forum)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                            
+                    md-divider(ng-if="!$last")        
         md-toolbar().md-scroll-shrink
             div().md-toolbar-tools
-                | Strategy
-                span(flex)
-                md-button(ng-click = "deleteCategory($event)").md-icon-button
-                    md-icon(md-font-library="material-icons", aria-label = "add new forum") delete
-                md-button(ng-click = "editCategory()").md-icon-button
-                    md-icon(md-font-library="material-icons", aria-label = "add new forum") mode_edit
-                md-button(ng-click = "createForum()").md-icon-button
-                    md-icon(md-font-library="material-icons", aria-label = "add new forum") add
-        md-list
-            md-list-item(ng-repeat = "test in testListCount").md-2-line
-                div(ng-click = "goToForum()").md-list-item-text
-                    h3
-                        | Forum {{test}}
-                    h4
-                        | Some Details
-                md-divider(ng-if="!$last")
-        md-toolbar().md-scroll-shrink
-            div().md-toolbar-tools
-                | General
-                
-        md-list
-            md-list-item(ng-repeat = "test in testListCount").md-2-line
-                div().md-list-item-text
-                    h3
-                        | Forum {{test}}
-                    h4
-                        | Some Details
-                md-divider(ng-if="!$last")
-    md-toolbar().md-scroll-shrink
-        div().md-toolbar-tools
-            md-button(ng-click = "newCategory()").md-raised
-                | New Category
+                md-button(ng-click = "newCategory()").md-raised
+                    | New Category
                             
         //input-markdown(input = "markdown")
                             

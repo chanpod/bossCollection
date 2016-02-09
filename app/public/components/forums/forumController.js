@@ -13,52 +13,72 @@ angular.module("BossCollection.forums")
 
 
             $scope.markdown = "";
-
+            
+            $scope.init = function(){
+                
+                forumService.getForums()
+                    .then(function(forums){
+                        
+                        $scope.forums = forums;
+                    })
+            }
+            
             $scope.newCategory = function () {
 
                 $scope.category = {};
-                openBottomSheet('category');
+                forumService.openBottomSheet('category');
             }
 
             $scope.editCategory = function (category) {
 
                 //$scope.category = category;
-                $scope.category = {name: "Test"};
-                openBottomSheet('category');
+                
+                forumService.openBottomSheet('category', {object: category})
+                    .then(function(result){
+                        
+                    })
+                    .catch(function(err){
+                        //Didn't save
+                    })
             } 
 
             $scope.deleteCategory = function (category) {
 
-                $mdDialog.show(confirmDelete())
+                forumService.confirmDelete()
                     .then(function(result){
-                        console.log("You deleted it.");
-                        //forumService.deleteCategory(category);
-                    },
-                    function(){
-                        $scope.cancel();
+                        
+                        if(result){
+                            console.log("Deleting the category")
+                            forumService.deleteCategory(category);
+                        }
                     })
             }
             
             $scope.createForum = function () {
                 
-                $mdDialog.show({
-                    templateUrl: 'forumEdit',
-                    scope: $scope,
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false
-                })
-                    .then(function(){
-                        console.log("successfully closed");
-                    },
-                    function(){
-                        console.log("It broke?");
-                    })
+                forumService.openBottomSheet('forumEdit');
                 
-                //openBottomSheet('forumEdit');
             }
 
-            $scope.cancel = function () {
-                $mdDialog.hide();
+            $scope.editForum = function(forum){
+                
+                forumService.openBottomSheet('category', { object: forum })
+                    .then(function (result) {
+
+                        console.log(result);
+                    })
+            }
+            
+            $scope.deleteForum = function(forum){
+                
+                 forumService.confirmDelete()
+                    .then(function(result){
+                        
+                        if(result){
+                            console.log("Deleting the forum")
+                            forumService.deleteForum(forum);
+                        }
+                    })
             }
 
             $scope.goToForum = function (forum) {
@@ -68,31 +88,5 @@ angular.module("BossCollection.forums")
             }
 
 
-            function confirmDelete(event) {
-
-                return $mdDialog.confirm()
-                    .title('Are you sure you want to delete this?')
-                    .textContent('This is irreversable once you click Yes!')
-                    .ariaLabel('Confirm Delete')
-                    .targetEvent(event)
-                    .ok('Delete')
-                    .cancel('Nevermind');
-            }
-
-
-            function openBottomSheet(template) {
-
-                $mdDialog.show({
-                    templateUrl: template,
-                    scope: $scope,
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false
-                })
-                    .then(function(){
-                        console.log("successfully closed");
-                    },
-                    function(){
-                        console.log("It broke?");
-                    })
-            }
+            $scope.init();
         }]) 

@@ -68,25 +68,11 @@ html, body {
     
     height: 100%;
 }
- 
-.floatingIconLabel{
-    left: 25px !important;
-}
-
-
-.floatingIconInput{
-    position: relative;
-    left: 25px !important;
-    width: 90% !important;
-}
-
 
 
 .bossVideoContainer{
     border-bottom:1px solid black;
 }
-
-
 
 
 .wodHeader{
@@ -231,6 +217,14 @@ html, body {
     color:black;
 }
 
+.characterError{
+    color:red;
+}
+
+
+.characterSuccess{
+    color: green;
+}
 .nav{
   @extend .blue, .darken-4;  
 }
