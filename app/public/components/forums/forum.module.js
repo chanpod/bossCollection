@@ -8,8 +8,8 @@ angular.module("BossCollection.forums", ['ngRoute'])
             templateUrl: 'forum',
             controller: 'forumController'
         })
-        .when('/forum/:forum', {
-            templateUrl: 'threads',
+        .when('/forum/:forumID', {
+            templateUrl: 'thread',
             controller: 'threadController'
         })
 

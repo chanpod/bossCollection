@@ -1,0 +1,24 @@
+script#thread(type="text/ng-template")    
+    md-content(layout = "column", flex, layout-fill)
+        md-toolbar().md-scroll-shrink
+                div().md-toolbar-tools
+                    md-button(ng-click = "goBack()").md-icon-button
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
+                    | Forums
+                    span(flex)
+                    md-button(ng-click = "refresh()").md-icon-button
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") refresh
+        md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+        md-list
+                md-list-item(ng-repeat = "thread in forum.threads").md-2-line
+                    div(ng-click = "openThread(thread)", layout-padding).md-list-item-text
+                        h3
+                            {{thread.user}}
+                        p
+                            {{thread.title}}
+                        div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
+                            md-button(ng-click = "deleteForum(thread)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                            md-button(ng-click = "editForum(thread)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                    md-divider(ng-if="!$last")        

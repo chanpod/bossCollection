@@ -1,12 +1,14 @@
 angular.module("BossCollection.forums")
     .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window) {
 
             console.log("Forum Controller loaded");
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
-
+            
+            
+            
             for (var i = 0; i < 5; i++) {
                 $scope.testListCount.push(i);
             }
@@ -84,7 +86,7 @@ angular.module("BossCollection.forums")
             $scope.goToForum = function (forum) {
 
                 forumService.setForum(forum);
-                $location.url('/forum/' + forum.name)
+                $location.url('/forum/' + forum._id)
             }
 
 

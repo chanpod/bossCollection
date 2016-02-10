@@ -14,10 +14,10 @@ script#forum(type="text/ng-template")
                             md-icon(md-font-library="material-icons", aria-label = "add new forum") add
             md-list
                 md-list-item(ng-repeat = "forum in category.forums").md-2-line
-                    div(ng-click = "goToForum()", layout-padding).md-list-item-text
+                    div(ng-click = "goToForum(forum)", layout-padding).md-list-item-text
                         h3
                             {{forum.name}}
-                        div().md-secondary
+                        div(ng-show = "user.rank == 4").md-secondary
                             md-button(ng-click = "deleteForum(forum)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                             md-button(ng-click = "editForum(forum)").md-icon-button

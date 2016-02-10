@@ -91,5 +91,7 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     ]);
 
   $locationProvider.html5Mode(true);
-
-}]);
+  
+  
+  
+}])

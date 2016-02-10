@@ -5,19 +5,40 @@ angular.module("BossCollection.forums")
 
             $scope.object = {};
             $scope.loading = false;
+            $scope.replying = false;
+            $scope.comment = "";
             
             if(data){
                 
-                $scope.object = data.object; 
+                $scope.object = data; 
             }
             else{
                 $scope.object = {};
             }
             
-
+            
+            
+            
             $scope.cancel = function () {
 
                 $mdDialog.cancel();
+            }
+            
+            $scope.cancelComment = function(){
+                $scope.replying = false;
+            }
+            
+            $scope.saveComment = function(){
+                
+                forumService.saveComment()
+                    .then(function(){
+                        
+                        $scope.comment = "";
+                    })
+            }
+            
+            $scope.openCommentBox = function(){
+                $scope.replying = true;
             }
             
             $scope.close = function(){

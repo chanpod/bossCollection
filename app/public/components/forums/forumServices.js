@@ -1,9 +1,11 @@
 angular.module("BossCollection.forums")
     .service('forumService', [
-        '$location', '$mdDialog', '$q', 'siteServices',
-        function ($location, $mdDialog, $q, siteServices) {
+        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope',
+        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope) {
 
             var currentForum = {};
+            
+            
             var forums = {               
                 
                     "categories": [
@@ -11,13 +13,86 @@ angular.module("BossCollection.forums")
                             "name": "Strategy",
                             "forums": [
                                 {
-                                    "name": "HM"
+                                    "name": "HM",
+                                    "threads": [
+                                        {
+                                            title: "Test Title",
+                                            user: "tester",
+                                            comments: [
+                                                {
+                                                    user: "chanpod",                                                    
+                                                    message: "I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long." 
+                                                },
+                                                {
+                                                    user: "test",                                                    
+                                                    message: "I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long." 
+                                                },
+                                                {
+                                                    user: "tester",                                                    
+                                                    message: "I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long." 
+                                                }
+                                            ],
+                                            message: "I created a thread!",
+                                        },
+                                        {
+                                            title: "Test Title",
+                                            user: "test",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        },
+                                        {
+                                            title: "Test Title",
+                                            user: "test2",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        }
+                                    ]
                                 },
                                 {
-                                    "name": "BRF"
+                                    "name": "BRF",
+                                    "threads": [
+                                        {
+                                            title: "Test",
+                                            user: "Tester",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        },
+                                        {
+                                            title: "Test",
+                                            user: "Tester",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        },
+                                        {
+                                            title: "Test",
+                                            user: "Tester",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        }
+                                    ]
                                 },
                                 {
-                                    "name": "HFC"
+                                    "name": "HFC",
+                                    "threads": [
+                                        {
+                                            title: "Test",
+                                            user: "Tester",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        },
+                                        {
+                                            title: "Test",
+                                            user: "Tester",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        },
+                                        {
+                                            title: "Test",
+                                            user: "Tester",
+                                            comments: [],
+                                            message: "I created a thread!",
+                                        }
+                                    ]
                                 }
                             ]
                         },
@@ -38,12 +113,50 @@ angular.module("BossCollection.forums")
                     ]
             }
 
-            function setForum(forum) {
-                currentForum = forum;
+            function setForum(selectedforum) {
+                currentForum = selectedforum;
+            }
+            
+            function getSelectedForum(){
+                var defer = $q.defer();
+                
+                if(currentForum){
+                    defer.resolve(currentForum);
+                }
+                else{
+                    
+                    defer.resolve(forums.categories[0].forums[0]);
+                }
+                
+                return defer.promise;
             }
 
-            function getThread(thread) {
+            function getThreads(thread) {
 
+            }
+            
+            function deleteThread(thread){
+                
+            }
+            
+            function editThread(thread){
+                
+            }
+            
+            function createThread(thread){
+                
+            }
+            
+            function deleteComment(comment){
+                
+            }
+            
+            function editComment(comment){
+                
+            }
+            
+            function createComment(comment){
+                
             }
 
             function deleteCategory(category) {
@@ -130,15 +243,17 @@ angular.module("BossCollection.forums")
 
 
             function openBottomSheet(template, locals) {
-                var defer = $q.defer();
-                var localCopy = angular.copy(locals);
                 
+                var defer = $q.defer();
+                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
                 $mdDialog.show({
                     templateUrl: template,
                     controller: 'dialogController',
                     parent: angular.element(document.body),
                     clickOutsideToClose: false,
-                    locals: { data: localCopy }
+                    locals: { data: locals },
+                    fullscreen: true
                 })
                     .then(function (result) {
 
@@ -167,6 +282,14 @@ angular.module("BossCollection.forums")
                 createNewForum:createNewForum,
                 deleteForum:deleteForum,
                 cancel: cancel,
-                getForums: getForums
+                getForums: getForums,
+                getThreads:getThreads,
+                getCurrentForum:getSelectedForum,
+                deleteThread:deleteThread,
+                editThread:editThread,
+                createThread:createThread,
+                deleteComment:deleteComment,
+                editComment:editComment,
+                createComment:createComment,
             }
         }]) 

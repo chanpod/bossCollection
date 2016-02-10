@@ -235,3 +235,19 @@ html, body {
 .loadingModal{
     background-color: rgba(255, 255, 255, 0);
 }
+
+.threadComments{
+    overflow: scroll;
+}
+
+.commentsDialog{
+    overflow: hidden;
+    min-width:50%;
+}
+
+.reply{
+    position: absolute;
+    right:15px;
+    bottom:15px;
+    width: 100%;
+}
