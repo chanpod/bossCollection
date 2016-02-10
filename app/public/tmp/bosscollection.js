@@ -163,10 +163,10 @@ angular.module("BossCollection.forums")
 
                 $scope.loading = false;
 
-                forumService.createNewCategory()
+                forumService.createNewCategory({name: $scope.object.name})
                     .then(function (result) {
-
-                        $scope.close();
+                        
+                        $scope.close(result);
                     })
                     .catch(function (err) {
 
@@ -175,18 +175,38 @@ angular.module("BossCollection.forums")
                         $scope.loading = false;
                     })
             }
+            
+            $scope.saveThread = function(){
+                
+                forumService.createNewThread()
+                    .then(function (response) {
+
+                        $scope.close(response);
+                    })
+                    .catch(function (err) {
+                        $scope.loading = false;
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
+            }
 
             $scope.saveForum = function () {
                 
-                $scope.loading = false;
+                $scope.loading = true;
+                
+                var forum = {
+                    name: $scope.object.name,
+                    categoryId: $scope.object.object.categoryId
+                }
+                
+                forumService.createNewForum(forum)
+                    .then(function (response) {
 
-                forumService.createNewForum()
-                    .then(function () {
-
-                        $scope.close();
+                        $scope.close(response);
                     })
                     .catch(function (err) {
-
+                        $scope.loading = false;
                     })
                     .finally(function () {
                         $scope.loading = false;
@@ -201,7 +221,7 @@ angular.module("BossCollection.forums")
             console.log("Forum Controller loaded");
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
-            
+            $scope.loading = false;
             
             
             for (var i = 0; i < 5; i++) {
@@ -213,17 +233,43 @@ angular.module("BossCollection.forums")
             
             $scope.init = function(){
                 
-                forumService.getForums()
+                $scope.getForums();
+            }
+            
+            $scope.getForums = function(){
+                
+                $scope.loading = true;
+                return forumService.getForums()
                     .then(function(forums){
                         
+                        $scope.loading = false;  
                         $scope.forums = forums;
+                    })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                        console.log(err);
                     })
             }
             
             $scope.newCategory = function () {
 
                 $scope.category = {};
-                forumService.openBottomSheet('category');
+                
+                forumService.openBottomSheet('category')
+                    .then(function(result){
+                        
+                        $scope.getForums();
+                    })
+                    .then(function(){
+                        
+                        //Category created. 
+                        forumService.cancel();
+                    })
+                    .catch(function(err){
+                        
+                        siteServices.showMessageModal(err);
+                    })
             }
 
             $scope.editCategory = function (category) {
@@ -251,9 +297,11 @@ angular.module("BossCollection.forums")
                     })
             }
             
-            $scope.createForum = function () {
+            $scope.createForum = function (category) {
                 
-                forumService.openBottomSheet('forumEdit');
+                var categoryId = category._id;
+                
+                forumService.openBottomSheet('forumEdit', {object: {categoryId: categoryId}});
                 
             }
 
@@ -289,13 +337,259 @@ angular.module("BossCollection.forums")
         }]) 
 angular.module("BossCollection.forums")
     .service('forumService', [
-        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope',
-        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope) {
+        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource',
+        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource) {
 
             var currentForum = {};
+
+            var categoryResource = $resource('/forum/createCategory', {}, {})
+            var getForumsResource = $resource('/forum/getCategories', {}, {});
+            var createNewForumResource = $resource('/forum/createForum', {}, {});
+            var createNewThreadResource = $resource('/forum/createThread', {}, {});
+            var forums;
+            
+            //==== Category Functions ==================
+            
+            function deleteCategory(category) {
+
+            }
+
+            function createNewCategory(category) {
+
+                var defer = $q.defer();
+
+                var bodyData = { category: category };
+
+                categoryResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.category);
+                    })
+
+                return defer.promise;
+            }
+
+            function editCategory(category) {
+
+                var defer = $q.defer();
+
+                defer.resolve(category);
+
+                return defer.promise;
+            }
+            
+            //==== Forum Functions ==================
+            
+            function setForum(selectedforum) {
+                currentForum = selectedforum;
+            }
+
+            function getForums() {
+
+                var defer = $q.defer();
+
+                if (forums) {
+                    defer.resolve(forums);
+                }
+                else {
+
+                    getForumsResource.save({}).$promise
+                        .then(function (response) {
+
+                            forums = response.forums;
+                            defer.resolve(response.forums);
+                        })
+                }
+                return defer.promise;
+            }
+
+            function deleteForum(forum) {
+
+                var defer = $q.defer();
+
+                defer.resolve(forum);
+
+                return defer.promise;
+            }
+
+            function createNewForum(forum) {
+
+                var defer = $q.defer();
+
+                createNewForumResource.save({ forum: forum }).$promise
+                    .then(function () {
+
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+
+                return defer.promise;
+            }
+
+            function editForum(forum) {
+
+                var defer = $q.defer();
+
+                defer.resolve(forum);
+
+                return defer.promise;
+            }
+
+            function getSelectedForum() {
+                var defer = $q.defer();
+
+                if (currentForum) {
+                    defer.resolve(currentForum);
+                }
+                else {
+
+                    defer.resolve(forums.categories[0].forums[0]);
+                }
+
+                return defer.promise;
+            }
+            
+            //==== Thread Functions ==================
+            
+            function getThreads(thread) {
+
+            }
+
+            function deleteThread(thread) {
+
+            }
+
+            function editThread(thread) {
+
+            }
+
+            function createThread(thread) {
+                
+                var defer = $q.defer();
+
+                var bodyData = { thread: thread };
+
+                createNewThreadResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.thread);
+                    })
+
+                return defer.promise;
+            }
             
             
-            var forums = {               
+            
+            
+            //==== Comment Functions ==================
+            
+            function deleteComment(comment) {
+
+            }
+
+            function editComment(comment) {
+
+            }
+
+            function createComment(comment) {
+
+            }
+
+            
+            
+            
+
+            
+            
+            //==== General Functions ==================
+
+            
+
+            function confirmDelete(event, callback) {
+
+                var defer = $q.defer();
+
+                var confirm = $mdDialog.confirm()
+                    .title('Are you sure you want to delete this?')
+                    .textContent('This is irreversable once you click Yes!')
+                    .ariaLabel('Confirm Delete')
+                    .targetEvent(event)
+                    .ok('Delete')
+                    .cancel('Nevermind');
+
+                $mdDialog.show(confirm)
+                    .then(function () {
+
+                        defer.resolve(true);
+                    }, function (err) {
+
+                        defer.reject(false);
+                    })
+
+                return defer.promise;
+            }
+
+
+            function openBottomSheet(template, locals) {
+
+                var defer = $q.defer();
+                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                $mdDialog.show({
+                    templateUrl: template,
+                    controller: 'dialogController',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false,
+                    locals: { data: locals },
+                    fullscreen: true
+                })
+                    .then(function (result) {
+
+                        defer.resolve(result);
+                    },
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                return defer.promise;
+            }
+
+            function cancel() {
+
+                $mdDialog.hide();
+            }
+
+            return {
+                setForum: setForum,
+                confirmDelete: confirmDelete,
+                openBottomSheet: openBottomSheet,
+                createNewCategory: createNewCategory,
+                deleteCategory: deleteCategory,
+                editForum: editForum,
+                createNewForum: createNewForum,
+                deleteForum: deleteForum,
+                cancel: cancel,
+                getForums: getForums,
+                getThreads: getThreads,
+                getCurrentForum: getSelectedForum,
+                deleteThread: deleteThread,
+                editThread: editThread,
+                createThread: createThread,
+                deleteComment: deleteComment,
+                editComment: editComment,
+                createComment: createComment,
+            }
+        }]) 
+        
+        
+        
+        
+        
+        /*
+            {               
                 
                     "categories": [
                         {
@@ -401,187 +695,7 @@ angular.module("BossCollection.forums")
                         }
                     ]
             }
-
-            function setForum(selectedforum) {
-                currentForum = selectedforum;
-            }
-            
-            function getSelectedForum(){
-                var defer = $q.defer();
-                
-                if(currentForum){
-                    defer.resolve(currentForum);
-                }
-                else{
-                    
-                    defer.resolve(forums.categories[0].forums[0]);
-                }
-                
-                return defer.promise;
-            }
-
-            function getThreads(thread) {
-
-            }
-            
-            function deleteThread(thread){
-                
-            }
-            
-            function editThread(thread){
-                
-            }
-            
-            function createThread(thread){
-                
-            }
-            
-            function deleteComment(comment){
-                
-            }
-            
-            function editComment(comment){
-                
-            }
-            
-            function createComment(comment){
-                
-            }
-
-            function deleteCategory(category) {
-
-            }
-
-            function createNewCategory(category) {
-
-                var defer = $q.defer();
-
-                defer.resolve(category);
-
-                return defer.promise;
-            }
-            
-            function getForums(){
-                
-                var defer = $q.defer();
-
-                defer.resolve(forums);
-
-                return defer.promise;
-            }
-
-            function editCategory(category) {
-
-                var defer = $q.defer();
-
-                defer.resolve(category);
-
-                return defer.promise;
-            }
-
-            function deleteForum(forum) {
-
-                var defer = $q.defer();
-
-                defer.resolve(forum);
-
-                return defer.promise;
-            }
-
-            function createNewForum(forum) {
-
-                var defer = $q.defer();
-
-                defer.resolve(forum);
-
-                return defer.promise;
-            }
-
-            function editForum(forum) {
-
-                var defer = $q.defer();
-
-                defer.resolve(forum);
-
-                return defer.promise;
-            }
-
-            function confirmDelete(event, callback) {
-
-                var defer = $q.defer();
-
-                var confirm = $mdDialog.confirm()
-                    .title('Are you sure you want to delete this?')
-                    .textContent('This is irreversable once you click Yes!')
-                    .ariaLabel('Confirm Delete')
-                    .targetEvent(event)
-                    .ok('Delete')
-                    .cancel('Nevermind');
-
-                $mdDialog.show(confirm)
-                    .then(function () {
-
-                        defer.resolve(true);
-                    }, function (err) {
-
-                        defer.reject(false);
-                    })
-
-                return defer.promise;
-            }
-
-
-            function openBottomSheet(template, locals) {
-                
-                var defer = $q.defer();
-                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-                $mdDialog.show({
-                    templateUrl: template,
-                    controller: 'dialogController',
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false,
-                    locals: { data: locals },
-                    fullscreen: true
-                })
-                    .then(function (result) {
-
-                        defer.resolve(result);
-                    },
-                        function () {
-                            defer.reject();
-                            //Something broke or they canceled
-                        })
-
-                return defer.promise;
-            }
-
-            function cancel() {
-
-                $mdDialog.hide();
-            }
-
-            return {
-                setForum: setForum,
-                confirmDelete: confirmDelete,
-                openBottomSheet: openBottomSheet,
-                createNewCategory: createNewCategory,
-                deleteCategory: deleteCategory,
-                editForum:editForum,
-                createNewForum:createNewForum,
-                deleteForum:deleteForum,
-                cancel: cancel,
-                getForums: getForums,
-                getThreads:getThreads,
-                getCurrentForum:getSelectedForum,
-                deleteThread:deleteThread,
-                editThread:editThread,
-                createThread:createThread,
-                deleteComment:deleteComment,
-                editComment:editComment,
-                createComment:createComment,
-            }
-        }]) 
+            */
 angular.module("BossCollection.forums")
     .controller('threadController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog',
@@ -612,6 +726,16 @@ angular.module("BossCollection.forums")
             $scope.openThread = function(thread){
                 
                 forumService.openBottomSheet('threadComments', thread);
+            }
+            
+            $scope.createThread = function(forumID){
+                
+                forumService.openBottomSheet('threadEdit', {forumID: forumID});
+            }
+            
+            $scope.editThread = function(forum){
+                
+                forumService.openBottomSheet('threadEdit', forum);
             }
             
             $scope.goBack = function(){

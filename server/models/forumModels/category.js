@@ -11,4 +11,4 @@ var categorySchema = new Schema({
      
 })
 
-module.exports = mongoose.model('forums', forumSchema);
+module.exports = mongoose.model('category', categorySchema);

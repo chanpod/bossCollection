@@ -3,6 +3,9 @@ var router = express.Router();
 var ThreadManager = require('./components/threadManager')
 var MessageManager = require('./components/messageManager')
 var ForumManager = require('./components/forumManager')
+var CategoryManager = require('./components/categoryManager');
+
+var util = require('../../utility');
 
 router.use(function (req, res, next) {
 
@@ -19,22 +22,58 @@ router.use(function (req, res, next) {
 
 })
 
-//=======Message Routes ================
-router.route('/createMessage')
+//=======Comment Routes ================
+router.route('/createComment')
     .post(function (req, res) {
 
         console.log("Successfully accessed forum route");
 
     });
 
-router.route('/deleteMessage')
+router.route('/deleteComment')
     .post(function (req, res) {
 
         console.log("Successfully accessed forum route");
 
     });
 
-router.route('/updateMessage')
+router.route('/updateComment')
+    .post(function (req, res) {
+
+        console.log("Successfully accessed forum route");
+
+    });
+
+
+router.route('/getCategories')
+    .post(function(req, res){        
+        
+        CategoryManager.getCategories(req, res)
+            .then(function(response){
+                
+                res.status(200).send({forums: response})
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
+router.route('/createCategory')
+    .post(function (req, res) {
+
+        console.log("Creating a new category...");
+        
+        CategoryManager.createCategory(req, res)
+    });
+
+router.route('/deleteCategory')
+    .post(function (req, res) {
+
+        console.log("Successfully accessed forum route");
+
+    });
+
+router.route('/updateCategory')
     .post(function (req, res) {
 
         console.log("Successfully accessed forum route");
@@ -83,7 +122,7 @@ router.route('/updateThread')
 router.route('/createForum')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        ForumManager.createForum(req, res);
 
     });
 

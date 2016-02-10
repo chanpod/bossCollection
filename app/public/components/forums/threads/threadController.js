@@ -30,6 +30,16 @@ angular.module("BossCollection.forums")
                 forumService.openBottomSheet('threadComments', thread);
             }
             
+            $scope.createThread = function(forumID){
+                
+                forumService.openBottomSheet('threadEdit', {forumID: forumID});
+            }
+            
+            $scope.editThread = function(forum){
+                
+                forumService.openBottomSheet('threadEdit', forum);
+            }
+            
             $scope.goBack = function(){
                 window.history.back();
             }

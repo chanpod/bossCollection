@@ -6,7 +6,7 @@ angular.module("BossCollection.forums")
             console.log("Forum Controller loaded");
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
-            
+            $scope.loading = false;
             
             
             for (var i = 0; i < 5; i++) {
@@ -18,17 +18,43 @@ angular.module("BossCollection.forums")
             
             $scope.init = function(){
                 
-                forumService.getForums()
+                $scope.getForums();
+            }
+            
+            $scope.getForums = function(){
+                
+                $scope.loading = true;
+                return forumService.getForums()
                     .then(function(forums){
                         
+                        $scope.loading = false;  
                         $scope.forums = forums;
+                    })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                        console.log(err);
                     })
             }
             
             $scope.newCategory = function () {
 
                 $scope.category = {};
-                forumService.openBottomSheet('category');
+                
+                forumService.openBottomSheet('category')
+                    .then(function(result){
+                        
+                        $scope.getForums();
+                    })
+                    .then(function(){
+                        
+                        //Category created. 
+                        forumService.cancel();
+                    })
+                    .catch(function(err){
+                        
+                        siteServices.showMessageModal(err);
+                    })
             }
 
             $scope.editCategory = function (category) {
@@ -56,9 +82,11 @@ angular.module("BossCollection.forums")
                     })
             }
             
-            $scope.createForum = function () {
+            $scope.createForum = function (category) {
                 
-                forumService.openBottomSheet('forumEdit');
+                var categoryId = category._id;
+                
+                forumService.openBottomSheet('forumEdit', {object: {categoryId: categoryId}});
                 
             }
 

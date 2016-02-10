@@ -1,6 +1,6 @@
 script#forum(type="text/ng-template")    
     md-content(layout = "column", flex, layout-fill)
-        div(ng-repeat = "category in forums.categories")
+        div(ng-repeat = "category in forums.categories")            
             md-toolbar().md-scroll-shrink
                 div().md-toolbar-tools
                     {{category.name}}
@@ -10,8 +10,9 @@ script#forum(type="text/ng-template")
                             md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                         md-button(ng-click = "editCategory(category)").md-icon-button
                             md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                        md-button(ng-click = "createForum()").md-icon-button
+                        md-button(ng-click = "createForum(category)").md-icon-button
                             md-icon(md-font-library="material-icons", aria-label = "add new forum") add
+            md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             md-list
                 md-list-item(ng-repeat = "forum in category.forums").md-2-line
                     div(ng-click = "goToForum(forum)", layout-padding).md-list-item-text
@@ -29,5 +30,5 @@ script#forum(type="text/ng-template")
                 md-button(ng-click = "newCategory()").md-raised
                     | New Category
                             
-        //input-markdown(input = "markdown")
+        ad()
                             

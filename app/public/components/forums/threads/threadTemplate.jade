@@ -6,6 +6,8 @@ script#thread(type="text/ng-template")
                         md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
                     | Forums
                     span(flex)
+                    md-button(ng-click = "createThread()").md-icon-button
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") add
                     md-button(ng-click = "refresh()").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "delete category") refresh
         md-progress-linear(ng-if = "loading", md-mode="indeterminate")

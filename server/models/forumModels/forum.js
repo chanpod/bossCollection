@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 
 var forumSchema = new Schema({
     
-    name: String,    
+    name: String,
+    categoryId: String, 
     threads: Array,
 })
 

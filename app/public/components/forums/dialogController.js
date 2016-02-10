@@ -49,10 +49,10 @@ angular.module("BossCollection.forums")
 
                 $scope.loading = false;
 
-                forumService.createNewCategory()
+                forumService.createNewCategory({name: $scope.object.name})
                     .then(function (result) {
-
-                        $scope.close();
+                        
+                        $scope.close(result);
                     })
                     .catch(function (err) {
 
@@ -61,18 +61,38 @@ angular.module("BossCollection.forums")
                         $scope.loading = false;
                     })
             }
+            
+            $scope.saveThread = function(){
+                
+                forumService.createNewThread()
+                    .then(function (response) {
+
+                        $scope.close(response);
+                    })
+                    .catch(function (err) {
+                        $scope.loading = false;
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
+            }
 
             $scope.saveForum = function () {
                 
-                $scope.loading = false;
+                $scope.loading = true;
+                
+                var forum = {
+                    name: $scope.object.name,
+                    categoryId: $scope.object.object.categoryId
+                }
+                
+                forumService.createNewForum(forum)
+                    .then(function (response) {
 
-                forumService.createNewForum()
-                    .then(function () {
-
-                        $scope.close();
+                        $scope.close(response);
                     })
                     .catch(function (err) {
-
+                        $scope.loading = false;
                     })
                     .finally(function () {
                         $scope.loading = false;
