@@ -26,9 +26,33 @@ router.use(function (req, res, next) {
 router.route('/createComment')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        console.log("Creating comment...");
+        
+        MessageManager.createComment(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response)
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
 
     });
+    
+router.route('/getComments')
+    .post(function (req, res) {
+        
+        MessageManager.getComments(req.body.threadId)
+            .then(function(response){
+                
+                res.status(200).send(response)
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
+
+    });
+
 
 router.route('/deleteComment')
     .post(function (req, res) {
@@ -90,10 +114,29 @@ router.route('/updateCategory')
 
 //=======Thread Routes ================
 
+router.route('/getThreads')
+    .post(function (req, res) {
+
+        console.log("Creating a thread...");
+        
+        ThreadManager.getThreads(req.body.forumId)
+            .then(function(response){
+                
+                res.status(200).send(response);
+            })
+
+    });
+
 router.route('/createThread')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        console.log("Creating a thread...");
+        
+        ThreadManager.createThread(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response);
+            })
 
     });
 

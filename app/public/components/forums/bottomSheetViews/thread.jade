@@ -12,37 +12,38 @@ script#threadComments(type="text/ng-template")
                     md-card-title-text
                         h3
                             {{object.user}}
+                md-divider
                 md-card-content
                     p
-                        {{object.message}}
+                        display-markdown(markdown = "object.message") 
                     div(flex, layout = "row", layout-align = "end center")
                         md-button(ng-click = "editForum(forum)").md-icon-button
                             md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                         
                     md-divider() 
-                    div(layout = "column", ng-if = "replying")
+                    div(flex, layout = "column", ng-if = "replying")
                         div(flex, layout = "row",  layout-align="end center")
                             md-button(flex, ng-click = "saveComment()").md-raised.md-primary
                                 | Save
                             md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
                                 | Cancel
                         div(flex)
-                            input-markdown(flex, input = "comment")
-                    md-list
-                        md-list-item(ng-repeat = "comment in object.comments").md-2-line.md-long-text
+                            input-markdown(flex, input = "object.newComment")
+                    md-card(ng-repeat = "comment in object.comments").md-whiteframe-10dp
+                        md-card-content
                             div(layout = "column")
-                                div(flex, ng-click = "goToForum(forum)", layout-padding).md-list-item-text
+                                div(flex).md-list-item-text
                                     h3
                                         {{comment.user}}
-                                    p
-                                        {{comment.message}}
+                                    md-divider
+                                            display-markdown(markdown = "comment.message")
                                 div(flex, layout = "row", layout-align = "end center")
                                     md-button(ng-click = "deleteForum(forum)").md-icon-button
                                         md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                                     md-button(ng-click = "editForum(forum)").md-icon-button
                                         md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                                 
-                            md-divider(ng-if="!$last")
+                            
                         md-list-item(style = "height = 50px;")
         
         md-button(ng-click = "openCommentBox()", ng-if = "!replying", aria-label = "reply", layout-align = "end center").md-fab.md-primary.reply

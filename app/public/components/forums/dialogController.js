@@ -30,10 +30,17 @@ angular.module("BossCollection.forums")
             
             $scope.saveComment = function(){
                 
-                forumService.saveComment()
-                    .then(function(){
+                var comment = {
+                    message: $scope.object.newComment,
+                    threadId: $scope.object._id 
+                }
+                
+                forumService.createComment(comment)
+                    .then(function(comment){
                         
-                        $scope.comment = "";
+                        $scope.object.newComment = "";
+                        $scope.object.comments.push(comment.comment);
+                        $scope.cancelComment();
                     })
             }
             
@@ -64,7 +71,13 @@ angular.module("BossCollection.forums")
             
             $scope.saveThread = function(){
                 
-                forumService.createNewThread()
+                var thread = {
+                    name: $scope.object.name,
+                    forumId: $scope.object.forum._id,
+                    message: $scope.object.message
+                }
+                
+                forumService.createThread(thread)
                     .then(function (response) {
 
                         $scope.close(response);

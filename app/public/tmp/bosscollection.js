@@ -144,10 +144,17 @@ angular.module("BossCollection.forums")
             
             $scope.saveComment = function(){
                 
-                forumService.saveComment()
-                    .then(function(){
+                var comment = {
+                    message: $scope.object.newComment,
+                    threadId: $scope.object._id 
+                }
+                
+                forumService.createComment(comment)
+                    .then(function(comment){
                         
-                        $scope.comment = "";
+                        $scope.object.newComment = "";
+                        $scope.object.comments.push(comment.comment);
+                        $scope.cancelComment();
                     })
             }
             
@@ -178,7 +185,13 @@ angular.module("BossCollection.forums")
             
             $scope.saveThread = function(){
                 
-                forumService.createNewThread()
+                var thread = {
+                    name: $scope.object.name,
+                    forumId: $scope.object.forum._id,
+                    message: $scope.object.message
+                }
+                
+                forumService.createThread(thread)
                     .then(function (response) {
 
                         $scope.close(response);
@@ -337,15 +350,19 @@ angular.module("BossCollection.forums")
         }]) 
 angular.module("BossCollection.forums")
     .service('forumService', [
-        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource',
+        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource', 
         function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource) {
 
-            var currentForum = {};
+            var currentForum;
 
             var categoryResource = $resource('/forum/createCategory', {}, {})
             var getForumsResource = $resource('/forum/getCategories', {}, {});
             var createNewForumResource = $resource('/forum/createForum', {}, {});
             var createNewThreadResource = $resource('/forum/createThread', {}, {});
+            var getThreadsResource = $resource('/forum/getThreads', {}, {});
+            
+            var createCommentResource = $resource('/forum/createComment', {}, {});
+            var getCommentsResource = $resource('/forum/getComments', {}, {});
             var forums;
             
             //==== Category Functions ==================
@@ -354,7 +371,7 @@ angular.module("BossCollection.forums")
 
             }
 
-            function createNewCategory(category) {
+            function createNewCategory(category) { 
 
                 var defer = $q.defer();
 
@@ -383,6 +400,38 @@ angular.module("BossCollection.forums")
             function setForum(selectedforum) {
                 currentForum = selectedforum;
             }
+            
+            function getForum(forumId){
+                
+                var defer = $q.defer();
+                
+                getForums()
+                    .then(function(forums){
+                        
+                        var selectedForum;
+                         
+                         _(forums.categories).forEach(function(category){
+                             
+                         
+                             _.find(category.forums, function (forum) {
+
+                                 if(forum._id == forumId){
+                                     selectedForum = forum;
+                                 }
+                             })
+                        
+                        })
+                        
+                        defer.resolve(selectedForum);
+                    }, function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                    
+                return defer.promise;
+            }
 
             function getForums() {
 
@@ -398,6 +447,9 @@ angular.module("BossCollection.forums")
 
                             forums = response.forums;
                             defer.resolve(response.forums);
+                        }, function(err){
+                            
+                            defer.reject(err);
                         })
                 }
                 return defer.promise;
@@ -438,6 +490,7 @@ angular.module("BossCollection.forums")
             }
 
             function getSelectedForum() {
+                
                 var defer = $q.defer();
 
                 if (currentForum) {
@@ -445,7 +498,12 @@ angular.module("BossCollection.forums")
                 }
                 else {
 
-                    defer.resolve(forums.categories[0].forums[0]);
+                    getForum($routeParams.forumID)
+                        .then(function(forum){
+                            
+                            currentForum = forum;
+                            defer.resolve(forum);
+                        })
                 }
 
                 return defer.promise;
@@ -453,8 +511,19 @@ angular.module("BossCollection.forums")
             
             //==== Thread Functions ==================
             
-            function getThreads(thread) {
+            function getThreads(forumId) {
+                
+                var defer = $q.defer();
 
+                var bodyData = { forumId: forumId };
+
+                getThreadsResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.threads);
+                    })
+
+                return defer.promise;
             }
 
             function deleteThread(thread) {
@@ -494,10 +563,43 @@ angular.module("BossCollection.forums")
             }
 
             function createComment(comment) {
-
+                
+                var defer = $q.defer();
+                
+                var bodyData = { comment: comment };
+                
+                createCommentResource.save(bodyData).$promise
+                    .then(function(comment){
+                        
+                        defer.resolve(comment)
+                    }, 
+                    function(err){
+                        
+                        defer.reject(err);
+                    })
+                
+                
+                return defer.promise;
             }
 
-            
+            function getComments(threadId){
+                
+                var defer = $q.defer();
+                
+                var bodyData = {threadId: threadId};
+                
+                getCommentsResource.save(bodyData).$promise
+                    .then(function(comments){
+                        
+                        defer.resolve(comments);
+                    }, 
+                    function(err){
+                        
+                        defer.reject(err);
+                    })
+                    
+                return defer.promise;
+            }
             
             
 
@@ -581,121 +683,11 @@ angular.module("BossCollection.forums")
                 deleteComment: deleteComment,
                 editComment: editComment,
                 createComment: createComment,
+                getComments:getComments
             }
         }]) 
         
-        
-        
-        
-        
-        /*
-            {               
-                
-                    "categories": [
-                        {
-                            "name": "Strategy",
-                            "forums": [
-                                {
-                                    "name": "HM",
-                                    "threads": [
-                                        {
-                                            title: "Test Title",
-                                            user: "tester",
-                                            comments: [
-                                                {
-                                                    user: "chanpod",                                                    
-                                                    message: "I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long." 
-                                                },
-                                                {
-                                                    user: "test",                                                    
-                                                    message: "I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long." 
-                                                },
-                                                {
-                                                    user: "tester",                                                    
-                                                    message: "I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long. I'm leaving a message for this thread. It will be very long." 
-                                                }
-                                            ],
-                                            message: "I created a thread!",
-                                        },
-                                        {
-                                            title: "Test Title",
-                                            user: "test",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        },
-                                        {
-                                            title: "Test Title",
-                                            user: "test2",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        }
-                                    ]
-                                },
-                                {
-                                    "name": "BRF",
-                                    "threads": [
-                                        {
-                                            title: "Test",
-                                            user: "Tester",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        },
-                                        {
-                                            title: "Test",
-                                            user: "Tester",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        },
-                                        {
-                                            title: "Test",
-                                            user: "Tester",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        }
-                                    ]
-                                },
-                                {
-                                    "name": "HFC",
-                                    "threads": [
-                                        {
-                                            title: "Test",
-                                            user: "Tester",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        },
-                                        {
-                                            title: "Test",
-                                            user: "Tester",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        },
-                                        {
-                                            title: "Test",
-                                            user: "Tester",
-                                            comments: [],
-                                            message: "I created a thread!",
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "name": "General",
-                            "forums": [
-                                {
-                                    "name": "Whatever"
-                                },
-                                {
-                                    "name": "Real Life"
-                                },
-                                {
-                                    "name": "Other Games"
-                                }
-                            ]
-                        }
-                    ]
-            }
-            */
+      
 angular.module("BossCollection.forums")
     .controller('threadController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog',
@@ -708,7 +700,7 @@ angular.module("BossCollection.forums")
             
             $scope.init = function(){
                 
-                
+                $scope.loading = true;
                 
                 $scope.forum = forumService.getCurrentForum()
                     .then(function(forum){
@@ -721,16 +713,47 @@ angular.module("BossCollection.forums")
                     .then(function(threads){
                         $scope.threads = threads;
                     })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                    })
+                    .finally(function(){
+                        
+                        $scope.loading = false;
+                    })
             }  
+            
+            $scope.refresh = function(){
+                
+                $scope.loading = true;
+                
+                forumService.getThreads($scope.forum)
+                    .then(function(threads){
+                        
+                        $scope.loading = false;
+                        $scope.threads = threads;
+                    })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                    })
+            }
             
             $scope.openThread = function(thread){
                 
-                forumService.openBottomSheet('threadComments', thread);
+                forumService.getComments(thread._id)
+                    .then(function(comments){
+                        
+                        thread.comments = comments.comments;
+                        forumService.openBottomSheet('threadComments', thread);
+                    })
+                
+                
             }
             
-            $scope.createThread = function(forumID){
+            $scope.createThread = function(){
                 
-                forumService.openBottomSheet('threadEdit', {forumID: forumID});
+                forumService.openBottomSheet('threadEdit', {forum: $scope.forum});
             }
             
             $scope.editThread = function(forum){
@@ -2147,6 +2170,29 @@ angular.module('BossCollection.directives').
         }  
   }]); 
  
+angular.module('BossCollection.directives')
+    .directive('displayMarkdown', ['$sce', function($sce){
+        
+        return {
+            restrict: 'E',
+            scope: {
+                markdown: '=markdown'
+            },
+            link: function(scope){
+                
+                var converter = new showdown.Converter();
+                
+                scope.converToHtml = function (){
+                    
+                    scope.html = $sce.trustAsHtml(converter.makeHtml(scope.markdown));
+                }
+                
+                scope.converToHtml(scope.markdown);    
+            }, 
+            templateUrl: 'displayMarkdownDirective'
+        } 
+        
+    }])
 angular.module('BossCollection.directives')
     .directive('inputMarkdown', ['$sce', function($sce){
         

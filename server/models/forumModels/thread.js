@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var threadSchema = new Schema({
     
     title: String,
-    user: name,
+    user: String,
     comments: Array,
     message: String,
     forumID: String

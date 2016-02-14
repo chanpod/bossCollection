@@ -7,17 +7,17 @@ script#thread(type="text/ng-template")
                     | Forums
                     span(flex)
                     md-button(ng-click = "createThread()").md-icon-button
-                        md-icon(md-font-library="material-icons", aria-label = "delete category") add
+                        md-icon(md-font-library="material-icons", aria-label = "new thread") add
                     md-button(ng-click = "refresh()").md-icon-button
-                        md-icon(md-font-library="material-icons", aria-label = "delete category") refresh
+                        md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
         md-progress-linear(ng-if = "loading", md-mode="indeterminate")
         md-list
-                md-list-item(ng-repeat = "thread in forum.threads").md-2-line
+                md-list-item(ng-repeat = "thread in threads").md-2-line
                     div(ng-click = "openThread(thread)", layout-padding).md-list-item-text
                         h3
-                            {{thread.user}}
-                        p
                             {{thread.title}}
+                        p
+                            {{thread.user}}
                         div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
                             md-button(ng-click = "deleteForum(thread)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "delete category") delete

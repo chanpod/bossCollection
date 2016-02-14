@@ -10,7 +10,7 @@ angular.module("BossCollection.forums")
             
             $scope.init = function(){
                 
-                
+                $scope.loading = true;
                 
                 $scope.forum = forumService.getCurrentForum()
                     .then(function(forum){
@@ -23,16 +23,47 @@ angular.module("BossCollection.forums")
                     .then(function(threads){
                         $scope.threads = threads;
                     })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                    })
+                    .finally(function(){
+                        
+                        $scope.loading = false;
+                    })
             }  
+            
+            $scope.refresh = function(){
+                
+                $scope.loading = true;
+                
+                forumService.getThreads($scope.forum)
+                    .then(function(threads){
+                        
+                        $scope.loading = false;
+                        $scope.threads = threads;
+                    })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                    })
+            }
             
             $scope.openThread = function(thread){
                 
-                forumService.openBottomSheet('threadComments', thread);
+                forumService.getComments(thread._id)
+                    .then(function(comments){
+                        
+                        thread.comments = comments.comments;
+                        forumService.openBottomSheet('threadComments', thread);
+                    })
+                
+                
             }
             
-            $scope.createThread = function(forumID){
+            $scope.createThread = function(){
                 
-                forumService.openBottomSheet('threadEdit', {forumID: forumID});
+                forumService.openBottomSheet('threadEdit', {forum: $scope.forum});
             }
             
             $scope.editThread = function(forum){

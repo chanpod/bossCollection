@@ -5,10 +5,12 @@ script#threadEdit(type="text/ng-template")
                 | Thread
         div()
             form(name = "logInForm")
-                div(layout = "row")
+                div(layout = "column")
                     md-input-container(flex).md-block
                         label() Thread Name
-                        input(ng-model = "object.name", required)                        
+                        input(ng-model = "object.name", required)        
+                    div(ng-if = "!object.threadId")
+                        input-markdown(flex, input = "object.message")
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block
                         md-button(ng-click = "saveThread()").md-primary.md-raised
