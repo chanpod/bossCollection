@@ -4,6 +4,8 @@ var q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 
+var MessageManager = require('./MessageManager');
+
 var util = require('../../../utility');
 var ThreadModel = require('../../../models/forumModels/thread.js');
 
@@ -35,6 +37,40 @@ function createThread(req, res){
     return defer.promise;
 }
 
+/**
+ *  get associated Comments
+ *  delete Comments
+ *  detele Thread   
+ */
+function deleteThread(req, res){
+    
+    var defer = q.defer();
+    var thread = req.body.thread;
+    var threadId = thread.id || thread._id;
+    
+    MessageManager.getComments(threadId)
+        .then(function(comments){
+            
+            _(comments.comments).forEach(function(comment){
+                
+                req.body.comment = comment;
+                MessageManager.deleteComment(req, res);
+            })
+            
+            ThreadModel.findOne({"_id": threadId})
+                .then(function(thread){
+                    
+                    thread.remove();
+                    defer.resolve();  
+                })
+                
+        }, function(err){
+            
+            defer.reject(err);
+        })
+        
+    return defer.promise;
+}
 
 function getThreads(forumId){
     
@@ -53,5 +89,6 @@ function getThreads(forumId){
 
 module.exports = {
     createThread:createThread,
-    getThreads:getThreads
+    getThreads:getThreads,
+    deleteThread:deleteThread
 }

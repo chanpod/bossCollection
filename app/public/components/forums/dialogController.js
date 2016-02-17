@@ -51,6 +51,24 @@ angular.module("BossCollection.forums")
             $scope.close = function () {
                 $mdDialog.hide($scope.object);
             }
+            
+            $scope.deleteCategory = function(){
+                
+                forumService.deleteCategory($scope.object)
+                    .then(function(result){
+                        
+                        $scope.close(result);
+                    })
+            }
+            
+            $scope.deleteForum = function(){
+                
+                forumService.deleteForum($scope.object)
+                    .then(function(result){
+                        
+                        $scope.close(result);
+                    })
+            }
 
             $scope.saveCategory = function () {
 

@@ -56,14 +56,18 @@ angular.module("BossCollection.forums")
                         
                         thread.comments = comments.comments;
                         forumService.openBottomSheet('threadComments', thread);
+                            
                     })
                 
                 
             }
             
-            $scope.createThread = function(){
-                
-                forumService.openBottomSheet('threadEdit', {forum: $scope.forum});
+            $scope.createThread = function () {
+
+                forumService.openBottomSheet('threadEdit', { forum: $scope.forum })
+                    .then(function (response) {
+                        $scope.refresh();
+                    })
             }
             
             $scope.editThread = function(forum){

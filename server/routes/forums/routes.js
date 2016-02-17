@@ -94,7 +94,17 @@ router.route('/deleteCategory')
     .post(function (req, res) {
 
         console.log("Successfully accessed forum route");
-
+        
+        CategoryManager.deleteCategories(req, res)
+            .then(function(response){
+                
+                res.status(200).send();
+            })
+            .fail(function(err){
+                
+                res.status(400).send(util.handleErrors(err));
+            })
+        
     });
 
 router.route('/editCategory')
@@ -180,7 +190,12 @@ router.route('/createForum')
 router.route('/deleteForum')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        console.log("Deleting forum...");
+        ForumManager.deleteForum(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response);
+            })
 
     });
 

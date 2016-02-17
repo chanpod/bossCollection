@@ -33,6 +33,25 @@ function createComment(req, res){
     return defer.promise;
 }
 
+function deleteComment(req, res) {
+
+    var defer = q.defer();
+    var comment = req.body.comment;
+    var commentId = comment.id || comment._id;
+
+    commentModel.findOne({ "_id": commentId })
+        .then(function (comment) {
+
+            comment.remove();
+            defer.resolve();
+            
+        }, function(err){
+            
+            defer.reject(err);
+        })
+
+    return defer.promise;
+}
 
 function getComments(threadId){
     
@@ -51,5 +70,6 @@ function getComments(threadId){
 
 module.exports = {
     createComment:createComment,
-    getComments:getComments
+    getComments:getComments,
+    deleteComment:deleteComment
 }

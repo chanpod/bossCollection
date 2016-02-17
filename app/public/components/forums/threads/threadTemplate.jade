@@ -13,10 +13,10 @@ script#thread(type="text/ng-template")
         md-progress-linear(ng-if = "loading", md-mode="indeterminate")
         md-list
                 md-list-item(ng-repeat = "thread in threads").md-2-line
-                    div(ng-click = "openThread(thread)", layout-padding).md-list-item-text
-                        h3
+                    div(layout-padding).md-list-item-text
+                        h3(ng-click = "openThread(thread)")
                             {{thread.title}}
-                        p
+                        p(ng-click = "openThread(thread)")
                             {{thread.user}}
                         div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
                             md-button(ng-click = "deleteForum(thread)").md-icon-button

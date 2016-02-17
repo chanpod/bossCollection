@@ -47,6 +47,42 @@ function editCategory(req, res){
     return defer.promise;
 }
 
+/**
+ *  get associated Forums
+ *  delete Forums
+ *  detele Category  
+ */
+function deleteCategories(req, res){
+    
+    var defer = q.defer();
+    var categoryId = req.body.category._id;
+    
+    
+    ForumManager.getForums(categoryId)
+        .then(function (forums) {
+            
+            _(forums).forEach(function(forum, index){
+                
+                req.body.forum = forum;
+                ForumManager.deleteForum(req, res);
+            })
+            
+            CategorydModel.findOne({ "_id": categoryId })
+                .then(function (category) {
+
+                    category.remove();
+                    defer.resolve();
+                })
+                
+        }, function(err){
+            
+            defer.reject(err);
+        }) 
+    
+
+    return defer.promise;
+}
+
 function getCategories(req, res){
     
     var guild = req.session.user.guild.name;
@@ -94,5 +130,6 @@ function getCategories(req, res){
 module.exports = {
     createCategory:createCategory,
     getCategories:getCategories,
-    editCategory:editCategory
+    editCategory:editCategory,
+    deleteCategories:deleteCategories
 }

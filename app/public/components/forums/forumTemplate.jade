@@ -1,5 +1,6 @@
 script#forum(type="text/ng-template")    
     md-content(layout = "column", flex, layout-fill)
+        md-progress-linear(ng-if = "loading", md-mode="indeterminate")
         div(ng-repeat = "category in forums.categories")            
             md-toolbar().md-scroll-shrink
                 div().md-toolbar-tools
@@ -15,8 +16,8 @@ script#forum(type="text/ng-template")
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             md-list
                 md-list-item(ng-repeat = "forum in category.forums").md-2-line
-                    div(ng-click = "goToForum(forum)", layout-padding).md-list-item-text
-                        h3
+                    div(layout-padding).md-list-item-text
+                        h3(ng-click = "goToForum(forum)")
                             {{forum.name}}
                         div(ng-show = "user.rank == 4").md-secondary
                             md-button(ng-click = "deleteForum(forum)").md-icon-button

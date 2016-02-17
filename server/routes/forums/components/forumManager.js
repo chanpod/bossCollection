@@ -4,6 +4,8 @@ var q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 
+var ThreadManager = require('./threadManager');
+
 var util = require('../../../utility');
 var ForumdModel = require('../../../models/forumModels/forum.js');
 
@@ -27,6 +29,44 @@ function createForum(req, res){
         res.status(400).send(util.handleErrors(err));    
     })
     
+}
+
+/**
+ *  get associated Threads
+ *  delete threads
+ *  detele forum   
+ */
+function deleteForum(req, res){
+    
+    var defer = q.defer();
+    var forum = req.body.forum;
+    var forumId = forum.id || forum._id;
+    
+    ThreadManager.getThreads(forumId)
+        .then(function(threads){
+            
+            _(threads.threads).forEach(function(someThread, index){
+                
+                req.body.thread = someThread;
+                ThreadManager.deleteThread(req, res);
+            })
+            
+            ForumdModel.findOne({ "_id": forumId })
+                .then(function (forum) {
+
+                    forum.remove();
+                    defer.resolve({response: true});
+                })
+                
+        }, function(err){
+            
+            defer.reject(err);
+        })
+        .then(function(){
+            
+        })
+    
+    return defer.promise;
 }
 
 function getForums(categoryId){
@@ -53,5 +93,6 @@ function getForums(categoryId){
 
 module.exports = {
     createForum:createForum,
-    getForums:getForums
+    getForums:getForums,
+    deleteForum:deleteForum
 }

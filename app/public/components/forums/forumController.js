@@ -44,6 +44,7 @@ angular.module("BossCollection.forums")
                 forumService.openBottomSheet('category')
                     .then(function(result){
                         
+                        forumService.removeLocalForums();
                         $scope.getForums();
                     })
                     .then(function(){
@@ -63,7 +64,8 @@ angular.module("BossCollection.forums")
                 
                 forumService.openBottomSheet('category', category)
                     .then(function(result){
-                        
+                        forumService.removeLocalForums();
+                        $scope.getForums();
                     })
                     .catch(function(err){
                         //Didn't save
@@ -77,8 +79,12 @@ angular.module("BossCollection.forums")
                         
                         if(result){
                             console.log("Deleting the category")
-                            forumService.deleteCategory(category);
+                            return forumService.deleteCategory(category);
                         }
+                    })
+                    .then(function(response){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
                     })
             }
             
@@ -86,7 +92,14 @@ angular.module("BossCollection.forums")
                 
                 var categoryId = category._id;
                 
-                forumService.openBottomSheet('forumEdit', {object: {categoryId: categoryId}});
+                forumService.openBottomSheet('forumEdit', {object: {categoryId: categoryId}})
+                    .then(function(result){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+                    .catch(function(err){
+                        //Didn't save
+                    })
                 
             }
 
@@ -94,8 +107,9 @@ angular.module("BossCollection.forums")
                 
                 forumService.openBottomSheet('category', { object: forum })
                     .then(function (result) {
-
-                        console.log(result);
+                        
+                        forumService.removeLocalForums();
+                        $scope.getForums();
                     })
             }
             
@@ -106,8 +120,12 @@ angular.module("BossCollection.forums")
                         
                         if(result){
                             console.log("Deleting the forum")
-                            forumService.deleteForum(forum);
+                            return forumService.deleteForum(forum);
                         }
+                    })
+                    .then(function(response){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
                     })
             }
 
