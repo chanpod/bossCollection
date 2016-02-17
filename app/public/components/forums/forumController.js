@@ -61,7 +61,7 @@ angular.module("BossCollection.forums")
 
                 //$scope.category = category;
                 
-                forumService.openBottomSheet('category', {object: category})
+                forumService.openBottomSheet('category', category)
                     .then(function(result){
                         
                     })

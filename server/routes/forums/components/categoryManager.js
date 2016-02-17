@@ -30,6 +30,23 @@ function createCategory(req, res){
     
 }
 
+function editCategory(req, res){
+    
+    var defer = q.defer();
+    var query = { "_id" : req.body.category._id};
+    
+    CategorydModel.findOneAndUpdate(query, req.body.category)
+        .then(function(response){
+            
+            defer.resolve(response);
+        },function(err){
+            defer.reject(err);
+        })
+        
+    
+    return defer.promise;
+}
+
 function getCategories(req, res){
     
     var guild = req.session.user.guild.name;
@@ -54,6 +71,8 @@ function getCategories(req, res){
                     })   
             })
             
+        },function(err){
+            defer.reject(err);
         })
     
     function forEachFinished(index){
@@ -74,5 +93,6 @@ function getCategories(req, res){
 
 module.exports = {
     createCategory:createCategory,
-    getCategories:getCategories
+    getCategories:getCategories,
+    editCategory:editCategory
 }

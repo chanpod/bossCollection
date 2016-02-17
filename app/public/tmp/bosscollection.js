@@ -121,48 +121,48 @@ angular.module("BossCollection.forums")
             $scope.loading = false;
             $scope.replying = false;
             $scope.comment = "";
-            
-            if(data){
-                
-                $scope.object = data; 
+
+            if (data) {
+
+                $scope.object = data;
             }
-            else{
+            else {
                 $scope.object = {};
             }
-            
-            
-            
-            
+
+
+
+
             $scope.cancel = function () {
 
                 $mdDialog.cancel();
             }
-            
-            $scope.cancelComment = function(){
+
+            $scope.cancelComment = function () {
                 $scope.replying = false;
             }
-            
-            $scope.saveComment = function(){
-                
+
+            $scope.saveComment = function () {
+
                 var comment = {
                     message: $scope.object.newComment,
-                    threadId: $scope.object._id 
+                    threadId: $scope.object._id
                 }
-                
+
                 forumService.createComment(comment)
-                    .then(function(comment){
-                        
+                    .then(function (comment) {
+
                         $scope.object.newComment = "";
                         $scope.object.comments.push(comment.comment);
                         $scope.cancelComment();
                     })
             }
-            
-            $scope.openCommentBox = function(){
+
+            $scope.openCommentBox = function () {
                 $scope.replying = true;
             }
-            
-            $scope.close = function(){
+
+            $scope.close = function () {
                 $mdDialog.hide($scope.object);
             }
 
@@ -170,27 +170,43 @@ angular.module("BossCollection.forums")
 
                 $scope.loading = false;
 
-                forumService.createNewCategory({name: $scope.object.name})
-                    .then(function (result) {
-                        
-                        $scope.close(result);
-                    })
-                    .catch(function (err) {
+                if ($scope.object._id) {
+                    forumService.editCategory($scope.object)
+                        .then(function (result) {
 
-                    })
-                    .finally(function () {
-                        $scope.loading = false;
-                    })
+                            $scope.close(result);
+                        })
+                        .catch(function (err) {
+                            
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else {
+                    forumService.createNewCategory({ name: $scope.object.name })
+                        .then(function (result) {
+
+                            $scope.close(result);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+
             }
-            
-            $scope.saveThread = function(){
-                
+
+            $scope.saveThread = function () {
+
                 var thread = {
                     name: $scope.object.name,
                     forumId: $scope.object.forum._id,
                     message: $scope.object.message
                 }
-                
+
                 forumService.createThread(thread)
                     .then(function (response) {
 
@@ -205,14 +221,14 @@ angular.module("BossCollection.forums")
             }
 
             $scope.saveForum = function () {
-                
+
                 $scope.loading = true;
-                
+
                 var forum = {
                     name: $scope.object.name,
                     categoryId: $scope.object.object.categoryId
                 }
-                
+
                 forumService.createNewForum(forum)
                     .then(function (response) {
 
@@ -289,7 +305,7 @@ angular.module("BossCollection.forums")
 
                 //$scope.category = category;
                 
-                forumService.openBottomSheet('category', {object: category})
+                forumService.openBottomSheet('category', category)
                     .then(function(result){
                         
                     })
@@ -356,6 +372,8 @@ angular.module("BossCollection.forums")
             var currentForum;
 
             var categoryResource = $resource('/forum/createCategory', {}, {})
+            var categoryEditResource = $resource('/forum/editCategory', {}, {})
+            var categoryDeleteResource = $resource('/forum/deleteCategory', {}, {})
             var getForumsResource = $resource('/forum/getCategories', {}, {});
             var createNewForumResource = $resource('/forum/createForum', {}, {});
             var createNewThreadResource = $resource('/forum/createThread', {}, {});
@@ -389,7 +407,19 @@ angular.module("BossCollection.forums")
             function editCategory(category) {
 
                 var defer = $q.defer();
+                var bodyData = { category: category };
+                
+                categoryEditResource.save(bodyData).$promise
+                    .then(function (response) {
 
+                        defer.resolve(response.category);
+                    }, function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
                 defer.resolve(category);
 
                 return defer.promise;
@@ -670,6 +700,7 @@ angular.module("BossCollection.forums")
                 openBottomSheet: openBottomSheet,
                 createNewCategory: createNewCategory,
                 deleteCategory: deleteCategory,
+                editCategory:editCategory,
                 editForum: editForum,
                 createNewForum: createNewForum,
                 deleteForum: deleteForum,

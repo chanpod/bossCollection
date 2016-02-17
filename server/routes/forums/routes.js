@@ -97,10 +97,18 @@ router.route('/deleteCategory')
 
     });
 
-router.route('/updateCategory')
+router.route('/editCategory')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        console.log("Edit Category...");
+        CategoryManager.editCategory(req, res)
+            .then(function(response){
+                
+                res.status(200).send({category: response})
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
 
     });
 

@@ -6,6 +6,8 @@ angular.module("BossCollection.forums")
             var currentForum;
 
             var categoryResource = $resource('/forum/createCategory', {}, {})
+            var categoryEditResource = $resource('/forum/editCategory', {}, {})
+            var categoryDeleteResource = $resource('/forum/deleteCategory', {}, {})
             var getForumsResource = $resource('/forum/getCategories', {}, {});
             var createNewForumResource = $resource('/forum/createForum', {}, {});
             var createNewThreadResource = $resource('/forum/createThread', {}, {});
@@ -39,7 +41,19 @@ angular.module("BossCollection.forums")
             function editCategory(category) {
 
                 var defer = $q.defer();
+                var bodyData = { category: category };
+                
+                categoryEditResource.save(bodyData).$promise
+                    .then(function (response) {
 
+                        defer.resolve(response.category);
+                    }, function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
                 defer.resolve(category);
 
                 return defer.promise;
@@ -320,6 +334,7 @@ angular.module("BossCollection.forums")
                 openBottomSheet: openBottomSheet,
                 createNewCategory: createNewCategory,
                 deleteCategory: deleteCategory,
+                editCategory:editCategory,
                 editForum: editForum,
                 createNewForum: createNewForum,
                 deleteForum: deleteForum,
