@@ -19,8 +19,8 @@ script#thread(type="text/ng-template")
                         p(ng-click = "openThread(thread)")
                             {{thread.user}}
                         div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
-                            md-button(ng-click = "deleteForum(thread)").md-icon-button
+                            md-button(ng-click = "deleteThread(thread)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "delete category") delete
-                            md-button(ng-click = "editForum(thread)").md-icon-button
+                            md-button(ng-click = "editThread(thread)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                     md-divider(ng-if="!$last")        

@@ -105,7 +105,7 @@ angular.module("BossCollection.forums")
 
             $scope.editForum = function(forum){
                 
-                forumService.openBottomSheet('category', { object: forum })
+                forumService.openBottomSheet('forumEdit', forum)
                     .then(function (result) {
                         
                         forumService.removeLocalForums();

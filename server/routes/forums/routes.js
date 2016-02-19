@@ -142,6 +142,9 @@ router.route('/getThreads')
                 
                 res.status(200).send(response);
             })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
 
     });
 
@@ -154,6 +157,9 @@ router.route('/createThread')
             .then(function(response){
                 
                 res.status(200).send(response);
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
             })
 
     });
@@ -196,14 +202,25 @@ router.route('/deleteForum')
                 
                 res.status(200).send(response);
             })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
 
     });
 
-router.route('/updateForum')
+router.route('/editForum')
     .post(function (req, res) {
 
         console.log("Successfully accessed forum route");
-
+        
+        ForumManager.editForum(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response);
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
     });
 
 module.exports = router;

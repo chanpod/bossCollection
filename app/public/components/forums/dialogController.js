@@ -51,21 +51,21 @@ angular.module("BossCollection.forums")
             $scope.close = function () {
                 $mdDialog.hide($scope.object);
             }
-            
-            $scope.deleteCategory = function(){
-                
+
+            $scope.deleteCategory = function () {
+
                 forumService.deleteCategory($scope.object)
-                    .then(function(result){
-                        
+                    .then(function (result) {
+
                         $scope.close(result);
                     })
             }
-            
-            $scope.deleteForum = function(){
-                
+
+            $scope.deleteForum = function () {
+
                 forumService.deleteForum($scope.object)
-                    .then(function(result){
-                        
+                    .then(function (result) {
+
                         $scope.close(result);
                     })
             }
@@ -81,7 +81,7 @@ angular.module("BossCollection.forums")
                             $scope.close(result);
                         })
                         .catch(function (err) {
-                            
+
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -117,7 +117,7 @@ angular.module("BossCollection.forums")
                         $scope.close(response);
                     })
                     .catch(function (err) {
-                        $scope.loading = false;
+                        
                     })
                     .finally(function () {
                         $scope.loading = false;
@@ -128,21 +128,40 @@ angular.module("BossCollection.forums")
 
                 $scope.loading = true;
 
-                var forum = {
-                    name: $scope.object.name,
-                    categoryId: $scope.object.object.categoryId
+                if ($scope.object._id) {
+                    var forum = $scope.object;
+                    
+                    forumService.editForum(forum)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+                            
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
                 }
+                else {
 
-                forumService.createNewForum(forum)
-                    .then(function (response) {
 
-                        $scope.close(response);
-                    })
-                    .catch(function (err) {
-                        $scope.loading = false;
-                    })
-                    .finally(function () {
-                        $scope.loading = false;
-                    })
+                    var forum = {
+                        name: $scope.object.name,
+                        categoryId: $scope.object.object.categoryId
+                    }
+
+                    forumService.createNewForum(forum)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+                            $scope.loading = false;
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
             }
         }]);

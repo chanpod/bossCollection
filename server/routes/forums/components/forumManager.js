@@ -69,6 +69,23 @@ function deleteForum(req, res){
     return defer.promise;
 }
 
+function editForum(req, res){
+    
+    var defer = q.defer();
+    var query = { "_id" : req.body.forum._id};
+    
+    ForumdModel.findOneAndUpdate(query, req.body.forum)
+        .then(function(response){
+            
+            defer.resolve(response);
+        },function(err){
+            defer.reject(err);
+        })
+        
+    
+    return defer.promise;
+}
+
 function getForums(categoryId){
     
     var defer = q.defer();
@@ -94,5 +111,6 @@ function getForums(categoryId){
 module.exports = {
     createForum:createForum,
     getForums:getForums,
-    deleteForum:deleteForum
+    deleteForum:deleteForum,
+    editForum:editForum
 }

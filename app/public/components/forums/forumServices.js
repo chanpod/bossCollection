@@ -10,6 +10,7 @@ angular.module("BossCollection.forums")
             var categoryDeleteResource = $resource('/forum/deleteCategory', {}, {})
             var getForumsResource = $resource('/forum/getCategories', {}, {});
             var deleteForumsResource = $resource('/forum/deleteForum', {}, {});
+            var editForumResource = $resource('/forum/editForum', {}, {})
             var createNewForumResource = $resource('/forum/createForum', {}, {});
             var createNewThreadResource = $resource('/forum/createThread', {}, {});
             var getThreadsResource = $resource('/forum/getThreads', {}, {});
@@ -183,8 +184,19 @@ angular.module("BossCollection.forums")
             function editForum(forum) {
 
                 var defer = $q.defer();
+                
+                editForumResource.save({ forum: forum }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
-                defer.resolve(forum);
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
 
                 return defer.promise;
             }
