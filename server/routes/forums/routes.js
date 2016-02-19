@@ -135,7 +135,7 @@ router.route('/editCategory')
 router.route('/getThreads')
     .post(function (req, res) {
 
-        console.log("Creating a thread...");
+        console.log("Getting threads...");
         
         ThreadManager.getThreads(req.body.forumId)
             .then(function(response){
@@ -151,7 +151,7 @@ router.route('/getThreads')
 router.route('/createThread')
     .post(function (req, res) {
 
-        console.log("Creating a thread...");
+        console.log("Creating a thread...dd");
         
         ThreadManager.createThread(req, res)
             .then(function(response){
@@ -167,15 +167,31 @@ router.route('/createThread')
 router.route('/deleteThread')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        console.log("Deleting Thread...");
+        ThreadManager.deleteThread(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response);
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
 
     });
 
-router.route('/updateThread')
+router.route('/editThread')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
-
+        console.log("Editing thread...");
+        
+        ThreadManager.editThread(req, res)
+            .then(function(response){
+                
+                res.status(200).send({category: response})
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
     });
 
 

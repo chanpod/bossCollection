@@ -15,6 +15,7 @@ angular.module("BossCollection.forums")
             var createNewThreadResource = $resource('/forum/createThread', {}, {});
             var getThreadsResource = $resource('/forum/getThreads', {}, {});
             var deleteThreadResource = $resource('/forum/deleteThread', {}, {});
+            var editThreadResource = $resource('/forum/editThread')
             
             var createCommentResource = $resource('/forum/createComment', {}, {});
             var getCommentsResource = $resource('/forum/getComments', {}, {});
@@ -259,7 +260,23 @@ angular.module("BossCollection.forums")
             }
 
             function editThread(thread) {
+                
+                var defer = $q.defer();
+                
+                editThreadResource.save({ thread: thread }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
             }
 
             function createThread(thread) {

@@ -97,6 +97,10 @@ function getCategories(req, res){
             var categoryIds = []
             numOfCategories = forums.categories.length;
             
+            if(forums.categories.length == 0){
+                defer.resolve([]);
+            }
+            
             _(forums.categories).forEach(function(category, index){
                 
                 ForumManager.getForums(category._id)

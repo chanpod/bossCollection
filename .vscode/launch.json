@@ -7,14 +7,15 @@
 			"name": "Launch server",
 			// Type of configuration.
 			"type": "node",
+            "request": "launch",
 			// Workspace relative or absolute path to the program.
-			"program": "server/server.js",
+			"program": "${workspaceRoot}server/server.js",
 			// Automatically stop program after launch.
 			"stopOnEntry": false,
 			// Command line arguments passed to the program.
 			"args": [],
 			// Workspace relative or absolute path to the working directory of the program being debugged. Default is the current workspace.
-			"cwd": ".",
+			"cwd": "${workspaceRoot}",
 			// Workspace relative or absolute path to the runtime executable to be used. Default is the runtime executable on the PATH.
 			"runtimeExecutable": null,
 			// Optional arguments passed to the runtime executable.
@@ -30,6 +31,7 @@
 		},
 		{
 			"name": "Attach",
+            "request" :"attach",
 			"type": "node",
 			// TCP/IP address. Default is "localhost".
 			"address": "localhost",

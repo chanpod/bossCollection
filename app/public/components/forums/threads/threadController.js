@@ -49,6 +49,22 @@ angular.module("BossCollection.forums")
                     })
             }
             
+            $scope.deleteThread = function(thread){
+                
+                forumService.confirmDelete()
+                    .then(function(result){
+                        
+                        if(result){
+                            console.log("Deleting the category")
+                            return forumService.deleteThread(thread);
+                        }
+                    })
+                    .then(function(response){
+                        
+                        $scope.refresh();
+                    })
+            }
+            
             $scope.openThread = function(thread){
                 
                 forumService.getComments(thread._id)

@@ -104,24 +104,45 @@ angular.module("BossCollection.forums")
             }
 
             $scope.saveThread = function () {
+                
+                var thread;
+                
+                if ($scope.object._id) {
+                    
+                    thread = $scope.object;
+                    
+                    forumService.editThread(thread)
+                        .then(function (response) {
 
-                var thread = {
-                    name: $scope.object.name,
-                    forumId: $scope.object.forum._id,
-                    message: $scope.object.message
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+                            
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
                 }
+                else {
 
-                forumService.createThread(thread)
-                    .then(function (response) {
+                    thread = {
+                        name: $scope.object.title,
+                        forumId: $scope.object.forum._id,
+                        message: $scope.object.message
+                    }
 
-                        $scope.close(response);
-                    })
-                    .catch(function (err) {
-                        
-                    })
-                    .finally(function () {
-                        $scope.loading = false;
-                    })
+                    forumService.createThread(thread)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
             }
 
             $scope.saveForum = function () {

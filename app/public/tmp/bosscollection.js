@@ -218,24 +218,45 @@ angular.module("BossCollection.forums")
             }
 
             $scope.saveThread = function () {
+                
+                var thread;
+                
+                if ($scope.object._id) {
+                    
+                    thread = $scope.object;
+                    
+                    forumService.editThread(thread)
+                        .then(function (response) {
 
-                var thread = {
-                    name: $scope.object.name,
-                    forumId: $scope.object.forum._id,
-                    message: $scope.object.message
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+                            
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
                 }
+                else {
 
-                forumService.createThread(thread)
-                    .then(function (response) {
+                    thread = {
+                        name: $scope.object.title,
+                        forumId: $scope.object.forum._id,
+                        message: $scope.object.message
+                    }
 
-                        $scope.close(response);
-                    })
-                    .catch(function (err) {
-                        
-                    })
-                    .finally(function () {
-                        $scope.loading = false;
-                    })
+                    forumService.createThread(thread)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
             }
 
             $scope.saveForum = function () {
@@ -436,6 +457,7 @@ angular.module("BossCollection.forums")
             var createNewThreadResource = $resource('/forum/createThread', {}, {});
             var getThreadsResource = $resource('/forum/getThreads', {}, {});
             var deleteThreadResource = $resource('/forum/deleteThread', {}, {});
+            var editThreadResource = $resource('/forum/editThread')
             
             var createCommentResource = $resource('/forum/createComment', {}, {});
             var getCommentsResource = $resource('/forum/getComments', {}, {});
@@ -680,7 +702,23 @@ angular.module("BossCollection.forums")
             }
 
             function editThread(thread) {
+                
+                var defer = $q.defer();
+                
+                editThreadResource.save({ thread: thread }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
             }
 
             function createThread(thread) {
@@ -887,6 +925,22 @@ angular.module("BossCollection.forums")
                     .catch(function(err){
                         
                         $scope.loading = false;
+                    })
+            }
+            
+            $scope.deleteThread = function(thread){
+                
+                forumService.confirmDelete()
+                    .then(function(result){
+                        
+                        if(result){
+                            console.log("Deleting the category")
+                            return forumService.deleteThread(thread);
+                        }
+                    })
+                    .then(function(response){
+                        
+                        $scope.refresh();
                     })
             }
             

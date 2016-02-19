@@ -25,6 +25,7 @@ function createThread(req, res){
     newThread.user = user;
     newThread.comments = comments;
     newThread.message = message;
+    
     newThread.forumID =  forumID;
     
     newThread.save().then(function(response){
@@ -60,8 +61,11 @@ function deleteThread(req, res){
             ThreadModel.findOne({"_id": threadId})
                 .then(function(thread){
                     
-                    thread.remove();
-                    defer.resolve();  
+                    thread.remove()
+                        .then(function(response){
+                            defer.resolve();        
+                        })
+                      
                 })
                 
         }, function(err){
@@ -85,10 +89,29 @@ function getThreads(forumId){
     return defer.promise;
 }
 
+function editThread(req, res){
+    
+    var defer = q.defer();
+    var query = { "_id" : req.body.thread._id};
+    
+    ThreadModel.findOneAndUpdate(query, req.body.thread)
+        .then(function(response){
+            
+            defer.resolve(response);
+        },function(err){
+            defer.reject(err);
+        })
+        
+    
+    return defer.promise;
+}
+
+
 
 
 module.exports = {
     createThread:createThread,
     getThreads:getThreads,
-    deleteThread:deleteThread
+    deleteThread:deleteThread,
+    editThread:editThread
 }
