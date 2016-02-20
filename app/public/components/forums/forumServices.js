@@ -316,6 +316,8 @@ angular.module("BossCollection.forums")
                     .finally(function(){
                         
                     })
+                    
+                return defer.promise;
             }
 
             function editComment(comment) {

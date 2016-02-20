@@ -9,7 +9,8 @@ var threadSchema = new Schema({
     user: String,
     comments: Array,
     message: String,
-    forumID: String
+    forumID: String,
+    dateCreated: Date
 })
 
 module.exports = mongoose.model('threads', threadSchema);

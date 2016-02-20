@@ -54,7 +54,7 @@ angular.module("BossCollection.forums")
                     })
                     .catch(function(err){
                         
-                        siteServices.showMessageModal(err);
+                        //siteServices.showMessageModal(err);
                     })
             }
 

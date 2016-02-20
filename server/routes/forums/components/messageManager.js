@@ -22,6 +22,8 @@ function createComment(req, res){
     newComment.user = user;
     newComment.message = message;
     newComment.threadID =  threadId;
+    newComment.dateCreated = moment.utc();
+    newComment.dateEdited = moment.utc();
     
     newComment.save().then(function(response){
         
@@ -70,6 +72,8 @@ function editComment(req, res){
     
     var defer = q.defer();
     var query = { "_id" : req.body.comment._id};
+    
+    req.body.comment.dateEdited = moment.utc();
     
     commentModel.findOneAndUpdate(query, req.body.comment)
         .then(function(response){

@@ -114,75 +114,107 @@ angular.module("BossCollection.forums", ['ngRoute'])
     }]);
 angular.module("BossCollection.forums")
     .controller('dialogController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
 
             $scope.object = {};
             $scope.loading = false;
             $scope.replying = false;
             $scope.comment = "";
             $scope.commentToDelete;
+            
+            $scope.orderBy = "dateCreated"
 
-            if (data) {
 
-                $scope.object = data;
+            $scope.init = function () {
+
+                if (data) {
+
+                    $scope.object = data;
+                }
+                else {
+                    $scope.object = {};
+                }
+
+                userLoginSrvc.getUser()
+                    .then(function (user) {
+                        $scope.user = user;
+                    })
             }
-            else {
-                $scope.object = {};
-            }
-
-
-
 
             $scope.cancel = function () {
 
                 $mdDialog.cancel();
             }
+            
+            $scope.orderByDateCreated = function(){
+                $scope.orderBy = "dateCreated"
+            }
+            
+            $scope.orderByDateCreatedReversed = function(){
+                $scope.orderBy = "-dateCreated"
+            }
 
             $scope.cancelComment = function () {
                 $scope.replying = false;
             }
-            
-            $scope.cancelCommentEdit = function(comment){
+
+            $scope.cancelCommentEdit = function (comment) {
                 comment.editing = false;
             }
-            
-            $scope.saveCommentEdit = function(comment){
-                
+
+            $scope.saveCommentEdit = function (comment) {
+
                 forumService.editComment(comment)
-                    .then(function (comment) {
-                        
+                    .then(function (savedComment) {
+
                         $scope.cancelCommentEdit(comment);
                     })
             }
-            
-            $scope.confirmDelete = function(comment){
-                
+
+            $scope.confirmDelete = function (comment) {
+
                 $scope.commentToDelete = comment;
                 $scope.confirmDeleteBool = true;
             }
-            
-            $scope.deleteComment = function(){
-                
+
+            $scope.deleteComment = function () {
+
                 forumService.deleteComment($scope.commentToDelete)
                     .then(function (result) {
 
-                            $scope.close(result);
-                        })
-                        .catch(function (err) {
+                        $scope.refreshComments();
+                    })
+                    .catch(function (err) {
 
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                        $scope.confirmDeleteBool = false;
+                    })
             }
-            
-            $scope.cancelCommentDelete = function(){
-                
+
+            $scope.refreshComments = function () {
+
+                forumService.getComments($scope.object._id)
+                    .then(function (comments) {
+
+                        $scope.object.comments = comments.comments;
+                    })
+                    .catch(function (err) {
+
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
+            }
+
+            $scope.cancelCommentDelete = function () {
+
                 $scope.commentToDelete = {};
                 $scope.confirmDeleteBool = false;
             }
-            
+
             $scope.saveComment = function () {
 
                 var comment = {
@@ -259,20 +291,20 @@ angular.module("BossCollection.forums")
             }
 
             $scope.saveThread = function () {
-                
+
                 var thread;
-                
+
                 if ($scope.object._id) {
-                    
+
                     thread = $scope.object;
-                    
+
                     forumService.editThread(thread)
                         .then(function (response) {
 
                             $scope.close(response);
                         })
                         .catch(function (err) {
-                            
+
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -299,6 +331,13 @@ angular.module("BossCollection.forums")
                         })
                 }
             }
+            
+            $scope.formatDate = function (date) {
+                
+                var localTime  = moment.utc(date).toDate();
+        
+                return moment(localTime).format('dddd, MMM D hh:mm');
+            }
 
             $scope.saveForum = function () {
 
@@ -306,14 +345,14 @@ angular.module("BossCollection.forums")
 
                 if ($scope.object._id) {
                     var forum = $scope.object;
-                    
+
                     forumService.editForum(forum)
                         .then(function (response) {
 
                             $scope.close(response);
                         })
                         .catch(function (err) {
-                            
+
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -340,6 +379,8 @@ angular.module("BossCollection.forums")
                         })
                 }
             }
+            
+            $scope.init();
         }]);
 angular.module("BossCollection.forums")
     .controller('forumController', [
@@ -397,7 +438,7 @@ angular.module("BossCollection.forums")
                     })
                     .catch(function(err){
                         
-                        siteServices.showMessageModal(err);
+                        //siteServices.showMessageModal(err);
                     })
             }
 
@@ -799,6 +840,8 @@ angular.module("BossCollection.forums")
                     .finally(function(){
                         
                     })
+                    
+                return defer.promise;
             }
 
             function editComment(comment) {
