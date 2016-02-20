@@ -251,3 +251,25 @@ html, body {
     bottom:15px;
     width: 100%;
 }
+
+.threadReply{
+    
+    position: absolute;
+    left: 0;
+    bottom:0;
+    padding:0;
+    background:white;
+    width: 100%;
+    z-index: 1000;
+}
+
+.confirmCommentDelete{
+    
+    position: absolute;
+    left: 0;
+    bottom:50%;
+    padding:0;
+    background:white;
+    width: 100%;
+    z-index: 1000;
+}

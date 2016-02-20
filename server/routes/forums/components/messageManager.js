@@ -66,10 +66,28 @@ function getComments(threadId){
     return defer.promise;
 }
 
+function editComment(req, res){
+    
+    var defer = q.defer();
+    var query = { "_id" : req.body.comment._id};
+    
+    commentModel.findOneAndUpdate(query, req.body.comment)
+        .then(function(response){
+            
+            defer.resolve(response);
+        },function(err){
+            defer.reject(err);
+        })
+        
+    
+    return defer.promise;
+}
+
 
 
 module.exports = {
     createComment:createComment,
     getComments:getComments,
-    deleteComment:deleteComment
+    deleteComment:deleteComment,
+    editComment:editComment
 }

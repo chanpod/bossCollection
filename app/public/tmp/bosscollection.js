@@ -121,6 +121,7 @@ angular.module("BossCollection.forums")
             $scope.loading = false;
             $scope.replying = false;
             $scope.comment = "";
+            $scope.commentToDelete;
 
             if (data) {
 
@@ -141,7 +142,47 @@ angular.module("BossCollection.forums")
             $scope.cancelComment = function () {
                 $scope.replying = false;
             }
+            
+            $scope.cancelCommentEdit = function(comment){
+                comment.editing = false;
+            }
+            
+            $scope.saveCommentEdit = function(comment){
+                
+                forumService.editComment(comment)
+                    .then(function (comment) {
+                        
+                        $scope.cancelCommentEdit(comment);
+                    })
+            }
+            
+            $scope.confirmDelete = function(comment){
+                
+                $scope.commentToDelete = comment;
+                $scope.confirmDeleteBool = true;
+            }
+            
+            $scope.deleteComment = function(){
+                
+                forumService.deleteComment($scope.commentToDelete)
+                    .then(function (result) {
 
+                            $scope.close(result);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+            }
+            
+            $scope.cancelCommentDelete = function(){
+                
+                $scope.commentToDelete = {};
+                $scope.confirmDeleteBool = false;
+            }
+            
             $scope.saveComment = function () {
 
                 var comment = {
@@ -461,6 +502,8 @@ angular.module("BossCollection.forums")
             
             var createCommentResource = $resource('/forum/createComment', {}, {});
             var getCommentsResource = $resource('/forum/getComments', {}, {});
+            var editCommentResource = $resource('/forum/editComment', {}, {});
+            var deleteCommentResource = $resource('/forum/deleteComment', {}, {});
             var forums;
             
             //==== Category Functions ==================
@@ -742,11 +785,40 @@ angular.module("BossCollection.forums")
             //==== Comment Functions ==================
             
             function deleteComment(comment) {
+                
+                var defer = $q.defer();
+                
+                deleteCommentResource.save({comment: comment}).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
             }
 
             function editComment(comment) {
+                
+                var defer = $q.defer();
+                
+                editCommentResource.save({ comment: comment }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
             }
 
             function createComment(comment) {

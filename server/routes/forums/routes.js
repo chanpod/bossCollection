@@ -58,14 +58,28 @@ router.route('/deleteComment')
     .post(function (req, res) {
 
         console.log("Successfully accessed forum route");
-
+        MessageManager.deleteComment(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response)
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
     });
 
-router.route('/updateComment')
+router.route('/editComment')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
-
+        console.log("Editing comment...");
+        MessageManager.editComment(req, res)
+            .then(function(response){
+                
+                res.status(200).send(response)
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
     });
 
 

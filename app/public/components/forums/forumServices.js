@@ -19,6 +19,8 @@ angular.module("BossCollection.forums")
             
             var createCommentResource = $resource('/forum/createComment', {}, {});
             var getCommentsResource = $resource('/forum/getComments', {}, {});
+            var editCommentResource = $resource('/forum/editComment', {}, {});
+            var deleteCommentResource = $resource('/forum/deleteComment', {}, {});
             var forums;
             
             //==== Category Functions ==================
@@ -300,11 +302,40 @@ angular.module("BossCollection.forums")
             //==== Comment Functions ==================
             
             function deleteComment(comment) {
+                
+                var defer = $q.defer();
+                
+                deleteCommentResource.save({comment: comment}).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
             }
 
             function editComment(comment) {
+                
+                var defer = $q.defer();
+                
+                editCommentResource.save({ comment: comment }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
 
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
             }
 
             function createComment(comment) {

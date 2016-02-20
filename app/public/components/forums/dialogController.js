@@ -7,6 +7,7 @@ angular.module("BossCollection.forums")
             $scope.loading = false;
             $scope.replying = false;
             $scope.comment = "";
+            $scope.commentToDelete;
 
             if (data) {
 
@@ -27,7 +28,47 @@ angular.module("BossCollection.forums")
             $scope.cancelComment = function () {
                 $scope.replying = false;
             }
+            
+            $scope.cancelCommentEdit = function(comment){
+                comment.editing = false;
+            }
+            
+            $scope.saveCommentEdit = function(comment){
+                
+                forumService.editComment(comment)
+                    .then(function (comment) {
+                        
+                        $scope.cancelCommentEdit(comment);
+                    })
+            }
+            
+            $scope.confirmDelete = function(comment){
+                
+                $scope.commentToDelete = comment;
+                $scope.confirmDeleteBool = true;
+            }
+            
+            $scope.deleteComment = function(){
+                
+                forumService.deleteComment($scope.commentToDelete)
+                    .then(function (result) {
 
+                            $scope.close(result);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+            }
+            
+            $scope.cancelCommentDelete = function(){
+                
+                $scope.commentToDelete = {};
+                $scope.confirmDeleteBool = false;
+            }
+            
             $scope.saveComment = function () {
 
                 var comment = {

@@ -20,28 +20,68 @@ script#threadComments(type="text/ng-template")
                         md-button(ng-click = "editForum(forum)").md-icon-button
                             md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                         
-                    md-divider() 
-                    div(flex, layout = "column", ng-if = "replying")
-                        div(flex, layout = "row",  layout-align="end center")
-                            md-button(flex, ng-click = "saveComment()").md-raised.md-primary
-                                | Save
-                            md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
-                                | Cancel
-                        div(flex)
-                            input-markdown(flex, input = "object.newComment")
-                    md-card(ng-repeat = "comment in object.comments").md-whiteframe-10dp
+                    md-divider()
+                    
+                    md-card
+                        md-card-content().threadReply 
+                            div(flex, layout = "column", ng-if = "replying")
+                                div(flex, layout = "row",  layout-align="end center")
+                                    md-button(flex, ng-click = "saveComment()").md-raised.md-primary
+                                        | Save
+                                    md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
+                                        | Cancel
+                                div(flex)
+                                    input-markdown(flex, input = "object.newComment")
+                                    
+                                    
+                    md-card(ng-if = "confirmDeleteBool")
+                        md-card-content().confirmCommentDelete.md-whiteframe-20dp
+                            div(flex, layout = "column", layout-align = "center center")
+                                span()
+                                    h3
+                                        | Warning!!!
+                                    span()
+                                        | You are about to delete this comment. This action is irreversible. Are you sure?
+                                div(layout)
+                                    md-button().md-raised.md-primary
+                                        | Confirm
+                                    md-button().md-raised.md-primary
+                                        | Nevermind!
+                    div(layout = "row", layout-align = "space-between center")
+                        md-input-container().md-block.md-icon-float
+                            label() Search
+                            md-icon(md-font-library="material-icons") search
+                            input(type = "text", ng-model = "threadSearch")
+                        div()
+                            | Sort by date
+                            md-button().md-icon-button
+                                md-icon(md-font-library="material-icons") keyboard_arrow_up
+                            md-button().md-icon-button
+                                md-icon(md-font-library="material-icons") keyboard_arrow_down
+
+                            
+                    md-card(ng-repeat = "comment in object.comments | filter:threadSearch").md-whiteframe-10dp
                         md-card-content
+                        
                             div(layout = "column")
                                 div(flex).md-list-item-text
                                     h3
                                         {{comment.user}}
                                     md-divider
-                                            display-markdown(markdown = "comment.message")
+                                            display-markdown(markdown = "comment.message", ng-if = "!comment.editing")
+                                            div(flex, layout = "column", ng-if = "comment.editing")
+                                                div(flex, layout = "row",  layout-align="end center")
+                                                    md-button(flex, ng-click = "saveCommentEdit(comment)").md-raised.md-primary
+                                                        | Save
+                                                    md-button(flex, ng-click = "cancelCommentEdit(comment)").md-raised.md-primary
+                                                        | Cancel
+                                                div(flex)
+                                                    input-markdown(flex, input = "comment.message")
                                 div(flex, layout = "row", layout-align = "end center")
-                                    md-button(ng-click = "deleteForum(forum)").md-icon-button
-                                        md-icon(md-font-library="material-icons", aria-label = "delete category") delete
-                                    md-button(ng-click = "editForum(forum)").md-icon-button
-                                        md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                                    md-button(ng-click = "confirmDelete(comment)").md-icon-button
+                                        md-icon(md-font-library="material-icons", aria-label = "delete comment") delete
+                                    md-button(ng-click = "comment.editing = true").md-icon-button
+                                        md-icon(md-font-library="material-icons", aria-label = "edit comment") mode_edit
                                 
                             
                         md-list-item(style = "height = 50px;")
