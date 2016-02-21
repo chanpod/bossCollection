@@ -88,7 +88,7 @@ function getCategories(req, res){
     var guild = req.session.user.guild.name;
     var forums = {};
     var defer = q.defer();
-    var numOfCategories = 0;
+    var categoriesPromise = [];
     
     
     
@@ -103,16 +103,24 @@ function getCategories(req, res){
                 defer.resolve([]);
             }
             
-            console.log("============================================")
-            console.log(forums.categories)
-            console.log("=============================================")
+
             _(forums.categories).forEach(function(category, index){
                 console.log("Getting forums index: " + index);
+                
+                categoriesPromise.push(index);
+                
                 ForumManager.getForums(category._id)
-                    .then(function(forums){
-                        category.forums = forums;
+                    .then(function(categoryForums){
+
+                        category.forums = categoryForums;
                         
-                        forEachFinished(index);
+                        console.log("============================================")
+                        console.log(forums.categories)
+                        console.log("=============================================")
+                        
+                        categoriesPromise.pop();
+                        
+                        forEachFinished();
                     })   
             })
             
@@ -123,12 +131,10 @@ function getCategories(req, res){
     
     function forEachFinished(index){
         
-        if(index == (numOfCategories - 1)){
+        if(categoriesPromise.length == 0){
             
             console.log("Finished getting forums");
-            console.log("============================================")
-            console.log(forums.categories)
-            console.log("=============================================")
+
             defer.resolve(forums);
         }
     }
