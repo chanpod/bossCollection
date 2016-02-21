@@ -259,7 +259,7 @@ html, body {
     bottom:0;
     padding:0;
     background:white;
-    width: 100%;
+    width: 100%; 
     z-index: 1000;
 }
 
@@ -269,7 +269,14 @@ html, body {
     left: 0;
     bottom:50%;
     padding:0;
-    background:white;
+    background:white; 
     width: 100%;
     z-index: 1000;
+}  
+
+.threadMessagePreview{
+    max-width:75%;
+    word-wrap: break-word;
+    text-overflow: clip;
+    max-height: 50%;
 }

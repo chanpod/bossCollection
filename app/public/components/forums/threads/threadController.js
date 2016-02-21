@@ -31,7 +31,7 @@ angular.module("BossCollection.forums")
                     .finally(function(){
                         
                         $scope.loading = false;
-                    })
+                    }) 
             }  
             
             $scope.refresh = function(){

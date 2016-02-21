@@ -38,6 +38,6 @@ script#thread(type="text/ng-template")
                             md-button(ng-click = "editThread(thread)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                                 md-tooltip() Edit thread
-                    md-tooltip
+                    md-tooltip(style = "max-width:75%;").threadMessagePreview
                         {{thread.message}}
                     md-divider(ng-if="!$last")        
