@@ -15,7 +15,7 @@ script#forum(type="text/ng-template")
                             md-icon(md-font-library="material-icons", aria-label = "add new forum") add
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             md-list
-                md-list-item(ng-repeat = "forum in category.forums").md-2-line
+                md-list-item(ng-repeat = "forum in category.forums").md-2-line.mousePointer
                     div(layout-padding).md-list-item-text
                         h3(ng-click = "goToForum(forum)")
                             {{forum.name}}

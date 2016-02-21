@@ -1,7 +1,7 @@
 script#logInModal(type="text/ng-template")
     md-bottom-sheet().md-list.md-has-header
         div
-            form(name = "logInForm")
+            form(name = "logInForm", my-enter = "login()")
                 div(layout = "row")
                     md-input-container(flex).md-block
                         label() Username

@@ -12,6 +12,7 @@ script#inputField(type="text/ng-template")
                     md-button(ng-click = "goToExternal('http://showdownjs.github.io/demo/')", 
                             aria-label = "Help with formatting?").md-icon-button
                         md-icon(md-font-library="material-icons") help
+                        md-tooltip() Formatting help
                     md-button(ng-click = "hideShowPreview()", aria-label = "hidePreview").md-icon-button
                         md-icon(ng-show = "!showPreview", md-font-library="material-icons") expand_less
                         md-icon(ng-show = "showPreview", md-font-library="material-icons") expand_more
