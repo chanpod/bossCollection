@@ -8,11 +8,10 @@ script#threadComments(type="text/ng-template")
                     md-icon(md-font-library="material-icons", aria-label = "edit category") close
         div().threadComments
             md-card
-                md-card-title
-                    md-card-title-text
-                        h3
-                            {{object.user}}
-                md-divider
+                md-card-header
+                    md-card-header-text
+                        span().md-subhead
+                            | Author: {{object.user}}
                 md-card-content
                     p
                         display-markdown(markdown = "object.message") 
@@ -84,8 +83,10 @@ script#threadComments(type="text/ng-template")
                                 div(flex, layout = "row", layout-align = "end center", ng-show = "user.rank > 2 || user.name == comment.user")
                                     md-button(ng-click = "confirmDelete(comment)").md-icon-button
                                         md-icon(md-font-library="material-icons", aria-label = "delete comment") delete
+                                        md-tooltip() Delete Comment
                                     md-button(ng-click = "comment.editing = true").md-icon-button
                                         md-icon(md-font-library="material-icons", aria-label = "edit comment") mode_edit
+                                        md-tooltip() Edit Comment
                                 
                             
                         md-list-item(style = "height = 50px;")

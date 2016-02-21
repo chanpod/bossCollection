@@ -6,7 +6,7 @@ script#forum(type="text/ng-template")
                 div().md-toolbar-tools
                     {{category.name}}
                     span(flex)
-                    div(ng-show = "user.rank == 4")
+                    div(ng-show = "user.rank > 2")
                         md-button(ng-click = "deleteCategory(category)").md-icon-button
                             md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                         md-button(ng-click = "editCategory(category)").md-icon-button
@@ -26,7 +26,7 @@ script#forum(type="text/ng-template")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                             
                     md-divider(ng-if="!$last")        
-        md-toolbar().md-scroll-shrink
+        md-toolbar(ng-show = "user.rank > 2").md-scroll-shrink
             div().md-toolbar-tools
                 md-button(ng-click = "newCategory()").md-raised
                     | New Category

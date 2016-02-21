@@ -1001,6 +1001,7 @@ angular.module("BossCollection.forums")
             
             $scope.forum = {};
             $scope.loading = false;
+            $scope.orderBy = "dateCreated";
             
             $scope.init = function(){
                 
@@ -1057,6 +1058,14 @@ angular.module("BossCollection.forums")
                         
                         $scope.refresh();
                     })
+            }
+            
+            $scope.orderByDateCreated = function(){
+                $scope.orderBy = "dateCreated"
+            }
+            
+            $scope.orderByDateCreatedReversed = function(){
+                $scope.orderBy = "-dateCreated"
             }
             
             $scope.openThread = function(thread){
