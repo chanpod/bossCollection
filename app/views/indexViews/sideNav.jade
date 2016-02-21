@@ -5,7 +5,8 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     img(ng-click = "goTo('/')", src = "/images/wodLogo.png", style = "width:100%") 
                 md-list-item
                     h1(ng-click = "goTo('/')").md-toolbar-tools
-                        | Bosscollection
+                        | Bosscollection 
+                        i() &nbsp beta
                         
                 md-list-item(ng-show = "loggedIn", ng-click = "alert('test')").md-1-line 
                     h1(ng-click = "goTo('/auth/updateAccount')").md-toolbar-tools
