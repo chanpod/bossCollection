@@ -25,7 +25,7 @@ router.route('/test')
   .post(function(req, res){
     
     console.log("Route is working as intended");
-    console.log(req.body);
+    
     
     res.json({message: "Here's a response for a POST!"});
   })

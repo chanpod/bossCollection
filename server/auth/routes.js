@@ -73,7 +73,7 @@ router.get('/login', function (req, res) {
             //res.redirect('/');
         } else {
             console.log("Log in failed...");
-            console.log(user);
+            
             res.render('index', { title: 'Hello - Please Login To Your Account' });
         }
     })
@@ -88,7 +88,7 @@ router.post('/login', function (req, res) {
     AM.manualLogin(req.body.name, req.body.password)
         .then(function (user) {
 
-            console.log(user);
+            
 
             req.session.user = user;
 
@@ -154,7 +154,7 @@ router.get('/updateAccount', function (req, res) {
 router.post('/updateAccount', function (req, res) {
 
     console.log("auth /auth/updateAccount");
-    console.log(req.body);
+    
 
     var sessionPassword = req.session.user.password;
     var currentPassword = req.body.currentPassword;
@@ -220,7 +220,7 @@ router.get('/signup', function (req, res) {
 router.post('/signup', function (req, res) {
 
     console.log("auth /api/auth/signup")
-    console.log(req.body);
+    
 
     if (req.body.password === req.body.password_verify) {
 

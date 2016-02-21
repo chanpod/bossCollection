@@ -90,6 +90,8 @@ function getCategories(req, res){
     var defer = q.defer();
     var numOfCategories = 0;
     
+    
+    
     CategorydModel.find({"guild":guild})
         .then(function(categories){
             
@@ -101,8 +103,11 @@ function getCategories(req, res){
                 defer.resolve([]);
             }
             
+            console.log("============================================")
+            console.log(forums.categories)
+            console.log("=============================================")
             _(forums.categories).forEach(function(category, index){
-                
+                console.log("Getting forums index: " + index);
                 ForumManager.getForums(category._id)
                     .then(function(forums){
                         category.forums = forums;
@@ -110,6 +115,7 @@ function getCategories(req, res){
                         forEachFinished(index);
                     })   
             })
+            
             
         },function(err){
             defer.reject(err);
@@ -119,6 +125,10 @@ function getCategories(req, res){
         
         if(index == (numOfCategories - 1)){
             
+            console.log("Finished getting forums");
+            console.log("============================================")
+            console.log(forums.categories)
+            console.log("=============================================")
             defer.resolve(forums);
         }
     }
