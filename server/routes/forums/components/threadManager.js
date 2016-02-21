@@ -4,7 +4,7 @@ var q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 
-var MessageManager = require('./MessageManager');
+var MessageManager = require('./messageManager');
 
 var util = require('../../../utility');
 var ThreadModel = require('../../../models/forumModels/thread.js');
