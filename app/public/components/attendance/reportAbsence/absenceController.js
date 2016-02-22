@@ -2,7 +2,7 @@
 /**
  *
  */
-angular.module("BossCollection.attendnace")
+angular.module("BossCollection.attendance")
     .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         

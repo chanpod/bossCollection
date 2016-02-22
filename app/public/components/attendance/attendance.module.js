@@ -1,6 +1,6 @@
 'user strict'
 
-angular.module("BossCollection.attendnace", ['ngRoute'])
+angular.module("BossCollection.attendance", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider

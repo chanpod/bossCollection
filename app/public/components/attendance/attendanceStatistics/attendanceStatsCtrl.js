@@ -4,7 +4,7 @@
 /**
  *
  */
-angular.module("BossCollection.attendnace")
+angular.module("BossCollection.attendance")
     .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
@@ -49,14 +49,23 @@ angular.module("BossCollection.attendnace")
             _(listOfUsers).forEach(function(user) {
                 
                 var absentTypes = _.groupBy(user, "type");
-                var lateCount = absentTypes.late.length;
-                var absentCount = absentTypes.absent.length;
+                var lateCount = 0;
+                var absentCount = 0;
+                
+                if(absentTypes.late){
+                    lateCount = absentTypes.late.length || 0;    
+                }
+                if(absentTypes.absent){
+                    absentCount = absentTypes.absent.length || 0;
+                }
+                    
+                
                 
                 var totalAttendancePoints = (weeksCounted * raidsPerWeek) * (late + absent); 
                 var attendanceRating =  totalAttendancePoints - (lateCount * late) - (absentCount * absent);
                 var percentAttendanceRating = attendanceRating / totalAttendancePoints;
                 
-                $scope.absenceHighchartData.push({
+                $scope.absenceHighchartData.push({ 
                     name: user[0].user,
                     y: percentAttendanceRating * 100,
                     drilldown: user[0].user
@@ -123,7 +132,7 @@ angular.module("BossCollection.attendnace")
                     text: 'Click the columns to view dates missed.'
                 },
                 xAxis: {
-                    type: 'Member'
+                    type: 'category'
                 },
                 yAxis: {
                     title: {
@@ -144,7 +153,7 @@ angular.module("BossCollection.attendnace")
                     }
                 },
                 series: [{
-                    name: "Members attendance",
+                    name: "Member",
                     colorByPoint: true,
                     data: $scope.absenceHighchartData
                 }],

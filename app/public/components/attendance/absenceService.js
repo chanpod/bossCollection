@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module("BossCollection.services")
+angular.module("BossCollection.attendance")
     .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
         'siteServices',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices) {

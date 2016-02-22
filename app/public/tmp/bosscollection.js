@@ -8,7 +8,7 @@ angular.module('BossCollection', [
   'BossCollection.directives',
   'BossCollection.filters',
   'BossCollection.forums',
-  'BossCollection.attendnace',
+  'BossCollection.attendance',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -71,10 +71,6 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
         templateUrl: 'manageMembers',
         controller: 'manageMembersController'
     })
-    .when('/whosOut', {
-        templateUrl: 'absenceSubmissions',
-        controller: 'absenceController'
-    })
     .otherwise({
       redirectTo: '/'
     });
@@ -95,7 +91,7 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
 
 'user strict'
 
-angular.module("BossCollection.attendnace", ['ngRoute'])
+angular.module("BossCollection.attendance", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider
@@ -131,6 +127,93 @@ angular.module("BossCollection.forums", ['ngRoute'])
         })
 
     }]);
+'use strict';
+
+angular.module("BossCollection.attendance")
+    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices',
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
+
+            var absence = $resource('/api/absence', {}, {})
+            var absenceByDate = $resource('/api/absenceByDate', {}, {})
+
+
+            var absenceApi = {
+
+                submitNewAbsence: function (newAbsence) {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    absence.save(newAbsence).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                getAbsences: function () {
+
+                    var defer = $q.defer();
+
+
+
+                    absence.get().$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+
+                    return defer.promise;
+                },
+                getAbsencesByDate: function (date) {
+
+                    var defer = $q.defer();
+
+                    absenceByDate.save({date:date}).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+
+                    return defer.promise;
+                }
+            };
+
+            return absenceApi;
+        }])
 angular.module("BossCollection.forums")
     .controller('dialogController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
@@ -1017,7 +1100,7 @@ angular.module("BossCollection.forums")
 /**
  *
  */
-angular.module("BossCollection.attendnace")
+angular.module("BossCollection.attendance")
     .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
@@ -1062,14 +1145,23 @@ angular.module("BossCollection.attendnace")
             _(listOfUsers).forEach(function(user) {
                 
                 var absentTypes = _.groupBy(user, "type");
-                var lateCount = absentTypes.late.length;
-                var absentCount = absentTypes.absent.length;
+                var lateCount = 0;
+                var absentCount = 0;
+                
+                if(absentTypes.late){
+                    lateCount = absentTypes.late.length || 0;    
+                }
+                if(absentTypes.absent){
+                    absentCount = absentTypes.absent.length || 0;
+                }
+                    
+                
                 
                 var totalAttendancePoints = (weeksCounted * raidsPerWeek) * (late + absent); 
                 var attendanceRating =  totalAttendancePoints - (lateCount * late) - (absentCount * absent);
                 var percentAttendanceRating = attendanceRating / totalAttendancePoints;
                 
-                $scope.absenceHighchartData.push({
+                $scope.absenceHighchartData.push({ 
                     name: user[0].user,
                     y: percentAttendanceRating * 100,
                     drilldown: user[0].user
@@ -1136,7 +1228,7 @@ angular.module("BossCollection.attendnace")
                     text: 'Click the columns to view dates missed.'
                 },
                 xAxis: {
-                    type: 'Member'
+                    type: 'category'
                 },
                 yAxis: {
                     title: {
@@ -1157,7 +1249,7 @@ angular.module("BossCollection.attendnace")
                     }
                 },
                 series: [{
-                    name: "Members attendance",
+                    name: "Member",
                     colorByPoint: true,
                     data: $scope.absenceHighchartData
                 }],
@@ -1404,7 +1496,7 @@ angular.module("BossCollection.attendnace")
 /**
  *
  */
-angular.module("BossCollection.attendnace")
+angular.module("BossCollection.attendance")
     .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
@@ -1530,7 +1622,7 @@ angular.module("BossCollection.attendnace")
 /**
  *
  */
-angular.module("BossCollection.attendnace")
+angular.module("BossCollection.attendance")
     .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
@@ -3130,93 +3222,6 @@ angular.module('BossCollection.filters').
 
 'use strict';
 angular.module("BossCollection.services", []) 
-'use strict';
-
-angular.module("BossCollection.services")
-    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
-
-            var absence = $resource('/api/absence', {}, {})
-            var absenceByDate = $resource('/api/absenceByDate', {}, {})
-
-
-            var absenceApi = {
-
-                submitNewAbsence: function (newAbsence) {
-
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-
-                    absence.save(newAbsence).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                getAbsences: function () {
-
-                    var defer = $q.defer();
-
-
-
-                    absence.get().$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-
-                    return defer.promise;
-                },
-                getAbsencesByDate: function (date) {
-
-                    var defer = $q.defer();
-
-                    absenceByDate.save({date:date}).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-
-                    return defer.promise;
-                }
-            };
-
-            return absenceApi;
-        }])
 'use strict';
 
 angular.module("BossCollection.services")

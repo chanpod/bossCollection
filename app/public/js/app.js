@@ -8,7 +8,7 @@ angular.module('BossCollection', [
   'BossCollection.directives',
   'BossCollection.filters',
   'BossCollection.forums',
-  'BossCollection.attendnace',
+  'BossCollection.attendance',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -70,10 +70,6 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/manageMembers', {
         templateUrl: 'manageMembers',
         controller: 'manageMembersController'
-    })
-    .when('/whosOut', {
-        templateUrl: 'absenceSubmissions',
-        controller: 'absenceController'
     })
     .otherwise({
       redirectTo: '/'
