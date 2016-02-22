@@ -8,6 +8,7 @@ angular.module('BossCollection', [
   'BossCollection.directives',
   'BossCollection.filters',
   'BossCollection.forums',
+  'BossCollection.attendnace',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -53,10 +54,6 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/auth/application', {
         templateUrl: 'application',
         controller: 'applicationController'
-    }) 
-    .when('/auth/absence', {
-        templateUrl: 'absence',
-        controller: 'absenceController'
     })
     .when('/reviewApplications', {
         templateUrl: 'reviewApplications',

@@ -2,8 +2,8 @@
 /**
  *
  */
-angular.module("BossCollection.controllers")
-    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+angular.module("BossCollection.attendnace")
+    .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
         var currentDay = moment().day();

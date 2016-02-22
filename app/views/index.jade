@@ -19,27 +19,6 @@ block body
             
             md-content(layout)
                 div(flex, ng-view)    
-                
-    
-    //-
-        footer.page-footer.transparent
-        div.container.transparent
-            div.col.16.s6
-            h5.white-text
-                | Libraries
-            div.col.14.offset-12.s6          
-            div.collection
-                a(href = "http://materializecss.com/", class = "waves-effect waves-light collection-item btn")
-                    | Materialize
-                a(href = "#!", class = "waves-effect waves-light collection-item btn")
-                    | Blizzard api
-                a(href = "http://angularjs.org/", class = "waves-effect waves-light collection-item btn")
-                    | AngularJS
-                a(href = "http://nodejs.org/", class = "waves-effect waves-light collection-item btn")
-                    | NodeJS
-                a(href = "https://github.com/chanpod/bossCollection", class = "waves-effect waves-light collection-item btn")
-                    | Issues? Report them on github 
-
 
     include partials/home    
     include partials/strategyRoom
@@ -48,8 +27,7 @@ block body
     
     include partials/accounts/login
     include partials/accounts/signup
-    include partials/absence/absence
-    include partials/absence/absenceSubmissions
+
     
     include partials/accounts/editAccount
     include partials/applications/application
@@ -66,6 +44,10 @@ block body
     include ../public/components/forums/bottomSheetViews/thread
     include ../public/components/forums/bottomSheetViews/threadEdit
     
+    //-Absence
+    include ../public/components/attendance/attendanceStatistics/attendanceStatsTemplate
+    include ../public/components/attendance/reportAbsence/absence
+    include ../public/components/attendance/viewReports/absenceSubmissions
     
     include ../public/js/directives/inputMarkdown/inputMarkdownTemplate
     include ../public/js/directives/displayMarkdownText/template

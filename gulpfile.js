@@ -73,16 +73,19 @@ gulp.task('concatVendor', function(){
         './node_modules/angular-animate/angular-animate.min.js',
         './node_modules/angular-messages/angular-messages.min.js',
         './node_modules/angular-aria/angular-aria.min.js',        
-        './node_modules/showdown/dist/showdown.min.js',        
+        './node_modules/showdown/dist/showdown.min.js',
         './node_modules/angular-material/angular-material.min.js',
         './node_modules/moment/min/moment.min.js',
-        './app/public/js/vendor/angular-parallax.js',
         './app/public/js/lib/jquery-2.1.1.js',
+        './node_modules/highcharts/highcharts.js',
+        './node_modules/highcharts/modules/data.js',
+        './node_modules/highcharts/modules/drilldown.js',
+        './app/public/js/vendor/angular-parallax.js',
         './app/public/js/lib/underscoreJS.js',
         './app/public/js/lib/materialize/js/materialize.min.js',
         './app/public/js/lib/angular-socket-io-master/mock/socket-io.js',
         './app/public/js/lib/angular-socket-io-master/socket.js',
-        './app/public/js/lib/socket.io.js',        
+        './app/public/js/lib/socket.io.js',
     ])
             .pipe(concat('vendor.min.js'))
             .pipe(gulp.dest('./app/public/tmp/'))

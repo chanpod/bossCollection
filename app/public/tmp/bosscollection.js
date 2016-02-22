@@ -8,6 +8,7 @@ angular.module('BossCollection', [
   'BossCollection.directives',
   'BossCollection.filters',
   'BossCollection.forums',
+  'BossCollection.attendnace',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -53,10 +54,6 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
     .when('/auth/application', {
         templateUrl: 'application',
         controller: 'applicationController'
-    }) 
-    .when('/auth/absence', {
-        templateUrl: 'absence',
-        controller: 'absenceController'
     })
     .when('/reviewApplications', {
         templateUrl: 'reviewApplications',
@@ -96,6 +93,28 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
   
 }])
 
+'user strict'
+
+angular.module("BossCollection.attendnace", ['ngRoute'])
+    .config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider
+            .when('/attendanceStatistics', {
+                templateUrl: 'attendanceStats',
+                controller: 'attendanceStatsCtrl'
+            })
+
+            .when('/whosOut', {
+                templateUrl: 'absenceSubmissions',
+                controller: 'absenceSubmissionsController'
+            })
+
+            .when('/auth/absence', {
+                templateUrl: 'absence',
+                controller: 'absenceReportController'
+            })
+
+    }]);
 'user strict'
 
 angular.module("BossCollection.forums", ['ngRoute'])
@@ -992,6 +1011,647 @@ angular.module("BossCollection.forums")
         }]) 
         
       
+                
+    
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendnace")
+    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+        
+        siteServices.updateTitle('Attendance Statistics');    
+        $scope.absenceHighchartData = [];
+        $scope.absenceHighchartDrillDownSeries = [];
+        $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
+            $scope.loading = true;
+            
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+                $scope.calculateAttendance();
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+        
+        /**
+         * 
+         * 12
+         * 12 * 4 = 48
+         * 
+         */
+        $scope.calculateAttendance = function(){
+            
+            var late = 3;
+            var absent = 1;
+            var weeksCounted = 4;
+            var raidsPerWeek = 3;
+            
+            var totalPoints = weeksCounted * raidsPerWeek;
+            
+            var lateTypesCount;
+            var listOfUsers = _.groupBy($scope.absences, "user");
+            
+            _(listOfUsers).forEach(function(user) {
+                
+                var absentTypes = _.groupBy(user, "type");
+                var lateCount = absentTypes.late.length;
+                var absentCount = absentTypes.absent.length;
+                
+                var totalAttendancePoints = (weeksCounted * raidsPerWeek) * (late + absent); 
+                var attendanceRating =  totalAttendancePoints - (lateCount * late) - (absentCount * absent);
+                var percentAttendanceRating = attendanceRating / totalAttendancePoints;
+                
+                $scope.absenceHighchartData.push({
+                    name: user[0].user,
+                    y: percentAttendanceRating * 100,
+                    drilldown: user[0].user
+                })
+                
+                var drillDownData = []
+                
+                _(absentTypes.late).forEach(function(lateObject){
+                    
+                    drillDownData.push([
+                        lateObject.date,
+                        late
+                    ])
+                }) 
+                    
+                _(absentTypes.absent).forEach(function(absentObject){
+                    
+                    drillDownData.push([
+                        absentObject.date,
+                        absent
+                    ])
+                })  
+                
+                
+                
+                /*
+                {
+                name: 'Microsoft Internet Explorer',
+                id: 'Microsoft Internet Explorer',
+                data: [
+                    
+                    [
+                        'v11.0',
+                        24.13
+                    ]
+                   
+                ]
+                 */
+            
+                
+                $scope.absenceHighchartDrillDownSeries.push({
+                    name: user[0].user,
+                    id: user[0].user,
+                    data: drillDownData
+                })
+                
+            }, this);
+            
+            $scope.buildHighChart();
+        }
+        
+        $scope.getAbsences();
+        
+        $scope.buildHighChart = function () {
+            
+            $('#container').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Member attendance rates'
+                },
+                subtitle: {
+                    text: 'Click the columns to view dates missed.'
+                },
+                xAxis: {
+                    type: 'Member'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Percent attendance'
+                    }
+
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+                series: [{
+                    name: "Members attendance",
+                    colorByPoint: true,
+                    data: $scope.absenceHighchartData
+                }],
+
+                drilldown: {
+                    series: $scope.absenceHighchartDrillDownSeries
+
+                }
+
+            });
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+ 
+    }])
+
+
+/*
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Microsoft Internet Explorer',
+                y: 56.33,
+                drilldown: 'Microsoft Internet Explorer'
+            }, {
+                name: 'Chrome',
+                y: 24.03,
+                drilldown: 'Chrome'
+            }, {
+                name: 'Firefox',
+                y: 10.38,
+                drilldown: 'Firefox'
+            }, {
+                name: 'Safari',
+                y: 4.77,
+                drilldown: 'Safari'
+            }, {
+                name: 'Opera',
+                y: 0.91,
+                drilldown: 'Opera'
+            }, {
+                name: 'Proprietary or Undetectable',
+                y: 0.2,
+                drilldown: null
+            }]
+        }],
+        */
+        
+                    /*
+            [{
+                name: 'Microsoft Internet Explorer',
+                id: 'Microsoft Internet Explorer',
+                data: [
+                    [
+                        'v11.0',
+                        24.13
+                    ],
+                    [
+                        'v8.0',
+                        17.2
+                    ],
+                    [
+                        'v9.0',
+                        8.11
+                    ],
+                    [
+                        'v10.0',
+                        5.33
+                    ],
+                    [
+                        'v6.0',
+                        1.06
+                    ],
+                    [
+                        'v7.0',
+                        0.5
+                    ]
+                ]
+            }, {
+                name: 'Chrome',
+                id: 'Chrome',
+                data: [
+                    [
+                        'v40.0',
+                        5
+                    ],
+                    [
+                        'v41.0',
+                        4.32
+                    ],
+                    [
+                        'v42.0',
+                        3.68
+                    ],
+                    [
+                        'v39.0',
+                        2.96
+                    ],
+                    [
+                        'v36.0',
+                        2.53
+                    ],
+                    [
+                        'v43.0',
+                        1.45
+                    ],
+                    [
+                        'v31.0',
+                        1.24
+                    ],
+                    [
+                        'v35.0',
+                        0.85
+                    ],
+                    [
+                        'v38.0',
+                        0.6
+                    ],
+                    [
+                        'v32.0',
+                        0.55
+                    ],
+                    [
+                        'v37.0',
+                        0.38
+                    ],
+                    [
+                        'v33.0',
+                        0.19
+                    ],
+                    [
+                        'v34.0',
+                        0.14
+                    ],
+                    [
+                        'v30.0',
+                        0.14
+                    ]
+                ]
+            }, {
+                name: 'Firefox',
+                id: 'Firefox',
+                data: [
+                    [
+                        'v35',
+                        2.76
+                    ],
+                    [
+                        'v36',
+                        2.32
+                    ],
+                    [
+                        'v37',
+                        2.31
+                    ],
+                    [
+                        'v34',
+                        1.27
+                    ],
+                    [
+                        'v38',
+                        1.02
+                    ],
+                    [
+                        'v31',
+                        0.33
+                    ],
+                    [
+                        'v33',
+                        0.22
+                    ],
+                    [
+                        'v32',
+                        0.15
+                    ]
+                ]
+            }, {
+                name: 'Safari',
+                id: 'Safari',
+                data: [
+                    [
+                        'v8.0',
+                        2.56
+                    ],
+                    [
+                        'v7.1',
+                        0.77
+                    ],
+                    [
+                        'v5.1',
+                        0.42
+                    ],
+                    [
+                        'v5.0',
+                        0.3
+                    ],
+                    [
+                        'v6.1',
+                        0.29
+                    ],
+                    [
+                        'v7.0',
+                        0.26
+                    ],
+                    [
+                        'v6.2',
+                        0.17
+                    ]
+                ]
+            }, {
+                name: 'Opera',
+                id: 'Opera',
+                data: [
+                    [
+                        'v12.x',
+                        0.34
+                    ],
+                    [
+                        'v28',
+                        0.24
+                    ],
+                    [
+                        'v27',
+                        0.17
+                    ],
+                    [
+                        'v29',
+                        0.16
+                    ]
+                ]
+            }]
+            */
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendnace")
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+        
+        var currentDay = moment().day();
+        
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        }
+        
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        
+        if($location.url() == "/auth/absence"){
+            siteServices.updateTitle('Report Absence');    
+        }
+        else{
+            siteServices.updateTitle('Upcoming Absences');    
+        }
+       
+        
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+           
+           $scope.getAbsencesByDate();
+       }
+       
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
+           
+           var nextDate = dayDesired - currentDay;
+           
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
+           
+           
+           
+           return nextDate;
+       }
+       
+       $scope.formatDate = function(date){
+           
+           return moment.utc(date).format('dddd, MMM D');
+       }
+
+        $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
+            $scope.loading = true;
+            
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+        
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+         
+        $scope.submitNewAbsence = function () {
+
+            if ($scope.newAbsence.date == null) {
+
+                siteServices.showMessageModal("Must select a date")
+            }
+            else if($scope.newAbsence.type == null){
+                siteServices.showMessageModal("Must select a type: Late or Absent")
+            }
+            else {
+                
+                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
+                
+                    //TODO: Redirect to list of absences.
+                    $location.path("/whosOut");
+                },
+                    function (err) {
+                        Materialize.toast(err)
+                        console.log(err);
+                    })
+            }
+
+
+        }
+        
+        
+        function filterOutOldDates(){
+            
+        }
+    
+
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendnace")
+    .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+        
+        var currentDay = moment().day();
+        
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        }
+        
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        
+        if($location.url() == "/auth/absence"){
+            siteServices.updateTitle('Report Absence');    
+        }
+        else{
+            siteServices.updateTitle('Upcoming Absences');    
+        }
+       
+        
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+           
+           $scope.getAbsencesByDate();
+       }
+       
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
+           
+           var nextDate = dayDesired - currentDay;
+           
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
+           
+           
+           
+           return nextDate;
+       }
+       
+       $scope.formatDate = function(date){
+           
+           return moment.utc(date).format('dddd, MMM D');
+       }
+
+        $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
+            $scope.loading = true;
+            
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+        
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+         
+        $scope.submitNewAbsence = function () {
+
+            if ($scope.newAbsence.date == null) {
+
+                siteServices.showMessageModal("Must select a date")
+            }
+            else if($scope.newAbsence.type == null){
+                siteServices.showMessageModal("Must select a type: Late or Absent")
+            }
+            else {
+                
+                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
+                
+                    //TODO: Redirect to list of absences.
+                    $location.path("/whosOut");
+                },
+                    function (err) {
+                        Materialize.toast(err)
+                        console.log(err);
+                    })
+            }
+
+
+        }
+        
+        
+        function filterOutOldDates(){
+            
+        }
+    
+
+    }])
+
 angular.module("BossCollection.forums")
     .controller('threadController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog',
@@ -1388,132 +2048,6 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("absenceController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
-        
-        var currentDay = moment().day();
-        
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment(); 
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
-        
-        
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        }
-        
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        
-        if($location.url() == "/auth/absence"){
-            siteServices.updateTitle('Report Absence');    
-        }
-        else{
-            siteServices.updateTitle('Upcoming Absences');    
-        }
-       
-        
-       $scope.updateList = function(){
-           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
-           
-           $scope.getAbsencesByDate();
-       }
-       
-       function calculateNumOfDaysUntil(dayDesired){
-           var numOfDaysInWeek = 7;
-           
-           var nextDate = dayDesired - currentDay;
-           
-           if(nextDate < 0){
-               
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
-           }
-           
-           
-           
-           return nextDate;
-       }
-       
-       $scope.formatDate = function(date){
-           
-           return moment.utc(date).format('dddd, MMM D');
-       }
-
-        $scope.getAbsences = function(){
-            $scope.currentlySelected = "All absences"
-            $scope.loading = true;
-            
-            absenceService.getAbsences().then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-        
-        $scope.getAbsencesByDate = function(){
-            
-            $scope.loading = true;
-            
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-         
-        $scope.submitNewAbsence = function () {
-
-            if ($scope.newAbsence.date == null) {
-
-                siteServices.showMessageModal("Must select a date")
-            }
-            else if($scope.newAbsence.type == null){
-                siteServices.showMessageModal("Must select a type: Late or Absent")
-            }
-            else {
-                
-                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
-                
-                    //TODO: Redirect to list of absences.
-                    $location.path("/whosOut");
-                },
-                    function (err) {
-                        Materialize.toast(err)
-                        console.log(err);
-                    })
-            }
-
-
-        }
-        
-        
-        function filterOutOldDates(){
-            
-        }
-    
-
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
     .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
         function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
 
@@ -1871,23 +2405,6 @@ angular.module("BossCollection.controllers")
                     
                 }
             }
-
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("forumsController", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope',
-        function($scope, $location, $http, userLoginSrvc, $rootScope){
-            
-        $scope.user.name = userLoginSrvc.getUser();
-        
-        if($scope.user.name == undefined){
-            $location.path('/');
-        }
-        
 
     }])
 
