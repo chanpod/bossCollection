@@ -1,35 +1,35 @@
 script#forum(type="text/ng-template")    
     md-content(layout = "column", flex, layout-fill)
-        md-progress-linear(ng-if = "loading", md-mode="indeterminate")
-        div(ng-repeat = "category in forums.categories")            
-            md-toolbar().md-scroll-shrink
-                div().md-toolbar-tools
-                    {{category.name}}
-                    span(flex)
-                    div(ng-show = "user.rank > 2")
-                        md-button(ng-click = "deleteCategory(category)").md-icon-button
-                            md-icon(md-font-library="material-icons", aria-label = "delete category") delete
-                        md-button(ng-click = "editCategory(category)").md-icon-button
-                            md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                        md-button(ng-click = "createForum(category)").md-icon-button
-                            md-icon(md-font-library="material-icons", aria-label = "add new forum") add
+        div(style = "overflow:hidden;")
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
-            md-list
-                md-list-item(ng-repeat = "forum in category.forums").md-2-line.mousePointer
-                    div(layout-padding).md-list-item-text
-                        h3(ng-click = "goToForum(forum)")
-                            {{forum.name}}
-                        div(ng-show = "user.rank == 4").md-secondary
-                            md-button(ng-click = "deleteForum(forum)").md-icon-button
+            div(ng-repeat = "category in forums.categories")            
+                md-toolbar().md-scroll-shrink
+                    div().md-toolbar-tools
+                        {{category.name}}
+                        span(flex)
+                        div(ng-show = "user.rank > 2")
+                            md-button(ng-click = "deleteCategory(category)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "delete category") delete
-                            md-button(ng-click = "editForum(forum)").md-icon-button
+                            md-button(ng-click = "editCategory(category)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                            
-                    md-divider(ng-if="!$last")        
-        md-toolbar(ng-show = "user.rank > 2").md-scroll-shrink
-            div().md-toolbar-tools
-                md-button(ng-click = "newCategory()").md-raised
-                    | New Category
-                            
-        ad()
+                            md-button(ng-click = "createForum(category)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "add new forum") add
+                md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+                md-list
+                    md-list-item(ng-repeat = "forum in category.forums").md-2-line.mousePointer
+                        div(layout-padding).md-list-item-text
+                            h3(ng-click = "goToForum(forum)")
+                                {{forum.name}}
+                            div(ng-show = "user.rank == 4").md-secondary
+                                md-button(ng-click = "deleteForum(forum)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                md-button(ng-click = "editForum(forum)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                                
+                        md-divider(ng-if="!$last")
+            md-toolbar(ng-show = "user.rank > 2").md-scroll-shrink
+                div().md-toolbar-tools
+                    md-button(ng-click = "newCategory()").md-raised
+                        | New Category
+            ad()
                             
