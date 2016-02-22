@@ -114,10 +114,6 @@ function getCategories(req, res){
 
                         category.forums = categoryForums;
                         
-                        console.log("============================================")
-                        console.log(forums.categories)
-                        console.log("=============================================")
-                        
                         categoriesPromise.pop();
                         
                         forEachFinished();
