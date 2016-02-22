@@ -1117,6 +1117,7 @@ angular.module("BossCollection.attendance")
         $scope.init = function(){
             
             $scope.getAbsences();
+            $scope.buildHighChart();
         }
         
         $scope.getAbsences = function () {
@@ -1146,6 +1147,8 @@ angular.module("BossCollection.attendance")
             
             //get an object of unique users in the absence list
             var listOfUsers = _.groupBy($scope.absences, "user");
+            $scope.absenceHighchartData = [];
+            $scope.absenceHighchartDrillDownSeries = [];
             
             _(listOfUsers).forEach(function(user) {
                 
@@ -1164,9 +1167,11 @@ angular.module("BossCollection.attendance")
                     
                 
                 //Calculate total value based on weights and number of days.
-                var totalAttendancePoints = ($scope.weeksCounted * $scope.raidsPerWeek) * ($scope.late + $scope.absent);
+                var totalAttendancePoints = ($scope.weeksCounted * $scope.raidsPerWeek) * $scope.absent;
+                
+                var lateWeight = $scope.late/$scope.absent * $scope.absent;
                 //Get flat value by subtracting the total value minus the weighted values times the number of times they've occured a particular type. 
-                var attendanceRating =  totalAttendancePoints - (lateCount * $scope.late) - (absentCount * $scope.absent);
+                var attendanceRating =  totalAttendancePoints - (lateCount * lateWeight) - (absentCount * $scope.absent);
                 //Divide to get the %
                 var percentAttendanceRating = attendanceRating / totalAttendancePoints;
                 
@@ -1209,13 +1214,26 @@ angular.module("BossCollection.attendance")
             $scope.buildHighChart();
         }
         
+        $scope.redrawChart = function(seriesData, drilldownData){
+            
+            $scope.chart.series[0].setData([{
+                    name: "Member",
+                    colorByPoint: true,
+                    data: $scope.absenceHighchartData
+                }])
+            
+            $scope.chart.drilldown.setData({
+                    series: $scope.absenceHighchartDrillDownSeries
+                })
+        }
         
         
         $scope.buildHighChart = function () {
             
-            $('#container').highcharts({
+            $scope.chart = new Highcharts.Chart({
                 chart: {
-                    type: 'column'
+                    type: 'column',
+                    renderTo: 'container'
                 },
                 title: {
                     text: 'Member attendance rates'

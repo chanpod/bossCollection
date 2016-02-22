@@ -2,7 +2,34 @@ script#attendanceStats(type="text/ng-template")
   
     md-content.autoScroll
         section(flex)
-            div()
-                
-                div(id="container", style="")
+            div(layout = "column")
+                div(flex)
+                    md-card
+                        md-card-title
+                            md-card-title-text
+                                h3 Weights
+                        md-card-content
+                            div(layout)
+                                div(flex)
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Late Weight
+                                        input(type = "number", ng-model = "late")
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Absent Weight
+                                        input(type = "number", ng-model = "absent")
+                                div(flex)
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Weekly rotation
+                                        input(type = "number", ng-model = "weeksCounted")
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Raids per week
+                                        input(type = "number", ng-model = "raidsPerWeek")
+                                div(flex)
+                                    md-hint() Defaults to today
+                                    md-datepicker(ng-model = "newAbsence.date", md-placeholder="Start Date", required).datePickerAdjust
+                            div()
+                                md-button(ng-click = "calculateAttendance()").md-raised.md-primary
+                                    | Update chart
+                                    
+                div(flex, id="container", style="")
             ad(flex)
