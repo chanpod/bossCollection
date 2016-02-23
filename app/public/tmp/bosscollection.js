@@ -1108,8 +1108,8 @@ angular.module("BossCollection.attendance")
         $scope.absenceHighchartData = [];
         $scope.absenceHighchartDrillDownSeries = [];
         
-        $scope.late = 3;
-        $scope.absent = 1;
+        $scope.late = 1;
+        $scope.absent = 3;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
         
@@ -1290,7 +1290,7 @@ angular.module("BossCollection.attendance")
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
         var currentDay = moment().day();
@@ -1416,7 +1416,7 @@ angular.module("BossCollection.attendance")
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+    .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
         var currentDay = moment().day();
