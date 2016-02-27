@@ -16,19 +16,24 @@ angular.module("BossCollection.attendance")
         $scope.absent = 3;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
-        
+        $scope.startingDate = moment();
         
         $scope.init = function(){
             
             $scope.getAbsences();
             $scope.buildHighChart();
         }
-        
+           
         $scope.getAbsences = function () {
             $scope.currentlySelected = "All absences"
             $scope.loading = true;
-
-            absenceService.getAbsences().then(function (result) {
+            
+            var absenceHistory = {
+                date:$scope.startingDate, 
+                weeks:$scope.weeksCounted
+            }
+            
+            absenceService.getAbsenceHistory(absenceHistory).then(function (result) {
 
                 $scope.loading = false;
                 $scope.absences = result.absences;

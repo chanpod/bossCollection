@@ -50,6 +50,40 @@ router.route('/absence')
         getAbsences(date, req, res);
     })
 
+router.route('/absenceHistory')
+    .post(function(req, res){
+        
+        var numOfWeeks = req.body.weeks;
+        var numOfDaysHistory = numOfWeeks * 7;
+        var startingDate = standardiseTime(req.body.date);
+        
+        if(startingDate == undefined){
+            startingDate = standardiseTime(moment());
+        }
+         
+        var currentDayOfYear = moment().dayOfYear();
+        
+        var endDate = moment().dayOfYear(currentDayOfYear - numOfDaysHistory);
+        
+        AbsenceModel.find({
+            $and: [
+                {date: {
+                    $lte: startingDate.toISOString()
+                }},
+                {date: {
+                    $gte: endDate.toISOString()
+                }}
+            ]
+        })
+        .then(function (absences) {
+
+            res.status(200).send({ "absences": absences });
+        },
+            function (err) {
+                res.status(400).send(err);
+            })
+    })
+
 router.route('/absenceByDate')    
     .post(function(req, res){
         console.log("Getting absences by date...");

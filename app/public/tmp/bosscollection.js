@@ -134,9 +134,9 @@ angular.module("BossCollection.attendance")
         'siteServices',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
 
-            var absence = $resource('/api/absence', {}, {})
-            var absenceByDate = $resource('/api/absenceByDate', {}, {})
-
+            var absence = $resource('/api/absence', {}, {});
+            var absenceByDate = $resource('/api/absenceByDate', {}, {});
+            var absenceHistoryResource = $resource('/api/absenceHistory', {}, {});
 
             var absenceApi = {
 
@@ -161,6 +161,28 @@ angular.module("BossCollection.attendance")
                         })
 
                     return defer.promise;
+                },
+                getAbsenceHistory: function(absenceHistory){
+                    
+                    var defer = $q.defer();
+                    
+                    siteServices.startLoading();
+                    
+                    absenceHistoryResource.save(absenceHistory).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                        return defer.promise;
                 },
                 getAbsences: function () {
 
@@ -1112,19 +1134,24 @@ angular.module("BossCollection.attendance")
         $scope.absent = 3;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
-        
+        $scope.startingDate = moment();
         
         $scope.init = function(){
             
             $scope.getAbsences();
             $scope.buildHighChart();
         }
-        
+           
         $scope.getAbsences = function () {
             $scope.currentlySelected = "All absences"
             $scope.loading = true;
-
-            absenceService.getAbsences().then(function (result) {
+            
+            var absenceHistory = {
+                date:$scope.startingDate, 
+                weeks:$scope.weeksCounted
+            }
+            
+            absenceService.getAbsenceHistory(absenceHistory).then(function (result) {
 
                 $scope.loading = false;
                 $scope.absences = result.absences;

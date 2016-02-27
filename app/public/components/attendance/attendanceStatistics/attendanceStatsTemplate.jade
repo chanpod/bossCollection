@@ -26,9 +26,9 @@ script#attendanceStats(type="text/ng-template")
                                         input(type = "number", ng-model = "raidsPerWeek")
                                 div(flex)
                                     md-hint() Defaults to today
-                                    md-datepicker(ng-model = "newAbsence.date", md-placeholder="Start Date", required).datePickerAdjust
+                                    md-datepicker(ng-model = "startingDate", md-placeholder="Start Date", required).datePickerAdjust
                             div()
-                                md-button(ng-click = "calculateAttendance()").md-raised.md-primary
+                                md-button(ng-click = "getAbsences()").md-raised.md-primary
                                     | Update chart
                                     
                 div(flex, id="container", style="")
