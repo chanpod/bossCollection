@@ -1,0 +1,32 @@
+script#editAbsence(type="text/ng-template")
+    md-dialog(layout = "column").md-list.md-has-header
+        div(layout, layout-align = "center center")
+            h4
+                | Edit Absence
+        div()
+            form(ng-submit = "submitNewAbsence()")
+                div(layout-gt-xs="row")
+                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                        label() User Name
+                        md-icon(md-font-library="material-icons") person
+                        input(type = "text", ng-model = "absence.user", disabled)
+                    
+                md-datepicker(ng-model = "absence.date", md-placeholder="Enter date", required).datePickerAdjust
+                
+                div(layout-gt-xs="row").radioButtonFix
+                    md-radio-group(ng-model="absence.type", required)
+                        md-radio-button(value="late", class="md-primary")
+                            | Late
+                        md-radio-button(value="absent") 
+                            | Absent
+                md-input-container(flex-gt-md = "70").md-block
+                    label(for="reason") Reason...   
+                    textarea(id = "reason", required = "required", ng-model = "absence.reason")
+                div(layout = "row", layout-align = "space-around center")
+                    md-input-container().md-block
+                        md-button(ng-click = "save()").md-primary.md-raised
+                            | Save
+                    md-input-container().md-block
+                        md-button(ng-click = "cancel()").md-primary.md-raised
+                            | Cancel
+               

@@ -3,11 +3,18 @@ script#absence(type="text/ng-template")
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
                 div(layout-gt-xs="row")
-                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                        label() User Name
-                        md-icon(md-font-library="material-icons") person
-                        input(type = "text", ng-model = "user.name", disabled)
-                    
+                    md-autocomplete(md-min-length = "0",
+                                md-item-text = "user.user",
+                                md-selected-item = "selectedUser",                                    
+                                md-search-text = "user",
+                                md-floating-label = "Select User",
+                                md-items = "user in filterSearch(user)",
+                                ng-disabled = "user.rank < 3",
+                                md-autofocus = true,
+                                flex)
+                        md-item-template
+                            span(md-highlight-text = "user") {{user.user}}
+                        
                 md-datepicker(ng-model = "newAbsence.date", md-placeholder="Enter date", required).datePickerAdjust
                 
                 div(layout-gt-xs="row").radioButtonFix

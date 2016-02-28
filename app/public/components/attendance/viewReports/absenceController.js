@@ -25,12 +25,9 @@ angular.module("BossCollection.attendance")
         $scope.currentlySelected = "Today";
         $scope.isToolSetOpen = false;
         
-        if($location.url() == "/auth/absence"){
-            siteServices.updateTitle('Report Absence');    
-        }
-        else{
-            siteServices.updateTitle('Upcoming Absences');    
-        }
+        
+        siteServices.updateTitle('Upcoming Absences');    
+        
        
         
        $scope.updateList = function(){
@@ -73,6 +70,32 @@ angular.module("BossCollection.attendance")
                 $scope.loading = false;
                 console.log(err);  
             })
+        }
+        
+        $scope.deleteAbsence = function(absence){
+            
+            siteServices.confirmDelete()
+                .then(function(result){
+                    
+                    return absenceService.deleteAbsence(absence);
+                })   
+                .then(function(result){
+                    
+                    $scope.updateList();
+                })               
+                .finally(function(){
+                    
+                })
+        }
+        
+        $scope.editAbsence = function(absence){
+            
+            absenceService.openEditModal('editAbsence', absence)
+                .then(function(result){
+                    
+                    $scope.updateList();
+                    
+                })
         }
         
         $scope.getAbsencesByDate = function(){

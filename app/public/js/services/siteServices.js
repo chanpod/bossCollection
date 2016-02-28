@@ -3,8 +3,8 @@
 
 
 angular.module("BossCollection.services")
-    .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast',
-    function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast) {
+    .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast', '$q',
+    function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q) {
         
         var alreadyLoading = false;
         
@@ -41,6 +41,30 @@ angular.module("BossCollection.services")
                 })
             
         }
+        
+        function confirmDelete(event, callback) {
+
+                var defer = $q.defer();
+
+                var confirm = $mdDialog.confirm()
+                    .title('Are you sure you want to delete this?')
+                    .textContent('This is irreversable once you click Yes!')
+                    .ariaLabel('Confirm Delete')
+                    .targetEvent(event)
+                    .ok('Delete')
+                    .cancel('Nevermind');
+
+                $mdDialog.show(confirm)
+                    .then(function () {
+
+                        defer.resolve(true);
+                    }, function (err) {
+
+                        defer.reject(false);
+                    })
+
+                return defer.promise;
+            }
         
         function hideLoadingBottomSheet(){
             
@@ -122,6 +146,7 @@ angular.module("BossCollection.services")
             showMessageToast:showMessageToast,
             hideBottomSheet:hideBottomSheet,
             showLoadingModal:showLoadingModal,
-            hideLoadingModal:hideLoadingModal
+            hideLoadingModal:hideLoadingModal,
+            confirmDelete:confirmDelete
         }
     }])

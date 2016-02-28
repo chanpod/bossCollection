@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices){
         
         var currentDay = moment().day();
         
@@ -25,11 +25,35 @@ angular.module("BossCollection.attendance")
         $scope.currentlySelected = "Today";
         $scope.isToolSetOpen = false;
         
-        if($location.url() == "/auth/absence"){
-            siteServices.updateTitle('Report Absence');    
+        
+            
+                
+        $scope.init = function(){
+            
+            siteServices.updateTitle('Report Absence');
+            
+            if($scope.user.rank < 3){
+                $scope.selectedUser = $scope.user;
+            }
+            else{
+                $scope.getGuildUsers();    
+            }
+                
         }
-        else{
-            siteServices.updateTitle('Upcoming Absences');    
+        
+        $scope.getGuildUsers = function(){
+            
+            $scope.loading = true;
+            
+            guildServices.getGuildMembers($scope.user.guild.name)
+                .then(function(users){
+                    
+                    $scope.users = users;  
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
         }
        
         
@@ -91,6 +115,11 @@ angular.module("BossCollection.attendance")
             })
         }
          
+        $scope.filterSearch = function (filterSearch) {
+
+            return $filter('filter')($scope.users, filterSearch);
+        }
+         
         $scope.submitNewAbsence = function () {
 
             if ($scope.newAbsence.date == null) {
@@ -101,7 +130,7 @@ angular.module("BossCollection.attendance")
                 siteServices.showMessageModal("Must select a type: Late or Absent")
             }
             else {
-                
+                $scope.newAbsence.user = $scope.selectedUser.name;
                 absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.
@@ -121,5 +150,6 @@ angular.module("BossCollection.attendance")
             
         }
     
+        $scope.init();
 
     }])

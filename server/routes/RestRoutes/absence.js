@@ -3,6 +3,7 @@ var router = express.Router();
 var q = require('q');
 var AbsenceModel = require('../../models/absence.js');
 var moment = require('moment');
+var util = require('../../utility');
 
 /**
 {
@@ -34,7 +35,7 @@ router.route('/absence')
     },
     function(err){
         
-        res.status(400).send(err);
+        res.status(400).send(util.handleErrors(err));
     })
     
   })
@@ -48,6 +49,45 @@ router.route('/absence')
         date = standardiseTime(moment());
     
         getAbsences(date, req, res);
+    })
+
+router.route('/deleteAbsence')
+    .post(function(req, res){
+        
+        
+        var absenceId = req.body.absence.id || req.body.absence._id;
+
+
+        AbsenceModel.findOne({ "_id": absenceId })
+            .then(function (absence) {
+
+                return absence.remove()
+                
+                
+
+            }, function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+            .then(function(response){
+                res.status(200).send({ "absences": response });
+            })
+    })
+    
+router.route('/saveAbsence')
+    .post(function(req, res){
+        
+        var absenceId = req.body.absence.id || req.body.absence._id;
+        var query = { "_id": absenceId };
+
+        AbsenceModel.findOneAndUpdate(query, req.body.absence)
+            .then(function (response) {
+
+                res.status(200).send({ "absences": response });
+            }, function (err) {
+                
+                res.status(400).send(util.handleErrors(err));
+            })
     })
 
 router.route('/absenceHistory')
@@ -80,7 +120,7 @@ router.route('/absenceHistory')
             res.status(200).send({ "absences": absences });
         },
             function (err) {
-                res.status(400).send(err);
+                res.status(400).send(util.handleErrors(err));
             })
     })
 
@@ -100,7 +140,7 @@ router.route('/absenceByDate')
                 res.status(200).send({ "absences": absences });
             },
                 function (err) {
-                    res.status(400).send(err);
+                    res.status(400).send(util.handleErrors(err));
                 })
     })
 
@@ -136,7 +176,7 @@ function getAbsences(date, req, res){
             res.status(200).send({ "absences": absences });
         },
         function (err) {
-            res.status(400).send(err);
+            res.status(400).send(util.handleErrors(err));
         })
 }
   

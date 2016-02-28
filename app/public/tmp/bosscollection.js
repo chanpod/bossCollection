@@ -127,17 +127,66 @@ angular.module("BossCollection.forums", ['ngRoute'])
         })
 
     }]);
+angular.module("BossCollection.attendance")
+    .controller('absenceModalController', [
+        '$scope', 'absenceService', '$mdDialog', 'data',
+        function($scope, absenceService, $mdDialog, data){
+        
+        
+        
+        
+        $scope.init = function () {
+
+            if (data) {
+
+                $scope.absence = data;
+                $scope.absence.date = new Date($scope.absence.date);
+            }
+            else {
+                $scope.absence = {};
+            }
+        }
+        
+        $scope.save = function(){
+            
+            absenceService.saveAbsence($scope.absence)
+                .then(function(response){
+                    
+                    $scope.close(response);
+                })
+                .fail(function(err){
+                    
+                })
+                .finally(function(){
+                    
+                })
+        }
+        
+        $scope.cancel = function () {
+
+            $mdDialog.cancel();
+        }
+
+        $scope.close = function () {
+            $mdDialog.hide($scope.object);
+        }
+        
+        $scope.init();
+        
+    }])
 'use strict';
 
 angular.module("BossCollection.attendance")
     .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
+        'siteServices', '$mdMedia', '$mdDialog',
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
 
             var absence = $resource('/api/absence', {}, {});
             var absenceByDate = $resource('/api/absenceByDate', {}, {});
             var absenceHistoryResource = $resource('/api/absenceHistory', {}, {});
-
+            var deleteAbsenceResource = $resource('/api/deleteAbsence');
+            var saveAbsenceResource = $resource('/api/saveAbsence');
+            
             var absenceApi = {
 
                 submitNewAbsence: function (newAbsence) {
@@ -183,6 +232,76 @@ angular.module("BossCollection.attendance")
                         })
                         
                         return defer.promise;
+                },
+                openEditModal: function(template, locals) {
+                  
+
+                    var defer = $q.defer();
+                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                    
+                    $mdDialog.show({
+                        templateUrl: template,
+                        controller: 'absenceModalController',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: false,
+                        locals: { data: locals },
+                        fullscreen: true
+                    })
+                    .then(function (result) {
+
+                            defer.resolve(result);
+                        },
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                    return defer.promise;
+              
+                },
+                saveAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    saveAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                },
+                deleteAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    deleteAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                    
                 },
                 getAbsences: function () {
 
@@ -1317,8 +1436,8 @@ angular.module("BossCollection.attendance")
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices){
         
         var currentDay = moment().day();
         
@@ -1339,11 +1458,35 @@ angular.module("BossCollection.attendance")
         $scope.currentlySelected = "Today";
         $scope.isToolSetOpen = false;
         
-        if($location.url() == "/auth/absence"){
-            siteServices.updateTitle('Report Absence');    
+        
+            
+                
+        $scope.init = function(){
+            
+            siteServices.updateTitle('Report Absence');
+            
+            if($scope.user.rank < 3){
+                $scope.selectedUser = $scope.user;
+            }
+            else{
+                $scope.getGuildUsers();    
+            }
+                
         }
-        else{
-            siteServices.updateTitle('Upcoming Absences');    
+        
+        $scope.getGuildUsers = function(){
+            
+            $scope.loading = true;
+            
+            guildServices.getGuildMembers($scope.user.guild.name)
+                .then(function(users){
+                    
+                    $scope.users = users;  
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
         }
        
         
@@ -1405,6 +1548,11 @@ angular.module("BossCollection.attendance")
             })
         }
          
+        $scope.filterSearch = function (filterSearch) {
+
+            return $filter('filter')($scope.users, filterSearch);
+        }
+         
         $scope.submitNewAbsence = function () {
 
             if ($scope.newAbsence.date == null) {
@@ -1415,7 +1563,7 @@ angular.module("BossCollection.attendance")
                 siteServices.showMessageModal("Must select a type: Late or Absent")
             }
             else {
-                
+                $scope.newAbsence.user = $scope.selectedUser.name;
                 absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.
@@ -1435,6 +1583,7 @@ angular.module("BossCollection.attendance")
             
         }
     
+        $scope.init();
 
     }])
 
@@ -1465,12 +1614,9 @@ angular.module("BossCollection.attendance")
         $scope.currentlySelected = "Today";
         $scope.isToolSetOpen = false;
         
-        if($location.url() == "/auth/absence"){
-            siteServices.updateTitle('Report Absence');    
-        }
-        else{
-            siteServices.updateTitle('Upcoming Absences');    
-        }
+        
+        siteServices.updateTitle('Upcoming Absences');    
+        
        
         
        $scope.updateList = function(){
@@ -1513,6 +1659,32 @@ angular.module("BossCollection.attendance")
                 $scope.loading = false;
                 console.log(err);  
             })
+        }
+        
+        $scope.deleteAbsence = function(absence){
+            
+            siteServices.confirmDelete()
+                .then(function(result){
+                    
+                    return absenceService.deleteAbsence(absence);
+                })   
+                .then(function(result){
+                    
+                    $scope.updateList();
+                })               
+                .finally(function(){
+                    
+                })
+        }
+        
+        $scope.editAbsence = function(absence){
+            
+            absenceService.openEditModal('editAbsence', absence)
+                .then(function(result){
+                    
+                    $scope.updateList();
+                    
+                })
         }
         
         $scope.getAbsencesByDate = function(){
@@ -3411,8 +3583,8 @@ angular.module("BossCollection.services")
 
 
 angular.module("BossCollection.services")
-    .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast',
-    function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast) {
+    .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast', '$q',
+    function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q) {
         
         var alreadyLoading = false;
         
@@ -3449,6 +3621,30 @@ angular.module("BossCollection.services")
                 })
             
         }
+        
+        function confirmDelete(event, callback) {
+
+                var defer = $q.defer();
+
+                var confirm = $mdDialog.confirm()
+                    .title('Are you sure you want to delete this?')
+                    .textContent('This is irreversable once you click Yes!')
+                    .ariaLabel('Confirm Delete')
+                    .targetEvent(event)
+                    .ok('Delete')
+                    .cancel('Nevermind');
+
+                $mdDialog.show(confirm)
+                    .then(function () {
+
+                        defer.resolve(true);
+                    }, function (err) {
+
+                        defer.reject(false);
+                    })
+
+                return defer.promise;
+            }
         
         function hideLoadingBottomSheet(){
             
@@ -3530,7 +3726,8 @@ angular.module("BossCollection.services")
             showMessageToast:showMessageToast,
             hideBottomSheet:hideBottomSheet,
             showLoadingModal:showLoadingModal,
-            hideLoadingModal:hideLoadingModal
+            hideLoadingModal:hideLoadingModal,
+            confirmDelete:confirmDelete
         }
     }])
 'use strict';
