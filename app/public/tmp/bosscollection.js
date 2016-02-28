@@ -1694,7 +1694,12 @@ angular.module("BossCollection.attendance")
                 })   
                 .then(function(result){
                     
-                    $scope.updateList();
+                    if($scope.viewing == 0){
+                        $scope.getAbsences();
+                    }
+                    else{
+                        $scope.updateList();    
+                    }
                 })               
                 .finally(function(){
                     
