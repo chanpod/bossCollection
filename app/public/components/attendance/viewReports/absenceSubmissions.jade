@@ -1,7 +1,7 @@
 script#absenceSubmissions(type="text/ng-template")
     md-content
         section(layout="column")
-            div(flex, ng-init = "getAbsences()") 
+            div(flex) 
                 div(layout)
                     div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
                         md-datepicker(flex, ng-model = "dayDesired", ng-change = "updateList()", md-placeholder="Select Date")

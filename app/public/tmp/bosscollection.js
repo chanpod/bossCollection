@@ -181,11 +181,11 @@ angular.module("BossCollection.attendance")
         'siteServices', '$mdMedia', '$mdDialog',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
 
-            var absence = $resource('/api/absence', {}, {});
-            var absenceByDate = $resource('/api/absenceByDate', {}, {});
-            var absenceHistoryResource = $resource('/api/absenceHistory', {}, {});
-            var deleteAbsenceResource = $resource('/api/deleteAbsence');
-            var saveAbsenceResource = $resource('/api/saveAbsence');
+            var absence = $resource('/api/absence/absence', {}, {});
+            var absenceByDate = $resource('/api/absence/absenceByDate', {}, {});
+            var absenceHistoryResource = $resource('/api/absence/absenceHistory', {}, {});
+            var deleteAbsenceResource = $resource('/api/absence/deleteAbsence');
+            var saveAbsenceResource = $resource('/api/absence/saveAbsence');
             
             var absenceApi = {
 
@@ -1277,7 +1277,7 @@ angular.module("BossCollection.attendance")
                 $scope.calculateAttendance();
             },
                 function (err) {
-                    siteServices.showMessageToast(err)
+                    siteServices.showMessageModal(err.message)
                     $scope.loading = false;
                     console.log(err);
                 })
@@ -1285,8 +1285,7 @@ angular.module("BossCollection.attendance")
         
         /**
          * 
-         * 12
-         * 12 * 4 = 48
+         * 
          * 
          */
         $scope.calculateAttendance = function(){
@@ -1604,25 +1603,30 @@ angular.module("BossCollection.attendance")
         $scope.today = moment(); 
         $scope.dayDesired;
         $scope.currentlySelected = moment().format('dddd - Do');
-        
         /**
          * 0 = all future absences
          * 1 = specific date
          */
-        $scope.viewing = 0;
+         $scope.viewing = 0;
+         
         
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        }
-        
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        
-        
-        siteServices.updateTitle('Upcoming Absences');    
-        
-       
+       $scope.init = function(){
+
+           
+           $scope.getAbsences()
+           
+           $scope.toolbar = {
+               isOpen: false,
+               direction: "right"
+           }
+
+           $scope.currentlySelected = "Today";
+           $scope.isToolSetOpen = false;
+
+
+           siteServices.updateTitle('Upcoming Absences');   
+           
+       }
         
        $scope.updateList = function(){
            $scope.viewing = 1;
@@ -1673,7 +1677,9 @@ angular.module("BossCollection.attendance")
                 $scope.absences = result.absences; 
             }, 
             function(err){
-                siteServices.showMessageToast(err) 
+                
+                siteServices.showMessageModal(err.message)
+                 
                 $scope.loading = false;
                 console.log(err);  
             })
@@ -1756,6 +1762,8 @@ angular.module("BossCollection.attendance")
         function filterOutOldDates(){
             
         }
+        
+        $scope.init();
     
 
     }])

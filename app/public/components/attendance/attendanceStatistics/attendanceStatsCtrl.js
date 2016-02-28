@@ -40,7 +40,7 @@ angular.module("BossCollection.attendance")
                 $scope.calculateAttendance();
             },
                 function (err) {
-                    siteServices.showMessageToast(err)
+                    siteServices.showMessageModal(err.message)
                     $scope.loading = false;
                     console.log(err);
                 })
@@ -48,8 +48,7 @@ angular.module("BossCollection.attendance")
         
         /**
          * 
-         * 12
-         * 12 * 4 = 48
+         * 
          * 
          */
         $scope.calculateAttendance = function(){

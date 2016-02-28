@@ -15,6 +15,26 @@ var util = require('../../utility');
 }
  */
 
+router.use(function(req,res, next){
+    
+  var errMessage = "You must be logged in and a part of a guild to use this";
+  
+  if(req.session.user){
+      
+      if (req.session.user.guild) {
+          next();
+       }
+       else{
+           res.status(400).send(util.handleErrors(errMessage));
+       }
+  }
+  
+  else{
+      res.status(400).send(util.handleErrors(errMessage));
+  }
+  
+})
+
 router.route('/absence')  
   .post(function(req, res){
       

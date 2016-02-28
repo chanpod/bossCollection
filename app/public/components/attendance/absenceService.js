@@ -5,11 +5,11 @@ angular.module("BossCollection.attendance")
         'siteServices', '$mdMedia', '$mdDialog',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
 
-            var absence = $resource('/api/absence', {}, {});
-            var absenceByDate = $resource('/api/absenceByDate', {}, {});
-            var absenceHistoryResource = $resource('/api/absenceHistory', {}, {});
-            var deleteAbsenceResource = $resource('/api/deleteAbsence');
-            var saveAbsenceResource = $resource('/api/saveAbsence');
+            var absence = $resource('/api/absence/absence', {}, {});
+            var absenceByDate = $resource('/api/absence/absenceByDate', {}, {});
+            var absenceHistoryResource = $resource('/api/absence/absenceHistory', {}, {});
+            var deleteAbsenceResource = $resource('/api/absence/deleteAbsence');
+            var saveAbsenceResource = $resource('/api/absence/saveAbsence');
             
             var absenceApi = {
 

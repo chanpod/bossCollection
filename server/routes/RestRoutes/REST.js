@@ -17,7 +17,7 @@ router.use(function(req,res, next){
 })
 
 router.use(application);
-router.use(absence);
+router.use('/absence', absence);
 router.use(guilds);
 
 //Playing around with REST routes

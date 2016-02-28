@@ -15,25 +15,30 @@ angular.module("BossCollection.attendance")
         $scope.today = moment(); 
         $scope.dayDesired;
         $scope.currentlySelected = moment().format('dddd - Do');
-        
         /**
          * 0 = all future absences
          * 1 = specific date
          */
-        $scope.viewing = 0;
+         $scope.viewing = 0;
+         
         
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        }
-        
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        
-        
-        siteServices.updateTitle('Upcoming Absences');    
-        
-       
+       $scope.init = function(){
+
+           
+           $scope.getAbsences()
+           
+           $scope.toolbar = {
+               isOpen: false,
+               direction: "right"
+           }
+
+           $scope.currentlySelected = "Today";
+           $scope.isToolSetOpen = false;
+
+
+           siteServices.updateTitle('Upcoming Absences');   
+           
+       }
         
        $scope.updateList = function(){
            $scope.viewing = 1;
@@ -84,7 +89,9 @@ angular.module("BossCollection.attendance")
                 $scope.absences = result.absences; 
             }, 
             function(err){
-                siteServices.showMessageToast(err) 
+                
+                siteServices.showMessageModal(err.message)
+                 
                 $scope.loading = false;
                 console.log(err);  
             })
@@ -167,6 +174,8 @@ angular.module("BossCollection.attendance")
         function filterOutOldDates(){
             
         }
+        
+        $scope.init();
     
 
     }])
