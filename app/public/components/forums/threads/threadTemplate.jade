@@ -1,6 +1,6 @@
 script#thread(type="text/ng-template")    
-    md-content(layout = "column", flex, layout-fill)
-        md-toolbar().md-scroll-shrink
+    md-content(flex)
+        md-toolbar(flex).md-scroll-shrink
                 div().md-toolbar-tools
                     md-button(ng-click = "goBack()").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
@@ -13,7 +13,7 @@ script#thread(type="text/ng-template")
                         md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
                         md-tooltip() Refresh Forum data
         md-progress-linear(ng-if = "loading", md-mode="indeterminate")
-        div(layout = "row", layout-align = "space-between center")
+        div(layout = "row", layout-align = "space-between center", flex)
             md-input-container().md-block.md-icon-float
                 label() Search
                 md-icon(md-font-library="material-icons") search
@@ -24,6 +24,27 @@ script#thread(type="text/ng-template")
                     md-icon(md-font-library="material-icons") keyboard_arrow_up
                 md-button(ng-click = "orderByDateCreatedReversed()").md-icon-button
                     md-icon(md-font-library="material-icons") keyboard_arrow_down
+                    
+        md-list(layout = "row", layout-align = "center stretch", flex)          
+            md-virtual-repeat-container(id="vertical-container", flex, ng-style = "listStyle")
+                div(md-virtual-repeat="thread in threadRepeat", md-on-demand, class="repeated-item", flex)
+                    md-list-item(flex).md-2-line.mousePointer
+                        div(layout-padding).md-list-item-text
+                            h3(ng-click = "openThread(thread)")
+                                {{thread.title}}
+                            p(ng-click = "openThread(thread)")
+                                {{thread.user}}
+                            div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
+                                md-button(ng-click = "deleteThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                    md-tooltip() Delete thread
+                                md-button(ng-click = "editThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                                    md-tooltip() Edit thread
+                        md-tooltip(style = "max-width:75%;").threadMessagePreview
+                            {{thread.message}}
+                        md-divider(ng-if="!$last")        
+       //-
         md-list
                 md-list-item(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy").md-2-line.mousePointer
                     div(layout-padding).md-list-item-text
