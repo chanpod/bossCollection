@@ -4,7 +4,7 @@ script#absenceSubmissions(type="text/ng-template")
             div(flex, ng-init = "getAbsences()") 
                 div(layout)
                     div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
-                        md-datepicker(flex, ng-model = "dayDesired", ng-change = "updateList()", md-placeholder="Enter date")
+                        md-datepicker(flex, ng-model = "dayDesired", ng-change = "updateList()", md-placeholder="Select Date")
                         md-button(flex, ng-click = "getAbsences()").md-primary.md-raised
                             | Get All future Absences
                 md-divider
@@ -26,7 +26,7 @@ script#absenceSubmissions(type="text/ng-template")
                                     md-icon(md-font-library="material-icons") message &nbsp
                                     br
                                     {{absence.reason}}
-                            md-card-actions(ng-if = "user.rank > 2 || user.name == absence.user", layout="row", layout-align="end center")
+                            md-card-actions(ng-if = "user.rank > 2 || (user.name == absence.user && dateHasPassed(absence))", layout="row", layout-align="end center")
                                 md-button(ng-click = "editAbsence(absence)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit absence") mode_edit
                                     md-tooltip() Edit

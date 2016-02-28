@@ -130,7 +130,7 @@ angular.module("BossCollection.attendance")
                 siteServices.showMessageModal("Must select a type: Late or Absent")
             }
             else {
-                $scope.newAbsence.user = $scope.selectedUser.name;
+                $scope.newAbsence.user = $scope.selectedUser.user;
                 absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.

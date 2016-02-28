@@ -16,6 +16,11 @@ angular.module("BossCollection.attendance")
         $scope.dayDesired;
         $scope.currentlySelected = moment().format('dddd - Do');
         
+        /**
+         * 0 = all future absences
+         * 1 = specific date
+         */
+        $scope.viewing = 0;
         
         $scope.toolbar = {
             isOpen: false,
@@ -31,9 +36,20 @@ angular.module("BossCollection.attendance")
        
         
        $scope.updateList = function(){
+           $scope.viewing = 1;
            $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
            
            $scope.getAbsencesByDate();
+       }
+       
+       $scope.dateHasPassed = function(absence){
+           
+           if(moment(absence.date).isBefore(moment())){
+               return false;
+           }
+           else{
+               return true;
+           }
        }
        
        function calculateNumOfDaysUntil(dayDesired){
@@ -57,8 +73,10 @@ angular.module("BossCollection.attendance")
        }
 
         $scope.getAbsences = function(){
+            
             $scope.currentlySelected = "All absences"
             $scope.loading = true;
+            $scope.viewing = 0;
             
             absenceService.getAbsences().then(function(result){
                 
@@ -93,7 +111,13 @@ angular.module("BossCollection.attendance")
             absenceService.openEditModal('editAbsence', absence)
                 .then(function(result){
                     
-                    $scope.updateList();
+                    if($scope.viewing == 0){
+                        $scope.getAbsences();
+                    }
+                    else{
+                        $scope.updateList();    
+                    }
+                    
                     
                 })
         }

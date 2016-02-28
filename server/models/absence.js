@@ -6,7 +6,8 @@ var absenceSchema = new Schema({
     user: String, //gathered From session
     date: Object,
     reason: String,
-    type: String
+    type: String,
+    guild: String
 })
 
 module.exports = mongoose.model('absence', absenceSchema);
