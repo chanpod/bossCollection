@@ -113,7 +113,8 @@ router.route('/absenceHistory')
                 }},
                 {date: {
                     $gte: endDate.toISOString()
-                }}
+                }},
+                {guild: req.session.user.guild.name}
             ]
         })
         .then(function (absences) {
