@@ -104,7 +104,8 @@ angular.module("BossCollection.forums")
 
                         $scope.loading = false;
                         $scope.threads = threads;
-                        $scope.masterThread = threads
+                        $scope.masterThread = threads;
+                        sortThreads();
                     })
                     .catch(function(err){
 
