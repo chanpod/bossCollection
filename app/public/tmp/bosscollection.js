@@ -1951,7 +1951,7 @@ angular.module("BossCollection.forums")
                             }
                         }
                         
-
+                        sortThreads();
 
                     })
                     .catch(function(err){
