@@ -113,6 +113,9 @@ function getThreads(forumId){
                     })
             })
             
+            if(threads.length == 0){
+                defer.resolve({threads: threads});
+            }
             
         })
         

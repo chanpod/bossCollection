@@ -26,7 +26,7 @@ script#thread(type="text/ng-template")
                     md-icon(md-font-library="material-icons") keyboard_arrow_down
                     
         md-list(layout = "row", layout-align = "center stretch", flex)          
-            md-virtual-repeat-container(id="vertical-container", flex, ng-style = "listStyle")
+            md-virtual-repeat-container(ng-cloak, id="vertical-container", flex, ng-style = "listStyle")
                 div(md-virtual-repeat="thread in threadRepeat", md-on-demand, class="repeated-item", flex)
                     div(ng-class = "isRead(thread)", layout = "row")
                         md-list-item(flex,ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer

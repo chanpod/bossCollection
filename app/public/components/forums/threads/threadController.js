@@ -64,7 +64,13 @@ angular.module("BossCollection.forums")
                                 
                             },
                             getLength: function () {
-                                return this.numLoaded + 1;
+                                if($scope.threads.length == 0){
+                                    return 0;
+                                }
+                                else{
+                                    return this.numLoaded + 1;    
+                                }
+                                
                             },
                             fetchMoreThreads: function (index) {
 
@@ -155,7 +161,11 @@ angular.module("BossCollection.forums")
                 $scope.threads = $filter('filter')($scope.masterThread, $scope.threadSearch);
                 $scope.threads = $filter('orderBy')($scope.threads, $scope.orderBy);
                 
-                $scope.threadRepeat.numLoaded = $scope.threads.length - 1;
+                if($scope.threadRepeat){
+                    $scope.threadRepeat.numLoaded = $scope.threads.length - 1;    
+                }
+                
+                
             }
 
             $scope.orderByDateCreated = function(){
