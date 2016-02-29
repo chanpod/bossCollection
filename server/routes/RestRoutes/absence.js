@@ -43,9 +43,9 @@ router.route('/absence')
     var newAbsence = new AbsenceModel(req.body.newApplicant);
     var date = standardiseTime(req.body.date);
     
-    newAbsence.user = req.body.user
+    newAbsence.user = req.body.user || req.session.user.name;
     newAbsence.date = date.toISOString();
-    newAbsence.type = req.body.type;    
+    newAbsence.type = req.body.type;
     newAbsence.late = req.body.late;
     newAbsence.reason = req.body.reason;
     newAbsence.guild = req.session.user.guild.name;

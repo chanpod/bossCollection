@@ -11,6 +11,7 @@ script#absence(type="text/ng-template")
                                 md-items = "user in filterSearch(user)",
                                 ng-disabled = "user.rank < 3",
                                 md-autofocus = true,
+                                ng-if = "user.rank > 2"
                                 flex = "40")
                         md-item-template
                             span(md-highlight-text = "user") {{user.user}}

@@ -13,8 +13,8 @@ script#absenceSubmissions(type="text/ng-template")
                         h2
                             {{currentlySelected | date: 'dddd'}}
                     
-                    div(layout-gt-sm = "row")
-                        md-card(flex-sm = "1", flex-md = "50", ng-repeat = "absence in absences | orderBy: 'date'")
+                    div(layout-gt-sm = "column")
+                        md-card(flex-gt-md = "50", ng-repeat = "absence in absences | orderBy: 'date'")
                             md-card-content
                                 h3
                                     md-icon(md-font-library="material-icons") person &nbsp

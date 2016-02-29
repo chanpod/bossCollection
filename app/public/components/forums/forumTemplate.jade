@@ -17,9 +17,13 @@ script#forum(type="text/ng-template")
                 md-progress-linear(ng-if = "loading", md-mode="indeterminate")
                 md-list
                     md-list-item(ng-repeat = "forum in category.forums").md-2-line.mousePointer
-                        div(layout-padding).md-list-item-text
-                            h3(ng-click = "goToForum(forum)")
-                                {{forum.name}}
+                        div(layout-padding, layout = "column").md-list-item-text
+                            div(ng-click = "goToForum(forum)", flex, layout = "row")
+                                h3()
+                                    {{forum.name}}
+                            div(ng-click = "goToForum(forum)", flex)
+                                span()
+                                    | Threads: {{forum.threads.length}}
                             div(ng-show = "user.rank == 4").md-secondary
                                 md-button(ng-click = "deleteForum(forum)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "delete category") delete
