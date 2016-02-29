@@ -29,11 +29,17 @@ script#thread(type="text/ng-template")
             md-virtual-repeat-container(id="vertical-container", flex, ng-style = "listStyle")
                 div(md-virtual-repeat="thread in threadRepeat", md-on-demand, class="repeated-item", flex)
                     md-list-item(flex).md-2-line.mousePointer
-                        div(layout-padding).md-list-item-text
-                            h3(ng-click = "openThread(thread)")
-                                {{thread.title}}
-                            p(ng-click = "openThread(thread)")
-                                {{thread.user}}
+                        div(layout-padding, layout = "column").md-list-item-text
+                            div
+                                h3(ng-click = "openThread(thread)")
+                                    {{thread.title}}
+                            div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
+                                div(flex)
+                                    p(ng-click = "openThread(thread)", layout-align = "start center")
+                                        {{thread.user}}
+                                div(flex)
+                                    div(layout-align = "center center")
+                                        | Comments: {{thread.commentCount}}
                             div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
                                 md-button(ng-click = "deleteThread(thread)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "delete category") delete

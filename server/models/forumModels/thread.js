@@ -10,6 +10,7 @@ var threadSchema = new Schema({
     comments: Array,
     message: String,
     forumID: String,
+    commentCount:Number,
     dateCreated: Date
 })
 

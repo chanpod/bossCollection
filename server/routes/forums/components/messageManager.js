@@ -35,6 +35,19 @@ function createComment(req, res){
     return defer.promise;
 }
 
+function getCommentCount(threadID){
+    
+    var defer = q.defer();
+    
+    commentModel.count({threadID:threadID})
+        .then(function(count){
+            
+            defer.resolve(count);
+        })
+        
+    return defer.promise;
+}
+
 function deleteComment(req, res) {
 
     var defer = q.defer();
@@ -93,5 +106,6 @@ module.exports = {
     createComment:createComment,
     getComments:getComments,
     deleteComment:deleteComment,
-    editComment:editComment
+    editComment:editComment,
+    getCommentCount:getCommentCount
 }

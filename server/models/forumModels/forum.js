@@ -7,6 +7,7 @@ var forumSchema = new Schema({
     
     name: String,
     categoryId: String, 
+    threadCount: Number,
     threads: Array,
 })
 

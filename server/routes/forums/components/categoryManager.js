@@ -5,6 +5,7 @@ var moment = require('moment');
 var _ = require('lodash');
 
 var ForumManager = require('./forumManager');
+var ThreadManager = require('./threadManager');
 
 var util = require('../../../utility');
 var CategorydModel = require('../../../models/forumModels/category.js');
@@ -89,7 +90,7 @@ function getCategories(req, res){
     var forums = {};
     var defer = q.defer();
     var categoriesPromise = [];
-    
+    var forumsPromise = [];
     
     
     CategorydModel.find({"guild":guild})
@@ -111,12 +112,25 @@ function getCategories(req, res){
                 
                 ForumManager.getForums(category._id)
                     .then(function(categoryForums){
-
-                        category.forums = categoryForums;
+                        
+                        _(categoryForums).forEach(function(forum, forumIndex){
+                            
+                            forumsPromise.push(forumIndex);
+                            
+                            ThreadManager.getThreadCount(forum._id)
+                                .then(function(count){
+                                    console.log("Got thread count for forum: " +  forum.name)
+                                    forum.threadCount = count;
+                                    category.forums.push(forum);
+                                    
+                                    forumsPromise.pop();
+                                    
+                                    forEachFinished();
+                                })
+                            
+                        })
                         
                         categoriesPromise.pop();
-                        
-                        forEachFinished();
                     })   
             })
             
@@ -127,7 +141,7 @@ function getCategories(req, res){
     
     function forEachFinished(index){
         
-        if(categoriesPromise.length == 0){
+        if(categoriesPromise.length == 0 && forumsPromise.length == 0){
             
             console.log("Finished getting forums");
 

@@ -39,6 +39,20 @@ function createThread(req, res){
     return defer.promise;
 }
 
+function getThreadCount(forumId){
+    var defer = q.defer();
+    
+    ThreadModel.count({forumID: forumId})
+        .then(function(count){
+            defer.resolve(count);
+        },
+        function(err){
+            defer.reject(err);
+        })
+    
+    return defer.promise
+}
+
 /**
  *  get associated Comments
  *  delete Comments
@@ -80,14 +94,37 @@ function deleteThread(req, res){
 function getThreads(forumId){
     
     var defer = q.defer();
+    var commentPromise = [];
     
     ThreadModel.find({forumID: forumId})
         .then(function(threads){
             
-            defer.resolve({threads: threads});
+            threads.forEach(function(thread){
+                
+                commentPromise.push(thread);
+                
+                MessageManager.getCommentCount(thread._id)
+                    .then(function(commentCount){
+                        
+                        thread.commentCount = commentCount;
+                        commentPromise.pop();
+                        
+                        forEachFinished(threads);
+                    })
+            })
+            
+            
         })
         
     return defer.promise;
+    
+    function forEachFinished(threads){
+        
+        if(commentPromise.length == 0){
+
+            defer.resolve({threads: threads});
+        }
+    } 
 }
 
 function editThread(req, res){
@@ -114,5 +151,6 @@ module.exports = {
     createThread:createThread,
     getThreads:getThreads,
     deleteThread:deleteThread,
-    editThread:editThread
+    editThread:editThread,
+    getThreadCount:getThreadCount
 }
