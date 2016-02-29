@@ -1,7 +1,7 @@
 angular.module("BossCollection.forums")
     .service('forumService', [
-        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource', 
-        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource) {
+        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource',  '$cookies',
+        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource, $cookies) {
 
             var currentForum;
 
@@ -183,6 +183,16 @@ angular.module("BossCollection.forums")
 
                 return defer.promise;
             }
+            
+            function saveForumCounts(forums){
+                
+                $cookies.putObject("forums", forums);
+            }
+            
+            function getForumCountsLocal(){
+                
+                return $cookies.getObject("forums");
+            }
 
             function editForum(forum) {
 
@@ -225,6 +235,16 @@ angular.module("BossCollection.forums")
             }
             
             //==== Thread Functions ==================
+            
+            function saveThreadCounts(threads){
+                
+                $cookies.putObject("threads", threads);   
+            }
+            
+            function getThreadCountsLocal(){
+                
+                return $cookies.getObject("threads");
+            }
             
             function getThreads(forumId) {
                 
@@ -463,7 +483,11 @@ angular.module("BossCollection.forums")
                 deleteComment: deleteComment,
                 editComment: editComment,
                 createComment: createComment,
-                getComments:getComments
+                getComments:getComments,
+                saveForumCounts:saveForumCounts,
+                getForumCountsLocal:getForumCountsLocal,
+                saveThreadCounts:saveThreadCounts,
+                getThreadCountsLocal:getThreadCountsLocal
             }
         }]) 
         

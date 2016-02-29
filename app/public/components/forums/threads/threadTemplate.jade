@@ -28,28 +28,29 @@ script#thread(type="text/ng-template")
         md-list(layout = "row", layout-align = "center stretch", flex)          
             md-virtual-repeat-container(id="vertical-container", flex, ng-style = "listStyle")
                 div(md-virtual-repeat="thread in threadRepeat", md-on-demand, class="repeated-item", flex)
-                    md-list-item(flex).md-2-line.mousePointer
-                        div(layout-padding, layout = "column").md-list-item-text
-                            div
-                                h3(ng-click = "openThread(thread)")
-                                    {{thread.title}}
-                            div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
-                                div(flex)
-                                    p(ng-click = "openThread(thread)", layout-align = "start center")
-                                        {{thread.user}}
-                                div(flex)
-                                    div(layout-align = "center center")
-                                        | Comments: {{thread.commentCount}}
-                            div(ng-show = "thread.user == user.name || user.rank == 4").md-secondary
-                                md-button(ng-click = "deleteThread(thread)").md-icon-button
-                                    md-icon(md-font-library="material-icons", aria-label = "delete category") delete
-                                    md-tooltip() Delete thread
-                                md-button(ng-click = "editThread(thread)").md-icon-button
-                                    md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                                    md-tooltip() Edit thread
-                        md-tooltip(style = "max-width:75%;").threadMessagePreview
-                            {{thread.message}}
-                        md-divider(ng-if="!$last")        
+                    div(ng-class = "isRead(thread)", layout = "row")
+                        md-list-item(flex,ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
+                            div(layout-padding, layout = "column").md-list-item-text
+                                div
+                                    h3()
+                                        {{thread.title}}
+                                div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
+                                    div(flex)
+                                        p( layout-align = "start center")
+                                            {{thread.user}}
+                                    div(flex)
+                                        div(layout-align = "center center")
+                                            | Comments: {{thread.commentCount}}
+                            md-tooltip(style = "max-width:75%;").threadMessagePreview
+                                {{thread.message}}
+                        div(ng-show = "thread.user == user.name || user.rank == 4", layout-align = "center center", layout)
+                            md-button(ng-click = "deleteThread(thread)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                md-tooltip() Delete thread
+                            md-button(ng-click = "editThread(thread)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                                md-tooltip() Edit thread
+                    md-divider(ng-if="!$last")        
        //-
         md-list
                 md-list-item(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy").md-2-line.mousePointer

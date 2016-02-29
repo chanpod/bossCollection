@@ -18,6 +18,7 @@ angular.module("BossCollection.forums")
             
             $scope.init = function(){
                 
+                $scope.savedForums = forumService.getForumCountsLocal();
                 $scope.getForums();
             }
             
@@ -27,8 +28,15 @@ angular.module("BossCollection.forums")
                 return forumService.getForums()
                     .then(function(forums){
                         
+                        if ($scope.savedForums == undefined) {
+                            
+                            $scope.savedForums = forums;
+                            forumService.saveForumCounts(forums);
+                        }
+                        
                         $scope.loading = false;  
                         $scope.forums = forums;
+                        
                     })
                     .catch(function(err){
                         
@@ -102,7 +110,30 @@ angular.module("BossCollection.forums")
                     })
                 
             }
+            
+            $scope.isRead = function(forumIn, category){
+                var oldForum;
+                var oldCategory = _.find($scope.savedForums.categories, function(cat){
+                    return cat._id == category._id;
+                })
+                
+                if(oldCategory != undefined){
+                    
+                    oldForum = _.find(oldCategory.forums, function (forum) {
 
+                        return forum._id == forumIn._id;
+                    })
+                }
+                
+                
+                if(oldForum == undefined || oldForum.threadCount != forumIn.threadCount){
+                    return "unread";
+                }
+                else{
+                    return "read";
+                }
+            }
+            
             $scope.editForum = function(forum){
                 
                 forumService.openBottomSheet('forumEdit', forum)
@@ -130,11 +161,35 @@ angular.module("BossCollection.forums")
             }
 
             $scope.goToForum = function (forum) {
-
+                
+                
+                $scope.updateForumViewed(forum);
                 forumService.setForum(forum);
                 $location.url('/forum/' + forum._id)
             }
+            
+            $scope.updateForumViewed = function(forumIn){
+                
+                var catIndexTracker, forumIndexTracker;
+                
+                _.find($scope.savedForums.categories, function(cat, catIndex){
+                    if(cat._id == forumIn.categoryId){
+                        catIndexTracker = catIndex;
+                        _.find(cat.forums, function (forum, forumIndex) {
 
+                            if (forum._id == forumIn._id) {
+                                
+                                forumIndexTracker = forumIndex;
+                            }
+                        })
+                    }
+                })
+                
+                $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
+                
+                
+                forumService.saveForumCounts($scope.savedForums);
+            }
 
             $scope.init();
         }]) 

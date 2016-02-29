@@ -66,6 +66,7 @@ gulp.task('templates', function(){
 gulp.task('concatVendor', function(){
     
     return gulp.src([
+        './node_modules/lodash/lodash.min.js',
         './node_modules/angular/angular.min.js',
         './node_modules/angular-cookies/angular-cookies.min.js',
         './node_modules/angular-resource/angular-resource.min.js',
@@ -80,8 +81,7 @@ gulp.task('concatVendor', function(){
         './node_modules/highcharts/highcharts.js',
         './node_modules/highcharts/modules/data.js',
         './node_modules/highcharts/modules/drilldown.js',
-        './app/public/js/vendor/angular-parallax.js',
-        './app/public/js/lib/underscoreJS.js',
+        './app/public/js/vendor/angular-parallax.js',        
         './app/public/js/lib/materialize/js/materialize.min.js',
         './app/public/js/lib/angular-socket-io-master/mock/socket-io.js',
         './app/public/js/lib/angular-socket-io-master/socket.js',

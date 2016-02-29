@@ -645,6 +645,7 @@ angular.module("BossCollection.forums")
             
             $scope.init = function(){
                 
+                $scope.savedForums = forumService.getForumCountsLocal();
                 $scope.getForums();
             }
             
@@ -654,8 +655,15 @@ angular.module("BossCollection.forums")
                 return forumService.getForums()
                     .then(function(forums){
                         
+                        if ($scope.savedForums == undefined) {
+                            
+                            $scope.savedForums = forums;
+                            forumService.saveForumCounts(forums);
+                        }
+                        
                         $scope.loading = false;  
                         $scope.forums = forums;
+                        
                     })
                     .catch(function(err){
                         
@@ -729,7 +737,30 @@ angular.module("BossCollection.forums")
                     })
                 
             }
+            
+            $scope.isRead = function(forumIn, category){
+                var oldForum;
+                var oldCategory = _.find($scope.savedForums.categories, function(cat){
+                    return cat._id == category._id;
+                })
+                
+                if(oldCategory != undefined){
+                    
+                    oldForum = _.find(oldCategory.forums, function (forum) {
 
+                        return forum._id == forumIn._id;
+                    })
+                }
+                
+                
+                if(oldForum == undefined || oldForum.threadCount != forumIn.threadCount){
+                    return "unread";
+                }
+                else{
+                    return "read";
+                }
+            }
+            
             $scope.editForum = function(forum){
                 
                 forumService.openBottomSheet('forumEdit', forum)
@@ -757,18 +788,42 @@ angular.module("BossCollection.forums")
             }
 
             $scope.goToForum = function (forum) {
-
+                
+                
+                $scope.updateForumViewed(forum);
                 forumService.setForum(forum);
                 $location.url('/forum/' + forum._id)
             }
+            
+            $scope.updateForumViewed = function(forumIn){
+                
+                var catIndexTracker, forumIndexTracker;
+                
+                _.find($scope.savedForums.categories, function(cat, catIndex){
+                    if(cat._id == forumIn.categoryId){
+                        catIndexTracker = catIndex;
+                        _.find(cat.forums, function (forum, forumIndex) {
 
+                            if (forum._id == forumIn._id) {
+                                
+                                forumIndexTracker = forumIndex;
+                            }
+                        })
+                    }
+                })
+                
+                $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
+                
+                
+                forumService.saveForumCounts($scope.savedForums);
+            }
 
             $scope.init();
         }]) 
 angular.module("BossCollection.forums")
     .service('forumService', [
-        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource', 
-        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource) {
+        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource',  '$cookies',
+        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource, $cookies) {
 
             var currentForum;
 
@@ -950,6 +1005,16 @@ angular.module("BossCollection.forums")
 
                 return defer.promise;
             }
+            
+            function saveForumCounts(forums){
+                
+                $cookies.putObject("forums", forums);
+            }
+            
+            function getForumCountsLocal(){
+                
+                return $cookies.getObject("forums");
+            }
 
             function editForum(forum) {
 
@@ -992,6 +1057,16 @@ angular.module("BossCollection.forums")
             }
             
             //==== Thread Functions ==================
+            
+            function saveThreadCounts(threads){
+                
+                $cookies.putObject("threads", threads);   
+            }
+            
+            function getThreadCountsLocal(){
+                
+                return $cookies.getObject("threads");
+            }
             
             function getThreads(forumId) {
                 
@@ -1230,7 +1305,11 @@ angular.module("BossCollection.forums")
                 deleteComment: deleteComment,
                 editComment: editComment,
                 createComment: createComment,
-                getComments:getComments
+                getComments:getComments,
+                saveForumCounts:saveForumCounts,
+                getForumCountsLocal:getForumCountsLocal,
+                saveThreadCounts:saveThreadCounts,
+                getThreadCountsLocal:getThreadCountsLocal
             }
         }]) 
         
@@ -1808,7 +1887,10 @@ angular.module("BossCollection.forums")
             $scope.init = function(){
 
                 $scope.loading = true;
-
+                $scope.savedThreads = forumService.getThreadCountsLocal();
+                
+                
+                
                 $scope.forum = forumService.getCurrentForum()
                     .then(function(forum){
                         $scope.forum = forum;
@@ -1821,7 +1903,14 @@ angular.module("BossCollection.forums")
                         //$scope.threads = threads;
                         $scope.threads = threads;
                         $scope.masterThread = threads;
-
+                        
+                        if ($scope.savedThreads == undefined) {
+                            
+                            $scope.savedThreads = threads;
+                            forumService.saveThreadCounts(threads);
+                        }
+                        
+                        
                         $scope.threadRepeat = {
                             toLoad:0,
                             numLoaded: 0,
@@ -1942,11 +2031,14 @@ angular.module("BossCollection.forums")
             }
 
             $scope.openThread = function(thread){
-
+                
+                
+                
                 forumService.getComments(thread._id)
                     .then(function(comments){
 
                         thread.comments = comments.comments;
+                        $scope.updateThreadViewed(thread);
                         forumService.openBottomSheet('threadComments', thread);
 
                     })
@@ -1970,7 +2062,40 @@ angular.module("BossCollection.forums")
             $scope.goBack = function(){
                 window.history.back();
             }
+            
+            $scope.isRead = function (threadIn) {
+                
+                
+                var oldThread = _.find($scope.savedThreads, function (thread) {
+                    return thread._id == threadIn._id;
+                })
 
+
+                if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
+                    return "unread";
+                }
+                else {
+                    return "read";
+                }
+            }
+            
+            $scope.updateThreadViewed = function(threadIn){
+                
+                var threadIndexTracker;
+                        
+                _.find($scope.threads, function (thread, threadIndex) {
+
+                    if (thread._id == threadIn._id) {
+
+                        threadIndexTracker = threadIndex;
+                    }
+                })
+                
+                $scope.savedThreads[threadIndexTracker] = threadIn;
+                
+                forumService.saveThreadCounts($scope.savedThreads);
+            }
+            
             $scope.init();
         }])
 'use strict';

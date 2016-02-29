@@ -23,7 +23,10 @@ angular.module("BossCollection.forums")
             $scope.init = function(){
 
                 $scope.loading = true;
-
+                $scope.savedThreads = forumService.getThreadCountsLocal();
+                
+                
+                
                 $scope.forum = forumService.getCurrentForum()
                     .then(function(forum){
                         $scope.forum = forum;
@@ -36,7 +39,14 @@ angular.module("BossCollection.forums")
                         //$scope.threads = threads;
                         $scope.threads = threads;
                         $scope.masterThread = threads;
-
+                        
+                        if ($scope.savedThreads == undefined) {
+                            
+                            $scope.savedThreads = threads;
+                            forumService.saveThreadCounts(threads);
+                        }
+                        
+                        
                         $scope.threadRepeat = {
                             toLoad:0,
                             numLoaded: 0,
@@ -157,11 +167,14 @@ angular.module("BossCollection.forums")
             }
 
             $scope.openThread = function(thread){
-
+                
+                
+                
                 forumService.getComments(thread._id)
                     .then(function(comments){
 
                         thread.comments = comments.comments;
+                        $scope.updateThreadViewed(thread);
                         forumService.openBottomSheet('threadComments', thread);
 
                     })
@@ -185,6 +198,39 @@ angular.module("BossCollection.forums")
             $scope.goBack = function(){
                 window.history.back();
             }
+            
+            $scope.isRead = function (threadIn) {
+                
+                
+                var oldThread = _.find($scope.savedThreads, function (thread) {
+                    return thread._id == threadIn._id;
+                })
 
+
+                if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
+                    return "unread";
+                }
+                else {
+                    return "read";
+                }
+            }
+            
+            $scope.updateThreadViewed = function(threadIn){
+                
+                var threadIndexTracker;
+                        
+                _.find($scope.threads, function (thread, threadIndex) {
+
+                    if (thread._id == threadIn._id) {
+
+                        threadIndexTracker = threadIndex;
+                    }
+                })
+                
+                $scope.savedThreads[threadIndexTracker] = threadIn;
+                
+                forumService.saveThreadCounts($scope.savedThreads);
+            }
+            
             $scope.init();
         }])

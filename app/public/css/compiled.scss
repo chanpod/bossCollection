@@ -238,7 +238,13 @@ html, body {
 .loadingModal{
     background-color: rgba(255, 255, 255, 0);
 }
+.read{
+    border-left:15px solid gray;
+}
 
+.unread{
+    border-left:15px solid green;
+}
 .threadComments{
     overflow: scroll;
 }
@@ -270,6 +276,8 @@ html, body {
     min-height:200px;
 
 }
+
+
 
 .confirmCommentDelete{
     

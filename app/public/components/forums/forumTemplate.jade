@@ -16,22 +16,23 @@ script#forum(type="text/ng-template")
                                 md-icon(md-font-library="material-icons", aria-label = "add new forum") add
                 md-progress-linear(ng-if = "loading", md-mode="indeterminate")
                 md-list
-                    md-list-item(ng-repeat = "forum in category.forums").md-2-line.mousePointer
-                        div(layout-padding, layout = "column").md-list-item-text
-                            div(ng-click = "goToForum(forum)", flex, layout = "row")
-                                h3()
-                                    {{forum.name}}
-                            div(ng-click = "goToForum(forum)", flex, layout = "row", layout-align = "start center")
-                                span()
-                                span(layout-align = "start center")
-                                    div()
-                                        | Threads: {{forum.threadCount}}
-                            div(ng-show = "user.rank == 4").md-secondary
+                    div(ng-repeat = "forum in category.forums", ng-class = "isRead(forum, category)")
+                        div(layout = "row")
+                            md-list-item(flex, ng-click = "goToForum(forum)").md-2-line.mousePointer
+                                div(layout-padding, layout = "column").md-list-item-text
+                                    div(flex, layout = "row")
+                                        h3()
+                                            {{forum.name}}
+                                    div(flex, layout = "row", layout-align = "start center")
+                                        span()
+                                        span(layout-align = "start center")
+                                            div()
+                                                | Threads: {{forum.threadCount}}
+                            div(ng-show = "user.rank == 4", layout-align = "center center", layout)
                                 md-button(ng-click = "deleteForum(forum)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                                 md-button(ng-click = "editForum(forum)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                                
                         md-divider(ng-if="!$last")
             md-toolbar(ng-show = "user.rank > 2").md-scroll-shrink
                 div().md-toolbar-tools
