@@ -1,6 +1,6 @@
 script#forum(type="text/ng-template")    
     md-content(layout = "column", flex, layout-fill)
-        div(style = "overflow:hidden;")
+        div()
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             div(ng-repeat = "category in forums.categories")            
                 md-toolbar().md-scroll-shrink
