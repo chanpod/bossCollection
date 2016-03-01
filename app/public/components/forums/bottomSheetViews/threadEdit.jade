@@ -3,8 +3,8 @@ script#threadEdit(type="text/ng-template")
         div(layout, layout-align = "center center")
             h4
                 | Thread
-        div()
-            form(name = "logInForm")
+        div().editThreadScrollFix
+            form(name = "editThread")
                 div(layout = "column")
                     md-input-container(flex).md-block
                         label() Thread Name
@@ -13,7 +13,9 @@ script#threadEdit(type="text/ng-template")
                         input-markdown(flex, input = "object.message")
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block
-                        md-button(ng-click = "saveThread()").md-primary.md-raised
+                        md-button(ng-if = "!object.forumID", ng-click = "saveThread()").md-primary.md-raised
+                            | Post
+                        md-button(ng-if = "object.forumID", ng-click = "saveThread()").md-primary.md-raised
                             | Save
                     md-input-container().md-block
                         md-button(ng-click = "cancel()").md-primary.md-raised
