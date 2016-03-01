@@ -229,15 +229,18 @@ angular.module("BossCollection.forums")
                 
                 var threadIndexTracker;
                         
-                _.find($scope.threads, function (thread, threadIndex) {
+                _.find($scope.savedThreads, function (thread, threadIndex) {
 
                     if (thread._id == threadIn._id) {
-
-                        threadIndexTracker = threadIndex;
+                        threadIndexTracker == threadIndex;
+                        $scope.savedThreads[threadIndex] = threadIn;
                     }
                 })
                 
-                $scope.savedThreads[threadIndexTracker] = threadIn;
+                if($scope.savedThreads.length == 0 || threadIndexTracker == undefined){
+                    $scope.savedThreads.push(threadIn);
+                }
+                
                 
                 forumService.saveThreadCounts($scope.savedThreads);
             }

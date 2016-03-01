@@ -2,8 +2,8 @@
 
 angular.module("BossCollection.services")
     .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', 'socketProvider',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices, socketProvider) {
+        'siteServices', 
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
 
             var registration = $resource('/auth/signup', {},
                 {

@@ -165,7 +165,7 @@ angular.module("BossCollection.forums")
                     })
                 
 
-                return defer.promise;
+                return defer.promise; 
             }
 
             function createNewForum(forum) {
@@ -186,12 +186,12 @@ angular.module("BossCollection.forums")
             
             function saveForumCounts(forums){
                 
-                //$cookies.putObject("forums", forums);
+                localStorage.setItem("forums", angular.toJson(forums));
             }
             
             function getForumCountsLocal(){
                 
-                return $cookies.getObject("forums");
+                return angular.fromJson(localStorage.forums);
             }
 
             function editForum(forum) {
@@ -238,12 +238,12 @@ angular.module("BossCollection.forums")
             
             function saveThreadCounts(threads){
                 
-                //localStorage.putObject("threads", threads);   
+                localStorage.setItem("threads", angular.toJson(threads));   
             }
             
             function getThreadCountsLocal(){
                 
-                return $cookies.getObject("threads");
+                return angular.fromJson(localStorage.threads);
             }
             
             function getThreads(forumId) {

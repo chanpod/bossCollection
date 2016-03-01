@@ -4,8 +4,8 @@
 
 angular.module("BossCollection.services")
     .factory('guildServices', [
-        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 'socketProvider',
-    function ($http, $q, $resource, siteServices, userLoginSrvc, socketProvider) {
+        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 
+    function ($http, $q, $resource, siteServices, userLoginSrvc) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";

@@ -182,6 +182,10 @@ angular.module("BossCollection.forums")
                                 forumIndexTracker = forumIndex;
                             }
                         })
+                        
+                        if(cat.forums.length == 0){
+                            cat.forums.push(forumIn);
+                        }
                     }
                 })
                 

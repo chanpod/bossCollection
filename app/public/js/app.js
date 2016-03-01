@@ -15,10 +15,8 @@ angular.module('BossCollection', [
   'ngCookies', 
   'ngMaterial'  
  
-]).factory('mySocket', ['socketFactory', function(socketFactory){
-    return socketFactory();
-}]). 
-config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
+])
+.config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  
 
@@ -88,3 +86,8 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
   
   
 }])
+/*
+.factory('mySocket', ['socketFactory', function(socketFactory){
+    return socketFactory();
+}]). 
+*/ 

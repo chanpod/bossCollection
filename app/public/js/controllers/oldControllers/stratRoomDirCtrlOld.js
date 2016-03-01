@@ -1,9 +1,9 @@
 'use strict'
 angular.module("BossCollection.controllers")    
-    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider','$routeParams',
-            function($scope, bossStrats, $modal, socketProvider, routeParams){
+    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', '$routeParams',
+            function($scope, bossStrats, $modal,  routeParams){
 
-                var socket = socketProvider;
+              
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;

@@ -15,10 +15,8 @@ angular.module('BossCollection', [
   'ngCookies', 
   'ngMaterial'  
  
-]).factory('mySocket', ['socketFactory', function(socketFactory){
-    return socketFactory();
-}]). 
-config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
+])
+.config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  
 
@@ -88,7 +86,11 @@ config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegatePro
   
   
 }])
-
+/*
+.factory('mySocket', ['socketFactory', function(socketFactory){
+    return socketFactory();
+}]). 
+*/ 
 'user strict'
 
 angular.module("BossCollection.attendance", ['ngRoute'])
@@ -809,6 +811,10 @@ angular.module("BossCollection.forums")
                                 forumIndexTracker = forumIndex;
                             }
                         })
+                        
+                        if(cat.forums.length == 0){
+                            cat.forums.push(forumIn);
+                        }
                     }
                 })
                 
@@ -987,7 +993,7 @@ angular.module("BossCollection.forums")
                     })
                 
 
-                return defer.promise;
+                return defer.promise; 
             }
 
             function createNewForum(forum) {
@@ -1008,12 +1014,12 @@ angular.module("BossCollection.forums")
             
             function saveForumCounts(forums){
                 
-                //$cookies.putObject("forums", forums);
+                localStorage.setItem("forums", angular.toJson(forums));
             }
             
             function getForumCountsLocal(){
                 
-                return $cookies.getObject("forums");
+                return angular.fromJson(localStorage.forums);
             }
 
             function editForum(forum) {
@@ -1060,12 +1066,12 @@ angular.module("BossCollection.forums")
             
             function saveThreadCounts(threads){
                 
-                //localStorage.putObject("threads", threads);   
+                localStorage.setItem("threads", angular.toJson(threads));   
             }
             
             function getThreadCountsLocal(){
                 
-                return $cookies.getObject("threads");
+                return angular.fromJson(localStorage.threads);
             }
             
             function getThreads(forumId) {
@@ -2093,15 +2099,18 @@ angular.module("BossCollection.forums")
                 
                 var threadIndexTracker;
                         
-                _.find($scope.threads, function (thread, threadIndex) {
+                _.find($scope.savedThreads, function (thread, threadIndex) {
 
                     if (thread._id == threadIn._id) {
-
-                        threadIndexTracker = threadIndex;
+                        threadIndexTracker == threadIndex;
+                        $scope.savedThreads[threadIndex] = threadIn;
                     }
                 })
                 
-                $scope.savedThreads[threadIndexTracker] = threadIn;
+                if($scope.savedThreads.length == 0 || threadIndexTracker == undefined){
+                    $scope.savedThreads.push(threadIn);
+                }
+                
                 
                 forumService.saveThreadCounts($scope.savedThreads);
             }
@@ -2246,8 +2255,8 @@ angular.module("BossCollection.controllers")
 
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location, siteServices){
+    .controller("rosterController", ["$scope",  'filterFilter', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
+        function($scope, filterFilter, guildServices, $http, $cookies, $location, siteServices){
             
             
             
@@ -2959,10 +2968,10 @@ angular.module("BossCollection.controllers")
     }])
 'use strict'
 angular.module("BossCollection.controllers")    
-    .controller("bossStrategyController", ['$scope', 'bossStrats', 'socketProvider','$routeParams',
-            function($scope, bossStrats, socketProvider, routeParams){
+    .controller("bossStrategyController", ['$scope', 'bossStrats', '$routeParams',
+            function($scope, bossStrats, routeParams){
 
-                var socket = socketProvider;
+                
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
@@ -3123,10 +3132,10 @@ angular.module("BossCollection.controllers")
         }])
 'use strict'
 angular.module("BossCollection.controllers")    
-    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', 'socketProvider','$routeParams',
-            function($scope, bossStrats, $modal, socketProvider, routeParams){
+    .controller("bossStrategyController", ['$scope', 'bossStrats', '$modal', '$routeParams',
+            function($scope, bossStrats, $modal,  routeParams){
 
-                var socket = socketProvider;
+              
                 $scope.highmaulBossSelected = false;
                 $scope.brfBossSelected = false;
                 $scope.hfcBossSelected = false;
@@ -3481,7 +3490,7 @@ angular.module("BossCollection.services", [])
 'use strict';
 
 angular.module("BossCollection.services")
-    .factory('bossStrats', ['socketProvider', '$resource', '$q', function (socket, $resource, $q) {
+    .factory('bossStrats', ['$resource', '$q', function ($resource, $q) {
         
         var stratsAPI = $resource('/api/bossStrats', {},
             {
@@ -3535,8 +3544,8 @@ angular.module("BossCollection.services")
 
 angular.module("BossCollection.services")
     .factory('guildServices', [
-        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 'socketProvider',
-    function ($http, $q, $resource, siteServices, userLoginSrvc, socketProvider) {
+        '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 
+    function ($http, $q, $resource, siteServices, userLoginSrvc) {
 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d"
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
@@ -4002,16 +4011,16 @@ angular.module("BossCollection.services")
     .factory('socketProvider', [function () {
         
         //var socket = io("http://bosscollection.net:4001");
-        var socket = io("http://localhost:4001/guilds");
+        //var socket = io("http://localhost:4001/guilds");
          
-        return socket;
+        //return socket;
     }]) 
 'use strict';
 
 angular.module("BossCollection.services")
     .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', 'socketProvider',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices, socketProvider) {
+        'siteServices', 
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
 
             var registration = $resource('/auth/signup', {},
                 {

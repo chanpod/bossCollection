@@ -1,7 +1,7 @@
 'use strict';
 angular.module("BossCollection.controllers")    
-    .controller("rosterController", ["$scope",  'filterFilter', 'socketProvider', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
-        function($scope, filterFilter, socketProvider, guildServices, $http, $cookies, $location, siteServices){
+    .controller("rosterController", ["$scope",  'filterFilter', 'guildServices', '$http', '$cookies', '$location', 'siteServices',
+        function($scope, filterFilter, guildServices, $http, $cookies, $location, siteServices){
             
             
             

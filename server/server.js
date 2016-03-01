@@ -11,8 +11,8 @@ var express = require('express'),
   session = require('express-session'),
   MongoStore = require('connect-mongo')(session),
   mongoose = require('mongoose'),  
-  cookieParser = require('cookie-parser'),
-  socketapi = require('./routes/socket.js');
+  cookieParser = require('cookie-parser');
+  //socketapi = require('./routes/socket.js');
   
   
 //var authentication = require('./routes/authentication.js');
@@ -24,7 +24,7 @@ var app = express();
 var port = process.env.PORT || 4000;
 
 var http = require('http').Server(app)
-var io = require('socket.io')(http);
+//var io = require('socket.io')(http);
 
 /**
  * Configuration
@@ -75,11 +75,11 @@ var routes = require('./routes/router.js')(app);
 app.listen(port);
 console.log("Listening on port " + port);
 
-http.listen(4001, function(){
-    console.log("Socket server listening on 4001")
-});
+//http.listen(4001, function(){
+//    console.log("Socket server listening on 4001")
+//});
 
-io.on('connection', socketapi);
+//io.on('connection', socketapi);
 
 
 console.log('...');

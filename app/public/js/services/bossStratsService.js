@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module("BossCollection.services")
-    .factory('bossStrats', ['socketProvider', '$resource', '$q', function (socket, $resource, $q) {
+    .factory('bossStrats', ['$resource', '$q', function ($resource, $q) {
         
         var stratsAPI = $resource('/api/bossStrats', {},
             {
