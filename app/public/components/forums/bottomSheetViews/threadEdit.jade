@@ -1,8 +1,14 @@
 script#threadEdit(type="text/ng-template")
     md-dialog(layout = "column").md-list.md-has-header.commentsDialog
-        div(layout, layout-align = "center center")
-            h4
-                | Thread
+        md-toolbar()
+            div(layout).md-toolbar-tools
+                span(ng-if = "object.forumID")
+                    | Edit Thread
+                span(ng-if = "!object.forumID")
+                    | Create Thread
+                span(flex)
+                md-button(ng-click = "cancel()").md-icon-button
+                    md-icon(md-font-library="material-icons", aria-label = "edit category") close
         div().editThreadScrollFix
             form(name = "editThread")
                 div(layout = "column")
