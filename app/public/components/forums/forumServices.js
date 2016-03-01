@@ -186,7 +186,7 @@ angular.module("BossCollection.forums")
             
             function saveForumCounts(forums){
                 
-                $cookies.putObject("forums", forums);
+                //$cookies.putObject("forums", forums);
             }
             
             function getForumCountsLocal(){
@@ -238,7 +238,7 @@ angular.module("BossCollection.forums")
             
             function saveThreadCounts(threads){
                 
-                $cookies.putObject("threads", threads);   
+                //localStorage.putObject("threads", threads);   
             }
             
             function getThreadCountsLocal(){
