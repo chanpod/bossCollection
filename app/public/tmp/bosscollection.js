@@ -1715,7 +1715,7 @@ angular.module("BossCollection.attendance")
                direction: "right"
            }
 
-           $scope.currentlySelected = "Today";
+           $scope.currentlySelected = "All Future Absences";
            $scope.isToolSetOpen = false;
 
 
