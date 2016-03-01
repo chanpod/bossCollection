@@ -184,7 +184,7 @@ angular.module("BossCollection.forums")
                     .then(function(comments){
 
                         thread.comments = comments.comments;
-                        $scope.updateThreadViewed(thread);
+                        //$scope.updateThreadViewed(thread);
                         forumService.openBottomSheet('threadComments', thread);
 
                     })
