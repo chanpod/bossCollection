@@ -16,7 +16,7 @@ angular.module("BossCollection.attendance", ['ngRoute'])
 
             .when('/auth/absence', {
                 templateUrl: 'absence',
-                controller: 'absenceReportController'
+                controller: 'absenceReportController as ctrl'
             })
 
     }]);

@@ -8,6 +8,8 @@ angular.module("BossCollection.attendance")
         
         var currentDay = moment().day();
         
+        var self = this;
+        
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
@@ -16,6 +18,7 @@ angular.module("BossCollection.attendance")
         $scope.dayDesired;
         $scope.currentlySelected = moment().format('dddd - Do');
         
+        self.selectedUser = {};
         
         $scope.toolbar = {
             isOpen: false,
@@ -33,7 +36,7 @@ angular.module("BossCollection.attendance")
             siteServices.updateTitle('Report Absence');
             
             if($scope.user.rank < 3){
-                $scope.selectedUser = $scope.user;
+                self.selectedUser = $scope.user;
             }
             else{
                 $scope.getGuildUsers();    
@@ -133,11 +136,11 @@ angular.module("BossCollection.attendance")
                 
                 if ($scope.user.rank < 3) {
                     
-                    $scope.selectedUser = $scope.user.name;
+                    self.selectedUser = $scope.user.name;
                 }
                 else{
                     
-                    $scope.newAbsence.user = $scope.selectedUser.user;
+                    $scope.newAbsence.user = self.selectedUser.user;
                 }
                 
                 
