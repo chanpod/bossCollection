@@ -16,6 +16,16 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
             md-subheader().md-no-sticky
                 include accountMenu
             md-divider
+            md-menu-item()
+                md-button(ng-click = "goTo('/auth/application')")
+                    md-icon(md-font-library="material-icons") send
+                    | Apply to a Guild
+            md-divider
+            md-menu-item(ng-if = "user.rank > 1")
+                md-button(ng-click = "goTo('/forum')")
+                    md-icon(md-font-library="material-icons") today
+                    | Forums
+            md-divider
             md-subheader().md-no-sticky
                 include externalMenu
             md-divider
@@ -23,6 +33,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                 include raidMenu
             md-divider
             include guildManagement
+            
                 
     
         

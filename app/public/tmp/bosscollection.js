@@ -129,6 +129,7 @@ angular.module("BossCollection.forums", ['ngRoute'])
         })
 
     }]);
+
 angular.module("BossCollection.attendance")
     .controller('absenceModalController', [
         '$scope', 'absenceService', '$mdDialog', 'data',

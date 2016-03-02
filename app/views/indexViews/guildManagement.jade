@@ -7,8 +7,9 @@ md-subheader(ng-if = "!user.guild && loggedIn").md-no-sticky
         i(class="material-icons") home
         | Join Guild
 md-divider(ng-if = "(user.rank > 2 || user.guild) && loggedIn")
-md-subheader(ng-if = "(user.rank > 2 || user.guild) && loggedIn").md-no-sticky
-    md-button(aria-label = "Account options...", ng-click = "goTo('/manageMembers')")
-        i(class="material-icons") people
+md-menu-item(ng-if = "(user.rank > 2 || user.guild) && loggedIn")
+    md-button(ng-click = "goTo('/manageMembers')")
+        md-icon(md-font-library="material-icons") people
         | Manage Members
+
         

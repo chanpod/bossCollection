@@ -4,10 +4,7 @@ md-menu()
         | Guild
         i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")
-        md-menu-item(ng-if = "user.rank > 1")
-            md-button(ng-click = "goTo('/forum')")
-                md-icon(md-font-library="material-icons") today
-                | Forums
+        
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/auth/absence')")
                 md-icon(md-font-library="material-icons") today
@@ -16,10 +13,6 @@ md-menu()
             md-button(ng-click = "goTo('/whosOut')")
                 md-icon(md-font-library="material-icons") today
                 | Upcoming Absences
-        md-menu-item()
-            md-button(ng-click = "goTo('/auth/application')")
-                md-icon(md-font-library="material-icons") send
-                | Apply to our Guild
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/reviewApplications')")
                 md-icon(md-font-library="material-icons") inbox
