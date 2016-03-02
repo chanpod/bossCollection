@@ -93,6 +93,22 @@ angular.module('BossCollection', [
 */ 
 'user strict'
 
+angular.module("BossCollection.forums", ['ngRoute'])
+    .config(['$routeProvider',  function ($routeProvider) {
+
+        $routeProvider
+        .when('/forum', {
+            templateUrl: 'forum',
+            controller: 'forumController'
+        })
+        .when('/forum/:forumID', {
+            templateUrl: 'thread',
+            controller: 'threadController'
+        })
+
+    }]);
+'user strict'
+
 angular.module("BossCollection.attendance", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
@@ -113,250 +129,6 @@ angular.module("BossCollection.attendance", ['ngRoute'])
             })
 
     }]);
-'user strict'
-
-angular.module("BossCollection.forums", ['ngRoute'])
-    .config(['$routeProvider',  function ($routeProvider) {
-
-        $routeProvider
-        .when('/forum', {
-            templateUrl: 'forum',
-            controller: 'forumController'
-        })
-        .when('/forum/:forumID', {
-            templateUrl: 'thread',
-            controller: 'threadController'
-        })
-
-    }]);
-angular.module("BossCollection.attendance")
-    .controller('absenceModalController', [
-        '$scope', 'absenceService', '$mdDialog', 'data',
-        function($scope, absenceService, $mdDialog, data){
-        
-        
-        
-        
-        $scope.init = function () {
-
-            if (data) {
-
-                $scope.absence = data;
-                $scope.absence.date = new Date($scope.absence.date);
-            }
-            else {
-                $scope.absence = {};
-            }
-        }
-        
-        $scope.save = function(){
-            
-            absenceService.saveAbsence($scope.absence)
-                .then(function(response){
-                    
-                    $scope.close(response);
-                })
-                .fail(function(err){
-                    
-                })
-                .finally(function(){
-                    
-                })
-        }
-        
-        $scope.cancel = function () {
-
-            $mdDialog.cancel();
-        }
-
-        $scope.close = function () {
-            $mdDialog.hide($scope.object);
-        }
-        
-        $scope.init();
-        
-    }])
-'use strict';
-
-angular.module("BossCollection.attendance")
-    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', '$mdMedia', '$mdDialog',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
-
-            var absence = $resource('/api/absence/absence', {}, {});
-            var absenceByDate = $resource('/api/absence/absenceByDate', {}, {});
-            var absenceHistoryResource = $resource('/api/absence/absenceHistory', {}, {});
-            var deleteAbsenceResource = $resource('/api/absence/deleteAbsence');
-            var saveAbsenceResource = $resource('/api/absence/saveAbsence');
-            
-            var absenceApi = {
-
-                submitNewAbsence: function (newAbsence) {
-
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-
-                    absence.save(newAbsence).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                getAbsenceHistory: function(absenceHistory){
-                    
-                    var defer = $q.defer();
-                    
-                    siteServices.startLoading();
-                    
-                    absenceHistoryResource.save(absenceHistory).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                        return defer.promise;
-                },
-                openEditModal: function(template, locals) {
-                  
-
-                    var defer = $q.defer();
-                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-                    
-                    $mdDialog.show({
-                        templateUrl: template,
-                        controller: 'absenceModalController',
-                        parent: angular.element(document.body),
-                        clickOutsideToClose: false,
-                        locals: { data: locals },
-                        fullscreen: true
-                    })
-                    .then(function (result) {
-
-                            defer.resolve(result);
-                        },
-                        function () {
-                            defer.reject();
-                            //Something broke or they canceled
-                        })
-
-                    return defer.promise;
-              
-                },
-                saveAbsence: function(absence){
-                    
-                    var defer = $q.defer();
-                    var bodyData = {absence: absence};
-                    
-                    saveAbsenceResource.save(bodyData).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                        function (err) {
-
-                            console.log(err);
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                    return defer.promise;
-                },
-                deleteAbsence: function(absence){
-                    
-                    var defer = $q.defer();
-                    var bodyData = {absence: absence};
-                    
-                    deleteAbsenceResource.save(bodyData).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                        function (err) {
-
-                            console.log(err);
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                    return defer.promise;
-                    
-                },
-                getAbsences: function () {
-
-                    var defer = $q.defer();
-
-
-
-                    absence.get().$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-
-                    return defer.promise;
-                },
-                getAbsencesByDate: function (date) {
-
-                    var defer = $q.defer();
-
-                    absenceByDate.save({date:date}).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-
-                    return defer.promise;
-                }
-            };
-
-            return absenceApi;
-        }])
 angular.module("BossCollection.forums")
     .controller('dialogController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
@@ -1320,6 +1092,483 @@ angular.module("BossCollection.forums")
         }]) 
         
       
+angular.module("BossCollection.attendance")
+    .controller('absenceModalController', [
+        '$scope', 'absenceService', '$mdDialog', 'data',
+        function($scope, absenceService, $mdDialog, data){
+        
+        
+        
+        
+        $scope.init = function () {
+
+            if (data) {
+
+                $scope.absence = data;
+                $scope.absence.date = new Date($scope.absence.date);
+            }
+            else {
+                $scope.absence = {};
+            }
+        }
+        
+        $scope.save = function(){
+            
+            absenceService.saveAbsence($scope.absence)
+                .then(function(response){
+                    
+                    $scope.close(response);
+                })
+                .fail(function(err){
+                    
+                })
+                .finally(function(){
+                    
+                })
+        }
+        
+        $scope.cancel = function () {
+
+            $mdDialog.cancel();
+        }
+
+        $scope.close = function () {
+            $mdDialog.hide($scope.object);
+        }
+        
+        $scope.init();
+        
+    }])
+'use strict';
+
+angular.module("BossCollection.attendance")
+    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices', '$mdMedia', '$mdDialog',
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
+
+            var absence = $resource('/api/absence/absence', {}, {});
+            var absenceByDate = $resource('/api/absence/absenceByDate', {}, {});
+            var absenceHistoryResource = $resource('/api/absence/absenceHistory', {}, {});
+            var deleteAbsenceResource = $resource('/api/absence/deleteAbsence');
+            var saveAbsenceResource = $resource('/api/absence/saveAbsence');
+            
+            var absenceApi = {
+
+                submitNewAbsence: function (newAbsence) {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    absence.save(newAbsence).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                getAbsenceHistory: function(absenceHistory){
+                    
+                    var defer = $q.defer();
+                    
+                    siteServices.startLoading();
+                    
+                    absenceHistoryResource.save(absenceHistory).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                        return defer.promise;
+                },
+                openEditModal: function(template, locals) {
+                  
+
+                    var defer = $q.defer();
+                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                    
+                    $mdDialog.show({
+                        templateUrl: template,
+                        controller: 'absenceModalController',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: false,
+                        locals: { data: locals },
+                        fullscreen: true
+                    })
+                    .then(function (result) {
+
+                            defer.resolve(result);
+                        },
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                    return defer.promise;
+              
+                },
+                saveAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    saveAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                },
+                deleteAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    deleteAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                    
+                },
+                getAbsences: function () {
+
+                    var defer = $q.defer();
+
+
+
+                    absence.get().$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+
+                    return defer.promise;
+                },
+                getAbsencesByDate: function (date) {
+
+                    var defer = $q.defer();
+
+                    absenceByDate.save({date:date}).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+
+                    return defer.promise;
+                }
+            };
+
+            return absenceApi;
+        }])
+angular.module("BossCollection.forums")
+    .controller('threadController', [
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter) {
+
+            console.log("Thread Controller Loaded");
+
+            $scope.forum = {};
+            $scope.loading = false;
+            $scope.orderBy = "dateCreated";
+            $scope.masterThread = []
+            
+            
+
+            $scope.getLength = function (){
+                return $scope.threads.length
+            }
+
+            $scope.getItemAtIndex = function(index){
+                return $scope.threads[index];
+            }
+
+            $scope.init = function(){
+
+                $scope.loading = true;
+                $scope.savedThreads = forumService.getThreadCountsLocal();
+                
+                
+                
+                $scope.forum = forumService.getCurrentForum()
+                    .then(function(forum){
+                        $scope.forum = forum;
+                    })
+                    .then(function(){
+                        siteServices.updateTitle($scope.forum.name + ' Forum');
+                        return forumService.getThreads($scope.forum);
+                    })
+                    .then(function(threads){
+                        //$scope.threads = threads;
+                        $scope.threads = threads;
+                        $scope.masterThread = threads;
+                        
+                        if ($scope.savedThreads == undefined) {
+                            
+                            $scope.savedThreads = threads;
+                            forumService.saveThreadCounts(threads);
+                        }
+                        
+                        
+                        $scope.threadRepeat = {
+                            toLoad:0,
+                            numLoaded: 0,
+                            threads: $scope.threads,
+                            getItemAtIndex: function (index) {
+                                
+                                if(index > this.numLoaded && index < $scope.threads.length){
+                                    this.fetchMoreThreads(index);
+                                    return null;
+                                }
+
+                                if(index < $scope.threads.length){
+                                    return $scope.threads[index];    
+                                }
+                                
+                            },
+                            getLength: function () {
+                                if($scope.threads.length == 0){
+                                    return 0;
+                                }
+                                else{
+                                    return this.numLoaded + 1;    
+                                }
+                                
+                            },
+                            fetchMoreThreads: function (index) {
+
+                                if (this.toLoad < index) {
+                                    this.toLoad += 20;
+
+                                    this.numLoaded = this.toLoad;
+                                    
+                                    if(this.numLoaded > $scope.threads.length){
+                                        this.numLoaded = $scope.threads.length - 1;
+                                    }
+
+                                }
+                            }
+                        }
+                        
+                        sortThreads();
+
+                    })
+                    .catch(function(err){
+
+                        $scope.loading = false;
+                    })
+                    .finally(function(){
+
+                        $scope.loading = false;
+                    })
+            }
+
+            $scope.listStyle = {
+                height: ($window.innerHeight - 312) + 'px'
+            };
+
+            $window.addEventListener('resize', onResize);
+
+            function onResize() {
+                self.listStyle.height = ($window.innerHeight - 312) + 'px';
+                if (!$scope.$root.$$phase) $scope.$digest();
+            }
+
+            $scope.refresh = function(){
+
+                $scope.loading = true;
+
+                forumService.getThreads($scope.forum)
+                    .then(function(threads){
+
+                        $scope.loading = false;
+                        $scope.threads = threads;
+                        $scope.masterThread = threads;
+                        sortThreads();
+                    })
+                    .catch(function(err){
+
+                        $scope.loading = false;
+                    })
+            }
+
+            $scope.deleteThread = function(thread){
+
+                forumService.confirmDelete()
+                    .then(function(result){
+
+                        if(result){
+                            console.log("Deleting the category")
+                            return forumService.deleteThread(thread);
+                        }
+                    })
+                    .then(function(response){
+
+                        $scope.refresh();
+                    })
+            }
+            
+            $scope.$watch('threadSearch', function(){
+                
+                sortThreads();
+                
+            })
+            
+            $scope.$watch('orderBy', function(){
+                
+                sortThreads();
+                
+            })
+            
+            function sortThreads(){
+                $scope.threads = $filter('filter')($scope.masterThread, $scope.threadSearch);
+                $scope.threads = $filter('orderBy')($scope.threads, $scope.orderBy);
+                
+                if($scope.threadRepeat){
+                    $scope.threadRepeat.numLoaded = $scope.threads.length - 1;    
+                }
+                
+                
+            }
+
+            $scope.orderByDateCreated = function(){
+                $scope.orderBy = "dateCreated"
+            }
+
+            $scope.orderByDateCreatedReversed = function(){
+                $scope.orderBy = "-dateCreated"
+            }
+
+            $scope.openThread = function(thread){
+                
+                
+                
+                forumService.getComments(thread._id)
+                    .then(function(comments){
+
+                        thread.comments = comments.comments;
+                        $scope.updateThreadViewed(thread);
+                        forumService.openBottomSheet('threadComments', thread);
+
+                    })
+
+
+            }
+
+            $scope.createThread = function () {
+
+                forumService.openBottomSheet('threadEdit', { forum: $scope.forum })
+                    .then(function (response) {
+                        $scope.refresh();
+                    })
+            }
+
+            $scope.editThread = function(forum){
+
+                forumService.openBottomSheet('threadEdit', forum);
+            }
+
+            $scope.goBack = function(){
+                window.history.back();
+            }
+            
+            $scope.isRead = function (threadIn) {
+                
+                
+                var oldThread = _.find($scope.savedThreads, function (thread) {
+                    return thread._id == threadIn._id;
+                })
+
+
+                if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
+                    return "unread";
+                }
+                else {
+                    return "read";
+                }
+            }
+            
+            $scope.updateThreadViewed = function(threadIn){
+                
+                var threadIndexTracker;
+                        
+                _.find($scope.savedThreads, function (thread, threadIndex) {
+
+                    if (thread._id == threadIn._id) {
+                        threadIndexTracker == threadIndex;
+                        $scope.savedThreads[threadIndex] = threadIn;
+                    }
+                })
+                
+                if($scope.savedThreads.length == 0 || threadIndexTracker == undefined){
+                    $scope.savedThreads.push(threadIn);
+                }
+                
+                
+                forumService.saveThreadCounts($scope.savedThreads);
+            }
+            
+            $scope.init();
+        }])
                 
     
 'use strict';
@@ -1335,7 +1584,7 @@ angular.module("BossCollection.attendance")
         $scope.absenceHighchartDrillDownSeries = [];
         
         $scope.late = 1;
-        $scope.absent = 3;
+        $scope.absent = 6;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
         $scope.startingDate = moment();
@@ -1871,255 +2120,6 @@ angular.module("BossCollection.attendance")
 
     }])
 
-angular.module("BossCollection.forums")
-    .controller('threadController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter) {
-
-            console.log("Thread Controller Loaded");
-
-            $scope.forum = {};
-            $scope.loading = false;
-            $scope.orderBy = "dateCreated";
-            $scope.masterThread = []
-            
-            
-
-            $scope.getLength = function (){
-                return $scope.threads.length
-            }
-
-            $scope.getItemAtIndex = function(index){
-                return $scope.threads[index];
-            }
-
-            $scope.init = function(){
-
-                $scope.loading = true;
-                $scope.savedThreads = forumService.getThreadCountsLocal();
-                
-                
-                
-                $scope.forum = forumService.getCurrentForum()
-                    .then(function(forum){
-                        $scope.forum = forum;
-                    })
-                    .then(function(){
-                        siteServices.updateTitle($scope.forum.name + ' Forum');
-                        return forumService.getThreads($scope.forum);
-                    })
-                    .then(function(threads){
-                        //$scope.threads = threads;
-                        $scope.threads = threads;
-                        $scope.masterThread = threads;
-                        
-                        if ($scope.savedThreads == undefined) {
-                            
-                            $scope.savedThreads = threads;
-                            forumService.saveThreadCounts(threads);
-                        }
-                        
-                        
-                        $scope.threadRepeat = {
-                            toLoad:0,
-                            numLoaded: 0,
-                            threads: $scope.threads,
-                            getItemAtIndex: function (index) {
-                                
-                                if(index > this.numLoaded && index < $scope.threads.length){
-                                    this.fetchMoreThreads(index);
-                                    return null;
-                                }
-
-                                if(index < $scope.threads.length){
-                                    return $scope.threads[index];    
-                                }
-                                
-                            },
-                            getLength: function () {
-                                if($scope.threads.length == 0){
-                                    return 0;
-                                }
-                                else{
-                                    return this.numLoaded + 1;    
-                                }
-                                
-                            },
-                            fetchMoreThreads: function (index) {
-
-                                if (this.toLoad < index) {
-                                    this.toLoad += 20;
-
-                                    this.numLoaded = this.toLoad;
-                                    
-                                    if(this.numLoaded > $scope.threads.length){
-                                        this.numLoaded = $scope.threads.length - 1;
-                                    }
-
-                                }
-                            }
-                        }
-                        
-                        sortThreads();
-
-                    })
-                    .catch(function(err){
-
-                        $scope.loading = false;
-                    })
-                    .finally(function(){
-
-                        $scope.loading = false;
-                    })
-            }
-
-            $scope.listStyle = {
-                height: ($window.innerHeight - 312) + 'px'
-            };
-
-            $window.addEventListener('resize', onResize);
-
-            function onResize() {
-                self.listStyle.height = ($window.innerHeight - 312) + 'px';
-                if (!$scope.$root.$$phase) $scope.$digest();
-            }
-
-            $scope.refresh = function(){
-
-                $scope.loading = true;
-
-                forumService.getThreads($scope.forum)
-                    .then(function(threads){
-
-                        $scope.loading = false;
-                        $scope.threads = threads;
-                        $scope.masterThread = threads;
-                        sortThreads();
-                    })
-                    .catch(function(err){
-
-                        $scope.loading = false;
-                    })
-            }
-
-            $scope.deleteThread = function(thread){
-
-                forumService.confirmDelete()
-                    .then(function(result){
-
-                        if(result){
-                            console.log("Deleting the category")
-                            return forumService.deleteThread(thread);
-                        }
-                    })
-                    .then(function(response){
-
-                        $scope.refresh();
-                    })
-            }
-            
-            $scope.$watch('threadSearch', function(){
-                
-                sortThreads();
-                
-            })
-            
-            $scope.$watch('orderBy', function(){
-                
-                sortThreads();
-                
-            })
-            
-            function sortThreads(){
-                $scope.threads = $filter('filter')($scope.masterThread, $scope.threadSearch);
-                $scope.threads = $filter('orderBy')($scope.threads, $scope.orderBy);
-                
-                if($scope.threadRepeat){
-                    $scope.threadRepeat.numLoaded = $scope.threads.length - 1;    
-                }
-                
-                
-            }
-
-            $scope.orderByDateCreated = function(){
-                $scope.orderBy = "dateCreated"
-            }
-
-            $scope.orderByDateCreatedReversed = function(){
-                $scope.orderBy = "-dateCreated"
-            }
-
-            $scope.openThread = function(thread){
-                
-                
-                
-                forumService.getComments(thread._id)
-                    .then(function(comments){
-
-                        thread.comments = comments.comments;
-                        $scope.updateThreadViewed(thread);
-                        forumService.openBottomSheet('threadComments', thread);
-
-                    })
-
-
-            }
-
-            $scope.createThread = function () {
-
-                forumService.openBottomSheet('threadEdit', { forum: $scope.forum })
-                    .then(function (response) {
-                        $scope.refresh();
-                    })
-            }
-
-            $scope.editThread = function(forum){
-
-                forumService.openBottomSheet('threadEdit', forum);
-            }
-
-            $scope.goBack = function(){
-                window.history.back();
-            }
-            
-            $scope.isRead = function (threadIn) {
-                
-                
-                var oldThread = _.find($scope.savedThreads, function (thread) {
-                    return thread._id == threadIn._id;
-                })
-
-
-                if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
-                    return "unread";
-                }
-                else {
-                    return "read";
-                }
-            }
-            
-            $scope.updateThreadViewed = function(threadIn){
-                
-                var threadIndexTracker;
-                        
-                _.find($scope.savedThreads, function (thread, threadIndex) {
-
-                    if (thread._id == threadIn._id) {
-                        threadIndexTracker == threadIndex;
-                        $scope.savedThreads[threadIndex] = threadIn;
-                    }
-                })
-                
-                if($scope.savedThreads.length == 0 || threadIndexTracker == undefined){
-                    $scope.savedThreads.push(threadIn);
-                }
-                
-                
-                forumService.saveThreadCounts($scope.savedThreads);
-            }
-            
-            $scope.init();
-        }])
 'use strict';
 /**
  *
@@ -2405,6 +2405,174 @@ angular.module("BossCollection.controllers")
         }])
 'use strict';
 /**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
+
+            siteServices.updateTitle('Account');
+
+            $scope.leaveGuild = function () {
+
+                var guildName = $scope.user.guild.name;
+
+                guildServices.leaveGuild(guildName)
+                    .then(function (user) {
+
+                        $scope.user = userLoginSrvc.updateUser();
+                    })
+            }
+
+            $scope.updateAccount = function () {
+
+                console.log("Updating account");
+                userLoginSrvc.updateAccount($scope.user).then(function (response) {
+
+                    $scope.user = userLoginSrvc.updateUser();
+                    siteServices.showMessageToast("User updated");
+                },
+                    function (err) {
+
+                        siteServices.showMessageModal(err);
+                    })
+            }
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
+
+        $scope.user = {};
+        $scope.user.name = "";
+        $scope.loading = false;
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        console.log("Login Controller");
+        
+        $scope.init = function () {
+        }
+        
+        $scope.resetPassword = function(){
+            
+            $scope.loading = true;
+             
+            userLoginSrvc.lostPassword($scope.user.email)
+                .then(function(response){
+                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
+                })
+                .catch(function(err){
+                    siteServices.showMessageModal(err);
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+             
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.openPasswordResetWindow = function($event){
+            $mdBottomSheet.show({
+                    templateUrl: 'resetPassword',
+                    controller: 'loginController',
+                    targetEvent: $event,
+                    escapeToClose: false
+                })
+        }
+        
+        $scope.cancelPasswordReset = function(){ 
+            
+            $mdBottomSheet.hide();
+            $timeout(function(){
+                
+                siteServices.showLoadingBottomSheet();    
+            }, 500);
+            
+        }
+        
+        $scope.login = function(){
+             
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                console.log(response);
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
+                
+            },
+            function(err){
+                
+                siteServices.showMessageModal(err);
+                console.log(err);
+            })
+        }
+        
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
+            $location.path("/");
+        }
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.controllers")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
+
+            $scope.user = {};
+
+            $scope.passwordsMatch = false;
+
+            $('#logInModal').closeModal();
+
+            $scope.register = function () {
+
+                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
+                    //save user to cookie
+                    console.log(result);
+                },
+                    function (err) {
+                        $scope.passwordsMatch = true;
+                        $scope.openFromLeft(err);
+                        console.log(err);
+                    })
+
+            }
+
+            $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
+
+        }])
+
+'use strict';
+/**
  
  *
 
@@ -2599,174 +2767,6 @@ angular.module("BossCollection.controllers")
             }
 
     }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
-
-            siteServices.updateTitle('Account');
-
-            $scope.leaveGuild = function () {
-
-                var guildName = $scope.user.guild.name;
-
-                guildServices.leaveGuild(guildName)
-                    .then(function (user) {
-
-                        $scope.user = userLoginSrvc.updateUser();
-                    })
-            }
-
-            $scope.updateAccount = function () {
-
-                console.log("Updating account");
-                userLoginSrvc.updateAccount($scope.user).then(function (response) {
-
-                    $scope.user = userLoginSrvc.updateUser();
-                    siteServices.showMessageToast("User updated");
-                },
-                    function (err) {
-
-                        siteServices.showMessageModal(err);
-                    })
-            }
-        }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
-        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
-
-        $scope.user = {};
-        $scope.user.name = "";
-        $scope.loading = false;
-        
-        if($location.url() == "/auth/login"){
-            siteServices.updateTitle('Login');    
-        }
-        
-        console.log("Login Controller");
-        
-        $scope.init = function () {
-        }
-        
-        $scope.resetPassword = function(){
-            
-            $scope.loading = true;
-             
-            userLoginSrvc.lostPassword($scope.user.email)
-                .then(function(response){
-                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
-                })
-                .catch(function(err){
-                    siteServices.showMessageModal(err);
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-        
-        $scope.alreadyLoggedIn = function(){
-             
-            if(userLoginSrvc.loggedIn() == true){
-                $location.path('/');
-            }
-        }
-        
-        $scope.openPasswordResetWindow = function($event){
-            $mdBottomSheet.show({
-                    templateUrl: 'resetPassword',
-                    controller: 'loginController',
-                    targetEvent: $event,
-                    escapeToClose: false
-                })
-        }
-        
-        $scope.cancelPasswordReset = function(){ 
-            
-            $mdBottomSheet.hide();
-            $timeout(function(){
-                
-                siteServices.showLoadingBottomSheet();    
-            }, 500);
-            
-        }
-        
-        $scope.login = function(){
-             
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                console.log(response);
-                userLoginSrvc.getUser()
-                    .then(function () {
-
-                        if ($location.path() == "/auth/application") {
-
-                        }
-                        else {
-                            $location.path("/");
-                        }
-                    })
-                
-            },
-            function(err){
-                
-                siteServices.showMessageModal(err);
-                console.log(err);
-            })
-        }
-        
-        $scope.cancelLogin = function () {
-            
-            siteServices.hideBottomSheet();
-            $location.path("/");
-        }
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
-
-            $scope.user = {};
-
-            $scope.passwordsMatch = false;
-
-            $('#logInModal').closeModal();
-
-            $scope.register = function () {
-
-                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
-                    //save user to cookie
-                    console.log(result);
-                },
-                    function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
-                        console.log(err);
-                    })
-
-            }
-
-            $scope.openFromLeft = function (errorMessage) {
-                
-                siteServices.showMessageModal(errorMessage);
-            };
-
-        }])
 
 'use strict';
 /**

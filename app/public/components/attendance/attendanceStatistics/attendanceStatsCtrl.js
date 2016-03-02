@@ -13,7 +13,7 @@ angular.module("BossCollection.attendance")
         $scope.absenceHighchartDrillDownSeries = [];
         
         $scope.late = 1;
-        $scope.absent = 3;
+        $scope.absent = 6;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
         $scope.startingDate = moment();
