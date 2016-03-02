@@ -6,12 +6,12 @@ angular.module("BossCollection.attendance", ['ngRoute'])
         $routeProvider
             .when('/attendanceStatistics', {
                 templateUrl: 'attendanceStats',
-                controller: 'attendanceStatsCtrl'
+                controller: 'attendanceStatsCtrl as ctrl'
             })
 
             .when('/whosOut', {
                 templateUrl: 'absenceSubmissions',
-                controller: 'absenceSubmissionsController'
+                controller: 'absenceSubmissionsController as ctrl'
             })
 
             .when('/auth/absence', {

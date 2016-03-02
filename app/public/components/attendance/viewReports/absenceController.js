@@ -7,47 +7,52 @@ angular.module("BossCollection.attendance")
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
         var currentDay = moment().day();
+        var self = this;
         
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment(); 
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
+        self.newAbsence = {};
+        self.absences = {};
+        self.loading = false;
+        self.typePicked = false;
+        self.today = moment(); 
+        self.dayDesired;
+        self.currentlySelected = moment().format('dddd - Do');
+        
+        var ALLFUTUREABSENCES = "All Future Absences";
+        var TITLE = "Upcoming Absences";
+        
         /**
          * 0 = all future absences
          * 1 = specific date
          */
-         $scope.viewing = 0;
+         self.viewing = 0;
          
         
-       $scope.init = function(){
+       self.init = function(){
 
            
-           $scope.getAbsences()
+           self.getAbsences()
            
-           $scope.toolbar = {
+           self.toolbar = {
                isOpen: false,
                direction: "right"
            }
 
-           $scope.currentlySelected = "All Future Absences";
-           $scope.isToolSetOpen = false;
+           self.currentlySelected = ALLFUTUREABSENCES;
+           self.isToolSetOpen = false;
 
 
-           siteServices.updateTitle('Upcoming Absences');   
+           siteServices.updateTitle(TITLE);   
            
        }
         
-       $scope.updateList = function(){
-           $scope.viewing = 1;
-           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+       self.updateList = function(){
+           self.viewing = 1;
+           self.currentlySelected = moment(self.dayDesired).format('dddd - Do');
            
-           $scope.getAbsencesByDate();
+           self.getAbsencesByDate();
        }
        
-       $scope.dateHasPassed = function(absence){
+       self.dateHasPassed = function(absence){
            
            if(moment(absence.date).isBefore(moment())){
                return false;
@@ -72,32 +77,32 @@ angular.module("BossCollection.attendance")
            return nextDate;
        }
        
-       $scope.formatDate = function(date){
+       self.formatDate = function(date){
            
            return moment.utc(date).format('dddd, MMM D');
        }
 
-        $scope.getAbsences = function(){
+        self.getAbsences = function(){
             
-            $scope.currentlySelected = "All absences"
-            $scope.loading = true;
-            $scope.viewing = 0;
+            self.currentlySelected = "All absences"
+            self.loading = true;
+            self.viewing = 0;
             
             absenceService.getAbsences().then(function(result){
                 
-                $scope.loading = false;
-                $scope.absences = result.absences; 
+                self.loading = false;
+                self.absences = result.absences; 
             }, 
             function(err){
                 
                 siteServices.showMessageModal(err.message)
                  
-                $scope.loading = false;
+                self.loading = false;
                 console.log(err);  
             })
         }
         
-        $scope.deleteAbsence = function(absence){
+        self.deleteAbsence = function(absence){
             
             siteServices.confirmDelete()
                 .then(function(result){
@@ -106,11 +111,11 @@ angular.module("BossCollection.attendance")
                 })   
                 .then(function(result){
                     
-                    if($scope.viewing == 0){
-                        $scope.getAbsences();
+                    if(self.viewing == 0){
+                        self.getAbsences();
                     }
                     else{
-                        $scope.updateList();    
+                        self.updateList();    
                     }
                 })               
                 .finally(function(){
@@ -118,50 +123,50 @@ angular.module("BossCollection.attendance")
                 })
         }
         
-        $scope.editAbsence = function(absence){
+        self.editAbsence = function(absence){
             
             absenceService.openEditModal('editAbsence', absence)
                 .then(function(result){
                     
-                    if($scope.viewing == 0){
-                        $scope.getAbsences();
+                    if(self.viewing == 0){
+                        self.getAbsences();
                     }
                     else{
-                        $scope.updateList();    
+                        self.updateList();    
                     }
                     
                     
                 })
         }
         
-        $scope.getAbsencesByDate = function(){
+        self.getAbsencesByDate = function(){
             
-            $scope.loading = true;
+            self.loading = true;
             
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+            absenceService.getAbsencesByDate(self.dayDesired).then(function(result){
                 
-                $scope.loading = false;
-                $scope.absences = result.absences; 
+                self.loading = false;
+                self.absences = result.absences; 
             }, 
             function(err){
                 siteServices.showMessageToast(err) 
-                $scope.loading = false;
+                self.loading = false;
                 console.log(err);  
             })
         }
          
-        $scope.submitNewAbsence = function () {
+        self.submitNewAbsence = function () {
 
-            if ($scope.newAbsence.date == null) {
+            if (self.newAbsence.date == null) {
 
                 siteServices.showMessageModal("Must select a date")
             }
-            else if($scope.newAbsence.type == null){
+            else if(self.newAbsence.type == null){
                 siteServices.showMessageModal("Must select a type: Late or Absent")
             }
             else {
                 
-                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
+                absenceService.submitNewAbsence(self.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.
                     $location.path("/whosOut");
@@ -180,7 +185,7 @@ angular.module("BossCollection.attendance")
             
         }
         
-        $scope.init();
+        self.init();
     
 
     }])
