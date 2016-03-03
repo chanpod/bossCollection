@@ -4,7 +4,7 @@
  *
 
  */
-angular.module("BossCollection.controllers")
+angular.module("BossCollection.guild")
     .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
         function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
             

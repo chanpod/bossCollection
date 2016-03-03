@@ -9,7 +9,7 @@ angular.module('BossCollection', [
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',
-  'BossCollection.guildApplications',
+  'BossCollection.guild',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 

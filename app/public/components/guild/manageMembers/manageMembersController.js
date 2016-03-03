@@ -5,7 +5,7 @@
  * @class Controllers
  * @constructor No Controller
  */
-angular.module("BossCollection.controllers")
+angular.module("BossCollection.guild")
     .controller("manageMembersController", [
         "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {

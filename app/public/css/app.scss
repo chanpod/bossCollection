@@ -12,17 +12,57 @@ html, body {
     */
 } 
 
-.contentAnimationHidden{
-    transition: opacity .2s, visibility .2s, margin-left 0s .2s;
-    margin-left: -100%;
-    visibility: hidden;
-}
+.contentAnimationContainer{
+    
+    
+  height: 100%;
+  width: 100%;
+  background-color: #c00;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -ms-transition: all .3s ease;
+  transition: all .3s ease;
+  position: absolute;
+  top: 0%;
+  left: -90vw;
+  background-color:white;
+} 
 
 .contentAnimationShow{
-    transition: opacity .2s, margin-left .4s;
-    margin-left: 0;
-    visibility: visible;
-    transform-origin: 20% 40%;
+    transform: translate(90vw, 0%);
+    -webkit-transform: translate(90vw, 0%);
+}
+
+.contentAnimationHide{
+   // transform: translate(80vw, 0%);
+   // -webkit-transform: translate(80vw, 0%);
+}
+
+@media (max-width: 960px){
+  
+    .contentAnimationContainer{
+        
+        
+        height: 100%;
+    width: 100%;
+    background-color: #c00;
+    -webkit-transition: all .3s ease;
+    -moz-transition: all .3s ease;
+    -o-transition: all .3s ease;
+    -ms-transition: all .3s ease;
+    transition: all .3s ease;
+    position: absolute;
+    top: 0%;
+    left: -100vw;
+    background-color:white;
+    } 
+
+    .contentAnimationShow{
+        transform: translate(100vw, 0%);
+        -webkit-transform: translate(100vw, 0%);
+    }
+    
 }
 
  @font-face {

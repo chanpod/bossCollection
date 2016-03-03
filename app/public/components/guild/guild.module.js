@@ -1,6 +1,6 @@
 'user strict'
 
-angular.module("BossCollection.guildApplications", ['ngRoute'])
+angular.module("BossCollection.guild", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider

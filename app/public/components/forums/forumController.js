@@ -7,7 +7,7 @@ angular.module("BossCollection.forums")
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
             $scope.loading = false;
-            $scope.showContentBool = false;
+           
             
             for (var i = 0; i < 5; i++) {
                 $scope.testListCount.push(i);
@@ -36,7 +36,7 @@ angular.module("BossCollection.forums")
                         
                         $scope.loading = false;  
                         $scope.forums = forums;
-                        $scope.showContent();
+                        
                         
                     })
                     .catch(function(err){
@@ -67,13 +67,7 @@ angular.module("BossCollection.forums")
                     })
             }
             
-            $scope.showContent = function () {
-                $timeout(function(){
-                    
-                    $scope.showContentBool = true;    
-                }, 100)
-                
-            }
+            
             
             $scope.editCategory = function (category) {
 
@@ -167,14 +161,15 @@ angular.module("BossCollection.forums")
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })
-            }
+            } 
 
             $scope.goToForum = function (forum) {
                 
                 
                 $scope.updateForumViewed(forum);
                 forumService.setForum(forum);
-                $location.url('/forum/' + forum._id)
+                $scope.goTo('/forum/' + forum._id);
+                
             }
             
             $scope.updateForumViewed = function(forumIn){

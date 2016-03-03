@@ -14,9 +14,11 @@ md-menu
                 | Logout
         md-menu-item(ng-show = "!loggedIn")
             md-button(ng-click = "showLoginBottomSheet($event)")
+                md-icon(md-font-library="material-icons") account_circle
                 | Log In
             //md-button(ng-click = "goTo('auth/login')")
                 | Log In
         md-menu-item(ng-show = "!loggedIn")
             md-button(ng-click = "goTo('auth/signup')")
+                md-icon(md-font-library="material-icons") account_circle
                 | Register

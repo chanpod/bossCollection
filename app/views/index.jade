@@ -38,7 +38,7 @@ block body
                     
             
             md-content(layout, flex)
-                div(flex, ng-view)    
+                div(flex, ng-view, ng-class = "showContentBool ? 'contentAnimationShow': 'contentAnimationHide'").contentAnimationContainer    
 
     include partials/home    
     include partials/strategyRoom
@@ -50,11 +50,11 @@ block body
 
     
     include partials/accounts/editAccount
-    include partials/applications/application
-    include partials/applications/reviewApplications
-    include partials/guildManagement/createGuild
-    include partials/guildManagement/joinGuild
-    include partials/guildManagement/manageMembers
+    include ../public/components/guild/applications/application
+    include ../public/components/guild/applications/reviewApplications
+    include ../public/components/guild/createGuild/createGuild
+    include ../public/components/guild/joinGuild/joinGuild
+    include ../public/components/guild/manageMembers/manageMembers
     
     //-Forum
     include ../public/components/forums/forumTemplate

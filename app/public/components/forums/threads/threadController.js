@@ -20,13 +20,6 @@ angular.module("BossCollection.forums")
                 return $scope.threads[index];
             }
             
-            $scope.showContent = function () {
-                $timeout(function(){
-                    
-                    $scope.showContentBool = true;    
-                }, 50)
-                 
-            }    
              
             $scope.init = function(){  
 
@@ -95,7 +88,7 @@ angular.module("BossCollection.forums")
                         }
                         
                         sortThreads();
-                        $scope.showContent();
+                        
                     })
                     .catch(function(err){
 
@@ -213,8 +206,8 @@ angular.module("BossCollection.forums")
             }
 
             $scope.goBack = function(){
-                window.history.back();
-            }
+                $scope.goTo('/forum');
+            } 
             
             $scope.isRead = function (threadIn) {
                 

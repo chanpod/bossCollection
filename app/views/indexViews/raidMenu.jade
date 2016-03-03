@@ -1,6 +1,6 @@
-md-menu()
-    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
-        
+
+md-menu(ng-if = "user.guild", ng-click = "openMenu($mdOpenMenu, $event)")
+    md-button(aria-label = "Account options...")
         | Guild
         i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")
@@ -23,7 +23,7 @@ md-menu()
                 | Attendance Statistics
 
     
-                
+                    
         
                 
     

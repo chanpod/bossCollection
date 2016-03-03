@@ -9,7 +9,7 @@ angular.module('BossCollection', [
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',
-  'BossCollection.guildApplications',
+  'BossCollection.guild',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -113,7 +113,7 @@ angular.module("BossCollection.forums", ['ngRoute'])
     }]);
 'user strict'
 
-angular.module("BossCollection.guildApplications", ['ngRoute'])
+angular.module("BossCollection.guild", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider
@@ -646,7 +646,7 @@ angular.module("BossCollection.forums")
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
             $scope.loading = false;
-            $scope.showContentBool = false;
+           
             
             for (var i = 0; i < 5; i++) {
                 $scope.testListCount.push(i);
@@ -675,7 +675,7 @@ angular.module("BossCollection.forums")
                         
                         $scope.loading = false;  
                         $scope.forums = forums;
-                        $scope.showContent();
+                        
                         
                     })
                     .catch(function(err){
@@ -706,13 +706,7 @@ angular.module("BossCollection.forums")
                     })
             }
             
-            $scope.showContent = function () {
-                $timeout(function(){
-                    
-                    $scope.showContentBool = true;    
-                }, 100)
-                
-            }
+            
             
             $scope.editCategory = function (category) {
 
@@ -806,14 +800,15 @@ angular.module("BossCollection.forums")
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })
-            }
+            } 
 
             $scope.goToForum = function (forum) {
                 
                 
                 $scope.updateForumViewed(forum);
                 forumService.setForum(forum);
-                $location.url('/forum/' + forum._id)
+                $scope.goTo('/forum/' + forum._id);
+                
             }
             
             $scope.updateForumViewed = function(forumIn){
@@ -1353,7 +1348,7 @@ angular.module("BossCollection.attendance")
         $scope.absenceHighchartData = [];
         $scope.absenceHighchartDrillDownSeries = [];
         
-        $scope.showContentBool = false;
+        
         $scope.late = 1;
         $scope.absent = 6;
         $scope.weeksCounted = 4;
@@ -1364,15 +1359,7 @@ angular.module("BossCollection.attendance")
             
             $scope.getAbsences();
             $scope.buildHighChart();
-            self.showContent();
-        }
-        
-        self.showContent = function(){
-           $scope.showContentBool = true;
-           var element = $('#statsContainer');
-           element.removeClass('contentAnimationHidden')
-           element.toggleClass('contentAnimationShow')
-           
+            
         }
            
         $scope.getAbsences = function () {
@@ -1389,7 +1376,7 @@ angular.module("BossCollection.attendance")
                 $scope.loading = false;
                 $scope.absences = result.absences;
                 $scope.calculateAttendance();
-                self.showContent();
+
             },
                 function (err) {
                     siteServices.showMessageModal(err.message)
@@ -1398,7 +1385,7 @@ angular.module("BossCollection.attendance")
                 })
         }
         
-        /**
+        /** 
          * 
          * 
          * 
@@ -1941,13 +1928,6 @@ angular.module("BossCollection.forums")
                 return $scope.threads[index];
             }
             
-            $scope.showContent = function () {
-                $timeout(function(){
-                    
-                    $scope.showContentBool = true;    
-                }, 50)
-                 
-            }    
              
             $scope.init = function(){  
 
@@ -2016,7 +1996,7 @@ angular.module("BossCollection.forums")
                         }
                         
                         sortThreads();
-                        $scope.showContent();
+                        
                     })
                     .catch(function(err){
 
@@ -2134,8 +2114,8 @@ angular.module("BossCollection.forums")
             }
 
             $scope.goBack = function(){
-                window.history.back();
-            }
+                $scope.goTo('/forum');
+            } 
             
             $scope.isRead = function (threadIn) {
                 
@@ -2177,6 +2157,396 @@ angular.module("BossCollection.forums")
         }])
 'use strict';
 /**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild")
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
+            
+            siteServices.updateTitle('Applications');
+            
+            console.log("Loading application ctrl..."); 
+            $scope.application = {};            
+            
+            
+            $scope.validCharacterName = false;
+            $scope.charRequirementsIncomplete = false;
+            $scope.charRealmError = false;
+            $scope.searchingForUser = false;
+            $scope.icon = "error";
+            
+                
+            $scope.init = function(){
+                
+                realmServices.getRealms()
+                    .then(function (realms) {
+
+                        $scope.realms = realms;
+                    })
+                    .then(function(){
+                        return $scope.loggedIn()
+                    })
+                    .catch(function (err) {
+
+                        console.log(err);
+                    })
+                    .finally(function () {
+                        $timeout(function(){
+                            siteServices.hideLoadingModal();    
+                        }, 500)
+                        
+                    })  
+                    
+            }
+            
+            $scope.filterSearch = function(filterSearch){
+                
+                return $filter('filter')($scope.realms, filterSearch);
+            }
+            
+            $scope.loggedIn = function () {
+                
+                userLoginSrvc.getUser().then(function (user) {
+                    
+                    //Success, let them fill out the form.
+                })
+                .catch(function(err){
+                    
+                    siteServices.showMessageModal("Please log in before attempting to apply.")
+                    $location.path('/')   
+                })
+                .finally(function(){
+                    
+                })
+            }
+            
+
+            $scope.validateCharactername = function (callback) {
+
+                if ($scope.application.realm) {
+                    $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                    $scope.searchingForUser = true;
+
+                    guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
+                        .then(function (character) {
+
+                            
+                            $scope.validCharacterName = true;
+                            $scope.icon = "check_circle";
+                            $scope.application.character = character;
+                            
+                            if(callback){
+                                callback();
+                            }
+                        },
+                            function (err) {
+                                $scope.icon = "error";
+                                siteServices.showMessageToast(err);
+                                $scope.validCharacterName = false;
+                            })
+                        .finally(function () {
+                            $scope.searchingForUser = false;
+                        })
+
+                }
+                else{
+                    $scope.validCharacterName = false;
+                    if (callback) {
+                        callback();
+                    }
+                }
+            }
+            
+            
+            $scope.submitApplication = function(){
+                
+                $scope.validateCharactername(function () {
+                        
+                        if ($scope.validCharacterName == false) {
+
+                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                        }
+                        else {
+                            
+                            guildServices.submitApplication($scope.application)
+                                .then(function (result) {
+
+                                    $location.path('/reviewApplications');
+                                },
+                                    function (err) {
+
+                                        siteServices.showMessageToast(err);
+                                    })
+                        }
+                    })
+            }
+            
+            
+            $scope.init();
+  
+            
+    }])
+
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild")
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
+        function($scope, $location, $http, $timeout, guildServices, siteServices){
+            
+            siteServices.updateTitle('View Applications');    
+            
+          
+            
+             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
+            $scope.loading = true;
+            
+            $scope.openComments = function (comments) {
+                
+                siteServices.showMessageModal(comments, "Comments");
+            } 
+            
+            $scope.goTo = function(url){
+                
+                var win = window.open(url, '_blank');
+                win.focus();
+            }
+            //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+            
+            $scope.buildArmoryUrl = function (realm, character) {
+                var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+                
+                $scope.goTo(url);
+            }
+            
+            guildServices.getApplications() 
+                .then(function(applications){
+                    $scope.loading = false;
+                    $scope.applications = applications.applications; //object to array
+                    console.log($scope.applications);
+                    
+                    convertClasses();
+                },
+                function(err){
+                    
+                    $scope.loading = false;
+                    console.log(err);
+                    siteServices.showMessageToast("Seems something broke. Try again in a few...");
+                })
+                
+            function convertClasses(){
+                
+                for(var i = 0; i < $scope.applications.length; i++){
+                    
+                    var classType = classes[$scope.applications[i].character.class];
+                    $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+                    
+                }
+            }
+
+    }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("createGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+          
+            
+            siteServices.updateTitle('Create Guild');
+            
+            $scope.guildName = "";
+            $scope.loading = false;
+            
+            $scope.joinGuild = function(){
+                $scope.loading = true;
+                guildServices.createGuild($scope.guildName)
+                    .then(function(){
+                        
+                        var user = userLoginSrvc.updateUser();
+                        
+                        siteServices.showMessageModal("Successfully created " + user.guild.name);
+                        
+                        $location.path('/');           
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
+                    })
+            }
+    }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("joinGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+
+
+            $scope.listOfGuilds = [];
+            $scope.loading = false;
+
+
+            siteServices.updateTitle('Join Guild');
+
+            $scope.init = function () {
+
+
+
+                $scope.getGuilds();
+
+            }
+
+            $scope.filterSearch = function (filterSearch) {
+
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
+            }
+
+            $scope.getGuilds = function () {
+
+                guildServices.getListOfGuilds()
+                    .then(function (guilds) {
+
+                        $scope.listOfGuilds = guilds;
+                    })
+            }
+
+            $scope.joinGuild = function () {
+
+                $scope.loading = true;
+
+                if ($scope.guildName) {
+
+                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
+                        .then(function (guild) {
+
+                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
+                            
+                            userLoginSrvc.updateUser($scope.user);
+
+                            $location.path('/');
+
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else{
+                    siteServices.showMessageToast("Guild doesn't exist");
+                    $scope.loading = false;
+                }
+            }
+
+            $scope.init();
+        }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("manageMembersController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+            
+            //user comes from parent controller navbar
+            
+            $scope.guildMembers;
+            $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
+
+            $scope.init = function () {
+
+                if($scope.user.name != ""){
+                    
+                    guildServices.getGuildMembers($scope.user.guild.name)
+                        .then(function (guildMembers) {
+                            $scope.guildMembers = guildMembers
+                        })
+                }
+                else{
+                    userLoginSrvc.getUser()
+                        .then(function(user){
+                            
+                            guildServices.getGuildMembers(user.guild.name)
+                                .then(function (guildMembers) {
+                                    $scope.guildMembers = guildMembers
+                                })
+                        })
+                }
+
+            }
+
+            $scope.promote = function (user) {
+
+                if (user.rank == 3) {
+                    siteServices.showMessageModal("Can't promote any further");
+                }
+                else {
+                    user.rank++
+
+                    guildServices.updateRank($scope.user.guild.name, user)
+                        .then(function () {
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                }
+
+
+            }
+
+            $scope.demote = function (user) {
+                if (user.rank == 1) {
+                    siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
+                }
+                else {
+                    user.rank--;
+
+                    guildServices.updateRank($scope.user.guild.name, user)
+                        .then(function () {
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                }
+            }
+            
+          
+            $scope.init();
+            siteServices.updateTitle('Manage Members');
+        }])
+
+'use strict';
+/**
  *
  */
 angular.module("BossCollection.controllers", [
@@ -2202,8 +2572,8 @@ angular.module("BossCollection.controllers")
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices',
-        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices){
+    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices, $timeout){
         
         var originatorEv;
         var bossCollectionWowProgressUrl = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/json_rank";
@@ -2211,13 +2581,13 @@ angular.module("BossCollection.controllers")
         $scope.user.name = "";
         $scope.loggedIn = false;
         $scope.title = "";
-        
+        $scope.showContentBool = false;
         
         $scope.init = function(){
             
            getUser();
-        }
-        
+        } 
+         
         $scope.showLoginBottomSheet = function($event){
             
             siteServices.showLoadingBottomSheet($event);
@@ -2228,9 +2598,29 @@ angular.module("BossCollection.controllers")
             $mdOpenMenu(ev);
         };
         
+        $scope.hideContent = function(){
+            $scope.showContentBool = false;
+        }
+        
+        $scope.showContent = function () {
+            
+            $timeout(function () {
+
+                $scope.showContentBool = true;
+            }, 100)
+        }  
+         
         $scope.goTo = function(path){
-            $location.url(path);
-            $scope.toggle();
+            $scope.closeSideBar('left');
+            $scope.hideContent();
+            
+            $timeout(function(){
+                $location.url(path);
+                
+                $scope.showContent();
+            }, 200)
+            
+            
         }
         
         $scope.goToExternal = function (path) {
@@ -2300,6 +2690,7 @@ angular.module("BossCollection.controllers")
                     if(user){
                         $scope.user = user;
                         $scope.loggedIn = true;
+                        $scope.showContent();
                     }
                 },
                 function(err){
@@ -2624,396 +3015,6 @@ angular.module("BossCollection.controllers")
                 siteServices.showMessageModal(errorMessage);
             };
 
-        }])
-
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.controllers")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
-            
-            siteServices.updateTitle('Applications');
-            
-            console.log("Loading application ctrl..."); 
-            $scope.application = {};            
-            
-            
-            $scope.validCharacterName = false;
-            $scope.charRequirementsIncomplete = false;
-            $scope.charRealmError = false;
-            $scope.searchingForUser = false;
-            $scope.icon = "error";
-            
-                
-            $scope.init = function(){
-                
-                realmServices.getRealms()
-                    .then(function (realms) {
-
-                        $scope.realms = realms;
-                    })
-                    .then(function(){
-                        return $scope.loggedIn()
-                    })
-                    .catch(function (err) {
-
-                        console.log(err);
-                    })
-                    .finally(function () {
-                        $timeout(function(){
-                            siteServices.hideLoadingModal();    
-                        }, 500)
-                        
-                    })  
-                    
-            }
-            
-            $scope.filterSearch = function(filterSearch){
-                
-                return $filter('filter')($scope.realms, filterSearch);
-            }
-            
-            $scope.loggedIn = function () {
-                
-                userLoginSrvc.getUser().then(function (user) {
-                    
-                    //Success, let them fill out the form.
-                })
-                .catch(function(err){
-                    
-                    siteServices.showMessageModal("Please log in before attempting to apply.")
-                    $location.path('/')   
-                })
-                .finally(function(){
-                    
-                })
-            }
-            
-
-            $scope.validateCharactername = function (callback) {
-
-                if ($scope.application.realm) {
-                    $scope.validCharacterName = false; //Immediately invalidate until response comes back
-                    $scope.searchingForUser = true;
-
-                    guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
-                        .then(function (character) {
-
-                            
-                            $scope.validCharacterName = true;
-                            $scope.icon = "check_circle";
-                            $scope.application.character = character;
-                            
-                            if(callback){
-                                callback();
-                            }
-                        },
-                            function (err) {
-                                $scope.icon = "error";
-                                siteServices.showMessageToast(err);
-                                $scope.validCharacterName = false;
-                            })
-                        .finally(function () {
-                            $scope.searchingForUser = false;
-                        })
-
-                }
-                else{
-                    $scope.validCharacterName = false;
-                    if (callback) {
-                        callback();
-                    }
-                }
-            }
-            
-            
-            $scope.submitApplication = function(){
-                
-                $scope.validateCharactername(function () {
-                        
-                        if ($scope.validCharacterName == false) {
-
-                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                        }
-                        else {
-                            
-                            guildServices.submitApplication($scope.application)
-                                .then(function (result) {
-
-                                    $location.path('/reviewApplications');
-                                },
-                                    function (err) {
-
-                                        siteServices.showMessageToast(err);
-                                    })
-                        }
-                    })
-            }
-            
-            
-            $scope.init();
-  
-            
-    }])
-
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.controllers")
-    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
-        function($scope, $location, $http, $timeout, guildServices, siteServices){
-            
-            siteServices.updateTitle('View Applications');    
-            
-          
-            
-             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
-            
-            $scope.loading = true;
-            
-            $scope.openComments = function (comments) {
-                
-                siteServices.showMessageModal(comments, "Comments");
-            } 
-            
-            $scope.goTo = function(url){
-                
-                var win = window.open(url, '_blank');
-                win.focus();
-            }
-            //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
-            
-            $scope.buildArmoryUrl = function (realm, character) {
-                var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
-                
-                $scope.goTo(url);
-            }
-            
-            guildServices.getApplications() 
-                .then(function(applications){
-                    $scope.loading = false;
-                    $scope.applications = applications.applications; //object to array
-                    console.log($scope.applications);
-                    
-                    convertClasses();
-                },
-                function(err){
-                    
-                    $scope.loading = false;
-                    console.log(err);
-                    siteServices.showMessageToast("Seems something broke. Try again in a few...");
-                })
-                
-            function convertClasses(){
-                
-                for(var i = 0; i < $scope.applications.length; i++){
-                    
-                    var classType = classes[$scope.applications[i].character.class];
-                    $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
-                    
-                }
-            }
-
-    }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.controllers")
-    .controller("createGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-          
-            
-            siteServices.updateTitle('Create Guild');
-            
-            $scope.guildName = "";
-            $scope.loading = false;
-            
-            $scope.joinGuild = function(){
-                $scope.loading = true;
-                guildServices.createGuild($scope.guildName)
-                    .then(function(){
-                        
-                        var user = userLoginSrvc.updateUser();
-                        
-                        siteServices.showMessageModal("Successfully created " + user.guild.name);
-                        
-                        $location.path('/');           
-                    })
-                    .catch(function(err){
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function(){
-                        $scope.loading = false;
-                    })
-            }
-    }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.controllers")
-    .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-
-
-            $scope.listOfGuilds = [];
-            $scope.loading = false;
-
-
-            siteServices.updateTitle('Join Guild');
-
-            $scope.init = function () {
-
-
-
-                $scope.getGuilds();
-
-            }
-
-            $scope.filterSearch = function (filterSearch) {
-
-                return $filter('filter')($scope.listOfGuilds, filterSearch);
-            }
-
-            $scope.getGuilds = function () {
-
-                guildServices.getListOfGuilds()
-                    .then(function (guilds) {
-
-                        $scope.listOfGuilds = guilds;
-                    })
-            }
-
-            $scope.joinGuild = function () {
-
-                $scope.loading = true;
-
-                if ($scope.guildName) {
-
-                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
-                        .then(function (guild) {
-
-                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                            
-                            userLoginSrvc.updateUser($scope.user);
-
-                            $location.path('/');
-
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else{
-                    siteServices.showMessageToast("Guild doesn't exist");
-                    $scope.loading = false;
-                }
-            }
-
-            $scope.init();
-        }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.controllers")
-    .controller("manageMembersController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-            
-            //user comes from parent controller navbar
-            
-            $scope.guildMembers;
-            $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
-
-            $scope.init = function () {
-
-                if($scope.user.name != ""){
-                    
-                    guildServices.getGuildMembers($scope.user.guild.name)
-                        .then(function (guildMembers) {
-                            $scope.guildMembers = guildMembers
-                        })
-                }
-                else{
-                    userLoginSrvc.getUser()
-                        .then(function(user){
-                            
-                            guildServices.getGuildMembers(user.guild.name)
-                                .then(function (guildMembers) {
-                                    $scope.guildMembers = guildMembers
-                                })
-                        })
-                }
-
-            }
-
-            $scope.promote = function (user) {
-
-                if (user.rank == 3) {
-                    siteServices.showMessageModal("Can't promote any further");
-                }
-                else {
-                    user.rank++
-
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                }
-
-
-            }
-
-            $scope.demote = function (user) {
-                if (user.rank == 1) {
-                    siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
-                }
-                else {
-                    user.rank--;
-
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                }
-            }
-            
-          
-            $scope.init();
-            siteServices.updateTitle('Manage Members');
         }])
 
 'use strict'

@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices',
-        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices){
+    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices, $timeout){
         
         var originatorEv;
         var bossCollectionWowProgressUrl = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/json_rank";
@@ -12,13 +12,13 @@ angular.module("BossCollection.controllers")
         $scope.user.name = "";
         $scope.loggedIn = false;
         $scope.title = "";
-        
+        $scope.showContentBool = false;
         
         $scope.init = function(){
             
            getUser();
-        }
-        
+        } 
+         
         $scope.showLoginBottomSheet = function($event){
             
             siteServices.showLoadingBottomSheet($event);
@@ -29,9 +29,29 @@ angular.module("BossCollection.controllers")
             $mdOpenMenu(ev);
         };
         
+        $scope.hideContent = function(){
+            $scope.showContentBool = false;
+        }
+        
+        $scope.showContent = function () {
+            
+            $timeout(function () {
+
+                $scope.showContentBool = true;
+            }, 100)
+        }  
+         
         $scope.goTo = function(path){
-            $location.url(path);
-            $scope.toggle();
+            $scope.closeSideBar('left');
+            $scope.hideContent();
+            
+            $timeout(function(){
+                $location.url(path);
+                
+                $scope.showContent();
+            }, 200)
+            
+            
         }
         
         $scope.goToExternal = function (path) {
@@ -101,6 +121,7 @@ angular.module("BossCollection.controllers")
                     if(user){
                         $scope.user = user;
                         $scope.loggedIn = true;
+                        $scope.showContent();
                     }
                 },
                 function(err){

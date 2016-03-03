@@ -4,7 +4,7 @@
  *
 
  */
-angular.module("BossCollection.controllers")
+angular.module("BossCollection.guild")
     .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
         function($scope, $location, $http, $timeout, guildServices, siteServices){
             

@@ -134,6 +134,10 @@ gulp.task('concatSass', function () {
         './app/public/components/**/*.scss'
     ])
         .pipe(concat('compiled.scss'))
+        .on('error', function(err){
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest('./app/public/css/'));
 })
 
@@ -144,6 +148,10 @@ gulp.task('css', function () {
         
     ])
         .pipe(sass())
+        .on('error', function(err){
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest('./app/public/tmp/'));
 })
 

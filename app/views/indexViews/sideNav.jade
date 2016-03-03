@@ -12,7 +12,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     h1(ng-click = "goTo('/auth/updateAccount')").md-toolbar-tools
                         | {{user.name}}
     md-content(role = "navigation").md-primary
-        md-list.md-primary            
+        md-list.md-primary(ng-if = "loggedIn")            
             md-menu-item()
                 md-button(ng-click = "goTo('/auth/application')")
                     md-icon(md-font-library="material-icons") send
@@ -22,14 +22,23 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                 md-button(ng-click = "goTo('/forum')")
                     md-icon(md-font-library="material-icons") today
                     | Forums
-            md-divider
-            md-subheader().md-no-sticky
-                include externalMenu
-            md-divider
-            md-subheader(ng-if = "user.rank", ng-show = "loggedIn").md-no-sticky
-                include raidMenu
-            md-divider
+            md-divider(ng-if = "!user.guild || user.rank > 2")            
             include guildManagement
+            md-divider
+            include raidMenu            
+            md-divider
+            include externalMenu
+        md-list.md-primary(ng-if = "!loggedIn")
+            md-menu-item()
+                md-button(ng-click = "showLoginBottomSheet($event)")
+                    md-icon(md-font-library="material-icons") account_circle
+                    | Log In
+            md-divider
+            md-menu-item()
+                md-button(ng-click = "goTo('auth/signup')")
+                    md-icon(md-font-library="material-icons") account_circle
+                    | Register
+            
             
                 
     
