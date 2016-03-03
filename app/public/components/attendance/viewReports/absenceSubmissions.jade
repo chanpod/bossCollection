@@ -1,5 +1,6 @@
-script#absenceSubmissions(type="text/ng-template")
-    md-content
+script#absenceSubmissions(type="text/ng-template")   
+    
+    md-content(ng-class = "ctrl.showContentBool ? 'contentAnimationShow': 'contentAnimationHidden'").contentAnimationHidden
         section(layout="column")
             div(flex) 
                 div(layout)

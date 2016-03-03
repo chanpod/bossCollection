@@ -9,6 +9,7 @@ angular.module('BossCollection', [
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',
+  'BossCollection.guildApplications',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -49,26 +50,7 @@ angular.module('BossCollection', [
         templateUrl: 'editAccount',
         controller: 'editAccountController' 
     })
-    .when('/auth/application', {
-        templateUrl: 'application',
-        controller: 'applicationController'
-    })
-    .when('/reviewApplications', {
-        templateUrl: 'reviewApplications',
-        controller: 'applicationsReviewController'
-    })
-    .when('/createGuild', {
-        templateUrl: 'createGuild',
-        controller: 'createGuildController'
-    })
-    .when('/joinGuild', {
-        templateUrl: 'joinGuild',
-        controller: 'joinGuildController'
-    })
-    .when('/manageMembers', {
-        templateUrl: 'manageMembers',
-        controller: 'manageMembersController'
-    })
+
     .otherwise({
       redirectTo: '/'
     });
@@ -129,7 +111,34 @@ angular.module("BossCollection.forums", ['ngRoute'])
         })
 
     }]);
+'user strict'
 
+angular.module("BossCollection.guildApplications", ['ngRoute'])
+    .config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider
+            .when('/auth/application', {
+                templateUrl: 'application',
+                controller: 'applicationController'
+            })
+            .when('/reviewApplications', {
+                templateUrl: 'reviewApplications',
+                controller: 'applicationsReviewController'
+            })
+            .when('/createGuild', {
+                templateUrl: 'createGuild',
+                controller: 'createGuildController'
+            })
+            .when('/joinGuild', {
+                templateUrl: 'joinGuild',
+                controller: 'joinGuildController'
+            })
+            .when('/manageMembers', {
+                templateUrl: 'manageMembers',
+                controller: 'manageMembersController'
+            })
+
+    }]);
 angular.module("BossCollection.attendance")
     .controller('absenceModalController', [
         '$scope', 'absenceService', '$mdDialog', 'data',
@@ -630,14 +639,14 @@ angular.module("BossCollection.forums")
         }]);
 angular.module("BossCollection.forums")
     .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout) {
 
             console.log("Forum Controller loaded");
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
             $scope.loading = false;
-            
+            $scope.showContentBool = false;
             
             for (var i = 0; i < 5; i++) {
                 $scope.testListCount.push(i);
@@ -666,6 +675,7 @@ angular.module("BossCollection.forums")
                         
                         $scope.loading = false;  
                         $scope.forums = forums;
+                        $scope.showContent();
                         
                     })
                     .catch(function(err){
@@ -695,7 +705,15 @@ angular.module("BossCollection.forums")
                         //siteServices.showMessageModal(err);
                     })
             }
-
+            
+            $scope.showContent = function () {
+                $timeout(function(){
+                    
+                    $scope.showContentBool = true;    
+                }, 100)
+                
+            }
+            
             $scope.editCategory = function (category) {
 
                 //$scope.category = category;
@@ -1335,6 +1353,7 @@ angular.module("BossCollection.attendance")
         $scope.absenceHighchartData = [];
         $scope.absenceHighchartDrillDownSeries = [];
         
+        $scope.showContentBool = false;
         $scope.late = 1;
         $scope.absent = 6;
         $scope.weeksCounted = 4;
@@ -1345,6 +1364,15 @@ angular.module("BossCollection.attendance")
             
             $scope.getAbsences();
             $scope.buildHighChart();
+            self.showContent();
+        }
+        
+        self.showContent = function(){
+           $scope.showContentBool = true;
+           var element = $('#statsContainer');
+           element.removeClass('contentAnimationHidden')
+           element.toggleClass('contentAnimationShow')
+           
         }
            
         $scope.getAbsences = function () {
@@ -1361,6 +1389,7 @@ angular.module("BossCollection.attendance")
                 $scope.loading = false;
                 $scope.absences = result.absences;
                 $scope.calculateAttendance();
+                self.showContent();
             },
                 function (err) {
                     siteServices.showMessageModal(err.message)
@@ -1528,6 +1557,7 @@ angular.module("BossCollection.attendance")
         
         var self = this;
         
+        self.showContentBool = false;
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
@@ -1543,11 +1573,15 @@ angular.module("BossCollection.attendance")
             direction: "right"
         }
         
+        self.showContent = function(){
+           self.showContentBool = true;
+       }
+        
         $scope.currentlySelected = "Today";
         $scope.isToolSetOpen = false;
         
         
-            
+             
                 
         $scope.init = function(){
             
@@ -1555,6 +1589,7 @@ angular.module("BossCollection.attendance")
             
             if($scope.user.rank < 3){
                 self.selectedUser = $scope.user;
+                self.showContent();  
             }
             else{
                 $scope.getGuildUsers();    
@@ -1569,7 +1604,8 @@ angular.module("BossCollection.attendance")
             guildServices.getGuildMembers($scope.user.guild.name)
                 .then(function(users){
                     
-                    $scope.users = users;  
+                    $scope.users = users;
+                    self.showContent();  
                 })
                 .finally(function(){
                     
@@ -1696,6 +1732,7 @@ angular.module("BossCollection.attendance")
         var currentDay = moment().day();
         var self = this;
         
+        self.showContentBool = false;
         self.newAbsence = {};
         self.absences = {};
         self.loading = false;
@@ -1730,6 +1767,10 @@ angular.module("BossCollection.attendance")
 
            siteServices.updateTitle(TITLE);   
            
+       }
+       
+       self.showContent = function(){
+           self.showContentBool = true;
        }
         
        self.updateList = function(){
@@ -1777,8 +1818,9 @@ angular.module("BossCollection.attendance")
             
             absenceService.getAbsences().then(function(result){
                 
-                self.loading = false;
-                self.absences = result.absences; 
+                self.loading = false;                
+                self.absences = result.absences;
+                self.showContent(); 
             }, 
             function(err){
                 
@@ -1879,8 +1921,8 @@ angular.module("BossCollection.attendance")
 
 angular.module("BossCollection.forums")
     .controller('threadController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
 
             console.log("Thread Controller Loaded");
 
@@ -1898,12 +1940,19 @@ angular.module("BossCollection.forums")
             $scope.getItemAtIndex = function(index){
                 return $scope.threads[index];
             }
-
-            $scope.init = function(){
+            
+            $scope.showContent = function () {
+                $timeout(function(){
+                    
+                    $scope.showContentBool = true;    
+                }, 50)
+                 
+            }    
+             
+            $scope.init = function(){  
 
                 $scope.loading = true;
                 $scope.savedThreads = forumService.getThreadCountsLocal();
-                
                 
                 
                 $scope.forum = forumService.getCurrentForum()
@@ -1967,7 +2016,7 @@ angular.module("BossCollection.forums")
                         }
                         
                         sortThreads();
-
+                        $scope.showContent();
                     })
                     .catch(function(err){
 
@@ -3337,21 +3386,24 @@ angular.module('BossCollection.directives', [])
 /* Directives */
 
 angular.module('BossCollection.directives').
-  directive('ad', [function () {
+  directive('ad', ['$timeout', function ($timeout) {
         return {
             restrict: 'E',
             template: '<ins class="adsbygoogle"style="display:block;overflow:hidden;"data-ad-client="ca-pub-4895481554192451"data-ad-slot="1814022675"data-ad-format="auto">',
  
             link: function (scope, elm, attrs) {
+                
+                $timeout(function () {
+                    try {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    }
+                    catch (err) {
+                        console.log("Add code broke");
+                        console.log(err);
 
-                try {
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                }
-                catch (err) {
-                    console.log("Add code broke");
-                    console.log(err);
-                    
-                }  
+                    }
+                }, 2000)
+                  
             }
         }  
   }]); 

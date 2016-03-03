@@ -12,6 +12,7 @@ angular.module("BossCollection.attendance")
         $scope.absenceHighchartData = [];
         $scope.absenceHighchartDrillDownSeries = [];
         
+        $scope.showContentBool = false;
         $scope.late = 1;
         $scope.absent = 6;
         $scope.weeksCounted = 4;
@@ -22,6 +23,15 @@ angular.module("BossCollection.attendance")
             
             $scope.getAbsences();
             $scope.buildHighChart();
+            self.showContent();
+        }
+        
+        self.showContent = function(){
+           $scope.showContentBool = true;
+           var element = $('#statsContainer');
+           element.removeClass('contentAnimationHidden')
+           element.toggleClass('contentAnimationShow')
+           
         }
            
         $scope.getAbsences = function () {
@@ -38,6 +48,7 @@ angular.module("BossCollection.attendance")
                 $scope.loading = false;
                 $scope.absences = result.absences;
                 $scope.calculateAttendance();
+                self.showContent();
             },
                 function (err) {
                     siteServices.showMessageModal(err.message)

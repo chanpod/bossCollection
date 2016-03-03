@@ -9,6 +9,7 @@ angular.module("BossCollection.attendance")
         var currentDay = moment().day();
         var self = this;
         
+        self.showContentBool = false;
         self.newAbsence = {};
         self.absences = {};
         self.loading = false;
@@ -43,6 +44,10 @@ angular.module("BossCollection.attendance")
 
            siteServices.updateTitle(TITLE);   
            
+       }
+       
+       self.showContent = function(){
+           self.showContentBool = true;
        }
         
        self.updateList = function(){
@@ -90,8 +95,9 @@ angular.module("BossCollection.attendance")
             
             absenceService.getAbsences().then(function(result){
                 
-                self.loading = false;
-                self.absences = result.absences; 
+                self.loading = false;                
+                self.absences = result.absences;
+                self.showContent(); 
             }, 
             function(err){
                 

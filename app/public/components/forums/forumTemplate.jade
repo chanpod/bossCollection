@@ -1,5 +1,6 @@
-script#forum(type="text/ng-template")    
-    md-content(layout = "column", flex, layout-fill)
+script#forum(type="text/ng-template")
+    
+    md-content(layout = "column", flex, layout-fill, ng-class = "showContentBool ? 'contentAnimationShow': 'contentAnimationHidden'").contentAnimationHidden    
         div()
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             div(ng-repeat = "category in forums.categories")            

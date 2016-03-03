@@ -9,6 +9,7 @@ angular.module('BossCollection', [
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',
+  'BossCollection.guildApplications',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -49,26 +50,7 @@ angular.module('BossCollection', [
         templateUrl: 'editAccount',
         controller: 'editAccountController' 
     })
-    .when('/auth/application', {
-        templateUrl: 'application',
-        controller: 'applicationController'
-    })
-    .when('/reviewApplications', {
-        templateUrl: 'reviewApplications',
-        controller: 'applicationsReviewController'
-    })
-    .when('/createGuild', {
-        templateUrl: 'createGuild',
-        controller: 'createGuildController'
-    })
-    .when('/joinGuild', {
-        templateUrl: 'joinGuild',
-        controller: 'joinGuildController'
-    })
-    .when('/manageMembers', {
-        templateUrl: 'manageMembers',
-        controller: 'manageMembersController'
-    })
+
     .otherwise({
       redirectTo: '/'
     });

@@ -1,7 +1,7 @@
 angular.module("BossCollection.forums")
     .controller('threadController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
 
             console.log("Thread Controller Loaded");
 
@@ -19,12 +19,19 @@ angular.module("BossCollection.forums")
             $scope.getItemAtIndex = function(index){
                 return $scope.threads[index];
             }
-
-            $scope.init = function(){
+            
+            $scope.showContent = function () {
+                $timeout(function(){
+                    
+                    $scope.showContentBool = true;    
+                }, 50)
+                 
+            }    
+             
+            $scope.init = function(){  
 
                 $scope.loading = true;
                 $scope.savedThreads = forumService.getThreadCountsLocal();
-                
                 
                 
                 $scope.forum = forumService.getCurrentForum()
@@ -88,7 +95,7 @@ angular.module("BossCollection.forums")
                         }
                         
                         sortThreads();
-
+                        $scope.showContent();
                     })
                     .catch(function(err){
 

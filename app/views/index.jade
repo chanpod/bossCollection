@@ -9,12 +9,32 @@ block body
                 div().md-toolbar-tools
                     md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
                         i(class = "material-icons") menu
-                    div(flex = "70")
+                    div(flex)
                         h2
                             | {{title}}
                     span(flex)
-                        a(href = "https://github.com/chanpod/bossCollection", target = "_blank")    
-                            span(flex, class="mega-octicon octicon-mark-github")
+                        md-menu
+                            md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
+                                i(class="material-icons").iconHeightAdjust account_circle
+                            md-menu-content(width = "4")
+                                md-menu-item(ng-show = "loggedIn")
+                                    md-button(ng-click = "goTo('/auth/updateAccount')")
+                                        md-icon(md-font-library="material-icons") mode_edit
+                                        | Update
+                                md-menu-item(ng-show = "loggedIn")
+                                    md-button(ng-click = "logout()")
+                                        md-icon(md-font-library="material-icons") exit_to_app
+                                        | Logout
+                                md-menu-item(ng-show = "!loggedIn")
+                                    md-button(ng-click = "showLoginBottomSheet($event)")
+                                        | Log In
+                                    //md-button(ng-click = "goTo('auth/login')")
+                                        | Log In
+                                md-menu-item(ng-show = "!loggedIn")
+                                    md-button(ng-click = "goTo('auth/signup')")
+                                        | Register
+                   
+                            
                     
             
             md-content(layout, flex)

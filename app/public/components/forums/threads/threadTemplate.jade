@@ -1,5 +1,5 @@
 script#thread(type="text/ng-template")    
-    md-content(flex)
+    md-content(flex, ng-class = "showContentBool ? 'contentAnimationShow': 'contentAnimationHidden'").contentAnimationHidden
         md-toolbar(flex).md-scroll-shrink
                 div().md-toolbar-tools
                     md-button(ng-click = "goBack()").md-icon-button

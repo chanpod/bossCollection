@@ -1,13 +1,13 @@
 angular.module("BossCollection.forums")
     .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout) {
 
             console.log("Forum Controller loaded");
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
             $scope.loading = false;
-            
+            $scope.showContentBool = false;
             
             for (var i = 0; i < 5; i++) {
                 $scope.testListCount.push(i);
@@ -36,6 +36,7 @@ angular.module("BossCollection.forums")
                         
                         $scope.loading = false;  
                         $scope.forums = forums;
+                        $scope.showContent();
                         
                     })
                     .catch(function(err){
@@ -65,7 +66,15 @@ angular.module("BossCollection.forums")
                         //siteServices.showMessageModal(err);
                     })
             }
-
+            
+            $scope.showContent = function () {
+                $timeout(function(){
+                    
+                    $scope.showContentBool = true;    
+                }, 100)
+                
+            }
+            
             $scope.editCategory = function (category) {
 
                 //$scope.category = category;

@@ -1,5 +1,5 @@
 script#absence(type="text/ng-template")    
-    md-content.autoScroll
+    md-content(ng-class = "ctrl.showContentBool ? 'contentAnimationShow': 'contentAnimationHidden'").contentAnimationHidden
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
                 div(layout-gt-xs="row")

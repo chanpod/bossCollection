@@ -10,6 +10,7 @@ angular.module("BossCollection.attendance")
         
         var self = this;
         
+        self.showContentBool = false;
         $scope.newAbsence = {};
         $scope.absences = {};
         $scope.loading = false;
@@ -25,11 +26,15 @@ angular.module("BossCollection.attendance")
             direction: "right"
         }
         
+        self.showContent = function(){
+           self.showContentBool = true;
+       }
+        
         $scope.currentlySelected = "Today";
         $scope.isToolSetOpen = false;
         
         
-            
+             
                 
         $scope.init = function(){
             
@@ -37,6 +42,7 @@ angular.module("BossCollection.attendance")
             
             if($scope.user.rank < 3){
                 self.selectedUser = $scope.user;
+                self.showContent();  
             }
             else{
                 $scope.getGuildUsers();    
@@ -51,7 +57,8 @@ angular.module("BossCollection.attendance")
             guildServices.getGuildMembers($scope.user.guild.name)
                 .then(function(users){
                     
-                    $scope.users = users;  
+                    $scope.users = users;
+                    self.showContent();  
                 })
                 .finally(function(){
                     
