@@ -13,7 +13,8 @@ var applicationSchema = new Schema({
     role: String,
     comments: String,
     desiredRole: String,
-    dateApplied: Date   
+    dateApplied: Date,
+    guild: String
 })
 
 module.exports = mongoose.model('applications', applicationSchema);

@@ -2186,6 +2186,9 @@ angular.module("BossCollection.guild")
                         $scope.realms = realms;
                     })
                     .then(function(){
+                        return $scope.getGuilds()
+                    })
+                    .then(function(){
                         return $scope.loggedIn()
                     })
                     .catch(function (err) {
@@ -2199,6 +2202,19 @@ angular.module("BossCollection.guild")
                         
                     })  
                     
+            }
+            
+            $scope.getGuilds = function () {
+
+                return guildServices.getListOfGuilds()
+                    .then(function (guilds) {
+
+                        $scope.listOfGuilds = guilds;
+                    })
+            }
+            
+            $scope.filterGuildsSearch = function(filterSearch){
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
             }
             
             $scope.filterSearch = function(filterSearch){
@@ -2268,17 +2284,28 @@ angular.module("BossCollection.guild")
 
                             siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
                         }
-                        else {
+                        else if($scope.guildSelected != undefined) {
                             
+                            $scope.application.guildName = $scope.guildSelected.name;
                             guildServices.submitApplication($scope.application)
                                 .then(function (result) {
-
-                                    $location.path('/reviewApplications');
+                                    
+                                    if($scope.user.guild != undefined){
+                                        $location.path('/reviewApplications');    
+                                    }
+                                    else{
+                                        siteServices.showMessageModal("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion.");
+                                        $location.path('/');
+                                    }
+                                    
                                 },
                                     function (err) {
 
                                         siteServices.showMessageToast(err);
                                     })
+                        }
+                        else{
+                            siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
                         }
                     })
             }
@@ -2337,7 +2364,7 @@ angular.module("BossCollection.guild")
                     
                     $scope.loading = false;
                     console.log(err);
-                    siteServices.showMessageToast("Seems something broke. Try again in a few...");
+                    siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
                 })
                 
             function convertClasses(){
@@ -2863,11 +2890,16 @@ angular.module("BossCollection.controllers")
 
                 var guildName = $scope.user.guild.name;
 
-                guildServices.leaveGuild(guildName)
-                    .then(function (user) {
+                siteServices.confirmDelete()
+                    .then(function (result) {
+                        guildServices.leaveGuild(guildName)
+                            .then(function (user) {
 
-                        $scope.user = userLoginSrvc.updateUser();
+                                $scope.user = userLoginSrvc.updateUser();
+                            })
                     })
+                
+                 
             }
 
             $scope.updateAccount = function () {

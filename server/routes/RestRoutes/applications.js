@@ -13,7 +13,7 @@ router.route('/applicationSubmission')
     newApplication.user = req.session.user.name;    
     newApplication.battleTag = req.session.user.battleTag;
     newApplication.dateApplied = dateApplied;
-    
+    newApplication.guild = req.body.newApplicant.guildName
     newApplication.save().then(function(result){
         
         res.status(200).send(result);
@@ -28,7 +28,7 @@ router.route('/applicationSubmission')
 router.route('/getApplications')
     .get(function(req, res){
         console.log("Getting applications...");
-        ApplicationModel.find({})
+        ApplicationModel.find({guild: req.session.user.guild.name})
             .then(function(applications){
                 
                 res.status(200).send({"applications" : applications});

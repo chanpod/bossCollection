@@ -2,6 +2,16 @@ script#application(type="text/ng-template")
     md-content
         section(layout="column", flex = "80")
             form(name = "editAccountForm", ng-submit = "submitApplication()")
+                div(layout)
+                    md-autocomplete(md-min-length = "0",
+                                md-item-text = "guild.name",
+                                md-selected-item = "guildSelected",                                    
+                                md-search-text = "guild",
+                                md-floating-label = "Select Guild",
+                                md-items = "guild in filterGuildsSearch(guild)",
+                                flex)
+                        md-item-template
+                            span(md-highlight-text = "guild"){{guild.name}}
                 div(layout, layout-xs="column")
                     div(ng-show = "searchingForUser")
                         md-progress-linear (md-mode="indeterminate")
@@ -11,7 +21,7 @@ script#application(type="text/ng-template")
                         input(id = "characterNameInput", ng-model = "application.characterName", 
                             ng-blur = "validateCharactername()", required)
                         
-                    md-autocomplete(md-min-length = "0",
+                    md-autocomplete(md-min-length = "1",
                                     md-item-text = "realm.name",
                                     md-selected-item = "application.realm",
                                     md-selected-item-change="validateCharactername()"

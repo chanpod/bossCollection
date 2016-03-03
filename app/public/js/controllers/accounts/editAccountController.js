@@ -12,11 +12,16 @@ angular.module("BossCollection.controllers")
 
                 var guildName = $scope.user.guild.name;
 
-                guildServices.leaveGuild(guildName)
-                    .then(function (user) {
+                siteServices.confirmDelete()
+                    .then(function (result) {
+                        guildServices.leaveGuild(guildName)
+                            .then(function (user) {
 
-                        $scope.user = userLoginSrvc.updateUser();
+                                $scope.user = userLoginSrvc.updateUser();
+                            })
                     })
+                
+                 
             }
 
             $scope.updateAccount = function () {
