@@ -26,7 +26,7 @@ angular.module("BossCollection.controllers")
 
             $scope.updateAccount = function () {
 
-                console.log("Updating account");
+                
                 userLoginSrvc.updateAccount($scope.user).then(function (response) {
 
                     $scope.user = userLoginSrvc.updateUser();

@@ -16,7 +16,7 @@ angular.module("BossCollection.controllers")
 
                 userLoginSrvc.registerNewUser($scope.user).then(function (result) {
                     //save user to cookie
-                    console.log(result);
+                    
                 },
                     function (err) {
                         $scope.passwordsMatch = true;

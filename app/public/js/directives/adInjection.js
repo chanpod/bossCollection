@@ -14,8 +14,8 @@ angular.module('BossCollection.directives').
                         (adsbygoogle = window.adsbygoogle || []).push({});
                     }
                     catch (err) {
-                        console.log("Add code broke");
-                        console.log(err);
+                        
+                        //console.log(err);
 
                     }
                 }, 2000)

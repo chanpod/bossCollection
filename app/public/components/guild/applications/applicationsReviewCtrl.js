@@ -38,7 +38,7 @@ angular.module("BossCollection.guild")
                 .then(function(applications){
                     $scope.loading = false;
                     $scope.applications = applications.applications; //object to array
-                    console.log($scope.applications);
+                    
                     
                     convertClasses();
                 },

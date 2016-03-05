@@ -57,8 +57,7 @@ angular.module("BossCollection.controllers")
                
 
                 $scope.saveNewBossInfo = function(name, url, boss, difficulty){
-                    
-                    console.log(boss);
+
                      
                     if (verifyYoutubeURL(url)) {
                         
@@ -84,7 +83,6 @@ angular.module("BossCollection.controllers")
                         
                         $scope.raidData.bosses = $scope.raidToDisplay;
                         
-                        console.log($scope.raidData);
 
                         bossStrats.saveStrats($scope.raidData, url);                        
                         $scope.addNewBoss = false;

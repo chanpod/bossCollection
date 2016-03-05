@@ -14,7 +14,7 @@ angular.module("BossCollection.controllers")
             siteServices.updateTitle('Login');    
         }
         
-        console.log("Login Controller");
+        
         
         $scope.init = function () {
         }
@@ -68,7 +68,7 @@ angular.module("BossCollection.controllers")
             userLoginSrvc.login($scope.user).then(function(response){
                 
                 //navigate to some page
-                console.log(response);
+                
                 userLoginSrvc.getUser()
                     .then(function () {
 

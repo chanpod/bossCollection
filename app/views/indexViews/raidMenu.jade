@@ -4,7 +4,6 @@ md-menu(ng-if = "user.guild && user.rank > 1", ng-click = "openMenu($mdOpenMenu,
         | Guild
         i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")
-        
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/auth/absence')")
                 md-icon(md-font-library="material-icons") today

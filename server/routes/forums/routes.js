@@ -146,6 +146,19 @@ router.route('/editCategory')
 
 //=======Thread Routes ================
 
+router.route('/thread')
+    .post(function(req, res){
+        
+        ThreadManager.getThread(req.body.threadID)
+            .then(function(response){
+                
+                res.status(200).send(response);
+            })
+            .fail(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 router.route('/getThreads')
     .post(function (req, res) {
 

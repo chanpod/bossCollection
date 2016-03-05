@@ -8,7 +8,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                         | Bosscollection 
                         i() &nbsp beta
                         
-                md-list-item(ng-show = "loggedIn", ng-click = "alert('test')").md-1-line 
+                md-list-item(ng-show = "loggedIn").md-1-line 
                     h1(ng-click = "goTo('/auth/updateAccount')").md-toolbar-tools
                         | {{user.name}}
     md-content(role = "navigation").md-primary

@@ -3,7 +3,7 @@ angular.module("BossCollection.forums")
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout',
         function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout) {
 
-            console.log("Forum Controller loaded");
+            
             siteServices.updateTitle('Forums');
             $scope.testListCount = [];
             $scope.loading = false;
@@ -89,7 +89,7 @@ angular.module("BossCollection.forums")
                     .then(function(result){
                         
                         if(result){
-                            console.log("Deleting the category")
+                            
                             return forumService.deleteCategory(category);
                         }
                     })
@@ -153,7 +153,7 @@ angular.module("BossCollection.forums")
                     .then(function(result){
                         
                         if(result){
-                            console.log("Deleting the forum")
+                            
                             return forumService.deleteForum(forum);
                         }
                     })

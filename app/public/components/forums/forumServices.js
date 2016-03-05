@@ -5,23 +5,27 @@ angular.module("BossCollection.forums")
 
             var currentForum;
 
-            var categoryResource = $resource('/forum/createCategory', {}, {})
-            var categoryEditResource = $resource('/forum/editCategory', {}, {})
-            var categoryDeleteResource = $resource('/forum/deleteCategory', {}, {})
-            var getForumsResource = $resource('/forum/getCategories', {}, {});
-            var deleteForumsResource = $resource('/forum/deleteForum', {}, {});
-            var editForumResource = $resource('/forum/editForum', {}, {})
-            var createNewForumResource = $resource('/forum/createForum', {}, {});
-            var createNewThreadResource = $resource('/forum/createThread', {}, {});
-            var getThreadsResource = $resource('/forum/getThreads', {}, {});
-            var deleteThreadResource = $resource('/forum/deleteThread', {}, {});
+            var categoryResource = $resource('/forum/createCategory');
+            var categoryEditResource = $resource('/forum/editCategory');
+            var categoryDeleteResource = $resource('/forum/deleteCategory');
+            var getForumsResource = $resource('/forum/getCategories');
+            var deleteForumsResource = $resource('/forum/deleteForum');
+            var editForumResource = $resource('/forum/editForum');
+            var createNewForumResource = $resource('/forum/createForum');
+            var createNewThreadResource = $resource('/forum/createThread');
+            var getThreadsResource = $resource('/forum/getThreads');
+            var deleteThreadResource = $resource('/forum/deleteThread');
             var editThreadResource = $resource('/forum/editThread')
-            
+            var getThreadResource = $resource('/forum/thread');
             var createCommentResource = $resource('/forum/createComment', {}, {});
             var getCommentsResource = $resource('/forum/getComments', {}, {});
             var editCommentResource = $resource('/forum/editComment', {}, {});
             var deleteCommentResource = $resource('/forum/deleteComment', {}, {});
+            
+            
             var forums;
+            var currentForum;            
+            var thread;
             
             //==== Category Functions ==================
             
@@ -167,7 +171,7 @@ angular.module("BossCollection.forums")
 
                 return defer.promise; 
             }
-
+ 
             function createNewForum(forum) {
 
                 var defer = $q.defer();
@@ -317,7 +321,39 @@ angular.module("BossCollection.forums")
             }
             
             
+            function setSelectedThread(selectedThread){
+                thread = selectedThread;
+            }
             
+            function removeSelectedThread(){
+                thread = {};
+            }
+            
+            function getSelectedThread(threadID){
+                
+                var defer = $q.defer();
+                
+                if(thread == undefined){
+                    getThreadResource.save({threadID:threadID}).$promise
+                        .then(function(threadData){
+                            
+                            defer.resolve(threadData);
+                        })
+                        .catch(function (err) {
+
+                            defer.reject(err);
+                        })
+                        .finally(function () {
+
+                        })
+                }
+                else{
+                    
+                    defer.resolve(thread);
+                }
+                
+                return defer.promise;
+            }
             
             //==== Comment Functions ==================
             
@@ -487,7 +523,10 @@ angular.module("BossCollection.forums")
                 saveForumCounts:saveForumCounts,
                 getForumCountsLocal:getForumCountsLocal,
                 saveThreadCounts:saveThreadCounts,
-                getThreadCountsLocal:getThreadCountsLocal
+                getThreadCountsLocal:getThreadCountsLocal,
+                setSelectedThread:setSelectedThread,
+                removeSelectedThread:removeSelectedThread,
+                getSelectedThread:getSelectedThread
             }
         }]) 
         

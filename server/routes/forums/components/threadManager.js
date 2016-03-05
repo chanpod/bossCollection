@@ -91,6 +91,19 @@ function deleteThread(req, res){
     return defer.promise;
 }
 
+function getThread(threadID){
+    var defer = q.defer();
+    
+    
+    ThreadModel.find({_id: threadID})
+        .then(function(thread){
+            
+               defer.resolve({thread:thread});
+        })
+        
+    return defer.promise;
+}
+
 function getThreads(forumId){
     
     var defer = q.defer();
@@ -153,7 +166,9 @@ function editThread(req, res){
 module.exports = {
     createThread:createThread,
     getThreads:getThreads,
+    getThread:getThread,
     deleteThread:deleteThread,
     editThread:editThread,
     getThreadCount:getThreadCount
+    
 }

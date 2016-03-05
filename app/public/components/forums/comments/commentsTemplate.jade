@@ -1,20 +1,29 @@
 script#threadComments(type="text/ng-template")
-    md-dialog(layout = "column", md-dialog-fullscreen).md-list.md-has-header.commentsDialog
-        md-toolbar()
-            div(layout).md-toolbar-tools
-                {{object.title}}
-                span(flex)
-                md-button(ng-click = "cancel()").md-icon-button
-                    md-icon(md-font-library="material-icons", aria-label = "edit category") close
-        div().threadComments
+    md-content(layout = "column", aria-label = "threadComments")
+        md-toolbar(ng-if="true", md-scroll-shrink)
+            div().md-toolbar-tools
+                md-button(ng-click = "goBack()").md-icon-button
+                    md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
+                | Threads
+                span(flex, layout, layout-align = "center center")
+                    div(flex)     
+                        {{ctrl.thread.title}}           
+                md-button(ng-click = "openCommentBox()", aria-label = "reply", layout-align = "end center").md-icon-button
+                    md-icon(md-font-library="material-icons", aria-label = "edit category") reply
+                    md-tooltip() Reply
+                md-button(ng-click = "ctrl.getComments()").md-icon-button
+                    md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
+                    md-tooltip() Refresh Forum data
+        md-progress-linear(ng-if = "ctrl.loading", md-mode="indeterminate")
+        div()
             md-card
                 md-card-header
                     md-card-header-text
                         span().md-subhead
-                            | Author: {{object.user}}
+                            | Author: {{ctrl.thread.user}}
                 md-card-content
                     p
-                        display-markdown(markdown = "object.message") 
+                        display-markdown(markdown = "ctrl.thread.message") 
                     div(flex, layout = "row", layout-align = "end center")
                         //message buttons if needed
                         
@@ -29,7 +38,7 @@ script#threadComments(type="text/ng-template")
                                     md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
                                         | Cancel
                                 div(flex)
-                                    input-markdown(flex, input = "object.newComment")
+                                    input-markdown(flex, input = "ctrl.thread.newComment")
                                     
                                     
                     md-card(ng-if = "confirmDeleteBool")
@@ -49,7 +58,7 @@ script#threadComments(type="text/ng-template")
                         md-input-container().md-block.md-icon-float
                             label() Search
                             md-icon(md-font-library="material-icons") search
-                            input(type = "text", ng-model = "threadSearch")
+                            input(type = "text", ng-model = "ctrl.threadSearch")
                         div()
                             | Sort by date
                             md-button(ng-click = "orderByDateCreated()").md-icon-button
@@ -58,7 +67,7 @@ script#threadComments(type="text/ng-template")
                                 md-icon(md-font-library="material-icons") keyboard_arrow_down
 
                             
-                    md-card(ng-repeat = "comment in object.comments | filter:threadSearch | orderBy:orderBy").md-whiteframe-10dp
+                    md-card(ng-repeat = "comment in ctrl.thread.comments | filter: ctrl.threadSearch | orderBy:ctrl.orderBy").md-whiteframe-10dp
                         md-card-content
                         
                             div(layout = "column")
@@ -91,8 +100,7 @@ script#threadComments(type="text/ng-template")
                             
                         md-list-item(style = "height = 50px;")
         
-        md-button(ng-click = "openCommentBox()", ng-if = "!replying", aria-label = "reply", layout-align = "end center").md-fab.md-primary.reply
-            md-icon(md-font-library="material-icons", aria-label = "edit category") reply
+        
         
                                     
                                 

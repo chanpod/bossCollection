@@ -3,11 +3,11 @@ angular.module("BossCollection.forums")
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
         function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
 
-            console.log("Thread Controller Loaded");
+            
 
             $scope.forum = {};
             $scope.loading = false;
-            $scope.orderBy = "dateCreated";
+            $scope.orderBy = "-dateCreated";
             $scope.masterThread = []
             
             
@@ -27,7 +27,7 @@ angular.module("BossCollection.forums")
                 $scope.savedThreads = forumService.getThreadCountsLocal();
                 
                 
-                $scope.forum = forumService.getCurrentForum()
+                forumService.getCurrentForum()
                     .then(function(forum){
                         $scope.forum = forum;
                     })
@@ -104,12 +104,7 @@ angular.module("BossCollection.forums")
                 height: ($window.innerHeight - 312) + 'px'
             };
 
-            $window.addEventListener('resize', onResize);
-
-            function onResize() {
-                self.listStyle.height = ($window.innerHeight - 312) + 'px';
-                if (!$scope.$root.$$phase) $scope.$digest();
-            }
+           
 
             $scope.refresh = function(){
 
@@ -135,7 +130,7 @@ angular.module("BossCollection.forums")
                     .then(function(result){
 
                         if(result){
-                            console.log("Deleting the category")
+                            
                             return forumService.deleteThread(thread);
                         }
                     })
@@ -178,18 +173,8 @@ angular.module("BossCollection.forums")
 
             $scope.openThread = function(thread){
                 
-                
-                
-                forumService.getComments(thread._id)
-                    .then(function(comments){
-
-                        thread.comments = comments.comments;
-                        $scope.updateThreadViewed(thread);
-                        forumService.openBottomSheet('threadComments', thread);
-
-                    })
-
-
+                forumService.setSelectedThread(thread);
+                $scope.goTo('/thread/' + thread._id);
             }
 
             $scope.createThread = function () {

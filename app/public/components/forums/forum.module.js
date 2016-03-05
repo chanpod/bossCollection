@@ -12,5 +12,9 @@ angular.module("BossCollection.forums", ['ngRoute'])
             templateUrl: 'thread',
             controller: 'threadController'
         })
+        .when('/thread/:threadID',{
+            templateUrl: 'threadComments',
+            controller: 'commentsController as ctrl'
+        })
 
     }]);

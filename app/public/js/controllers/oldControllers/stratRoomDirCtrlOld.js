@@ -55,7 +55,7 @@ angular.module("BossCollection.controllers")
 
                 $scope.saveNewBossInfo = function(name, url, boss, difficulty){
                     
-                    console.log(boss);
+                  
                      
                     if (verifyYoutubeURL(url)) {
                         
@@ -133,7 +133,7 @@ angular.module("BossCollection.controllers")
 
                 $scope.open = function (url) {
                     $scope.setUrl(url);
-                    console.log(url);
+                   
                     var modalInstance = $modal.open({
                         templateUrl: 'videoModal',
                         controller: 'videoController',

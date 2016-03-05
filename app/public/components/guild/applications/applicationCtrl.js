@@ -10,7 +10,7 @@ angular.module("BossCollection.guild")
             
             siteServices.updateTitle('Applications');
             
-            console.log("Loading application ctrl..."); 
+            
             $scope.application = {};            
             
             

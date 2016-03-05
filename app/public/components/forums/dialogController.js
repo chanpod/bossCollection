@@ -6,8 +6,7 @@ angular.module("BossCollection.forums")
             $scope.object = {};
             $scope.loading = false;
             $scope.replying = false;
-            $scope.comment = "";
-            $scope.commentToDelete;
+            
             
             $scope.orderBy = "dateCreated"
 
@@ -41,89 +40,7 @@ angular.module("BossCollection.forums")
                 $scope.orderBy = "-dateCreated"
             }
 
-            $scope.cancelComment = function () {
-                $scope.replying = false;
-            }
 
-            $scope.cancelCommentEdit = function (comment) {
-                comment.editing = false;
-            }
-
-            $scope.saveCommentEdit = function (comment) {
-
-                forumService.editComment(comment)
-                    .then(function (savedComment) {
-
-                        $scope.cancelCommentEdit(comment);
-                    })
-            }
-
-            $scope.confirmDelete = function (comment) {
-
-                $scope.commentToDelete = comment;
-                $scope.confirmDeleteBool = true;
-            }
-
-            $scope.deleteComment = function () {
-
-                forumService.deleteComment($scope.commentToDelete)
-                    .then(function (result) {
-
-                        $scope.refreshComments();
-                    })
-                    .catch(function (err) {
-
-                    })
-                    .finally(function () {
-                        $scope.loading = false;
-                        $scope.confirmDeleteBool = false;
-                    })
-            }
-
-            $scope.refreshComments = function () {
-
-                forumService.getComments($scope.object._id)
-                    .then(function (comments) {
-
-                        $scope.object.comments = comments.comments;
-                    })
-                    .catch(function (err) {
-
-                    })
-                    .finally(function () {
-                        $scope.loading = false;
-                    })
-            }
-
-            $scope.cancelCommentDelete = function () {
-
-                $scope.commentToDelete = {};
-                $scope.confirmDeleteBool = false;
-            }
-
-            $scope.saveComment = function () {
-
-                var comment = {
-                    message: $scope.object.newComment,
-                    threadId: $scope.object._id
-                }
-
-                forumService.createComment(comment)
-                    .then(function (comment) {
-
-                        $scope.object.newComment = "";
-                        $scope.object.comments.push(comment.comment);
-                        $scope.cancelComment();
-                    })
-            }
-
-            $scope.openCommentBox = function () {
-                $scope.replying = true;
-            }
-
-            $scope.close = function () {
-                $mdDialog.hide($scope.object);
-            }
 
             $scope.deleteCategory = function () {
 

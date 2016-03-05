@@ -37,7 +37,7 @@ angular.module("BossCollection.controllers")
                 
                 guildServices.getGuild($scope.realm, $scope.guild).then(function(data){
                     
-                    console.log(data);
+                    
                     $scope.loading = false;
                     parseMembers(data);
                 },
@@ -52,7 +52,7 @@ angular.module("BossCollection.controllers")
                 
                 $http({method: 'POST', url: '/getUser'}).success(function(data){
                    
-                   console.log(data);
+                   
                 });
             }
             
@@ -105,7 +105,7 @@ angular.module("BossCollection.controllers")
                     return newMember;
                 }
                 catch(err){
-                    console.log(raider);
+                    console.log(err);
                 }
             }
             
