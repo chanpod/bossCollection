@@ -2726,6 +2726,8 @@ angular.module("BossCollection.controllers")
           
             
             siteServices.updateTitle('Home');
+            
+            $scope.showContent();
     }])
  
 'use strict';
@@ -2855,7 +2857,7 @@ angular.module("BossCollection.controllers")
                     }
                 },
                 function(err){
-                    $scope.user.name = "";
+                    $scope.user = {};
                     $scope.loggedIn = false;
                 })
         }

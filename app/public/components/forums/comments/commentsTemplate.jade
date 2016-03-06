@@ -24,7 +24,7 @@ script#threadComments(type="text/ng-template")
                         div(flex, layout, layout-align = "center center")
                             h2()
                                 {{ctrl.thread.title}}        
-                md-card-content
+                md-card-content.wordWrap
                     p()
                         display-markdown(markdown = "ctrl.thread.message")
                         

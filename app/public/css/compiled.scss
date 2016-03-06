@@ -330,6 +330,10 @@ html, body {
 .overflowFix{
     overflow: hidden;
 }
+
+.wordWrap{
+    word-wrap: break-word;
+}
 .threadComments{
     overflow: scroll;
 }

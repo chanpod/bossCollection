@@ -125,7 +125,7 @@ angular.module("BossCollection.controllers")
                     }
                 },
                 function(err){
-                    $scope.user.name = "";
+                    $scope.user = {};
                     $scope.loggedIn = false;
                 })
         }
