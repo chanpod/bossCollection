@@ -751,7 +751,7 @@ angular.module("BossCollection.forums")
                             }
                         })
                         
-                        if(cat.forums.length == 0){
+                        if(forumIndexTracker == undefined){
                             cat.forums.push(forumIn);
                         }
                     }
@@ -1880,7 +1880,7 @@ angular.module("BossCollection.forums")
             self.threadSearch = "";
             self.orderBy = "-dateCreated";
             self.loading = false;
-            self.isFinishedLoading = false;
+            
             
             $scope.comment = "";
             $scope.commentToDelete;
@@ -1897,11 +1897,11 @@ angular.module("BossCollection.forums")
                         
                         if(thread.thread){
                             self.thread = thread.thread[0];
-                            self.isFinishedLoading = true;
+                            
                         }
                         else{
                             self.thread = thread;
-                            self.isFinishedLoading = true;
+                         
                         }
                         
                     })
@@ -2074,12 +2074,23 @@ angular.module("BossCollection.forums")
                         $scope.forum = forum;
                     })
                     .then(function(){
+                        
                         siteServices.updateTitle($scope.forum.name + ' Forum');
-                        return forumService.getThreads($scope.forum);
+                        
+                        if($scope.forum.threads.length > 0){
+                            return $scope.forum.threads
+                        }
+                        else{
+                            return forumService.getThreads($scope.forum);    
+                        }
+                        
                     })
                     .then(function(threads){
-                        //$scope.threads = threads;
+                        
                         $scope.threads = threads;
+                        $scope.forum.threads = threads;
+                        
+                        forumService.setForum($scope.forum);
                         $scope.masterThread = threads;
                         
                         if ($scope.savedThreads == undefined) {
@@ -2088,8 +2099,28 @@ angular.module("BossCollection.forums")
                             forumService.saveThreadCounts(threads);
                         }
                         
+                        //$scope.initInfiniteScroll();
                         
-                        $scope.threadRepeat = {
+                        sortThreads();
+                        
+                    })
+                    .catch(function(err){
+
+                        $scope.loading = false;
+                    })
+                    .finally(function(){
+
+                        $scope.loading = false;
+                    })
+            }
+
+            $scope.listStyle = {
+                height: ($window.innerHeight - 312) + 'px'
+            };
+
+           $scope.initInfiniteScroll = function(){
+               
+               $scope.threadRepeat = {
                             toLoad:0,
                             numLoaded: 0,
                             threads: $scope.threads,
@@ -2128,25 +2159,8 @@ angular.module("BossCollection.forums")
                                 }
                             }
                         }
-                        
-                        sortThreads();
-                        
-                    })
-                    .catch(function(err){
-
-                        $scope.loading = false;
-                    })
-                    .finally(function(){
-
-                        $scope.loading = false;
-                    })
-            }
-
-            $scope.listStyle = {
-                height: ($window.innerHeight - 312) + 'px'
-            };
-
-           
+               
+           }
 
             $scope.refresh = function(){
 
@@ -2195,14 +2209,13 @@ angular.module("BossCollection.forums")
             })
             
             function sortThreads(){
+                
                 $scope.threads = $filter('filter')($scope.masterThread, $scope.threadSearch);
                 $scope.threads = $filter('orderBy')($scope.threads, $scope.orderBy);
                 
                 if($scope.threadRepeat){
                     $scope.threadRepeat.numLoaded = $scope.threads.length - 1;    
                 }
-                
-                
             }
 
             $scope.orderByDateCreated = function(){
@@ -2216,6 +2229,8 @@ angular.module("BossCollection.forums")
             $scope.openThread = function(thread){
                 
                 forumService.setSelectedThread(thread);
+                $scope.updateThreadViewed(thread);
+                
                 $scope.goTo('/thread/' + thread._id);
             }
 
@@ -3620,7 +3635,7 @@ angular.module('BossCollection.directives')
                 }
                 
                 scope.$watch('markdown', function(){
-                    scope.convertToHtml(scope.markdown);
+                    scope.converToHtml(scope.markdown);
                 })
                 
                 scope.converToHtml(scope.markdown);    

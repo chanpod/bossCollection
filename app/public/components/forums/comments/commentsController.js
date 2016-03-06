@@ -8,7 +8,7 @@ angular.module("BossCollection.forums")
             self.threadSearch = "";
             self.orderBy = "-dateCreated";
             self.loading = false;
-            self.isFinishedLoading = false;
+            
             
             $scope.comment = "";
             $scope.commentToDelete;
@@ -25,11 +25,11 @@ angular.module("BossCollection.forums")
                         
                         if(thread.thread){
                             self.thread = thread.thread[0];
-                            self.isFinishedLoading = true;
+                            
                         }
                         else{
                             self.thread = thread;
-                            self.isFinishedLoading = true;
+                         
                         }
                         
                     })

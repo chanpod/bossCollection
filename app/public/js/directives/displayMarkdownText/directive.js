@@ -16,7 +16,7 @@ angular.module('BossCollection.directives')
                 }
                 
                 scope.$watch('markdown', function(){
-                    scope.convertToHtml(scope.markdown);
+                    scope.converToHtml(scope.markdown);
                 })
                 
                 scope.converToHtml(scope.markdown);    

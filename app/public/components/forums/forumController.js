@@ -187,7 +187,7 @@ angular.module("BossCollection.forums")
                             }
                         })
                         
-                        if(cat.forums.length == 0){
+                        if(forumIndexTracker == undefined){
                             cat.forums.push(forumIn);
                         }
                     }
