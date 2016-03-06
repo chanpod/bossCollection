@@ -20,6 +20,12 @@ angular.module("BossCollection.forums")
                 return $scope.threads[index];
             }
             
+            $scope.formatDate = function (date) {
+                
+                var localTime  = moment.utc(date).toDate();
+        
+                return moment(localTime).format('dddd, MMM D hh:mm a');
+            }
              
             $scope.init = function(){  
 

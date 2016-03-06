@@ -15,6 +15,10 @@ angular.module('BossCollection.directives')
                     scope.html = $sce.trustAsHtml(converter.makeHtml(scope.markdown));
                 }
                 
+                scope.$watch('markdown', function(){
+                    scope.convertToHtml(scope.markdown);
+                })
+                
                 scope.converToHtml(scope.markdown);    
             }, 
             templateUrl: 'displayMarkdownDirective'

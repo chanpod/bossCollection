@@ -1,0 +1,23 @@
+.toolbarFixedContentContainer{
+    height: 100%;
+}
+
+.toolbarFixedPosition{
+    position: fixed;
+}
+
+.titleOverflow{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.contentAdjust{
+   top: 65px;
+   height: 90%;
+    
+}
+
+.overflowFix{
+    overflow: hidden;
+}

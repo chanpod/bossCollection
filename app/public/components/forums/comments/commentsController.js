@@ -8,22 +8,28 @@ angular.module("BossCollection.forums")
             self.threadSearch = "";
             self.orderBy = "-dateCreated";
             self.loading = false;
+            self.isFinishedLoading = false;
             
             $scope.comment = "";
             $scope.commentToDelete;
             
             $scope.init = function(){
                 
+                
+                
                 self.threadID = $routeParams.threadID;
                 self.loading = true
+                
                 forumService.getSelectedThread(self.threadID)
                     .then(function(thread){
                         
                         if(thread.thread){
-                            self.thread = thread.thread[0];    
+                            self.thread = thread.thread[0];
+                            self.isFinishedLoading = true;
                         }
                         else{
                             self.thread = thread;
+                            self.isFinishedLoading = true;
                         }
                         
                     })
@@ -36,6 +42,11 @@ angular.module("BossCollection.forums")
                     })
                 
                 
+            }
+            
+            self.editThread = function(thread){
+
+                forumService.openBottomSheet('threadEdit', thread);
             }
             
             self.getComments = function(){
@@ -51,21 +62,21 @@ angular.module("BossCollection.forums")
                         
                         self.loading = false
                     })
-            } 
+            }  
             
             $scope.goBack = function(){
                 $scope.goTo('/forum/' + self.thread.forumID);
             }
             
-            $scope.orderByDateCreated = function(){
-                $scope.orderBy = "dateCreated"
+            self.orderByDateCreated = function(){
+                self.orderBy = "dateCreated"
             }
             
-            $scope.orderByDateCreatedReversed = function(){
-                $scope.orderBy = "-dateCreated"
+            self.orderByDateCreatedReversed = function(){
+                self.orderBy = "-dateCreated"
             }
             
-                        $scope.cancelComment = function () {
+            $scope.cancelComment = function () {
                 $scope.replying = false;
             }
 
@@ -81,16 +92,37 @@ angular.module("BossCollection.forums")
                         $scope.cancelCommentEdit(comment);
                     })
             }
+            
+            $scope.formatDate = function (date) {
+                
+                var localTime  = moment.utc(date).toDate();
+        
+                return moment(localTime).format('dddd, MMM D hh:mm a');
+            }
 
             $scope.confirmDelete = function (comment) {
 
                 $scope.commentToDelete = comment;
-                $scope.confirmDeleteBool = true;
+                
+
+                forumService.confirmDelete()
+                    .then(function(result){
+
+                        if(result){
+                            
+                            $scope.deleteComment(comment)
+                        }
+                    })
+                    .then(function(response){
+
+                        $scope.refresh();
+                    })
+            
             }
 
-            $scope.deleteComment = function () {
+            $scope.deleteComment = function (comment) {
 
-                forumService.deleteComment($scope.commentToDelete)
+                forumService.deleteComment(comment)
                     .then(function (result) {
 
                         self.getComments();
@@ -99,15 +131,9 @@ angular.module("BossCollection.forums")
 
                     })
                     .finally(function () {
+                        
                         $scope.loading = false;
-                        $scope.confirmDeleteBool = false;
                     })
-            }
-
-            $scope.cancelCommentDelete = function () {
-
-                $scope.commentToDelete = {};
-                $scope.confirmDeleteBool = false;
             }
 
             $scope.saveComment = function () {

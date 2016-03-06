@@ -31,9 +31,11 @@ script#thread(type="text/ng-template")
                     div(ng-class = "isRead(thread)", layout = "row")
                         md-list-item(flex,ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
                             div(layout-padding, layout = "column").md-list-item-text
-                                div
-                                    h3()
+                                div(layout-align = "space-between center", layout)
+                                    h3(flex)
                                         {{thread.title}}
+                                    div(hide-sm, hide-xs, flex)
+                                            {{formatDate(thread.dateCreated)}}
                                 div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
                                     div(flex)
                                         p( layout-align = "start center")

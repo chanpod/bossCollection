@@ -142,6 +142,10 @@ angular.module("BossCollection.forums")
                 return moment(localTime).format('dddd, MMM D hh:mm');
             }
 
+            $scope.close = function () {
+                $mdDialog.hide(self.thread);
+            }
+            
             $scope.saveForum = function () {
 
                 $scope.loading = true;
