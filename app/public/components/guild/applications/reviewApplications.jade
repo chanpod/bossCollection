@@ -38,8 +38,8 @@ script#reviewApplications(type="text/ng-template")
                         md-card-actions(layout = "row", layout-align = "end end")
                             md-button(ng-click = "openComments(application.comments)").md-icon.button
                                 md-icon(md-font-library="material-icons") message
-                            md-button().md-icon.button
-                                md-icon(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)", md-font-library="material-icons") call_made
+                            md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-icon.button
+                                md-icon(md-font-library="material-icons") call_made
                                     
                     
     ad()                    
