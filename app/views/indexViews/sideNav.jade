@@ -7,11 +7,15 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     h1(ng-click = "goTo('/')").md-toolbar-tools
                         | Bosscollection 
                         i() &nbsp beta
-                        
-                md-list-item(ng-show = "loggedIn").md-1-line 
-                    h1(ng-click = "goTo('/auth/updateAccount')").md-toolbar-tools
-                        | {{user.name}}
+                md-list-item()
+                    h1().md-toolbar-tools
+                        {{user.guild.name}}                
     md-content(role = "navigation").md-primary
+        md-list.md-primary(ng-if = "loggedIn")            
+            md-menu-item()
+                md-button(ng-click = "goTo('/')")
+                    md-icon(md-font-library="material-icons") home
+                    | Home
         md-list.md-primary(ng-if = "loggedIn")            
             md-menu-item(ng-if = "user.rank < 2")
                 md-button(ng-click = "goTo('/auth/application')")

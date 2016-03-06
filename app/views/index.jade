@@ -12,14 +12,15 @@ block body
                     div(flex)
                         h2
                             | {{title}}
+                    div(flex, hide-xs)
+                        h2
+                            | {{user.guild.name}}
                     span(flex)
                         md-menu
                             md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
                                 i(class="material-icons").iconHeightAdjust account_circle
                                 &nbsp {{user.name}}
-                            md-menu-content(width = "4")
-                                md-menu-item(ng-if = "user.guild",layout-align = "start center")
-                                    {{user.guild.name}}
+                            md-menu-content(width = "4")                                
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "goTo('/auth/updateAccount')")
                                         md-icon(md-font-library="material-icons") mode_edit
