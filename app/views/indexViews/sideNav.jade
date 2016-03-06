@@ -27,12 +27,22 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     md-icon(md-font-library="material-icons") today
                     | Forums
             md-divider(ng-if = "!user.guild || user.rank > 2")            
-            include guildManagement
-            md-divider
-            include raidMenu            
-            md-divider
-            include externalMenu
+            include guildManagement                
+            
+        md-list.md-primary(ng-if = "user.rank > 1")
+            md-divider                 
+            md-menu-item()
+                md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")
+                    md-icon(md-font-library="material-icons") equalizer
+                    | Logs
+        md-list.md-primary(ng-if = "user.rank > 1")
+            md-divider            
+            md-menu-item()
+                md-button(ng-click = "goToExternal('http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection')")
+                    md-icon(md-font-library="material-icons") trending_up
+                    | Progression
         md-list.md-primary(ng-if = "!loggedIn")
+            md-divider
             md-menu-item()
                 md-button(ng-click = "showLoginBottomSheet($event)")
                     md-icon(md-font-library="material-icons") account_circle
@@ -42,6 +52,9 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                 md-button(ng-click = "goTo('auth/signup')")
                     md-icon(md-font-library="material-icons") account_circle
                     | Register
+        md-list.md-primary()
+            md-divider
+            include raidMenu      
             
             
                 
