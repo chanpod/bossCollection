@@ -1,6 +1,6 @@
 
 md-menu(ng-if = "user.guild && user.rank > 1", ng-click = "openMenu($mdOpenMenu, $event)")
-    md-button(aria-label = "Account options...")
+    md-button(aria-label = "Account options...").menuDropdown
         | Guild
         i(class="material-icons").iconHeightAdjust keyboard_arrow_down
     md-menu-content(width = "4")

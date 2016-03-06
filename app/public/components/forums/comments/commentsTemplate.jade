@@ -1,5 +1,5 @@
 script#threadComments(type="text/ng-template")
-    md-content(ng-cloak, layout = "column", aria-label = "threadComments").toolbarFixedContentContainer.contentAdjust
+    md-content(ng-cloak, layout = "column", aria-label = "threadComments").toolbarFixedContentContainer
         md-toolbar(ng-if="true").toolbarFixedPosition
             div().md-toolbar-tools
                 md-button(ng-click = "goBack()").md-icon-button
@@ -15,7 +15,7 @@ script#threadComments(type="text/ng-template")
                     md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
                     md-tooltip() Refresh Forum data
         md-progress-linear(ng-if = "ctrl.loading", md-mode="indeterminate")
-        div()
+        div().contentAdjust
             md-card
                 md-card-header
                     md-card-header-text

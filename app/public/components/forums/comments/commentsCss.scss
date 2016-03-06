@@ -4,6 +4,7 @@
 
 .toolbarFixedPosition{
     position: fixed;
+    top:0;
 }
 
 .titleOverflow{
@@ -13,8 +14,8 @@
 }
 
 .contentAdjust{
-   top: 65px;
-   height: 90%;
+    position: relative;
+    top: 60px;
     
 }
 

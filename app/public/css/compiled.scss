@@ -123,6 +123,10 @@ html, body {
     height: 100%;
 }
 
+.menuDropdown{
+    width: 95%;
+    text-align: left;
+}
 
 .bossVideoContainer{
     border-bottom:1px solid black;
@@ -308,6 +312,7 @@ html, body {
 
 .toolbarFixedPosition{
     position: fixed;
+    top:0;
 }
 
 .titleOverflow{
@@ -317,8 +322,8 @@ html, body {
 }
 
 .contentAdjust{
-   top: 65px;
-   height: 90%;
+    position: relative;
+    top: 60px;
     
 }
 
