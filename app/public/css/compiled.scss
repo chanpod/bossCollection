@@ -16,31 +16,66 @@ html, body {
     */
 } 
 
-.contentAnimationContainer{
+.contentCopyAnimationContainer{
     
     
   height: 100%;
   width: 100%;
   background-color: #c00;
-  -webkit-transition: all .3s ease;
-  -moz-transition: all .3s ease;
-  -o-transition: all .3s ease;
-  -ms-transition: all .3s ease;
-  transition: all .3s ease;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;
+  transition: all .5s ease;
   position: absolute;
   top: 0%;
-  left: -90vw;
+  left: 0;
   background-color:white;
+  overflow: hidden;
+  
+} 
+
+.contentCopyAnimationShow{
+    visibility: visible;
+    transform: translate(110vw, 0%);
+    -webkit-transform: translate(110vw, 0%);
+}
+
+.contentCopyAnimationHide{
+    visibility: hidden;
+}
+
+.contentAnimationContainer{
+    
+  height: 100%;
+  width: 100%;
+  background-color: #c00;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;
+  transition: all .5s ease;
+  position: absolute;
+  top: 0%;
+  left: -100vw;
+  background-color:white;
+  
 } 
 
 .contentAnimationShow{
-    transform: translate(90vw, 0%);
-    -webkit-transform: translate(90vw, 0%);
+    visibility: visible;
+    width:100%;
+    transform: translate(100vw, 0%);
+    -webkit-transform: translate(100vw, 0%);
 }
 
 .contentAnimationHide{
-   // transform: translate(80vw, 0%);
-   // -webkit-transform: translate(80vw, 0%);
+  -webkit-transition: all 0s ease;
+  -moz-transition: all 0s ease;
+  -o-transition: all 0s ease;
+  -ms-transition: all 0s ease;
+  transition: all 0s ease;
+   visibility: hidden;
 }
 
 @media (max-width: 960px){

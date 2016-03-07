@@ -1,6 +1,6 @@
 script#forum(type="text/ng-template")
     
-    md-content(layout = "column", flex, layout-fill)    
+    md-content(layout = "column", layout-fill)    
         div()
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             div(ng-repeat = "category in forums.categories")            

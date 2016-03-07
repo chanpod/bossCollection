@@ -13,6 +13,7 @@ angular.module("BossCollection.controllers")
         $scope.loggedIn = false;
         $scope.title = "";
         $scope.showContentBool = false;
+        $scope.showContentCopyBool = false;
         
         $scope.init = function(){
             
@@ -30,7 +31,54 @@ angular.module("BossCollection.controllers")
         };
         
         $scope.hideContent = function(){
-            $scope.showContentBool = false;
+            
+            
+            
+            //copyNgView
+            var ngCopy = document.getElementById('ngView').innerHTML;
+            document.getElementById('copyNgView').innerHTML = ngCopy;
+            
+            //Show copied Div
+            $('#copyNgView').removeClass('contentCopyAnimationHide')
+            
+            $timeout(function(){
+                    
+                
+                $scope.showContentBool = false;
+            }, 100)
+            
+            
+            
+            
+       
+            
+            
+            
+            
+            
+            //Wait for ngView to slide out
+            $timeout(function(){
+                
+                //Slide out copied Div
+                $('#copyNgView').addClass('contentCopyAnimationShow')    
+                
+                //Show div for slide back in
+                $('#ngView').removeClass('contentAnimationHide')
+                //Hide div
+                $('#copyNgView').addClass('contentCopyAnimationHide')
+                
+                $timeout(function(){
+                    
+                    
+                    
+                    //Slide it back in for next animation
+                    $('#copyNgView').removeClass('contentCopyAnimationShow')    
+                }, 600)
+                
+            }, 500)
+                        
+            
+            
         }
         
         $scope.showContent = function () {
@@ -38,18 +86,31 @@ angular.module("BossCollection.controllers")
             $timeout(function () {
 
                 $scope.showContentBool = true;
+                
+                $('#copyNgView').addClass('contentCopyAnimationShow')
+                
+                
+                $timeout(function(){
+                    $('#copyNgView').addClass('contentCopyAnimationHide')
+                    $('#copyNgView').removeClass('contentCopyAnimationShow')
+                }, 500)
+                
             }, 100)
+            
+            
         }  
          
         $scope.goTo = function(path){
             $scope.closeSideBar('left');
             $scope.hideContent();
             
+            
+            
             $timeout(function(){
-                $location.url(path);
                 
                 $scope.showContent();
-            }, 200)
+                $location.url(path);
+            }, 100)
             
             
         }
