@@ -45,10 +45,10 @@ html, body {
 }
 
 .slideReverse {
-    -webkit-transition: -webkit-transform .7s ease-in-out;
-    -moz-transition: -moz-transform .7s ease-in-out;
-    -o-transition: -o-transform .7s ease-in-out;
-    transition: transform .7s ease-in-out;
+    -webkit-transition: -webkit-transform .5s ease-in-out;
+    -moz-transition: -moz-transform .5s ease-in-out;
+    -o-transition: -o-transform .5s ease-in-out;
+    transition: transform .5s ease-in-out;
     -webkit-transform: translateX(0);
     transform: translateX(0);
     width:100%;
@@ -79,6 +79,8 @@ html, body {
   -moz-transform:translate3d(-100vw, 0, 0);
   transform:translate3d(-100vw, 0, 0);
 }
+
+
 
  @font-face {
   font-family: 'Octicons'; 
@@ -317,6 +319,35 @@ html, body {
 .unread{
     border-left:15px solid green;
 }
+
+.toolbarFixedContentContainer{
+    height: 100%;
+}
+
+.toolbarFixedPosition{
+    position: fixed;
+    top:0;
+}
+
+.titleOverflow{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.contentAdjust{
+    position: relative;
+    top: 60px;
+    
+}
+
+.overflowFix{
+    overflow: hidden;
+}
+
+.wordWrap{
+    word-wrap: break-word;
+}
 .threadComments{
     overflow: scroll;
 }
@@ -372,32 +403,4 @@ html, body {
     word-wrap: break-word;
     text-overflow: clip;
     max-height: 50%;
-}
-.toolbarFixedContentContainer{
-    height: 100%;
-}
-
-.toolbarFixedPosition{
-    position: fixed;
-    top:0;
-}
-
-.titleOverflow{
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.contentAdjust{
-    position: relative;
-    top: 60px;
-    
-}
-
-.overflowFix{
-    overflow: hidden;
-}
-
-.wordWrap{
-    word-wrap: break-word;
 }

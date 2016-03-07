@@ -12,7 +12,9 @@ angular.module("BossCollection.controllers")
         $scope.user.name = "";
         $scope.loggedIn = false;
         $scope.title = "";
-        $scope.reversed = true;
+        $scope.reversed = "slide";
+        
+        //-ng-class = "!reversed ? 'slide' : 'slideReverse'"
         
         $scope.init = function(){
             
@@ -39,16 +41,14 @@ angular.module("BossCollection.controllers")
         
         $scope.goToBackwards = function(path){
             
-            $scope.reversed = false;
-            $('ngView').removeClass('slide');           
-            $('ngView').addClass('slideReverse');
+            $scope.reversed = 'slideReverse';
+            
             
             $scope.goTo(path);      
             
-            $scope.reversed = true;
+            $scope.reversed = 'slide';
             
-            $('ngView').addClass('slide');
-            $('ngView').removeClass('slideReverse');
+            
            
         }
         

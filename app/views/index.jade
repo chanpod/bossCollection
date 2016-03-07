@@ -43,7 +43,7 @@ block body
             
             md-content(layout, flex)
                 
-                div(id = "ngView", flex, ng-view, ng-class = "!reversed ? 'slide' : 'slideReverse'")    
+                div(id = "ngView", flex, ng-view, ng-animate = "").slideReverse   
 
     include partials/home    
     
