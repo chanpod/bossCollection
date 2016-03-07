@@ -15,10 +15,10 @@ html, body {
     width: 100%;
     height: 100%;
 }
-.slide.ng-enter,
+.slide.ng-enter, 
 .slide.ng-leave {
-    -webkit-transition: all .4s ease;
-    transition: all .4s ease;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
 }
 .slide.ng-enter {
     left: 100%;
@@ -257,6 +257,12 @@ html, body {
 .loadingModal{
     background-color: rgba(255, 255, 255, 0);
 }
+.editAbsenceModal{
+    min-width:50%;
+    min-height:50%;
+}
+
+
 .read{
     border-left:15px solid gray;
 }
@@ -264,12 +270,6 @@ html, body {
 .unread{
     border-left:15px solid green;
 }
-.editAbsenceModal{
-    min-width:50%;
-    min-height:50%;
-}
-
-
 .toolbarFixedContentContainer{
     height: 100%;
 }

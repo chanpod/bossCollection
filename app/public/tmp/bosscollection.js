@@ -14,7 +14,8 @@ angular.module('BossCollection', [
   'ngResource',
   'btford.socket-io', 
   'ngCookies', 
-  'ngMaterial'  
+  'ngMaterial',
+  'ngAnimate'
  
 ])
 .config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
