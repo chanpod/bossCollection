@@ -65,7 +65,7 @@ angular.module("BossCollection.forums")
             }  
             
             $scope.goBack = function(){
-                $scope.goTo('/forum/' + self.thread.forumID);
+                $scope.goToBackwards('/forum/' + self.thread.forumID);
             }
             
             self.orderByDateCreated = function(){

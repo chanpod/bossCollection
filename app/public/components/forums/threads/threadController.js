@@ -212,7 +212,7 @@ angular.module("BossCollection.forums")
             }
 
             $scope.goBack = function(){
-                $scope.goTo('/forum');
+                $scope.goToBackwards('/forum');
             } 
             
             $scope.isRead = function (threadIn) {

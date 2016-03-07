@@ -12,7 +12,7 @@ angular.module("BossCollection.controllers")
         $scope.user.name = "";
         $scope.loggedIn = false;
         $scope.title = "";
-
+        $scope.reversed = true;
         
         $scope.init = function(){
             
@@ -35,6 +35,21 @@ angular.module("BossCollection.controllers")
             
             $scope.closeSideBar('left');
             $location.url(path);
+        }
+        
+        $scope.goToBackwards = function(path){
+            
+            $scope.reversed = false;
+            $('ngView').removeClass('slide');           
+            $('ngView').addClass('slideReverse');
+            
+            $scope.goTo(path);      
+            
+            $scope.reversed = true;
+            
+            $('ngView').addClass('slide');
+            $('ngView').removeClass('slideReverse');
+           
         }
         
         $scope.goToExternal = function (path) {
