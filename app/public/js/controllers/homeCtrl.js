@@ -11,7 +11,5 @@ angular.module("BossCollection.controllers")
           
             
             siteServices.updateTitle('Home');
-            
-            $scope.showContent();
     }])
  

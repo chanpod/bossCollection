@@ -42,8 +42,8 @@ block body
                     
             
             md-content(layout, flex)
-                div(id = "copyNgView", class = "contentCopyAnimationHide").contentCopyAnimationContainer
-                div(id = "ngView", flex, ng-view, ng-class = "showContentBool ? 'contentAnimationShow': 'contentAnimationHide'").contentAnimationContainer    
+                
+                div(id = "ngView", flex, ng-view).slide    
 
     include partials/home    
     

@@ -5,103 +5,32 @@
 /* app css stylesheet */
 
 html, body {
-    /*
-    font-family: helvetica;
-    background-image: linear-gradient(to bottom, transparent, #2c3e50);
-    height:0;
-    background-color:black;
-    margin: 0;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    */
+
 } 
 
-.contentCopyAnimationContainer{
-    
-    
-  height: 100%;
-  width: 100%;
-  background-color: #c00;
-  -webkit-transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  -ms-transition: all .5s ease;
-  transition: all .5s ease;
-  position: absolute;
-  top: 0%;
-  left: 0;
-  background-color:white;
-  overflow: hidden;
-  
-} 
-
-.contentCopyAnimationShow{
-    visibility: visible;
-    transform: translate(110vw, 0%);
-    -webkit-transform: translate(110vw, 0%);
-}
-
-.contentCopyAnimationHide{
-    visibility: hidden;
-}
-
-.contentAnimationContainer{
-    
-  height: 100%;
-  width: 100%;
-  background-color: #c00;
-  -webkit-transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  -ms-transition: all .5s ease;
-  transition: all .5s ease;
-  position: absolute;
-  top: 0%;
-  left: -100vw;
-  background-color:white;
-  
-} 
-
-.contentAnimationShow{
-    visibility: visible;
-    width:100%;
-    transform: translate(100vw, 0%);
-    -webkit-transform: translate(100vw, 0%);
-}
-
-.contentAnimationHide{
-  -webkit-transition: all 0s ease;
-  -moz-transition: all 0s ease;
-  -o-transition: all 0s ease;
-  -ms-transition: all 0s ease;
-  transition: all 0s ease;
-   visibility: hidden;
-}
-
-@media (max-width: 960px){
-  
-    .contentAnimationContainer{
-        
-        
-        height: 100%;
-    width: 100%;
-    background-color: #c00;
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    -ms-transition: all .3s ease;
-    transition: all .3s ease;
+.slide {
     position: absolute;
-    top: 0%;
-    left: -100vw;
-    background-color:white;
-    } 
-
-    .contentAnimationShow{
-        transform: translate(100vw, 0%);
-        -webkit-transform: translate(100vw, 0%);
-    }
-    
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.slide.ng-enter,
+.slide.ng-leave {
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+}
+.slide.ng-enter {
+    left: 100%;
+}
+.slide.ng-enter-active {
+    left: 0;
+}
+.slide.ng-leave {
+    left: 0;
+}
+.slide.ng-leave-active {
+    left: -100%;
 }
 
  @font-face {
@@ -328,12 +257,6 @@ html, body {
 .loadingModal{
     background-color: rgba(255, 255, 255, 0);
 }
-.editAbsenceModal{
-    min-width:50%;
-    min-height:50%;
-}
-
-
 .read{
     border-left:15px solid gray;
 }
@@ -341,6 +264,12 @@ html, body {
 .unread{
     border-left:15px solid green;
 }
+.editAbsenceModal{
+    min-width:50%;
+    min-height:50%;
+}
+
+
 .toolbarFixedContentContainer{
     height: 100%;
 }
