@@ -35,7 +35,7 @@ md-card-content(layout = "column")
             md-icon(md-font-library="material-icons") message
         md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-icon-button
             md-icon(md-font-library="material-icons") call_made
-        md-menu
+        md-menu(ng-if = "user.rank > 2")
             md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
                 md-icon(md-font-library="material-icons", md-menu-origin) more_vert
             md-menu-content
