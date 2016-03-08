@@ -17,6 +17,11 @@ angular.module("BossCollection.guild")
 
             $scope.init = function () {
 
+                $scope.getMembers();
+            }
+            
+            $scope.getMembers = function(){
+                
                 if($scope.user.name != ""){
                     
                     guildServices.getGuildMembers($scope.user.guild.name)
@@ -34,9 +39,8 @@ angular.module("BossCollection.guild")
                                 })
                         })
                 }
-
             }
-
+            
             $scope.promote = function (user) {
 
                 if (user.rank == 3) {
@@ -74,7 +78,25 @@ angular.module("BossCollection.guild")
                 }
             }
             
-          
+            $scope.kick = function(user){
+                
+                var userName = user;
+                var guildName = $scope.user.guild.name;
+                
+                guildServices.kickUser(userName, guildName)
+                    .then(function(reponse) {
+                        
+                        $scope.getMembers();
+                    })
+                    .catch(function(err) {
+                        
+                        siteServices.showMessageModal(err);
+                    })
+                    .finally(function() {
+
+                    })
+            }
+            
             $scope.init();
             siteServices.updateTitle('Manage Members');
         }])

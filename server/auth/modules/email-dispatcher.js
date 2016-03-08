@@ -25,14 +25,14 @@ EM.dispatchResetPasswordLink = function(account, callback)
 	}, callback );
 }
 
-EM.dispatchCustomEmail = function(message, account){
+EM.dispatchCustomEmail = function(message, subject, account){
     
     var defer = q.defer();
     
     var emailSettings = {
 		from         : ES.sender,
 		to           : account.email,
-		subject      : 'Password Reset',
+		subject      : subject,
 		text         : 'Someone sent you a message',
 		attachment   : EM.composeCustomEmail(message, account)
 	}

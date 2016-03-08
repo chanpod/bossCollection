@@ -16,11 +16,58 @@ angular.module("BossCollection.guild")
             
             $scope.loading = true;
             
+            $scope.filterStatus = function(status){
+                
+                return function(application){
+                    return application.status == status;
+                }
+                
+                /**
+                var filteredArray = _.filter($scope.applications, function(application){
+                    return application.status == status;
+                })
+                
+                return filteredArray;
+                 */
+            }
+            
+            $scope.approveApplicant = function(application){
+                
+                guildServices.approveApplication(application)
+                    .then(function(){
+                        application.status = "Approved";
+                    })
+                    .catch(function(err){
+                        
+                    })
+                    .finally(function(){
+                        
+                    })
+            }
+            
+            $scope.rejectApplicant = function(application){
+                
+                guildServices.rejectApplication(application)
+                    .then(function(){
+                        application.status = "Rejected";
+                    })
+                    .catch(function(err){
+                        
+                    })
+                    .finally(function(){
+                        
+                    })
+            }
+            
             $scope.openComments = function (comments) {
                 
                 siteServices.showMessageModal(comments, "Comments");
-            } 
+            }  
             
+            $scope.openMenu = function($mdOpenMenu, ev){
+                $mdOpenMenu(ev);
+            }
+             
             $scope.goTo = function(url){
                 
                 var win = window.open(url, '_blank');

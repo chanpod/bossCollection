@@ -50,6 +50,10 @@ script#manageMembers(type="text/ng-template")
                                         div(ng-if = "user.rank > 2", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
                                             md-button(ng-click = "promote(member)").md-primary.md-raised
                                                 | Promote
+                                        div(ng-if = "user.rank > 2", flex, layout = "row",  layout-align = "end center")
+                                            md-button(ng-click = "kick(member)").md-primary.md-raised
+                                                | Kick
+                                        
                                     md-divider(ng-if="!$last")
                     
                 

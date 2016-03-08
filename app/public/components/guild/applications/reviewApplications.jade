@@ -2,45 +2,17 @@ script#reviewApplications(type="text/ng-template")
     md-content(ng-cloak)
         section(layout-xs="column", layout="row")
             div(flex-xs, flex-gt-xs="60")
-                md-card(ng-repeat = "application in applications | orderBy: '-dateApplied'")
-                    md-card-header
-                        md-card-header-text
-                            span().md-headline
-                                {{application.character.name}} - {{application.dateApplied | date: format}}
-                            span().md-subhead
-                                {{application.character.class}} - {{application.itemLevel}}
-                            
-                    md-card-content(layout = "column")
-                        img(src="images/classBackdrops/{{application.character.class}}.jpg", style = "width:100%;height:100%").md-media-xl.card-media.applicationReviewImageAdjust
-                        div(layout, layout-align = "space-around center")
-                            div(flex)
-                                div(layout = "column")
-                                    h3
-                                        | Role 
-                                    span {{application.desiredRole}}
-                            div(flex)
-                                div(layout = "column")
-                                    h3
-                                        | Previous Guild
-                                    span {{application.previousGuild}}
-                            div(flex)
-                                div(layout="column")
-                                    h3
-                                        | Realm
-                                    span {{application.realm.name}}
-                            div(flex)
-                                div(layout="column")
-                                    h3
-                                        | Battle Tag
-                                    span {{application.battleTag}}
-                            
-                                
-                        md-card-actions(layout = "row", layout-align = "end end")
-                            md-button(ng-click = "openComments(application.comments)").md-icon.button
-                                md-icon(md-font-library="material-icons") message
-                            md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-icon.button
-                                md-icon(md-font-library="material-icons") call_made
-                                    
+                md-tabs(md-dynamic-height md-border-bottom)
+                    md-tab(label = "New Applications")
+                        md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")
+                            include applicationsList
+                    md-tab(label = "Approved")
+                        md-card(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'")
+                            include applicationsList
+                    md-tab(label = "Denied")
+                        md-card(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'")
+                            include applicationsList
+                        
                     
     ad()                    
  

@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', '$timeout',
-        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices, $timeout){
+    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', '$timeout', '$animate',
+        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices, $timeout, $animate){
         
         var originatorEv;
         var bossCollectionWowProgressUrl = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/json_rank";
@@ -12,7 +12,7 @@ angular.module("BossCollection.controllers")
         $scope.user.name = "";
         $scope.loggedIn = false;
         $scope.title = "";
-        $scope.reversed = "slide";
+        $scope.reversed = false;
         
         //-ng-class = "!reversed ? 'slide' : 'slideReverse'"
         
@@ -30,23 +30,20 @@ angular.module("BossCollection.controllers")
             originatorEv = ev;
             $mdOpenMenu(ev);
         };
-        
          
-         
-        $scope.goTo = function(path){
+        $scope.goTo = function(path){ 
             
             $scope.closeSideBar('left');
             $location.url(path);
         }
-        
+         
         $scope.goToBackwards = function(path){
             
-            $scope.reversed = 'slideReverse';
-            
+            $scope.reversed = true;
             
             $scope.goTo(path);      
             
-            $scope.reversed = 'slide';
+            $scope.reversed = false;
             
             
            

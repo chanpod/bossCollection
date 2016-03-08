@@ -17,7 +17,7 @@ angular.module('BossCollection', [
   'ngMaterial',
   'ngAnimate'
  
-])
+])   
 .config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  

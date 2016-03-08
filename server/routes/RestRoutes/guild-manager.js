@@ -212,45 +212,42 @@ router.route('/addMember')
 
     })
 
+router.route('/kickMember')
+    .post(function(req, res){
+        var userName = req.body.userName.user;
+        var guildName = req.body.guildName
+        
+        removeUserFromGuild(userName, guildName)
+            .then(function(user){
+                
+                res.status(200).send(user);
+            })
+            .fail(function(err){
+                
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 router.route('/removeMember')
     .post(function (req, res) {
 
         var guildName = req.body.guildName;
         var guildMemberName = req.session.user.name;
 
-        findGuild(guildName)
-            .then(function (guild) {
+        removeUserFromGuild(guildMemberName, guildName)
+            .then(function(user){
+                
+                delete req.session.user.guild;
 
-                if (guild) {
+                util.saveSession(req, res)
+                    .then(function(user) {
 
-                    var indexOfMember = doesMemberExist(guild.members, guildMemberName);
-
-                    if (indexOfMember == -1) {
-                        throw new Error("Member doesn't exist.");
-                        return;
-                    }
-
-                    guild.members.splice(indexOfMember, 1);
-
-                    guild.save(function (savedGuild) {
-                        delete req.session.user.guild;
-
-                        util.saveSession(req, res)
-                            .then(function (user) {
-
-                                res.status(200).send(user);
-                            })
-                    }, function (err) {
-
-                        res.status(400).send(util.handleErrors(err));
-                    });
-                }
-                else {
-                    throw new Error("Guild no longer exists? Don't ask...");
-                }
+                        res.status(200).send(user);
+                    })
+                
             })
-            .fail(function (err) {
-
+            .fail(function(err){
+                
                 res.status(400).send(util.handleErrors(err));
             })
     })
@@ -274,7 +271,42 @@ router.findUsersGuild = function (username) {
 
 module.exports = router;
 
+function removeUserFromGuild(guildMemberName, guildName){
+    
+    var defer = q.defer();
+    
+    findGuild(guildName)
+        .then(function(guild) {
 
+            if (guild) {
+
+                var indexOfMember = doesMemberExist(guild.members, guildMemberName);
+
+                if (indexOfMember == -1) {
+                    throw new Error("Member doesn't exist.");                    
+                }
+
+                guild.members.splice(indexOfMember, 1);
+
+                guild.save(function(savedGuild) {
+                    defer.resolve();
+                    
+                }, function(err) {
+
+                    defer.reject(err);
+                });
+            }
+            else {
+                throw new Error("Guild no longer exists?");
+            }
+        })
+        .fail(function(err) {
+
+            defer.reject(err);
+        })
+    
+    return defer.promise;
+}
 
 function isAdmin(memberList, memberName) {
 

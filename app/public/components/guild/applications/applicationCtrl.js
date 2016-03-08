@@ -154,6 +154,7 @@ angular.module("BossCollection.guild")
             }
             
             
+            
             $scope.init();
   
             

@@ -5,10 +5,10 @@ html, body {
 } 
 
 .slide {
-    -webkit-transition: -webkit-transform .7s ease-in-out;
-    -moz-transition: -moz-transform .7s ease-in-out;
-    -o-transition: -o-transform .7s ease-in-out;
-    transition: transform .7s ease-in-out;
+    -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    -moz-transition: -moz-transform 0.5s ease-in-out;
+    -o-transition: -o-transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
     -webkit-transform: translateX(0);
     transform: translateX(0);
     width:100%;
@@ -19,9 +19,9 @@ html, body {
 .slide.ng-enter {
   opacity: 1;
   /*padding-left: 0px;*/  
-  -webkit-transform:translate3d(-100vw, 0, 0);
-  -moz-transform:translate3d(-100vw, 0, 0);
-  transform:translate3d(-100vw, 0, 0);
+  -webkit-transform:translate3d(100vw, 0, 0);
+  -moz-transform:translate3d(100vw, 0, 0);
+  transform:translate3d(100vw, 0, 0);
 }
 
 .slide.ng-enter.ng-enter-active, .slide.ng-leave {
@@ -30,21 +30,22 @@ html, body {
   -webkit-transform:translate3d(0, 0, 0);
   -moz-transform:translate3d(0, 0, 0);
   transform:translate3d(0, 0, 0);
-}
-
+} 
+ 
 .slide.ng-leave.ng-leave-active {
   opacity: 1;
-  /*padding-left: 0px;*/  
-  -webkit-transform:translate3d(100vw, 0, 0);
-  -moz-transform:translate3d(100vw, 0, 0);
-  transform:translate3d(100vw, 0, 0);
+  /*padding-left: 0px;*/   
+  -webkit-transform:translate3d(-100vw, 0, 0);
+  -moz-transform:translate3d(-100vw, 0, 0);
+  transform:translate3d(-100vw, 0, 0);
 }
 
+
 .slideReverse {
-    -webkit-transition: -webkit-transform .5s ease-in-out;
-    -moz-transition: -moz-transform .5s ease-in-out;
-    -o-transition: -o-transform .5s ease-in-out;
-    transition: transform .5s ease-in-out;
+    -webkit-transition: -webkit-transform 0.5s ease-in-out;
+    -moz-transition: -moz-transform 0.5s ease-in-out;
+    -o-transition: -o-transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
     -webkit-transform: translateX(0);
     transform: translateX(0);
     width:100%;
@@ -52,12 +53,14 @@ html, body {
     position: absolute;
 }
 
+
+
 .slideReverse.ng-enter {
   opacity: 1;
   /*padding-left: 0px;*/  
-  -webkit-transform:translate3d(100vw, 0, 0);
-  -moz-transform:translate3d(100vw, 0, 0);
-  transform:translate3d(100vw, 0, 0);
+  -webkit-transform:translate3d(-100vw, 0, 0);
+  -moz-transform:translate3d(-100vw, 0, 0);
+  transform:translate3d(-100vw, 0, 0);
 }
 
 .slideReverse.ng-enter.ng-enter-active, .slideReverse.ng-leave {
@@ -71,9 +74,9 @@ html, body {
 .slideReverse.ng-leave.ng-leave-active {
   opacity: 1;
   /*padding-left: 0px;*/  
-  -webkit-transform:translate3d(-100vw, 0, 0);
-  -moz-transform:translate3d(-100vw, 0, 0);
-  transform:translate3d(-100vw, 0, 0);
+  -webkit-transform:translate3d(100vw, 0, 0);
+  -moz-transform:translate3d(100vw, 0, 0);
+  transform:translate3d(100vw, 0, 0);
 }
 
 

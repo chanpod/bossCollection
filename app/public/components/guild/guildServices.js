@@ -2,7 +2,7 @@
 
 
 
-angular.module("BossCollection.services")
+angular.module("BossCollection.guild")
     .factory('guildServices', [
         '$http', '$q', '$resource', 'siteServices', 'userLoginSrvc', 
     function ($http, $q, $resource, siteServices, userLoginSrvc) {
@@ -15,17 +15,35 @@ angular.module("BossCollection.services")
 
         var apply = $resource('/api/applicationSubmission', {}, {});
         var getApplicationsUrl = $resource('/api/getApplications', {}, {});
+        var approveApplication = $resource('/api/approveApplication', {}, {});
+        var rejectApplication = $resource('/api/rejectApplication', {}, {});
+        
         var addGuild = $resource('/api/addGuild', {}, {});
         var updateRank = $resource('/api/updateRank', {}, {});
         var changeGuildName = $resource('/api/changeGuildName', {}, {});
         var addMember = $resource('/api/addMember', {}, {});
         var removeMember = $resource('/api/removeMember', {}, {});
+        var kickuserResource = $resource('/api/kickMember', {}, {});
         var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
         var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
-        
+         
         
         var guildApi = { 
-            
+            kickUser: function(userName, guildName){
+                
+                var bodyData = {userName: userName, guildName:guildName};
+                return kickuserResource.save(bodyData).$promise
+            },
+            approveApplication: function(application){
+                
+                var bodyData = {application: application};
+                return approveApplication.save(bodyData).$promise
+            },
+            rejectApplication: function(application){
+                
+                var bodyData = {application: application};
+                return rejectApplication.save(bodyData).$promise
+            },
             getListOfGuilds: function(){
                 var defer = $q.defer();
                 
