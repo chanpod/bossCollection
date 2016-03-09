@@ -98,6 +98,8 @@ router.post('/login', function (req, res) {
                     return util.saveSession(req, res)
                 })
                 .then(function(){
+                    
+                    res.cookie('user', req.session.user, { maxAge: 900000 });
                     res.status(200).send(req.session.user);
                 })
                 .fail(function (err) {
@@ -360,7 +362,7 @@ function setUser(req, res) {
         .then(function (guild) {
 
             if (guild) {
-
+                guild.tabs = [];
                 req.session.user.guild = guild._doc;
                 return util.saveSession(req, res)
             }

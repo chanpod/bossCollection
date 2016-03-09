@@ -257,16 +257,18 @@ router.rout
 router.route('/guildHomepage')
     .get(function(req, res){
         
-        var usersGuild = req.session.user.guild.name
-        
-        GuildModel.findOne({name:usersGuild})
-            .then(function (guild) {
+        if(req.session.user){
+            var usersGuild = req.session.user.guild.name
 
-                res.status(200).send({ guild: guild });
-            }, function (err) {
-                
-                res.status(400).send(util.handleErrors(err));
-            })
+            GuildModel.findOne({ name: usersGuild })
+                .then(function(guild) {
+
+                    res.status(200).send({ guild: guild });
+                }, function(err) {
+
+                    res.status(400).send(util.handleErrors(err));
+                })
+        }
     })
     .post(function(req, res){
         
