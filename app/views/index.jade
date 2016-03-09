@@ -20,6 +20,7 @@ block body
                             md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
                                 i(class="material-icons").iconHeightAdjust account_circle
                                 &nbsp {{user.name}}
+                                i(class="material-icons").iconHeightAdjust keyboard_arrow_down
                             md-menu-content(width = "4")                                
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "goTo('/auth/updateAccount')")
