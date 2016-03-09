@@ -179,10 +179,10 @@ angular.module("BossCollection.services")
                     siteServices.startLoading();
 
                     login.save(user).$promise
-                        .then(function (result) {
+                        .then(function (loggedInUser) {
 
-                            savedUser = getUserFromCookie();
-                            saveUsersRank(savedUser);
+                            savedUser = loggedInUser;
+                            saveUsersRank(loggedInUser);
 
                             $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
                             siteServices.hideLoadingBottomSheet();

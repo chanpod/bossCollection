@@ -26,9 +26,19 @@ angular.module("BossCollection.guild")
         var kickuserResource = $resource('/api/kickMember', {}, {});
         var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
         var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
-         
+        var guildHomepageContentResource = $resource("/api/guildHomepage", {}, {});
         
         var guildApi = { 
+            updateHomepageContent: function(guild){
+                
+                var bodyData = {guild: guild}; //no data, it's a get
+                return guildHomepageContentResource.save(bodyData).$promise
+            },
+            getHomepageContent: function(){
+                
+                var bodyData = {}; //no data, it's a get
+                return guildHomepageContentResource.get().$promise
+            },
             kickUser: function(userName, guildName){
                 
                 var bodyData = {userName: userName, guildName:guildName};

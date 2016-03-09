@@ -10,6 +10,7 @@ angular.module('BossCollection', [
   'BossCollection.forums',
   'BossCollection.attendance',
   'BossCollection.guild',
+  'BossCollection.home',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -31,11 +32,8 @@ angular.module('BossCollection', [
     });
 
     $routeProvider.
-    when('/', {
-      templateUrl: 'home',
-      controller: 'homeController'
-    })
-    .when('/strategyRoom/:raid', {
+    
+    when('/strategyRoom/:raid', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
     })
@@ -144,6 +142,18 @@ angular.module("BossCollection.guild", ['ngRoute'])
             })
 
     }]);
+'user strict'
+
+angular.module("BossCollection.home", ['ngRoute'])
+    .config(['$routeProvider', function($routeProvider) {
+
+        $routeProvider
+        .when('/', {
+            templateUrl: 'home',
+            controller: 'homeController'
+        })
+        
+    }]); 
 angular.module("BossCollection.attendance")
     .controller('absenceModalController', [
         '$scope', 'absenceService', '$mdDialog', 'data',
@@ -1327,9 +1337,19 @@ angular.module("BossCollection.guild")
         var kickuserResource = $resource('/api/kickMember', {}, {});
         var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
         var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
-         
+        var guildHomepageContentResource = $resource("/api/guildHomepage", {}, {});
         
         var guildApi = { 
+            updateHomepageContent: function(guild){
+                
+                var bodyData = {guild: guild}; //no data, it's a get
+                return guildHomepageContentResource.save(bodyData).$promise
+            },
+            getHomepageContent: function(){
+                
+                var bodyData = {}; //no data, it's a get
+                return guildHomepageContentResource.get().$promise
+            },
             kickUser: function(userName, guildName){
                 
                 var bodyData = {userName: userName, guildName:guildName};
@@ -1592,6 +1612,85 @@ angular.module("BossCollection.guild")
         
         
     }])
+
+angular.module("BossCollection.home")
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices',
+        function($scope, $location, $http, $timeout, siteServices, guildServices){
+            $scope.guild = {};
+            $scope.editing = false;
+            $scope.content;            
+            $scope.newTab;            
+            
+            var newTab = {title: "New Tab", content: "Make me whatever you want."};
+            
+            $scope.init = function() {
+                
+                $scope.newTab = newTab;
+                
+                guildServices.getHomepageContent()
+                    .then(function(guild){
+                        $scope.guild = guild.guild;
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err.message);
+                    })
+            }
+
+            $scope.editTab = function(){
+                $scope.editing = true;
+            }
+            
+            $scope.saveTab = function(){
+                
+                guildServices.updateHomepageContent($scope.guild)
+                    .then(function(res){
+                        
+                        $scope.cancel();
+                        //It worked, do nothing.
+                    })
+                    .catch(function(err){
+                        
+                        siteServices.showMessageModal(err.message);
+                    })
+                
+            }
+            
+            $scope.deleteTab = function(index){
+                
+                siteServices.confirmDelete()
+                    .then(function(){
+                        
+                        $scope.guild.tabs.remove(index);
+                        $scope.saveTab();
+                        
+                    })
+            }
+            
+            $scope.addNewTab = function(){
+                
+                $scope.guild.tabs.push($scope.newTab);
+                
+                $scope.saveTab();
+                
+                $scope.newTab = newTab;
+            }
+            
+            $scope.cancel = function(){
+                
+                $scope.editing = false;
+            }
+            
+            siteServices.updateTitle('Home');
+            
+            $scope.init();
+            
+            Array.prototype.remove = function(from, to) {
+                var rest = this.slice((to || from) + 1 || this.length);
+                this.length = from < 0 ? this.length + from : from;
+                return this.push.apply(this, rest);
+            };
+    }])
+  
                 
     
 'use strict';
@@ -3079,21 +3178,6 @@ angular.module("BossCollection.controllers", [
 ])
 'use strict';
 /**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.controllers")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', '$sce',
-        function($scope, $location, $http, $timeout, siteServices, $sce){
-          
-            
-            siteServices.updateTitle('Home');
-    }])
- 
-'use strict';
-/**
  *
  */
 angular.module("BossCollection.controllers")
@@ -4510,10 +4594,10 @@ angular.module("BossCollection.services")
                     siteServices.startLoading();
 
                     login.save(user).$promise
-                        .then(function (result) {
+                        .then(function (loggedInUser) {
 
-                            savedUser = getUserFromCookie();
-                            saveUsersRank(savedUser);
+                            savedUser = loggedInUser;
+                            saveUsersRank(loggedInUser);
 
                             $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
                             siteServices.hideLoadingBottomSheet();

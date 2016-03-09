@@ -252,6 +252,44 @@ router.route('/removeMember')
             })
     })
 
+router.rout
+
+router.route('/guildHomepage')
+    .get(function(req, res){
+        
+        var usersGuild = req.session.user.guild.name
+        
+        GuildModel.findOne({name:usersGuild})
+            .then(function (guild) {
+
+                res.status(200).send({ guild: guild });
+            }, function (err) {
+                
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+    .post(function(req, res){
+        
+        var usersGuild = req.session.user.guild.name
+        var updatedGuild = req.body.guild
+        
+        GuildModel.findOne({name:usersGuild})
+            .then(function (guild) {
+                
+                guild.tabs = updatedGuild.tabs;
+                
+                guild.save(function(){
+                    
+                    res.status(200).send({ guild: guild });    
+                })
+                
+                
+            }, function (err) {
+                
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 router.findUsersGuild = function (username) {
     var defer = q.defer();
 

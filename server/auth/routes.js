@@ -91,10 +91,13 @@ router.post('/login', function (req, res) {
             
 
             req.session.user = user;
-
+            
             setUser(req, res)
                 .then(function (result) {
-
+                    
+                    return util.saveSession(req, res)
+                })
+                .then(function(){
                     res.status(200).send(req.session.user);
                 })
                 .fail(function (err) {

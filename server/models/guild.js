@@ -9,6 +9,12 @@ var GuildSchema = new Schema({
             user: String,
             rank: Number
         }
+    ],
+    tabs: [
+        {
+            title: String,
+            content: String
+        }
     ]
 })
  

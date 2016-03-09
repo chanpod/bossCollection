@@ -10,6 +10,7 @@ angular.module('BossCollection', [
   'BossCollection.forums',
   'BossCollection.attendance',
   'BossCollection.guild',
+  'BossCollection.home',
   'ngRoute',
   'ngResource',
   'btford.socket-io', 
@@ -31,11 +32,8 @@ angular.module('BossCollection', [
     });
 
     $routeProvider.
-    when('/', {
-      templateUrl: 'home',
-      controller: 'homeController'
-    })
-    .when('/strategyRoom/:raid', {
+    
+    when('/strategyRoom/:raid', {
         templateUrl: 'strategyRoom',
         controller: 'strategyRoomController',
     })
