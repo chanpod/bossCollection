@@ -28,7 +28,9 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     | Forums
             md-divider(ng-if = "!user.guild || user.rank > 2")            
             include guildManagement                
-            
+        md-list.md-primary()
+            md-divider
+            include raidMenu   
         md-list.md-primary(ng-if = "user.rank > 1")
             md-divider                 
             md-menu-item()
@@ -52,9 +54,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                 md-button(ng-click = "goTo('auth/signup')")
                     md-icon(md-font-library="material-icons") account_circle
                     | Register
-        md-list.md-primary()
-            md-divider
-            include raidMenu      
+           
             
             
                 
