@@ -1,4 +1,15 @@
 script#threadComments(type="text/ng-template")
+    div()
+        md-card.threadReplyContainer
+            md-card-content().threadReply 
+                div(flex, layout = "column", ng-if = "replying")
+                    div(flex, layout = "row",  layout-align="end center")
+                        md-button(flex, ng-click = "saveComment()").md-raised.md-primary
+                            | Post
+                        md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
+                            | Cancel
+                    div(flex)
+                        input-markdown(flex, input = "ctrl.thread.newComment")
     md-content(ng-cloak, layout = "column", aria-label = "threadComments").toolbarFixedContentContainer
         md-toolbar(ng-if="true").toolbarFixedPosition
             div().md-toolbar-tools
@@ -15,7 +26,7 @@ script#threadComments(type="text/ng-template")
                     md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
                     md-tooltip() Refresh Forum data
         md-progress-linear(ng-if = "ctrl.loading", md-mode="indeterminate")
-        div().contentAdjust
+        div(ng-class = "replying ? 'threadReplyPadding' : ''").contentAdjust
             md-card
                 md-card-header
                     md-card-header-text
@@ -30,16 +41,7 @@ script#threadComments(type="text/ng-template")
                         
                     md-divider()
                     
-                    md-card
-                        md-card-content().threadReply 
-                            div(flex, layout = "column", ng-if = "replying")
-                                div(flex, layout = "row",  layout-align="end center")
-                                    md-button(flex, ng-click = "saveComment()").md-raised.md-primary
-                                        | Post
-                                    md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
-                                        | Cancel
-                                div(flex)
-                                    input-markdown(flex, input = "ctrl.thread.newComment")
+                    
                 md-card-actions
                     md-button(ng-click = "ctrl.editThread(ctrl.thread)").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
