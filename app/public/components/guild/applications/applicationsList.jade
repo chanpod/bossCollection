@@ -40,12 +40,10 @@ md-card-content(layout = "column")
                 md-icon(md-font-library="material-icons", md-menu-origin) more_vert
             md-menu-content
                 md-menu-item
-                    md-button(ng-click = "approveApplicant(application)").md-icon-button
+                    md-button(ng-click = "approveApplicant(application)")
                         md-icon(md-font-library="material-icons") check_circle
-                        md-tooltip
-                            | Accept application
+                        | Accept Application
                 md-menu-item
-                    md-button(ng-click = "rejectApplicant(application)").md-icon-button
+                    md-button(ng-click = "rejectApplicant(application)")
                         md-icon(md-font-library="material-icons") close
-                        md-tooltip
-                            | Reject application
+                        | Reject application
