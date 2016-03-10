@@ -7,7 +7,7 @@ var express = require('express');
 var router = express.Router();
 var q = require('q');
 var util = require('../utility');
-
+var _ = require('lodash');
 
 // main login page //
     
@@ -362,8 +362,15 @@ function setUser(req, res) {
         .then(function (guild) {
 
             if (guild) {
-                guild.tabs = [];
-                req.session.user.guild = guild._doc;
+
+                
+                var userIndex = findUser(req.session.user.name, guild.members);
+                
+                req.session.user.guild = {};
+                req.session.user.guild.members = [];
+                req.session.user.guild.members[0] = guild.members[userIndex];
+                req.session.user.guild.name = guild.name;
+
                 return util.saveSession(req, res)
             }
             else {
@@ -380,6 +387,14 @@ function setUser(req, res) {
 
 
     return defer.promise;
+}
+
+function findUser(userName, guildList){    
+
+    var userIndex = _.findIndex(guildList, { 'user': userName });
+
+    return userIndex; // -1 if member doesn't exist. Otherwise, it's the index of the array.
+
 }
 
 module.exports = router
