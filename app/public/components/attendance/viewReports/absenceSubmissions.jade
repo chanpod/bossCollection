@@ -6,7 +6,7 @@ script#absenceSubmissions(type="text/ng-template")
                 div(layout)
                     div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
                         md-datepicker(flex, ng-model = "ctrl.dayDesired", ng-change = "ctrl.updateList()", md-placeholder="Select Date")
-                        md-button(flex, ng-click = "ctrl.getAbsences()").md-primary.md-raised
+                        md-button(ng-click = "ctrl.getAbsences()").md-primary.md-raised
                             | Get All future Absences
                 md-divider
                 div(flex, layout = "column")

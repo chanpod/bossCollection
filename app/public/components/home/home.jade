@@ -1,7 +1,7 @@
 script#home(type="text/ng-template")
   md-content
     section().wodHeader
-    section(layout="column")
+    section(layout="column", ng-if = "user.guild")
         md-tabs(md-dynamic-height, md-border-bottom).md-background
             md-tab(ng-repeat = "tab in guild.tabs", label = "{{tab.title}}")
                 md-content().md-padding
@@ -37,11 +37,23 @@ script#home(type="text/ng-template")
                                 
                                 input-markdown(flex, input = "newTab.content")
                             div(flex, layout = "row",  layout-align="end center")
-                                md-button(flex, ng-click = "addNewTab()").md-raised.md-primary
+                                md-button(ng-click = "addNewTab()").md-raised.md-primary
                                     | Save
         
-        
-                                
+    section(layout="column", ng-if = "!user.guild")
+        div(flex, layout-align = "center center")
+            h3
+                | Welcome to BossCollection.net
+            p()
+                | To get started, login, create or join a guild, and start using the site!
+        div(flex)
+            md-card
+                md-card-title
+                    md-card-title-text
+                        h3
+                            | Features
+                md-card-content
+                    | Test
             
         ad()
         

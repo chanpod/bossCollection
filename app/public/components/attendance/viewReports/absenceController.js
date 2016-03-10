@@ -11,7 +11,7 @@ angular.module("BossCollection.attendance")
         
         self.showContentBool = false;
         self.newAbsence = {};
-        self.absences = {};
+        self.absences = [];
         self.loading = false;
         self.typePicked = false;
         self.today = moment(); 

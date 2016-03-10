@@ -4,9 +4,9 @@ script#threadComments(type="text/ng-template")
             md-card-content().threadReply 
                 div(flex, layout = "column", ng-if = "replying")
                     div(flex, layout = "row",  layout-align="end center")
-                        md-button(flex, ng-click = "saveComment()").md-raised.md-primary
+                        md-button(ng-click = "saveComment()").md-raised.md-primary
                             | Post
-                        md-button(flex, ng-click = "cancelComment()").md-raised.md-primary
+                        md-button(ng-click = "cancelComment()").md-raised.md-primary
                             | Cancel
                     div(flex)
                         input-markdown(flex, input = "ctrl.thread.newComment")
@@ -75,9 +75,9 @@ script#threadComments(type="text/ng-template")
                                     display-markdown(markdown = "comment.message", ng-if = "!comment.editing")
                                     div(flex, layout = "column", ng-if = "comment.editing")
                                         div(flex, layout = "row",  layout-align="end center")
-                                            md-button(flex, ng-click = "saveCommentEdit(comment)").md-raised.md-primary
+                                            md-button(ng-click = "saveCommentEdit(comment)").md-raised.md-primary
                                                 | Save
-                                            md-button(flex, ng-click = "cancelCommentEdit(comment)").md-raised.md-primary
+                                            md-button(ng-click = "cancelCommentEdit(comment)").md-raised.md-primary
                                                 | Cancel
                                         div(flex)
                                             input-markdown(flex, input = "comment.message")

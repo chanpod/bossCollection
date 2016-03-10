@@ -1,7 +1,7 @@
 
 angular.module("BossCollection.home")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices',
-        function($scope, $location, $http, $timeout, siteServices, guildServices){
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
             $scope.guild = {};
             $scope.editing = false;
             $scope.content;            
@@ -9,17 +9,44 @@ angular.module("BossCollection.home")
             
             var newTab = {title: "New Tab", content: "Make me whatever you want."};
             
+            $scope.$on("loggedin", function(event, user) {
+                
+                userLoginSrvc.getUser()
+                    .then(function(user) {
+                        if (user) {
+                            $scope.user = user;
+                            $scope.loggedIn = true;
+                            $scope.getHomepageContent();
+                        }
+                    },
+                    function(err) {
+                        $scope.user = {};
+                        $scope.loggedIn = false;
+                    })
+                
+                
+            }) 
+            
             $scope.init = function() {
                 
-                $scope.newTab = newTab;
+                $scope.newTab = newTab; 
                 
-                guildServices.getHomepageContent()
-                    .then(function(guild){
-                        $scope.guild = guild.guild;
-                    })
-                    .catch(function(err){
-                        siteServices.showMessageModal(err.message);
-                    })
+                $scope.getHomepageContent();    
+                
+            }
+            
+            $scope.getHomepageContent = function(){
+                
+                if($scope.user && $scope.user.guild){
+                    
+                    guildServices.getHomepageContent()
+                        .then(function(guild) {
+                            $scope.guild = guild.guild;
+                        })
+                        .catch(function(err) {
+                            siteServices.showMessageModal(err.message);
+                        })    
+                }
             }
 
             $scope.editTab = function(){

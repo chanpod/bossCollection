@@ -1,10 +1,10 @@
 
-md-menu(ng-if = "user.guild && user.rank > 1", ng-click = "openMenu($mdOpenMenu, $event)")
-    md-button(aria-label = "Account options...").menuDropdown
+md-menu(ng-if = "user.guild && user.rank > 1")
+    md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)").menuDropdown
         md-icon(md-font-library="material-icons") videogame_asset
         | &nbsp&nbsp&nbsp Guild
         md-icon(md-font-library="material-icons") keyboard_arrow_down
-    md-menu-content(width = "4")
+    md-menu-content()
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/auth/absence')")
                 md-icon(md-font-library="material-icons") today

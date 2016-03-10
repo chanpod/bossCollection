@@ -1,4 +1,4 @@
-md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
+md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
     md-toolbar().md-primary
         md-list.md-primary
                 md-list-item()
@@ -28,7 +28,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     | Forums
             md-divider(ng-if = "!user.guild || user.rank > 2")            
             include guildManagement                
-        md-list.md-primary()
+        md-list
             md-divider
             include raidMenu   
         md-list.md-primary(ng-if = "user.rank > 1")

@@ -17,7 +17,7 @@ angular.module("BossCollection.attendance")
         $scope.absent = 6;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
-        $scope.startingDate = moment();
+        $scope.startingDate = new Date();
         
         $scope.init = function(){
             
@@ -27,6 +27,7 @@ angular.module("BossCollection.attendance")
         }
            
         $scope.getAbsences = function () {
+            
             $scope.currentlySelected = "All absences"
             $scope.loading = true;
             
