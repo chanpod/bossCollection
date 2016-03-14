@@ -7,6 +7,7 @@ angular.module("BossCollection.forums")
             
             self.threadSearch = "";
             self.orderBy = "-dateCreated";
+            self.orderByString = 'Newest';
             self.loading = false;
             
             
@@ -68,12 +69,18 @@ angular.module("BossCollection.forums")
                 $scope.goToBackwards('/forum/' + self.thread.forumID);
             }
             
-            self.orderByDateCreated = function(){
-                self.orderBy = "dateCreated"
-            }
-            
-            self.orderByDateCreatedReversed = function(){
-                self.orderBy = "-dateCreated"
+            self.flipOrderBySorting = function(){
+                
+                if(self.orderBy == "dateCreated"){
+                    
+                    self.orderByString = 'Newest';
+                    self.orderBy = "-dateCreated"    
+                }
+                else{
+                    self.orderByString = 'Oldest';
+                    self.orderBy = "dateCreated"    
+                }
+                
             }
             
             $scope.cancelComment = function () {

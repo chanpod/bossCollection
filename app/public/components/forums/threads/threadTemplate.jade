@@ -18,12 +18,11 @@ script#thread(type="text/ng-template")
                 label() Search
                 md-icon(md-font-library="material-icons") search
                 input(type = "text", ng-model = "threadSearch")
-            div()
-                | Sort by date
-                md-button(ng-click = "orderByDateCreated()").md-icon-button
-                    md-icon(md-font-library="material-icons") keyboard_arrow_up
-                md-button(ng-click = "orderByDateCreatedReversed()").md-icon-button
-                    md-icon(md-font-library="material-icons") keyboard_arrow_down
+            div()                
+                md-button(ng-click = "flipOrderBySorting()").md-primary.md-raised
+                    md-icon(md-font-library="material-icons") date_range
+                    label()
+                        | &nbsp {{orderByString}}
                     
         md-list(layout = "column", layout-align = "center stretch", flex)          
            div(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy", ng-class = "isRead(thread)", layout = "row")
