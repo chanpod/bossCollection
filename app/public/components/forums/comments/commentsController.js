@@ -128,7 +128,9 @@ angular.module("BossCollection.forums")
             }
 
             $scope.deleteComment = function (comment) {
-
+                
+                $scope.loading = true;
+                
                 forumService.deleteComment(comment)
                     .then(function (result) {
 
