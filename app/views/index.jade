@@ -9,14 +9,15 @@ block body
                 div().md-toolbar-tools
                     md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
                         i(class = "material-icons") menu
-                    div(flex)
-                        h2
-                            | {{title}}
-                    div(flex, hide-xs)
+                    div(flex, layout-align = "center center", layout)
+                        div(flex)
+                            h2()
+                                | {{title}}
+                    div(flex, hide-xs, layout-align = "center center", layout)
                         h2
                             | {{user.guild.name}}
                     span(flex)
-                        md-menu
+                        md-menu(flex, layout-align = "end center", layout)
                             md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
                                 i(class="material-icons").iconHeightAdjust account_circle
                                 &nbsp {{user.name}}
