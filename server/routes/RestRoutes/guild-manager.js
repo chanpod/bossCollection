@@ -54,6 +54,8 @@ router.route('/addGuild')
                     return newGuild.save(function (savedGuild) {
 
                         req.session.user.guild = newGuild;
+                        router.buildGuildCookie(req, res, newGuild);
+                        
                         return util.saveSession(req, res);
                     });
                 })
@@ -98,7 +100,7 @@ router.route('/updateRank')
 
                     guild.save(function (savedGuild) {
 
-                        req.session.user.guild = guild;
+                        router.buildGuildCookie(req, res, guild);
 
                         util.saveSession(req, res)
                             .then(function (user) {
@@ -309,11 +311,15 @@ router.findUsersGuild = function (username) {
 
 router.buildGuildCookie = function(req, res, guild){
     
-    var userIndex = doesMemberExist(guild.members, req.session.user.name);
-
     req.session.user.guild = {};
     req.session.user.guild.members = [];
-    req.session.user.guild.members[0] = guild.members[userIndex];
+    
+    if(guild.members){
+        
+        var userIndex = doesMemberExist(guild.members, req.session.user.name);
+        req.session.user.guild.members[0] = guild.members[userIndex];    
+    }
+    
     req.session.user.guild.name = guild.name;
     
 }
