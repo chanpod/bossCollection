@@ -141,8 +141,6 @@ angular.module("BossCollection.guild")
             joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
                 
-                
-                
                 addMember.save({
                     guildName: guildName,
                     memberName: memberName
@@ -152,7 +150,7 @@ angular.module("BossCollection.guild")
                         defer.resolve(result.guild);
                     })
                     .catch(function (err) {
-
+ 
                         defer.reject(err.data.message);
                     })
                     .finally(function(){

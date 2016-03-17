@@ -195,7 +195,7 @@ router.route('/addMember')
 
                     util.saveSession(req, res)
                         .then(function (user) {
-                            res.status(200).send(user);
+                            res.status(200).send({user:user});
                         })
 
 
