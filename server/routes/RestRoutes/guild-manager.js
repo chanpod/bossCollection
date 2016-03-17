@@ -199,14 +199,9 @@ router.route('/addMember')
 
                     util.saveSession(req, res) 
                         .then(function (user) {                       
-                            console.log("Adding member completed successfully");     
+                            console.log("Adding member completed successfully");
                             res.status(200).send({user:user});
                         })
-
-
-                }, function (err) {
-
-                    res.status(400).send(util.handleErrors(err));
                 });
             })
             .fail(function (err) {
