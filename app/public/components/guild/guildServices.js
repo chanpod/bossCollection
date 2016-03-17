@@ -151,7 +151,7 @@ angular.module("BossCollection.guild")
                     })
                     .catch(function (err) {
  
-                        defer.reject(err.data.message);
+                        defer.reject(err.message);
                     })
                     .finally(function(){
                         

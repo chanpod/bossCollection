@@ -193,9 +193,9 @@ router.route('/addMember')
 
                     req.session.user.guild = guild._doc;
 
-                    util.saveSession(req, res)
-                        .then(function (user) {
-                            res.status(200).send({user:user});
+                    util.saveSession(req, res) 
+                        .then(function (user) {                            
+                            res.status(200).send({success:true});
                         })
 
 
