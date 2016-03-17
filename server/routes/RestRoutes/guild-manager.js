@@ -191,15 +191,15 @@ router.route('/addMember')
 
 
                 guild.members.push(newMember);
-                console.log("Saving guild");
+                
                 guild.save(function () {
                     
-                    console.log("Adding guild to user session object");
                     req.session.user.guild = guild;
-
+                    router.buildGuildCookie(req, res, guild);
+                    
                     util.saveSession(req, res) 
                         .then(function (user) {                       
-                            console.log("Adding member completed successfully");
+                    
                             res.status(200).send({user:user});
                         })
                 });
@@ -307,6 +307,17 @@ router.findUsersGuild = function (username) {
     return defer.promise;
 }
 
+router.buildGuildCookie = function(req, res, guild){
+    
+    var userIndex = doesMemberExist(guild.members, req.session.user.name);
+
+    req.session.user.guild = {};
+    req.session.user.guild.members = [];
+    req.session.user.guild.members[0] = guild.members[userIndex];
+    req.session.user.guild.name = guild.name;
+    
+}
+
 module.exports = router;
 
 function removeUserFromGuild(guildMemberName, guildName){
@@ -376,6 +387,8 @@ function doesMemberExist(memberList, memberName) {
 
     return doesExist; // -1 if member doesn't exist. Otherwise, it's the index of the array.
 }
+
+
 
 function findGuild(name) {
 

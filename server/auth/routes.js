@@ -361,12 +361,7 @@ function setUser(req, res) {
 
             if (guild) {
                 
-                var userIndex = findUser(req.session.user.name, guild.members);
-                
-                req.session.user.guild = {};
-                req.session.user.guild.members = [];
-                req.session.user.guild.members[0] = guild.members[userIndex];
-                req.session.user.guild.name = guild.name;
+                guildManagement.buildGuildCookie(req, res, guild);
                 return util.saveSession(req, res)
             }
             else {

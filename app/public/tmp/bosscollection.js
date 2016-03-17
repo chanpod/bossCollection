@@ -1461,14 +1461,8 @@ angular.module("BossCollection.guild")
                         defer.resolve(result.guild);
                     })
                     .catch(function (err) {
-                        
-                        if(err.status == 502){
-                            //TODO:this is super not right but seems to be working but not really???
-                            defer.resolve("whatever, it worked apparently");
-                        }
-                        else{
-                            defer.reject(err.message);    
-                        }
+
+                        defer.reject(err.message);
                         
                     })
                     .finally(function(){
