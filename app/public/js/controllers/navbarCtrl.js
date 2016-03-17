@@ -107,6 +107,15 @@ angular.module("BossCollection.controllers")
                 
                 $mdSidenav(navID)
                     .toggle();
+            } 
+        }
+        
+        $scope.hasGuild = function(){
+            if($scope.user.guild){
+                return true
+            }
+            else{
+                return false
             }
         }
         

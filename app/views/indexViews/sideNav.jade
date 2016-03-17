@@ -16,8 +16,9 @@ md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-
                 md-button(ng-click = "goTo('/')")
                     md-icon(md-font-library="material-icons") home
                     | Home
+            md-divider
         md-list.md-primary(ng-if = "loggedIn")            
-            md-menu-item(ng-if = "user.rank < 2")
+            md-menu-item(ng-if = "!hasGuild() || user.rank < 2")
                 md-button(ng-click = "goTo('/auth/application')")
                     md-icon(md-font-library="material-icons") send
                     | Apply to a Guild

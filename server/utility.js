@@ -6,7 +6,7 @@ var myExports = {
     saveSession: function(req, res){
         var defer = q.defer();
         console.log("Updating session");
-        res.cookie('user', req.session.user, { maxAge: 900000 });
+        res.cookie('user', req.session.user, { maxAge: 90000000 });
         
         req.session.save(function () {
                         
