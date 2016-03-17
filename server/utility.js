@@ -12,10 +12,12 @@ var myExports = {
                         
             // update the user's login cookies if they exists //
             if (req.session.user != undefined) {                
-
+                
+                console.log("Session update complete");
                 defer.resolve(req.session.user);                
             }
             else{
+                console.log("Uh oh, session Broke. No user defined?");
                 defer.reject("No session user defined.")
             }
         });

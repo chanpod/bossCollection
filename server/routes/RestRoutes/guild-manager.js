@@ -178,7 +178,10 @@ router.route('/addMember')
                     throw new Error("Guild doesn't exist. You can create it if you're the GM");
                     return;
                 }
-
+                
+                console.log("Seeing if guild exist");
+                console.log("Guild name: " + guild.name);
+                console.log("User name: " + memberName);
                 var indexOfMember = doesMemberExist(guild.members, memberName);
                 if (indexOfMember != -1) {
 
@@ -188,13 +191,15 @@ router.route('/addMember')
 
 
                 guild.members.push(newMember);
-
+                console.log("Saving guild");
                 guild.save(function () {
-
-                    req.session.user.guild = guild._doc;
+                    
+                    console.log("Adding guild to user session object");
+                    req.session.user.guild = guild;
 
                     util.saveSession(req, res) 
-                        .then(function (user) {                            
+                        .then(function (user) {                       
+                            console.log("Adding member completed successfully");     
                             res.status(200).send({success:true});
                         })
 
