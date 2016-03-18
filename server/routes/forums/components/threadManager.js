@@ -26,6 +26,8 @@ function createThread(req, res){
     newThread.comments = comments;
     newThread.message = message;
     newThread.dateCreated = moment.utc();
+    newThread.favorite = false;
+    newThread.sticky = false;
     
     newThread.forumID =  forumID;
     

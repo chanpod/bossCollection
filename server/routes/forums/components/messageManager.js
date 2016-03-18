@@ -24,6 +24,7 @@ function createComment(req, res){
     newComment.threadID =  threadId;
     newComment.dateCreated = moment.utc();
     newComment.dateEdited = moment.utc();
+    newComment.sticky = false;
     
     newComment.save().then(function(response){
         

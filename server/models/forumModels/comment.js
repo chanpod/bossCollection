@@ -9,7 +9,8 @@ var commentSchema = new Schema({
     threadID: String,
     message: String,
     dateCreated: Date,
-    dateEdited: Date 
+    dateEdited: Date,
+    sticky: Boolean
 })
 
 module.exports = mongoose.model('comments', commentSchema);
