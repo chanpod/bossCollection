@@ -169,7 +169,7 @@ angular.module("BossCollection.forums")
             
             $scope.$watch('orderBy', function(){
                 
-                sortThreads();
+                //sortThreads();
                 
             })
             

@@ -74,11 +74,11 @@ angular.module("BossCollection.forums")
                 if(self.orderBy == "dateCreated"){
                     
                     self.orderByString = 'Newest';
-                    self.orderBy = "-dateCreated"    
+                    self.orderBy = "-dateCreated";    
                 }
                 else{
                     self.orderByString = 'Oldest';
-                    self.orderBy = "dateCreated"    
+                    self.orderBy = "dateCreated";    
                 }
                 
             }
