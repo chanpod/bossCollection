@@ -13,7 +13,8 @@ html(ng-app="BossCollection")
     link(rel="stylesheet", href="/vendor/octicons/octicons/octicons.css")
     link(rel="stylesheet", href="/tmp/angular-material.min.css")    
     link(rel='stylesheet', href='/tmp/bosscollection.min.css')
-
+    link(rel="manifest", href="/vendor/manifest.json")
+    
     //Google analytics script
     script.
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -21,9 +22,8 @@ html(ng-app="BossCollection")
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
         ga('create', 'UA-56619501-1', 'auto');
-        ga('send', 'pageview');
-        
-        
+        ga('send', 'pageview');        
+    
 
     body(layout = "column")
         

@@ -44,3 +44,14 @@ script#editAccount(type="text/ng-template")
                     md-input-container(flex).md-block
                         md-button(type = "submit").md-primary.md-raised
                             | Save
+            div(flex)
+                div(layout = "row")
+                    div(flex)
+                        md-button(ng-click = "registerPush()").md-raised.md-primary
+                            | Register
+                    div(flex)
+                        md-button(ng-click = "unregisterPush()").md-raised.md-primary
+                            | Unregister
+                    div(flex)
+                        md-button(ng-click = "sendPush()").md-raised.md-primary
+                            | Send Test Push

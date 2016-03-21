@@ -64,8 +64,12 @@ angular.module('BossCollection', [
 
   $locationProvider.html5Mode(true);
   
+   
   
-  
+}])
+.run([function(){
+    // Check service workers are supported
+    
 }])
 /*
 .factory('mySocket', ['socketFactory', function(socketFactory){

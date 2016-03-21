@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices', 'pushNotificationsService',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices, pushNotificationsService) {
 
             siteServices.updateTitle('Account');
 
@@ -23,7 +23,21 @@ angular.module("BossCollection.controllers")
                 
                  
             }
-
+            
+            $scope.registerPush = function(){
+                
+                pushNotificationsService.subscribe();
+            }
+            
+            $scope.unregisterPush = function(){
+                
+                pushNotificationsService.unsubscribe(); 
+            }
+                    
+            $scope.sendPush = function(){
+                
+                pushNotificationsService.sendPush();
+            }
             $scope.updateAccount = function () {
 
                 
