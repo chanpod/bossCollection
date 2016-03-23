@@ -7,8 +7,8 @@ var _ = require('lodash');
 var ForumManager = require('./forumManager');
 var ThreadManager = require('./threadManager');
 
-var util = require('../../../utility');
-var CategorydModel = require('../../../models/forumModels/category.js');
+var util = require('utility');
+var CategorydModel = require('models/forumModels/category.js');
 
 function createCategory(req, res){
     

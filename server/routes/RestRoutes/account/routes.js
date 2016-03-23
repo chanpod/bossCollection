@@ -2,12 +2,14 @@
 var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
-var guildManagement = require('../routes/RestRoutes/guild-manager')
+var guildManagement = require('../guild/components/guild/guild-manager.js')
 var express = require('express');
 var router = express.Router();
 var q = require('q');
-var util = require('../utility');
+var util = require('utility');
 var _ = require('lodash');
+
+var path = require('path')
 
 // main login page //
     

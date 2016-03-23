@@ -6,8 +6,8 @@ var _ = require('lodash');
 
 var MessageManager = require('./messageManager');
 
-var util = require('../../../utility');
-var ThreadModel = require('../../../models/forumModels/thread.js');
+var util = require('utility');
+var ThreadModel = require('models/forumModels/thread.js');
 
 function createThread(req, res){
     

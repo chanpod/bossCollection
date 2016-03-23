@@ -2,11 +2,11 @@
 var crypto 		= require('crypto');
 var moment 		= require('moment');
 var q = require('q');
-var util = require('../../utility');
+var util = require('utility');
 
 //var mongoose = require('mongoose');
 //var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
-var UserModel = require('../../models/user.js');
+var UserModel = require('models/user.js');
 
 
 exports.verifyLoggedIn = function (req, res) {

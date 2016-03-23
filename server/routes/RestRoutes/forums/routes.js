@@ -5,7 +5,7 @@ var MessageManager = require('./components/messageManager')
 var ForumManager = require('./components/forumManager')
 var CategoryManager = require('./components/categoryManager');
 
-var util = require('../../utility');
+var util = require('utility');
 
 router.use(function (req, res, next) {
 

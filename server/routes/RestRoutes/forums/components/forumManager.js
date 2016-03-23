@@ -6,8 +6,8 @@ var _ = require('lodash');
 
 var ThreadManager = require('./threadManager');
 
-var util = require('../../../utility');
-var ForumdModel = require('../../../models/forumModels/forum.js');
+var util = require('utility');
+var ForumdModel = require('models/forumModels/forum.js');
 
 function createForum(req, res){
     

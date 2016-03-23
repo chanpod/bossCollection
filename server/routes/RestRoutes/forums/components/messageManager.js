@@ -4,8 +4,8 @@ var q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 
-var util = require('../../../utility');
-var commentModel = require('../../../models/forumModels/comment.js');
+var util = require('utility');
+var commentModel = require('models/forumModels/comment.js');
 
 function createComment(req, res){
     
