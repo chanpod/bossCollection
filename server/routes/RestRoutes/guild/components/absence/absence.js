@@ -30,6 +30,7 @@ function saveAbsence(req, res){
         defer.reject(err);
     })
     
+    return defer.promise;
   }
   
 function getAbsence(req, res) {
@@ -42,7 +43,15 @@ function getAbsence(req, res) {
 
     date = standardiseTime(moment());
 
-    getAbsences(date, req, res);
+    getAbsences(date, req, res)
+        .then(function(response){
+            defer.resolve(response);
+        })
+        .fail(function(err){
+            defer.reject(err);
+        })
+    
+    return defer.promise;
 }
 
 function deleteAbsence(req, res) {

@@ -26,8 +26,8 @@ router.use(function(req,res, next){
   
 })
 
-router.use('/api/absence', absence);
-router.use('/api/applications', applications);
-router.use('/api/guild', guildManager);
+router.use('/absence', absence);
+router.use('/applications', applications);
+router.use('/guild', guildManager);
 
 module.exports = router;

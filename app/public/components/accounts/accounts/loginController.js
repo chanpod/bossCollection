@@ -2,7 +2,7 @@
 /**
  *
  */
-angular.module("BossCollection.controllers")
+angular.module("BossCollection.accounts")
     .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
         function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
 

@@ -1,5 +1,5 @@
 var express = require('express');
-var router = express.Router();
+
 var q = require('q');
 var ApplicationModel = require('models/applications.js');
 var EmailDispatcher = require('../../../account/modules/email-dispatcher');
@@ -103,7 +103,12 @@ function getApplications(req, res) {
 
 
 
-module.exports = router;
+module.exports = {
+    getApplications:getApplications,
+    rejectApplication:rejectApplication,
+    approveApplication:approveApplication,
+    submitApplication:submitApplication
+};
 
 function approveApplicationEmail(application) {
 
@@ -128,3 +133,4 @@ function rejectApplicationEmail(application) {
             EmailDispatcher.dispatchCustomEmail(message, subject, userAccount);
         })
 }
+

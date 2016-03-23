@@ -16,14 +16,15 @@ var request = require('request');
 
     router.get('/sw.js', function(req, res) {
 
-        console.log("sending service worker");
-        res.sendFile('sw.js');
+        //console.log("sending service worker");
+        //res.sendFile('../../../sw.js');
+        res.status(200).send();
     })
 
     router.get('/cache-polyfill.js', function(req, res) {
 
 
-        res.sendFile('cache-polyfill.js');
+        res.sendFile('../cache-polyfill.js');
     })
 
 

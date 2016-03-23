@@ -1,22 +1,22 @@
 'use strict';
 
-angular.module("BossCollection.services")
+angular.module("BossCollection.accounts")
     .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
         'siteServices', 
         function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
-
+            var ACCOUNT_API_URL_BASE = "/api/account"
             var registration = $resource('/auth/signup', {},
                 {
 
                 })
 
-            var login = $resource('/auth/login', {}, {})
-            var logout = $resource('/auth/logout', {}, {});
-            var loggedIn = $resource('/auth/loggedin', {}, {});
-            var updateAccount = $resource('/auth/updateAccount', {}, {});
-            var getUser = $resource('/auth/currentUser', {}, {});
-            var lostPassword = $resource('/auth/lost-password', {}, {}); 
-            var savedUser = null;
+            var login = $resource(ACCOUNT_API_URL_BASE + '/login')
+            var logout = $resource(ACCOUNT_API_URL_BASE +  '/logout');
+            var loggedIn = $resource(ACCOUNT_API_URL_BASE + '/loggedin');
+            var updateAccount = $resource(ACCOUNT_API_URL_BASE + '/updateAccount');
+            var getUser = $resource(ACCOUNT_API_URL_BASE + '/currentUser');
+            var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
+            var savedUser = null; 
 
             var accountApi = {
                 lostPassword: function(email){

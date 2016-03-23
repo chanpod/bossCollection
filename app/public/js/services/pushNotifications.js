@@ -90,7 +90,7 @@ angular.module("BossCollection.services")
             return subscriptionId;
         };
         
-        loadSubscription();
+        //loadSubscription();
         
         return {            
             subscribe:subscribe,

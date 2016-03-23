@@ -76,6 +76,8 @@ angular.module('BossCollection', [
     return socketFactory();
 }]). 
 */ 
+'use strict';
+angular.module('BossCollection.accounts', ['BossCollection.services'])
 'user strict'
 
 angular.module("BossCollection.attendance", ['ngRoute'])
@@ -120,18 +122,6 @@ angular.module("BossCollection.forums", ['ngRoute'])
     }]);
 'user strict'
 
-angular.module("BossCollection.home", ['ngRoute'])
-    .config(['$routeProvider', function($routeProvider) {
-
-        $routeProvider
-        .when('/', {
-            templateUrl: 'home',
-            controller: 'homeController'
-        })
-        
-    }]); 
-'user strict'
-
 angular.module("BossCollection.guild", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
@@ -158,6 +148,273 @@ angular.module("BossCollection.guild", ['ngRoute'])
             })
 
     }]);
+'user strict'
+
+angular.module("BossCollection.home", ['ngRoute'])
+    .config(['$routeProvider', function($routeProvider) {
+
+        $routeProvider
+        .when('/', {
+            templateUrl: 'home',
+            controller: 'homeController'
+        })
+        
+    }]); 
+'use strict';
+/* Directives */
+
+angular.module('BossCollection.accounts').
+  directive('logIn', [function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'login',
+            controller: 'loginController',
+ 
+            link: function(scope, elm, attrs) {
+            }
+        }  
+  }]); 
+ 
+'use strict';
+
+angular.module("BossCollection.accounts")
+    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices', 
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
+            var ACCOUNT_API_URL_BASE = "/api/account"
+            var registration = $resource('/auth/signup', {},
+                {
+
+                })
+
+            var login = $resource(ACCOUNT_API_URL_BASE + '/login')
+            var logout = $resource(ACCOUNT_API_URL_BASE +  '/logout');
+            var loggedIn = $resource(ACCOUNT_API_URL_BASE + '/loggedin');
+            var updateAccount = $resource(ACCOUNT_API_URL_BASE + '/updateAccount');
+            var getUser = $resource(ACCOUNT_API_URL_BASE + '/currentUser');
+            var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
+            var savedUser = null; 
+
+            var accountApi = {
+                lostPassword: function(email){
+                    
+                    var defer = $q.defer();
+                    
+                  lostPassword.save({"email": email}).$promise
+                    .then(function(response){
+                        
+                        defer.resolve(response);
+                    }, function(err){
+                        defer.reject(err.data.message);
+                    })  
+                    
+                    return defer.promise;
+                },
+                updateAccount: function (updatedUser) {
+
+                    var defer = $q.defer(); 
+
+                    siteServices.startLoading();
+
+                    updateAccount.save(updatedUser).$promise
+                        .then(function (response) {
+
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data.message);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                updateUser: function () {
+
+                    savedUser = getUserFromCookie();
+
+                    if (savedUser && savedUser.guild) {
+                        saveUsersRank(savedUser);
+                    }
+
+                    $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
+
+                    return savedUser;
+
+                },
+                getUser: function () {
+
+                    var defer = $q.defer();
+
+                    savedUser = getUserFromCookie();
+
+                    if (savedUser) {
+
+                        if (savedUser && savedUser.guild) {
+                            saveUsersRank(savedUser);
+                        }
+
+                        defer.resolve(savedUser);
+                    }
+                    else {
+                        defer.reject("User doesn't exist");
+                    }
+
+
+                    return defer.promise;
+                },
+                refreshUserFromServer: function () {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    getUser.get().$promise
+                        .then(function (user) {
+
+                            accountApi.updateUser();
+                            defer.resolve();
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                logout: function () {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+                    savedUser = null;
+
+                    logout.save({}).$promise.then(function (result) {
+
+                        if (result.loggedOut == true) {
+
+                            $rootScope.$broadcast("loggedin", { loggedIn: false });
+                        }
+
+
+                        $location.path("/");
+
+                    }, function (err) {
+
+                        $rootScope.$broadcast("loggedin", { loggedIn: false });
+                        $location.path("/");
+                    })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+                    return defer.promise;
+                },
+                registerNewUser: function (newUser) {
+
+                    var defer = $q.defer();
+
+                    console.log("Register new user");
+                    //socket.emit("getBossInfo", boss); 
+                
+                    siteServices.startLoading();
+
+                    registration.save(newUser).$promise
+                        .then(function (result) {
+
+                            savedUser = getUserFromCookie();
+                            saveUsersRank(savedUser);
+                            
+                            accountApi.updateUser();
+                            
+                            $location.path("/");
+                        }, function (err) {
+                            console.log(err.data);
+
+
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                login: function (user) {
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    login.save(user).$promise
+                        .then(function (loggedInUser) {
+
+                            savedUser = loggedInUser;
+                            saveUsersRank(loggedInUser);
+
+                            $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
+                            siteServices.hideLoadingBottomSheet();
+                        },
+                            function (err) {
+
+
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+
+
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                }
+            };
+            
+            
+            function getUserFromCookie() {
+
+                var userCookie = $cookies.get("user");
+                var user = undefined;
+                
+                if (userCookie) {
+                    var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
+                    user = JSON.parse(jsonString);
+                }
+
+                return user;
+            }
+
+            function saveUsersRank(user) {
+                var memberListing;
+                if (savedUser && savedUser.guild) {
+                    memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+                    savedUser.rank = memberListing.rank
+                    return memberListing.rank;
+                }
+                else {
+                    if (user && user.guild) {
+                        memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+                        return memberListing.rank;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+            }
+
+            accountApi.refreshUserFromServer();
+
+            return accountApi;
+        }])
 angular.module("BossCollection.attendance")
     .controller('absenceModalController', [
         '$scope', 'absenceService', '$mdDialog', 'data',
@@ -212,12 +469,14 @@ angular.module("BossCollection.attendance")
         'siteServices', '$mdMedia', '$mdDialog',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
 
-            var absence = $resource('/api/absence/absence', {}, {});
-            var absenceByDate = $resource('/api/absence/absenceByDate', {}, {});
-            var absenceHistoryResource = $resource('/api/absence/absenceHistory', {}, {});
-            var deleteAbsenceResource = $resource('/api/absence/deleteAbsence');
-            var saveAbsenceResource = $resource('/api/absence/saveAbsence');
+            var API_BASE = "/api/guild/absence";
             
+            var absence = $resource(API_BASE + '/absence');
+            var absenceByDate = $resource(API_BASE + '/absenceByDate');
+            var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
+            var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
+            var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
+                                    
             var absenceApi = {
 
                 submitNewAbsence: function (newAbsence) {
@@ -225,7 +484,7 @@ angular.module("BossCollection.attendance")
                     var defer = $q.defer();
 
                     siteServices.startLoading();
-
+ 
                     absence.save(newAbsence).$promise
                         .then(function (response) {
 
@@ -786,23 +1045,24 @@ angular.module("BossCollection.forums")
         function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource, $cookies) {
 
             var currentForum;
-
-            var categoryResource = $resource('/forum/createCategory');
-            var categoryEditResource = $resource('/forum/editCategory');
-            var categoryDeleteResource = $resource('/forum/deleteCategory');
-            var getForumsResource = $resource('/forum/getCategories');
-            var deleteForumsResource = $resource('/forum/deleteForum');
-            var editForumResource = $resource('/forum/editForum');
-            var createNewForumResource = $resource('/forum/createForum');
-            var createNewThreadResource = $resource('/forum/createThread');
-            var getThreadsResource = $resource('/forum/getThreads');
-            var deleteThreadResource = $resource('/forum/deleteThread');
-            var editThreadResource = $resource('/forum/editThread')
-            var getThreadResource = $resource('/forum/thread');
-            var createCommentResource = $resource('/forum/createComment', {}, {});
-            var getCommentsResource = $resource('/forum/getComments', {}, {});
-            var editCommentResource = $resource('/forum/editComment', {}, {});
-            var deleteCommentResource = $resource('/forum/deleteComment', {}, {});
+            var FORUM_API_BASE = "/api/forum";
+            
+            var categoryResource = $resource(FORUM_API_BASE + '/createCategory');
+            var categoryEditResource = $resource(FORUM_API_BASE + '/editCategory');
+            var categoryDeleteResource = $resource(FORUM_API_BASE + '/deleteCategory');
+            var getForumsResource = $resource(FORUM_API_BASE + '/getCategories');
+            var deleteForumsResource = $resource(FORUM_API_BASE + '/deleteForum');
+            var editForumResource = $resource(FORUM_API_BASE + '/editForum');
+            var createNewForumResource = $resource(FORUM_API_BASE + '/createForum');
+            var createNewThreadResource = $resource(FORUM_API_BASE + '/createThread');
+            var getThreadsResource = $resource(FORUM_API_BASE + '/getThreads');
+            var deleteThreadResource = $resource(FORUM_API_BASE + '/deleteThread');
+            var editThreadResource = $resource(FORUM_API_BASE + '/editThread')
+            var getThreadResource = $resource(FORUM_API_BASE + '/thread');
+            var createCommentResource = $resource(FORUM_API_BASE + '/createComment', {}, {});
+            var getCommentsResource = $resource(FORUM_API_BASE + '/getComments', {}, {});
+            var editCommentResource = $resource(FORUM_API_BASE + '/editComment', {}, {});
+            var deleteCommentResource = $resource(FORUM_API_BASE + '/deleteComment', {}, {});
             
             
             var forums;
@@ -1313,112 +1573,6 @@ angular.module("BossCollection.forums")
         }]) 
         
       
-
-angular.module("BossCollection.home")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-            $scope.guild = {};
-            $scope.editing = false;
-            $scope.content;            
-            $scope.newTab;            
-            
-            var newTab = {title: "New Tab", content: "Make me whatever you want."};
-            
-            $scope.$on("loggedin", function(event, user) {
-                
-                userLoginSrvc.getUser()
-                    .then(function(user) {
-                        if (user) {
-                            $scope.user = user;
-                            $scope.loggedIn = true;
-                            $scope.getHomepageContent();
-                        }
-                    },
-                    function(err) {
-                        $scope.user = {};
-                        $scope.loggedIn = false;
-                    })
-                
-                
-            }) 
-            
-            $scope.init = function() {
-                
-                $scope.newTab = newTab; 
-                
-                $scope.getHomepageContent();    
-                
-            }
-            
-            $scope.getHomepageContent = function(){
-                
-                if($scope.user && $scope.user.guild){
-                    
-                    guildServices.getHomepageContent()
-                        .then(function(guild) {
-                            $scope.guild = guild.guild;
-                        })
-                        .catch(function(err) {
-                            siteServices.showMessageModal(err.message);
-                        })    
-                }
-            }
-
-            $scope.editTab = function(){
-                $scope.editing = true;
-            }
-            
-            $scope.saveTab = function(){
-                
-                guildServices.updateHomepageContent($scope.guild)
-                    .then(function(res){
-                        
-                        $scope.cancel();
-                        //It worked, do nothing.
-                    })
-                    .catch(function(err){
-                        
-                        siteServices.showMessageModal(err.message);
-                    })
-                
-            }
-            
-            $scope.deleteTab = function(index){
-                
-                siteServices.confirmDelete()
-                    .then(function(){
-                        
-                        $scope.guild.tabs.remove(index);
-                        $scope.saveTab();
-                        
-                    })
-            }
-            
-            $scope.addNewTab = function(){
-                
-                $scope.guild.tabs.push($scope.newTab);
-                
-                $scope.saveTab();
-                
-                $scope.newTab = newTab;
-            }
-            
-            $scope.cancel = function(){
-                
-                $scope.editing = false;
-            }
-            
-            siteServices.updateTitle('Home');
-            
-            $scope.init();
-            
-            Array.prototype.remove = function(from, to) {
-                var rest = this.slice((to || from) + 1 || this.length);
-                this.length = from < 0 ? this.length + from : from;
-                return this.push.apply(this, rest);
-            };
-    }])
-  
 'use strict';
 
 
@@ -1432,22 +1586,24 @@ angular.module("BossCollection.guild")
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-
-
-        var apply = $resource('/api/applicationSubmission', {}, {});
-        var getApplicationsUrl = $resource('/api/getApplications', {}, {});
-        var approveApplication = $resource('/api/approveApplication', {}, {});
-        var rejectApplication = $resource('/api/rejectApplication', {}, {});
+        var API_BASE = "/api/guild/guild";
+        var APPLICATION_API_BASE = "/api/guild/applications";
         
-        var addGuild = $resource('/api/addGuild', {}, {});
-        var updateRank = $resource('/api/updateRank', {}, {});
-        var changeGuildName = $resource('/api/changeGuildName', {}, {});
-        var addMember = $resource('/api/addMember', {}, {});
-        var removeMember = $resource('/api/removeMember', {}, {});
-        var kickuserResource = $resource('/api/kickMember', {}, {});
-        var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
-        var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
-        var guildHomepageContentResource = $resource("/api/guildHomepage", {}, {});
+        
+        var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
+        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications');
+        var approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
+        var rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
+        
+        var addGuild = $resource(API_BASE + '/addGuild');
+        var updateRank = $resource(API_BASE + '/updateRank');
+        var changeGuildName = $resource(API_BASE + '/changeGuildName');
+        var addMember = $resource(API_BASE + '/addMember');
+        var removeMember = $resource(API_BASE + '/removeMember' );
+        var kickuserResource = $resource(API_BASE + '/kickMember');
+        var getGuildMembers = $resource(API_BASE + '/getGuildMembers');
+        var getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
+        var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage');
         
         var guildApi = { 
             updateHomepageContent: function(guild){
@@ -1627,7 +1783,7 @@ angular.module("BossCollection.guild")
                 var defer = $q.defer();
                 var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-                var getCharacter = $resource(getCharacterUrl, {}, {});
+                var getCharacter = $resource(getCharacterUrl);
 
                 getCharacter.get().$promise.then(function (data) {
 
@@ -1669,7 +1825,7 @@ angular.module("BossCollection.guild")
 
                 var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-                var getCharacter = $resource(getCharacterUrl, {}, {});
+                var getCharacter = $resource(getCharacterUrl);
 
                 siteServices.startLoading();
 
@@ -1721,6 +1877,299 @@ angular.module("BossCollection.guild")
         
         
     }])
+
+angular.module("BossCollection.home")
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+            $scope.guild = {};
+            $scope.editing = false;
+            $scope.content;            
+            $scope.newTab;            
+            
+            var newTab = {title: "New Tab", content: "Make me whatever you want."};
+            
+            $scope.$on("loggedin", function(event, user) {
+                
+                userLoginSrvc.getUser()
+                    .then(function(user) {
+                        if (user) {
+                            $scope.user = user;
+                            $scope.loggedIn = true;
+                            $scope.getHomepageContent();
+                        }
+                    },
+                    function(err) {
+                        $scope.user = {};
+                        $scope.loggedIn = false;
+                    })
+                
+                
+            }) 
+            
+            $scope.init = function() {
+                
+                $scope.newTab = newTab; 
+                
+                $scope.getHomepageContent();    
+                
+            }
+            
+            $scope.getHomepageContent = function(){
+                
+                if($scope.user && $scope.user.guild){
+                    
+                    guildServices.getHomepageContent()
+                        .then(function(guild) {
+                            $scope.guild = guild.guild;
+                        })
+                        .catch(function(err) {
+                            siteServices.showMessageModal(err.message);
+                        })    
+                }
+            }
+
+            $scope.editTab = function(){
+                $scope.editing = true;
+            }
+            
+            $scope.saveTab = function(){
+                
+                guildServices.updateHomepageContent($scope.guild)
+                    .then(function(res){
+                        
+                        $scope.cancel();
+                        //It worked, do nothing.
+                    })
+                    .catch(function(err){
+                        
+                        siteServices.showMessageModal(err.message);
+                    })
+                
+            }
+            
+            $scope.deleteTab = function(index){
+                
+                siteServices.confirmDelete()
+                    .then(function(){
+                        
+                        $scope.guild.tabs.remove(index);
+                        $scope.saveTab();
+                        
+                    })
+            }
+            
+            $scope.addNewTab = function(){
+                
+                $scope.guild.tabs.push($scope.newTab);
+                
+                $scope.saveTab();
+                
+                $scope.newTab = newTab;
+            }
+            
+            $scope.cancel = function(){
+                
+                $scope.editing = false;
+            }
+            
+            siteServices.updateTitle('Home');
+            
+            $scope.init();
+            
+            Array.prototype.remove = function(from, to) {
+                var rest = this.slice((to || from) + 1 || this.length);
+                this.length = from < 0 ? this.length + from : from;
+                return this.push.apply(this, rest);
+            };
+    }])
+  
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices', 'pushNotificationsService',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices, pushNotificationsService) {
+
+            siteServices.updateTitle('Account');
+
+            $scope.leaveGuild = function () {
+
+                var guildName = $scope.user.guild.name;
+
+                siteServices.confirmDelete()
+                    .then(function (result) {
+                        guildServices.leaveGuild(guildName)
+                            .then(function (user) {
+
+                                $scope.user = userLoginSrvc.updateUser();
+                            })
+                    })
+                
+                 
+            }
+            
+            $scope.registerPush = function(){
+                
+                pushNotificationsService.subscribe();
+            }
+            
+            $scope.unregisterPush = function(){
+                
+                pushNotificationsService.unsubscribe(); 
+            }
+                    
+            $scope.sendPush = function(){
+                
+                pushNotificationsService.sendPush();
+            }
+            $scope.updateAccount = function () {
+
+                
+                userLoginSrvc.updateAccount($scope.user).then(function (response) {
+
+                    $scope.user = userLoginSrvc.updateUser();
+                    siteServices.showMessageToast("User updated");
+                },
+                    function (err) {
+
+                        siteServices.showMessageModal(err);
+                    })
+            }
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
+
+        $scope.user = {};
+        $scope.user.name = "";
+        $scope.loading = false;
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        
+        
+        $scope.init = function () {
+        }
+        
+        $scope.resetPassword = function(){
+            
+            $scope.loading = true;
+             
+            userLoginSrvc.lostPassword($scope.user.email)
+                .then(function(response){
+                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
+                })
+                .catch(function(err){
+                    siteServices.showMessageModal(err);
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+             
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.openPasswordResetWindow = function($event){
+            $mdBottomSheet.show({
+                    templateUrl: 'resetPassword',
+                    controller: 'loginController',
+                    targetEvent: $event,
+                    escapeToClose: false
+                })
+        }
+        
+        $scope.cancelPasswordReset = function(){ 
+            
+            $mdBottomSheet.hide();
+            $timeout(function(){
+                
+                siteServices.showLoadingBottomSheet();    
+            }, 500);
+            
+        }
+        
+        $scope.login = function(){
+             
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
+                
+            },
+            function(err){
+                
+                siteServices.showMessageModal(err);
+                console.log(err);
+            })
+        }
+        
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
+            $location.path("/");
+        }
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
+
+            $scope.user = {};
+
+            $scope.passwordsMatch = false;
+
+            $('#logInModal').closeModal();
+
+            $scope.register = function () {
+
+                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
+                    //save user to cookie
+                    
+                },
+                    function (err) {
+                        $scope.passwordsMatch = true;
+                        $scope.openFromLeft(err);
+                        console.log(err);
+                    })
+
+            }
+
+            $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
+
+        }])
+
                 
     
 'use strict';
@@ -3225,9 +3674,7 @@ angular.module("BossCollection.guild")
 /**
  *
  */
-angular.module("BossCollection.controllers", [
-    
-])
+angular.module("BossCollection.controllers", ['BossCollection.accounts'])
 'use strict';
 /**
  *
@@ -3514,193 +3961,6 @@ angular.module("BossCollection.controllers")
            $scope.getMembers()
 
         }])
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices', 'pushNotificationsService',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices, pushNotificationsService) {
-
-            siteServices.updateTitle('Account');
-
-            $scope.leaveGuild = function () {
-
-                var guildName = $scope.user.guild.name;
-
-                siteServices.confirmDelete()
-                    .then(function (result) {
-                        guildServices.leaveGuild(guildName)
-                            .then(function (user) {
-
-                                $scope.user = userLoginSrvc.updateUser();
-                            })
-                    })
-                
-                 
-            }
-            
-            $scope.registerPush = function(){
-                
-                pushNotificationsService.subscribe();
-            }
-            
-            $scope.unregisterPush = function(){
-                
-                pushNotificationsService.unsubscribe(); 
-            }
-                    
-            $scope.sendPush = function(){
-                
-                pushNotificationsService.sendPush();
-            }
-            $scope.updateAccount = function () {
-
-                
-                userLoginSrvc.updateAccount($scope.user).then(function (response) {
-
-                    $scope.user = userLoginSrvc.updateUser();
-                    siteServices.showMessageToast("User updated");
-                },
-                    function (err) {
-
-                        siteServices.showMessageModal(err);
-                    })
-            }
-        }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
-        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
-
-        $scope.user = {};
-        $scope.user.name = "";
-        $scope.loading = false;
-        
-        if($location.url() == "/auth/login"){
-            siteServices.updateTitle('Login');    
-        }
-        
-        
-        
-        $scope.init = function () {
-        }
-        
-        $scope.resetPassword = function(){
-            
-            $scope.loading = true;
-             
-            userLoginSrvc.lostPassword($scope.user.email)
-                .then(function(response){
-                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
-                })
-                .catch(function(err){
-                    siteServices.showMessageModal(err);
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-        
-        $scope.alreadyLoggedIn = function(){
-             
-            if(userLoginSrvc.loggedIn() == true){
-                $location.path('/');
-            }
-        }
-        
-        $scope.openPasswordResetWindow = function($event){
-            $mdBottomSheet.show({
-                    templateUrl: 'resetPassword',
-                    controller: 'loginController',
-                    targetEvent: $event,
-                    escapeToClose: false
-                })
-        }
-        
-        $scope.cancelPasswordReset = function(){ 
-            
-            $mdBottomSheet.hide();
-            $timeout(function(){
-                
-                siteServices.showLoadingBottomSheet();    
-            }, 500);
-            
-        }
-        
-        $scope.login = function(){
-             
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                
-                userLoginSrvc.getUser()
-                    .then(function () {
-
-                        if ($location.path() == "/auth/application") {
-
-                        }
-                        else {
-                            $location.path("/");
-                        }
-                    })
-                
-            },
-            function(err){
-                
-                siteServices.showMessageModal(err);
-                console.log(err);
-            })
-        }
-        
-        $scope.cancelLogin = function () {
-            
-            siteServices.hideBottomSheet();
-            $location.path("/");
-        }
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.controllers")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
-
-            $scope.user = {};
-
-            $scope.passwordsMatch = false;
-
-            $('#logInModal').closeModal();
-
-            $scope.register = function () {
-
-                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
-                    //save user to cookie
-                    
-                },
-                    function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
-                        console.log(err);
-                    })
-
-            }
-
-            $scope.openFromLeft = function (errorMessage) {
-                
-                siteServices.showMessageModal(errorMessage);
-            };
-
-        }])
-
 'use strict'
 angular.module("BossCollection.controllers")
     .controller("strategyRoomController", ['$scope',
@@ -4106,21 +4366,6 @@ angular.module('BossCollection.directives').
         } 
   }]); 
  
-'use strict';
-/* Directives */
-
-angular.module('BossCollection.directives').
-  directive('logIn', [function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'login',
-            controller: 'loginController',
- 
-            link: function(scope, elm, attrs) {
-            }
-        }  
-  }]); 
- 
 angular.module("BossCollection.directives")
     .directive('myEnter', function () {
         return function (scope, element, attrs) {
@@ -4237,57 +4482,6 @@ angular.module('BossCollection.filters').
 angular.module("BossCollection.services", []) 
 'use strict';
 
-angular.module("BossCollection.services")
-    .factory('bossStrats', ['$resource', '$q', function ($resource, $q) {
-        
-        var stratsAPI = $resource('/api/bossStrats', {},
-            {
-                update: {
-                    method: 'PUT'
-                }
-            })
-        
-        
-        var bossStratsApi = {
-
-            getStrats: function (boss) {
-                
-                var defer = $q.defer();
-                
-                console.log("Request Boss Info");
-                //socket.emit("getBossInfo", boss); 
-                
-                var data = {name: boss};
-                
-                stratsAPI.save(data).$promise.then(function(result){ 
-                    console.log("Result: " );
-                    console.log(result);
-                    defer.resolve(result.result);
-                })
-                
-                return defer.promise;
-            },
-            saveStrats: function (updatedStrats, url) {
-                console.log("Saving info now");
-                var parameters = {
-                    raidData: updatedStrats,
-                    url: url
-                }
-                parameters = angular.toJson(parameters);
-                console.log(parameters); 
-                //socket.emit("saveStrats", parameters);
-                stratsAPI.data = parameters;
-                
-                stratsAPI.update(parameters, function(result){
-                    console.log("Result: " + result);
-                })
-            }
-        };
-
-        return bossStratsApi;
-    }])
-'use strict';
-
 
 
 angular.module("BossCollection.services")
@@ -4378,7 +4572,7 @@ angular.module("BossCollection.services")
             return subscriptionId;
         };
         
-        loadSubscription();
+        //loadSubscription();
         
         return {            
             subscribe:subscribe,
@@ -4580,6 +4774,57 @@ angular.module("BossCollection.services")
     }])
 'use strict';
 
+angular.module("BossCollection.services")
+    .factory('bossStrats', ['$resource', '$q', function ($resource, $q) {
+        
+        var stratsAPI = $resource('/api/bossStrats', {},
+            {
+                update: {
+                    method: 'PUT'
+                }
+            })
+        
+        
+        var bossStratsApi = {
+
+            getStrats: function (boss) {
+                
+                var defer = $q.defer();
+                
+                console.log("Request Boss Info");
+                //socket.emit("getBossInfo", boss); 
+                
+                var data = {name: boss};
+                
+                stratsAPI.save(data).$promise.then(function(result){ 
+                    console.log("Result: " );
+                    console.log(result);
+                    defer.resolve(result.result);
+                })
+                
+                return defer.promise;
+            },
+            saveStrats: function (updatedStrats, url) {
+                console.log("Saving info now");
+                var parameters = {
+                    raidData: updatedStrats,
+                    url: url
+                }
+                parameters = angular.toJson(parameters);
+                console.log(parameters); 
+                //socket.emit("saveStrats", parameters);
+                stratsAPI.data = parameters;
+                
+                stratsAPI.update(parameters, function(result){
+                    console.log("Result: " + result);
+                })
+            }
+        };
+
+        return bossStratsApi;
+    }])
+'use strict';
+
 
 
 angular.module("BossCollection.services")
@@ -4590,243 +4835,3 @@ angular.module("BossCollection.services")
          
         //return socket;
     }]) 
-'use strict';
-
-angular.module("BossCollection.services")
-    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', 
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
-
-            var registration = $resource('/auth/signup', {},
-                {
-
-                })
-
-            var login = $resource('/auth/login', {}, {})
-            var logout = $resource('/auth/logout', {}, {});
-            var loggedIn = $resource('/auth/loggedin', {}, {});
-            var updateAccount = $resource('/auth/updateAccount', {}, {});
-            var getUser = $resource('/auth/currentUser', {}, {});
-            var lostPassword = $resource('/auth/lost-password', {}, {}); 
-            var savedUser = null;
-
-            var accountApi = {
-                lostPassword: function(email){
-                    
-                    var defer = $q.defer();
-                    
-                  lostPassword.save({"email": email}).$promise
-                    .then(function(response){
-                        
-                        defer.resolve(response);
-                    }, function(err){
-                        defer.reject(err.data.message);
-                    })  
-                    
-                    return defer.promise;
-                },
-                updateAccount: function (updatedUser) {
-
-                    var defer = $q.defer(); 
-
-                    siteServices.startLoading();
-
-                    updateAccount.save(updatedUser).$promise
-                        .then(function (response) {
-
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data.message);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                updateUser: function () {
-
-                    savedUser = getUserFromCookie();
-
-                    if (savedUser && savedUser.guild) {
-                        saveUsersRank(savedUser);
-                    }
-
-                    $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
-
-                    return savedUser;
-
-                },
-                getUser: function () {
-
-                    var defer = $q.defer();
-
-                    savedUser = getUserFromCookie();
-
-                    if (savedUser) {
-
-                        if (savedUser && savedUser.guild) {
-                            saveUsersRank(savedUser);
-                        }
-
-                        defer.resolve(savedUser);
-                    }
-                    else {
-                        defer.reject("User doesn't exist");
-                    }
-
-
-                    return defer.promise;
-                },
-                refreshUserFromServer: function () {
-
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-
-                    getUser.get().$promise
-                        .then(function (user) {
-
-                            accountApi.updateUser();
-                            defer.resolve();
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                logout: function () {
-
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-                    savedUser = null;
-
-                    logout.save({}).$promise.then(function (result) {
-
-                        if (result.loggedOut == true) {
-
-                            $rootScope.$broadcast("loggedin", { loggedIn: false });
-                        }
-
-
-                        $location.path("/");
-
-                    }, function (err) {
-
-                        $rootScope.$broadcast("loggedin", { loggedIn: false });
-                        $location.path("/");
-                    })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-                    return defer.promise;
-                },
-                registerNewUser: function (newUser) {
-
-                    var defer = $q.defer();
-
-                    console.log("Register new user");
-                    //socket.emit("getBossInfo", boss); 
-                
-                    siteServices.startLoading();
-
-                    registration.save(newUser).$promise
-                        .then(function (result) {
-
-                            savedUser = getUserFromCookie();
-                            saveUsersRank(savedUser);
-                            
-                            accountApi.updateUser();
-                            
-                            $location.path("/");
-                        }, function (err) {
-                            console.log(err.data);
-
-
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                login: function (user) {
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-
-                    login.save(user).$promise
-                        .then(function (loggedInUser) {
-
-                            savedUser = loggedInUser;
-                            saveUsersRank(loggedInUser);
-
-                            $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
-                            siteServices.hideLoadingBottomSheet();
-                        },
-                            function (err) {
-
-
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-
-
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                }
-            };
-            
-            
-            function getUserFromCookie() {
-
-                var userCookie = $cookies.get("user");
-                var user = undefined;
-                
-                if (userCookie) {
-                    var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
-                    user = JSON.parse(jsonString);
-                }
-
-                return user;
-            }
-
-            function saveUsersRank(user) {
-                var memberListing;
-                if (savedUser && savedUser.guild) {
-                    memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
-                    savedUser.rank = memberListing.rank
-                    return memberListing.rank;
-                }
-                else {
-                    if (user && user.guild) {
-                        memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
-                        return memberListing.rank;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-            }
-
-            accountApi.refreshUserFromServer();
-
-            return accountApi;
-        }])
