@@ -40,7 +40,7 @@ script#home(type="text/ng-template")
                                 md-button(ng-click = "addNewTab()").md-raised.md-primary
                                     | Save
         
-        section(layout = "row")
+        section(layout-gt-sm = "row", layout = "column")
             md-card(flex)
                 md-card-title
                     md-card-title-text

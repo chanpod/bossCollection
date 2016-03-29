@@ -32,11 +32,6 @@ angular.module("BossCollection.attendance")
 
            
            self.getAbsences()
-           
-           self.toolbar = {
-               isOpen: false,
-               direction: "right"
-           }
 
            self.currentlySelected = ALLFUTUREABSENCES;
            self.isToolSetOpen = false;

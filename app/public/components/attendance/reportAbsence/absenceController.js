@@ -154,7 +154,7 @@ angular.module("BossCollection.attendance")
                 absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.
-                    
+                    siteServices.showMessageModal("Success");
                 },
                     function (err) {
                         siteServices.showMessageModal(err);
