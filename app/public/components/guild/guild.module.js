@@ -1,7 +1,7 @@
 'user strict'
 
 angular.module("BossCollection.guild", ['ngRoute'])
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider', 'userLoginSrvc', '$location', function ($routeProvider, userLoginSrvc, $location) {
 
         $routeProvider
             .when('/auth/application', {

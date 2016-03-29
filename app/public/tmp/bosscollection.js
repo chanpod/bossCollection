@@ -6,6 +6,7 @@ angular.module('BossCollection', [
   'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
+  'BossCollection.accounts',
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',
@@ -123,7 +124,7 @@ angular.module("BossCollection.forums", ['ngRoute'])
 'user strict'
 
 angular.module("BossCollection.guild", ['ngRoute'])
-    .config(['$routeProvider', function ($routeProvider) {
+    .config(['$routeProvider', 'userLoginSrvc', '$location', function ($routeProvider, userLoginSrvc, $location) {
 
         $routeProvider
             .when('/auth/application', {
@@ -265,6 +266,26 @@ angular.module("BossCollection.accounts")
                     }
 
 
+                    return defer.promise;
+                },
+                ifLoggedIn: function(){
+                    
+                    var defer = $q.defer();
+                    
+                    this.getUser()
+                        .then(function(){
+                            
+                            if (savedUser) {
+                                defer.resolve(true);
+                            }
+                            else {
+                                defer.resolve(false);
+                            }
+                        })
+                        .fail(function(err){
+                            defer.reject(err);
+                        })
+                    
                     return defer.promise;
                 },
                 refreshUserFromServer: function () {

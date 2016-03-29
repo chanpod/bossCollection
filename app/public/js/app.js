@@ -6,6 +6,7 @@ angular.module('BossCollection', [
   'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
+  'BossCollection.accounts',
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',

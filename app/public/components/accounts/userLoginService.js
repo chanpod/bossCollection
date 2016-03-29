@@ -90,6 +90,26 @@ angular.module("BossCollection.accounts")
 
                     return defer.promise;
                 },
+                ifLoggedIn: function(){
+                    
+                    var defer = $q.defer();
+                    
+                    this.getUser()
+                        .then(function(){
+                            
+                            if (savedUser) {
+                                defer.resolve(true);
+                            }
+                            else {
+                                defer.resolve(false);
+                            }
+                        })
+                        .fail(function(err){
+                            defer.reject(err);
+                        })
+                    
+                    return defer.promise;
+                },
                 refreshUserFromServer: function () {
 
                     var defer = $q.defer();
