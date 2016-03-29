@@ -2,7 +2,7 @@ script#absence(type="text/ng-template")
     md-content()
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row")
+                div(layout-gt-xs="row", ng-if = "user.rank > 2")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
                                 md-selected-item = "ctrl.selectedUser",                                    
@@ -31,4 +31,4 @@ script#absence(type="text/ng-template")
                     md-input-container().md-block
                     md-button(type = "submit").md-primary.md-raised
                             | Submit
-            ad(flex)
+            

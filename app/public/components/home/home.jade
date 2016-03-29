@@ -40,6 +40,23 @@ script#home(type="text/ng-template")
                                 md-button(ng-click = "addNewTab()").md-raised.md-primary
                                     | Save
         
+        section(layout = "row")
+            md-card(flex)
+                md-card-title
+                    md-card-title-text
+                        h1
+                            | Report an absence
+                md-card-content
+                    absence-report
+            md-card(flex)
+                md-card-title
+                    md-card-title-text
+                        h1
+                            | Absence Reports
+                md-card-content
+                    view-absence-report
+            
+        
     section(layout="column", ng-if = "!user.guild")
         div(flex, layout-align = "center center")
             h3
@@ -69,5 +86,5 @@ script#home(type="text/ng-template")
                             i
                                 | Not implemented yet...
             
-        ad()
+    ad(flex)
         

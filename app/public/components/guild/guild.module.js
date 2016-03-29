@@ -1,7 +1,7 @@
 'user strict'
 
 angular.module("BossCollection.guild", ['ngRoute'])
-    .config(['$routeProvider', 'userLoginSrvc', '$location', function ($routeProvider, userLoginSrvc, $location) {
+    .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider
             .when('/auth/application', {
@@ -11,7 +11,7 @@ angular.module("BossCollection.guild", ['ngRoute'])
             .when('/reviewApplications', {
                 templateUrl: 'reviewApplications',
                 controller: 'applicationsReviewController'
-            })
+            }) 
             .when('/createGuild', {
                 templateUrl: 'createGuild',
                 controller: 'createGuildController'
@@ -23,6 +23,5 @@ angular.module("BossCollection.guild", ['ngRoute'])
             .when('/manageMembers', {
                 templateUrl: 'manageMembers',
                 controller: 'manageMembersController'
-            })
-
+            }) 
     }]);

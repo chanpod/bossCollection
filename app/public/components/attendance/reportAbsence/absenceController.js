@@ -154,10 +154,10 @@ angular.module("BossCollection.attendance")
                 absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.
-                    $location.path("/whosOut");
+                    
                 },
                     function (err) {
-                        Materialize.toast(err)
+                        siteServices.showMessageModal(err);
                         console.log(err);
                     })
             }
