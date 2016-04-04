@@ -18,8 +18,7 @@ angular.module("BossCollection.attendance")
         self.dayDesired;
         self.currentlySelected = moment().format('dddd - Do');
         
-        var ALLFUTUREABSENCES = "All Future Absences";
-        var TITLE = "Upcoming Absences";
+        var ALLFUTUREABSENCES = "All Future Absences";        
         
         /**
          * 0 = all future absences
@@ -37,7 +36,7 @@ angular.module("BossCollection.attendance")
            self.isToolSetOpen = false;
 
 
-           siteServices.updateTitle(TITLE);   
+           
            
        }
        
@@ -84,7 +83,7 @@ angular.module("BossCollection.attendance")
 
         self.getAbsences = function(){
             
-            self.currentlySelected = "All absences"
+            self.currentlySelected = "All Future Absences"
             self.loading = true;
             self.viewing = 0;
             

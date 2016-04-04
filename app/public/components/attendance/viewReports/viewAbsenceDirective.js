@@ -3,7 +3,7 @@ angular.module('BossCollection.attendance')
         
         return {
             restrict: 'E',
-            controller: 'absenceSubmissionsController',
+            controller: 'absenceSubmissionsController as absenceReportCtrl',
             templateUrl: 'absenceSubmissions'
         }
         

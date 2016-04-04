@@ -8,7 +8,7 @@ angular.module("BossCollection.attendance")
     .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
         
-        siteServices.updateTitle('Attendance Statistics');    
+        siteServices.updateTitle('Attendance Portal');    
         $scope.absenceHighchartData = [];
         $scope.absenceHighchartDrillDownSeries = [];
         

@@ -1,6 +1,12 @@
 script#attendanceStats(type="text/ng-template")
   
     md-content(id = "statsContainer")
+        md-toolbar
+            div().md-toolbar-tools
+                md-button().md-icon-button
+                    md-icon(md-font-library="material-icons") add                
+                md-button().md-icon-button
+                    md-icon(md-font-library="material-icons") person_pin
         section(flex)
             div(layout = "column")
                 div(flex)
@@ -32,4 +38,13 @@ script#attendanceStats(type="text/ng-template")
                                     | Update chart
                                     
                 div(flex, id="container", style="")
+                
+            section(flex)
+                md-card
+                    md-card-title
+                        md-card-title-text
+                            h3 Reports
+                    md-card-content
+                       
+                        view-absence-report
             ad(flex)

@@ -10,17 +10,13 @@ md-menu(ng-if = "user.guild && user.rank > 1")
                 md-icon(md-font-library="material-icons") today
                 | Report Absence
         md-menu-item(ng-if = "user.rank > 1")
-            md-button(ng-click = "goTo('/whosOut')")
-                md-icon(md-font-library="material-icons") today
-                | Upcoming Absences
-        md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/reviewApplications')")
                 md-icon(md-font-library="material-icons") inbox
                 | View Applications
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/attendanceStatistics')")
-                md-icon(md-font-library="material-icons") show_chart
-                | Attendance Statistics
+                md-icon(md-font-library="material-icons") poll
+                | Attendance Portal
 
     
                     

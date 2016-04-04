@@ -40,21 +40,7 @@ script#home(type="text/ng-template")
                                 md-button(ng-click = "addNewTab()").md-raised.md-primary
                                     | Save
         
-        section(layout-gt-sm = "row", layout = "column")
-            md-card(flex)
-                md-card-title
-                    md-card-title-text
-                        h1
-                            | Report an absence
-                md-card-content
-                    absence-report
-            md-card(flex)
-                md-card-title
-                    md-card-title-text
-                        h1
-                            | Absence Reports
-                md-card-content
-                    view-absence-report
+        
             
         
     section(layout="column", ng-if = "!user.guild")
