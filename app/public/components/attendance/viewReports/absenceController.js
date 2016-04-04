@@ -28,15 +28,11 @@ angular.module("BossCollection.attendance")
          
         
        self.init = function(){
-
            
            self.getAbsences()
 
            self.currentlySelected = ALLFUTUREABSENCES;
            self.isToolSetOpen = false;
-
-
-           
            
        }
        
@@ -53,7 +49,9 @@ angular.module("BossCollection.attendance")
        
        self.dateHasPassed = function(absence){
            
-           if(moment(absence.date).isBefore(moment())){
+           var difference = moment().diff(moment(absence.date))
+           console.log(difference);
+           if(difference > 0){
                return false;
            }
            else{
@@ -80,10 +78,12 @@ angular.module("BossCollection.attendance")
            
            return moment.utc(date).format('dddd, MMM D');
        }
+       
+       
 
         self.getAbsences = function(){
             
-            self.currentlySelected = "All Future Absences"
+            self.currentlySelected = ALLFUTUREABSENCES;
             self.loading = true;
             self.viewing = 0;
             
@@ -139,9 +139,16 @@ angular.module("BossCollection.attendance")
                 })
         }
         
-        self.getAbsencesByDate = function(){
+        self.getTodaysAbsences = function() {
+            self.dayDesired = new Date();
+            self.getAbsencesByDate();
+        }
+        
+        self.getAbsencesByDate = function(dateIn){
             
             self.loading = true;
+            
+            
             
             absenceService.getAbsencesByDate(self.dayDesired).then(function(result){
                 
@@ -154,15 +161,28 @@ angular.module("BossCollection.attendance")
                 console.log(err);  
             })
         }
+        
+        self.getUserAbsences = function(){
+            
+            absenceService.getUsersAbsences($scope.user.name)
+                .then(function(absences){
+                    
+                    self.absences = absences.absences;
+                })
+        }
          
         self.submitNewAbsence = function () {
-
+            
+            var NO_DATE = "Must select a date";
+            var NO_TYPE = "Must select a type: Late or Absent";
+            
             if (self.newAbsence.date == null) {
 
-                siteServices.showMessageModal("Must select a date")
+                siteServices.showMessageModal(NO_DATE);
             }
             else if(self.newAbsence.type == null){
-                siteServices.showMessageModal("Must select a type: Late or Absent")
+                
+                siteServices.showMessageModal(NO_TYPE);
             }
             else {
                 
@@ -176,8 +196,6 @@ angular.module("BossCollection.attendance")
                         console.log(err);
                     })
             }
-
-
         }
         
         

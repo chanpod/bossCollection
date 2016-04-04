@@ -103,7 +103,7 @@ angular.module("BossCollection.guild")
 
                 var defer = $q.defer();
                 
-                siteServices.startLoading();
+                
                 
                 getGuildMembers.save({ guildName: guildName }).$promise
                     .then(function (result) {
@@ -115,7 +115,7 @@ angular.module("BossCollection.guild")
                         defer.reject(err.data.message);
                     })
                     .finally(function(){
-                        siteServices.loadingFinished();
+                
                     })
 
                 return defer.promise;

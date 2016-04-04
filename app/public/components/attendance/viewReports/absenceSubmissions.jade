@@ -3,11 +3,16 @@ script#absenceSubmissions(type="text/ng-template")
     md-content()
         section(layout="column")
             div(flex) 
-                div(layout)
-                    div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
-                        md-datepicker(flex, ng-model = "absenceReportCtrl.dayDesired", ng-change = "absenceReportCtrl.updateList()", md-placeholder="Select Date")
+                
+                div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
+                    md-datepicker(flex, ng-model = "absenceReportCtrl.dayDesired", ng-change = "absenceReportCtrl.updateList()", md-placeholder="Select Date")
+                    div(flex, layout = "row", layout-xs = "column")
                         md-button(ng-click = "absenceReportCtrl.getAbsences()").md-primary.md-raised
-                            | Get All future Absences
+                            | Future Absences
+                        md-button( ng-click = "absenceReportCtrl.getUserAbsences()").md-primary.md-raised
+                            | My absences
+                        md-button( ng-click = "absenceReportCtrl.getTodaysAbsences()").md-primary.md-raised
+                            | Today
                 md-divider
                 div(flex, layout = "column")
                     div(flex)

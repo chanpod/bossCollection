@@ -7,6 +7,22 @@ var util = require('utility');
 
 var Absence = require('./absence.js');
 
+router.route('/absence/:userName')
+    .get(function(req, res) {
+
+        Absence.getUsersAbsences(req, res)
+            .then(function(result) {
+
+                res.status(200).send(result);
+            })
+            .fail(function(err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+
+    })
+    
+    
 router.route('/absence')
     .post(function(req, res) {
 
@@ -79,8 +95,8 @@ router.route('/absenceHistory')
 
     })
 
-router.route('/absenceByDate')
-    .post(function(req, res) {
+router.route('/absenceByDate/:date')
+    .get(function(req, res) {
 
         Absence.getAbsenceByDate(req, res)
             .then(function(result) {

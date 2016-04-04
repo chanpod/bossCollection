@@ -29,6 +29,8 @@ script#absence(type="text/ng-template")
                     textarea(id = "reason", required = "required", ng-model = "newAbsence.reason")
                 div(layout)
                     md-input-container().md-block
-                    md-button(type = "submit").md-primary.md-raised
+                        md-button(type = "submit").md-primary.md-raised
                             | Submit
+                        md-button(ng-click = "cancel()").md-primary.md-raised
+                            | Cancel
             

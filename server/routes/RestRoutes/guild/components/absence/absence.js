@@ -32,7 +32,28 @@ function saveAbsence(req, res){
     
     return defer.promise;
   }
-  
+
+function getUsersAbsences(req, res){
+    
+    var defer = q.defer();
+    
+    console.log("Getting absences for: " + req.params.userName);
+
+    var userName = req.params.userName;
+
+    
+
+    getUsersAbsence(userName, req)
+        .then(function(response){
+            defer.resolve(response);
+        })
+        .fail(function(err){
+            defer.reject(err);
+        })
+    
+    return defer.promise;
+}
+
 function getAbsence(req, res) {
     
     var defer = q.defer();
@@ -142,7 +163,7 @@ function getAbsenceByDate(req, res) {
 
     var date;
 
-    date = standardiseTime(req.body.date);
+    date = standardiseTime(req.params.date);
 
     AbsenceModel.find({
         date: date.toISOString(),
@@ -166,7 +187,8 @@ module.exports = {
     deleteAbsence: deleteAbsence,
     updateAbsence: updateAbsence,
     getAbsenceHistory: getAbsenceHistory,
-    getAbsenceByDate: getAbsenceByDate
+    getAbsenceByDate: getAbsenceByDate,
+    getUsersAbsences:getUsersAbsences
 };
 
 function standardiseTime(date){
@@ -188,6 +210,24 @@ function standardiseTime(date){
     date.hours(0);
     
     return date;
+}
+
+function getUsersAbsence(userName, req){
+    var defer = q.defer();
+    
+    AbsenceModel.find({
+        user: userName,
+        guild: req.session.user.guild.name
+    })
+        .then(function (absences) {
+
+            defer.resolve({ "absences": absences });
+        },
+        function (err) {
+            defer.reject(err);
+        })
+        
+    return defer.promise;
 }
 
 function getAbsences(date, req, res){

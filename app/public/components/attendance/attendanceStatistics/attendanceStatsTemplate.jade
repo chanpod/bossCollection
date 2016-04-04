@@ -1,12 +1,6 @@
 script#attendanceStats(type="text/ng-template")
   
     md-content(id = "statsContainer")
-        md-toolbar
-            div().md-toolbar-tools
-                md-button().md-icon-button
-                    md-icon(md-font-library="material-icons") add                
-                md-button().md-icon-button
-                    md-icon(md-font-library="material-icons") person_pin
         section(flex)
             div(layout = "column")
                 div(flex)
@@ -35,15 +29,23 @@ script#attendanceStats(type="text/ng-template")
                                     md-datepicker(ng-model = "startingDate", md-placeholder="Start Date", required).datePickerAdjust
                             div()
                                 md-button(ng-click = "getAbsences()").md-raised.md-primary
+                                    md-icon(md-font-library="material-icons") refresh
                                     | Update chart
                                     
                 div(flex, id="container", style="")
                 
             section(flex)
-                md-card
-                    md-card-title
-                        md-card-title-text
-                            h3 Reports
+                md-toolbar
+                    div().md-toolbar-tools
+                        div(flex)
+                            md-button(ng-click = "openReportModal()").md-icon-button
+                                md-icon(md-font-library="material-icons") add
+                                md-tooltip() Submit new report
+                        div(flex, layout-align = "center center", layout)
+                            h2 Reports
+                        div(flex)
+                            
+                md-card                    
                     md-card-content
                        
                         view-absence-report
