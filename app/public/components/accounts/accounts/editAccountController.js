@@ -26,17 +26,17 @@ angular.module("BossCollection.accounts")
             
             $scope.registerPush = function(){
                 
-                pushNotificationsService.subscribe();
+                //pushNotificationsService.subscribe();
             }
             
             $scope.unregisterPush = function(){
                 
-                pushNotificationsService.unsubscribe(); 
+                //pushNotificationsService.unsubscribe(); 
             }
                     
             $scope.sendPush = function(){
                 
-                pushNotificationsService.sendPush();
+                //pushNotificationsService.sendPush();
             }
             $scope.updateAccount = function () {
 

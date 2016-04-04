@@ -461,10 +461,7 @@ angular.module("BossCollection.attendance")
                 .then(function(response){
                     
                     $scope.close(response);
-                })
-                .fail(function(err){
-                    
-                })
+                })               
                 .finally(function(){
                     
                 })
@@ -2027,17 +2024,17 @@ angular.module("BossCollection.accounts")
             
             $scope.registerPush = function(){
                 
-                pushNotificationsService.subscribe();
+                //pushNotificationsService.subscribe();
             }
             
             $scope.unregisterPush = function(){
                 
-                pushNotificationsService.unsubscribe(); 
+                //pushNotificationsService.unsubscribe(); 
             }
                     
             $scope.sendPush = function(){
                 
-                pushNotificationsService.sendPush();
+                //pushNotificationsService.sendPush();
             }
             $scope.updateAccount = function () {
 
@@ -2218,7 +2215,7 @@ angular.module("BossCollection.attendance")
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
             
             $mdDialog.show({
-                controller: "absenceReportController",
+                controller: "absenceReportController as reportAbsenceCtrl",
                 templateUrl: 'absence',                
                 clickOutsideToClose: false,
                 fullscreen: useFullScreen
@@ -4568,7 +4565,7 @@ angular.module("BossCollection.services", [])
 angular.module("BossCollection.services")
     .factory('pushNotificationsService', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast', '$q', '$resource',
     function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q, $resource) {
-        
+        /**
        var API_KEY = "AIzaSyCsOC0YDE2dKWwp20f4SiHlh_KI-2uJ-P8";
        var BASE_GOOGLE_URL = "https://android.googleapis.com/gcm/send";
        var subscription;
@@ -4662,6 +4659,7 @@ angular.module("BossCollection.services")
             sendPush:sendPush
     
         }
+         */
     }])
 angular.module("BossCollection.services")
     .factory('realmServices', [

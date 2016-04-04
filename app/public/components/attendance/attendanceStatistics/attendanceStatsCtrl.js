@@ -30,7 +30,7 @@ angular.module("BossCollection.attendance")
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
             
             $mdDialog.show({
-                controller: "absenceReportController",
+                controller: "absenceReportController as reportAbsenceCtrl",
                 templateUrl: 'absence',                
                 clickOutsideToClose: false,
                 fullscreen: useFullScreen

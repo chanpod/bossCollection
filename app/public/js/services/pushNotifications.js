@@ -5,7 +5,7 @@
 angular.module("BossCollection.services")
     .factory('pushNotificationsService', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast', '$q', '$resource',
     function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q, $resource) {
-        
+        /**
        var API_KEY = "AIzaSyCsOC0YDE2dKWwp20f4SiHlh_KI-2uJ-P8";
        var BASE_GOOGLE_URL = "https://android.googleapis.com/gcm/send";
        var subscription;
@@ -99,4 +99,5 @@ angular.module("BossCollection.services")
             sendPush:sendPush
     
         }
+         */
     }])

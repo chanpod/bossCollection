@@ -5,7 +5,7 @@ script#absence(type="text/ng-template")
                 div(layout-gt-xs="row", ng-if = "user.rank > 2")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
-                                md-selected-item = "ctrl.selectedUser",                                    
+                                md-selected-item = "reportAbsenceCtrl.selectedUser",                                    
                                 md-search-text = "user",
                                 md-floating-label = "Select User",
                                 md-items = "user in filterSearch(user)",
