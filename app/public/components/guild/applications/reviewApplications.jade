@@ -4,7 +4,9 @@ script#reviewApplications(type="text/ng-template")
             div(flex-xs, flex-gt-xs="60")
                 md-tabs(md-dynamic-height md-border-bottom)
                     md-tab(label = "New Applications")
-                        md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")
+                        div(ng-show = "numOfNewApplicants == 0")
+                            h3 No New Applications
+                        md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")                            
                             include applicationsList
                     md-tab(label = "Approved")
                         md-card(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'")

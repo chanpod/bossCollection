@@ -4,11 +4,7 @@ md-menu(ng-if = "user.guild && user.rank > 1")
         md-icon(md-font-library="material-icons") videogame_asset
         | &nbsp&nbsp&nbsp Guild
         md-icon(md-font-library="material-icons") keyboard_arrow_down
-    md-menu-content()
-        md-menu-item(ng-if = "user.rank > 1")
-            md-button(ng-click = "goTo('/auth/absence')")
-                md-icon(md-font-library="material-icons") today
-                | Report Absence
+    md-menu-content()        
         md-menu-item(ng-if = "user.rank > 1")
             md-button(ng-click = "goTo('/reviewApplications')")
                 md-icon(md-font-library="material-icons") inbox

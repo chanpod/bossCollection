@@ -12,15 +12,13 @@ router.use(function(req,res, next){
   var errMessage = "You must be logged in and a part of a guild to use this";
   
   if(req.session.user){
-      
+      next();
       if (req.session.user.guild) {
-          next();
+          
        }
        else{
-           res.writeHead(400, {
-               'Location': '/'
-           })
-           res.status(400).send(util.handleErrors(errMessage));
+          
+           //res.status(400).send(util.handleErrors(errMessage));
        }
   }
   

@@ -2001,8 +2001,8 @@ angular.module("BossCollection.home")
  *
  */
 angular.module("BossCollection.accounts")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices', 'pushNotificationsService',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices, pushNotificationsService) {
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
 
             siteServices.updateTitle('Account');
 
@@ -3263,6 +3263,44 @@ angular.module("BossCollection.forums")
         }])
 'use strict';
 /**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("createGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+          
+            
+            siteServices.updateTitle('Create Guild');
+            
+            $scope.guildName = "";
+            $scope.loading = false;
+            
+            $scope.joinGuild = function(){
+                $scope.loading = true;
+                guildServices.createGuild($scope.guildName)
+                    .then(function(){
+                        
+                        var user = userLoginSrvc.updateUser();
+                        
+                        siteServices.showMessageModal("Successfully created " + user.guild.name);
+                        
+                        $location.path('/');           
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
+                    })
+            }
+    }])
+
+'use strict';
+/**
  
  *
 
@@ -3440,7 +3478,7 @@ angular.module("BossCollection.guild")
              var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
             
             $scope.loading = true;
-            
+            $scope.numOfNewApplicants = 0;
             $scope.filterStatus = function(status){
                 
                 return function(application){
@@ -3511,6 +3549,14 @@ angular.module("BossCollection.guild")
                     $scope.loading = false;
                     $scope.applications = applications.applications; //object to array
                     
+                    var newApplicants = _.find($scope.applications, function(applicant){                        
+                        return applicant.status == "Applied";
+                    })
+                    
+                    if(newApplicants != undefined){
+                        $scope.numOfNewApplicants = 1;    
+                    }
+                    
                     
                     convertClasses();
                 },
@@ -3531,44 +3577,6 @@ angular.module("BossCollection.guild")
                 }
             }
 
-    }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("createGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-          
-            
-            siteServices.updateTitle('Create Guild');
-            
-            $scope.guildName = "";
-            $scope.loading = false;
-            
-            $scope.joinGuild = function(){
-                $scope.loading = true;
-                guildServices.createGuild($scope.guildName)
-                    .then(function(){
-                        
-                        var user = userLoginSrvc.updateUser();
-                        
-                        siteServices.showMessageModal("Successfully created " + user.guild.name);
-                        
-                        $location.path('/');           
-                    })
-                    .catch(function(err){
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function(){
-                        $scope.loading = false;
-                    })
-            }
     }])
 
 'use strict';

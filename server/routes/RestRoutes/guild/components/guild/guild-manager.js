@@ -31,7 +31,7 @@ function addGuild(req, res) {
     var guildName = req.body.guildName;
     var guildManager = req.session.user.name
 
-    router.findUsersGuild(guildManager)
+    findUsersGuild(guildManager)
         .then(function(guildExist) {
             if (guildExist) {
 
@@ -58,7 +58,7 @@ function addGuild(req, res) {
             return newGuild.save(function(savedGuild) {
 
                 req.session.user.guild = newGuild;
-                router.buildGuildCookie(req, res, newGuild);
+                buildGuildCookie(req, res, newGuild);
 
                 return util.saveSession(req, res);
             });
@@ -106,7 +106,7 @@ function updateRank(req, res) {
 
                 guild.save(function(savedGuild) {
 
-                    router.buildGuildCookie(req, res, guild);
+                    buildGuildCookie(req, res, guild);
 
                     util.saveSession(req, res)
                         .then(function(user) {
@@ -202,7 +202,7 @@ function addMember(req, res) {
             guild.save(function() {
 
                 req.session.user.guild = guild;
-                router.buildGuildCookie(req, res, guild);
+                buildGuildCookie(req, res, guild);
 
                 util.saveSession(req, res)
                     .then(function(user) {
@@ -325,12 +325,14 @@ module.exports = {
     updateGuildHomepage:updateGuildHomepage,
     buildGuildCookie:buildGuildCookie,
     getGuildHomepage:getGuildHomepage,
+    getListOfGuilds:getListOfGuilds,
     getGuildMembers:getGuildMembers,
     findUsersGuild:findUsersGuild,
     removeMember:removeMember,    
     kickMember:kickMember,
     updateRank:updateRank,
     addMember:addMember,
+    addGuild:addGuild
     };
 
 function findUsersGuild (username) {

@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.accounts")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices', 'pushNotificationsService',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices, pushNotificationsService) {
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
 
             siteServices.updateTitle('Account');
 

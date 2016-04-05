@@ -15,7 +15,7 @@ angular.module("BossCollection.guild")
              var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
             
             $scope.loading = true;
-            
+            $scope.numOfNewApplicants = 0;
             $scope.filterStatus = function(status){
                 
                 return function(application){
@@ -85,6 +85,14 @@ angular.module("BossCollection.guild")
                 .then(function(applications){
                     $scope.loading = false;
                     $scope.applications = applications.applications; //object to array
+                    
+                    var newApplicants = _.find($scope.applications, function(applicant){                        
+                        return applicant.status == "Applied";
+                    })
+                    
+                    if(newApplicants != undefined){
+                        $scope.numOfNewApplicants = 1;    
+                    }
                     
                     
                     convertClasses();
