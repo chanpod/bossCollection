@@ -19,6 +19,21 @@ router.use(function (req, res, next) {
     next();
 })
 
+router.get('/user/:userName/avatar', function(req, res){
+    
+    var userName = req.params.userName;
+    
+    AM.getAvatarUrl(userName)
+        .then(function(response){
+            res.status(200).send(response);
+        })
+        .fail(function(err){
+            res.status(400).send(err);
+        })
+    
+})
+
+
 router.post('/loggedin', function (req, res) {
 
     console.log("Checking user...");

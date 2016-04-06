@@ -15,10 +15,21 @@ angular.module("BossCollection.accounts")
             var loggedIn = $resource(ACCOUNT_API_URL_BASE + '/loggedin');
             var updateAccount = $resource(ACCOUNT_API_URL_BASE + '/updateAccount');
             var getUser = $resource(ACCOUNT_API_URL_BASE + '/currentUser');
+            var getUserAvatar = $resource(ACCOUNT_API_URL_BASE + '/user/:userName/avatar');
             var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
             var savedUser = null; 
 
             var accountApi = {
+                getAvatar: function(userName){
+                    var defer = $q.defer();
+                    
+                    getUserAvatar.get({userName: userName}, function(response){
+                        defer.resolve(response.avatarUrl);
+                    })
+                    
+                    
+                    return defer.promise;
+                },
                 lostPassword: function(email){
                     
                     var defer = $q.defer();

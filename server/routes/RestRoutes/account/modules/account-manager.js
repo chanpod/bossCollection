@@ -9,6 +9,24 @@ var util = require('utility');
 var UserModel = require('models/user.js');
 
 
+exports.getAvatarUrl = function(userName){
+    
+    var defer = q.defer();
+    
+    UserModel.findOne({name:userName}, function(err, user){       
+       
+       if(err){
+           defer.reject(util.handleErrors(err));
+           return;
+       }
+       var url = user._doc.avatarUrl;
+       defer.resolve({avatarUrl: url});
+        
+    })
+    
+    return defer.promise;
+}
+
 exports.verifyLoggedIn = function (req, res) {
 
     if (req.session.user == null) {

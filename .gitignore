@@ -1,6 +1,7 @@
 
 .settings/
 node_modules/
+!./server/node_modules
 workspace.xml
 watcherTasks.xml
 app/public/tmp/

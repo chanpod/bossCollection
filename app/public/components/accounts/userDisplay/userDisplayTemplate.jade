@@ -1,7 +1,8 @@
 script#userDisplayTemplate(type="text/ng-template")
     div(layout)
         div()
-            img(src = "http://findicons.com/files/icons/1072/face_avatars/300/i05.png").avatarImage
+            img(ng-if = "avatarUrl != undefined", src = "{{avatarUrl}}").avatarImage
+            i(ng-if = "avatarUrl == undefined", class="material-icons").iconHeightAdjust account_circle
         div(layout, layout-align = "center center")
             span().userFont
                 {{user}}
