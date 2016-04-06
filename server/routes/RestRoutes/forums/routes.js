@@ -57,7 +57,7 @@ router.route('/getComments')
 router.route('/deleteComment')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        
         MessageManager.deleteComment(req, res)
             .then(function(response){
                 
@@ -107,7 +107,7 @@ router.route('/createCategory')
 router.route('/deleteCategory')
     .post(function (req, res) {
 
-        console.log("Successfully accessed forum route");
+        
         
         CategoryManager.deleteCategories(req, res)
             .then(function(response){
