@@ -323,6 +323,15 @@ html, body {
     border-left:15px solid green;
 }
 
+.avatarImage{
+    width: 50px;
+    height: 50px;
+}
+
+.userFont{
+    color: black;
+    font-size: 20px;
+} 
 .toolbarFixedContentContainer{
     height: 100%;
 }
@@ -392,14 +401,14 @@ html, body {
     overflow: scroll;
 }
 
-
+.threadSubject{
+    font-size: 23px;
+}
 
 #vertical-container{
     min-height:100px; 
     height: 70vh !important;
-}
-
-
+} 
 
 .confirmCommentDelete{
     

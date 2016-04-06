@@ -30,8 +30,8 @@ script#threadComments(type="text/ng-template")
             md-card
                 md-card-header
                     md-card-header-text
-                        span().md-subhead
-                            | Author: {{ctrl.thread.user}}
+                        span().md-subhead                            
+                            user-display(user = "ctrl.thread.user")
                         div(flex, layout, layout-align = "center center")
                             h2()
                                 {{ctrl.thread.title}}        
@@ -64,11 +64,12 @@ script#threadComments(type="text/ng-template")
                 
                     div(layout = "column")
                         div(flex).md-list-item-text
-                            div(layout-align = "space-between center", layout)
+                            div(layout-align = "space-between center", layout, layout-xs = "column")
                                 h3(flex)
-                                    {{comment.user}}
-                                div(flex)
-                                    {{formatDate(comment.dateCreated)}}
+                                    user-display(user = "comment.user")                                    
+                                div(flex, layout-align = "end center", layout)
+                                    span()
+                                        {{formatDate(comment.dateCreated)}}
                                 
                             md-divider
                                     display-markdown(markdown = "comment.message", ng-if = "!comment.editing")
