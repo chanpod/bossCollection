@@ -35,6 +35,9 @@ script#editAccount(type="text/ng-template")
                         label() Avatar
                         input(id="battleTag", ng-model = "user.avatarUrl")
                         md-hint() Uses image url only. EG use imgur
+                    div(ng-if = "user.avatarUrl != undefined")
+                        h3 Avatar
+                        img(src = "{{user.avatarUrl}}").avatarImage
                     md-list
                         md-subheader().md-no-sticky
                             | Guilds
