@@ -140,7 +140,13 @@ angular.module("BossCollection.attendance")
         }
         
         self.getTodaysAbsences = function() {
+            
             self.dayDesired = new Date();
+            
+            self.dayDesired.setSeconds(0);
+            self.dayDesired.setHours(0);
+            self.dayDesired.setMinutes(0);
+            
             self.getAbsencesByDate();
         }
         
@@ -148,7 +154,7 @@ angular.module("BossCollection.attendance")
             
             self.loading = true;
             
-            
+             
             
             absenceService.getAbsencesByDate(self.dayDesired).then(function(result){
                 
