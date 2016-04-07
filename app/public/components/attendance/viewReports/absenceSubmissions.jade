@@ -9,10 +9,11 @@ script#absenceSubmissions(type="text/ng-template")
                     div(flex, layout = "row", layout-xs = "column")
                         md-button(ng-click = "absenceReportCtrl.getAbsences()").md-primary.md-raised
                             | Future Absences
-                        md-button( ng-click = "absenceReportCtrl.getUserAbsences()").md-primary.md-raised
+                        md-button( ng-click = "absenceReportCtrl.getUserAbsences(user.name)").md-primary.md-raised
                             | My absences
                         md-button( ng-click = "absenceReportCtrl.getTodaysAbsences()").md-primary.md-raised
                             | Today
+                        list-guild-members(selected-member = "selectedMember", guild = "user.guild.name")
                 md-divider
                 div(flex, layout = "column")
                     div(flex)

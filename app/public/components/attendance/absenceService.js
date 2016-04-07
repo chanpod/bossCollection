@@ -14,7 +14,7 @@ angular.module("BossCollection.attendance")
             var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
             var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
                                     
-            var absenceApi = {
+            var absenceApi = {                
                 getUsersAbsences: function(user){
                     
                     var defer = $q.defer();                    

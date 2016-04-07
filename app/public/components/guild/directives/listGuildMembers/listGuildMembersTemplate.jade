@@ -1,0 +1,16 @@
+script#listGuildMembersTemplate(type="text/ng-template")
+    div()
+        | Search for Members Absences
+        md-autocomplete(md-min-length = "1",
+                    md-item-text = "user.user",
+                    md-selected-item = "selectedMember",                                    
+                    md-search-text = "user",
+                    md-floating-label = "Select User",
+                    md-items = "user in filterSearch(user)",
+                    md-selected-item-change = "userSelected()",                    
+                    flex             
+                    )
+            md-item-template
+                span(md-highlight-text = "user") {{user.user}}
+            md-not-found
+                | Nothing found.
