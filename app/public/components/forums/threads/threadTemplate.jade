@@ -26,6 +26,7 @@ script#thread(type="text/ng-template")
                     
         md-list(layout = "column", layout-align = "center stretch", flex)          
            div(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy", ng-class = "isRead(thread)", layout = "row")
+           
                 md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
@@ -42,6 +43,7 @@ script#thread(type="text/ng-template")
                                     | Comments: {{thread.commentCount}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
                         {{thread.message}}
+                        
                 div(ng-show = "thread.user == user.name || user.rank == 4", layout-align = "center center", layout)
                     md-button(ng-click = "deleteThread(thread)").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "delete category") delete
@@ -49,4 +51,5 @@ script#thread(type="text/ng-template")
                     md-button(ng-click = "editThread(thread)").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                         md-tooltip() Edit thread
+                        
             md-divider(ng-if="!$last")

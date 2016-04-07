@@ -8,6 +8,23 @@ var util = require('utility');
 //var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
 var UserModel = require('models/user.js');
 
+exports.updateAvatarUrl = function(userName, avatarUrl){
+    var defer = q.defer();
+    
+    UserModel.findOne({name: userName}, function(err, user){
+        
+        if(err){
+            defer.reject(err);
+            return;
+        }
+        
+        user.avatarUrl = avatarUrl;
+        
+        user.save(status => defer.resolve(status));
+    })
+    
+    return defer.promise;
+}
 
 exports.getAvatarUrl = function(userName){
     

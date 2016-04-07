@@ -31,6 +31,10 @@ script#editAccount(type="text/ng-template")
                     md-input-container(flex).md-block
                         label() Battle Tag
                         input(id="battleTag", ng-model = "user.battleTag")
+                    md-input-container(flex).md-block
+                        label() Avatar
+                        input(id="battleTag", ng-model = "user.avatarUrl")
+                        md-hint() Uses image url only. EG use imgur
                     md-list
                         md-subheader().md-no-sticky
                             | Guilds

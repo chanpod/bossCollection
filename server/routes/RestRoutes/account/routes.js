@@ -19,6 +19,19 @@ router.use(function (req, res, next) {
     next();
 })
 
+/**
+ * Update users avatar.
+ */
+router.post('/user/:userName/avatar/:avatarUrl', function(req, res){
+    
+    var userName = req.params.userName;
+    var avatarUrl = req.params.userName;
+    
+    AM.updateAvatarUrl(userName, avatarUrl)
+        .then(response => res.status(200).send(response))
+        .fail(err => res.status(400).send(err))
+})
+
 router.get('/user/:userName/avatar', function(req, res){
     
     var userName = req.params.userName;
@@ -207,7 +220,8 @@ router.post('/updateAccount', function (req, res) {
                 name: req.body['name'],
                 battleTag: req.body['battleTag'],
                 email: req.body['email'],
-                password: req.session.user.password
+                password: req.session.user.password,
+                avatarUrl: req.body['avatarUrl']
             })
         })
         .then(function (user) {
