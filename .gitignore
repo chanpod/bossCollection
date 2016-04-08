@@ -6,3 +6,4 @@ workspace.xml
 watcherTasks.xml
 app/public/tmp/
 app/public/css/compiled.scss
+app/public/bower_components

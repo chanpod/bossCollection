@@ -6,6 +6,7 @@ angular.module("BossCollection.home")
             $scope.editing = false;
             $scope.content;            
             $scope.newTab;            
+            $scope.guildImagesLoaded = false;
             
             var newTab = {title: "New Tab", content: "Make me whatever you want."};
             
@@ -36,12 +37,27 @@ angular.module("BossCollection.home")
             }
             
             $scope.getHomepageContent = function(){
-                
+                $scope.guildImagesLoaded = false;
                 if($scope.user && $scope.user.guild){
                     
                     guildServices.getHomepageContent()
                         .then(function(guild) {
+                            
                             $scope.guild = guild.guild;
+
+                            var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                                + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
+
+                            $scope.guild.images.forEach(function(image) {
+                                sliderHTML += "<item source = " + image + "></item>"
+                            }, this);
+
+
+                            sliderHTML += "</awesome-slider>";
+
+                            document.getElementById('imageGallery').innerHTML = sliderHTML;
+
+                            $scope.guildImagesLoaded = true;
                         })
                         .catch(function(err) {
                             siteServices.showMessageModal(err.message);

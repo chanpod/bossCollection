@@ -1,6 +1,8 @@
-script#home(type="text/ng-template")
+script#home(type="text/ng-template")  
+  
   md-content
-    section().wodHeader
+    section(id = "imageGallery").imageGallery        
+        
     section(layout="column", ng-if = "user.guild")
         md-tabs(md-dynamic-height, md-border-bottom).md-background
             md-tab(ng-repeat = "tab in guild.tabs", label = "{{tab.title}}")
@@ -73,4 +75,4 @@ script#home(type="text/ng-template")
                                 | Not implemented yet...
             
     ad(flex)
-        
+    

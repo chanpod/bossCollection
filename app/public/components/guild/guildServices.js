@@ -30,7 +30,7 @@ angular.module("BossCollection.guild")
         var getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
         var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage');
         
-        var guildApi = { 
+        var guildApi = {
             updateHomepageContent: function(guild){
                 
                 var bodyData = {guild: guild}; //no data, it's a get
