@@ -10,9 +10,10 @@ var util = require('utility');
 router.use(function(req,res, next){
     
   var errMessage = "You must be logged in and a part of a guild to use this";
-  
+  next();
+  /*
   if(req.session.user){
-      next();
+      
       if (req.session.user.guild) {
           
        }
@@ -25,7 +26,7 @@ router.use(function(req,res, next){
   else{
       res.status(400).send(util.handleErrors(errMessage));
   }
-  
+  */
 })
 
 router.use('/absence', absence);

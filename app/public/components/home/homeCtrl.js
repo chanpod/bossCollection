@@ -40,18 +40,20 @@ angular.module("BossCollection.home")
                 $scope.guildImagesLoaded = false;
                 if($scope.user && $scope.user.guild){
                     
-                    guildServices.getHomepageContent()
+                    guildServices.getHomepageContent($scope.user.guild.name)
                         .then(function(guild) {
                             
                             $scope.guild = guild.guild;
 
                             var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
                                 + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
-
-                            $scope.guild.images.forEach(function(image) {
-                                sliderHTML += "<item source = " + image + "></item>"
-                            }, this);
-
+                                
+                            if($scope.guild && $scope.guild.images){
+                                $scope.guild.images.forEach(function(image) {
+                                    sliderHTML += "<item source = " + image + "></item>"
+                                }, this);    
+                            }
+                            
 
                             sliderHTML += "</awesome-slider>";
 

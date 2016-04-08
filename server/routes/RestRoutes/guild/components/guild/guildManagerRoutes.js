@@ -130,7 +130,7 @@ router.route('/removeMember')
 
 
 
-router.route('/guildHomepage')
+router.route('/guildHomepage/:guildName')
     .get(function(req, res){
         
        Guild.getGuildHomepage(req, res)

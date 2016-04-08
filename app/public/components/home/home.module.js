@@ -8,5 +8,9 @@ angular.module("BossCollection.home", ['ngRoute'])
             templateUrl: 'home',
             controller: 'homeController'
         })
+        .when('/guild/:guildName', {
+            templateUrl: 'guildVisitHome',
+            controller: 'guildVisitController'
+        })
         
     }]); 

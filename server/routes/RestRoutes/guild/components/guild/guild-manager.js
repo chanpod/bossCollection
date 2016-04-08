@@ -279,7 +279,7 @@ function getGuildHomepage(req, res) {
 
     var defer = q.defer();
 
-    var usersGuild = req.session.user.guild.name
+    var usersGuild = req.params.guildName;
 
     GuildModel.findOne({ name: usersGuild })
         .then(function(guild) {
