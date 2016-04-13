@@ -5,7 +5,7 @@ angular.module("BossCollection.accounts")
         'siteServices', 
         function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
             var ACCOUNT_API_URL_BASE = "/api/account"
-            var registration = $resource('/auth/signup', {},
+            var registration = $resource('/api/account/signup', {},
                 {
 
                 })
@@ -19,14 +19,13 @@ angular.module("BossCollection.accounts")
             var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
             var savedUser = null; 
 
-            var accountApi = {
+            var accountApi = { 
                 getAvatar: function(userName){
                     var defer = $q.defer();
                     
                     getUserAvatar.get({userName: userName}, function(response){
                         defer.resolve(response.avatarUrl);
                     })
-                    
                     
                     return defer.promise;
                 },

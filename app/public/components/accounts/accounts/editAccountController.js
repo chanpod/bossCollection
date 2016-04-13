@@ -20,8 +20,6 @@ angular.module("BossCollection.accounts")
                                 $scope.user = userLoginSrvc.updateUser();
                             })
                     })
-                
-                 
             }
             
             $scope.registerPush = function(){

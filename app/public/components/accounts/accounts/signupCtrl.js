@@ -10,7 +10,7 @@ angular.module("BossCollection.accounts")
 
             $scope.passwordsMatch = false;
 
-            $('#logInModal').closeModal();
+            
 
             $scope.register = function () {
 
