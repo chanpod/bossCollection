@@ -65,8 +65,14 @@ angular.module("BossCollection.forums")
                     })
             }  
             
-            $scope.goBack = function(){
-                $scope.goToBackwards('/forum/' + self.thread.forumID);
+            $scope.goBack = function () {
+                
+                if (forumService.getIsComingFromFavorites()) {
+                    $scope.goToBackwards('/forum/favorites');
+                } else{
+                    $scope.goToBackwards('/forum/' + self.thread.forumID);    
+                }
+                
             }
             
             self.flipOrderBySorting = function(){

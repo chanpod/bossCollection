@@ -9,6 +9,23 @@ var MessageManager = require('./messageManager');
 var util = require('utility');
 var ThreadModel = require('models/forumModels/thread.js');
 
+function getFavorites(req, res) {
+
+    var defer = q.defer();
+
+    var user = req.session.user.name;
+
+    ThreadModel.find({ "favorite": true, "user":user })
+        .then((favorites, err) => {
+
+            if (err) return defer.reject(util.handleErrors(err));
+
+            return defer.resolve({favorites: favorites});
+        })
+
+    return defer.promise;
+}
+
 function createThread(req, res){
     
     var defer = q.defer();
@@ -171,6 +188,7 @@ module.exports = {
     getThread:getThread,
     deleteThread:deleteThread,
     editThread:editThread,
-    getThreadCount:getThreadCount
+    getThreadCount: getThreadCount,
+    getFavorites:getFavorites
     
 }

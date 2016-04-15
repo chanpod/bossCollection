@@ -20,7 +20,8 @@ angular.module("BossCollection.accounts")
             var savedUser = null; 
 
             var accountApi = { 
-                getAvatar: function(userName){
+                getAvatar: function (userName) {
+                    
                     var defer = $q.defer();
                     
                     getUserAvatar.get({userName: userName}, function(response){

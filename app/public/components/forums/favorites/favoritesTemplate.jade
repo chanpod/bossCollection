@@ -1,39 +1,43 @@
-script#thread(type="text/ng-template")    
+script#favorites(type="text/ng-template")    
     md-content(flex, aria-label = "threadTemplate")
-        md-toolbar(flex).md-scroll-shrink
-                div().md-toolbar-tools
-                    md-button(ng-click = "goBack()").md-icon-button
-                        md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
-                    | Forums
-                    span(flex)
-                    md-button(ng-click = "createThread()").md-icon-button
-                        md-icon(md-font-library="material-icons", aria-label = "new thread") add
-                        md-tooltip() Create new thread
-                    md-button(ng-click = "refresh()").md-icon-button
-                        md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
-                        md-tooltip() Refresh Forum data
-        md-progress-linear(ng-if = "loading", md-mode="indeterminate")
-        div(layout = "row", layout-align = "space-between center", flex)
-            md-input-container().md-block.md-icon-float
-                label() Search
-                md-icon(md-font-library="material-icons") search
-                input(type = "text", ng-model = "threadSearch")
-            div()                
-                md-button(ng-click = "flipOrderBySorting()").md-primary.md-raised
-                    md-icon(md-font-library="material-icons") date_range
-                    label()
-                        | &nbsp {{orderByString}}
-                    
+       md-toolbar(flex).md-scroll-shrink
+           div().md-toolbar-tools
+      
+               span(flex)
+               span(flex)
+               
+               md-button(ng-click = "favCtrl.refresh()").md-icon-button
+                   md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
+                   md-tooltip() Refresh data
+
+       md-progress-linear(ng-if = "favCtrl.loading", md-mode="indeterminate")
+         
+       div(layout = "row", layout-align = "space-between center", flex)
+         
+        md-input-container().md-block.md-icon-float
+            label() Search
+            md-icon(md-font-library="material-icons") search
+            input(type = "text", ng-model = "favCtrl.threadSearch")
+             
+        div()        
+        md-button(ng-click = "favCtrl.flipOrderBySorting()").md-primary.md-raised
+            md-icon(md-font-library="material-icons") date_range
+            label()
+               | &nbsp {{favCtrl.orderByString}}
+            
+       md-list(layout = "column", layout-align = "center stretch", flex)         
+          div(ng-repeat = "thread in favCtrl.threads | filter:favCtrl.threadSearch | orderBy:favCtrl.orderBy", ng-class = "favCtrl.isRead(thread)", layout = "row")
+          
         md-list(layout = "column", layout-align = "center stretch", flex)          
-           div(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy", ng-class = "isRead(thread)", layout = "row")
+           div(ng-repeat = "thread in favCtrl.favorites | filter:favCtrl.threadSearch | orderBy:favCtrl.orderBy", ng-class = "favCtrl.isRead(thread)", layout = "row")
            
-                md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
+                md-list-item(flex, ng-click = "favCtrl.openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
                             div(flex).threadSubject
                                 {{thread.title}}
                             div(hide-sm, hide-xs, flex)
-                                    {{formatDate(thread.dateCreated)}}
+                                    {{favCtrl.formatDate(thread.dateCreated)}}
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
                             div(flex)
                                 p( layout-align = "start center")                                    
@@ -50,17 +54,17 @@ script#thread(type="text/ng-template")
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
                         md-menu-content
                             md-menu-item
-                                md-button(ng-click = "deleteThread(thread)").md-icon-button
+                                md-button(ng-click = "favCtrl.deleteThread(thread)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                                     md-tooltip() Delete thread
                             md-menu-item
-                                md-button(ng-click = "editThread(thread)").md-icon-button
+                                md-button(ng-click = "favCtrl.editThread(thread)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                                     md-tooltip() Edit thread
-                    md-button(ng-if = "thread.favorite", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                    md-button(ng-if = "thread.favorite", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
                         md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
                         md-tooltip() Favorite
-                    md-button(ng-if = "!thread.favorite", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                    md-button(ng-if = "!thread.favorite", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
                         md-icon(md-font-library="material-icons", aria-label = "delete category") favorite_border
                         md-tooltip() Favorite 
                         

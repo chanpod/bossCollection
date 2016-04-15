@@ -18,6 +18,7 @@ angular.module("BossCollection.forums")
             var deleteThreadResource = $resource(FORUM_API_BASE + '/deleteThread');
             var editThreadResource = $resource(FORUM_API_BASE + '/editThread')
             var getThreadResource = $resource(FORUM_API_BASE + '/thread');
+            var getFavoritesResource = $resource(FORUM_API_BASE + '/favorites');
             var createCommentResource = $resource(FORUM_API_BASE + '/createComment', {}, {});
             var getCommentsResource = $resource(FORUM_API_BASE + '/getComments', {}, {});
             var editCommentResource = $resource(FORUM_API_BASE + '/editComment', {}, {});
@@ -27,7 +28,29 @@ angular.module("BossCollection.forums")
             var forums;
             var currentForum;            
             var thread;
-            
+            var comingFromFavorites = false;
+
+            function setIsComingFromFavorites(boolean) {
+                comingFromFavorites = boolean;
+            }    
+
+            function getIsComingFromFavorites() {
+                return comingFromFavorites;
+            }
+
+            function getFavorites() {
+
+                var defer = $q.defer();                
+
+                getFavoritesResource.get().$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.favorites);
+                    });
+
+                return defer.promise;
+            }            
+
             //==== Category Functions ==================
             
             function deleteCategory(category) {
@@ -527,7 +550,10 @@ angular.module("BossCollection.forums")
                 getThreadCountsLocal:getThreadCountsLocal,
                 setSelectedThread:setSelectedThread,
                 removeSelectedThread:removeSelectedThread,
-                getSelectedThread:getSelectedThread
+                getSelectedThread: getSelectedThread,
+                getFavorites: getFavorites,
+                getIsComingFromFavorites: getIsComingFromFavorites,
+                setIsComingFromFavorites:setIsComingFromFavorites
             }
         }]) 
         

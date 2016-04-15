@@ -266,4 +266,22 @@ router.route('/editForum')
             })
     });
 
+//=======Favorites Routes ================
+
+router.route('/favorites')
+    .get((req, res) => {
+
+        console.log("Getting Favorites!");
+        
+        ThreadManager.getFavorites(req, res)
+            .then(function(response){
+
+                console.log("Return Favorites!");
+                res.status(200).send(response);
+            })
+            .catch(function(err){
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 module.exports = router;

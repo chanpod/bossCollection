@@ -210,6 +210,30 @@ angular.module("BossCollection.forums")
                 $scope.goTo('/thread/' + thread._id);
             }
 
+            $scope.favoriteThread = function (thread) {
+
+                if (thread.favorite) {
+                    
+                    thread.favorite = !thread.favorite;
+                }
+                else {
+                    thread.favorite = true;
+                }
+                $scope.loading = false;
+                
+                forumService.editThread(thread)
+                    .then(function (response) {
+
+                        
+                    })
+                    .catch(function (err) {
+
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
+            }            
+
             $scope.createThread = function () {
 
                 forumService.openBottomSheet('threadEdit', { forum: $scope.forum })
