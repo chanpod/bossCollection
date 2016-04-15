@@ -35,7 +35,7 @@ angular.module("BossCollection.home")
                 $scope.getHomepageContent();    
                 
             }
-            
+             
             $scope.getHomepageContent = function(){
                 $scope.guildImagesLoaded = false;
                 if($scope.user && $scope.user.guild){
@@ -52,7 +52,7 @@ angular.module("BossCollection.home")
                                 $scope.guild.images.forEach(function(image) {
                                     sliderHTML += "<item source = " + image + "></item>"
                                 }, this);    
-                            }
+                            } 
                             
 
                             sliderHTML += "</awesome-slider>";
