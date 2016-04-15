@@ -24,10 +24,7 @@ angular.module("BossCollection.attendance")
                 .then(function(response){
                     
                     $scope.close(response);
-                })
-                .fail(function(err){
-                    
-                })
+                })               
                 .finally(function(){
                     
                 })

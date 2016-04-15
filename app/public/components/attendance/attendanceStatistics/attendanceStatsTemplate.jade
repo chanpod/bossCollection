@@ -29,7 +29,24 @@ script#attendanceStats(type="text/ng-template")
                                     md-datepicker(ng-model = "startingDate", md-placeholder="Start Date", required).datePickerAdjust
                             div()
                                 md-button(ng-click = "getAbsences()").md-raised.md-primary
+                                    md-icon(md-font-library="material-icons") refresh
                                     | Update chart
                                     
                 div(flex, id="container", style="")
+                
+            section(flex)
+                md-toolbar
+                    div().md-toolbar-tools
+                        div(flex)
+                            md-button(ng-click = "openReportModal()").md-icon-button
+                                md-icon(md-font-library="material-icons") add
+                                md-tooltip() Submit new report
+                        div(flex, layout-align = "center center", layout)
+                            h2 Reports
+                        div(flex)
+                            
+                md-card                    
+                    md-card-content
+                       
+                        view-absence-report
             ad(flex)

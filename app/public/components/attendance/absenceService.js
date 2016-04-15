@@ -5,20 +5,30 @@ angular.module("BossCollection.attendance")
         'siteServices', '$mdMedia', '$mdDialog',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
 
-            var absence = $resource('/api/absence/absence', {}, {});
-            var absenceByDate = $resource('/api/absence/absenceByDate', {}, {});
-            var absenceHistoryResource = $resource('/api/absence/absenceHistory', {}, {});
-            var deleteAbsenceResource = $resource('/api/absence/deleteAbsence');
-            var saveAbsenceResource = $resource('/api/absence/saveAbsence');
+            var API_BASE = "/api/guild/absence";
             
-            var absenceApi = {
-
+            var absence = $resource(API_BASE + '/absence');
+            var UserAbsence = $resource(API_BASE + '/absence/:userName');
+            var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
+            var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
+            var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
+            var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
+                                    
+            var absenceApi = {                
+                getUsersAbsences: function(user){
+                    
+                    var defer = $q.defer();                    
+                    
+                    UserAbsence.get({userName: user}, function(response){
+                        defer.resolve(response);
+                    })
+                    
+                    return defer.promise;
+                },
                 submitNewAbsence: function (newAbsence) {
 
                     var defer = $q.defer();
-
-                    siteServices.startLoading();
-
+ 
                     absence.save(newAbsence).$promise
                         .then(function (response) {
 
@@ -30,7 +40,7 @@ angular.module("BossCollection.attendance")
                                 defer.reject(err.data);
                             })
                         .finally(function () {
-                            siteServices.loadingFinished();
+                            
                         })
 
                     return defer.promise;
@@ -156,22 +166,10 @@ angular.module("BossCollection.attendance")
 
                     var defer = $q.defer();
 
-                    absenceByDate.save({date:date}).$promise
-                        .then(function (response) {
+                    absenceByDate.get({date:date}, function (response) {
 
                             defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
                         })
-
-
-
 
                     return defer.promise;
                 }

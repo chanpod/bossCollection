@@ -4,23 +4,24 @@ angular.module("BossCollection.forums")
         function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource, $cookies) {
 
             var currentForum;
-
-            var categoryResource = $resource('/forum/createCategory');
-            var categoryEditResource = $resource('/forum/editCategory');
-            var categoryDeleteResource = $resource('/forum/deleteCategory');
-            var getForumsResource = $resource('/forum/getCategories');
-            var deleteForumsResource = $resource('/forum/deleteForum');
-            var editForumResource = $resource('/forum/editForum');
-            var createNewForumResource = $resource('/forum/createForum');
-            var createNewThreadResource = $resource('/forum/createThread');
-            var getThreadsResource = $resource('/forum/getThreads');
-            var deleteThreadResource = $resource('/forum/deleteThread');
-            var editThreadResource = $resource('/forum/editThread')
-            var getThreadResource = $resource('/forum/thread');
-            var createCommentResource = $resource('/forum/createComment', {}, {});
-            var getCommentsResource = $resource('/forum/getComments', {}, {});
-            var editCommentResource = $resource('/forum/editComment', {}, {});
-            var deleteCommentResource = $resource('/forum/deleteComment', {}, {});
+            var FORUM_API_BASE = "/api/forum";
+            
+            var categoryResource = $resource(FORUM_API_BASE + '/createCategory');
+            var categoryEditResource = $resource(FORUM_API_BASE + '/editCategory');
+            var categoryDeleteResource = $resource(FORUM_API_BASE + '/deleteCategory');
+            var getForumsResource = $resource(FORUM_API_BASE + '/getCategories');
+            var deleteForumsResource = $resource(FORUM_API_BASE + '/deleteForum');
+            var editForumResource = $resource(FORUM_API_BASE + '/editForum');
+            var createNewForumResource = $resource(FORUM_API_BASE + '/createForum');
+            var createNewThreadResource = $resource(FORUM_API_BASE + '/createThread');
+            var getThreadsResource = $resource(FORUM_API_BASE + '/getThreads');
+            var deleteThreadResource = $resource(FORUM_API_BASE + '/deleteThread');
+            var editThreadResource = $resource(FORUM_API_BASE + '/editThread')
+            var getThreadResource = $resource(FORUM_API_BASE + '/thread');
+            var createCommentResource = $resource(FORUM_API_BASE + '/createComment', {}, {});
+            var getCommentsResource = $resource(FORUM_API_BASE + '/getComments', {}, {});
+            var editCommentResource = $resource(FORUM_API_BASE + '/editComment', {}, {});
+            var deleteCommentResource = $resource(FORUM_API_BASE + '/deleteComment', {}, {});
             
             
             var forums;

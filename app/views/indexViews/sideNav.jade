@@ -1,4 +1,4 @@
-md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
+md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
     md-toolbar().md-primary
         md-list.md-primary
                 md-list-item()
@@ -16,8 +16,9 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                 md-button(ng-click = "goTo('/')")
                     md-icon(md-font-library="material-icons") home
                     | Home
+            md-divider
         md-list.md-primary(ng-if = "loggedIn")            
-            md-menu-item(ng-if = "user.rank < 2")
+            md-menu-item(ng-if = "!hasGuild() || user.rank < 2")
                 md-button(ng-click = "goTo('/auth/application')")
                     md-icon(md-font-library="material-icons") send
                     | Apply to a Guild
@@ -28,7 +29,7 @@ md-sidenav( md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md
                     | Forums
             md-divider(ng-if = "!user.guild || user.rank > 2")            
             include guildManagement                
-        md-list.md-primary()
+        md-list
             md-divider
             include raidMenu   
         md-list.md-primary(ng-if = "user.rank > 1")

@@ -3,34 +3,40 @@ script#absenceSubmissions(type="text/ng-template")
     md-content()
         section(layout="column")
             div(flex) 
-                div(layout)
-                    div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
-                        md-datepicker(flex, ng-model = "ctrl.dayDesired", ng-change = "ctrl.updateList()", md-placeholder="Select Date")
-                        md-button(flex, ng-click = "ctrl.getAbsences()").md-primary.md-raised
-                            | Get All future Absences
+                
+                div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
+                    md-datepicker(flex, ng-model = "absenceReportCtrl.dayDesired", ng-change = "absenceReportCtrl.updateList()", md-placeholder="Select Date")
+                    div(flex, layout = "row", layout-xs = "column")
+                        md-button(ng-click = "absenceReportCtrl.getAbsences()").md-primary.md-raised
+                            | Future Absences
+                        md-button( ng-click = "absenceReportCtrl.getUserAbsences(user.name)").md-primary.md-raised
+                            | My absences
+                        md-button( ng-click = "absenceReportCtrl.getTodaysAbsences()").md-primary.md-raised
+                            | Today
+                        list-guild-members(selected-member = "selectedMember", guild = "user.guild.name")
                 md-divider
                 div(flex, layout = "column")
                     div(flex)
                         h2
-                            {{ctrl.currentlySelected | date: 'dddd'}}
+                            {{absenceReportCtrl.currentlySelected | date: 'dddd'}}
                     
                     div(layout-gt-sm = "column")
-                        md-card(flex-gt-md = "50", ng-repeat = "absence in ctrl.absences | orderBy: 'date'")
+                        md-card(flex-gt-md = "50", ng-repeat = "absence in absenceReportCtrl.absences | orderBy: 'date'")
                             md-card-content
                                 h3
                                     md-icon(md-font-library="material-icons") person &nbsp
                                     {{absence.user}}                                 
                                 h4  
                                     md-icon(md-font-library="material-icons") date_range &nbsp
-                                    {{ctrl.formatDate(absence.date)}} - {{absence.type}}
+                                    {{absenceReportCtrl.formatDate(absence.date)}} - {{absence.type}}
                                 p
                                     md-icon(md-font-library="material-icons") message &nbsp
                                     br
                                     {{absence.reason}}
-                            md-card-actions(ng-if = "user.rank > 2 || (user.name == absence.user && ctrl.dateHasPassed(absence))", layout="row", layout-align="end center")
-                                md-button(ng-click = "ctrl.editAbsence(absence)").md-icon-button
+                            md-card-actions(ng-if = "user.rank > 2 || (user.name == absence.user && absenceReportCtrl.dateHasPassed(absence))", layout="row", layout-align="end center")
+                                md-button(ng-click = "absenceReportCtrl.editAbsence(absence)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit absence") mode_edit
                                     md-tooltip() Edit
-                                md-button(ng-click = "ctrl.deleteAbsence(absence)").md-icon-button
+                                md-button(ng-click = "absenceReportCtrl.deleteAbsence(absence)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "delete absence") delete
                                     md-tooltip() Delete

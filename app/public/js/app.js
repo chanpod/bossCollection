@@ -6,6 +6,7 @@ angular.module('BossCollection', [
   'BossCollection.controllers',
   'BossCollection.services',
   'BossCollection.directives',
+  'BossCollection.accounts',
   'BossCollection.filters',
   'BossCollection.forums',
   'BossCollection.attendance',
@@ -64,8 +65,12 @@ angular.module('BossCollection', [
 
   $locationProvider.html5Mode(true);
   
+   
   
-  
+}])
+.run([function(){
+    // Check service workers are supported
+    
 }])
 /*
 .factory('mySocket', ['socketFactory', function(socketFactory){

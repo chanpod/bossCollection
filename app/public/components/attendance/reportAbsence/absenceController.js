@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices){
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
         
         var currentDay = moment().day();
         
@@ -26,6 +26,10 @@ angular.module("BossCollection.attendance")
             direction: "right"
         }
         
+        $scope.cancel = function(){
+            $mdDialog.cancel();
+        }
+        
         self.showContent = function(){
            self.showContentBool = true;
        }
@@ -40,12 +44,30 @@ angular.module("BossCollection.attendance")
             
             siteServices.updateTitle('Report Absence');
             
-            if($scope.user.rank < 3){
-                self.selectedUser = $scope.user;
-                self.showContent();  
+            if($scope.user == undefined){
+                
+                userLoginSrvc.getUser()
+                    .then(function(user) {
+                        $scope.user = user
+                        
+                        if ($scope.user.rank < 3) {
+                            self.selectedUser = $scope.user;
+                            self.showContent();
+                        }
+                        else {
+                            $scope.getGuildUsers();
+                        }
+                    })
+                
             }
             else{
-                $scope.getGuildUsers();    
+                if ($scope.user.rank < 3) {
+                    self.selectedUser = $scope.user;
+                    self.showContent();
+                }
+                else {
+                    $scope.getGuildUsers();
+                }
             }
                 
         }
@@ -154,10 +176,10 @@ angular.module("BossCollection.attendance")
                 absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
                 
                     //TODO: Redirect to list of absences.
-                    $location.path("/whosOut");
+                    siteServices.showMessageModal("Success");
                 },
                     function (err) {
-                        Materialize.toast(err)
+                        siteServices.showMessageModal(err);
                         console.log(err);
                     })
             }

@@ -1,7 +1,9 @@
 
 .settings/
 node_modules/
+!./server/node_modules
 workspace.xml
 watcherTasks.xml
 app/public/tmp/
 app/public/css/compiled.scss
+app/public/bower_components

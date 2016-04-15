@@ -11,33 +11,35 @@ angular.module("BossCollection.guild")
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-
-
-        var apply = $resource('/api/applicationSubmission', {}, {});
-        var getApplicationsUrl = $resource('/api/getApplications', {}, {});
-        var approveApplication = $resource('/api/approveApplication', {}, {});
-        var rejectApplication = $resource('/api/rejectApplication', {}, {});
+        var API_BASE = "/api/guild/guild";
+        var APPLICATION_API_BASE = "/api/guild/applications";
         
-        var addGuild = $resource('/api/addGuild', {}, {});
-        var updateRank = $resource('/api/updateRank', {}, {});
-        var changeGuildName = $resource('/api/changeGuildName', {}, {});
-        var addMember = $resource('/api/addMember', {}, {});
-        var removeMember = $resource('/api/removeMember', {}, {});
-        var kickuserResource = $resource('/api/kickMember', {}, {});
-        var getGuildMembers = $resource("/api/getGuildMembers", {}, {});
-        var getListOfGuilds = $resource("/api/listOfGuilds", {}, {});
-        var guildHomepageContentResource = $resource("/api/guildHomepage", {}, {});
         
-        var guildApi = { 
+        var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
+        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications');
+        var approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
+        var rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
+        
+        var addGuild = $resource(API_BASE + '/addGuild');
+        var updateRank = $resource(API_BASE + '/updateRank');
+        var changeGuildName = $resource(API_BASE + '/changeGuildName');
+        var addMember = $resource(API_BASE + '/addMember');
+        var removeMember = $resource(API_BASE + '/removeMember' );
+        var kickuserResource = $resource(API_BASE + '/kickMember');
+        var getGuildMembers = $resource(API_BASE + '/getGuildMembers');
+        var getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
+        var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
+        
+        var guildApi = {
             updateHomepageContent: function(guild){
                 
                 var bodyData = {guild: guild}; //no data, it's a get
                 return guildHomepageContentResource.save(bodyData).$promise
             },
-            getHomepageContent: function(){
+            getHomepageContent: function(guildName){
                 
                 var bodyData = {}; //no data, it's a get
-                return guildHomepageContentResource.get().$promise
+                return guildHomepageContentResource.get({guildName:guildName}).$promise
             },
             kickUser: function(userName, guildName){
                 
@@ -101,7 +103,7 @@ angular.module("BossCollection.guild")
 
                 var defer = $q.defer();
                 
-                siteServices.startLoading();
+                
                 
                 getGuildMembers.save({ guildName: guildName }).$promise
                     .then(function (result) {
@@ -113,7 +115,7 @@ angular.module("BossCollection.guild")
                         defer.reject(err.data.message);
                     })
                     .finally(function(){
-                        siteServices.loadingFinished();
+                
                     })
 
                 return defer.promise;
@@ -141,8 +143,6 @@ angular.module("BossCollection.guild")
             joinGuild: function (guildName, memberName) {
                 var defer = $q.defer();
                 
-                
-                
                 addMember.save({
                     guildName: guildName,
                     memberName: memberName
@@ -153,7 +153,8 @@ angular.module("BossCollection.guild")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.data.message);
+                        defer.reject(err.message);
+                        
                     })
                     .finally(function(){
                         
@@ -207,7 +208,7 @@ angular.module("BossCollection.guild")
                 var defer = $q.defer();
                 var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-                var getCharacter = $resource(getCharacterUrl, {}, {});
+                var getCharacter = $resource(getCharacterUrl);
 
                 getCharacter.get().$promise.then(function (data) {
 
@@ -249,7 +250,7 @@ angular.module("BossCollection.guild")
 
                 var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-                var getCharacter = $resource(getCharacterUrl, {}, {});
+                var getCharacter = $resource(getCharacterUrl);
 
                 siteServices.startLoading();
 

@@ -11,12 +11,12 @@ angular.module("BossCollection.attendance", ['ngRoute'])
 
             .when('/whosOut', {
                 templateUrl: 'absenceSubmissions',
-                controller: 'absenceSubmissionsController as ctrl'
+                controller: 'absenceSubmissionsController as absenceReportCtrl'
             })
 
             .when('/auth/absence', {
                 templateUrl: 'absence',
                 controller: 'absenceReportController as ctrl'
             })
-
+ 
     }]);

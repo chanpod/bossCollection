@@ -8,6 +8,7 @@ angular.module("BossCollection.forums")
             $scope.forum = {};
             $scope.loading = false;
             $scope.orderBy = "-dateCreated";
+            $scope.orderByString = 'Newest';
             $scope.masterThread = []
             
             
@@ -168,7 +169,7 @@ angular.module("BossCollection.forums")
             
             $scope.$watch('orderBy', function(){
                 
-                sortThreads();
+                //sortThreads();
                 
             })
             
@@ -182,11 +183,22 @@ angular.module("BossCollection.forums")
                 }
             }
 
-            $scope.orderByDateCreated = function(){
-                $scope.orderBy = "dateCreated"
+            $scope.flipOrderBySorting = function(){
+                
+                if($scope.orderBy == "dateCreated"){
+                    
+                    $scope.orderByString = 'Newest';
+                    $scope.orderBy = "-dateCreated"    
+                }
+                else{
+                    $scope.orderByString = 'Oldest';
+                    $scope.orderBy = "dateCreated"    
+                }
+                
             }
 
             $scope.orderByDateCreatedReversed = function(){
+                $scope.orderByString = 'Oldest';
                 $scope.orderBy = "-dateCreated"
             }
 

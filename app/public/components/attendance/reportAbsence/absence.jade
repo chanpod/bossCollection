@@ -2,10 +2,10 @@ script#absence(type="text/ng-template")
     md-content()
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row")
+                div(layout-gt-xs="row", ng-if = "user.rank > 2")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
-                                md-selected-item = "ctrl.selectedUser",                                    
+                                md-selected-item = "reportAbsenceCtrl.selectedUser",                                    
                                 md-search-text = "user",
                                 md-floating-label = "Select User",
                                 md-items = "user in filterSearch(user)",
@@ -29,6 +29,8 @@ script#absence(type="text/ng-template")
                     textarea(id = "reason", required = "required", ng-model = "newAbsence.reason")
                 div(layout)
                     md-input-container().md-block
-                    md-button(type = "submit").md-primary.md-raised
+                        md-button(type = "submit").md-primary.md-raised
                             | Submit
-            ad(flex)
+                        md-button(ng-click = "cancel()").md-primary.md-raised
+                            | Cancel
+            

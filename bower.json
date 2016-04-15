@@ -1,0 +1,21 @@
+{
+  "name": "bosscollection.net",
+  "description": "Modern Site for Guilds",
+  "main": "app/public/js/app.js",
+  "authors": [
+    "Chauncey Philpot"
+  ],
+  "license": "True",
+  "homepage": "https://github.com/chanpod/bossCollection",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paper-header-panel": "PolymerElements/paper-header-panel#1.0.0",
+    "awesome-slider": "*"
+  }
+}

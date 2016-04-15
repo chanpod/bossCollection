@@ -5,10 +5,10 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter){
+    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia','siteServices', '$filter',
+        function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter){
         
-        siteServices.updateTitle('Attendance Statistics');    
+        siteServices.updateTitle('Attendance Portal');    
         $scope.absenceHighchartData = [];
         $scope.absenceHighchartDrillDownSeries = [];
         
@@ -17,16 +17,28 @@ angular.module("BossCollection.attendance")
         $scope.absent = 6;
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
-        $scope.startingDate = moment();
+        $scope.startingDate = new Date();
         
         $scope.init = function(){
             
             $scope.getAbsences();
             $scope.buildHighChart();
+        }
+        
+        $scope.openReportModal = function(){
             
+            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
+            
+            $mdDialog.show({
+                controller: "absenceReportController as reportAbsenceCtrl",
+                templateUrl: 'absence',                
+                clickOutsideToClose: false,
+                fullscreen: useFullScreen
+            })
         }
            
         $scope.getAbsences = function () {
+            
             $scope.currentlySelected = "All absences"
             $scope.loading = true;
             

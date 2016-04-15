@@ -9,14 +9,15 @@ block body
                 div().md-toolbar-tools
                     md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
                         i(class = "material-icons") menu
-                    div(flex)
-                        h2
-                            | {{title}}
-                    div(flex, hide-xs)
+                    div(flex, layout-align = "center center", layout)
+                        div(flex)
+                            h2()
+                                | {{title}}
+                    div(flex, hide-xs, layout-align = "center center", layout)
                         h2
                             | {{user.guild.name}}
                     span(flex)
-                        md-menu
+                        md-menu(flex, layout-align = "end center", layout)
                             md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
                                 i(class="material-icons").iconHeightAdjust account_circle
                                 &nbsp {{user.name}}
@@ -46,14 +47,15 @@ block body
                 
                 div(id = "ngView", flex, ng-view).slide   
 
-    include ../public/components/home/home    
+    include ../public/components/home/home
+    include ../public/components/home/guildVisit    
     
     
-    include partials/accounts/login
-    include partials/accounts/signup
-
+    include ../public/components/accounts/login
+    include ../public/components/accounts/signup
+    include ../public/components/accounts/userDisplay/userDisplayTemplate
     
-    include partials/accounts/editAccount
+    include ../public/components/accounts/editAccount
     include ../public/components/guild/applications/application
     include ../public/components/guild/applications/reviewApplications
     include ../public/components/guild/createGuild/createGuild
@@ -74,10 +76,11 @@ block body
     include ../public/components/attendance/reportAbsence/absence
     include ../public/components/attendance/viewReports/absenceSubmissions
     include ../public/components/attendance/editAbsenceModal
+    include ../public/components/guild/directives/listGuildMembers/listGuildMembersTemplate
     
     include ../public/js/directives/inputMarkdown/inputMarkdownTemplate
     include ../public/js/directives/displayMarkdownText/template
     
-    include modals/logInModal
-    include modals/reset-password
+    include ../public/components/accounts/modals/logInModal
+    include ../public/components/accounts/modals/reset-password
     include modals/loadingModal

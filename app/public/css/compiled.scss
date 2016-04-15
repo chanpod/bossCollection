@@ -148,6 +148,9 @@ html, body {
     border-bottom:1px solid black;
 }
 
+.imageGallery{
+    padding-bottom:30px;
+}
 
 .wodHeader{
     background-image: url("/images/expansionBanners/wodbanner.jpg");
@@ -323,6 +326,16 @@ html, body {
     border-left:15px solid green;
 }
 
+.avatarImage{
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+}
+
+.userFont{
+    
+    font-size: 20px;
+} 
 .toolbarFixedContentContainer{
     height: 100%;
 }
@@ -392,14 +405,14 @@ html, body {
     overflow: scroll;
 }
 
-
+.threadSubject{
+    font-size: 23px;
+}
 
 #vertical-container{
     min-height:100px; 
     height: 70vh !important;
-}
-
-
+} 
 
 .confirmCommentDelete{
     

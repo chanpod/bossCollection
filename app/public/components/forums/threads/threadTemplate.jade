@@ -18,31 +18,32 @@ script#thread(type="text/ng-template")
                 label() Search
                 md-icon(md-font-library="material-icons") search
                 input(type = "text", ng-model = "threadSearch")
-            div()
-                | Sort by date
-                md-button(ng-click = "orderByDateCreated()").md-icon-button
-                    md-icon(md-font-library="material-icons") keyboard_arrow_up
-                md-button(ng-click = "orderByDateCreatedReversed()").md-icon-button
-                    md-icon(md-font-library="material-icons") keyboard_arrow_down
+            div()                
+                md-button(ng-click = "flipOrderBySorting()").md-primary.md-raised
+                    md-icon(md-font-library="material-icons") date_range
+                    label()
+                        | &nbsp {{orderByString}}
                     
         md-list(layout = "column", layout-align = "center stretch", flex)          
            div(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy", ng-class = "isRead(thread)", layout = "row")
+           
                 md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
-                            h3(flex)
+                            div(flex).threadSubject
                                 {{thread.title}}
                             div(hide-sm, hide-xs, flex)
                                     {{formatDate(thread.dateCreated)}}
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
                             div(flex)
-                                p( layout-align = "start center")
-                                    {{thread.user}}
+                                p( layout-align = "start center")                                    
+                                    user-display(user = "thread.user")
                             div(flex)
                                 div(layout-align = "center center")
                                     | Comments: {{thread.commentCount}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
                         {{thread.message}}
+                        
                 div(ng-show = "thread.user == user.name || user.rank == 4", layout-align = "center center", layout)
                     md-button(ng-click = "deleteThread(thread)").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "delete category") delete
@@ -50,4 +51,5 @@ script#thread(type="text/ng-template")
                     md-button(ng-click = "editThread(thread)").md-icon-button
                         md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                         md-tooltip() Edit thread
+                        
             md-divider(ng-if="!$last")
