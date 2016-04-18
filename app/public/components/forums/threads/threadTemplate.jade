@@ -24,9 +24,9 @@ script#thread(type="text/ng-template")
                     label()
                         | &nbsp {{orderByString}}
                     
-        md-list(layout = "column", layout-align = "center stretch", flex)          
-           div(ng-repeat = "thread in threads | filter:threadSearch | orderBy:orderBy", ng-class = "isRead(thread)", layout = "row")
-           
+        md-list(layout = "column", layout-align = "center stretch", flex)     
+            div(ng-repeat = "thread in stickyThreads | filter:sortThreads()", ng-class = "isRead(thread)", layout = "row")
+            
                 md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
@@ -34,6 +34,8 @@ script#thread(type="text/ng-template")
                                 {{thread.title}}
                             div(hide-sm, hide-xs, flex)
                                     {{formatDate(thread.dateCreated)}}
+                            div( ng-if = "thread.sticky")
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
                             div(flex)
                                 p( layout-align = "start center")                                    
@@ -45,9 +47,11 @@ script#thread(type="text/ng-template")
                         {{thread.message}}
                         
                 div( layout-align = "center center", layout)
+                
                     md-menu(ng-if = "user.rank > 2")
                         md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+                            
                         md-menu-content
                             md-menu-item
                                 md-button(ng-click = "deleteThread(thread)").md-icon-button
@@ -57,6 +61,68 @@ script#thread(type="text/ng-template")
                                 md-button(ng-click = "editThread(thread)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                                     md-tooltip() Edit thread
+                            md-menu-item(ng-if = "thread.sticky")
+                                md-button(ng-click = "stickyThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
+                                    md-tooltip() Remove Sticky from Thread  
+                            md-menu-item(ng-if = "!thread.sticky")
+                                md-button(ng-click = "stickyThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark_border
+                                    md-tooltip() Sticky Thread 
+                 //-                  
+                    md-button(ng-if = "thread.favorite", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                        md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
+                        md-tooltip() Favorite
+                    md-button(ng-if = "!thread.favorite", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") favorite_border
+                        md-tooltip() Favorite 
+                        
+            md-divider(ng-if="!$last")     
+            div(ng-repeat = "thread in threads | filter:sortThreads()", ng-class = "isRead(thread)", layout = "row")
+            
+                md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
+                    div(layout-padding, layout = "column").md-list-item-text
+                        div(layout-align = "space-between center", layout)
+                            div(flex).threadSubject
+                                {{thread.title}}
+                            div(hide-sm, hide-xs, flex)
+                                    {{formatDate(thread.dateCreated)}}
+                            div( ng-if = "thread.sticky")
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
+                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
+                            div(flex)
+                                p( layout-align = "start center")                                    
+                                    user-display(user = "thread.user")
+                            div(flex)
+                                div(layout-align = "center center")
+                                    | Comments: {{thread.commentCount}}
+                    md-tooltip(style = "max-width:75%;").threadMessagePreview
+                        {{thread.message}}
+                        
+                div( layout-align = "center center", layout)
+                
+                    md-menu(ng-if = "user.rank > 2")
+                        md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                            md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+                            
+                        md-menu-content
+                            md-menu-item
+                                md-button(ng-click = "deleteThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                    md-tooltip() Delete thread
+                            md-menu-item
+                                md-button(ng-click = "editThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                                    md-tooltip() Edit thread
+                            md-menu-item(ng-if = "thread.sticky")
+                                md-button(ng-click = "stickyThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
+                                    md-tooltip() Remove Sticky from Thread  
+                            md-menu-item(ng-if = "!thread.sticky")
+                                md-button(ng-click = "stickyThread(thread)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark_border
+                                    md-tooltip() Sticky Thread 
+                 //-                   
                     md-button(ng-if = "thread.favorite", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
                         md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
                         md-tooltip() Favorite

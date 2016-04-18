@@ -10,7 +10,7 @@ angular.module("BossCollection.forums")
             $scope.orderBy = "-dateCreated";
             $scope.orderByString = 'Newest';
             $scope.masterThread = []
-            
+            $scope.sticky = 'true';
             
 
             $scope.getLength = function (){
@@ -66,7 +66,7 @@ angular.module("BossCollection.forums")
                         
                         //$scope.initInfiniteScroll();
                         
-                        sortThreads();
+                        $scope.sortThreads();
                         
                     })
                     .catch(function(err){
@@ -78,6 +78,10 @@ angular.module("BossCollection.forums")
                         $scope.loading = false;
                     })
             }
+
+            $scope.getStickyThreads = function () {                
+                
+            }            
 
             $scope.listStyle = {
                 height: ($window.innerHeight - 312) + 'px'
@@ -137,7 +141,7 @@ angular.module("BossCollection.forums")
                         $scope.loading = false;
                         $scope.threads = threads;
                         $scope.masterThread = threads;
-                        sortThreads();
+                        $scope.sortThreads();
                     })
                     .catch(function(err){
 
@@ -163,24 +167,27 @@ angular.module("BossCollection.forums")
             
             $scope.$watch('threadSearch', function(){
                 
-                sortThreads();
+                $scope.sortThreads();
                 
-            })
+            })            
             
-            $scope.$watch('orderBy', function(){
-                
-                //sortThreads();
-                
-            })
             
-            function sortThreads(){
+            $scope.sortThreads = function(){
                 
-                $scope.threads = $filter('filter')($scope.masterThread, $scope.threadSearch);
-                $scope.threads = $filter('orderBy')($scope.threads, $scope.orderBy);
                 
-                if($scope.threadRepeat){
-                    $scope.threadRepeat.numLoaded = $scope.threads.length - 1;    
-                }
+                $scope.stickyThreads = _.filter($scope.masterThread, function (thread) {
+                    return thread.sticky == true;
+                })
+
+                $scope.threads = _.filter($scope.masterThread, function (thread) {
+                    return thread.sticky != true;
+                })
+
+                $scope.threads = $filter('filter')($scope.threads, $scope.threadSearch);
+                
+                $scope.stickyThreads = $filter('orderBy')($scope.stickyThreads, [$scope.orderBy]); 
+                $scope.threads = $filter('orderBy')($scope.threads, [ $scope.orderBy]);                
+                
             }
 
             $scope.flipOrderBySorting = function(){
@@ -210,6 +217,20 @@ angular.module("BossCollection.forums")
                 $scope.goTo('/thread/' + thread._id);
             }
 
+            $scope.stickyThread = function (thread) {
+                
+                if (thread.sticky) {
+                    
+                    thread.sticky = !thread.sticky;
+                }
+                else {
+                    thread.sticky = true;
+                }
+
+                $scope.saveThread(thread);
+            }    
+                      
+
             $scope.favoriteThread = function (thread) {
 
                 if (thread.favorite) {
@@ -219,6 +240,12 @@ angular.module("BossCollection.forums")
                 else {
                     thread.favorite = true;
                 }
+
+                $scope.saveThread(thread);
+            }     
+
+            $scope.saveThread = function (thread) {
+                
                 $scope.loading = false;
                 
                 forumService.editThread(thread)
@@ -232,7 +259,7 @@ angular.module("BossCollection.forums")
                     .finally(function () {
                         $scope.loading = false;
                     })
-            }            
+            }
 
             $scope.createThread = function () {
 
