@@ -1,7 +1,7 @@
 angular.module("BossCollection.forums")
     .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout', 'userLoginSrvc',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout,userLoginSrvc) {
 
             
             siteServices.updateTitle('Forums');
@@ -38,6 +38,15 @@ angular.module("BossCollection.forums")
                         $scope.forums = forums;
                         
                         
+                    })
+                    .then(function () {
+                        return userLoginSrvc.getAvatar($scope.user.name)
+                            .then(function (result) {
+                                return result
+                            })
+                    })
+                    .then(function (avatarUrl) {
+                        $scope.avatarUrl = avatarUrl;
                     })
                     .catch(function(err){
                         

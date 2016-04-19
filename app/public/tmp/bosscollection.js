@@ -77,6 +77,8 @@ angular.module('BossCollection', [
     return socketFactory();
 }]). 
 */ 
+'use strict';
+angular.module('BossCollection.accounts', ['BossCollection.services'])
 'user strict'
 
 angular.module("BossCollection.attendance", ['ngRoute'])
@@ -99,8 +101,6 @@ angular.module("BossCollection.attendance", ['ngRoute'])
             })
  
     }]);
-'use strict';
-angular.module('BossCollection.accounts', ['BossCollection.services'])
 'user strict'
 
 angular.module("BossCollection.guild", ['ngRoute'])
@@ -130,22 +130,6 @@ angular.module("BossCollection.guild", ['ngRoute'])
     }]);
 'user strict'
 
-angular.module("BossCollection.home", ['ngRoute'])
-    .config(['$routeProvider', function($routeProvider) {
-
-        $routeProvider
-        .when('/', {
-            templateUrl: 'home',
-            controller: 'homeController'
-        })
-        .when('/guild/:guildName', {
-            templateUrl: 'guildVisitHome',
-            controller: 'guildVisitController'
-        })
-        
-    }]); 
-'user strict'
-
 angular.module("BossCollection.forums", ['ngRoute'])
     .config(['$routeProvider',  function ($routeProvider) {
 
@@ -169,229 +153,22 @@ angular.module("BossCollection.forums", ['ngRoute'])
 		
 
     }]);
-angular.module("BossCollection.attendance")
-    .controller('absenceModalController', [
-        '$scope', 'absenceService', '$mdDialog', 'data',
-        function($scope, absenceService, $mdDialog, data){
+'user strict'
+
+angular.module("BossCollection.home", ['ngRoute'])
+    .config(['$routeProvider', function($routeProvider) {
+
+        $routeProvider
+        .when('/', {
+            templateUrl: 'home',
+            controller: 'homeController'
+        })
+        .when('/guild/:guildName', {
+            templateUrl: 'guildVisitHome',
+            controller: 'guildVisitController'
+        })
         
-        
-        
-        
-        $scope.init = function () {
-
-            if (data) {
-
-                $scope.absence = data;
-                $scope.absence.date = new Date($scope.absence.date);
-            }
-            else {
-                $scope.absence = {};
-            }
-        }
-        
-        $scope.save = function(){
-            
-            absenceService.saveAbsence($scope.absence)
-                .then(function(response){
-                    
-                    $scope.close(response);
-                })               
-                .finally(function(){
-                    
-                })
-        }
-        
-        $scope.cancel = function () {
-
-            $mdDialog.cancel();
-        }
-
-        $scope.close = function () {
-            $mdDialog.hide($scope.object);
-        }
-        
-        $scope.init();
-        
-    }])
-'use strict';
-
-angular.module("BossCollection.attendance")
-    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', '$mdMedia', '$mdDialog',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
-
-            var API_BASE = "/api/guild/absence";
-            
-            var absence = $resource(API_BASE + '/absence');
-            var UserAbsence = $resource(API_BASE + '/absence/:userName');
-            var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
-            var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
-            var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
-            var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
-                                    
-            var absenceApi = {                
-                getUsersAbsences: function(user){
-                    
-                    var defer = $q.defer();                    
-                    
-                    UserAbsence.get({userName: user}, function(response){
-                        defer.resolve(response);
-                    })
-                    
-                    return defer.promise;
-                },
-                submitNewAbsence: function (newAbsence) {
-
-                    var defer = $q.defer();
- 
-                    absence.save(newAbsence).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            
-                        })
-
-                    return defer.promise;
-                },
-                getAbsenceHistory: function(absenceHistory){
-                    
-                    var defer = $q.defer();
-                    
-                    siteServices.startLoading();
-                    
-                    absenceHistoryResource.save(absenceHistory).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                        return defer.promise;
-                },
-                openEditModal: function(template, locals) {
-                  
-
-                    var defer = $q.defer();
-                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-                    
-                    $mdDialog.show({
-                        templateUrl: template,
-                        controller: 'absenceModalController',
-                        parent: angular.element(document.body),
-                        clickOutsideToClose: false,
-                        locals: { data: locals },
-                        fullscreen: true
-                    })
-                    .then(function (result) {
-
-                            defer.resolve(result);
-                        },
-                        function () {
-                            defer.reject();
-                            //Something broke or they canceled
-                        })
-
-                    return defer.promise;
-              
-                },
-                saveAbsence: function(absence){
-                    
-                    var defer = $q.defer();
-                    var bodyData = {absence: absence};
-                    
-                    saveAbsenceResource.save(bodyData).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                        function (err) {
-
-                            console.log(err);
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                    return defer.promise;
-                },
-                deleteAbsence: function(absence){
-                    
-                    var defer = $q.defer();
-                    var bodyData = {absence: absence};
-                    
-                    deleteAbsenceResource.save(bodyData).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                        function (err) {
-
-                            console.log(err);
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                    return defer.promise;
-                    
-                },
-                getAbsences: function () {
-
-                    var defer = $q.defer();
-
-
-
-                    absence.get().$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-
-                    return defer.promise;
-                },
-                getAbsencesByDate: function (date) {
-
-                    var defer = $q.defer();
-
-                    absenceByDate.get({date:date}, function (response) {
-
-                            defer.resolve(response);
-                        })
-
-                    return defer.promise;
-                }
-            };
-
-            return absenceApi;
-        }])
+    }]); 
 'use strict';
 /* Directives */
 
@@ -677,6 +454,229 @@ angular.module("BossCollection.accounts")
             accountApi.refreshUserFromServer();
 
             return accountApi;
+        }])
+angular.module("BossCollection.attendance")
+    .controller('absenceModalController', [
+        '$scope', 'absenceService', '$mdDialog', 'data',
+        function($scope, absenceService, $mdDialog, data){
+        
+        
+        
+        
+        $scope.init = function () {
+
+            if (data) {
+
+                $scope.absence = data;
+                $scope.absence.date = new Date($scope.absence.date);
+            }
+            else {
+                $scope.absence = {};
+            }
+        }
+        
+        $scope.save = function(){
+            
+            absenceService.saveAbsence($scope.absence)
+                .then(function(response){
+                    
+                    $scope.close(response);
+                })               
+                .finally(function(){
+                    
+                })
+        }
+        
+        $scope.cancel = function () {
+
+            $mdDialog.cancel();
+        }
+
+        $scope.close = function () {
+            $mdDialog.hide($scope.object);
+        }
+        
+        $scope.init();
+        
+    }])
+'use strict';
+
+angular.module("BossCollection.attendance")
+    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices', '$mdMedia', '$mdDialog',
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
+
+            var API_BASE = "/api/guild/absence";
+            
+            var absence = $resource(API_BASE + '/absence');
+            var UserAbsence = $resource(API_BASE + '/absence/:userName');
+            var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
+            var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
+            var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
+            var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
+                                    
+            var absenceApi = {                
+                getUsersAbsences: function(user){
+                    
+                    var defer = $q.defer();                    
+                    
+                    UserAbsence.get({userName: user}, function(response){
+                        defer.resolve(response);
+                    })
+                    
+                    return defer.promise;
+                },
+                submitNewAbsence: function (newAbsence) {
+
+                    var defer = $q.defer();
+ 
+                    absence.save(newAbsence).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            
+                        })
+
+                    return defer.promise;
+                },
+                getAbsenceHistory: function(absenceHistory){
+                    
+                    var defer = $q.defer();
+                    
+                    siteServices.startLoading();
+                    
+                    absenceHistoryResource.save(absenceHistory).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                        return defer.promise;
+                },
+                openEditModal: function(template, locals) {
+                  
+
+                    var defer = $q.defer();
+                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                    
+                    $mdDialog.show({
+                        templateUrl: template,
+                        controller: 'absenceModalController',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: false,
+                        locals: { data: locals },
+                        fullscreen: true
+                    })
+                    .then(function (result) {
+
+                            defer.resolve(result);
+                        },
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                    return defer.promise;
+              
+                },
+                saveAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    saveAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                },
+                deleteAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    deleteAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                    
+                },
+                getAbsences: function () {
+
+                    var defer = $q.defer();
+
+
+
+                    absence.get().$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+
+                    return defer.promise;
+                },
+                getAbsencesByDate: function (date) {
+
+                    var defer = $q.defer();
+
+                    absenceByDate.get({date:date}, function (response) {
+
+                            defer.resolve(response);
+                        })
+
+                    return defer.promise;
+                }
+            };
+
+            return absenceApi;
         }])
 'use strict';
 
@@ -982,242 +982,6 @@ angular.module("BossCollection.guild")
         
         
     }])
-
-angular.module("BossCollection.home")
-    .controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-            
-            $scope.guild = {};
-            $scope.editing = false;
-            $scope.content;            
-            $scope.newTab;            
-            $scope.guildImagesLoaded = false;
-            $scope.guildName = $routeParams.guildName
-           
-            
-           
-            
-            $scope.init = function() {
-                
-                $scope.getHomepageContent();
-            }
-            
-            $scope.getHomepageContent = function() {
-
-                $scope.guildImagesLoaded = false;
-
-                guildServices.getHomepageContent($scope.guildName)
-                    .then(function(guild) {
-
-                        if(guild.guild == undefined){
-                            siteServices.showMessageModal("Guild not found. Check the spelling. Spaces and Case matter.");
-                        }
-                        
-                        $scope.guild = guild.guild;
-                        
-                        var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                            + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
-                        
-                        
-                        
-                        if ($scope.guild && $scope.guild.images) {
-                            $scope.guild.images.forEach(function(image) {
-                                sliderHTML += "<item source = " + image + "></item>"
-                            }, this);
-                        }
-
-
-                        sliderHTML += "</awesome-slider>";
-
-                        document.getElementById('imageGallery').innerHTML = sliderHTML;
-
-                        $scope.guildImagesLoaded = true;
-                    })
-                    .catch(function(err) {
-                        siteServices.showMessageModal(err.message);
-                    })
-
-            }
-
-            $scope.editTab = function(){
-                $scope.editing = true;
-            }
-            
-            $scope.saveTab = function(){
-                
-                guildServices.updateHomepageContent($scope.guild)
-                    .then(function(res){
-                        
-                        $scope.cancel();
-                        //It worked, do nothing.
-                    })
-                    .catch(function(err){
-                        
-                        siteServices.showMessageModal(err.message);
-                    })
-                
-            }
-            
-            $scope.deleteTab = function(index){
-                
-                siteServices.confirmDelete()
-                    .then(function(){
-                        
-                        $scope.guild.tabs.remove(index);
-                        $scope.saveTab();
-                        
-                    })
-            }
-            
-            $scope.addNewTab = function(){
-                
-                $scope.guild.tabs.push($scope.newTab);
-                
-                $scope.saveTab();
-                
-                $scope.newTab = newTab;
-            }
-            
-            $scope.cancel = function(){
-                
-                $scope.editing = false;
-            }
-            
-            siteServices.updateTitle('Home');
-            
-            $scope.init();
-            
-            Array.prototype.remove = function(from, to) {
-                var rest = this.slice((to || from) + 1 || this.length);
-                this.length = from < 0 ? this.length + from : from;
-                return this.push.apply(this, rest);
-            };
-    }])
-  
-
-angular.module("BossCollection.home")
-    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-            $scope.guild = {};
-            $scope.editing = false;
-            $scope.content;            
-            $scope.newTab;            
-            $scope.guildImagesLoaded = false;
-            
-            var newTab = {title: "New Tab", content: "Make me whatever you want."};
-            
-            $scope.$on("loggedin", function(event, user) {
-                
-                userLoginSrvc.getUser()
-                    .then(function(user) {
-                        if (user) {
-                            $scope.user = user;
-                            $scope.loggedIn = true;
-                            $scope.getHomepageContent();
-                        }
-                    },
-                    function(err) {
-                        $scope.user = {};
-                        $scope.loggedIn = false;
-                    })
-                
-                
-            }) 
-            
-            $scope.init = function() {
-                
-                $scope.newTab = newTab; 
-                
-                $scope.getHomepageContent();    
-                
-            }
-             
-            $scope.getHomepageContent = function(){
-                $scope.guildImagesLoaded = false;
-                if($scope.user && $scope.user.guild){
-                    
-                    guildServices.getHomepageContent($scope.user.guild.name)
-                        .then(function(guild) {
-                            
-                            $scope.guild = guild.guild;
-
-                            var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                                + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
-                                
-                            if($scope.guild && $scope.guild.images){
-                                $scope.guild.images.forEach(function(image) {
-                                    sliderHTML += "<item source = " + image + "></item>"
-                                }, this);    
-                            } 
-                            
-
-                            sliderHTML += "</awesome-slider>";
-
-                            document.getElementById('imageGallery').innerHTML = sliderHTML;
-
-                            $scope.guildImagesLoaded = true;
-                        })
-                        .catch(function(err) {
-                            siteServices.showMessageModal(err.message);
-                        })    
-                }
-            }
-
-            $scope.editTab = function(){
-                $scope.editing = true;
-            }
-            
-            $scope.saveTab = function(){
-                
-                guildServices.updateHomepageContent($scope.guild)
-                    .then(function(res){
-                        
-                        $scope.cancel();
-                        //It worked, do nothing.
-                    })
-                    .catch(function(err){
-                        
-                        siteServices.showMessageModal(err.message);
-                    })
-                
-            }
-            
-            $scope.deleteTab = function(index){
-                
-                siteServices.confirmDelete()
-                    .then(function(){
-                        
-                        $scope.guild.tabs.remove(index);
-                        $scope.saveTab();
-                        
-                    })
-            }
-            
-            $scope.addNewTab = function(){
-                
-                $scope.guild.tabs.push($scope.newTab);
-                
-                $scope.saveTab();
-                
-                $scope.newTab = newTab;
-            }
-            
-            $scope.cancel = function(){
-                
-                $scope.editing = false;
-            }
-            
-            siteServices.updateTitle('Home');
-            
-            $scope.init();
-            
-            Array.prototype.remove = function(from, to) {
-                var rest = this.slice((to || from) + 1 || this.length);
-                this.length = from < 0 ? this.length + from : from;
-                return this.push.apply(this, rest);
-            };
-    }])
-  
 angular.module("BossCollection.forums")
     .controller('dialogController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
@@ -1411,8 +1175,8 @@ angular.module("BossCollection.forums")
         }]);
 angular.module("BossCollection.forums")
     .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout', 'userLoginSrvc',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout,userLoginSrvc) {
 
             
             siteServices.updateTitle('Forums');
@@ -1449,6 +1213,15 @@ angular.module("BossCollection.forums")
                         $scope.forums = forums;
                         
                         
+                    })
+                    .then(function () {
+                        return userLoginSrvc.getAvatar($scope.user.name)
+                            .then(function (result) {
+                                return result
+                            })
+                    })
+                    .then(function (avatarUrl) {
+                        $scope.avatarUrl = avatarUrl;
                     })
                     .catch(function(err){
                         
@@ -2172,6 +1945,471 @@ angular.module("BossCollection.forums")
         }]) 
         
       
+
+angular.module("BossCollection.home")
+    .controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+            
+            $scope.guild = {};
+            $scope.editing = false;
+            $scope.content;            
+            $scope.newTab;            
+            $scope.guildImagesLoaded = false;
+            $scope.guildName = $routeParams.guildName
+           
+            
+           
+            
+            $scope.init = function() {
+                
+                $scope.getHomepageContent();
+            }
+            
+            $scope.getHomepageContent = function() {
+
+                $scope.guildImagesLoaded = false;
+
+                guildServices.getHomepageContent($scope.guildName)
+                    .then(function(guild) {
+
+                        if(guild.guild == undefined){
+                            siteServices.showMessageModal("Guild not found. Check the spelling. Spaces and Case matter.");
+                        }
+                        
+                        $scope.guild = guild.guild;
+                        
+                        var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                            + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
+                        
+                        
+                        
+                        if ($scope.guild && $scope.guild.images) {
+                            $scope.guild.images.forEach(function(image) {
+                                sliderHTML += "<item source = " + image + "></item>"
+                            }, this);
+                        }
+
+
+                        sliderHTML += "</awesome-slider>";
+
+                        document.getElementById('imageGallery').innerHTML = sliderHTML;
+
+                        $scope.guildImagesLoaded = true;
+                    })
+                    .catch(function(err) {
+                        siteServices.showMessageModal(err.message);
+                    })
+
+            }
+
+            $scope.editTab = function(){
+                $scope.editing = true;
+            }
+            
+            $scope.saveTab = function(){
+                
+                guildServices.updateHomepageContent($scope.guild)
+                    .then(function(res){
+                        
+                        $scope.cancel();
+                        //It worked, do nothing.
+                    })
+                    .catch(function(err){
+                        
+                        siteServices.showMessageModal(err.message);
+                    })
+                
+            }
+            
+            $scope.deleteTab = function(index){
+                
+                siteServices.confirmDelete()
+                    .then(function(){
+                        
+                        $scope.guild.tabs.remove(index);
+                        $scope.saveTab();
+                        
+                    })
+            }
+            
+            $scope.addNewTab = function(){
+                
+                $scope.guild.tabs.push($scope.newTab);
+                
+                $scope.saveTab();
+                
+                $scope.newTab = newTab;
+            }
+            
+            $scope.cancel = function(){
+                
+                $scope.editing = false;
+            }
+            
+            siteServices.updateTitle('Home');
+            
+            $scope.init();
+            
+            Array.prototype.remove = function(from, to) {
+                var rest = this.slice((to || from) + 1 || this.length);
+                this.length = from < 0 ? this.length + from : from;
+                return this.push.apply(this, rest);
+            };
+    }])
+  
+
+angular.module("BossCollection.home")
+    .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+            $scope.guild = {};
+            $scope.editing = false;
+            $scope.content;            
+            $scope.newTab;            
+            $scope.guildImagesLoaded = false;
+            
+            var newTab = {title: "New Tab", content: "Make me whatever you want."};
+            
+            $scope.$on("loggedin", function(event, user) {
+                
+                userLoginSrvc.getUser()
+                    .then(function(user) {
+                        if (user) {
+                            $scope.user = user;
+                            $scope.loggedIn = true;
+                            $scope.getHomepageContent();
+                        }
+                    },
+                    function(err) {
+                        $scope.user = {};
+                        $scope.loggedIn = false;
+                    })
+                
+                
+            }) 
+            
+            $scope.init = function() {
+                
+                $scope.newTab = newTab; 
+                
+                $scope.getHomepageContent();    
+                
+            }
+             
+            $scope.getHomepageContent = function(){
+                $scope.guildImagesLoaded = false;
+                if($scope.user && $scope.user.guild){
+                    
+                    guildServices.getHomepageContent($scope.user.guild.name)
+                        .then(function(guild) {
+                            
+                            $scope.guild = guild.guild;
+
+                            var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                                + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
+                                
+                            if($scope.guild && $scope.guild.images){
+                                $scope.guild.images.forEach(function(image) {
+                                    sliderHTML += "<item source = " + image + "></item>"
+                                }, this);    
+                            } 
+                            
+
+                            sliderHTML += "</awesome-slider>";
+
+                            document.getElementById('imageGallery').innerHTML = sliderHTML;
+
+                            $scope.guildImagesLoaded = true;
+                        })
+                        .catch(function(err) {
+                            siteServices.showMessageModal(err.message);
+                        })    
+                }
+            }
+
+            $scope.editTab = function(){
+                $scope.editing = true;
+            }
+            
+            $scope.saveTab = function(){
+                
+                guildServices.updateHomepageContent($scope.guild)
+                    .then(function(res){
+                        
+                        $scope.cancel();
+                        //It worked, do nothing.
+                    })
+                    .catch(function(err){
+                        
+                        siteServices.showMessageModal(err.message);
+                    })
+                
+            }
+            
+            $scope.deleteTab = function(index){
+                
+                siteServices.confirmDelete()
+                    .then(function(){
+                        
+                        $scope.guild.tabs.remove(index);
+                        $scope.saveTab();
+                        
+                    })
+            }
+            
+            $scope.addNewTab = function(){
+                
+                $scope.guild.tabs.push($scope.newTab);
+                
+                $scope.saveTab();
+                
+                $scope.newTab = newTab;
+            }
+            
+            $scope.cancel = function(){
+                
+                $scope.editing = false;
+            }
+            
+            siteServices.updateTitle('Home');
+            
+            $scope.init();
+            
+            Array.prototype.remove = function(from, to) {
+                var rest = this.slice((to || from) + 1 || this.length);
+                this.length = from < 0 ? this.length + from : from;
+                return this.push.apply(this, rest);
+            };
+    }])
+  
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
+
+            siteServices.updateTitle('Account');
+
+            $scope.leaveGuild = function () {
+
+                var guildName = $scope.user.guild.name;
+
+                siteServices.confirmDelete()
+                    .then(function (result) {
+                        guildServices.leaveGuild(guildName)
+                            .then(function (user) {
+
+                                $scope.user = userLoginSrvc.updateUser();
+                            })
+                    })
+            }
+            
+            $scope.registerPush = function(){
+                
+                //pushNotificationsService.subscribe();
+            }
+            
+            $scope.unregisterPush = function(){
+                
+                //pushNotificationsService.unsubscribe(); 
+            }
+                    
+            $scope.sendPush = function(){
+                
+                //pushNotificationsService.sendPush();
+            }
+            $scope.updateAccount = function () {
+
+                
+                userLoginSrvc.updateAccount($scope.user).then(function (response) {
+
+                    $scope.user = userLoginSrvc.updateUser();
+                    siteServices.showMessageToast("User updated");
+                },
+                    function (err) {
+
+                        siteServices.showMessageModal(err);
+                    })
+            }
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
+
+        $scope.user = {};
+        $scope.user.name = "";
+        $scope.loading = false;
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        
+        
+        $scope.init = function () {
+        }
+        
+        $scope.resetPassword = function(){
+            
+            $scope.loading = true;
+             
+            userLoginSrvc.lostPassword($scope.user.email)
+                .then(function(response){
+                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
+                })
+                .catch(function(err){
+                    siteServices.showMessageModal(err);
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+             
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.openPasswordResetWindow = function($event){
+            $mdBottomSheet.show({
+                    templateUrl: 'resetPassword',
+                    controller: 'loginController',
+                    targetEvent: $event,
+                    escapeToClose: false
+                })
+        }
+        
+        $scope.cancelPasswordReset = function(){ 
+            
+            $mdBottomSheet.hide();
+            $timeout(function(){
+                
+                siteServices.showLoadingBottomSheet();    
+            }, 500);
+            
+        }
+        
+        $scope.login = function(){
+             
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
+                
+            },
+            function(err){
+                
+                siteServices.showMessageModal(err);
+                console.log(err);
+            })
+        }
+        
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
+            $location.path("/");
+        }
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
+
+            $scope.user = {};
+
+            $scope.passwordsMatch = false;
+
+            
+
+            $scope.register = function () {
+
+                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
+                    //save user to cookie
+                    
+                },
+                    function (err) {
+                        $scope.passwordsMatch = true;
+                        $scope.openFromLeft(err);
+                        console.log(err);
+                    })
+
+            }
+
+            $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
+
+        }])
+
+'use strict';
+/* Directives */
+
+angular.module('BossCollection.accounts').
+  directive('userDisplay', [function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'userDisplayTemplate',
+            controller: 'userDisplayController',
+            scope: {
+                user: '=user'
+            } 
+        }  
+  }]); 
+ 
+'use strict';
+/* Directives */
+
+angular.module('BossCollection.accounts').
+    controller('userDisplayController', ['$scope', 'userLoginSrvc', function($scope, userLoginSrvc) {
+
+        console.log($scope.user);
+
+
+
+        $scope.$watch('user', function(user) {
+
+            if ($scope.avatarUrl == undefined) {
+                getAvatarUrl();
+            }
+
+        })
+
+        function getAvatarUrl() {
+
+            userLoginSrvc.getAvatar($scope.user)
+                .then(function(avatarUrl) {
+                    $scope.avatarUrl = avatarUrl;
+                    
+                })
+        }
+
+    }]);
+
                 
     
 'use strict';
@@ -2382,6 +2620,214 @@ angular.module("BossCollection.attendance")
 
 
 
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendance")
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
+        
+        var currentDay = moment().day();
+        
+        var self = this;
+        
+        self.showContentBool = false;
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        self.selectedUser = {};
+        
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        }
+        
+        $scope.cancel = function(){
+            $mdDialog.cancel();
+        }
+        
+        self.showContent = function(){
+           self.showContentBool = true;
+       }
+        
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        
+        
+             
+                
+        $scope.init = function(){
+            
+            siteServices.updateTitle('Report Absence');
+            
+            if($scope.user == undefined){
+                
+                userLoginSrvc.getUser()
+                    .then(function(user) {
+                        $scope.user = user
+                        
+                        if ($scope.user.rank < 3) {
+                            self.selectedUser = $scope.user;
+                            self.showContent();
+                        }
+                        else {
+                            $scope.getGuildUsers();
+                        }
+                    })
+                
+            }
+            else{
+                if ($scope.user.rank < 3) {
+                    self.selectedUser = $scope.user;
+                    self.showContent();
+                }
+                else {
+                    $scope.getGuildUsers();
+                }
+            }
+                
+        }
+        
+        $scope.getGuildUsers = function(){
+            
+            $scope.loading = true;
+            
+            guildServices.getGuildMembers($scope.user.guild.name)
+                .then(function(users){
+                    
+                    $scope.users = users;
+                    self.showContent();  
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+       
+        
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+           
+           $scope.getAbsencesByDate();
+       }
+       
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
+           
+           var nextDate = dayDesired - currentDay;
+           
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
+           
+           
+           
+           return nextDate;
+       }
+       
+       $scope.formatDate = function(date){
+           
+           return moment.utc(date).format('dddd, MMM D');
+       }
+
+        $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
+            $scope.loading = true;
+            
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+        
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+         
+        $scope.filterSearch = function (filterSearch) {
+
+            return $filter('filter')($scope.users, filterSearch);
+        }
+         
+        $scope.submitNewAbsence = function () {
+
+            if ($scope.newAbsence.date == null) {
+
+                siteServices.showMessageModal("Must select a date")
+            }
+            else if($scope.newAbsence.type == null){
+                siteServices.showMessageModal("Must select a type: Late or Absent")
+            }
+            else { 
+                
+                if ($scope.user.rank < 3) {
+                    
+                    self.selectedUser = $scope.user.name;
+                }
+                else{
+                    
+                    $scope.newAbsence.user = self.selectedUser.user;
+                }
+                
+                
+                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
+                
+                    //TODO: Redirect to list of absences.
+                    siteServices.showMessageModal("Success");
+                },
+                    function (err) {
+                        siteServices.showMessageModal(err);
+                        console.log(err);
+                    })
+            }
+
+
+        }
+        
+        
+        function filterOutOldDates(){
+            
+        }
+    
+        $scope.init();
+
+    }])
+
+angular.module('BossCollection.attendance')
+    .directive('absenceReport', [function(){
+        
+        return {
+            restrict: 'E',
+            controller: 'absenceReportController',
+            templateUrl: 'absence'
+        }
+        
+    }])
 'use strict';
 /**
  *
@@ -2598,443 +3044,6 @@ angular.module('BossCollection.attendance')
         }
         
     }])
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
-        
-        var currentDay = moment().day();
-        
-        var self = this;
-        
-        self.showContentBool = false;
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment(); 
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
-        
-        self.selectedUser = {};
-        
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        }
-        
-        $scope.cancel = function(){
-            $mdDialog.cancel();
-        }
-        
-        self.showContent = function(){
-           self.showContentBool = true;
-       }
-        
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        
-        
-             
-                
-        $scope.init = function(){
-            
-            siteServices.updateTitle('Report Absence');
-            
-            if($scope.user == undefined){
-                
-                userLoginSrvc.getUser()
-                    .then(function(user) {
-                        $scope.user = user
-                        
-                        if ($scope.user.rank < 3) {
-                            self.selectedUser = $scope.user;
-                            self.showContent();
-                        }
-                        else {
-                            $scope.getGuildUsers();
-                        }
-                    })
-                
-            }
-            else{
-                if ($scope.user.rank < 3) {
-                    self.selectedUser = $scope.user;
-                    self.showContent();
-                }
-                else {
-                    $scope.getGuildUsers();
-                }
-            }
-                
-        }
-        
-        $scope.getGuildUsers = function(){
-            
-            $scope.loading = true;
-            
-            guildServices.getGuildMembers($scope.user.guild.name)
-                .then(function(users){
-                    
-                    $scope.users = users;
-                    self.showContent();  
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-       
-        
-       $scope.updateList = function(){
-           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
-           
-           $scope.getAbsencesByDate();
-       }
-       
-       function calculateNumOfDaysUntil(dayDesired){
-           var numOfDaysInWeek = 7;
-           
-           var nextDate = dayDesired - currentDay;
-           
-           if(nextDate < 0){
-               
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
-           }
-           
-           
-           
-           return nextDate;
-       }
-       
-       $scope.formatDate = function(date){
-           
-           return moment.utc(date).format('dddd, MMM D');
-       }
-
-        $scope.getAbsences = function(){
-            $scope.currentlySelected = "All absences"
-            $scope.loading = true;
-            
-            absenceService.getAbsences().then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-        
-        $scope.getAbsencesByDate = function(){
-            
-            $scope.loading = true;
-            
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-         
-        $scope.filterSearch = function (filterSearch) {
-
-            return $filter('filter')($scope.users, filterSearch);
-        }
-         
-        $scope.submitNewAbsence = function () {
-
-            if ($scope.newAbsence.date == null) {
-
-                siteServices.showMessageModal("Must select a date")
-            }
-            else if($scope.newAbsence.type == null){
-                siteServices.showMessageModal("Must select a type: Late or Absent")
-            }
-            else { 
-                
-                if ($scope.user.rank < 3) {
-                    
-                    self.selectedUser = $scope.user.name;
-                }
-                else{
-                    
-                    $scope.newAbsence.user = self.selectedUser.user;
-                }
-                
-                
-                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
-                
-                    //TODO: Redirect to list of absences.
-                    siteServices.showMessageModal("Success");
-                },
-                    function (err) {
-                        siteServices.showMessageModal(err);
-                        console.log(err);
-                    })
-            }
-
-
-        }
-        
-        
-        function filterOutOldDates(){
-            
-        }
-    
-        $scope.init();
-
-    }])
-
-angular.module('BossCollection.attendance')
-    .directive('absenceReport', [function(){
-        
-        return {
-            restrict: 'E',
-            controller: 'absenceReportController',
-            templateUrl: 'absence'
-        }
-        
-    }])
-'use strict';
-/* Directives */
-
-angular.module('BossCollection.accounts').
-  directive('userDisplay', [function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'userDisplayTemplate',
-            controller: 'userDisplayController',
-            scope: {
-                user: '=user'
-            } 
-        }  
-  }]); 
- 
-'use strict';
-/* Directives */
-
-angular.module('BossCollection.accounts').
-    controller('userDisplayController', ['$scope', 'userLoginSrvc', function($scope, userLoginSrvc) {
-
-        console.log($scope.user);
-
-
-
-        $scope.$watch('user', function(user) {
-
-            if ($scope.avatarUrl == undefined) {
-                getAvatarUrl();
-            }
-
-        })
-
-        function getAvatarUrl() {
-
-            userLoginSrvc.getAvatar($scope.user)
-                .then(function(avatarUrl) {
-                    $scope.avatarUrl = avatarUrl;
-                    
-                })
-        }
-
-    }]);
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.accounts")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
-
-            siteServices.updateTitle('Account');
-
-            $scope.leaveGuild = function () {
-
-                var guildName = $scope.user.guild.name;
-
-                siteServices.confirmDelete()
-                    .then(function (result) {
-                        guildServices.leaveGuild(guildName)
-                            .then(function (user) {
-
-                                $scope.user = userLoginSrvc.updateUser();
-                            })
-                    })
-            }
-            
-            $scope.registerPush = function(){
-                
-                //pushNotificationsService.subscribe();
-            }
-            
-            $scope.unregisterPush = function(){
-                
-                //pushNotificationsService.unsubscribe(); 
-            }
-                    
-            $scope.sendPush = function(){
-                
-                //pushNotificationsService.sendPush();
-            }
-            $scope.updateAccount = function () {
-
-                
-                userLoginSrvc.updateAccount($scope.user).then(function (response) {
-
-                    $scope.user = userLoginSrvc.updateUser();
-                    siteServices.showMessageToast("User updated");
-                },
-                    function (err) {
-
-                        siteServices.showMessageModal(err);
-                    })
-            }
-        }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.accounts")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
-        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
-
-        $scope.user = {};
-        $scope.user.name = "";
-        $scope.loading = false;
-        
-        if($location.url() == "/auth/login"){
-            siteServices.updateTitle('Login');    
-        }
-        
-        
-        
-        $scope.init = function () {
-        }
-        
-        $scope.resetPassword = function(){
-            
-            $scope.loading = true;
-             
-            userLoginSrvc.lostPassword($scope.user.email)
-                .then(function(response){
-                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
-                })
-                .catch(function(err){
-                    siteServices.showMessageModal(err);
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-        
-        $scope.alreadyLoggedIn = function(){
-             
-            if(userLoginSrvc.loggedIn() == true){
-                $location.path('/');
-            }
-        }
-        
-        $scope.openPasswordResetWindow = function($event){
-            $mdBottomSheet.show({
-                    templateUrl: 'resetPassword',
-                    controller: 'loginController',
-                    targetEvent: $event,
-                    escapeToClose: false
-                })
-        }
-        
-        $scope.cancelPasswordReset = function(){ 
-            
-            $mdBottomSheet.hide();
-            $timeout(function(){
-                
-                siteServices.showLoadingBottomSheet();    
-            }, 500);
-            
-        }
-        
-        $scope.login = function(){
-             
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                
-                userLoginSrvc.getUser()
-                    .then(function () {
-
-                        if ($location.path() == "/auth/application") {
-
-                        }
-                        else {
-                            $location.path("/");
-                        }
-                    })
-                
-            },
-            function(err){
-                
-                siteServices.showMessageModal(err);
-                console.log(err);
-            })
-        }
-        
-        $scope.cancelLogin = function () {
-            
-            siteServices.hideBottomSheet();
-            $location.path("/");
-        }
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.accounts")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
-
-            $scope.user = {};
-
-            $scope.passwordsMatch = false;
-
-            
-
-            $scope.register = function () {
-
-                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
-                    //save user to cookie
-                    
-                },
-                    function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
-                        console.log(err);
-                    })
-
-            }
-
-            $scope.openFromLeft = function (errorMessage) {
-                
-                siteServices.showMessageModal(errorMessage);
-            };
-
-        }])
-
 'use strict';
 /**
  
@@ -3361,6 +3370,80 @@ angular.module("BossCollection.guild")
  * @constructor No Controller
  */
 angular.module("BossCollection.guild")
+    .controller("joinGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+
+
+            $scope.listOfGuilds = [];
+            $scope.loading = false;
+
+
+            siteServices.updateTitle('Join Guild');
+
+            $scope.init = function () {
+
+
+
+                $scope.getGuilds();
+
+            }
+
+            $scope.filterSearch = function (filterSearch) {
+
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
+            }
+
+            $scope.getGuilds = function () {
+
+                guildServices.getListOfGuilds()
+                    .then(function (guilds) {
+
+                        $scope.listOfGuilds = guilds;
+                    })
+            }
+
+            $scope.joinGuild = function () {
+
+                $scope.loading = true;
+
+                if ($scope.guildName) {
+
+                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
+                        .then(function (guild) {
+
+                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
+                            
+                            userLoginSrvc.refreshUserFromServer();
+
+                            $location.path('/');
+
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else{
+                    siteServices.showMessageToast("Guild doesn't exist");
+                    $scope.loading = false;
+                }
+            }
+
+            $scope.init();
+        }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
     .controller("manageMembersController", [
         "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
@@ -3454,80 +3537,6 @@ angular.module("BossCollection.guild")
             
             $scope.init();
             siteServices.updateTitle('Manage Members');
-        }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-
-
-            $scope.listOfGuilds = [];
-            $scope.loading = false;
-
-
-            siteServices.updateTitle('Join Guild');
-
-            $scope.init = function () {
-
-
-
-                $scope.getGuilds();
-
-            }
-
-            $scope.filterSearch = function (filterSearch) {
-
-                return $filter('filter')($scope.listOfGuilds, filterSearch);
-            }
-
-            $scope.getGuilds = function () {
-
-                guildServices.getListOfGuilds()
-                    .then(function (guilds) {
-
-                        $scope.listOfGuilds = guilds;
-                    })
-            }
-
-            $scope.joinGuild = function () {
-
-                $scope.loading = true;
-
-                if ($scope.guildName) {
-
-                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
-                        .then(function (guild) {
-
-                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                            
-                            userLoginSrvc.refreshUserFromServer();
-
-                            $location.path('/');
-
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else{
-                    siteServices.showMessageToast("Guild doesn't exist");
-                    $scope.loading = false;
-                }
-            }
-
-            $scope.init();
         }])
 
 angular.module("BossCollection.forums")
@@ -3816,15 +3825,20 @@ angular.module("BossCollection.forums")
 
                 self.loading = true;
 
-                forumService.getThreads(self.favorites)
+                forumService.getFavorites()
+                    .then(function(favorites){
+                        self.favorites = favorites;
+                    })                    
                     .then(function(threads){
-
-                        self.loading = false;
-                        self.threads = threads;
-                        self.masterThread = threads;
+                        
                         sortFavorites();
+                        
                     })
                     .catch(function(err){
+
+                        self.loading = false;
+                    })
+                    .finally(function(){
 
                         self.loading = false;
                     })
@@ -3886,7 +3900,7 @@ angular.module("BossCollection.forums")
                 self.orderByString = 'Oldest';
                 self.orderBy = "-dateCreated"
             }
-
+            
             self.openThread = function(thread){
                 
                 forumService.setSelectedThread(thread);
@@ -3896,15 +3910,41 @@ angular.module("BossCollection.forums")
                 $scope.goTo('/thread/' + thread._id);
             }
 
-            self.favoriteThread = function (thread) {
+            self.isFavorite = function (thread) {
 
-                if (thread.favorite) {
-                    
-                    thread.favorite = !thread.favorite;
+                var doesExist = _.find(thread.favorites, function (username) {
+                    return $scope.user.name == username;
+                })
+
+                if (doesExist != undefined) {
+                    return true;
                 }
                 else {
-                    thread.favorite = true;
+                    return false;
                 }
+            }
+
+   
+
+            self.favoriteThread = function (thread) {
+
+                var doesExist = self.isFavorite(thread);
+
+                if (doesExist == false) {
+
+                    if (thread.favorites == undefined) {
+                        thread.favorites = [];
+                    }
+
+                    thread.favorites.push($scope.user.name);
+                }
+                else {
+
+                    _.remove(thread.favorites, function (favorite) {
+                        return favorite == $scope.user.name;
+                    })
+                }
+                
                 $scope.loading = false;
                 
                 forumService.editThread(thread)
@@ -3934,7 +3974,7 @@ angular.module("BossCollection.forums")
             }
 
             self.goBack = function(){
-                self.goToBackwards('/forum');
+                $scope.goBack();
             } 
             
             self.isRead = function (threadIn) {
@@ -4207,18 +4247,40 @@ angular.module("BossCollection.forums")
 
                 $scope.saveThread(thread);
             }    
-                      
+
+            $scope.isFavorite = function (thread) {
+
+                var doesExist = _.find(thread.favorites, function (username) {
+                    return $scope.user.name == username;
+                })  
+
+                if (doesExist != undefined) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
 
             $scope.favoriteThread = function (thread) {
 
-                if (thread.favorite) {
+                var doesExist = $scope.isFavorite(thread);
+                
+                if (doesExist == false) {
+
+                    if (thread.favorites == undefined) {
+                        thread.favorites = [];
+                    }
                     
-                    thread.favorite = !thread.favorite;
+                    thread.favorites.push($scope.user.name);
                 }
                 else {
-                    thread.favorite = true;
-                }
 
+                    _.remove(thread.favorites, function (favorite) {
+                        return favorite == $scope.user.name;
+                    })
+                }
+                
                 $scope.saveThread(thread);
             }     
 
@@ -4378,7 +4440,11 @@ angular.module("BossCollection.controllers")
             $scope.closeSideBar('left');
             $location.url(path);
         }
-         
+
+        $scope.goBack = function () {
+            window.history.back();
+        }            
+
         $scope.goToBackwards = function(path){
             
             $scope.reversed = true;

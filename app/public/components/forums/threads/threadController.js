@@ -229,18 +229,40 @@ angular.module("BossCollection.forums")
 
                 $scope.saveThread(thread);
             }    
-                      
+
+            $scope.isFavorite = function (thread) {
+
+                var doesExist = _.find(thread.favorites, function (username) {
+                    return $scope.user.name == username;
+                })  
+
+                if (doesExist != undefined) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
 
             $scope.favoriteThread = function (thread) {
 
-                if (thread.favorite) {
+                var doesExist = $scope.isFavorite(thread);
+                
+                if (doesExist == false) {
+
+                    if (thread.favorites == undefined) {
+                        thread.favorites = [];
+                    }
                     
-                    thread.favorite = !thread.favorite;
+                    thread.favorites.push($scope.user.name);
                 }
                 else {
-                    thread.favorite = true;
-                }
 
+                    _.remove(thread.favorites, function (favorite) {
+                        return favorite == $scope.user.name;
+                    })
+                }
+                
                 $scope.saveThread(thread);
             }     
 

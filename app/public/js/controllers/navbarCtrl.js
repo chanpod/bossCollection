@@ -36,7 +36,11 @@ angular.module("BossCollection.controllers")
             $scope.closeSideBar('left');
             $location.url(path);
         }
-         
+
+        $scope.goBack = function () {
+            window.history.back();
+        }            
+
         $scope.goToBackwards = function(path){
             
             $scope.reversed = true;

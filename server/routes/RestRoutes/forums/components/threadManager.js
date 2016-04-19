@@ -15,7 +15,7 @@ function getFavorites(req, res) {
 
     var user = req.session.user.name;
 
-    ThreadModel.find({ "favorite": true, "user":user })
+    ThreadModel.find({ "favorites": req.session.user.name})
         .then((favorites, err) => {
 
             if (err) return defer.reject(util.handleErrors(err));

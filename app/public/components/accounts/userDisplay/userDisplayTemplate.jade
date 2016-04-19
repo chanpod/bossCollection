@@ -1,9 +1,10 @@
 script#userDisplayTemplate(type="text/ng-template")
-    div(layout = "column", layout-align = "start start")
-        div()
-            span().userFont
-                {{user}}
+    div(layout = "row", layout-align = "start center")
         div(layout, layout-align = "center center")
             img(ng-if = "avatarUrl != undefined", src = "{{avatarUrl}}").avatarImage
-            i(ng-if = "avatarUrl == undefined", class="material-icons").iconHeightAdjust account_circle
+            i(ng-if = "avatarUrl == undefined", class="material-icons") account_circle
+        div(layout, layout-align = "center center")
+            span().userFont
+                {{user}}
+        
         

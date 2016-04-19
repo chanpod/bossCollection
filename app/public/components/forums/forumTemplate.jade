@@ -1,8 +1,24 @@
 script#forum(type="text/ng-template")
     
     md-content(layout = "column", layout-fill)    
-        div()
+        div(flex)
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+            div(layout-align = "center center")
+                md-card
+                    md-card-header
+                        md-card-avatar
+                            img(src = "{{avatarUrl}}").md-user-avatar
+                    
+                        md-card-header-text
+                            span().md-headline
+                                {{user.name}}
+                            span().md-subhead
+                                {{user.name}}
+                    md-card-actions
+                        md-button(ng-click = "goTo('/forum/favorites')").md-raised Favorites
+                        md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
+                            md-tooltip() See post you've created
+                    
             div(ng-repeat = "category in forums.categories")            
                 md-toolbar().md-scroll-shrink
                     div().md-toolbar-tools

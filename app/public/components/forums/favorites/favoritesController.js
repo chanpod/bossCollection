@@ -105,15 +105,20 @@ angular.module("BossCollection.forums")
 
                 self.loading = true;
 
-                forumService.getThreads(self.favorites)
+                forumService.getFavorites()
+                    .then(function(favorites){
+                        self.favorites = favorites;
+                    })                    
                     .then(function(threads){
-
-                        self.loading = false;
-                        self.threads = threads;
-                        self.masterThread = threads;
+                        
                         sortFavorites();
+                        
                     })
                     .catch(function(err){
+
+                        self.loading = false;
+                    })
+                    .finally(function(){
 
                         self.loading = false;
                     })
@@ -175,7 +180,7 @@ angular.module("BossCollection.forums")
                 self.orderByString = 'Oldest';
                 self.orderBy = "-dateCreated"
             }
-
+            
             self.openThread = function(thread){
                 
                 forumService.setSelectedThread(thread);
@@ -185,15 +190,41 @@ angular.module("BossCollection.forums")
                 $scope.goTo('/thread/' + thread._id);
             }
 
-            self.favoriteThread = function (thread) {
+            self.isFavorite = function (thread) {
 
-                if (thread.favorite) {
-                    
-                    thread.favorite = !thread.favorite;
+                var doesExist = _.find(thread.favorites, function (username) {
+                    return $scope.user.name == username;
+                })
+
+                if (doesExist != undefined) {
+                    return true;
                 }
                 else {
-                    thread.favorite = true;
+                    return false;
                 }
+            }
+
+   
+
+            self.favoriteThread = function (thread) {
+
+                var doesExist = self.isFavorite(thread);
+
+                if (doesExist == false) {
+
+                    if (thread.favorites == undefined) {
+                        thread.favorites = [];
+                    }
+
+                    thread.favorites.push($scope.user.name);
+                }
+                else {
+
+                    _.remove(thread.favorites, function (favorite) {
+                        return favorite == $scope.user.name;
+                    })
+                }
+                
                 $scope.loading = false;
                 
                 forumService.editThread(thread)
@@ -223,7 +254,7 @@ angular.module("BossCollection.forums")
             }
 
             self.goBack = function(){
-                self.goToBackwards('/forum');
+                $scope.goBack();
             } 
             
             self.isRead = function (threadIn) {

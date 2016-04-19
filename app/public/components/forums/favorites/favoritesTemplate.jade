@@ -3,7 +3,8 @@ script#favorites(type="text/ng-template")
        md-toolbar(flex).md-scroll-shrink
            div().md-toolbar-tools
       
-               span(flex)
+               md-button(ng-click = "favCtrl.goBack()").md-icon-button
+                    md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
                span(flex)
                
                md-button(ng-click = "favCtrl.refresh()").md-icon-button
@@ -61,11 +62,11 @@ script#favorites(type="text/ng-template")
                                 md-button(ng-click = "favCtrl.editThread(thread)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                                     md-tooltip() Edit thread
-                    md-button(ng-if = "thread.favorite", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
+                    md-button(ng-if = "favCtrl.isFavorite(thread)", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
                         md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
                         md-tooltip() Favorite
-                    md-button(ng-if = "!thread.favorite", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
+                    md-button(ng-if = "!favCtrl.isFavorite(thread)", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
                         md-icon(md-font-library="material-icons", aria-label = "delete category") favorite_border
-                        md-tooltip() Favorite 
+                        md-tooltip() Favorite
                         
             md-divider(ng-if="!$last")
