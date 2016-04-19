@@ -212,6 +212,7 @@ angular.module("BossCollection.forums")
             $scope.openThread = function(thread){
                 
                 forumService.setSelectedThread(thread);
+                forumService.setIsComingFromFavorites(false);
                 $scope.updateThreadViewed(thread);
                 
                 $scope.goTo('/thread/' + thread._id);
