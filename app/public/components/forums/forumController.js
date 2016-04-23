@@ -182,30 +182,34 @@ angular.module("BossCollection.forums")
             }
             
             $scope.updateForumViewed = function(forumIn){
-                
-                var catIndexTracker, forumIndexTracker;
-                
-                _.find($scope.savedForums.categories, function(cat, catIndex){
-                    if(cat._id == forumIn.categoryId){
-                        catIndexTracker = catIndex;
-                        _.find(cat.forums, function (forum, forumIndex) {
+                try{
+                    var catIndexTracker, forumIndexTracker;
+                    
+                    _.find($scope.savedForums.categories, function(cat, catIndex){
+                        if(cat._id == forumIn.categoryId){
+                            catIndexTracker = catIndex;
+                            _.find(cat.forums, function (forum, forumIndex) {
 
-                            if (forum._id == forumIn._id) {
-                                
-                                forumIndexTracker = forumIndex;
+                                if (forum._id == forumIn._id) {
+                                    
+                                    forumIndexTracker = forumIndex;
+                                }
+                            })
+                            
+                            if(forumIndexTracker == undefined){
+                                cat.forums.push(forumIn);
                             }
-                        })
-                        
-                        if(forumIndexTracker == undefined){
-                            cat.forums.push(forumIn);
                         }
-                    }
-                })
-                
-                $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
-                
-                
-                forumService.saveForumCounts($scope.savedForums);
+                    })
+                    
+                    $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
+                    
+                    
+                    forumService.saveForumCounts($scope.savedForums);
+                }
+                catch(err){
+                    console.log(err);
+                }
             }
 
             $scope.init();

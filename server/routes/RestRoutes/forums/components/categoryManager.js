@@ -36,6 +36,9 @@ function editCategory(req, res){
     var defer = q.defer();
     var query = { "_id" : req.body.category._id};
     
+    var categoryToUpdate = req.body.category;
+    categoryToUpdate.forums = []; //we don't want to save these!
+    
     CategorydModel.findOneAndUpdate(query, req.body.category)
         .then(function(response){
             
@@ -113,24 +116,30 @@ function getCategories(req, res){
                 ForumManager.getForums(category._id)
                     .then(function(categoryForums){
                         
-                        _(categoryForums).forEach(function(forum, forumIndex){
+                        if(categoryForums.length > 0){
                             
-                            forumsPromise.push(forumIndex);
+                            _(categoryForums).forEach(function(forum, forumIndex){
+                                
+                                forumsPromise.push(forumIndex);
+                                
+                                ThreadManager.getThreadCount(forum._id)
+                                    .then(function(count){
+                                        console.log("Got thread count for forum: " +  forum.name)
+                                        forum.threadCount = count;
+                                        category.forums.push(forum);
+                                        
+                                        forumsPromise.pop();
+                                        
+                                        forEachFinished();
+                                    })
+                                
+                            })
                             
-                            ThreadManager.getThreadCount(forum._id)
-                                .then(function(count){
-                                    console.log("Got thread count for forum: " +  forum.name)
-                                    forum.threadCount = count;
-                                    category.forums.push(forum);
-                                    
-                                    forumsPromise.pop();
-                                    
-                                    forEachFinished();
-                                })
-                            
-                        })
-                        
-                        categoriesPromise.pop();
+                            categoriesPromise.pop();
+                        }
+                        else{
+                            defer.resolve(forums)
+                        }
                     })   
             })
             

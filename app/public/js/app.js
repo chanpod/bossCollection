@@ -13,8 +13,7 @@ angular.module('BossCollection', [
   'BossCollection.guild',
   'BossCollection.home',
   'ngRoute',
-  'ngResource',
-  'btford.socket-io', 
+  'ngResource',  
   'ngCookies', 
   'ngMaterial',
   'ngAnimate'

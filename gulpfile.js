@@ -40,27 +40,12 @@ gulp.task('watch', function(){
         gulp.start('build', done);
     }));
 
-//    gulp.watch('./app/public/js/**/*.js', ['build']);
-        
-   //gulp.watch('./app/public/js/**/*.sass', ['build']);
 })
 
 gulp.task('build', function(){
-    //['clean', 'concatJS', 'concatSass', 'css', 'cssRename', 'minify', 'minifyCss']
     
     runSequence('clean', 'concatJS', 'concatSass', 'css', 'cssRename', 'minify', 'minifyCss', 'vendorCss');
 })
-
-/**
-gulp.task('templates', function(){
-    
-    gulp.src('./app/views/index.jade')
-        .pipe(jade({
-            
-        }))
-        .pipe(gulp.dest('./app/views/'))
-});
- */
 
 
 gulp.task('concatVendor', function(){
@@ -76,16 +61,11 @@ gulp.task('concatVendor', function(){
         './node_modules/angular-aria/angular-aria.min.js',        
         './node_modules/showdown/dist/showdown.min.js',
         './node_modules/angular-material/angular-material.min.js',
-        './node_modules/moment/min/moment.min.js',
-        './app/public/js/lib/jquery-2.1.1.js',
+        './node_modules/moment/min/moment.min.js',        
         './node_modules/highcharts/highcharts.js',
         './node_modules/highcharts/modules/data.js',
-        './node_modules/highcharts/modules/drilldown.js',
-        './app/public/js/vendor/angular-parallax.js',        
-        './app/public/js/lib/materialize/js/materialize.min.js',
-        './app/public/js/lib/angular-socket-io-master/mock/socket-io.js',
-        './app/public/js/lib/angular-socket-io-master/socket.js',
-        './app/public/js/lib/socket.io.js',
+        './node_modules/highcharts/modules/drilldown.js',        
+        
     ])
             .pipe(concat('vendor.min.js'))
             .pipe(gulp.dest('./app/public/tmp/'))
