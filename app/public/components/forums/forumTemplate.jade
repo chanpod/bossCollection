@@ -14,8 +14,12 @@ script#forum(type="text/ng-template")
                                 {{user.name}}
                             span().md-subhead
                                 {{user.name}}
-                    md-card-actions
+                    md-card-actions(layout, layout-xs = "column")
                         md-button(ng-click = "goTo('/forum/favorites')").md-raised Favorites
+                        br
+                        md-button(ng-if = "user.rank > 2", ng-click = "newCategory()").md-raised
+                            | Create Category
+                        br
                         md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
                             md-tooltip() See post you've created
                     
@@ -53,7 +57,6 @@ script#forum(type="text/ng-template")
                         md-divider(ng-if="!$last")
             md-toolbar(ng-show = "user.rank > 2").md-scroll-shrink
                 div().md-toolbar-tools
-                    md-button(ng-click = "newCategory()").md-raised
-                        | New Category
+                    
             ad()
                             

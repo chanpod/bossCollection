@@ -114,9 +114,7 @@ function getCategories(req, res){
                 categoriesPromise.push(index);
                 
                 ForumManager.getForums(category._id)
-                    .then(function(categoryForums){
-                        
-                        if(categoryForums.length > 0){
+                    .then(function(categoryForums){                        
                             
                             _(categoryForums).forEach(function(forum, forumIndex){
                                 
@@ -135,11 +133,10 @@ function getCategories(req, res){
                                 
                             })
                             
-                            categoriesPromise.pop();
-                        }
-                        else{
-                            defer.resolve(forums)
-                        }
+                            categoriesPromise.pop();                            
+                            
+                            forEachFinished();    
+                            
                     })   
             })
             
