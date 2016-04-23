@@ -705,10 +705,10 @@ angular.module("BossCollection.guild")
         var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
         
         var guildApi = {
-            updateHomepageContent: function(guild){
+            updateHomepageContent: function(guild, guildName){
                 
                 var bodyData = {guild: guild}; //no data, it's a get
-                return guildHomepageContentResource.save(bodyData).$promise
+                return guildHomepageContentResource.save({guildName:guildName}, bodyData).$promise
             },
             getHomepageContent: function(guildName){
                 
@@ -827,7 +827,7 @@ angular.module("BossCollection.guild")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.message);
+                        defer.reject(err.data);
                         
                     })
                     .finally(function(){
@@ -1946,8 +1946,7 @@ angular.module("BossCollection.home")
                             $scope.guild.images.forEach(function(image) {
                                 sliderHTML += "<item source = " + image + "></item>"
                             }, this);
-                        }
-
+                        } 
 
                         sliderHTML += "</awesome-slider>";
 
@@ -1956,48 +1955,9 @@ angular.module("BossCollection.home")
                         $scope.guildImagesLoaded = true;
                     })
                     .catch(function(err) {
-                        siteServices.showMessageModal(err.message);
+                        siteServices.showMessageModal(err.data);
                     })
 
-            }
-
-            $scope.editTab = function(){
-                $scope.editing = true;
-            }
-            
-            $scope.saveTab = function(){
-                
-                guildServices.updateHomepageContent($scope.guild)
-                    .then(function(res){
-                        
-                        $scope.cancel();
-                        //It worked, do nothing.
-                    })
-                    .catch(function(err){
-                        
-                        siteServices.showMessageModal(err.message);
-                    })
-                
-            }
-            
-            $scope.deleteTab = function(index){
-                
-                siteServices.confirmDelete()
-                    .then(function(){
-                        
-                        $scope.guild.tabs.remove(index);
-                        $scope.saveTab();
-                        
-                    })
-            }
-            
-            $scope.addNewTab = function(){
-                
-                $scope.guild.tabs.push($scope.newTab);
-                
-                $scope.saveTab();
-                
-                $scope.newTab = newTab;
             }
             
             $scope.cancel = function(){
@@ -2080,7 +2040,7 @@ angular.module("BossCollection.home")
                             $scope.guildImagesLoaded = true;
                         })
                         .catch(function(err) {
-                            siteServices.showMessageModal(err.message);
+                            siteServices.showMessageModal(err.data);
                         })    
                 }
             }
@@ -2091,7 +2051,7 @@ angular.module("BossCollection.home")
             
             $scope.saveTab = function(){
                 
-                guildServices.updateHomepageContent($scope.guild)
+                guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name)
                     .then(function(res){
                         
                         $scope.cancel();
@@ -2099,7 +2059,7 @@ angular.module("BossCollection.home")
                     })
                     .catch(function(err){
                         
-                        siteServices.showMessageModal(err.message);
+                        siteServices.showMessageModal(err.data);
                     })
                 
             }
@@ -2426,7 +2386,7 @@ angular.module("BossCollection.attendance")
 
             },
                 function (err) {
-                    siteServices.showMessageModal(err.message)
+                    siteServices.showMessageModal(err.data)
                     $scope.loading = false;
                     console.log(err);
                 })
@@ -2895,7 +2855,7 @@ angular.module("BossCollection.attendance")
                 },
                     function(err) {
 
-                        siteServices.showMessageModal(err.message)
+                        siteServices.showMessageModal(err.data)
 
                         self.loading = false;
                         console.log(err);
