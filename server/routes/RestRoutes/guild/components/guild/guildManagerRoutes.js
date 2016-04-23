@@ -134,9 +134,9 @@ router.route('/guildHomepage/:guildName')
     .get(function(req, res){
         
        Guild.getGuildHomepage(req, res)
-            .then(function(result) {
+            .then(function(result) { 
 
-                res.status(200).send(result);
+                res.status(200).send(result); 
             })
             .fail(function(err) {
 

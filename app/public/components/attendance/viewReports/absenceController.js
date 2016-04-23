@@ -106,7 +106,7 @@ angular.module("BossCollection.attendance")
                 },
                     function(err) {
 
-                        siteServices.showMessageModal(err.message)
+                        siteServices.showMessageModal(err.data)
 
                         self.loading = false;
                         console.log(err);

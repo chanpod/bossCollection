@@ -31,10 +31,10 @@ angular.module("BossCollection.guild")
         var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
         
         var guildApi = {
-            updateHomepageContent: function(guild){
+            updateHomepageContent: function(guild, guildName){
                 
                 var bodyData = {guild: guild}; //no data, it's a get
-                return guildHomepageContentResource.save(bodyData).$promise
+                return guildHomepageContentResource.save({guildName:guildName}, bodyData).$promise
             },
             getHomepageContent: function(guildName){
                 
@@ -153,7 +153,7 @@ angular.module("BossCollection.guild")
                     })
                     .catch(function (err) {
 
-                        defer.reject(err.message);
+                        defer.reject(err.data);
                         
                     })
                     .finally(function(){

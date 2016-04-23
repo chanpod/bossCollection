@@ -62,7 +62,7 @@ angular.module("BossCollection.home")
                             $scope.guildImagesLoaded = true;
                         })
                         .catch(function(err) {
-                            siteServices.showMessageModal(err.message);
+                            siteServices.showMessageModal(err.data);
                         })    
                 }
             }
@@ -73,7 +73,7 @@ angular.module("BossCollection.home")
             
             $scope.saveTab = function(){
                 
-                guildServices.updateHomepageContent($scope.guild)
+                guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name)
                     .then(function(res){
                         
                         $scope.cancel();
@@ -81,7 +81,7 @@ angular.module("BossCollection.home")
                     })
                     .catch(function(err){
                         
-                        siteServices.showMessageModal(err.message);
+                        siteServices.showMessageModal(err.data);
                     })
                 
             }
