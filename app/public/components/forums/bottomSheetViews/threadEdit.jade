@@ -19,9 +19,9 @@ script#threadEdit(type="text/ng-template")
                         input-markdown(flex, input = "object.message")
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block
-                        md-button(ng-if = "!object.forumID", ng-click = "saveThread()").md-primary.md-raised
+                        md-button(ng-disabled = "loading", ng-if = "!object.forumID", ng-click = "saveThread()").md-primary.md-raised
                             | Post
-                        md-button(ng-if = "object.forumID", ng-click = "saveThread()").md-primary.md-raised
+                        md-button(ng-disabled = "loading", ng-if = "object.forumID", ng-click = "saveThread()").md-primary.md-raised
                             | Save
                     md-input-container().md-block
                         md-button(ng-click = "cancel()").md-primary.md-raised

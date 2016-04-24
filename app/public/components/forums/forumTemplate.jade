@@ -17,6 +17,9 @@ script#forum(type="text/ng-template")
                     md-card-actions(layout, layout-xs = "column")
                         md-button(ng-click = "goTo('/forum/favorites')").md-raised Favorites
                         br
+                        md-button(ng-click = "refreshForums()").md-raised
+                            | Refresh
+                        br
                         md-button(ng-if = "user.rank > 2", ng-click = "newCategory()").md-raised
                             | Create Category
                         br

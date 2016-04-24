@@ -22,6 +22,14 @@ angular.module("BossCollection.forums")
                 $scope.getForums();
             }
             
+            $scope.refreshForums = function(){
+                forumService.getForumsForced()
+                    .then(function(forums){
+                        
+                        $scope.forums = forums;
+                    })
+            }
+            
             $scope.getForums = function(){
                 
                 $scope.loading = true;
@@ -201,6 +209,12 @@ angular.module("BossCollection.forums")
                             }
                         }
                     })
+                    
+                    if(catIndexTracker == undefined){
+                        
+                        $scope.savedForums.categories = $scope.forums.categories;
+                        forumService.saveForumCounts($scope.savedForums);
+                    }
                     
                     $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
                     

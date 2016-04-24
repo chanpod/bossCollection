@@ -140,6 +140,10 @@ angular.module("BossCollection.forums")
 
                         $scope.loading = false;
                         $scope.threads = threads;
+                        
+                        $scope.forum.threads = $scope.threads
+                        forumService.setForum($scope.forum);
+                        
                         $scope.masterThread = threads;
                         $scope.sortThreads();
                     })

@@ -80,6 +80,53 @@ angular.module('BossCollection', [
 angular.module('BossCollection.accounts', ['BossCollection.services'])
 'user strict'
 
+angular.module("BossCollection.attendance", ['ngRoute'])
+    .config(['$routeProvider', function ($routeProvider) {
+
+        $routeProvider
+            .when('/attendanceStatistics', {
+                templateUrl: 'attendanceStats',
+                controller: 'attendanceStatsCtrl as ctrl'
+            })
+
+            .when('/whosOut', {
+                templateUrl: 'absenceSubmissions',
+                controller: 'absenceSubmissionsController as absenceReportCtrl'
+            })
+
+            .when('/auth/absence', {
+                templateUrl: 'absence',
+                controller: 'absenceReportController as ctrl'
+            })
+ 
+    }]);
+'user strict'
+
+angular.module("BossCollection.forums", ['ngRoute'])
+    .config(['$routeProvider',  function ($routeProvider) {
+
+        $routeProvider
+        .when('/forum', {
+            templateUrl: 'forum',
+            controller: 'forumController'
+        })
+		.when('/forum/favorites', {
+			controller: 'favoritesController as favCtrl',
+			templateUrl: 'favorites'
+		})
+        .when('/forum/:forumID', {
+            templateUrl: 'thread',
+            controller: 'threadController'
+        })
+        .when('/thread/:threadID',{
+            templateUrl: 'threadComments',
+            controller: 'commentsController as ctrl'
+        })
+		
+
+    }]);
+'user strict'
+
 angular.module("BossCollection.guild", ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
@@ -107,28 +154,6 @@ angular.module("BossCollection.guild", ['ngRoute'])
     }]);
 'user strict'
 
-angular.module("BossCollection.attendance", ['ngRoute'])
-    .config(['$routeProvider', function ($routeProvider) {
-
-        $routeProvider
-            .when('/attendanceStatistics', {
-                templateUrl: 'attendanceStats',
-                controller: 'attendanceStatsCtrl as ctrl'
-            })
-
-            .when('/whosOut', {
-                templateUrl: 'absenceSubmissions',
-                controller: 'absenceSubmissionsController as absenceReportCtrl'
-            })
-
-            .when('/auth/absence', {
-                templateUrl: 'absence',
-                controller: 'absenceReportController as ctrl'
-            })
- 
-    }]);
-'user strict'
-
 angular.module("BossCollection.home", ['ngRoute'])
     .config(['$routeProvider', function($routeProvider) {
 
@@ -143,31 +168,6 @@ angular.module("BossCollection.home", ['ngRoute'])
         })
         
     }]); 
-'user strict'
-
-angular.module("BossCollection.forums", ['ngRoute'])
-    .config(['$routeProvider',  function ($routeProvider) {
-
-        $routeProvider
-        .when('/forum', {
-            templateUrl: 'forum',
-            controller: 'forumController'
-        })
-		.when('/forum/favorites', {
-			controller: 'favoritesController as favCtrl',
-			templateUrl: 'favorites'
-		})
-        .when('/forum/:forumID', {
-            templateUrl: 'thread',
-            controller: 'threadController'
-        })
-        .when('/thread/:threadID',{
-            templateUrl: 'threadComments',
-            controller: 'commentsController as ctrl'
-        })
-		
-
-    }]);
 'use strict';
 /* Directives */
 
@@ -454,6 +454,1234 @@ angular.module("BossCollection.accounts")
 
             return accountApi;
         }])
+angular.module("BossCollection.attendance")
+    .controller('absenceModalController', [
+        '$scope', 'absenceService', '$mdDialog', 'data',
+        function($scope, absenceService, $mdDialog, data){
+        
+        
+        
+        
+        $scope.init = function () {
+
+            if (data) {
+
+                $scope.absence = data;
+                $scope.absence.date = new Date($scope.absence.date);
+            }
+            else {
+                $scope.absence = {};
+            }
+        }
+        
+        $scope.save = function(){
+            
+            absenceService.saveAbsence($scope.absence)
+                .then(function(response){
+                    
+                    $scope.close(response);
+                })               
+                .finally(function(){
+                    
+                })
+        }
+        
+        $scope.cancel = function () {
+
+            $mdDialog.cancel();
+        }
+
+        $scope.close = function () {
+            $mdDialog.hide($scope.object);
+        }
+        
+        $scope.init();
+        
+    }])
+'use strict';
+
+angular.module("BossCollection.attendance")
+    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices', '$mdMedia', '$mdDialog',
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
+
+            var API_BASE = "/api/guild/absence";
+            
+            var absence = $resource(API_BASE + '/absence');
+            var UserAbsence = $resource(API_BASE + '/absence/:userName');
+            var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
+            var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
+            var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
+            var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
+                                    
+            var absenceApi = {                
+                getUsersAbsences: function(user){
+                    
+                    var defer = $q.defer();                    
+                    
+                    UserAbsence.get({userName: user}, function(response){
+                        defer.resolve(response);
+                    })
+                    
+                    return defer.promise;
+                },
+                submitNewAbsence: function (newAbsence) {
+
+                    var defer = $q.defer();
+ 
+                    absence.save(newAbsence).$promise
+                        .then(function (response) { 
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            
+                        })
+
+                    return defer.promise;
+                },
+                getAbsenceHistory: function(absenceHistory){
+                    
+                    var defer = $q.defer();
+                    
+                    siteServices.startLoading();
+                    
+                    absenceHistoryResource.save(absenceHistory).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                        return defer.promise;
+                },
+                openEditModal: function(template, locals) {
+                  
+
+                    var defer = $q.defer();
+                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                    
+                    $mdDialog.show({
+                        templateUrl: template,
+                        controller: 'absenceModalController',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose: false,
+                        locals: { data: locals },
+                        fullscreen: true
+                    })
+                    .then(function (result) {
+
+                            defer.resolve(result);
+                        },
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                    return defer.promise;
+              
+                },
+                saveAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    saveAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                },
+                deleteAbsence: function(absence){
+                    
+                    var defer = $q.defer();
+                    var bodyData = {absence: absence};
+                    
+                    deleteAbsenceResource.save(bodyData).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+                        
+                    return defer.promise;
+                    
+                },
+                getAbsences: function () {
+
+                    var defer = $q.defer();
+
+
+
+                    absence.get().$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+
+                    return defer.promise;
+                },
+                getAbsencesByDate: function (date) {
+
+                    var defer = $q.defer();
+
+                    absenceByDate.get({date:date}, function (response) {
+
+                            defer.resolve(response);
+                        })
+
+                    return defer.promise;
+                }
+            };
+
+            return absenceApi;
+        }])
+angular.module("BossCollection.forums")
+    .controller('dialogController', [
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
+
+            $scope.object = {};
+            $scope.loading = false;
+            $scope.replying = false;
+            
+            
+            $scope.orderBy = "dateCreated"
+
+
+            $scope.init = function () {
+
+                if (data) {
+
+                    $scope.object = data;
+                }
+                else {
+                    $scope.object = {};
+                }
+
+                userLoginSrvc.getUser()
+                    .then(function (user) {
+                        $scope.user = user;
+                    })
+            }
+
+            $scope.cancel = function () {
+
+                $mdDialog.cancel();
+            }
+            
+            $scope.orderByDateCreated = function(){
+                $scope.orderBy = "dateCreated"
+            }
+            
+            $scope.orderByDateCreatedReversed = function(){
+                $scope.orderBy = "-dateCreated"
+            }
+
+
+
+            $scope.deleteCategory = function () {
+
+                forumService.deleteCategory($scope.object)
+                    .then(function (result) {
+
+                        $scope.close(result);
+                    })
+            }
+
+            $scope.deleteForum = function () {
+
+                forumService.deleteForum($scope.object)
+                    .then(function (result) {
+
+                        $scope.close(result);
+                    })
+            }
+
+            $scope.saveCategory = function () {
+
+                $scope.loading = true;
+
+                if ($scope.object._id) {
+                    forumService.editCategory($scope.object)
+                        .then(function (result) {
+
+                            $scope.close(result);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else {
+                    forumService.createNewCategory({ name: $scope.object.name })
+                        .then(function (result) {
+
+                            $scope.close(result);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+
+            }
+
+            $scope.saveThread = function () {
+
+                var thread;
+                
+                if ($scope.object._id) {
+
+                    thread = $scope.object;
+                    $scope.loading = true;
+                    
+                    forumService.editThread(thread)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else {
+
+                    thread = {
+                        name: $scope.object.title,
+                        forumId: $scope.object.forum._id,
+                        message: $scope.object.message
+                    }
+                    
+                    $scope.loading = true;
+                    
+                    forumService.createThread(thread)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+            }
+            
+            $scope.formatDate = function (date) {
+                
+                var localTime  = moment.utc(date).toDate();
+        
+                return moment(localTime).format('dddd, MMM D hh:mm');
+            }
+
+            $scope.close = function () {
+                $mdDialog.hide(self.thread);
+            }
+            
+            $scope.saveForum = function () {
+
+                $scope.loading = true;
+
+                if ($scope.object._id) {
+                    var forum = $scope.object;
+
+                    forumService.editForum(forum)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else {
+
+
+                    var forum = {
+                        name: $scope.object.name,
+                        categoryId: $scope.object.object.categoryId
+                    }
+
+                    forumService.createNewForum(forum)
+                        .then(function (response) {
+
+                            $scope.close(response);
+                        })
+                        .catch(function (err) {
+                            $scope.loading = false;
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+            }
+            
+            $scope.init();
+        }]);
+angular.module("BossCollection.forums")
+    .controller('forumController', [
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout', 'userLoginSrvc',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout,userLoginSrvc) {
+
+            
+            siteServices.updateTitle('Forums');
+            $scope.testListCount = [];
+            $scope.loading = false;
+           
+            
+            for (var i = 0; i < 5; i++) {
+                $scope.testListCount.push(i);
+            }
+
+
+            $scope.markdown = "";
+            
+            $scope.init = function(){
+                
+                $scope.savedForums = forumService.getForumCountsLocal();
+                $scope.getForums();
+            }
+            
+            $scope.refreshForums = function(){
+                forumService.getForumsForced()
+                    .then(function(forums){
+                        
+                        $scope.forums = forums;
+                    })
+            }
+            
+            $scope.getForums = function(){
+                
+                $scope.loading = true;
+                return forumService.getForums()
+                    .then(function(forums){
+                        
+                        if ($scope.savedForums == undefined) {
+                            
+                            $scope.savedForums = forums;
+                            forumService.saveForumCounts(forums);
+                        }
+                        
+                        $scope.loading = false;  
+                        $scope.forums = forums;
+                        
+                        
+                    })
+                    .then(function () {
+                        return userLoginSrvc.getAvatar($scope.user.name)
+                            .then(function (result) {
+                                return result
+                            })
+                    })
+                    .then(function (avatarUrl) {
+                        $scope.avatarUrl = avatarUrl;
+                    })
+                    .catch(function(err){
+                        
+                        $scope.loading = false;
+                        console.log(err);
+                    })
+            }
+            
+            $scope.newCategory = function () {
+
+                $scope.category = {};
+                
+                forumService.openBottomSheet('category')
+                    .then(function(result){
+                        
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+                    .then(function(){
+                        
+                        //Category created. 
+                        forumService.cancel();
+                    })
+                    .catch(function(err){
+                        
+                        //siteServices.showMessageModal(err);
+                    })
+            }
+            
+            
+            
+            $scope.editCategory = function (category) {
+
+                //$scope.category = category;
+                
+                forumService.openBottomSheet('category', category)
+                    .then(function(result){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+                    .catch(function(err){
+                        //Didn't save
+                    })
+            } 
+
+            $scope.deleteCategory = function (category) {
+
+                forumService.confirmDelete()
+                    .then(function(result){
+                        
+                        if(result){
+                            
+                            return forumService.deleteCategory(category);
+                        }
+                    })
+                    .then(function(response){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+            }
+            
+            $scope.createForum = function (category) {
+                
+                var categoryId = category._id;
+                
+                forumService.openBottomSheet('forumEdit', {object: {categoryId: categoryId}})
+                    .then(function(result){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+                    .catch(function(err){
+                        //Didn't save
+                    })
+                
+            }
+            
+            $scope.isRead = function(forumIn, category){
+                var oldForum;
+                var oldCategory = _.find($scope.savedForums.categories, function(cat){
+                    return cat._id == category._id;
+                })
+                
+                if(oldCategory != undefined){
+                    
+                    oldForum = _.find(oldCategory.forums, function (forum) {
+
+                        return forum._id == forumIn._id;
+                    })
+                }
+                
+                
+                if(oldForum == undefined || oldForum.threadCount != forumIn.threadCount){
+                    return "unread";
+                }
+                else{
+                    return "read";
+                }
+            }
+            
+            $scope.editForum = function(forum){
+                
+                forumService.openBottomSheet('forumEdit', forum)
+                    .then(function (result) {
+                        
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+            }
+            
+            $scope.deleteForum = function(forum){
+                
+                 forumService.confirmDelete()
+                    .then(function(result){
+                        
+                        if(result){
+                            
+                            return forumService.deleteForum(forum);
+                        }
+                    })
+                    .then(function(response){
+                        forumService.removeLocalForums();
+                        $scope.getForums();
+                    })
+            } 
+
+            $scope.goToForum = function (forum) {
+                
+                
+                $scope.updateForumViewed(forum);
+                forumService.setForum(forum);
+                $scope.goTo('/forum/' + forum._id);
+                
+            }
+            
+            $scope.updateForumViewed = function(forumIn){
+                try{
+                    var catIndexTracker, forumIndexTracker;
+                    
+                    _.find($scope.savedForums.categories, function(cat, catIndex){
+                        if(cat._id == forumIn.categoryId){
+                            catIndexTracker = catIndex;
+                            _.find(cat.forums, function (forum, forumIndex) {
+
+                                if (forum._id == forumIn._id) {
+                                    
+                                    forumIndexTracker = forumIndex;
+                                }
+                            })
+                            
+                            if(forumIndexTracker == undefined){
+                                cat.forums.push(forumIn);
+                            }
+                        }
+                    })
+                    
+                    if(catIndexTracker == undefined){
+                        
+                        $scope.savedForums.categories = $scope.forums.categories;
+                        forumService.saveForumCounts($scope.savedForums);
+                    }
+                    
+                    $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
+                    
+                    
+                    forumService.saveForumCounts($scope.savedForums);
+                }
+                catch(err){
+                    console.log(err);
+                }
+            }
+
+            $scope.init();
+        }]) 
+angular.module("BossCollection.forums")
+    .service('forumService', [
+        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource',  '$cookies',
+        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource, $cookies) {
+
+            var currentForum;
+            var FORUM_API_BASE = "/api/forum";
+            
+            var categoryResource = $resource(FORUM_API_BASE + '/createCategory');
+            var categoryEditResource = $resource(FORUM_API_BASE + '/editCategory');
+            var categoryDeleteResource = $resource(FORUM_API_BASE + '/deleteCategory');
+            var getForumsResource = $resource(FORUM_API_BASE + '/getCategories');
+            var deleteForumsResource = $resource(FORUM_API_BASE + '/deleteForum');
+            var editForumResource = $resource(FORUM_API_BASE + '/editForum');
+            var createNewForumResource = $resource(FORUM_API_BASE + '/createForum');
+            var createNewThreadResource = $resource(FORUM_API_BASE + '/createThread');
+            var getThreadsResource = $resource(FORUM_API_BASE + '/getThreads');
+            var deleteThreadResource = $resource(FORUM_API_BASE + '/deleteThread');
+            var editThreadResource = $resource(FORUM_API_BASE + '/editThread')
+            var getThreadResource = $resource(FORUM_API_BASE + '/thread');
+            var getFavoritesResource = $resource(FORUM_API_BASE + '/favorites');
+            var createCommentResource = $resource(FORUM_API_BASE + '/createComment', {}, {});
+            var getCommentsResource = $resource(FORUM_API_BASE + '/getComments', {}, {});
+            var editCommentResource = $resource(FORUM_API_BASE + '/editComment', {}, {});
+            var deleteCommentResource = $resource(FORUM_API_BASE + '/deleteComment', {}, {});
+            
+            
+            var forums;
+            var currentForum;            
+            var thread;
+            var comingFromFavorites = false;
+
+            function setIsComingFromFavorites(boolean) {
+                comingFromFavorites = boolean;
+            }    
+
+            function getIsComingFromFavorites() {
+                return comingFromFavorites;
+            }
+
+            function getFavorites() {
+
+                var defer = $q.defer();                
+
+                getFavoritesResource.get().$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.favorites);
+                    });
+
+                return defer.promise;
+            }            
+
+            //==== Category Functions ==================
+            
+            function deleteCategory(category) {
+                
+                var defer = $q.defer();
+                var bodyData = { category: category };
+                
+                categoryDeleteResource.save(bodyData).$promise
+                    .then(function(result){
+                        
+                        defer.resolve(result);
+                    }, function(err){
+                        
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+                return defer.promise;
+            }
+
+            function createNewCategory(category) { 
+
+                var defer = $q.defer();
+
+                var bodyData = { category: category };
+
+                categoryResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.category);
+                    })
+
+                return defer.promise;
+            }
+
+            function editCategory(category) {
+
+                var defer = $q.defer();
+                var bodyData = { category: category };
+                
+                categoryEditResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.category);
+                    }, function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+                defer.resolve(category);
+
+                return defer.promise;
+            }
+            
+            //==== Forum Functions ==================
+            
+            function setForum(selectedforum) {
+                currentForum = selectedforum;
+            }
+            
+            function getForum(forumId){
+                
+                var defer = $q.defer();
+                
+                getForums()
+                    .then(function(forums){
+                        
+                        var selectedForum;
+                         
+                         _(forums.categories).forEach(function(category){
+                             
+                         
+                             _.find(category.forums, function (forum) {
+
+                                 if(forum._id == forumId){
+                                     selectedForum = forum;
+                                 }
+                             })
+                        
+                        })
+                        
+                        defer.resolve(selectedForum);
+                    }, function(err){
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                    
+                return defer.promise;
+            }
+
+            function getForums() {
+
+                var defer = $q.defer();
+
+                if (forums) {
+                    defer.resolve(forums);
+                }
+                else {
+
+                    getForumsResource.save({}).$promise
+                        .then(function (response) {
+
+                            forums = response.forums;
+                            defer.resolve(response.forums);
+                        }, function(err){
+                            
+                            defer.reject(err);
+                        })
+                }
+                return defer.promise;
+            }
+            
+            function getForumsForced(){
+                
+                var defer = $q.defer();
+
+                
+                getForumsResource.save({}).$promise
+                    .then(function (response) {
+
+                        forums = response.forums;
+                        defer.resolve(response.forums);
+                    }, function (err) {
+
+                        defer.reject(err);
+                    })
+                
+                return defer.promise;
+            }
+            
+            function removeLocalForums(){
+                forums = undefined;
+            }
+
+            function deleteForum(forum) {
+
+                var defer = $q.defer();
+                
+                var bodyData = {forum: forum};
+                
+                deleteForumsResource.save(bodyData).$promise
+                    .then(function(response){
+                        
+                        defer.resolve(response);        
+                    })
+                    .catch(function(err){
+                        
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise; 
+            }
+ 
+            function createNewForum(forum) {
+
+                var defer = $q.defer();
+
+                createNewForumResource.save({ forum: forum }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+
+                return defer.promise;
+            }
+            
+            function saveForumCounts(forums){
+                
+                localStorage.setItem("forums", angular.toJson(forums));
+            }
+            
+            function getForumCountsLocal(){
+                
+                return angular.fromJson(localStorage.forums);
+            }
+
+            function editForum(forum) {
+
+                var defer = $q.defer();
+                
+                editForumResource.save({ forum: forum }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
+            }
+
+            function getSelectedForum() {
+                
+                var defer = $q.defer();
+
+                if (currentForum) {
+                    defer.resolve(currentForum);
+                }
+                else {
+
+                    getForum($routeParams.forumID)
+                        .then(function(forum){
+                            
+                            currentForum = forum;
+                            defer.resolve(forum);
+                        })
+                }
+
+                return defer.promise;
+            }
+            
+            //==== Thread Functions ==================
+            
+            function saveThreadCounts(threads){
+                
+                localStorage.setItem("threads", angular.toJson(threads));   
+            }
+            
+            function getThreadCountsLocal(){
+                
+                return angular.fromJson(localStorage.threads);
+            }
+            
+            function getThreads(forumId) {
+                
+                var defer = $q.defer();
+
+                var bodyData = { forumId: forumId };
+
+                getThreadsResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.threads);
+                    })
+
+                return defer.promise;
+            }
+
+            function deleteThread(thread) {
+                
+                var defer = $q.defer();
+                
+                var bodyData = {thread: thread};
+                
+                deleteThreadResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+                    .finally(function () {
+
+                    })
+                    
+                return defer.promise;
+            }
+
+            function editThread(thread) {
+                
+                var defer = $q.defer();
+                
+                editThreadResource.save({ thread: thread }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
+            }
+
+            function createThread(thread) {
+                
+                var defer = $q.defer();
+
+                var bodyData = { thread: thread };
+
+                createNewThreadResource.save(bodyData).$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.thread);
+                    })
+
+                return defer.promise;
+            }
+            
+            
+            function setSelectedThread(selectedThread){
+                thread = selectedThread;
+            }
+            
+            function removeSelectedThread(){
+                thread = {};
+            }
+            
+            function getSelectedThread(threadID){
+                
+                var defer = $q.defer();
+                
+                if(thread == undefined){
+                    getThreadResource.save({threadID:threadID}).$promise
+                        .then(function(threadData){
+                            
+                            defer.resolve(threadData);
+                        })
+                        .catch(function (err) {
+
+                            defer.reject(err);
+                        })
+                        .finally(function () {
+
+                        })
+                }
+                else{
+                    
+                    defer.resolve(thread);
+                }
+                
+                return defer.promise;
+            }
+            
+            //==== Comment Functions ==================
+            
+            function deleteComment(comment) {
+                
+                var defer = $q.defer();
+                
+                deleteCommentResource.save({comment: comment}).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                    
+                return defer.promise;
+            }
+
+            function editComment(comment) {
+                
+                var defer = $q.defer();
+                
+                editCommentResource.save({ comment: comment }).$promise
+                    .then(function (response) {
+                        defer.resolve(response);
+                    })
+                    .catch(function (err) {
+
+                        defer.reject(err);
+                    })
+                    .finally(function(){
+                        
+                    })
+                
+
+                return defer.promise;
+            }
+
+            function createComment(comment) {
+                
+                var defer = $q.defer();
+                
+                var bodyData = { comment: comment };
+                
+                createCommentResource.save(bodyData).$promise
+                    .then(function(comment){
+                        
+                        defer.resolve(comment)
+                    }, 
+                    function(err){
+                        
+                        defer.reject(err);
+                    })
+                
+                
+                return defer.promise;
+            }
+
+            function getComments(threadId){
+                
+                var defer = $q.defer();
+                
+                var bodyData = {threadId: threadId};
+                
+                getCommentsResource.save(bodyData).$promise
+                    .then(function(comments){
+                        
+                        defer.resolve(comments);
+                    }, 
+                    function(err){
+                        
+                        defer.reject(err);
+                    })
+                    
+                return defer.promise;
+            }
+            
+            
+
+            
+            
+            //==== General Functions ==================
+
+            
+
+            function confirmDelete(event, callback) {
+
+                var defer = $q.defer();
+
+                var confirm = $mdDialog.confirm()
+                    .title('Are you sure you want to delete this?')
+                    .textContent('This is irreversable once you click Yes!')
+                    .ariaLabel('Confirm Delete')
+                    .targetEvent(event)
+                    .ok('Delete')
+                    .cancel('Nevermind');
+
+                $mdDialog.show(confirm)
+                    .then(function () {
+
+                        defer.resolve(true);
+                    }, function (err) {
+
+                        defer.reject(false);
+                    })
+
+                return defer.promise;
+            }
+
+
+            function openBottomSheet(template, locals) {
+
+                var defer = $q.defer();
+                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                $mdDialog.show({
+                    templateUrl: template,
+                    controller: 'dialogController',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false,
+                    locals: { data: locals },
+                    fullscreen: true
+                })
+                    .then(function (result) {
+
+                        defer.resolve(result);
+                    },
+                        function () {
+                            defer.reject();
+                            //Something broke or they canceled
+                        })
+
+                return defer.promise;
+            }
+
+            function cancel() {
+
+                $mdDialog.hide();
+            }
+
+            return {
+                setForum: setForum,
+                confirmDelete: confirmDelete,
+                openBottomSheet: openBottomSheet,
+                createNewCategory: createNewCategory,
+                deleteCategory: deleteCategory,
+                editCategory:editCategory,                
+                editForum: editForum,
+                createNewForum: createNewForum,
+                deleteForum: deleteForum,
+                cancel: cancel,
+                getForums: getForums,
+                getForumsForced:getForumsForced,
+                removeLocalForums:removeLocalForums,
+                getThreads: getThreads,
+                getCurrentForum: getSelectedForum,
+                deleteThread: deleteThread,
+                editThread: editThread,
+                createThread: createThread,
+                deleteComment: deleteComment,
+                editComment: editComment,
+                createComment: createComment,
+                getComments:getComments,
+                saveForumCounts:saveForumCounts,
+                getForumCountsLocal:getForumCountsLocal,
+                saveThreadCounts:saveThreadCounts,
+                getThreadCountsLocal:getThreadCountsLocal,
+                setSelectedThread:setSelectedThread,
+                removeSelectedThread:removeSelectedThread,
+                getSelectedThread: getSelectedThread,
+                getFavorites: getFavorites,
+                getIsComingFromFavorites: getIsComingFromFavorites,
+                setIsComingFromFavorites:setIsComingFromFavorites
+            }
+        }]) 
+        
+      
 'use strict';
 
 
@@ -758,229 +1986,6 @@ angular.module("BossCollection.guild")
         
         
     }])
-angular.module("BossCollection.attendance")
-    .controller('absenceModalController', [
-        '$scope', 'absenceService', '$mdDialog', 'data',
-        function($scope, absenceService, $mdDialog, data){
-        
-        
-        
-        
-        $scope.init = function () {
-
-            if (data) {
-
-                $scope.absence = data;
-                $scope.absence.date = new Date($scope.absence.date);
-            }
-            else {
-                $scope.absence = {};
-            }
-        }
-        
-        $scope.save = function(){
-            
-            absenceService.saveAbsence($scope.absence)
-                .then(function(response){
-                    
-                    $scope.close(response);
-                })               
-                .finally(function(){
-                    
-                })
-        }
-        
-        $scope.cancel = function () {
-
-            $mdDialog.cancel();
-        }
-
-        $scope.close = function () {
-            $mdDialog.hide($scope.object);
-        }
-        
-        $scope.init();
-        
-    }])
-'use strict';
-
-angular.module("BossCollection.attendance")
-    .factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', '$mdMedia', '$mdDialog',
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia,$mdDialog) {
-
-            var API_BASE = "/api/guild/absence";
-            
-            var absence = $resource(API_BASE + '/absence');
-            var UserAbsence = $resource(API_BASE + '/absence/:userName');
-            var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
-            var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
-            var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
-            var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
-                                    
-            var absenceApi = {                
-                getUsersAbsences: function(user){
-                    
-                    var defer = $q.defer();                    
-                    
-                    UserAbsence.get({userName: user}, function(response){
-                        defer.resolve(response);
-                    })
-                    
-                    return defer.promise;
-                },
-                submitNewAbsence: function (newAbsence) {
-
-                    var defer = $q.defer();
- 
-                    absence.save(newAbsence).$promise
-                        .then(function (response) { 
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            
-                        })
-
-                    return defer.promise;
-                },
-                getAbsenceHistory: function(absenceHistory){
-                    
-                    var defer = $q.defer();
-                    
-                    siteServices.startLoading();
-                    
-                    absenceHistoryResource.save(absenceHistory).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                        return defer.promise;
-                },
-                openEditModal: function(template, locals) {
-                  
-
-                    var defer = $q.defer();
-                    var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-                    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-                    
-                    $mdDialog.show({
-                        templateUrl: template,
-                        controller: 'absenceModalController',
-                        parent: angular.element(document.body),
-                        clickOutsideToClose: false,
-                        locals: { data: locals },
-                        fullscreen: true
-                    })
-                    .then(function (result) {
-
-                            defer.resolve(result);
-                        },
-                        function () {
-                            defer.reject();
-                            //Something broke or they canceled
-                        })
-
-                    return defer.promise;
-              
-                },
-                saveAbsence: function(absence){
-                    
-                    var defer = $q.defer();
-                    var bodyData = {absence: absence};
-                    
-                    saveAbsenceResource.save(bodyData).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                        function (err) {
-
-                            console.log(err);
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                    return defer.promise;
-                },
-                deleteAbsence: function(absence){
-                    
-                    var defer = $q.defer();
-                    var bodyData = {absence: absence};
-                    
-                    deleteAbsenceResource.save(bodyData).$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                        function (err) {
-
-                            console.log(err);
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-                        
-                    return defer.promise;
-                    
-                },
-                getAbsences: function () {
-
-                    var defer = $q.defer();
-
-
-
-                    absence.get().$promise
-                        .then(function (response) {
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-
-                    return defer.promise;
-                },
-                getAbsencesByDate: function (date) {
-
-                    var defer = $q.defer();
-
-                    absenceByDate.get({date:date}, function (response) {
-
-                            defer.resolve(response);
-                        })
-
-                    return defer.promise;
-                }
-            };
-
-            return absenceApi;
-        }])
 
 angular.module("BossCollection.home")
     .controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
@@ -1177,973 +2182,6 @@ angular.module("BossCollection.home")
             };
     }])
   
-angular.module("BossCollection.forums")
-    .controller('dialogController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
-
-            $scope.object = {};
-            $scope.loading = false;
-            $scope.replying = false;
-            
-            
-            $scope.orderBy = "dateCreated"
-
-
-            $scope.init = function () {
-
-                if (data) {
-
-                    $scope.object = data;
-                }
-                else {
-                    $scope.object = {};
-                }
-
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        $scope.user = user;
-                    })
-            }
-
-            $scope.cancel = function () {
-
-                $mdDialog.cancel();
-            }
-            
-            $scope.orderByDateCreated = function(){
-                $scope.orderBy = "dateCreated"
-            }
-            
-            $scope.orderByDateCreatedReversed = function(){
-                $scope.orderBy = "-dateCreated"
-            }
-
-
-
-            $scope.deleteCategory = function () {
-
-                forumService.deleteCategory($scope.object)
-                    .then(function (result) {
-
-                        $scope.close(result);
-                    })
-            }
-
-            $scope.deleteForum = function () {
-
-                forumService.deleteForum($scope.object)
-                    .then(function (result) {
-
-                        $scope.close(result);
-                    })
-            }
-
-            $scope.saveCategory = function () {
-
-                $scope.loading = false;
-
-                if ($scope.object._id) {
-                    forumService.editCategory($scope.object)
-                        .then(function (result) {
-
-                            $scope.close(result);
-                        })
-                        .catch(function (err) {
-
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else {
-                    forumService.createNewCategory({ name: $scope.object.name })
-                        .then(function (result) {
-
-                            $scope.close(result);
-                        })
-                        .catch(function (err) {
-
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-
-            }
-
-            $scope.saveThread = function () {
-
-                var thread;
-
-                if ($scope.object._id) {
-
-                    thread = $scope.object;
-
-                    forumService.editThread(thread)
-                        .then(function (response) {
-
-                            $scope.close(response);
-                        })
-                        .catch(function (err) {
-
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else {
-
-                    thread = {
-                        name: $scope.object.title,
-                        forumId: $scope.object.forum._id,
-                        message: $scope.object.message
-                    }
-
-                    forumService.createThread(thread)
-                        .then(function (response) {
-
-                            $scope.close(response);
-                        })
-                        .catch(function (err) {
-
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-            }
-            
-            $scope.formatDate = function (date) {
-                
-                var localTime  = moment.utc(date).toDate();
-        
-                return moment(localTime).format('dddd, MMM D hh:mm');
-            }
-
-            $scope.close = function () {
-                $mdDialog.hide(self.thread);
-            }
-            
-            $scope.saveForum = function () {
-
-                $scope.loading = true;
-
-                if ($scope.object._id) {
-                    var forum = $scope.object;
-
-                    forumService.editForum(forum)
-                        .then(function (response) {
-
-                            $scope.close(response);
-                        })
-                        .catch(function (err) {
-
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else {
-
-
-                    var forum = {
-                        name: $scope.object.name,
-                        categoryId: $scope.object.object.categoryId
-                    }
-
-                    forumService.createNewForum(forum)
-                        .then(function (response) {
-
-                            $scope.close(response);
-                        })
-                        .catch(function (err) {
-                            $scope.loading = false;
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-            }
-            
-            $scope.init();
-        }]);
-angular.module("BossCollection.forums")
-    .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout', 'userLoginSrvc',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout,userLoginSrvc) {
-
-            
-            siteServices.updateTitle('Forums');
-            $scope.testListCount = [];
-            $scope.loading = false;
-           
-            
-            for (var i = 0; i < 5; i++) {
-                $scope.testListCount.push(i);
-            }
-
-
-            $scope.markdown = "";
-            
-            $scope.init = function(){
-                
-                $scope.savedForums = forumService.getForumCountsLocal();
-                $scope.getForums();
-            }
-            
-            $scope.getForums = function(){
-                
-                $scope.loading = true;
-                return forumService.getForums()
-                    .then(function(forums){
-                        
-                        if ($scope.savedForums == undefined) {
-                            
-                            $scope.savedForums = forums;
-                            forumService.saveForumCounts(forums);
-                        }
-                        
-                        $scope.loading = false;  
-                        $scope.forums = forums;
-                        
-                        
-                    })
-                    .then(function () {
-                        return userLoginSrvc.getAvatar($scope.user.name)
-                            .then(function (result) {
-                                return result
-                            })
-                    })
-                    .then(function (avatarUrl) {
-                        $scope.avatarUrl = avatarUrl;
-                    })
-                    .catch(function(err){
-                        
-                        $scope.loading = false;
-                        console.log(err);
-                    })
-            }
-            
-            $scope.newCategory = function () {
-
-                $scope.category = {};
-                
-                forumService.openBottomSheet('category')
-                    .then(function(result){
-                        
-                        forumService.removeLocalForums();
-                        $scope.getForums();
-                    })
-                    .then(function(){
-                        
-                        //Category created. 
-                        forumService.cancel();
-                    })
-                    .catch(function(err){
-                        
-                        //siteServices.showMessageModal(err);
-                    })
-            }
-            
-            
-            
-            $scope.editCategory = function (category) {
-
-                //$scope.category = category;
-                
-                forumService.openBottomSheet('category', category)
-                    .then(function(result){
-                        forumService.removeLocalForums();
-                        $scope.getForums();
-                    })
-                    .catch(function(err){
-                        //Didn't save
-                    })
-            } 
-
-            $scope.deleteCategory = function (category) {
-
-                forumService.confirmDelete()
-                    .then(function(result){
-                        
-                        if(result){
-                            
-                            return forumService.deleteCategory(category);
-                        }
-                    })
-                    .then(function(response){
-                        forumService.removeLocalForums();
-                        $scope.getForums();
-                    })
-            }
-            
-            $scope.createForum = function (category) {
-                
-                var categoryId = category._id;
-                
-                forumService.openBottomSheet('forumEdit', {object: {categoryId: categoryId}})
-                    .then(function(result){
-                        forumService.removeLocalForums();
-                        $scope.getForums();
-                    })
-                    .catch(function(err){
-                        //Didn't save
-                    })
-                
-            }
-            
-            $scope.isRead = function(forumIn, category){
-                var oldForum;
-                var oldCategory = _.find($scope.savedForums.categories, function(cat){
-                    return cat._id == category._id;
-                })
-                
-                if(oldCategory != undefined){
-                    
-                    oldForum = _.find(oldCategory.forums, function (forum) {
-
-                        return forum._id == forumIn._id;
-                    })
-                }
-                
-                
-                if(oldForum == undefined || oldForum.threadCount != forumIn.threadCount){
-                    return "unread";
-                }
-                else{
-                    return "read";
-                }
-            }
-            
-            $scope.editForum = function(forum){
-                
-                forumService.openBottomSheet('forumEdit', forum)
-                    .then(function (result) {
-                        
-                        forumService.removeLocalForums();
-                        $scope.getForums();
-                    })
-            }
-            
-            $scope.deleteForum = function(forum){
-                
-                 forumService.confirmDelete()
-                    .then(function(result){
-                        
-                        if(result){
-                            
-                            return forumService.deleteForum(forum);
-                        }
-                    })
-                    .then(function(response){
-                        forumService.removeLocalForums();
-                        $scope.getForums();
-                    })
-            } 
-
-            $scope.goToForum = function (forum) {
-                
-                
-                $scope.updateForumViewed(forum);
-                forumService.setForum(forum);
-                $scope.goTo('/forum/' + forum._id);
-                
-            }
-            
-            $scope.updateForumViewed = function(forumIn){
-                try{
-                    var catIndexTracker, forumIndexTracker;
-                    
-                    _.find($scope.savedForums.categories, function(cat, catIndex){
-                        if(cat._id == forumIn.categoryId){
-                            catIndexTracker = catIndex;
-                            _.find(cat.forums, function (forum, forumIndex) {
-
-                                if (forum._id == forumIn._id) {
-                                    
-                                    forumIndexTracker = forumIndex;
-                                }
-                            })
-                            
-                            if(forumIndexTracker == undefined){
-                                cat.forums.push(forumIn);
-                            }
-                        }
-                    })
-                    
-                    $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
-                    
-                    
-                    forumService.saveForumCounts($scope.savedForums);
-                }
-                catch(err){
-                    console.log(err);
-                }
-            }
-
-            $scope.init();
-        }]) 
-angular.module("BossCollection.forums")
-    .service('forumService', [
-        '$location', '$mdDialog', '$q', '$routeParams', 'siteServices', '$mdMedia', '$rootScope', '$resource',  '$cookies',
-        function ($location, $mdDialog, $q, $routeParams, siteServices, $mdMedia, $rootScope, $resource, $cookies) {
-
-            var currentForum;
-            var FORUM_API_BASE = "/api/forum";
-            
-            var categoryResource = $resource(FORUM_API_BASE + '/createCategory');
-            var categoryEditResource = $resource(FORUM_API_BASE + '/editCategory');
-            var categoryDeleteResource = $resource(FORUM_API_BASE + '/deleteCategory');
-            var getForumsResource = $resource(FORUM_API_BASE + '/getCategories');
-            var deleteForumsResource = $resource(FORUM_API_BASE + '/deleteForum');
-            var editForumResource = $resource(FORUM_API_BASE + '/editForum');
-            var createNewForumResource = $resource(FORUM_API_BASE + '/createForum');
-            var createNewThreadResource = $resource(FORUM_API_BASE + '/createThread');
-            var getThreadsResource = $resource(FORUM_API_BASE + '/getThreads');
-            var deleteThreadResource = $resource(FORUM_API_BASE + '/deleteThread');
-            var editThreadResource = $resource(FORUM_API_BASE + '/editThread')
-            var getThreadResource = $resource(FORUM_API_BASE + '/thread');
-            var getFavoritesResource = $resource(FORUM_API_BASE + '/favorites');
-            var createCommentResource = $resource(FORUM_API_BASE + '/createComment', {}, {});
-            var getCommentsResource = $resource(FORUM_API_BASE + '/getComments', {}, {});
-            var editCommentResource = $resource(FORUM_API_BASE + '/editComment', {}, {});
-            var deleteCommentResource = $resource(FORUM_API_BASE + '/deleteComment', {}, {});
-            
-            
-            var forums;
-            var currentForum;            
-            var thread;
-            var comingFromFavorites = false;
-
-            function setIsComingFromFavorites(boolean) {
-                comingFromFavorites = boolean;
-            }    
-
-            function getIsComingFromFavorites() {
-                return comingFromFavorites;
-            }
-
-            function getFavorites() {
-
-                var defer = $q.defer();                
-
-                getFavoritesResource.get().$promise
-                    .then(function (response) {
-
-                        defer.resolve(response.favorites);
-                    });
-
-                return defer.promise;
-            }            
-
-            //==== Category Functions ==================
-            
-            function deleteCategory(category) {
-                
-                var defer = $q.defer();
-                var bodyData = { category: category };
-                
-                categoryDeleteResource.save(bodyData).$promise
-                    .then(function(result){
-                        
-                        defer.resolve(result);
-                    }, function(err){
-                        
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                
-                return defer.promise;
-            }
-
-            function createNewCategory(category) { 
-
-                var defer = $q.defer();
-
-                var bodyData = { category: category };
-
-                categoryResource.save(bodyData).$promise
-                    .then(function (response) {
-
-                        defer.resolve(response.category);
-                    })
-
-                return defer.promise;
-            }
-
-            function editCategory(category) {
-
-                var defer = $q.defer();
-                var bodyData = { category: category };
-                
-                categoryEditResource.save(bodyData).$promise
-                    .then(function (response) {
-
-                        defer.resolve(response.category);
-                    }, function(err){
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                
-                defer.resolve(category);
-
-                return defer.promise;
-            }
-            
-            //==== Forum Functions ==================
-            
-            function setForum(selectedforum) {
-                currentForum = selectedforum;
-            }
-            
-            function getForum(forumId){
-                
-                var defer = $q.defer();
-                
-                getForums()
-                    .then(function(forums){
-                        
-                        var selectedForum;
-                         
-                         _(forums.categories).forEach(function(category){
-                             
-                         
-                             _.find(category.forums, function (forum) {
-
-                                 if(forum._id == forumId){
-                                     selectedForum = forum;
-                                 }
-                             })
-                        
-                        })
-                        
-                        defer.resolve(selectedForum);
-                    }, function(err){
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                    
-                return defer.promise;
-            }
-
-            function getForums() {
-
-                var defer = $q.defer();
-
-                if (forums) {
-                    defer.resolve(forums);
-                }
-                else {
-
-                    getForumsResource.save({}).$promise
-                        .then(function (response) {
-
-                            forums = response.forums;
-                            defer.resolve(response.forums);
-                        }, function(err){
-                            
-                            defer.reject(err);
-                        })
-                }
-                return defer.promise;
-            }
-            
-            function removeLocalForums(){
-                forums = undefined;
-            }
-
-            function deleteForum(forum) {
-
-                var defer = $q.defer();
-                
-                var bodyData = {forum: forum};
-                
-                deleteForumsResource.save(bodyData).$promise
-                    .then(function(response){
-                        
-                        defer.resolve(response);        
-                    })
-                    .catch(function(err){
-                        
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                
-
-                return defer.promise; 
-            }
- 
-            function createNewForum(forum) {
-
-                var defer = $q.defer();
-
-                createNewForumResource.save({ forum: forum }).$promise
-                    .then(function (response) {
-                        defer.resolve(response);
-                    })
-                    .catch(function (err) {
-
-                        defer.reject(err);
-                    })
-
-                return defer.promise;
-            }
-            
-            function saveForumCounts(forums){
-                
-                localStorage.setItem("forums", angular.toJson(forums));
-            }
-            
-            function getForumCountsLocal(){
-                
-                return angular.fromJson(localStorage.forums);
-            }
-
-            function editForum(forum) {
-
-                var defer = $q.defer();
-                
-                editForumResource.save({ forum: forum }).$promise
-                    .then(function (response) {
-                        defer.resolve(response);
-                    })
-                    .catch(function (err) {
-
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                
-
-                return defer.promise;
-            }
-
-            function getSelectedForum() {
-                
-                var defer = $q.defer();
-
-                if (currentForum) {
-                    defer.resolve(currentForum);
-                }
-                else {
-
-                    getForum($routeParams.forumID)
-                        .then(function(forum){
-                            
-                            currentForum = forum;
-                            defer.resolve(forum);
-                        })
-                }
-
-                return defer.promise;
-            }
-            
-            //==== Thread Functions ==================
-            
-            function saveThreadCounts(threads){
-                
-                localStorage.setItem("threads", angular.toJson(threads));   
-            }
-            
-            function getThreadCountsLocal(){
-                
-                return angular.fromJson(localStorage.threads);
-            }
-            
-            function getThreads(forumId) {
-                
-                var defer = $q.defer();
-
-                var bodyData = { forumId: forumId };
-
-                getThreadsResource.save(bodyData).$promise
-                    .then(function (response) {
-
-                        defer.resolve(response.threads);
-                    })
-
-                return defer.promise;
-            }
-
-            function deleteThread(thread) {
-                
-                var defer = $q.defer();
-                
-                var bodyData = {thread: thread};
-                
-                deleteThreadResource.save(bodyData).$promise
-                    .then(function (response) {
-
-                        defer.resolve(response);
-                    })
-                    .catch(function (err) {
-
-                        defer.reject(err);
-                    })
-                    .finally(function () {
-
-                    })
-            }
-
-            function editThread(thread) {
-                
-                var defer = $q.defer();
-                
-                editThreadResource.save({ thread: thread }).$promise
-                    .then(function (response) {
-                        defer.resolve(response);
-                    })
-                    .catch(function (err) {
-
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                
-
-                return defer.promise;
-            }
-
-            function createThread(thread) {
-                
-                var defer = $q.defer();
-
-                var bodyData = { thread: thread };
-
-                createNewThreadResource.save(bodyData).$promise
-                    .then(function (response) {
-
-                        defer.resolve(response.thread);
-                    })
-
-                return defer.promise;
-            }
-            
-            
-            function setSelectedThread(selectedThread){
-                thread = selectedThread;
-            }
-            
-            function removeSelectedThread(){
-                thread = {};
-            }
-            
-            function getSelectedThread(threadID){
-                
-                var defer = $q.defer();
-                
-                if(thread == undefined){
-                    getThreadResource.save({threadID:threadID}).$promise
-                        .then(function(threadData){
-                            
-                            defer.resolve(threadData);
-                        })
-                        .catch(function (err) {
-
-                            defer.reject(err);
-                        })
-                        .finally(function () {
-
-                        })
-                }
-                else{
-                    
-                    defer.resolve(thread);
-                }
-                
-                return defer.promise;
-            }
-            
-            //==== Comment Functions ==================
-            
-            function deleteComment(comment) {
-                
-                var defer = $q.defer();
-                
-                deleteCommentResource.save({comment: comment}).$promise
-                    .then(function (response) {
-                        defer.resolve(response);
-                    })
-                    .catch(function (err) {
-
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                    
-                return defer.promise;
-            }
-
-            function editComment(comment) {
-                
-                var defer = $q.defer();
-                
-                editCommentResource.save({ comment: comment }).$promise
-                    .then(function (response) {
-                        defer.resolve(response);
-                    })
-                    .catch(function (err) {
-
-                        defer.reject(err);
-                    })
-                    .finally(function(){
-                        
-                    })
-                
-
-                return defer.promise;
-            }
-
-            function createComment(comment) {
-                
-                var defer = $q.defer();
-                
-                var bodyData = { comment: comment };
-                
-                createCommentResource.save(bodyData).$promise
-                    .then(function(comment){
-                        
-                        defer.resolve(comment)
-                    }, 
-                    function(err){
-                        
-                        defer.reject(err);
-                    })
-                
-                
-                return defer.promise;
-            }
-
-            function getComments(threadId){
-                
-                var defer = $q.defer();
-                
-                var bodyData = {threadId: threadId};
-                
-                getCommentsResource.save(bodyData).$promise
-                    .then(function(comments){
-                        
-                        defer.resolve(comments);
-                    }, 
-                    function(err){
-                        
-                        defer.reject(err);
-                    })
-                    
-                return defer.promise;
-            }
-            
-            
-
-            
-            
-            //==== General Functions ==================
-
-            
-
-            function confirmDelete(event, callback) {
-
-                var defer = $q.defer();
-
-                var confirm = $mdDialog.confirm()
-                    .title('Are you sure you want to delete this?')
-                    .textContent('This is irreversable once you click Yes!')
-                    .ariaLabel('Confirm Delete')
-                    .targetEvent(event)
-                    .ok('Delete')
-                    .cancel('Nevermind');
-
-                $mdDialog.show(confirm)
-                    .then(function () {
-
-                        defer.resolve(true);
-                    }, function (err) {
-
-                        defer.reject(false);
-                    })
-
-                return defer.promise;
-            }
-
-
-            function openBottomSheet(template, locals) {
-
-                var defer = $q.defer();
-                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-                $mdDialog.show({
-                    templateUrl: template,
-                    controller: 'dialogController',
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false,
-                    locals: { data: locals },
-                    fullscreen: true
-                })
-                    .then(function (result) {
-
-                        defer.resolve(result);
-                    },
-                        function () {
-                            defer.reject();
-                            //Something broke or they canceled
-                        })
-
-                return defer.promise;
-            }
-
-            function cancel() {
-
-                $mdDialog.hide();
-            }
-
-            return {
-                setForum: setForum,
-                confirmDelete: confirmDelete,
-                openBottomSheet: openBottomSheet,
-                createNewCategory: createNewCategory,
-                deleteCategory: deleteCategory,
-                editCategory:editCategory,                
-                editForum: editForum,
-                createNewForum: createNewForum,
-                deleteForum: deleteForum,
-                cancel: cancel,
-                getForums: getForums,
-                removeLocalForums:removeLocalForums,
-                getThreads: getThreads,
-                getCurrentForum: getSelectedForum,
-                deleteThread: deleteThread,
-                editThread: editThread,
-                createThread: createThread,
-                deleteComment: deleteComment,
-                editComment: editComment,
-                createComment: createComment,
-                getComments:getComments,
-                saveForumCounts:saveForumCounts,
-                getForumCountsLocal:getForumCountsLocal,
-                saveThreadCounts:saveThreadCounts,
-                getThreadCountsLocal:getThreadCountsLocal,
-                setSelectedThread:setSelectedThread,
-                removeSelectedThread:removeSelectedThread,
-                getSelectedThread: getSelectedThread,
-                getFavorites: getFavorites,
-                getIsComingFromFavorites: getIsComingFromFavorites,
-                setIsComingFromFavorites:setIsComingFromFavorites
-            }
-        }]) 
-        
-      
 'use strict';
 /**
  *
@@ -2372,501 +2410,6 @@ angular.module('BossCollection.accounts').
         }
 
     }]);
-
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
-            
-            siteServices.updateTitle('Applications');
-            
-            
-            $scope.application = {};            
-            
-            
-            $scope.validCharacterName = false;
-            $scope.charRequirementsIncomplete = false;
-            $scope.charRealmError = false;
-            $scope.searchingForUser = false;
-            $scope.icon = "error";
-            
-                
-            $scope.init = function(){
-                
-                realmServices.getRealms()
-                    .then(function (realms) {
-
-                        $scope.realms = realms;
-                    })
-                    .then(function(){
-                        return $scope.getGuilds()
-                    })
-                    .then(function(){
-                        return $scope.loggedIn()
-                    })
-                    .catch(function (err) {
-
-                        console.log(err);
-                    })
-                    .finally(function () {
-                        $timeout(function(){
-                            siteServices.hideLoadingModal();    
-                        }, 500)
-                        
-                    })  
-                    
-            }
-            
-            $scope.getGuilds = function () {
-
-                return guildServices.getListOfGuilds()
-                    .then(function (guilds) {
-
-                        $scope.listOfGuilds = guilds;
-                    })
-            }
-            
-            $scope.filterGuildsSearch = function(filterSearch){
-                return $filter('filter')($scope.listOfGuilds, filterSearch);
-            }
-            
-            $scope.filterSearch = function(filterSearch){
-                
-                return $filter('filter')($scope.realms, filterSearch);
-            }
-            
-            $scope.loggedIn = function () {
-                
-                userLoginSrvc.getUser().then(function (user) {
-                    
-                    //Success, let them fill out the form.
-                })
-                .catch(function(err){
-                    
-                    siteServices.showMessageModal("Please log in before attempting to apply.")
-                    $location.path('/')   
-                })
-                .finally(function(){
-                    
-                })
-            }
-            
-
-            $scope.validateCharactername = function (callback) {
-
-                if ($scope.application.realm) {
-                    $scope.validCharacterName = false; //Immediately invalidate until response comes back
-                    $scope.searchingForUser = true;
-
-                    guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
-                        .then(function (character) {
-
-                            
-                            $scope.validCharacterName = true;
-                            $scope.icon = "check_circle";
-                            $scope.application.character = character;
-                            
-                            if(callback){
-                                callback();
-                            }
-                        },
-                            function (err) {
-                                $scope.icon = "error";
-                                siteServices.showMessageToast(err);
-                                $scope.validCharacterName = false;
-                            })
-                        .finally(function () {
-                            $scope.searchingForUser = false;
-                        })
-
-                }
-                else{
-                    $scope.validCharacterName = false;
-                    if (callback) {
-                        callback();
-                    }
-                }
-            }
-            
-            
-            $scope.submitApplication = function(){
-                
-                $scope.validateCharactername(function () {
-                        
-                        if ($scope.validCharacterName == false) {
-
-                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                        }
-                        else if($scope.guildSelected != undefined) {
-                            
-                            $scope.application.guildName = $scope.guildSelected.name;
-                            guildServices.submitApplication($scope.application)
-                                .then(function (result) {
-                                    
-                                    if($scope.user.guild != undefined){
-                                        $location.path('/reviewApplications');    
-                                    }
-                                    else{
-                                        siteServices.showMessageModal("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion.");
-                                        $location.path('/');
-                                    }
-                                    
-                                },
-                                    function (err) {
-
-                                        siteServices.showMessageToast(err);
-                                    })
-                        }
-                        else{
-                            siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
-                        }
-                    })
-            }
-            
-            
-            
-            $scope.init();
-  
-            
-    }])
-
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild")
-    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
-        function($scope, $location, $http, $timeout, guildServices, siteServices){
-            
-            siteServices.updateTitle('View Applications');    
-            
-          
-            
-             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
-            
-            $scope.loading = true;
-            $scope.numOfNewApplicants = 0;
-            $scope.filterStatus = function(status){
-                
-                return function(application){
-                    return application.status == status;
-                }
-                
-                /**
-                var filteredArray = _.filter($scope.applications, function(application){
-                    return application.status == status;
-                })
-                
-                return filteredArray;
-                 */
-            }
-            
-            $scope.approveApplicant = function(application){
-                
-                guildServices.approveApplication(application)
-                    .then(function(){
-                        application.status = "Approved";
-                    })
-                    .catch(function(err){
-                        
-                    })
-                    .finally(function(){
-                        
-                    })
-            }
-            
-            $scope.rejectApplicant = function(application){
-                
-                guildServices.rejectApplication(application)
-                    .then(function(){
-                        application.status = "Rejected";
-                    })
-                    .catch(function(err){
-                        
-                    })
-                    .finally(function(){
-                        
-                    })
-            }
-            
-            $scope.openComments = function (comments) {
-                
-                siteServices.showMessageModal(comments, "Comments");
-            }  
-            
-            $scope.openMenu = function($mdOpenMenu, ev){
-                $mdOpenMenu(ev);
-            }
-             
-            $scope.goTo = function(url){
-                
-                var win = window.open(url, '_blank');
-                win.focus();
-            }
-            //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
-            
-            $scope.buildArmoryUrl = function (realm, character) {
-                var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
-                
-                $scope.goTo(url);
-            }
-            
-            guildServices.getApplications() 
-                .then(function(applications){
-                    $scope.loading = false;
-                    $scope.applications = applications.applications; //object to array
-                    
-                    var newApplicants = _.find($scope.applications, function(applicant){                        
-                        return applicant.status == "Applied";
-                    })
-                    
-                    if(newApplicants != undefined){
-                        $scope.numOfNewApplicants = 1;    
-                    }
-                    
-                    
-                    convertClasses();
-                },
-                function(err){
-                    
-                    $scope.loading = false;
-                    console.log(err);
-                    siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-                })
-                
-            function convertClasses(){
-                
-                for(var i = 0; i < $scope.applications.length; i++){
-                    
-                    var classType = classes[$scope.applications[i].character.class];
-                    $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
-                    
-                }
-            }
-
-    }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("createGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-          
-            
-            siteServices.updateTitle('Create Guild');
-            
-            $scope.guildName = "";
-            $scope.loading = false;
-            
-            $scope.joinGuild = function(){
-                $scope.loading = true;
-                guildServices.createGuild($scope.guildName)
-                    .then(function(){
-                        
-                        var user = userLoginSrvc.updateUser();
-                        
-                        siteServices.showMessageModal("Successfully created " + user.guild.name);
-                        
-                        $location.path('/');           
-                    })
-                    .catch(function(err){
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function(){
-                        $scope.loading = false;
-                    })
-            }
-    }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-
-
-            $scope.listOfGuilds = [];
-            $scope.loading = false;
-
-
-            siteServices.updateTitle('Join Guild');
-
-            $scope.init = function () {
-
-
-
-                $scope.getGuilds();
-
-            }
-
-            $scope.filterSearch = function (filterSearch) {
-
-                return $filter('filter')($scope.listOfGuilds, filterSearch);
-            }
-
-            $scope.getGuilds = function () {
-
-                guildServices.getListOfGuilds()
-                    .then(function (guilds) {
-
-                        $scope.listOfGuilds = guilds;
-                    })
-            }
-
-            $scope.joinGuild = function () {
-
-                $scope.loading = true;
-
-                if ($scope.guildName) {
-
-                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
-                        .then(function (guild) {
-
-                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                            
-                            userLoginSrvc.refreshUserFromServer();
-
-                            $location.path('/');
-
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else{
-                    siteServices.showMessageToast("Guild doesn't exist");
-                    $scope.loading = false;
-                }
-            }
-
-            $scope.init();
-        }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("manageMembersController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-            
-            //user comes from parent controller navbar
-            
-            $scope.guildMembers;
-            $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
-
-            $scope.init = function () {
-
-                $scope.getMembers();
-            }
-            
-            $scope.getMembers = function(){
-                
-                if($scope.user.name != ""){
-                    
-                    guildServices.getGuildMembers($scope.user.guild.name)
-                        .then(function (guildMembers) {
-                            $scope.guildMembers = guildMembers
-                        })
-                }
-                else{
-                    userLoginSrvc.getUser()
-                        .then(function(user){
-                            
-                            guildServices.getGuildMembers(user.guild.name)
-                                .then(function (guildMembers) {
-                                    $scope.guildMembers = guildMembers
-                                })
-                        })
-                }
-            }
-            
-            $scope.promote = function (user) {
-
-                if (user.rank == 3) {
-                    siteServices.showMessageModal("Can't promote any further");
-                }
-                else {
-                    user.rank++
-
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                }
-
-
-            }
-
-            $scope.demote = function (user) {
-                if (user.rank == 1) {
-                    siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
-                }
-                else {
-                    user.rank--;
-
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                }
-            }
-            
-            $scope.kick = function(user){
-                
-                var userName = user;
-                var guildName = $scope.user.guild.name;
-                
-                guildServices.kickUser(userName, guildName)
-                    .then(function(reponse) {
-                        
-                        $scope.getMembers();
-                    })
-                    .catch(function(err) {
-                        
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function() {
-
-                    })
-            }
-            
-            $scope.init();
-            siteServices.updateTitle('Manage Members');
-        }])
 
                 
     
@@ -4121,6 +3664,10 @@ angular.module("BossCollection.forums")
 
                         $scope.loading = false;
                         $scope.threads = threads;
+                        
+                        $scope.forum.threads = $scope.threads
+                        forumService.setForum($scope.forum);
+                        
                         $scope.masterThread = threads;
                         $scope.sortThreads();
                     })
@@ -4320,6 +3867,501 @@ angular.module("BossCollection.forums")
             
             $scope.init();
         }])
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild")
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
+        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
+            
+            siteServices.updateTitle('Applications');
+            
+            
+            $scope.application = {};            
+            
+            
+            $scope.validCharacterName = false;
+            $scope.charRequirementsIncomplete = false;
+            $scope.charRealmError = false;
+            $scope.searchingForUser = false;
+            $scope.icon = "error";
+            
+                
+            $scope.init = function(){
+                
+                realmServices.getRealms()
+                    .then(function (realms) {
+
+                        $scope.realms = realms;
+                    })
+                    .then(function(){
+                        return $scope.getGuilds()
+                    })
+                    .then(function(){
+                        return $scope.loggedIn()
+                    })
+                    .catch(function (err) {
+
+                        console.log(err);
+                    })
+                    .finally(function () {
+                        $timeout(function(){
+                            siteServices.hideLoadingModal();    
+                        }, 500)
+                        
+                    })  
+                    
+            }
+            
+            $scope.getGuilds = function () {
+
+                return guildServices.getListOfGuilds()
+                    .then(function (guilds) {
+
+                        $scope.listOfGuilds = guilds;
+                    })
+            }
+            
+            $scope.filterGuildsSearch = function(filterSearch){
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
+            }
+            
+            $scope.filterSearch = function(filterSearch){
+                
+                return $filter('filter')($scope.realms, filterSearch);
+            }
+            
+            $scope.loggedIn = function () {
+                
+                userLoginSrvc.getUser().then(function (user) {
+                    
+                    //Success, let them fill out the form.
+                })
+                .catch(function(err){
+                    
+                    siteServices.showMessageModal("Please log in before attempting to apply.")
+                    $location.path('/')   
+                })
+                .finally(function(){
+                    
+                })
+            }
+            
+
+            $scope.validateCharactername = function (callback) {
+
+                if ($scope.application.realm) {
+                    $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                    $scope.searchingForUser = true;
+
+                    guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
+                        .then(function (character) {
+
+                            
+                            $scope.validCharacterName = true;
+                            $scope.icon = "check_circle";
+                            $scope.application.character = character;
+                            
+                            if(callback){
+                                callback();
+                            }
+                        },
+                            function (err) {
+                                $scope.icon = "error";
+                                siteServices.showMessageToast(err);
+                                $scope.validCharacterName = false;
+                            })
+                        .finally(function () {
+                            $scope.searchingForUser = false;
+                        })
+
+                }
+                else{
+                    $scope.validCharacterName = false;
+                    if (callback) {
+                        callback();
+                    }
+                }
+            }
+            
+            
+            $scope.submitApplication = function(){
+                
+                $scope.validateCharactername(function () {
+                        
+                        if ($scope.validCharacterName == false) {
+
+                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                        }
+                        else if($scope.guildSelected != undefined) {
+                            
+                            $scope.application.guildName = $scope.guildSelected.name;
+                            guildServices.submitApplication($scope.application)
+                                .then(function (result) {
+                                    
+                                    if($scope.user.guild != undefined){
+                                        $location.path('/reviewApplications');    
+                                    }
+                                    else{
+                                        siteServices.showMessageModal("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion.");
+                                        $location.path('/');
+                                    }
+                                    
+                                },
+                                    function (err) {
+
+                                        siteServices.showMessageToast(err);
+                                    })
+                        }
+                        else{
+                            siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
+                        }
+                    })
+            }
+            
+            
+            
+            $scope.init();
+  
+            
+    }])
+
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild")
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
+        function($scope, $location, $http, $timeout, guildServices, siteServices){
+            
+            siteServices.updateTitle('View Applications');    
+            
+          
+            
+             var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            
+            $scope.loading = true;
+            $scope.numOfNewApplicants = 0;
+            $scope.filterStatus = function(status){
+                
+                return function(application){
+                    return application.status == status;
+                }
+                
+                /**
+                var filteredArray = _.filter($scope.applications, function(application){
+                    return application.status == status;
+                })
+                
+                return filteredArray;
+                 */
+            }
+            
+            $scope.approveApplicant = function(application){
+                
+                guildServices.approveApplication(application)
+                    .then(function(){
+                        application.status = "Approved";
+                    })
+                    .catch(function(err){
+                        
+                    })
+                    .finally(function(){
+                        
+                    })
+            }
+            
+            $scope.rejectApplicant = function(application){
+                
+                guildServices.rejectApplication(application)
+                    .then(function(){
+                        application.status = "Rejected";
+                    })
+                    .catch(function(err){
+                        
+                    })
+                    .finally(function(){
+                        
+                    })
+            }
+            
+            $scope.openComments = function (comments) {
+                
+                siteServices.showMessageModal(comments, "Comments");
+            }  
+            
+            $scope.openMenu = function($mdOpenMenu, ev){
+                $mdOpenMenu(ev);
+            }
+             
+            $scope.goTo = function(url){
+                
+                var win = window.open(url, '_blank');
+                win.focus();
+            }
+            //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+            
+            $scope.buildArmoryUrl = function (realm, character) {
+                var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+                
+                $scope.goTo(url);
+            }
+            
+            guildServices.getApplications() 
+                .then(function(applications){
+                    $scope.loading = false;
+                    $scope.applications = applications.applications; //object to array
+                    
+                    var newApplicants = _.find($scope.applications, function(applicant){                        
+                        return applicant.status == "Applied";
+                    })
+                    
+                    if(newApplicants != undefined){
+                        $scope.numOfNewApplicants = 1;    
+                    }
+                    
+                    
+                    convertClasses();
+                },
+                function(err){
+                    
+                    $scope.loading = false;
+                    console.log(err);
+                    siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
+                })
+                
+            function convertClasses(){
+                
+                for(var i = 0; i < $scope.applications.length; i++){
+                    
+                    var classType = classes[$scope.applications[i].character.class];
+                    $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+                    
+                }
+            }
+
+    }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("createGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+          
+            
+            siteServices.updateTitle('Create Guild');
+            
+            $scope.guildName = "";
+            $scope.loading = false;
+            
+            $scope.joinGuild = function(){
+                $scope.loading = true;
+                guildServices.createGuild($scope.guildName)
+                    .then(function(){
+                        
+                        var user = userLoginSrvc.updateUser();
+                        
+                        siteServices.showMessageModal("Successfully created " + user.guild.name);
+                        
+                        $location.path('/');           
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
+                    })
+            }
+    }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("joinGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+
+
+            $scope.listOfGuilds = [];
+            $scope.loading = false;
+
+
+            siteServices.updateTitle('Join Guild');
+
+            $scope.init = function () {
+
+
+
+                $scope.getGuilds();
+
+            }
+
+            $scope.filterSearch = function (filterSearch) {
+
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
+            }
+
+            $scope.getGuilds = function () {
+
+                guildServices.getListOfGuilds()
+                    .then(function (guilds) {
+
+                        $scope.listOfGuilds = guilds;
+                    })
+            }
+
+            $scope.joinGuild = function () {
+
+                $scope.loading = true;
+
+                if ($scope.guildName) {
+
+                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
+                        .then(function (guild) {
+
+                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
+                            
+                            userLoginSrvc.refreshUserFromServer();
+
+                            $location.path('/');
+
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else{
+                    siteServices.showMessageToast("Guild doesn't exist");
+                    $scope.loading = false;
+                }
+            }
+
+            $scope.init();
+        }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("manageMembersController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+            
+            //user comes from parent controller navbar
+            
+            $scope.guildMembers;
+            $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM']
+
+            $scope.init = function () {
+
+                $scope.getMembers();
+            }
+            
+            $scope.getMembers = function(){
+                
+                if($scope.user.name != ""){
+                    
+                    guildServices.getGuildMembers($scope.user.guild.name)
+                        .then(function (guildMembers) {
+                            $scope.guildMembers = guildMembers
+                        })
+                }
+                else{
+                    userLoginSrvc.getUser()
+                        .then(function(user){
+                            
+                            guildServices.getGuildMembers(user.guild.name)
+                                .then(function (guildMembers) {
+                                    $scope.guildMembers = guildMembers
+                                })
+                        })
+                }
+            }
+            
+            $scope.promote = function (user) {
+
+                if (user.rank == 3) {
+                    siteServices.showMessageModal("Can't promote any further");
+                }
+                else {
+                    user.rank++
+
+                    guildServices.updateRank($scope.user.guild.name, user)
+                        .then(function () {
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                }
+
+
+            }
+
+            $scope.demote = function (user) {
+                if (user.rank == 1) {
+                    siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
+                }
+                else {
+                    user.rank--;
+
+                    guildServices.updateRank($scope.user.guild.name, user)
+                        .then(function () {
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                }
+            }
+            
+            $scope.kick = function(user){
+                
+                var userName = user;
+                var guildName = $scope.user.guild.name;
+                
+                guildServices.kickUser(userName, guildName)
+                    .then(function(reponse) {
+                        
+                        $scope.getMembers();
+                    })
+                    .catch(function(err) {
+                        
+                        siteServices.showMessageModal(err);
+                    })
+                    .finally(function() {
+
+                    })
+            }
+            
+            $scope.init();
+            siteServices.updateTitle('Manage Members');
+        }])
+
 
 angular.module("BossCollection.guild")
     .directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil', function(guildServices,$filter, $mdUtil){

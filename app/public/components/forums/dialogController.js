@@ -62,7 +62,7 @@ angular.module("BossCollection.forums")
 
             $scope.saveCategory = function () {
 
-                $scope.loading = false;
+                $scope.loading = true;
 
                 if ($scope.object._id) {
                     forumService.editCategory($scope.object)
@@ -96,11 +96,12 @@ angular.module("BossCollection.forums")
             $scope.saveThread = function () {
 
                 var thread;
-
+                
                 if ($scope.object._id) {
 
                     thread = $scope.object;
-
+                    $scope.loading = true;
+                    
                     forumService.editThread(thread)
                         .then(function (response) {
 
@@ -120,7 +121,9 @@ angular.module("BossCollection.forums")
                         forumId: $scope.object.forum._id,
                         message: $scope.object.message
                     }
-
+                    
+                    $scope.loading = true;
+                    
                     forumService.createThread(thread)
                         .then(function (response) {
 

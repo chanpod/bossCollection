@@ -169,6 +169,24 @@ angular.module("BossCollection.forums")
                 return defer.promise;
             }
             
+            function getForumsForced(){
+                
+                var defer = $q.defer();
+
+                
+                getForumsResource.save({}).$promise
+                    .then(function (response) {
+
+                        forums = response.forums;
+                        defer.resolve(response.forums);
+                    }, function (err) {
+
+                        defer.reject(err);
+                    })
+                
+                return defer.promise;
+            }
+            
             function removeLocalForums(){
                 forums = undefined;
             }
@@ -307,6 +325,8 @@ angular.module("BossCollection.forums")
                     .finally(function () {
 
                     })
+                    
+                return defer.promise;
             }
 
             function editThread(thread) {
@@ -534,6 +554,7 @@ angular.module("BossCollection.forums")
                 deleteForum: deleteForum,
                 cancel: cancel,
                 getForums: getForums,
+                getForumsForced:getForumsForced,
                 removeLocalForums:removeLocalForums,
                 getThreads: getThreads,
                 getCurrentForum: getSelectedForum,
