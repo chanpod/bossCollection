@@ -17,7 +17,10 @@ script#threadComments(type="text/ng-template")
             div().md-toolbar-tools
                 md-button(ng-click = "goBack()").md-icon-button
                     md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
-                | Threads
+                div(ng-if = "!ctrl.isComingFromFavorites")
+                    | Threads
+                div(ng-if = "ctrl.isComingFromFavorites")
+                    | Favorites
                 div(flex, hide-gt-xs)
                 div(flex, layout, layout-align = "center center", hide-xs).titleOverflow
                     {{ctrl.thread.title}}           

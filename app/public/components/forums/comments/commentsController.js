@@ -17,7 +17,7 @@ angular.module("BossCollection.forums")
             $scope.init = function(){
                 
                 
-                
+                self.isComingFromFavorites = forumService.getIsComingFromFavorites();
                 self.threadID = $routeParams.threadID;
                 self.loading = true
                 
@@ -68,6 +68,7 @@ angular.module("BossCollection.forums")
             $scope.goBack = function () {
                 
                 if (forumService.getIsComingFromFavorites()) {
+                    forumService.setIsComingFromFavorites(false);
                     $scope.goToBackwards('/forum/favorites');
                 } else{
                     $scope.goToBackwards('/forum/' + self.thread.forumID);    

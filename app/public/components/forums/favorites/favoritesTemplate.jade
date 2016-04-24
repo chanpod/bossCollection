@@ -26,12 +26,11 @@ script#favorites(type="text/ng-template")
             label()
                | &nbsp {{favCtrl.orderByString}}
             
-       md-list(layout = "column", layout-align = "center stretch", flex)         
-          div(ng-repeat = "thread in favCtrl.threads | filter:favCtrl.threadSearch | orderBy:favCtrl.orderBy", ng-class = "favCtrl.isRead(thread)", layout = "row")
+       div()
           
         md-list(layout = "column", layout-align = "center stretch", flex)          
-           div(ng-repeat = "thread in favCtrl.favorites | filter:favCtrl.threadSearch | orderBy:favCtrl.orderBy", ng-class = "favCtrl.isRead(thread)", layout = "row")
-           
+            div(ng-repeat = "thread in favCtrl.favorites | filter:favCtrl.threadSearch | orderBy:favCtrl.orderBy", ng-class = "favCtrl.isRead(thread)", layout = "row")
+            
                 md-list-item(flex, ng-click = "favCtrl.openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
