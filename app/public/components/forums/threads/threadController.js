@@ -40,7 +40,7 @@ angular.module("BossCollection.forums")
                     })
                     .then(function(){
                         
-                        siteServices.updateTitle($scope.forum.name + ' Forum');
+                        siteServices.updateTitle('Forums');
                         
                         if($scope.forum.threads.length > 0){
                             return $scope.forum.threads

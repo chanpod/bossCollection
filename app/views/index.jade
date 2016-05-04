@@ -17,11 +17,10 @@ block body
                         h2
                             | {{user.guild.name}}
                     span(flex)
-                        md-menu(flex, layout-align = "end center", layout)
-                            md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
-                                i(class="material-icons").iconHeightAdjust account_circle
-                                &nbsp {{user.name}}
-                                i(class="material-icons").iconHeightAdjust keyboard_arrow_down
+                        md-menu(flex, layout-align = "center center", layout)
+                            md-button(layout, aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
+                                user-display(user = "user.name")
+                                i(class="material-icons", style = "padding-bottom:10px;").iconHeightAdjust keyboard_arrow_down
                             md-menu-content(width = "4")                                
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "goTo('/auth/updateAccount')")

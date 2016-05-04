@@ -51,10 +51,14 @@ script#threadComments(type="text/ng-template")
                     md-divider()
                     
                     
-                md-card-actions(ng-show = "user.rank > 2 || user.name == ctrl.thread.user")
-                    md-button(ng-click = "ctrl.editThread(ctrl.thread)").md-icon-button
+                md-card-actions()
+                    md-button(ng-show = "user.rank > 2 || user.name == ctrl.thread.user", ng-click = "ctrl.editThread(ctrl.thread)")
                         md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                        md-tooltip() Edit thread
+                        | Edit
+                        
+                    md-button(ng-click = "openCommentBox()", aria-label = "reply", layout-align = "end center")
+                        md-icon(md-font-library="material-icons", aria-label = "edit category") reply
+                        | Reply                        
                 
             div(layout = "row", layout-align = "space-between center")
             
@@ -66,8 +70,7 @@ script#threadComments(type="text/ng-template")
                 div()                
                     md-button(ng-click = "ctrl.flipOrderBySorting()").md-primary.md-raised
                         md-icon(md-font-library="material-icons") date_range
-                        label()
-                            | &nbsp {{ctrl.orderByString}}
+                        | &nbsp {{ctrl.orderByString}}
 
                     
             md-card(ng-repeat = "comment in ctrl.thread.comments | filter: ctrl.threadSearch | orderBy:ctrl.orderBy").md-whiteframe-10dp

@@ -5,15 +5,12 @@ script#forum(type="text/ng-template")
             md-progress-linear(ng-if = "loading", md-mode="indeterminate")
             div(layout-align = "center center")
                 md-card
-                    md-card-header
-                        md-card-avatar
-                            img(src = "{{avatarUrl}}").md-user-avatar
-                    
+                    md-card-header                        
                         md-card-header-text
                             span().md-headline
-                                {{user.name}}
+                                user-display(user = "user.name")
                             span().md-subhead
-                                {{user.name}}
+                                
                     md-card-actions(layout, layout-xs = "column")
                         md-button(ng-click = "goTo('/forum/favorites')").md-raised Favorites
                         br
@@ -29,7 +26,9 @@ script#forum(type="text/ng-template")
             div(ng-repeat = "category in forums.categories")            
                 md-toolbar().md-scroll-shrink
                     div().md-toolbar-tools
-                        {{category.name}}
+                        div().forumCategoryTitle
+                            {{category.name}}
+                            md-tooltop(hide-gt-sm) {{category.name}}
                         span(flex)
                         div(ng-show = "user.rank > 2")
                             md-button(ng-click = "deleteCategory(category)").md-icon-button

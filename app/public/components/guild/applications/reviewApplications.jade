@@ -1,19 +1,22 @@
 script#reviewApplications(type="text/ng-template")
-    md-content(ng-cloak)
+    md-content()
         section(layout-xs="column", layout="row")
             div(flex-xs, flex-gt-xs="60")
                 md-tabs(md-dynamic-height md-border-bottom)
                     md-tab(label = "New Applications")
-                        div(ng-show = "numOfNewApplicants == 0")
-                            h3 No New Applications
-                        md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")                            
-                            include applicationsList
+                        md-content()
+                            div(ng-show = "numOfNewApplicants == 0")
+                                h3 No New Applications
+                            md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")                            
+                                include applicationsList
                     md-tab(label = "Approved")
-                        md-card(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'")
-                            include applicationsList
+                        md-content()
+                            md-card(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'")
+                                include applicationsList
                     md-tab(label = "Denied")
-                        md-card(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'")
-                            include applicationsList
+                        md-content()
+                            md-card(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'")
+                                include applicationsList
                         
                     
     ad()                    

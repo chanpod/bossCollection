@@ -75,7 +75,7 @@ angular.module("BossCollection.controllers")
             
             userLoginSrvc.logout().then(function(response){
                 //navigate to some page
-                
+                $scope.user = {};
             },
             function(err){
                 console.log(err);
@@ -125,8 +125,9 @@ angular.module("BossCollection.controllers")
         
         function getUser(){
             userLoginSrvc.getUser()
-                .then(function(user){
-                    if(user){
+                .then(function (user) {                    
+                    if (user) {
+                        
                         $scope.user = user;
                         $scope.loggedIn = true;
                         
