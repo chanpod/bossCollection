@@ -7,6 +7,18 @@ var util = require('utility');
 
 var Guild = require('./guild-manager.js');
 
+router.route('/guildSettings')
+    .get(function (req, res) {
+        Guild.getGuildSettings(req, res)
+            .then((result) => {
+                res.status(200).send(result);
+            })
+            .catch(function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 router.route('/listOfGuilds')
     .get(function (req, res) {
 

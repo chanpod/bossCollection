@@ -273,7 +273,26 @@ function removeMember(req, res) {
     return defer.promise;
 }
 
+function getGuildSettings(req, res) {
 
+    var promise = new Promise((resolve, reject) => {
+
+        var usersGuild = req.session.user.guild.name;
+
+        GuildModel.findOne({ name: usersGuild })
+        .then(function(guild) {
+
+            resolve({guild: guild})
+
+        }, function(err) {
+
+            reject(err);
+        })
+        
+    })
+
+    return promise;
+}
 
 function getGuildHomepage(req, res) {
 
@@ -324,15 +343,17 @@ function updateGuildHomepage(req, res) {
 module.exports = {        
     updateGuildHomepage:updateGuildHomepage,
     buildGuildCookie:buildGuildCookie,
-    getGuildHomepage:getGuildHomepage,
+    getGuildHomepage: getGuildHomepage,
+    getGuildSettings: getGuildSettings,
+    getGuildMembers: getGuildMembers,
     getListOfGuilds:getListOfGuilds,
-    getGuildMembers:getGuildMembers,
     findUsersGuild:findUsersGuild,
     removeMember:removeMember,    
     kickMember:kickMember,
     updateRank:updateRank,
     addMember:addMember,
-    addGuild:addGuild
+    addGuild:addGuild,
+    
     };
 
 function findUsersGuild (username) {

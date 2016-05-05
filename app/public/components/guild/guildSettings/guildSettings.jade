@@ -1,0 +1,28 @@
+script#guildSettings(type="text/ng-template")
+    div
+        form(name = "editAccountForm", ng-submit = "updateAccount()", layout = "column", layout-xs = "column")
+            div(layout = "row", layout-xs = "column")
+                div(flex, layout = "column")
+                    div(flex)
+                        md-input-container(flex).md-block
+                            label() Logs Link
+                            input(id = "uName", ng-model = "guild.logsLink")
+                        
+                    div(flex)
+                        md-input-container(flex).md-block
+                            label() Progression Link
+                            input(id="battleTag", ng-model = "guild.progressionLink")                    
+                    
+            div(flex, ng-if = "user.guild") 
+                h3 Images for homepage banner
+                div(ng-repeat = "imageUrl in guild.images")                   
+                    md-input-container(flex).md-block
+                        label() Images
+                        input(id="battleTag", ng-model = "guild.images[$index]")
+                        md-hint() Uses image url only. EG use imgur
+                                        
+            div(flex)
+                div()
+                    md-input-container(flex).md-block
+                        md-button(type = "submit").md-primary.md-raised
+                            | Save

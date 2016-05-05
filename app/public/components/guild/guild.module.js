@@ -23,5 +23,9 @@ angular.module("BossCollection.guild", ['ngRoute'])
             .when('/manageMembers', {
                 templateUrl: 'manageMembers',
                 controller: 'manageMembersController'
-            }) 
+            })
+            .when('/manageGuild', {
+                templateUrl: 'guildSettings',
+                controller: 'guildSettingsController'
+            })
     }]);

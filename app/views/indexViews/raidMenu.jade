@@ -13,6 +13,11 @@ md-menu(ng-if = "user.guild && user.rank > 1")
             md-button(ng-click = "goTo('/attendanceStatistics')")
                 md-icon(md-font-library="material-icons") poll
                 | Attendance Portal
+        md-menu-item(ng-if = "user.rank > 1")
+            md-button(ng-click = "goTo('/manageGuild')")
+                md-icon(md-font-library="material-icons") settings
+                | Guild Settings
+                
 
     
                     
