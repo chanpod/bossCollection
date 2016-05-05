@@ -6,21 +6,22 @@ block body
                     
         div(layout = "column", flex)
             md-toolbar().md-accent.md-whiteframe-3dp
-                div().md-toolbar-tools
-                    md-button(hide-gt-sm, aria-label = "settings", ng-click = "toggle()").md-icon-button
-                        i(class = "material-icons") menu
-                    div(flex, layout-align = "center center", layout)
-                        div(flex)
+                div(flex).md-toolbar-tools
+                    div(flex, layout, layout-align = "start center", hide-gt-sm)
+                        md-button(layout, layout-align = "start center", aria-label = "settings", ng-click = "toggle()").md-icon-button
+                            i(class = "material-icons") menu
+                    div(flex, layout-align = "start center", layout)
+                        div()
                             h2()
                                 | {{title}}
-                    div(flex, hide-xs, layout-align = "center center", layout)
+                    div(flex, hide-xs, layout-align = "start center", layout)
                         h2
                             | {{user.guild.name}}
-                    span(flex)
-                        md-menu(flex, layout-align = "center center", layout)
-                            md-button(layout, aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)")
-                                user-display(user = "user.name")
-                                i(class="material-icons", style = "padding-bottom:10px;").iconHeightAdjust keyboard_arrow_down
+                    div(flex)
+                        md-menu(flex, layout-align = "end center", layout)
+                            div(layout, ng-click = "openMenu($mdOpenMenu, $event)", md-ink-ripple="#FF0000").mousePointer                           
+                                    user-display(user = "user.name", fontsize = "12", hideicon = "true")                                
+                                    i(class="material-icons", style = "padding-top:25px") keyboard_arrow_down
                             md-menu-content(width = "4")                                
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "goTo('/auth/updateAccount')")

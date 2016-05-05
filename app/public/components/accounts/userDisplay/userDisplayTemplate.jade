@@ -4,7 +4,7 @@ script#userDisplayTemplate(type="text/ng-template")
             img(ng-if = "avatarUrl != undefined", src = "{{avatarUrl}}").avatarImage
             i(ng-if = "avatarUrl == undefined", class="material-icons") account_circle
         div(layout, layout-align = "center center")
-            span().userFont
+            span(style = "font-size: {{fontsize}}px").userFont
                 {{user}}
         
         
