@@ -46,7 +46,7 @@ angular.module("BossCollection.home")
                             $scope.guild = guild.guild;
 
                             var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                                + "<item source=\"/images/expansionBanners/legionBanner.png\"></item>";
+                                + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
                                 
                             if($scope.guild && $scope.guild.images){
                                 $scope.guild.images.forEach(function(image) {
