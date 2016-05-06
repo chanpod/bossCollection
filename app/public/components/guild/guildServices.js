@@ -32,6 +32,9 @@ angular.module("BossCollection.guild")
         var guildSettingsResource = $resource(API_BASE + "/guildSettings");
         
         var guildApi = {
+            saveGuildSettings: function (guildSettings) {
+                return guildSettingsResource.save({ guild: guildSettings }).$promise;
+            },
             getGuildSettings: function () {
                 return guildSettingsResource.get().$promise;
             },

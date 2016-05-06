@@ -18,6 +18,17 @@ router.route('/guildSettings')
                 res.status(400).send(util.handleErrors(err));
             })
     })
+    .post(function (req, res) {
+        
+        Guild.saveGuildSettings(req, res)
+            .then((result) => {
+                res.status(200).send(result);
+            })
+            .catch(function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
 
 router.route('/listOfGuilds')
     .get(function (req, res) {

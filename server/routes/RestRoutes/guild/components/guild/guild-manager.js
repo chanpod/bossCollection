@@ -273,6 +273,33 @@ function removeMember(req, res) {
     return defer.promise;
 }
 
+function saveGuildSettings(req, res) {
+
+    var guildSettings = req.body.guild;
+    var promise = new Promise((resolve, reject) => {
+
+        var usersGuild = req.session.user.guild.name;
+
+        GuildModel.findOne({ name: usersGuild })
+            .then(function (guild) {
+
+                _.assign(guild, guildSettings);                
+                guild.save(() => {
+
+                    resolve({ guild: guild })
+                });
+
+
+            }, function (err) {
+
+                reject(err);
+            })
+
+    })
+
+    return promise;
+}
+
 function getGuildSettings(req, res) {
 
     var promise = new Promise((resolve, reject) => {
@@ -280,15 +307,15 @@ function getGuildSettings(req, res) {
         var usersGuild = req.session.user.guild.name;
 
         GuildModel.findOne({ name: usersGuild })
-        .then(function(guild) {
+            .then(function (guild) {
 
-            resolve({guild: guild})
+                resolve({ guild: guild })
 
-        }, function(err) {
+            }, function (err) {
 
-            reject(err);
-        })
-        
+                reject(err);
+            })
+
     })
 
     return promise;
@@ -342,7 +369,8 @@ function updateGuildHomepage(req, res) {
 
 module.exports = {        
     updateGuildHomepage:updateGuildHomepage,
-    buildGuildCookie:buildGuildCookie,
+    buildGuildCookie: buildGuildCookie,
+    saveGuildSettings:saveGuildSettings,
     getGuildHomepage: getGuildHomepage,
     getGuildSettings: getGuildSettings,
     getGuildMembers: getGuildMembers,

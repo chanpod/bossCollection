@@ -19,69 +19,26 @@ angular.module("BossCollection.guild")
 
                 $scope.guildSettings();
             }
-            
+
+            $scope.addNewImage = function () {
+                $scope.guild.images.push("");
+            } 
+
+            $scope.removeImage = function (index) {
+                $scope.guild.images.splice(index, 1);
+            }
+
             $scope.guildSettings = function(){
                 
                 guildServices.getGuildSettings()
                     .then(function (response) {
                         $scope.guild = response.guild
                     })
-            }
+            } 
             
-            $scope.promote = function (user) {
+            $scope.updateGuildSettings = function () {
 
-                if (user.rank == 3) {
-                    siteServices.showMessageModal("Can't promote any further");
-                }
-                else {
-                    user.rank++
-
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                }
-
-
-            }
-
-            $scope.demote = function (user) {
-                if (user.rank == 1) {
-                    siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
-                }
-                else {
-                    user.rank--;
-
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                }
-            }
-            
-            $scope.kick = function(user){
-                
-                var userName = user;
-                var guildName = $scope.user.guild.name;
-                
-                guildServices.kickUser(userName, guildName)
-                    .then(function(reponse) {
-                        
-                        $scope.getMembers();
-                    })
-                    .catch(function(err) {
-                        
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function() {
-
-                    })
+                guildServices.saveGuildSettings($scope.guild);
             }
             
             $scope.init();
