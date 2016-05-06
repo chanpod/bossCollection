@@ -22,7 +22,32 @@ angular.module('BossCollection', [
 .config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  
+        var themeColor = "142B0E";
+        $mdThemingProvider.definePalette('legion', {
+            '50': themeColor,
+            '100': themeColor,
+            '200': themeColor,
+            '300': themeColor,
+            '400': themeColor,
+            '500': themeColor,
+            '600': themeColor,
+            '700': themeColor,
+            '800': themeColor,
+            '900': themeColor,
+            'A100': themeColor,
+            'A200': themeColor,
+            'A400': themeColor,
+            'A700': themeColor,
+            'contrastDefaultColor': 'light',
+        })
 
+        $mdThemingProvider.theme('default')
+            .primaryPalette('legion')
+            .accentPalette('grey', {
+                'default': '900'
+            });
+
+/*
     $mdThemingProvider.theme('default')
     .primaryPalette('deep-orange', {
         'default': 'A700'
@@ -30,7 +55,7 @@ angular.module('BossCollection', [
     .accentPalette('grey', {
         'default': '900'
     });
-
+*/
     $routeProvider.
     
     when('/strategyRoom/:raid', {
