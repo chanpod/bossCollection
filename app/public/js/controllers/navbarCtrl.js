@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.controllers")
-    .controller("navbar", ["$scope", '$location', '$http', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', '$timeout', '$animate',
-        function($scope, $location, $http, userLoginSrvc, $rootScope, $mdSidenav, siteServices, $timeout, $animate){
+    .controller("navbar", ["$scope", '$location', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', 'guildServices',
+        function($scope, $location, userLoginSrvc, $rootScope, $mdSidenav, siteServices, guildServices){
         
         var originatorEv;
         var bossCollectionWowProgressUrl = "http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection/json_rank";
@@ -39,7 +39,7 @@ angular.module("BossCollection.controllers")
 
         $scope.goBack = function () {
             window.history.back();
-        }            
+        }             
 
         $scope.goToBackwards = function(path){
             
@@ -124,6 +124,7 @@ angular.module("BossCollection.controllers")
         }
         
         function getUser(){
+            
             userLoginSrvc.getUser()
                 .then(function (user) {                    
                     if (user) {
@@ -131,11 +132,20 @@ angular.module("BossCollection.controllers")
                         $scope.user = user;
                         $scope.loggedIn = true;
                         
+                        return guildServices.getGuildSettings();
+                            
+                        
                     }
                 },
                 function(err){
                     $scope.user = {};
                     $scope.loggedIn = false;
+                })
+                .then(function(guildSettings){
+                    
+                    if(guildSettings.guild){
+                        $scope.user.guild = guildSettings.guild;
+                    }
                 })
         }
         

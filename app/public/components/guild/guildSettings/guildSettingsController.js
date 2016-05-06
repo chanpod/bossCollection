@@ -7,8 +7,8 @@
  */
 angular.module("BossCollection.guild")
     .controller("guildSettingsController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+        "$scope", '$rootScope', '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $rootScope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
             
             //user comes from parent controller navbar
             
@@ -38,7 +38,11 @@ angular.module("BossCollection.guild")
             
             $scope.updateGuildSettings = function () {
 
-                guildServices.saveGuildSettings($scope.guild);
+                guildServices.saveGuildSettings($scope.guild)
+                    .then(function(result){
+                        
+                        $rootScope.$broadcast('loggedin');
+                    })
             }
             
             $scope.init();

@@ -35,13 +35,13 @@ md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-
         md-list.md-primary(ng-if = "user.rank > 1 && user.guild.logsLink != undefined")
             md-divider                 
             md-menu-item()
-                md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")
+                md-button(ng-click = "goToExternal(user.guild.logsLink)")
                     md-icon(md-font-library="material-icons") equalizer
                     | Logs
-        md-list.md-primary(ng-if = "user.rank > 1 && user.guild.progressionLink != undefined")
+        md-list.md-primary(ng-if = "user.rank > 1 && user.guild.progressionlink != undefined")
             md-divider            
             md-menu-item()
-                md-button(ng-click = "goToExternal('http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection')")
+                md-button(ng-click = "goToExternal(user.guild.progressionlink)")
                     md-icon(md-font-library="material-icons") trending_up
                     | Progression
         md-list.md-primary(ng-if = "!loggedIn")

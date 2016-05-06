@@ -20,8 +20,9 @@ block body
                     div(flex)
                         md-menu(flex, layout-align = "end center", layout)
                             div(layout, ng-click = "openMenu($mdOpenMenu, $event)", md-ink-ripple="#FF0000").mousePointer                           
-                                    user-display(user = "user.name", fontsize = "12", hideicon = "true")                                
-                                    i(class="material-icons", style = "padding-top:25px") keyboard_arrow_down
+                                    user-display(user = "user.name", fontsize = "12", hideicon = "true")         
+                                    div(flex, layout, layout-align = "center center")                       
+                                        i(class="material-icons") keyboard_arrow_down
                             md-menu-content(width = "4")                                
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "goTo('/auth/updateAccount')")
