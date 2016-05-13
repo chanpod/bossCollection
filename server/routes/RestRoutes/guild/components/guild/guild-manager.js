@@ -304,17 +304,23 @@ function getGuildSettings(req, res) {
 
     var promise = new Promise((resolve, reject) => {
 
-        var usersGuild = req.session.user.guild.name;
+        if (req.session.user.guild) {
+            var usersGuild = req.session.user.guild.name;
+            
+            GuildModel.findOne({ name: usersGuild })
+                .then(function (guild) {
 
-        GuildModel.findOne({ name: usersGuild })
-            .then(function (guild) {
+                    resolve({ guild: guild })
 
-                resolve({ guild: guild })
+                }, function (err) {
 
-            }, function (err) {
+                    reject(err);
+                })
+        }
+        else {
+            reject("No guild");
+        }
 
-                reject(err);
-            })
 
     })
 

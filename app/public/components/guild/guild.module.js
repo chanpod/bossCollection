@@ -15,16 +15,16 @@ angular.module("BossCollection.guild", ['ngRoute'])
             .when('/createGuild', {
                 templateUrl: 'createGuild',
                 controller: 'createGuildController'
-            })
+            }) 
             .when('/joinGuild', {
                 templateUrl: 'joinGuild',
-                controller: 'joinGuildController'
-            })
-            .when('/manageMembers', {
-                templateUrl: 'manageMembers',
+                controller: 'joinGuildController' 
+            }) 
+            .when('/manageMembers', {  
+                templateUrl: 'manageMembers', 
                 controller: 'manageMembersController'
             })
-            .when('/manageGuild', {
+            .when('/manageGuild', { 
                 templateUrl: 'guildSettings',
                 controller: 'guildSettingsController'
             })

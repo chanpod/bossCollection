@@ -5,11 +5,11 @@
 
  */
 angular.module("BossCollection.guild")
-    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices',
-        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices){
+    .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices', '$mdDialog',
+        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog){
             
             siteServices.updateTitle('Applications');
-            
+             
             
             $scope.application = {};            
             
@@ -90,21 +90,27 @@ angular.module("BossCollection.guild")
 
                     guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                         .then(function (character) {
-
                             
                             $scope.validCharacterName = true;
                             $scope.icon = "check_circle";
                             $scope.application.character = character;
+
+                            return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name); 
+
+                        },
+                        function (err) {
+                            $scope.icon = "error";
+                            siteServices.showMessageToast(err);
+                            $scope.validCharacterName = false;
+                        })
+                        .then(function (result) {
+                            
+                            $scope.application.itemLevel = result;
                             
                             if(callback){
                                 callback();
                             }
-                        },
-                            function (err) {
-                                $scope.icon = "error";
-                                siteServices.showMessageToast(err);
-                                $scope.validCharacterName = false;
-                            })
+                        })
                         .finally(function () {
                             $scope.searchingForUser = false;
                         })
@@ -130,20 +136,17 @@ angular.module("BossCollection.guild")
                         else if($scope.guildSelected != undefined) {
                             
                             $scope.application.guildName = $scope.guildSelected.name;
+                            
+                            $scope.isLoading = true;
+                            
                             guildServices.submitApplication($scope.application)
                                 .then(function (result) {
-                                    
-                                    if($scope.user.guild != undefined){
-                                        $location.path('/reviewApplications');    
-                                    }
-                                    else{
-                                        siteServices.showMessageModal("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion.");
-                                        $location.path('/');
-                                    }
+                                   
+                                    $scope.showConfirm();
                                     
                                 },
                                     function (err) {
-
+                                        $scope.isLoading = false;
                                         siteServices.showMessageToast(err);
                                     })
                         }
@@ -152,7 +155,34 @@ angular.module("BossCollection.guild")
                         }
                     })
             }
-            
+
+
+            $scope.showConfirm = function () {
+                // Appending dialog to document.body to cover sidenav in docs app
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(false)
+                        .title("Application Successful!")
+                        .textContent("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion. You will also receive an email with the registered email account with whether or not your application was accepted or rejected.")
+                        .ariaLabel('message popup')
+                        .ok('Got it!')
+                        .openFrom({
+                            left: -50,
+                            width: 30,
+                            height: 80
+                        })
+                        .closeTo({
+                            right: 1500
+                        })
+                ).then(function () {
+                    
+                    $scope.isLoading = false;
+                    $location.path('/');
+
+                }, function () {
+                    $scope.status = 'You decided to keep your debt.';
+                });
+            };            
             
             
             $scope.init();

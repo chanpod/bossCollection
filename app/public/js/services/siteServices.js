@@ -79,7 +79,7 @@ angular.module("BossCollection.services")
         function showMessageModal(message, title){
             $mdDialog.show(
                     $mdDialog.alert()
-                        .clickOutsideToClose(true)
+                        .clickOutsideToClose(false)
                         .title(title)
                         .textContent(message)
                         .ariaLabel('message popup')

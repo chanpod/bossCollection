@@ -210,6 +210,24 @@ angular.module("BossCollection.guild")
 
                 return defer.promise;
             },
+            getItemLevel: function (characterName, realm) {
+                
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+
+                var getCharacter = $resource(getCharacterUrl);
+
+                getCharacter.get().$promise.then(function (data) {
+
+                    defer.resolve(data.items.averageItemLevelEquipped);
+                },
+                    function (err) {
+ 
+                        defer.reject("Character not found");
+                    });
+
+                return defer.promise;
+            },
             validateCharacterName: function (characterName, realm) {
 
                 var defer = $q.defer();
@@ -259,7 +277,7 @@ angular.module("BossCollection.guild")
 
                 var getCharacter = $resource(getCharacterUrl);
 
-                siteServices.startLoading();
+                
 
                 getCharacter.get().$promise
                     .then(function (characterWithSpec) {
