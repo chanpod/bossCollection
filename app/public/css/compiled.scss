@@ -327,6 +327,12 @@ html, body {
 .loadingModal{
     background-color: rgba(255, 255, 255, 0);
 }
+.editAbsenceModal{
+    min-width:50%;
+    min-height:50%;
+}
+
+
 .read{
     border-left:15px solid gray;
 }
@@ -345,12 +351,6 @@ html, body {
     overflow: hidden;
     white-space: nowrap;
 }
-.editAbsenceModal{
-    min-width:50%;
-    min-height:50%;
-}
-
-
 .avatarImage{
     width: 50px;
     height: 50px;

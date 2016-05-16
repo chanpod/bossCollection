@@ -6,32 +6,32 @@
  */
 angular.module("BossCollection.guild")
     .controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices', '$mdDialog',
-        function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog){
-            
+        function ($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog) {
+
             siteServices.updateTitle('Applications');
-             
-            
-            $scope.application = {};            
-            
-            
+
+
+            $scope.application = {};
+
+
             $scope.validCharacterName = false;
             $scope.charRequirementsIncomplete = false;
             $scope.charRealmError = false;
             $scope.searchingForUser = false;
             $scope.icon = "error";
-            
-                
-            $scope.init = function(){
-                
+
+
+            $scope.init = function () {
+
                 realmServices.getRealms()
                     .then(function (realms) {
 
                         $scope.realms = realms;
                     })
-                    .then(function(){
+                    .then(function () {
                         return $scope.getGuilds()
                     })
-                    .then(function(){
+                    .then(function () {
                         return $scope.loggedIn()
                     })
                     .catch(function (err) {
@@ -39,14 +39,14 @@ angular.module("BossCollection.guild")
                         console.log(err);
                     })
                     .finally(function () {
-                        $timeout(function(){
-                            siteServices.hideLoadingModal();    
+                        $timeout(function () {
+                            siteServices.hideLoadingModal();
                         }, 500)
-                        
-                    })  
-                    
+
+                    })
+
             }
-            
+
             $scope.getGuilds = function () {
 
                 return guildServices.getListOfGuilds()
@@ -55,32 +55,32 @@ angular.module("BossCollection.guild")
                         $scope.listOfGuilds = guilds;
                     })
             }
-            
-            $scope.filterGuildsSearch = function(filterSearch){
+
+            $scope.filterGuildsSearch = function (filterSearch) {
                 return $filter('filter')($scope.listOfGuilds, filterSearch);
             }
-            
-            $scope.filterSearch = function(filterSearch){
-                
+
+            $scope.filterSearch = function (filterSearch) {
+
                 return $filter('filter')($scope.realms, filterSearch);
             }
-            
+
             $scope.loggedIn = function () {
-                
+
                 userLoginSrvc.getUser().then(function (user) {
-                    
+
                     //Success, let them fill out the form.
                 })
-                .catch(function(err){
-                    
-                    siteServices.showMessageModal("Please log in before attempting to apply.")
-                    $location.path('/')   
-                })
-                .finally(function(){
-                    
-                })
+                    .catch(function (err) {
+
+                        siteServices.showMessageModal("Please log in before attempting to apply.")
+                        $location.path('/')
+                    })
+                    .finally(function () {
+
+                    })
             }
-            
+
 
             $scope.validateCharactername = function (callback) {
 
@@ -90,12 +90,12 @@ angular.module("BossCollection.guild")
 
                     guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name)
                         .then(function (character) {
-                            
+
                             $scope.validCharacterName = true;
                             $scope.icon = "check_circle";
                             $scope.application.character = character;
 
-                            return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name); 
+                            return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
 
                         },
                         function (err) {
@@ -104,10 +104,18 @@ angular.module("BossCollection.guild")
                             $scope.validCharacterName = false;
                         })
                         .then(function (result) {
-                            
+
                             $scope.application.itemLevel = result;
-                            
-                            if(callback){
+
+                            return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
+
+
+                        })
+                        .then(function (result) {
+
+                            $scope.parseProgression(result);
+
+                            if (callback) {
                                 callback();
                             }
                         })
@@ -116,44 +124,69 @@ angular.module("BossCollection.guild")
                         })
 
                 }
-                else{
+                else {
                     $scope.validCharacterName = false;
                     if (callback) {
                         callback();
                     }
                 }
             }
-            
-            
-            $scope.submitApplication = function(){
-                
-                $scope.validateCharactername(function () {
-                        
-                        if ($scope.validCharacterName == false) {
 
-                            siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                        }
-                        else if($scope.guildSelected != undefined) {
-                            
-                            $scope.application.guildName = $scope.guildSelected.name;
-                            
-                            $scope.isLoading = true;
-                            
-                            guildServices.submitApplication($scope.application)
-                                .then(function (result) {
-                                   
-                                    $scope.showConfirm();
-                                    
-                                },
-                                    function (err) {
-                                        $scope.isLoading = false;
-                                        siteServices.showMessageToast(err);
-                                    })
-                        }
-                        else{
-                            siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
-                        }
-                    })
+            $scope.parseProgression = function (result) {
+
+                $scope.raids = result.raids;
+
+                $scope.hfc = _.find($scope.raids, function (raid) {
+
+                    return raid.name == "Hellfire Citadel";
+                })
+
+                $scope.brf = _.find($scope.raids, function (raid) {
+
+                    return raid.name == "Blackrock Foundry";
+                })
+
+                $scope.hm = _.find($scope.raids, function (raid) {
+
+                    return raid.name == "Highmaul";
+                })
+
+                $scope.application.progression = {};
+                
+                $scope.application.progression.hfc = $scope.hfc;
+                $scope.application.progression.brf = $scope.brf;
+                $scope.application.progression.hm = $scope.hm;
+            }
+            
+            $scope.submitApplication = function () {
+
+                $scope.validateCharactername(function () {
+
+                    if ($scope.validCharacterName == false) {
+
+                        siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                    }
+                    else if ($scope.guildSelected != undefined) {
+
+                        $scope.application.guildName = $scope.guildSelected.name;
+
+                        $scope.isLoading = true;
+
+                        guildServices.submitApplication($scope.application)
+                            .then(function (result) {
+
+                                $scope.showConfirm();
+
+                            },
+                            function (err) {
+                                $scope.isLoading = false;
+                                siteServices.showMessageToast(err);
+                            })
+                    }
+                    else {
+                        siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
+                    }
+                })
             }
 
 
@@ -175,17 +208,17 @@ angular.module("BossCollection.guild")
                             right: 1500
                         })
                 ).then(function () {
-                    
+
                     $scope.isLoading = false;
                     $location.path('/');
 
                 }, function () {
                     $scope.status = 'You decided to keep your debt.';
                 });
-            };            
-            
-            
+            };
+
+
             $scope.init();
-  
-            
-    }])
+
+
+        }])

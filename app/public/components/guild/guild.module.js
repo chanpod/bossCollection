@@ -7,7 +7,7 @@ angular.module("BossCollection.guild", ['ngRoute'])
             .when('/auth/application', {
                 templateUrl: 'application',
                 controller: 'applicationController'
-            })
+            }) 
             .when('/reviewApplications', {
                 templateUrl: 'reviewApplications',
                 controller: 'applicationsReviewController'
@@ -17,15 +17,15 @@ angular.module("BossCollection.guild", ['ngRoute'])
                 controller: 'createGuildController'
             }) 
             .when('/joinGuild', {
-                templateUrl: 'joinGuild',
+                templateUrl: 'joinGuild', 
                 controller: 'joinGuildController' 
             }) 
             .when('/manageMembers', {  
-                templateUrl: 'manageMembers', 
+                templateUrl: 'manageMembers',  
                 controller: 'manageMembersController'
-            })
+            }) 
             .when('/manageGuild', { 
-                templateUrl: 'guildSettings',
+                templateUrl: 'guildSettings', 
                 controller: 'guildSettingsController'
             })
     }]);

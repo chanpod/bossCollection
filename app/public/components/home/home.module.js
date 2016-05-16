@@ -11,6 +11,6 @@ angular.module("BossCollection.home", ['ngRoute'])
         .when('/guild/:guildName', {
             templateUrl: 'guildVisitHome',
             controller: 'guildVisitController'
-        })
+        })   
         
-    }]); 
+    }]);       

@@ -58,13 +58,16 @@ gulp.task('concatVendor', function(){
         './node_modules/angular-route/angular-route.min.js',
         './node_modules/angular-animate/angular-animate.min.js',
         './node_modules/angular-messages/angular-messages.min.js',
-        './node_modules/angular-aria/angular-aria.min.js',        
+        './node_modules/angular-aria/angular-aria.min.js',         
         './node_modules/showdown/dist/showdown.min.js',
         './node_modules/angular-material/angular-material.min.js',
         './node_modules/moment/min/moment.min.js',        
         './node_modules/highcharts/highcharts.js',
+        './node_modules/highcharts/highcharts-more.js',
         './node_modules/highcharts/modules/data.js',
-        './node_modules/highcharts/modules/drilldown.js',        
+        './node_modules/highcharts/modules/drilldown.js',
+        './node_modules/highcharts/modules/exporting.js',
+        './node_modules/highcharts/modules/solid-gauge.js'
         
     ])
             .pipe(concat('vendor.min.js'))

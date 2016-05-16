@@ -6,7 +6,9 @@ md-card-header
             {{application.character.class}} - {{application.itemLevel}}
         
 md-card-content(layout = "column")
-    img(src="images/classBackdrops/{{application.character.class}}.jpg", style = "width:100%;height:100%").md-media-xl.card-media.applicationReviewImageAdjust
+    
+    //-div(flex, id="{{application.character.name}}", style="", ng-init = "buildCharts(application.character.name)")
+    
     div(layout, layout-align = "space-around center")
         div(flex)
             div(layout = "column")
@@ -28,7 +30,78 @@ md-card-content(layout = "column")
                 h3
                     | Battle Tag
                 span {{application.battleTag}}
-        
+    br
+    div(layout, layout-align = "space-around center")
+        h2
+            | Progression      
+    div(layout, layout-align = "space-around center")
+        md-toolbar()
+            div().md-toolbar-tools
+                h2
+                    span        
+                        | HFC
+    div(layout, layout-align = "space-around center")        
+        div(flex)
+            div(layout = "column")
+                h3
+                    | Normal
+                span {{getNormalProgression(application.progression.hfc)}}
+        div(flex)
+            div(layout = "column")
+                h3
+                    | Heroic
+                span {{getHeroicProgression(application.progression.hfc)}}
+        div(flex)
+            div(layout="column")
+                h3
+                    | Mythic
+                span {{getMythicProgression(application.progression.hfc)}}
+    br
+    div(layout, layout-align = "space-around center")
+        md-toolbar()
+            div().md-toolbar-tools
+                h2
+                    span        
+                        | BRF
+    div(layout, layout-align = "space-around center")        
+        div(flex)
+            div(layout = "column")
+                h3
+                    | Normal
+                span {{getNormalProgression(application.progression.brf)}}
+        div(flex)
+            div(layout = "column")
+                h3
+                    | Heroic
+                span {{getHeroicProgression(application.progression.brf)}}
+        div(flex)
+            div(layout="column")
+                h3
+                    | Mythic
+                span {{getMythicProgression(application.progression.brf)}}
+    br
+    div(layout, layout-align = "space-around center")
+        md-toolbar()
+            div().md-toolbar-tools
+                h2
+                    span        
+                        | HM
+    div(layout, layout-align = "space-around center")        
+        div(flex)
+            div(layout = "column")
+                h3
+                    | Normal
+                span {{getNormalProgression(application.progression.hm)}}
+        div(flex)
+            div(layout = "column")
+                h3
+                    | Heroic
+                span {{getHeroicProgression(application.progression.hm)}}
+        div(flex)
+            div(layout="column")
+                h3
+                    | Mythic
+                span {{getMythicProgression(application.progression.hm)}}
             
     md-card-actions(layout = "row", layout-align = "end end")
         md-button(ng-click = "openComments(application.comments)").md-icon-button

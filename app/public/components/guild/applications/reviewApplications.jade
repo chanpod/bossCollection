@@ -1,13 +1,16 @@
 script#reviewApplications(type="text/ng-template")
-    md-content()
+    md-content()        
+        
         section(layout-xs="column", layout="row")
             div(flex-xs, flex-gt-xs="60")
+                
                 md-tabs(md-dynamic-height md-border-bottom)
                     md-tab(label = "New Applications")
                         md-content()
                             div(ng-show = "numOfNewApplicants == 0")
                                 h3 No New Applications
-                            md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")                            
+                            md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")    
+                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-image                    
                                 include applicationsList
                     md-tab(label = "Approved")
                         md-content()

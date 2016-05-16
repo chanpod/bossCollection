@@ -210,6 +210,24 @@ angular.module("BossCollection.guild")
 
                 return defer.promise;
             },
+            getProgression: function (characterName, realm) {
+                
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=progression&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+
+                var getCharacter = $resource(getCharacterUrl);
+
+                getCharacter.get().$promise.then(function (data) {
+
+                    defer.resolve(data.progression);
+                },
+                    function (err) {
+ 
+                        defer.reject("Character not found");
+                    });
+
+                return defer.promise;
+            },
             getItemLevel: function (characterName, realm) {
                 
                 var defer = $q.defer();
