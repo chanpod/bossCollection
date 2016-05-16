@@ -13,15 +13,17 @@ script#reviewApplications(type="text/ng-template")
                             div(ng-show = "numOfNewApplicants == 0")
                                 h3 No New Applications
                             md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")    
-                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-image                    
+                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments                    
                                 include applicationsList
                     md-tab(label = "Approved")
                         md-content()
                             md-card(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'")
+                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
                                 include applicationsList
                     md-tab(label = "Denied")
                         md-content()
                             md-card(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'")
+                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
                                 include applicationsList
                         
                     
