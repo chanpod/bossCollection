@@ -69,7 +69,7 @@ angular.module("BossCollection.home")
   
             $scope.editTab = function () {
                 $scope.editing = true;
-            }
+            }  
    
             $scope.saveTab = function () {
 

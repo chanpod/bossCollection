@@ -42,7 +42,7 @@ router.route('/createComment')
 router.route('/getComments')
     .post(function (req, res) {
         
-        MessageManager.getComments(req.body.threadId)
+        MessageManager.getComments(req.body.threadId, req.body.messageCount)
             .then(function(response){
                 
                 res.status(200).send(response)

@@ -10,7 +10,7 @@ angular.module("BossCollection.forums")
             self.orderByString = 'Newest';
             self.loading = false;
             
-            
+            $scope.messageCount = 25;
             $scope.comment = "";
             $scope.commentToDelete;
             
@@ -54,7 +54,7 @@ angular.module("BossCollection.forums")
                 
                 self.loading = true
                 
-                return forumService.getComments(self.threadID)
+                return forumService.getComments(self.threadID, $scope.messageCount)
                     .then(function(comments){
 
                         self.thread.comments = comments.comments;
@@ -89,13 +89,19 @@ angular.module("BossCollection.forums")
                 }
                 
             }
-            
+
+            $scope.loadMoreComments = function () {
+                $scope.messageCount += 25;
+
+                self.getComments();
+            }            
+
             $scope.cancelComment = function () {
                 $scope.replying = false;
             }
 
             $scope.cancelCommentEdit = function (comment) {
-                comment.editing = false;
+                comment.editing = false; 
             }
 
             $scope.saveCommentEdit = function (comment) {
@@ -129,7 +135,7 @@ angular.module("BossCollection.forums")
                     })
                     .then(function(response){
 
-                        $scope.refresh();
+                        self.getComments();
                     })
             
             }

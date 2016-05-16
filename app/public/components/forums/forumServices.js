@@ -460,11 +460,11 @@ angular.module("BossCollection.forums")
                 return defer.promise;
             }
 
-            function getComments(threadId){
+            function getComments(threadId, messageCount){
                 
                 var defer = $q.defer();
                 
-                var bodyData = {threadId: threadId};
+                var bodyData = {threadId: threadId, messageCount: messageCount};
                 
                 getCommentsResource.save(bodyData).$promise
                     .then(function(comments){

@@ -13,4 +13,4 @@ angular.module("BossCollection.home", ['ngRoute'])
             controller: 'guildVisitController'
         })   
         
-    }]);       
+    }]);        
