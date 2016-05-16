@@ -204,7 +204,7 @@ angular.module("BossCollection.guild")
 
                             defer.reject(err);
                         })
-                    .finally(function () {
+                    .finally(function () { 
                         siteServices.loadingFinished();
                     })
 
