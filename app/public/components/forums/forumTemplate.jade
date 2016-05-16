@@ -21,7 +21,7 @@ script#forum(type="text/ng-template")
                         br
                         md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
                             md-tooltip() See post you've created
-                    
+            ad()
             div(ng-repeat = "category in forums.categories")            
                 md-toolbar().md-scroll-shrink
                     div().md-toolbar-tools

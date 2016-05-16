@@ -13,6 +13,7 @@ script#thread(type="text/ng-template")
                         md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
                         md-tooltip() Refresh Forum data
         md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+        
         div(layout-align = "center center")
                 md-card
                     md-card-header                        
@@ -31,6 +32,7 @@ script#thread(type="text/ng-template")
                         br
                         md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
                             md-tooltip() See post you've created
+        ad()
         div(layout-align = "center center")
             div(layout, layout-align = "center center")
                 h1() {{forum.name}}
