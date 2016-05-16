@@ -12,5 +12,5 @@ angular.module("BossCollection.home", ['ngRoute'])
             templateUrl: 'guildVisitHome',
             controller: 'guildVisitController'
         })   
-        
+         
     }]);        
