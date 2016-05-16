@@ -17,7 +17,7 @@ angular.module("BossCollection.guild")
             $scope.loading = true;
             $scope.numOfNewApplicants = 0;
             $scope.startDate = moment();
-            $scope.startDate = moment($scope.startDate.month() - 2);
+            $scope.startDate.month($scope.startDate.month() - 2);
             $scope.filterStatus = function (status) {
 
                 return function (application) {
