@@ -16,7 +16,7 @@ angular.module("BossCollection.guild")
         
         
         var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
-        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications');
+        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
         var approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
         var rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
         
@@ -189,13 +189,13 @@ angular.module("BossCollection.guild")
 
                 return defer.promise;
             },
-            getApplications: function () {
+            getApplications: function (startDate) {
 
                 var defer = $q.defer();
 
                 siteServices.startLoading();
 
-                getApplicationsUrl.get().$promise
+                getApplicationsUrl.get({startDate:startDate}).$promise
                     .then(function (applications) {
 
                         defer.resolve(applications);

@@ -101,8 +101,6 @@ angular.module('BossCollection', [
     return socketFactory();
 }]). 
 */ 
-'use strict';
-angular.module('BossCollection.accounts', ['BossCollection.services'])
 'user strict'
 
 angular.module("BossCollection.attendance", ['ngRoute'])
@@ -198,291 +196,7 @@ angular.module("BossCollection.home", ['ngRoute'])
         
     }]);       
 'use strict';
-/* Directives */
-
-angular.module('BossCollection.accounts').
-  directive('logIn', [function () {
-        return {
-            restrict: 'E',
-            templateUrl: 'login',
-            controller: 'loginController',
- 
-            link: function(scope, elm, attrs) {
-            }
-        }  
-  }]); 
- 
-'use strict';
-
-angular.module("BossCollection.accounts")
-    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', 
-        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
-            var ACCOUNT_API_URL_BASE = "/api/account"
-            var registration = $resource('/api/account/signup', {},
-                {
-
-                })
-
-            var login = $resource(ACCOUNT_API_URL_BASE + '/login')
-            var logout = $resource(ACCOUNT_API_URL_BASE +  '/logout');
-            var loggedIn = $resource(ACCOUNT_API_URL_BASE + '/loggedin');
-            var updateAccount = $resource(ACCOUNT_API_URL_BASE + '/updateAccount');
-            var getUser = $resource(ACCOUNT_API_URL_BASE + '/currentUser');
-            var getUserAvatar = $resource(ACCOUNT_API_URL_BASE + '/user/:userName/avatar');
-            var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
-            var savedUser = null; 
-
-            var accountApi = { 
-                getAvatar: function (userName) {
-                    
-                    var defer = $q.defer();
-                    
-                    getUserAvatar.get({userName: userName}, function(response){
-                        defer.resolve(response.avatarUrl);
-                    })
-                    
-                    return defer.promise;
-                },
-                lostPassword: function(email){
-                    
-                    var defer = $q.defer();
-                    
-                  lostPassword.save({"email": email}).$promise
-                    .then(function(response){
-                        
-                        defer.resolve(response);
-                    }, function(err){
-                        defer.reject(err.data.message);
-                    })  
-                    
-                    return defer.promise;
-                },
-                updateAccount: function (updatedUser) {
-
-                    var defer = $q.defer(); 
-
-                    siteServices.startLoading();
-
-                    updateAccount.save(updatedUser).$promise
-                        .then(function (response) {
-
-
-                            defer.resolve(response);
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err.data.message);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                updateUser: function () {
-
-                    savedUser = getUserFromCookie();
-
-                    if (savedUser && savedUser.guild) {
-                        saveUsersRank(savedUser);
-                    }
-
-                    $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
-
-                    return savedUser;
-
-                },
-                getUser: function () {
-
-                    var defer = $q.defer();
-
-                    savedUser = getUserFromCookie();
-
-                    if (savedUser) {
-
-                        if (savedUser && savedUser.guild) {
-                            saveUsersRank(savedUser);
-                        }
-
-                        defer.resolve(savedUser);
-                    }
-                    else {
-                        defer.reject("User doesn't exist");
-                    }
-
-
-                    return defer.promise;
-                },
-                ifLoggedIn: function(){
-                    
-                    var defer = $q.defer();
-                    
-                    this.getUser()
-                        .then(function(){
-                            
-                            if (savedUser) {
-                                defer.resolve(true);
-                            }
-                            else {
-                                defer.resolve(false);
-                            }
-                        })
-                        .fail(function(err){
-                            defer.reject(err);
-                        })
-                    
-                    return defer.promise;
-                },
-                refreshUserFromServer: function () {
-
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-
-                    getUser.get().$promise
-                        .then(function (user) {
-
-                            accountApi.updateUser();
-                            defer.resolve();
-                        },
-                            function (err) {
-
-                                console.log(err);
-                                defer.reject(err);
-                            })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                logout: function () {
-
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-                    savedUser = null;
-
-                    logout.save({}).$promise.then(function (result) {
-
-                        if (result.loggedOut == true) {
-
-                            $rootScope.$broadcast("loggedin", { loggedIn: false });
-                        }
-
-
-                        $location.path("/");
-
-                    }, function (err) {
-
-                        $rootScope.$broadcast("loggedin", { loggedIn: false });
-                        $location.path("/");
-                    })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-
-
-                    return defer.promise;
-                },
-                registerNewUser: function (newUser) {
-
-                    var defer = $q.defer();
-
-                    console.log("Register new user");
-                    //socket.emit("getBossInfo", boss); 
-                
-                    siteServices.startLoading();
-
-                    registration.save(newUser).$promise
-                        .then(function (result) {
-
-                            savedUser = getUserFromCookie();
-                            saveUsersRank(savedUser);
-                            
-                            accountApi.updateUser();
-                            
-                            $location.path("/");
-                        }, function (err) {
-                            console.log(err.data);
-
-
-                            defer.reject(err.data);
-                        })
-                        .finally(function () {
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                },
-                login: function (user) {
-                    var defer = $q.defer();
-
-                    siteServices.startLoading();
-
-                    login.save(user).$promise
-                        .then(function (loggedInUser) {
-
-                            savedUser = loggedInUser;
-                            saveUsersRank(loggedInUser);
-
-                            $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
-                            siteServices.hideLoadingBottomSheet();
-                        },
-                            function (err) {
-
-
-                                defer.reject(err.data);
-                            })
-                        .finally(function () {
-
-
-                            siteServices.loadingFinished();
-                        })
-
-                    return defer.promise;
-                }
-            };
-            
-            
-            function getUserFromCookie() {
-
-                var userCookie = $cookies.get("user");
-                var user = undefined;
-                
-                if (userCookie) {
-                    var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
-                    user = JSON.parse(jsonString);
-                }
-
-                return user;
-            }
-
-            function saveUsersRank(user) {
-                var memberListing;
-                if (savedUser && savedUser.guild) {
-                    memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
-                    savedUser.rank = memberListing.rank
-                    return memberListing.rank;
-                }
-                else {
-                    if (user && user.guild) {
-                        memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
-                        return memberListing.rank;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-            }
-
-            accountApi.refreshUserFromServer();
-
-            return accountApi;
-        }])
+angular.module('BossCollection.accounts', ['BossCollection.services'])
 angular.module("BossCollection.attendance")
     .controller('absenceModalController', [
         '$scope', 'absenceService', '$mdDialog', 'data',
@@ -1729,7 +1443,7 @@ angular.module("BossCollection.guild")
         
         
         var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
-        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications');
+        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
         var approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
         var rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
         
@@ -1902,13 +1616,13 @@ angular.module("BossCollection.guild")
 
                 return defer.promise;
             },
-            getApplications: function () {
+            getApplications: function (startDate) {
 
                 var defer = $q.defer();
 
                 siteServices.startLoading();
 
-                getApplicationsUrl.get().$promise
+                getApplicationsUrl.get({startDate:startDate}).$promise
                     .then(function (applications) {
 
                         defer.resolve(applications);
@@ -2202,7 +1916,7 @@ angular.module("BossCollection.home")
             $scope.editTab = function () {
                 $scope.editing = true;
             }
-  
+   
             $scope.saveTab = function () {
 
                 guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name)
@@ -2255,440 +1969,291 @@ angular.module("BossCollection.home")
         }])
 
 'use strict';
-/**
- *
- */
-angular.module("BossCollection.accounts")
-    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
-        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
-
-            siteServices.updateTitle('Account');
-
-            $scope.leaveGuild = function () {
-
-                var guildName = $scope.user.guild.name;
-
-                siteServices.confirmDelete()
-                    .then(function (result) {
-                        guildServices.leaveGuild(guildName)
-                            .then(function (user) {
-
-                                $scope.user = userLoginSrvc.updateUser();
-                            })
-                    })
-            }
-            
-            $scope.registerPush = function(){
-                
-                //pushNotificationsService.subscribe();
-            }
-            
-            $scope.unregisterPush = function(){
-                
-                //pushNotificationsService.unsubscribe(); 
-            }
-                    
-            $scope.sendPush = function(){
-                
-                //pushNotificationsService.sendPush();
-            }
-            $scope.updateAccount = function () {
-
-                
-                userLoginSrvc.updateAccount($scope.user).then(function (response) {
-
-                    $scope.user = userLoginSrvc.updateUser();
-                    siteServices.showMessageToast("User updated");
-                },
-                    function (err) {
-
-                        siteServices.showMessageModal(err);
-                    })
-            }
-        }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.accounts")
-    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
-        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
-
-        $scope.user = {};
-        $scope.user.name = "";
-        $scope.loading = false;
-        
-        if($location.url() == "/auth/login"){
-            siteServices.updateTitle('Login');    
-        }
-        
-        
-        
-        $scope.init = function () {
-        }
-        
-        $scope.resetPassword = function(){
-            
-            $scope.loading = true;
-             
-            userLoginSrvc.lostPassword($scope.user.email)
-                .then(function(response){
-                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
-                })
-                .catch(function(err){
-                    siteServices.showMessageModal(err);
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-        
-        $scope.alreadyLoggedIn = function(){
-             
-            if(userLoginSrvc.loggedIn() == true){
-                $location.path('/');
-            }
-        }
-        
-        $scope.openPasswordResetWindow = function($event){
-            $mdBottomSheet.show({
-                    templateUrl: 'resetPassword',
-                    controller: 'loginController',
-                    targetEvent: $event,
-                    escapeToClose: false
-                })
-        }
-        
-        $scope.cancelPasswordReset = function(){ 
-            
-            $mdBottomSheet.hide();
-            $timeout(function(){
-                
-                siteServices.showLoadingBottomSheet();    
-            }, 500);
-            
-        }
-        
-        $scope.login = function(){
-             
-            
-            userLoginSrvc.login($scope.user).then(function(response){
-                
-                //navigate to some page
-                
-                userLoginSrvc.getUser()
-                    .then(function () {
-
-                        if ($location.path() == "/auth/application") {
-
-                        }
-                        else {
-                            $location.path("/");
-                        }
-                    })
-                
-            },
-            function(err){
-                
-                siteServices.showMessageModal(err);
-                console.log(err);
-            })
-        }
-        
-        $scope.cancelLogin = function () {
-            
-            siteServices.hideBottomSheet();
-            $location.path("/");
-        }
-    }])
-
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.accounts")
-    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
-        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
-
-            $scope.user = {};
-
-            $scope.passwordsMatch = false;
-
-            
-
-            $scope.register = function () {
-
-                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
-                    //save user to cookie
-                    
-                },
-                    function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
-                        console.log(err);
-                    })
-
-            }
-
-            $scope.openFromLeft = function (errorMessage) {
-                
-                siteServices.showMessageModal(errorMessage);
-            };
-
-        }])
-
-'use strict';
 /* Directives */
 
 angular.module('BossCollection.accounts').
-  directive('userDisplay', [function () {
+  directive('logIn', [function () {
         return {
             restrict: 'E',
-            templateUrl: 'userDisplayTemplate',
-            controller: 'userDisplayController',
-            scope: {
-                user: '=user',
-                fontsize: '=fontsize',
-                hideicon: '=hideIcon'
-            } 
+            templateUrl: 'login',
+            controller: 'loginController',
+ 
+            link: function(scope, elm, attrs) {
+            }
         }  
   }]); 
  
 'use strict';
-/* Directives */
 
-angular.module('BossCollection.accounts').
-    controller('userDisplayController', ['$scope', 'userLoginSrvc', function($scope, userLoginSrvc) {
+angular.module("BossCollection.accounts")
+    .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
+        'siteServices', 
+        function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
+            var ACCOUNT_API_URL_BASE = "/api/account"
+            var registration = $resource('/api/account/signup', {},
+                {
 
-        $scope.$watch('user', function(user) {
-
-            if ($scope.avatarUrl == undefined) {
-                getAvatarUrl();
-            }
-
-        })
-
-        function getAvatarUrl() {
-
-            userLoginSrvc.getAvatar($scope.user)
-                .then(function(avatarUrl) {
-                    $scope.avatarUrl = avatarUrl;
-                    
                 })
-        }
 
-    }]);
+            var login = $resource(ACCOUNT_API_URL_BASE + '/login')
+            var logout = $resource(ACCOUNT_API_URL_BASE +  '/logout');
+            var loggedIn = $resource(ACCOUNT_API_URL_BASE + '/loggedin');
+            var updateAccount = $resource(ACCOUNT_API_URL_BASE + '/updateAccount');
+            var getUser = $resource(ACCOUNT_API_URL_BASE + '/currentUser');
+            var getUserAvatar = $resource(ACCOUNT_API_URL_BASE + '/user/:userName/avatar');
+            var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
+            var savedUser = null; 
 
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
-        
-        var currentDay = moment().day();
-        
-        var self = this;
-        
-        self.showContentBool = false;
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment(); 
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
-        
-        self.selectedUser = {};
-        
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        }
-        
-        $scope.cancel = function(){
-            $mdDialog.cancel();
-        }
-        
-        self.showContent = function(){
-           self.showContentBool = true;
-       }
-        
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        
-        
-             
-                
-        $scope.init = function(){
-            
-            siteServices.updateTitle('Report Absence');
-            
-            if($scope.user == undefined){
-                
-                userLoginSrvc.getUser()
-                    .then(function(user) {
-                        $scope.user = user
-                        
-                        if ($scope.user.rank < 3) {
-                            self.selectedUser = $scope.user;
-                            self.showContent();
-                        }
-                        else {
-                            $scope.getGuildUsers();
-                        }
+            var accountApi = { 
+                getAvatar: function (userName) {
+                    
+                    var defer = $q.defer();
+                    
+                    getUserAvatar.get({userName: userName}, function(response){
+                        defer.resolve(response.avatarUrl);
                     })
+                    
+                    return defer.promise;
+                },
+                lostPassword: function(email){
+                    
+                    var defer = $q.defer();
+                    
+                  lostPassword.save({"email": email}).$promise
+                    .then(function(response){
+                        
+                        defer.resolve(response);
+                    }, function(err){
+                        defer.reject(err.data.message);
+                    })  
+                    
+                    return defer.promise;
+                },
+                updateAccount: function (updatedUser) {
+
+                    var defer = $q.defer(); 
+
+                    siteServices.startLoading();
+
+                    updateAccount.save(updatedUser).$promise
+                        .then(function (response) {
+
+
+                            defer.resolve(response);
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err.data.message);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                updateUser: function () {
+
+                    savedUser = getUserFromCookie();
+
+                    if (savedUser && savedUser.guild) {
+                        saveUsersRank(savedUser);
+                    }
+
+                    $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
+
+                    return savedUser;
+
+                },
+                getUser: function () {
+
+                    var defer = $q.defer();
+
+                    savedUser = getUserFromCookie();
+
+                    if (savedUser) {
+
+                        if (savedUser && savedUser.guild) {
+                            saveUsersRank(savedUser);
+                        }
+
+                        defer.resolve(savedUser);
+                    }
+                    else {
+                        defer.reject("User doesn't exist");
+                    }
+
+
+                    return defer.promise;
+                },
+                ifLoggedIn: function(){
+                    
+                    var defer = $q.defer();
+                    
+                    this.getUser()
+                        .then(function(){
+                            
+                            if (savedUser) {
+                                defer.resolve(true);
+                            }
+                            else {
+                                defer.resolve(false);
+                            }
+                        })
+                        .fail(function(err){
+                            defer.reject(err);
+                        })
+                    
+                    return defer.promise;
+                },
+                refreshUserFromServer: function () {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    getUser.get().$promise
+                        .then(function (user) {
+
+                            accountApi.updateUser();
+                            defer.resolve();
+                        },
+                            function (err) {
+
+                                console.log(err);
+                                defer.reject(err);
+                            })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                logout: function () {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+                    savedUser = null;
+
+                    logout.save({}).$promise.then(function (result) {
+
+                        if (result.loggedOut == true) {
+
+                            $rootScope.$broadcast("loggedin", { loggedIn: false });
+                        }
+
+
+                        $location.path("/");
+
+                    }, function (err) {
+
+                        $rootScope.$broadcast("loggedin", { loggedIn: false });
+                        $location.path("/");
+                    })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+
+
+                    return defer.promise;
+                },
+                registerNewUser: function (newUser) {
+
+                    var defer = $q.defer();
+
+                    console.log("Register new user");
+                    //socket.emit("getBossInfo", boss); 
                 
+                    siteServices.startLoading();
+
+                    registration.save(newUser).$promise
+                        .then(function (result) {
+
+                            savedUser = getUserFromCookie();
+                            saveUsersRank(savedUser);
+                            
+                            accountApi.updateUser();
+                            
+                            $location.path("/");
+                        }, function (err) {
+                            console.log(err.data);
+
+
+                            defer.reject(err.data);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+                login: function (user) {
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    login.save(user).$promise
+                        .then(function (loggedInUser) {
+
+                            savedUser = loggedInUser;
+                            saveUsersRank(loggedInUser);
+
+                            $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
+                            siteServices.hideLoadingBottomSheet();
+                        },
+                            function (err) {
+
+
+                                defer.reject(err.data);
+                            })
+                        .finally(function () {
+
+
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                }
+            };
+            
+            
+            function getUserFromCookie() {
+
+                var userCookie = $cookies.get("user");
+                var user = undefined;
+                
+                if (userCookie) {
+                    var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
+                    user = JSON.parse(jsonString);
+                }
+
+                return user;
             }
-            else{
-                if ($scope.user.rank < 3) {
-                    self.selectedUser = $scope.user;
-                    self.showContent();
+
+            function saveUsersRank(user) {
+                var memberListing;
+                if (savedUser && savedUser.guild) {
+                    memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+                    savedUser.rank = memberListing.rank
+                    return memberListing.rank;
                 }
                 else {
-                    $scope.getGuildUsers();
+                    if (user && user.guild) {
+                        memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+                        return memberListing.rank;
+                    }
+                    else {
+                        return 0;
+                    }
                 }
             }
-                
-        }
-        
-        $scope.getGuildUsers = function(){
-            
-            $scope.loading = true;
-            
-            guildServices.getGuildMembers($scope.user.guild.name)
-                .then(function(users){
-                    
-                    $scope.users = users;
-                    self.showContent();  
-                })
-                .finally(function(){
-                    
-                    $scope.loading = false;
-                })
-        }
-       
-        
-       $scope.updateList = function(){
-           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
-           
-           $scope.getAbsencesByDate();
-       }
-       
-       function calculateNumOfDaysUntil(dayDesired){
-           var numOfDaysInWeek = 7;
-           
-           var nextDate = dayDesired - currentDay;
-           
-           if(nextDate < 0){
-               
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
-           }
-           
-           
-           
-           return nextDate;
-       }
-       
-       $scope.formatDate = function(date){
-           
-           return moment.utc(date).format('dddd, MMM D');
-       }
 
-        $scope.getAbsences = function(){
-            $scope.currentlySelected = "All absences"
-            $scope.loading = true;
-            
-            absenceService.getAbsences().then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-        
-        $scope.getAbsencesByDate = function(){
-            
-            $scope.loading = true;
-            
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
-                
-                $scope.loading = false;
-                $scope.absences = result.absences; 
-            }, 
-            function(err){
-                siteServices.showMessageToast(err) 
-                $scope.loading = false;
-                console.log(err);  
-            })
-        }
-         
-        $scope.filterSearch = function (filterSearch) {
+            accountApi.refreshUserFromServer();
 
-            return $filter('filter')($scope.users, filterSearch);
-        }
-         
-        $scope.submitNewAbsence = function () {
-
-            if ($scope.newAbsence.date == null) {
-
-                siteServices.showMessageModal("Must select a date")
-            }
-            else if($scope.newAbsence.type == null){
-                siteServices.showMessageModal("Must select a type: Late or Absent")
-            }
-            else { 
-                
-                if ($scope.user.rank < 3) {
-                    
-                    self.selectedUser = $scope.user.name;
-                }
-                else{
-                    
-                    $scope.newAbsence.user = self.selectedUser.user;
-                }
-                
-                
-                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
-                
-                    //TODO: Redirect to list of absences.
-                    siteServices.showMessageModal("Success");
-                },
-                    function (err) {
-                        siteServices.showMessageModal(err);
-                        console.log(err);
-                    })
-            }
-
-
-        }
-        
-        
-        function filterOutOldDates(){
-            
-        }
-    
-        $scope.init();
-
-    }])
-
-angular.module('BossCollection.attendance')
-    .directive('absenceReport', [function(){
-        
-        return {
-            restrict: 'E',
-            controller: 'absenceReportController',
-            templateUrl: 'absence'
-        }
-        
-    }])
+            return accountApi;
+        }])
                 
     
 'use strict';
@@ -2899,6 +2464,214 @@ angular.module("BossCollection.attendance")
 
 
 
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendance")
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
+        
+        var currentDay = moment().day();
+        
+        var self = this;
+        
+        self.showContentBool = false;
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment(); 
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        
+        self.selectedUser = {};
+        
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        }
+        
+        $scope.cancel = function(){
+            $mdDialog.cancel();
+        }
+        
+        self.showContent = function(){
+           self.showContentBool = true;
+       }
+        
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        
+        
+             
+                
+        $scope.init = function(){
+            
+            siteServices.updateTitle('Report Absence');
+            
+            if($scope.user == undefined){
+                
+                userLoginSrvc.getUser()
+                    .then(function(user) {
+                        $scope.user = user
+                        
+                        if ($scope.user.rank < 3) {
+                            self.selectedUser = $scope.user;
+                            self.showContent();
+                        }
+                        else {
+                            $scope.getGuildUsers();
+                        }
+                    })
+                
+            }
+            else{
+                if ($scope.user.rank < 3) {
+                    self.selectedUser = $scope.user;
+                    self.showContent();
+                }
+                else {
+                    $scope.getGuildUsers();
+                }
+            }
+                
+        }
+        
+        $scope.getGuildUsers = function(){
+            
+            $scope.loading = true;
+            
+            guildServices.getGuildMembers($scope.user.guild.name)
+                .then(function(users){
+                    
+                    $scope.users = users;
+                    self.showContent();  
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+       
+        
+       $scope.updateList = function(){
+           $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+           
+           $scope.getAbsencesByDate();
+       }
+       
+       function calculateNumOfDaysUntil(dayDesired){
+           var numOfDaysInWeek = 7;
+           
+           var nextDate = dayDesired - currentDay;
+           
+           if(nextDate < 0){
+               
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);    
+           }
+           
+           
+           
+           return nextDate;
+       }
+       
+       $scope.formatDate = function(date){
+           
+           return moment.utc(date).format('dddd, MMM D');
+       }
+
+        $scope.getAbsences = function(){
+            $scope.currentlySelected = "All absences"
+            $scope.loading = true;
+            
+            absenceService.getAbsences().then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+        
+        $scope.getAbsencesByDate = function(){
+            
+            $scope.loading = true;
+            
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result){
+                
+                $scope.loading = false;
+                $scope.absences = result.absences; 
+            }, 
+            function(err){
+                siteServices.showMessageToast(err) 
+                $scope.loading = false;
+                console.log(err);  
+            })
+        }
+         
+        $scope.filterSearch = function (filterSearch) {
+
+            return $filter('filter')($scope.users, filterSearch);
+        }
+         
+        $scope.submitNewAbsence = function () {
+
+            if ($scope.newAbsence.date == null) {
+
+                siteServices.showMessageModal("Must select a date")
+            }
+            else if($scope.newAbsence.type == null){
+                siteServices.showMessageModal("Must select a type: Late or Absent")
+            }
+            else { 
+                
+                if ($scope.user.rank < 3) {
+                    
+                    self.selectedUser = $scope.user.name;
+                }
+                else{
+                    
+                    $scope.newAbsence.user = self.selectedUser.user;
+                }
+                
+                
+                absenceService.submitNewAbsence($scope.newAbsence).then(function (result) {
+                
+                    //TODO: Redirect to list of absences.
+                    siteServices.showMessageModal("Success");
+                },
+                    function (err) {
+                        siteServices.showMessageModal(err);
+                        console.log(err);
+                    })
+            }
+
+
+        }
+        
+        
+        function filterOutOldDates(){
+            
+        }
+    
+        $scope.init();
+
+    }])
+
+angular.module('BossCollection.attendance')
+    .directive('absenceReport', [function(){
+        
+        return {
+            restrict: 'E',
+            controller: 'absenceReportController',
+            templateUrl: 'absence'
+        }
+        
+    }])
 'use strict';
 /**
  *
@@ -3940,44 +3713,6 @@ angular.module("BossCollection.forums")
         }])
 'use strict';
 /**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("createGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
-          
-            
-            siteServices.updateTitle('Create Guild');
-            
-            $scope.guildName = "";
-            $scope.loading = false;
-            
-            $scope.joinGuild = function(){
-                $scope.loading = true;
-                guildServices.createGuild($scope.guildName)
-                    .then(function(){
-                        
-                        var user = userLoginSrvc.updateUser();
-                        
-                        siteServices.showMessageModal("Successfully created " + user.guild.name);
-                        
-                        $location.path('/');           
-                    })
-                    .catch(function(err){
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function(){
-                        $scope.loading = false;
-                    })
-            }
-    }])
-
-'use strict';
-/**
  
  *
 
@@ -4219,6 +3954,8 @@ angular.module("BossCollection.guild")
 
             $scope.loading = true;
             $scope.numOfNewApplicants = 0;
+            $scope.startDate = moment();
+            $scope.startDate = moment($scope.startDate.month() - 2);
             $scope.filterStatus = function (status) {
 
                 return function (application) {
@@ -4284,30 +4021,34 @@ angular.module("BossCollection.guild")
                 $scope.goTo(url);
             }
 
-            guildServices.getApplications()
-                .then(function (applications) {
-                    $scope.loading = false;
-                    $scope.applications = applications.applications; //object to array
+            $scope.getApplications = function () {
 
-                    var newApplicants = _.find($scope.applications, function (applicant) {
-                        return applicant.status == "Applied";
+                guildServices.getApplications($scope.startDate)
+                    .then(function (applications) {
+                        $scope.loading = false;
+                        $scope.applications = applications.applications; //object to array
+
+                        var newApplicants = _.find($scope.applications, function (applicant) {
+                            return applicant.status == "Applied";
+                        })
+
+                        if (newApplicants != undefined) {
+                            $scope.numOfNewApplicants = 1;
+                        }
+
+
+                        convertClasses();
+
+
+                    },
+                    function (err) {
+
+                        $scope.loading = false;
+                        console.log(err);
+                        siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
                     })
+            }
 
-                    if (newApplicants != undefined) {
-                        $scope.numOfNewApplicants = 1;
-                    }
-
-
-                    convertClasses();
-
-
-                },
-                function (err) {
-
-                    $scope.loading = false;
-                    console.log(err);
-                    siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-                })
 
             function convertClasses() {
 
@@ -4379,7 +4120,47 @@ angular.module("BossCollection.guild")
 
             }
 
+            $scope.getApplications()
+
         }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("createGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+        function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc){
+          
+            
+            siteServices.updateTitle('Create Guild');
+            
+            $scope.guildName = "";
+            $scope.loading = false;
+            
+            $scope.joinGuild = function(){
+                $scope.loading = true;
+                guildServices.createGuild($scope.guildName)
+                    .then(function(){
+                        
+                        var user = userLoginSrvc.updateUser();
+                        
+                        siteServices.showMessageModal("Successfully created " + user.guild.name);
+                        
+                        $location.path('/');           
+                    })
+                    .catch(function(err){
+                        siteServices.showMessageModal(err);
+                    })
+                    .finally(function(){
+                        $scope.loading = false;
+                    })
+            }
+    }])
 
 'use strict';
 /**
@@ -4430,80 +4211,6 @@ angular.module("BossCollection.guild")
             
             $scope.init();
             siteServices.updateTitle('Manage Members');
-        }])
-
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild")
-    .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-
-
-            $scope.listOfGuilds = [];
-            $scope.loading = false;
-
-
-            siteServices.updateTitle('Join Guild');
-
-            $scope.init = function () {
-
-
-
-                $scope.getGuilds();
-
-            }
-
-            $scope.filterSearch = function (filterSearch) {
-
-                return $filter('filter')($scope.listOfGuilds, filterSearch);
-            }
-
-            $scope.getGuilds = function () {
-
-                guildServices.getListOfGuilds()
-                    .then(function (guilds) {
-
-                        $scope.listOfGuilds = guilds;
-                    })
-            }
-
-            $scope.joinGuild = function () {
-
-                $scope.loading = true;
-
-                if ($scope.guildName) {
-
-                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
-                        .then(function (guild) {
-
-                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                            
-                            userLoginSrvc.refreshUserFromServer();
-
-                            $location.path('/');
-
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        })
-                }
-                else{
-                    siteServices.showMessageToast("Guild doesn't exist");
-                    $scope.loading = false;
-                }
-            }
-
-            $scope.init();
         }])
 
 'use strict';
@@ -4608,6 +4315,307 @@ angular.module("BossCollection.guild")
             $scope.init();
             siteServices.updateTitle('Manage Members');
         }])
+
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild")
+    .controller("joinGuildController", [
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+
+
+            $scope.listOfGuilds = [];
+            $scope.loading = false;
+
+
+            siteServices.updateTitle('Join Guild');
+
+            $scope.init = function () {
+
+
+
+                $scope.getGuilds();
+
+            }
+
+            $scope.filterSearch = function (filterSearch) {
+
+                return $filter('filter')($scope.listOfGuilds, filterSearch);
+            }
+
+            $scope.getGuilds = function () {
+
+                guildServices.getListOfGuilds()
+                    .then(function (guilds) {
+
+                        $scope.listOfGuilds = guilds;
+                    })
+            }
+
+            $scope.joinGuild = function () {
+
+                $scope.loading = true;
+
+                if ($scope.guildName) {
+
+                    guildServices.joinGuild($scope.guildName.name, $scope.user.name)
+                        .then(function (guild) {
+
+                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
+                            
+                            userLoginSrvc.refreshUserFromServer();
+
+                            $location.path('/');
+
+
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err);
+                        })
+                        .finally(function () {
+                            $scope.loading = false;
+                        })
+                }
+                else{
+                    siteServices.showMessageToast("Guild doesn't exist");
+                    $scope.loading = false;
+                }
+            }
+
+            $scope.init();
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("editAccountController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', 'guildServices',
+        function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
+
+            siteServices.updateTitle('Account');
+
+            $scope.leaveGuild = function () {
+
+                var guildName = $scope.user.guild.name;
+
+                siteServices.confirmDelete()
+                    .then(function (result) {
+                        guildServices.leaveGuild(guildName)
+                            .then(function (user) {
+
+                                $scope.user = userLoginSrvc.updateUser();
+                            })
+                    })
+            }
+            
+            $scope.registerPush = function(){
+                
+                //pushNotificationsService.subscribe();
+            }
+            
+            $scope.unregisterPush = function(){
+                
+                //pushNotificationsService.unsubscribe(); 
+            }
+                    
+            $scope.sendPush = function(){
+                
+                //pushNotificationsService.sendPush();
+            }
+            $scope.updateAccount = function () {
+
+                
+                userLoginSrvc.updateAccount($scope.user).then(function (response) {
+
+                    $scope.user = userLoginSrvc.updateUser();
+                    siteServices.showMessageToast("User updated");
+                },
+                    function (err) {
+
+                        siteServices.showMessageModal(err);
+                    })
+            }
+        }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("loginController", ["$scope", '$location', '$http', 'userLoginSrvc', 'siteServices', '$mdBottomSheet', '$timeout',
+        function($scope, $location, $http, userLoginSrvc, siteServices, $mdBottomSheet, $timeout){
+
+        $scope.user = {};
+        $scope.user.name = "";
+        $scope.loading = false;
+        
+        if($location.url() == "/auth/login"){
+            siteServices.updateTitle('Login');    
+        }
+        
+        
+        
+        $scope.init = function () {
+        }
+        
+        $scope.resetPassword = function(){
+            
+            $scope.loading = true;
+             
+            userLoginSrvc.lostPassword($scope.user.email)
+                .then(function(response){
+                    siteServices.showMessageModal("Email has been sent. Refer to your email for your temporary password.")
+                })
+                .catch(function(err){
+                    siteServices.showMessageModal(err);
+                })
+                .finally(function(){
+                    
+                    $scope.loading = false;
+                })
+        }
+        
+        $scope.alreadyLoggedIn = function(){
+             
+            if(userLoginSrvc.loggedIn() == true){
+                $location.path('/');
+            }
+        }
+        
+        $scope.openPasswordResetWindow = function($event){
+            $mdBottomSheet.show({
+                    templateUrl: 'resetPassword',
+                    controller: 'loginController',
+                    targetEvent: $event,
+                    escapeToClose: false
+                })
+        }
+        
+        $scope.cancelPasswordReset = function(){ 
+            
+            $mdBottomSheet.hide();
+            $timeout(function(){
+                
+                siteServices.showLoadingBottomSheet();    
+            }, 500);
+            
+        }
+        
+        $scope.login = function(){
+             
+            
+            userLoginSrvc.login($scope.user).then(function(response){
+                
+                //navigate to some page
+                
+                userLoginSrvc.getUser()
+                    .then(function () {
+
+                        if ($location.path() == "/auth/application") {
+
+                        }
+                        else {
+                            $location.path("/");
+                        }
+                    })
+                
+            },
+            function(err){
+                
+                siteServices.showMessageModal(err);
+                console.log(err);
+            })
+        }
+        
+        $scope.cancelLogin = function () {
+            
+            siteServices.hideBottomSheet();
+            $location.path("/");
+        }
+    }])
+
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.accounts")
+    .controller("signupController", ["$scope", '$location', '$http', '$timeout', 'userLoginSrvc', 'siteServices',
+        function ($scope, $location, $http, $timeout, userLoginSrvc, siteServices) {
+
+            $scope.user = {};
+
+            $scope.passwordsMatch = false;
+
+            
+
+            $scope.register = function () {
+
+                userLoginSrvc.registerNewUser($scope.user).then(function (result) {
+                    //save user to cookie
+                    
+                },
+                    function (err) {
+                        $scope.passwordsMatch = true;
+                        $scope.openFromLeft(err);
+                        console.log(err);
+                    })
+
+            }
+
+            $scope.openFromLeft = function (errorMessage) {
+                
+                siteServices.showMessageModal(errorMessage);
+            };
+
+        }])
+
+'use strict';
+/* Directives */
+
+angular.module('BossCollection.accounts').
+  directive('userDisplay', [function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'userDisplayTemplate',
+            controller: 'userDisplayController',
+            scope: {
+                user: '=user',
+                fontsize: '=fontsize',
+                hideicon: '=hideIcon'
+            } 
+        }  
+  }]); 
+ 
+'use strict';
+/* Directives */
+
+angular.module('BossCollection.accounts').
+    controller('userDisplayController', ['$scope', 'userLoginSrvc', function($scope, userLoginSrvc) {
+
+        $scope.$watch('user', function(user) {
+
+            if ($scope.avatarUrl == undefined) {
+                getAvatarUrl();
+            }
+
+        })
+
+        function getAvatarUrl() {
+
+            userLoginSrvc.getAvatar($scope.user)
+                .then(function(avatarUrl) {
+                    $scope.avatarUrl = avatarUrl;
+                    
+                })
+        }
+
+    }]);
 
 
 angular.module("BossCollection.guild")

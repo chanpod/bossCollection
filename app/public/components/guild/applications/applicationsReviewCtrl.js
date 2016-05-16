@@ -16,6 +16,8 @@ angular.module("BossCollection.guild")
 
             $scope.loading = true;
             $scope.numOfNewApplicants = 0;
+            $scope.startDate = moment();
+            $scope.startDate = moment($scope.startDate.month() - 2);
             $scope.filterStatus = function (status) {
 
                 return function (application) {
@@ -81,30 +83,34 @@ angular.module("BossCollection.guild")
                 $scope.goTo(url);
             }
 
-            guildServices.getApplications()
-                .then(function (applications) {
-                    $scope.loading = false;
-                    $scope.applications = applications.applications; //object to array
+            $scope.getApplications = function () {
 
-                    var newApplicants = _.find($scope.applications, function (applicant) {
-                        return applicant.status == "Applied";
+                guildServices.getApplications($scope.startDate)
+                    .then(function (applications) {
+                        $scope.loading = false;
+                        $scope.applications = applications.applications; //object to array
+
+                        var newApplicants = _.find($scope.applications, function (applicant) {
+                            return applicant.status == "Applied";
+                        })
+
+                        if (newApplicants != undefined) {
+                            $scope.numOfNewApplicants = 1;
+                        }
+
+
+                        convertClasses();
+
+
+                    },
+                    function (err) {
+
+                        $scope.loading = false;
+                        console.log(err);
+                        siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
                     })
+            }
 
-                    if (newApplicants != undefined) {
-                        $scope.numOfNewApplicants = 1;
-                    }
-
-
-                    convertClasses();
-
-
-                },
-                function (err) {
-
-                    $scope.loading = false;
-                    console.log(err);
-                    siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-                })
 
             function convertClasses() {
 
@@ -175,5 +181,7 @@ angular.module("BossCollection.guild")
                 }
 
             }
+
+            $scope.getApplications()
 
         }])

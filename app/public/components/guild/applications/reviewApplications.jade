@@ -1,6 +1,9 @@
 script#reviewApplications(type="text/ng-template")
-    md-content()        
+    md-content()
         
+        md-datepicker(ng-model = "startDate", md-placeholder="Select date", ng-change = "getApplications()")
+        div().hint Get applications after this date. Initial date is two months before today.
+        br
         section(layout-xs="column", layout="row")
             div(flex-xs, flex-gt-xs="60")
                 

@@ -25,11 +25,11 @@ function submitApplication(req, res) {
     newApplication.guild = req.body.newApplicant.guildName
     newApplication.status = statuses.applied
 
-    newApplication.save().then(function(result) {
+    newApplication.save().then(function (result) {
 
         defer.resolve(result);
     },
-        function(err) {
+        function (err) {
 
             defer.reject(err);
         })
@@ -45,13 +45,13 @@ function approveApplication(req, res) {
     var application = req.body.application;
 
     ApplicationModel.findOne({ _id: application._id })
-        .then(function(applicationModel) {
+        .then(function (applicationModel) {
 
             if (applicationModel.status != statuses.approved) {
 
                 applicationModel.status = statuses.approved;
 
-                applicationModel.save(function() {
+                applicationModel.save(function () {
 
                     approveApplicationEmail(application);
                     defer.resolve({ application: application });
@@ -70,10 +70,10 @@ function rejectApplication(req, res) {
     var application = req.body.application;
 
     ApplicationModel.findOne({ _id: application._id })
-        .then(function(applicationModel) {
+        .then(function (applicationModel) {
 
             applicationModel.status = statuses.rejected;
-            applicationModel.save(function() {
+            applicationModel.save(function () {
 
                 rejectApplicationEmail(application);
                 defer.resolve({ application: application });
@@ -89,12 +89,27 @@ function getApplications(req, res) {
     var defer = q.defer();
     console.log("Getting applications...");
 
-    ApplicationModel.find({ guild: req.session.user.guild.name })
-        .then(function(applications) {
+
+    var date = moment();
+
+    if (req.params.startDate) {
+        date = moment(req.params.startDate);
+    }
+    else {
+
+        date.month((date.month() - 2))
+    }
+
+    ApplicationModel.find({
+        guild: req.session.user.guild.name, dateApplied: {
+            $gte: date.toISOString()
+        }
+    })
+        .then(function (applications) {
 
             defer.resolve({ "applications": applications });
         },
-        function(err) {
+        function (err) {
             defer.reject(err);
         })
 
@@ -104,10 +119,10 @@ function getApplications(req, res) {
 
 
 module.exports = {
-    getApplications:getApplications,
-    rejectApplication:rejectApplication,
-    approveApplication:approveApplication,
-    submitApplication:submitApplication
+    getApplications: getApplications,
+    rejectApplication: rejectApplication,
+    approveApplication: approveApplication,
+    submitApplication: submitApplication
 };
 
 function approveApplicationEmail(application) {
@@ -116,7 +131,7 @@ function approveApplicationEmail(application) {
     var subject = "Application approved";
 
     UserModel.findOne({ name: application.user })
-        .then(function(userAccount) {
+        .then(function (userAccount) {
 
             EmailDispatcher.dispatchCustomEmail(message, subject, userAccount);
         })
@@ -128,7 +143,7 @@ function rejectApplicationEmail(application) {
     var subject = "Application Denied";
 
     UserModel.findOne({ name: application.user })
-        .then(function(userAccount) {
+        .then(function (userAccount) {
 
             EmailDispatcher.dispatchCustomEmail(message, subject, userAccount);
         })
