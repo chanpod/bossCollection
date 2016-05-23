@@ -384,7 +384,7 @@ angular.module("BossCollection.forums")
                             defer.resolve(threadData);
                         })
                         .catch(function (err) {
-
+                            siteServices.showMessageModal(err.data.message);
                             defer.reject(err);
                         })
                         .finally(function () {
@@ -452,7 +452,7 @@ angular.module("BossCollection.forums")
                         defer.resolve(comment)
                     }, 
                     function(err){
-                        
+                        siteServices.showMessageToast(err.data.message)
                         defer.reject(err);
                     })
                 

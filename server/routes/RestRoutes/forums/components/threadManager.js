@@ -110,15 +110,16 @@ function deleteThread(req, res){
     return defer.promise;
 }
 
-function getThread(threadID){
+function getThread(threadID) {
+    
     var defer = q.defer();
     
-    
     ThreadModel.find({_id: threadID})
-        .then(function(thread){
-            
-               defer.resolve({thread:thread});
+        .then(function (thread) {
+
+            defer.resolve({ thread: thread });
         })
+           
         
     return defer.promise;
 }

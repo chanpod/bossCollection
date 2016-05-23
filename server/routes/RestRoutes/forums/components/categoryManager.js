@@ -88,10 +88,17 @@ function deleteCategories(req, res){
 }
 
 function getCategories(req, res){
-    
-    var guild = req.session.user.guild.name;
-    var forums = {};
+
     var defer = q.defer();
+    
+    if (util.userHasGuild(req)) {
+        
+        var guild = req.session.user.guild.name;
+    }
+    else {
+        defer.reject("No guild association with the user or user isn't logged in.");   
+    }
+    var forums = {};
     var categoriesPromise = [];
     var forumsPromise = [];
     

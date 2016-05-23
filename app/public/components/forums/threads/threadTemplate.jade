@@ -22,15 +22,15 @@ script#thread(type="text/ng-template")
                                 user-display(user = "user.name")
                             span().md-subhead                    
                     md-card-actions(layout, layout-xs = "column")
-                        md-button(ng-click = "goTo('/forum/favorites')").md-raised Favorites
+                        md-button(ng-click = "goTo('/forum/favorites')").md-raised.md-primary Favorites
                         br
-                        md-button(ng-click = "refresh()").md-raised
+                        md-button(ng-click = "refresh()").md-raised.md-primary
                             | Refresh
                         br
-                        md-button(ng-click = "createThread()").md-raised
+                        md-button(ng-click = "createThread()").md-raised.md-primary
                             | Create Thread
                         br
-                        md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
+                        md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised.md-primary My Post (Not yet implemented)
                             md-tooltip() See post you've created
         ad()
         div(layout-align = "center center")

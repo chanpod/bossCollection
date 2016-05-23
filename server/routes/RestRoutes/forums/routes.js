@@ -137,11 +137,22 @@ router.route('/editCategory')
 
 router.route('/thread')
     .post(function (req, res) {
-
+        
         ThreadManager.getThread(req.body.threadID)
             .then(function (response) {
-
-                res.status(200).send(response);
+                
+                var thread = response.thread[0];
+                
+                if (thread.public || (thread.public == false || thread.public == undefined && util.userExist(req))) {
+                    
+                    res.status(200).send(response);
+                }
+                // else if (response.public == false || response.public == undefined && util.userExist(req)) {
+                //     res.status(200).send(response);
+                // }
+                else {
+                    throw new Error("Not authorized to view this thread.")
+                }
             })
             .fail(function (err) {
                 res.status(400).send(util.handleErrors(err));

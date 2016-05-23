@@ -29,7 +29,7 @@ exports.updateAvatarUrl = function(userName, avatarUrl){
 exports.getAvatarUrl = function(userName){
     
     var defer = q.defer();
-    
+
     UserModel.findOne({name:userName}, function(err, user){       
        
        if(err){
