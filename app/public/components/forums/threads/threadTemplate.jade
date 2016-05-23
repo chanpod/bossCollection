@@ -58,7 +58,7 @@ script#thread(type="text/ng-template")
                                     {{formatDate(thread.dateCreated)}}
                             div( ng-if = "thread.sticky")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
-                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
+                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
                             div(flex)
                                 p( layout-align = "start center")                                    
                                     user-display(user = "thread.user")
@@ -112,10 +112,10 @@ script#thread(type="text/ng-template")
                             div(flex).threadSubject
                                 {{thread.title}}
                             div(hide-sm, hide-xs, flex)
-                                    {{formatDate(thread.dateCreated)}}
+                                {{formatDate(thread.dateCreated)}}
                             div( ng-if = "thread.sticky")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
-                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
+                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
                             div(flex)
                                 p( layout-align = "start center")                                    
                                     user-display(user = "thread.user")

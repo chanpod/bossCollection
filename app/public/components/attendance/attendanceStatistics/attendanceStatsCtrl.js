@@ -121,7 +121,7 @@ angular.module("BossCollection.attendance")
                     drillDownData.push([
                         absentObject.date,
                         $scope.absent
-                    ])
+                    ]) 
                 })  
                 
                 

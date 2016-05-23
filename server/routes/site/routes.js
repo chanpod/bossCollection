@@ -68,7 +68,7 @@ var request = require('request');
     })
 
     router.get('/*', function(req, res) {
-        res.render('index');
+        res.render('index.html');
     });
 
 module.exports = router;

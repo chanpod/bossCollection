@@ -36,7 +36,8 @@ console.log("========= Starting server ============")
 console.log("App root directory: " + __dirname);
 
 app.set('views', path.join(__dirname, 'app/views'));
-app.set('view engine', 'jade');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'app/public')));
 app.enable("jsonp callback");
 

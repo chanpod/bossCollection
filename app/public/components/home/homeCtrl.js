@@ -2,15 +2,16 @@
 angular.module("BossCollection.home")
     .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+            
             $scope.guild = {};
             $scope.editing = false;
             $scope.content;
             $scope.newTab;
             $scope.guildImagesLoaded = false;
-
+ 
             var newTab = { title: "New Tab", content: "Make me whatever you want." };
 
-            $scope.$on("loggedin", function (event, user) {
+            $scope.$on("loggedin", (event, user) => {
 
                 userLoginSrvc.getUser()
                     .then(function (user) {
@@ -26,7 +27,7 @@ angular.module("BossCollection.home")
                     })
 
 
-            })
+            })  
 
             $scope.init = function () {
 
@@ -35,8 +36,8 @@ angular.module("BossCollection.home")
                 $scope.getHomepageContent();
 
             }
-
-            $scope.getHomepageContent = function () {
+ 
+            $scope.getHomepageContent = () => {
                 $scope.guildImagesLoaded = false;
                 if ($scope.user && $scope.user.guild) {
 

@@ -38,7 +38,7 @@ script#favorites(type="text/ng-template")
                                 {{thread.title}}
                             div(hide-sm, hide-xs, flex)
                                     {{favCtrl.formatDate(thread.dateCreated)}}
-                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center", layout-sm = "start center")
+                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
                             div(flex)
                                 p( layout-align = "start center")                                    
                                     user-display(user = "thread.user")

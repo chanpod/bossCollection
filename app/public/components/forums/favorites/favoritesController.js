@@ -1,34 +1,36 @@
+
+
 angular.module("BossCollection.forums")
 	.controller('favoritesController', [
 		'$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
         function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
 
-			var self = this;    
-
+			var self = this;      
+ 
             self.favorites = {};
             self.loading = false;
-            self.orderBy = "-dateCreated";
-            self.orderByString = 'Newest';
-            self.masterThread = []
+            self.orderBy = "-dateCreated"; 
+            self.orderByString = 'Newest'; 
+            self.masterThread = [] 
             siteServices.updateTitle('Favorites');
-            
+             
 
-            self.getLength = function (){
+            self.getLength = function (){ 
                 return self.threads.length
             }
 
             self.getItemAtIndex = function(index){
                 return self.threads[index];
-            }
-            
+            }  
+             
             self.formatDate = function (date) {
                 
                 var localTime  = moment.utc(date).toDate();
         
                 return moment(localTime).format('dddd, MMM D hh:mm a');
             }
-             
-            self.init = function(){  
+              
+            self.init = function(){   
 
                 self.loading = true;
                 self.savedThreads = forumService.getThreadCountsLocal();

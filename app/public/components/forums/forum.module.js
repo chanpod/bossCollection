@@ -1,4 +1,4 @@
-'user strict'
+'use strict'
 
 angular.module("BossCollection.forums", ['ngRoute'])
     .config(['$routeProvider',  function ($routeProvider) {
@@ -20,6 +20,5 @@ angular.module("BossCollection.forums", ['ngRoute'])
             templateUrl: 'threadComments',
             controller: 'commentsController as ctrl'
         })
-		
 
     }]);

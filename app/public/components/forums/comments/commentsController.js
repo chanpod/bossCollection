@@ -20,7 +20,7 @@ angular.module("BossCollection.forums")
                 self.isComingFromFavorites = forumService.getIsComingFromFavorites();
                 self.threadID = $routeParams.threadID;
                 self.loading = true
-                
+                 
                 forumService.getSelectedThread(self.threadID)
                     .then(function(thread){
                         
