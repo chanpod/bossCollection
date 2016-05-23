@@ -109,7 +109,6 @@ function getCategories(req, res){
             
 
             _(forums.categories).forEach(function(category, index){
-                console.log("Getting forums index: " + index);
                 
                 categoriesPromise.push(index);
                 
@@ -122,7 +121,7 @@ function getCategories(req, res){
                                 
                                 ThreadManager.getThreadCount(forum._id)
                                     .then(function(count){
-                                        console.log("Got thread count for forum: " +  forum.name)
+                                        
                                         forum.threadCount = count;
                                         category.forums.push(forum);
                                         

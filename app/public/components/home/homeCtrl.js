@@ -29,7 +29,7 @@ angular.module("BossCollection.home")
 
             })  
 
-            $scope.init = function () {
+            $scope.init =  () => {
 
                 $scope.newTab = newTab;
 

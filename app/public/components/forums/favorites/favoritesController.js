@@ -21,7 +21,7 @@ angular.module("BossCollection.forums")
 
             self.getItemAtIndex = function(index){
                 return self.threads[index];
-            }  
+            }   
              
             self.formatDate = function (date) {
                 

@@ -13,10 +13,17 @@ function createComment(req, res){
     
     var newComment = new commentModel();
     
-    
     var threadId = req.body.comment.threadId;
     var message = req.body.comment.message;
-    var user = req.session.user.name;
+
+    if (util.userExist(req)) {
+        
+        var user = req.session.user.name;
+    }    
+    else {
+        defer.reject("Not logged in.");
+    }
+    
     
     
     newComment.user = user;

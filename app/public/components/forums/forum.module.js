@@ -22,3 +22,4 @@ angular.module("BossCollection.forums", ['ngRoute'])
         })
 
     }]);
+

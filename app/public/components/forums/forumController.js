@@ -14,7 +14,7 @@ angular.module("BossCollection.forums")
             }
 
 
-            $scope.markdown = "";
+            $scope.markdown = "";  
             
             $scope.init = function(){
                 

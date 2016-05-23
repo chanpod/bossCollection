@@ -52,7 +52,7 @@ function addGuild(req, res) {
             newGuild.name = guildName;
             newGuild.members.push({
                 user: guildManager,
-                rank: ranks.length
+                rank: 0
             })
 
             return newGuild.save(function(savedGuild) {
@@ -83,7 +83,7 @@ function addGuild(req, res) {
  * save to DB
  *  
  */
-function updateRank(req, res) {
+function updateUserRank(req, res) {
 
     var defer = q.defer();
 
@@ -371,6 +371,22 @@ function updateGuildHomepage(req, res) {
     return defer.promise;
 }
 
+function getRanks(req, res) {
+    
+}
+
+function createRank(req, res) {
+    
+}
+
+function updateGuildRank(req, res) {
+    
+}
+
+function deleteRank(req, res) {
+    
+}
+
 
 
 module.exports = {        
@@ -384,9 +400,13 @@ module.exports = {
     findUsersGuild:findUsersGuild,
     removeMember:removeMember,    
     kickMember:kickMember,
-    updateRank:updateRank,
+    updateUserRank:updateUserRank,
     addMember:addMember,
-    addGuild:addGuild,
+    addGuild: addGuild,
+    getRanks: getRanks,
+    createRank: createRank,
+    updateGuildRank: updateGuildRank,
+    deleteRank:deleteRank,
     
     };
 

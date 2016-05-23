@@ -1,9 +1,10 @@
+
 angular.module("BossCollection.forums")
     .controller('threadController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
         function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
 
-            
+            var lodash = require('lodash');            
 
             $scope.forum = {};
             $scope.loading = false;
@@ -131,7 +132,7 @@ angular.module("BossCollection.forums")
                
            }
 
-            $scope.refresh = function(){
+            $scope.refresh = () => {
 
                 $scope.loading = true;
 

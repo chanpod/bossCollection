@@ -195,7 +195,7 @@ router.post('/updateAccount', function (req, res) {
     var newPassword = req.body.newPassword;
     var verifyPassword = req.body.passwordVerify;
 
-    console.log("Current password: " + sessionPassword);
+    
 
     AM.validatePassword(currentPassword, sessionPassword)
         .then(function () {

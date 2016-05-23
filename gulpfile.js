@@ -41,14 +41,16 @@ gulp.task('watch', function () {
         './app/public/js/**/*.sass',
         '!./app/public/js/tmp/**'
     ], batch(function (events, done) {
-        gulp.start('CSS', done);
+        gulp.start('concatSass', done);
     }));
 
     gulp.watch(["./app/public/js/**/*.js", './app/public/components/**/*.js', '!./app/public/js/tmp/**']).on('change', batch(function (events, done) {
         gulp.start('JS', done);
     }));
 
-    gulp.watch("app/**/*.jade").on('change', browserSync.reload);
+    gulp.watch("app/**/*.jade").on('change', batch(function (events, done) {
+        gulp.start('concatJade', done);
+    }));
 
     browserSync.init({
         proxy: "localhost:4000",
@@ -57,20 +59,16 @@ gulp.task('watch', function () {
 })
 
 gulp.task("JS", function () {
-    runSequence('concatJS', 'babel', 'browserify');
+    runSequence('concatJS', 'browserify');
 })
 
 gulp.task("CSS", function () {
     runSequence('concatSass', 'css', 'cssRename');
 })
 
-gulp.task('devBuild', function () {
-    runSequence('clean', 'concatJS', 'browserify', 'babel', 'concatSass', 'css', 'cssRename');
-})
-
 gulp.task('build', function () {
 
-    runSequence('clean', 'concatJS', 'babel', 'browserify', 'concatSass', 'css', 'cssRename', 'minify', 'minifyCss', 'vendorCss');
+    runSequence('clean', 'concatJade', 'concatJS', 'browserify', 'concatSass', 'vendorCss', 'concatVendor');
 })
 
 gulp.task('browserify', function () {
@@ -81,6 +79,10 @@ gulp.task('browserify', function () {
         .pipe(source('main.js'))
         // saves it the public/js/ directory
         .pipe(gulp.dest('./app/public/tmp/'))
+        .on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(browserSync.stream());
 })
 
@@ -91,6 +93,11 @@ gulp.task("concatJade", function () {
             locals: YOUR_LOCALS
         }))
         .pipe(gulp.dest('./app/views/'))
+        .on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        })
+        .pipe(browserSync.stream());
 });
 
 gulp.task('concatVendor', function () {
@@ -115,7 +122,12 @@ gulp.task('concatVendor', function () {
         './node_modules/highcharts/modules/solid-gauge.js'
 
     ])
-        .pipe(concat('vendor.min.js'))
+        .pipe(concat('vendor.js'))
+        .pipe(minify())
+        .on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest('./app/public/tmp/'))
 })
 
@@ -135,27 +147,20 @@ gulp.task('concatJS', function () {
         './app/public/js/services/**/*.js'
     ])
         .pipe(concat('bosscollection.js'))
-        .pipe(babel())
-        .on('error', function (err) {
-            console.log(err);
-            this.emit('end');
-        })
-        .pipe(gulp.dest('./app/public/tmp/'));
-
-
-})
-
-gulp.task('babel', function () {
-
-    return gulp.src('./app/public/tmp/bosscollection.js')
         .pipe(babel({
             presets: ['es2015']
         }))
+
+        .pipe(gulp.dest('./app/public/tmp/'))
+
+        .pipe(minify())
+        .pipe(rename('bosscollection.min.js'))
         .on('error', function (err) {
             console.log(err);
             this.emit('end');
         })
-        .pipe(gulp.dest('./app/public/tmp/'));
+        .pipe(gulp.dest('./app/public/tmp/'))
+        
 
 
 })
@@ -166,6 +171,10 @@ gulp.task('vendorCss', function () {
         './node_modules/angular-material/angular-material.min.css'
     ])
         .pipe(concat('angular-material.min.css'))
+        .on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        })
         .pipe(gulp.dest('./app/public/tmp/'));
 })
 
@@ -178,33 +187,16 @@ gulp.task('concatSass', function () {
         './app/public/components/**/*.scss'
     ])
         .pipe(concat('compiled.scss'))
-        .on('error', function (err) {
-            console.log(err);
-            this.emit('end');
-        })
-        .pipe(gulp.dest('./app/public/css/'));
-})
-
-gulp.task('css', function () {
-
-    return gulp.src([
-        './app/public/css/compiled.scss'
-
-    ])
         .pipe(sass())
         .on('error', function (err) {
             console.log(err);
             this.emit('end');
         })
-        .pipe(gulp.dest('./app/public/tmp/'));
-})
-
-gulp.task('cssRename', function () {
-
-    return gulp.src('./app/public/tmp/compiled.css')
+        .pipe(gulp.dest('./app/public/css/'))
+        .pipe(cssnano())
         .pipe(rename('bosscollection.min.css'))
-        .pipe(gulp.dest('./app/public/tmp'))
-    //.pipe(browserify.stream());
+        .pipe(gulp.dest('./app/public/tmp/'))
+        .pipe(browserSync.stream());
 })
 
 gulp.task('clean', function () {
@@ -212,30 +204,8 @@ gulp.task('clean', function () {
     return gulp.src([
         './app/public/tmp/*.js',
         './app/public/css/compiled.scss',
-        '!./app/public/tmp/vendor.min.js',
+        '!./app/public/tmp/vendor-min.js',
         './app/public/tmp/*.css'
     ], { read: false })
         .pipe(clean());
-});
-
-gulp.task('minify', function () {
-
-    return gulp.src(
-        [
-            './app/public/tmp/*.js',
-            '!./app/public/tmp/vendor.min.js'
-        ])
-        .pipe(minify())
-        .on('error', function (err) {
-            console.log(err);
-            this.emit('end');
-        })
-        .pipe(gulp.dest('./app/public/tmp'));
-})
-
-gulp.task('minifyCss', function () {
-
-    return gulp.src('./app/public/tmp/*.css')
-        .pipe(cssnano())
-        .pipe(gulp.dest('./app/public/tmp/'));
 });
