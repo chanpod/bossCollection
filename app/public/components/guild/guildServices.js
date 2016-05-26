@@ -320,7 +320,6 @@ angular.module("BossCollection.guild")
 
                                 defer.reject(err);
                             })
-
                     })
                     .finally(function () {
 

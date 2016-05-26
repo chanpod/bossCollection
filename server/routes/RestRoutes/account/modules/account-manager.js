@@ -146,7 +146,7 @@ exports.manualLogin = function(user, pass, callback)
                     defer.resolve(userFound);
 				}	else{
                     
-					defer.reject(util.handleErrors('invalid password: ' + err));
+					defer.reject(util.handleErrors('invalid password'));
 				}
 			});
 		}

@@ -221,7 +221,7 @@ angular.module("BossCollection.accounts")
                             function (err) {
 
 
-                                defer.reject(err.data);
+                                defer.reject(err.data.message);
                             })
                         .finally(function () {
 
