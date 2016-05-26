@@ -1,12 +1,15 @@
 ### Running the app
 
-Runs like a typical express app:
+npm install
 
-    node server.js
-or
+run mongo
 
-    npm start
+npm start
+
+gulp watch //For browsersync
+
+
 
 For more information on AngularJS please check out http://angularjs.org/
-For more on Express and Jade, http://expressjs.com/ and http://jade-lang.com/ are
-your friends.
+For more on Express and Jade, http://expressjs.com/ and http://jade-lang.com/.
+Also used is angular-material.

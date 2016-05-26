@@ -6,12 +6,12 @@ script#guildSettings(type="text/ng-template")
                     div(flex)
                         md-input-container(flex).md-block
                             label() Logs Link
-                            input(id = "uName", ng-model = "guild.logsLink")
+                            input(id = "logsLink", ng-model = "guild.logsLink", aria-label = "logs link")
                         
                     div(flex)
                         md-input-container(flex).md-block
                             label() Progression Link
-                            input(id="battleTag", ng-model = "guild.progressionlink")                    
+                            input(id="progressionLink", ng-model = "guild.progressionlink", aria-label = "progressionLink")                    
             md-card
                 md-card-title
                     md-card-title-text                                           
@@ -26,7 +26,7 @@ script#guildSettings(type="text/ng-template")
                             md-card
                                 md-card-content                   
                                     md-input-container(flex).md-block                        
-                                        input(id="battleTag", ng-model = "guild.images[$index]")
+                                        input(ng-model = "guild.images[$index]", aria-label = "guild image url")
                                         md-hint() Uses image url only. EG use imgur
                                 md-card-actions
                                     md-button(ng-click = "removeImage($index)").md-raised.md-primary Remove
@@ -42,7 +42,7 @@ script#guildSettings(type="text/ng-template")
                             md-list-item(ng-repeat = "rank in guild.ranks | orderBy: 'rank'").secondary-button-padding
                                 p
                                     md-input-container(flex).md-block                                        
-                                        input(ng-model = "rank.name")
+                                        input(ng-model = "rank.name", ng-change = "changeDetected()", aria-label = "rank name")
                                      
                                 md-menu()
                                     md-button(aria-label="Open rank settings menu", ng-click="openMenu($mdOpenMenu, $event)").md-icon-button
@@ -56,15 +56,22 @@ script#guildSettings(type="text/ng-template")
                                         md-button(ng-click = "demoteRank(rank)")
                                             md-icon(md-font-library="material-icons", aria-label = "refresh forum") keyboard_arrow_down
                                             | Decrease Rank
+                                        
+                                        md-button(ng-click = "deleteRank(rank)")
+                                            md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                            | Delete
                                             
                                         md-switch(ng-model = "rank.officer", aria-label = "Rank Switch")
                                             | Officer
                                             
                                         md-switch(ng-model = "rank.raider", aria-label = "Rank Switch")
                                             | Raider
+                    md-toolbar(ng-if = "changesMade").warning
+                        div() Changes detected. Please save or they won't be applied.
                                                  
             div(flex)
-                div()
-                    md-input-container(flex).md-block
+                div(layout, layout-align = "start center") 
+                    md-input-container().md-block
                         md-button(type = "submit").md-primary.md-raised
                             | Save 
+                    md-progress-circular(ng-if = "loading", md-mode="indeterminate")

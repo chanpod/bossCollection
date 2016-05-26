@@ -16,6 +16,8 @@ var source = require('vinyl-source-stream')
 var jade = require('gulp-jade');
 var browserSync = require('browser-sync').create();
 var jadeConcat = require('gulp-jade-template-concat');
+var prettify = require('gulp-js-prettify');
+
 
 /**
  * Tasks
@@ -150,7 +152,7 @@ gulp.task('concatJS', function () {
         .pipe(babel({
             presets: ['es2015']
         }))
-
+        .pipe(prettify({collapseWhitespace: true}))
         .pipe(gulp.dest('./app/public/tmp/'))
 
         .pipe(minify())
