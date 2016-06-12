@@ -72,7 +72,7 @@ angular.module("BossCollection.accounts")
                     savedUser = getUserFromCookie();
 
                     if (savedUser && savedUser.guild) {
-                        saveUsersRank(savedUser);
+                        saveUsersPermissions(savedUser);
                     }
 
                     $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
@@ -89,7 +89,7 @@ angular.module("BossCollection.accounts")
                     if (savedUser) {
 
                         if (savedUser && savedUser.guild) {
-                            saveUsersRank(savedUser);
+                            saveUsersPermissions(savedUser);
                         }
 
                         defer.resolve(savedUser);
@@ -187,7 +187,7 @@ angular.module("BossCollection.accounts")
                         .then(function (result) {
 
                             savedUser = getUserFromCookie();
-                            saveUsersRank(savedUser);
+                            saveUsersPermissions(savedUser);
                             
                             accountApi.updateUser();
                             
@@ -213,7 +213,7 @@ angular.module("BossCollection.accounts")
                         .then(function (loggedInUser) {
 
                             savedUser = loggedInUser;
-                            saveUsersRank(loggedInUser);
+                            saveUsersPermissions(loggedInUser);
 
                             $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
                             siteServices.hideLoadingBottomSheet();
@@ -247,20 +247,31 @@ angular.module("BossCollection.accounts")
                 return user;
             }
 
-            function saveUsersRank(user) {
+            function saveUsersPermissions(user) { 
+ 
                 var memberListing;
+
                 if (savedUser && savedUser.guild) {
+
                     memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+
                     savedUser.rank = memberListing.rank
+                    savedUser.officer = memberListing.officer
+                    savedUser.raider = memberListing.raider
+                    savedUser.GM = memberListing.GM
+                    savedUser.approved = memberListing.approved
+                    
                     return memberListing.rank;
                 }
                 else {
+
                     if (user && user.guild) {
+
                         memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
                         return memberListing.rank;
                     }
                     else {
-                        return 0;
+                        return undefined;
                     }
                 }
             }

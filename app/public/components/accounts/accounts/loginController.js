@@ -15,9 +15,8 @@ angular.module("BossCollection.accounts")
         }
         
         
-        
         $scope.init = function () {
-        }
+        } 
         
         $scope.resetPassword = function(){
             

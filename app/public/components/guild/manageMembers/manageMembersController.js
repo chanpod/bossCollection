@@ -7,8 +7,8 @@
  */
 angular.module("BossCollection.guild")
     .controller("manageMembersController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', 'permissionsService',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, permissionsService) {
             
             //user comes from parent controller navbar
             
@@ -43,7 +43,7 @@ angular.module("BossCollection.guild")
             
             $scope.promote = function (user) {
 
-                if (user.rank == 3) {
+                if (permissionsService.isOfficer($scope.user, $scope.user.guild.members)) {
                     siteServices.showMessageModal("Can't promote any further");
                 }
                 else {

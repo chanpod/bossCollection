@@ -1,6 +1,6 @@
 script#home(type="text/ng-template")  
   
-  md-content
+  md-content()
     section(id = "imageGallery").imageGallery        
         
     section(layout="column", ng-if = "user.guild")
@@ -23,12 +23,12 @@ script#home(type="text/ng-template")
                                         | Save
                                     md-button(ng-click = "cancel()").md-raised.md-primary
                                         | Cancel
-                        md-card-actions(ng-if = "user.rank > 2")
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editTab($index)").md-icon-button
                                 md-icon(md-font-library="material-icons") edit
                             md-button(ng-click = "deleteTab($index)").md-icon-button
                                 md-icon(md-font-library="material-icons") delete
-            md-tab(label = "{{newTab.title}}", ng-if = "user.rank > 2")
+            md-tab(label = "{{newTab.title}}", ng-if = "isOfficer()")
                 md-card
                     md-card-content                            
                         div(flex, layout = "column")
@@ -43,36 +43,165 @@ script#home(type="text/ng-template")
                                     | Save
         
         
-            
-        
-    section(layout="column", ng-if = "!user.guild")
-        div(flex, layout-align = "center center")
-            h3
-                | Welcome to BossCollection.net
+    section(flex, layout="column", ng-if = "!user")
+        div(flex, layout = "column", layout-align = "center center").welcomeBanner
+            h2
+                | Welcome to BossCollection
             p()
-                | To get started, login, create or join a guild, and start using the site!
-        div(flex)
-            md-card
-                md-card-title
-                    md-card-title-text
-                        h3
-                            | Features
-                md-card-content
-                    ul
-                        li
-                            | Modern, mobile friendly site for your guild!
-                        li
-                            | Built in application management! Approve or reject applicants and they'll get an email informing them of your decision.
-                        li
-                            | Attendance tool and statistics.
-                        li
-                            | Forums
-                        li
-                            | Easier management of site functionality.
-                        li
-                            | Integrated links to logs and progression sites of your choice. 
-                            i
-                                | Not implemented yet...
+                | Your home for guild management.
+            div()
+                span()
+                    | Get started
+            div()
+                md-button(ng-click = "login()").md-raised.md-accent
+                    | Login
+                md-button(ng-click = "goTo('auth/signup')").md-raised.md-accent
+                    | Register
+        div()
+        div(flex)            
+            div(layout-xs = "column", layout = "row", layout-align = "space-around start", layout-align-xs = "center center")
+
+                div(flex, layout = "column", layout-align = "center center").featureSection
+                    div(flex).iconSection
+                        md-icon(md-font-library="material-icons") smartphone
+                    h2(layout-align = "center center")
+                        | Modern Site
+                    section
+                        span()
+                            | Designed for the desktop, and your phone.
+                    
+
+                div(flex, layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") send
+                    h2
+                        | Blizzard api backed application process
+                    section
+                        span()
+                            | Applications require accurate server/character information. 
+                            | We then compile the users info, provide a link to their actual wow armory, and 
+                            | give some basic info so you can quickly and accurately filter out undesireable applicants.
+
+                div(flex, layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") poll
+                    h2
+                        | Attendance tracking
+                    section
+                        span()
+                            | Manage raiders attendance through this easy to use tool.
+                            | Weighted attendance designated by you or your raid leader.
+                            | Attendance history. Go back in time to see someones attendance at any point in the guilds history.
+
+            div(layout-xs = "column", layout = "row", layout-align = "space-around start", layout-align-xs = "center center")
+
+                div(layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") forum
+                    h2
+                        | Modern Forums
+                    section
+                        span()
+                            | Forums re-designed for a modern website.
             
-    ad(flex)
+            
+                div(layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") settings
+                    h2
+                        | Easy Administration
+                    section
+                        span()
+                            | No complex widget or component management. All you need is built right into the sites components.
+
+                div(layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") link
+                    h2
+                        | Custimization of external guild tools. 
+                    section
+                        span()
+                            | Integrated links to your tools of choice.      
+        
+    section(flex, layout="column", ng-if = "user && !user.guild")
+        div(flex, layout = "column", layout-align = "center center").welcomeBanner
+            h2
+                | Welcome to BossCollection
+            p()
+                | Your home for guild management.
+            div()
+                span()
+                    | Get started
+            div()
+                md-button(ng-click = "login()").md-raised.md-accent
+                    | Login
+                md-button(ng-click = "goTo('auth/signup')").md-raised.md-accent
+                    | Register
+        div()
+        div(flex)            
+            div(layout-xs = "column", layout = "row", layout-align = "space-around start", layout-align-xs = "center center")
+
+                div(flex, layout = "column", layout-align = "center center").featureSection
+                    div(flex).iconSection
+                        md-icon(md-font-library="material-icons") smartphone
+                    h2(layout-align = "center center")
+                        | Modern Site
+                    section
+                        span()
+                            | Designed for the desktop, and your phone.
+                    
+
+                div(flex, layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") send
+                    h2
+                        | Blizzard api backed application process
+                    section
+                        span()
+                            | Applications require accurate server/character information. 
+                            | We then compile the users info, provide a link to their actual wow armory, and 
+                            | give some basic info so you can quickly and accurately filter out undesireable applicants.
+
+                div(flex, layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") poll
+                    h2
+                        | Attendance tracking
+                    section
+                        span()
+                            | Manage raiders attendance through this easy to use tool.
+                            | Weighted attendance designated by you or your raid leader.
+                            | Attendance history. Go back in time to see someones attendance at any point in the guilds history.
+
+            div(layout-xs = "column", layout = "row", layout-align = "space-around start", layout-align-xs = "center center")
+
+                div(layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") forum
+                    h2
+                        | Modern Forums
+                    section
+                        span()
+                            | Forums re-designed for a modern website.
+            
+            
+                div(layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") settings
+                    h2
+                        | Easy Administration
+                    section
+                        span()
+                            | No complex widget or component management. All you need is built right into the sites components.
+
+                div(layout = "column", layout-align = "flex-start center").featureSection
+                    div(layout, layout-align = "center center").iconSection
+                        md-icon(md-font-library="material-icons") link
+                    h2
+                        | Custimization of external guild tools. 
+                    section
+                        span()
+                            | Integrated links to your tools of choice.
+            
+    ad(flex, layout, layout-align = "center center")
     

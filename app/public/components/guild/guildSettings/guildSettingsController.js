@@ -21,7 +21,8 @@ angular.module("BossCollection.guild")
                 name: "{name me}",
                 raider: false,
                 officer: false,
-                rank: null
+                rank: null,
+                gm: false                
             }
 
             $scope.init = () => {
@@ -123,12 +124,15 @@ angular.module("BossCollection.guild")
             }
 
             $scope.addNewRank = () => {
+
                 $scope.changesMade = true;
+
                 var newRank = {
                     name: "{name me}",
                     raider: false,
                     officer: false,
-                    rank: null
+                    rank: null,
+                    gm: false
                 }
 
                 newRank.rank = $scope.guild.ranks.length
@@ -136,6 +140,7 @@ angular.module("BossCollection.guild")
             }
 
             $scope.promoteRank = (rankIn) => {
+                
                 $scope.changesMade = true;
                 if (rankIn.rank != 0) {
 
@@ -166,8 +171,10 @@ angular.module("BossCollection.guild")
             }
 
             $scope.demoteRank = (rankIn) => {
+
                 $scope.changesMade = true;
                 var promotedRankindex = 0;
+
                 if (rankIn.rank != $scope.guild.ranks.length - 1) {
 
                     for (var i = 0; i < $scope.guild.ranks.length; i++) {

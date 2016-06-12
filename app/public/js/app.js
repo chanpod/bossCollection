@@ -23,13 +23,14 @@ angular.module('BossCollection', [
     function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $mdThemingProvider) {
  
         var themeColor = "142B0E";
+        var themeColorLight = "rgb(36, 76, 25)";
         $mdThemingProvider.definePalette('legion', {
             '50': themeColor,
             '100': themeColor,
             '200': themeColor,
             '300': themeColor,
             '400': themeColor,
-            '500': themeColor,
+            '500': themeColorLight,
             '600': themeColor,
             '700': themeColor,
             '800': themeColor,

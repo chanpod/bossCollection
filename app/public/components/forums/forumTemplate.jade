@@ -16,7 +16,7 @@ script#forum(type="text/ng-template")
                         md-button(ng-click = "refreshForums()").md-raised
                             | Refresh
                         br
-                        md-button(ng-if = "user.rank > 2", ng-click = "newCategory()").md-raised
+                        md-button(ng-if = "isOfficer()", ng-click = "newCategory()").md-raised
                             | Create Category
                         br
                         md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
@@ -29,7 +29,7 @@ script#forum(type="text/ng-template")
                             {{category.name}}
                             md-tooltop(hide-gt-sm) {{category.name}}
                         span(flex)
-                        div(ng-show = "user.rank > 2")
+                        div(ng-show = "isOfficer()")
                             md-button(ng-click = "deleteCategory(category)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                             md-button(ng-click = "editCategory(category)").md-icon-button
@@ -50,14 +50,10 @@ script#forum(type="text/ng-template")
                                         span(layout-align = "start center")
                                             div()
                                                 | Threads: {{forum.threadCount}}
-                            div(ng-show = "user.rank == 4", layout-align = "center center", layout)
+                            div(ng-show = "isGM()", layout-align = "center center", layout)
                                 md-button(ng-click = "deleteForum(forum)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "delete category") delete
                                 md-button(ng-click = "editForum(forum)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                        md-divider(ng-if="!$last")
-            md-toolbar(ng-show = "user.rank > 2").md-scroll-shrink
-                div().md-toolbar-tools
-                    
             ad()
                             

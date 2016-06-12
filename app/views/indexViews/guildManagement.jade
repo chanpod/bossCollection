@@ -1,17 +1,9 @@
-md-menu-item(ng-if = "loggedIn && !user.guild").md-no-sticky
+md-menu-item(ng-if = "loggedIn && !hasGuild()").md-no-sticky
     md-button(aria-label = "Account options...", ng-click = "goTo('/createGuild')")
         md-icon(md-font-library="material-icons") create
         | Create Guild
-md-divider(ng-if = "!user.guild && loggedIn")
-md-menu-item(ng-if = "!user.guild && loggedIn").md-no-sticky
+md-divider(ng-if = "!hasGuild() && loggedIn")
+md-menu-item(ng-if = "!hasGuild() && loggedIn").md-no-sticky
     md-button(aria-label = "Account options...", ng-click = "goTo('/joinGuild')")
         md-icon(md-font-library="material-icons") home
-        | Join Guild
-md-divider(ng-if = "(user.rank > 2) && loggedIn")
-md-menu-item(ng-if = "(user.rank > 2) && loggedIn")
-    md-button(ng-click = "goTo('/manageMembers')")
-        md-icon(md-font-library="material-icons") people
-        | Manage Members
-
-
-        
+        | Join Guild       

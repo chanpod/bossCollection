@@ -49,18 +49,10 @@ script#favorites(type="text/ng-template")
                         {{thread.message}}
                         
                 div( layout-align = "center center", layout)
-                    md-menu(ng-if = "user.rank > 2")
+                    md-menu(ng-if = "isOfficer")
                         md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
-                        md-menu-content
-                            md-menu-item
-                                md-button(ng-click = "favCtrl.deleteThread(thread)").md-icon-button
-                                    md-icon(md-font-library="material-icons", aria-label = "delete category") delete
-                                    md-tooltip() Delete thread
-                            md-menu-item
-                                md-button(ng-click = "favCtrl.editThread(thread)").md-icon-button
-                                    md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
-                                    md-tooltip() Edit thread
+                        include ../menuPopup.jade 
                     md-button(ng-if = "favCtrl.isFavorite(thread)", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
                         md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
                         md-tooltip() Favorite

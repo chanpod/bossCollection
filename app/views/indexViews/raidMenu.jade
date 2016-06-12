@@ -1,23 +1,27 @@
 
-md-menu(ng-if = "user.guild && user.rank > 1")
+md-menu(ng-if = "isMember()")
     md-button(aria-label = "Account options...", ng-click = "openMenu($mdOpenMenu, $event)").menuDropdown
         md-icon(md-font-library="material-icons") videogame_asset
         | &nbsp&nbsp&nbsp Guild
         md-icon(md-font-library="material-icons") keyboard_arrow_down
     md-menu-content()        
-        md-menu-item(ng-if = "user.rank > 1")
+        md-menu-item(ng-if = "isMember()")
             md-button(ng-click = "goTo('/reviewApplications')")
                 md-icon(md-font-library="material-icons") inbox
                 | View Applications
-        md-menu-item(ng-if = "user.rank > 1")
+        md-menu-item(ng-if = "isRaider()")
             md-button(ng-click = "goTo('/attendanceStatistics')")
                 md-icon(md-font-library="material-icons") poll
                 | Attendance Portal
-        md-menu-item(ng-if = "user.rank > 1")
+        md-menu-item(ng-if = "isGM()")
             md-button(ng-click = "goTo('/manageGuild')")
                 md-icon(md-font-library="material-icons") settings
                 | Guild Settings
-                
+        
+        md-menu-item(ng-if = "(isOfficer()) && loggedIn")
+            md-button(ng-click = "goTo('/manageMembers')")
+                md-icon(md-font-library="material-icons") people
+                | Manage Members
 
     
                     

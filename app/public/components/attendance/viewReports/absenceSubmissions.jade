@@ -33,7 +33,7 @@ script#absenceSubmissions(type="text/ng-template")
                                     md-icon(md-font-library="material-icons") message &nbsp
                                     br
                                     {{absence.reason}}
-                            md-card-actions(ng-if = "user.rank > 2 || (user.name == absence.user && absenceReportCtrl.dateHasPassed(absence))", layout="row", layout-align="end center")
+                            md-card-actions(ng-if = "isOfficer() || (user.name == absence.user && absenceReportCtrl.dateHasPassed(absence))", layout="row", layout-align="end center")
                                 md-button(ng-click = "absenceReportCtrl.editAbsence(absence)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit absence") mode_edit
                                     md-tooltip() Edit

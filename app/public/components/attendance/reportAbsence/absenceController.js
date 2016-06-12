@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService'
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService){
         
         var currentDay = moment().day();
         
@@ -50,7 +50,7 @@ angular.module("BossCollection.attendance")
                     .then(function(user) {
                         $scope.user = user
                         
-                        if ($scope.user.rank < 3) {
+                        if (permissionsService.isOfficer($scope.user)) {
                             self.selectedUser = $scope.user;
                             self.showContent();
                         }
@@ -61,7 +61,7 @@ angular.module("BossCollection.attendance")
                 
             }
             else{
-                if ($scope.user.rank < 3) {
+                if (permissionsService.isOfficer($scope.user)) {
                     self.selectedUser = $scope.user;
                     self.showContent();
                 }
@@ -163,7 +163,7 @@ angular.module("BossCollection.attendance")
             }
             else { 
                 
-                if ($scope.user.rank < 3) {
+                if (!permissionsService.isOfficer($scope.user)) {
                     
                     self.selectedUser = $scope.user.name;
                 }

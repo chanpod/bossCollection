@@ -52,7 +52,7 @@ script#threadComments(type="text/ng-template")
                     
                     
                 md-card-actions()
-                    md-button(ng-show = "user.rank > 2 || user.name == ctrl.thread.user", ng-click = "ctrl.editThread(ctrl.thread)")
+                    md-button(ng-show = "isOfficer() || user.name == ctrl.thread.user", ng-click = "ctrl.editThread(ctrl.thread)")
                         md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
                         | Edit
                         
@@ -96,7 +96,7 @@ script#threadComments(type="text/ng-template")
                                         div(flex)
                                             input-markdown(flex, input = "comment.message")
                                             
-                        div(flex, layout = "row", layout-align = "end center", ng-show = "user.rank > 2 || user.name == comment.user")
+                        div(flex, layout = "row", layout-align = "end center", ng-show = "isOfficer() || user.name == comment.user")
                             md-button(ng-click = "confirmDelete(comment)").md-icon-button
                                 md-icon(md-font-library="material-icons", aria-label = "delete comment") delete
                                 md-tooltip() Delete Comment

@@ -2,16 +2,14 @@ script#absence(type="text/ng-template")
     md-content()
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row", ng-if = "user.rank > 2")
+                div(layout-gt-xs="row", ng-if = "!isOfficer()")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
                                 md-selected-item = "reportAbsenceCtrl.selectedUser",                                    
                                 md-search-text = "user",
                                 md-floating-label = "Select User",
-                                md-items = "user in filterSearch(user)",
-                                ng-disabled = "user.rank < 3",
-                                md-autofocus = true,
-                                ng-if = "user.rank > 2"
+                                md-items = "user in filterSearch(user)",                                
+                                md-autofocus = true,                                
                                 flex = "40")
                         md-item-template
                             span(md-highlight-text = "user") {{user.user}}

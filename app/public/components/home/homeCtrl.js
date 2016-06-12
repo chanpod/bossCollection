@@ -9,7 +9,7 @@ angular.module("BossCollection.home")
             $scope.newTab;
             $scope.guildImagesLoaded = false;
  
-            var newTab = { title: "New Tab", content: "Make me whatever you want." };
+            var newTab = { title: "New Tab", content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details." };
 
             $scope.$on("loggedin", (event, user) => {
 
@@ -29,6 +29,10 @@ angular.module("BossCollection.home")
 
             })  
 
+            $scope.login = () =>{
+                siteServices.showLoadingBottomSheet();
+            }
+
             $scope.init =  () => {
 
                 $scope.newTab = newTab;
@@ -38,7 +42,9 @@ angular.module("BossCollection.home")
             }
  
             $scope.getHomepageContent = () => {
+
                 $scope.guildImagesLoaded = false;
+                
                 if ($scope.user && $scope.user.guild) {
 
                     guildServices.getHomepageContent($scope.user.guild.name)
