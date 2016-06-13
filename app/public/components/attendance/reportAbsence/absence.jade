@@ -2,7 +2,7 @@ script#absence(type="text/ng-template")
     md-content()
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row", ng-if = "!isOfficer()")
+                div(layout-gt-xs="row", ng-show = "isGM()")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
                                 md-selected-item = "reportAbsenceCtrl.selectedUser",                                    

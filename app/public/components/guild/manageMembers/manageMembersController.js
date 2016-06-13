@@ -91,7 +91,7 @@ angular.module("BossCollection.guild")
                 //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
                 var shouldShowDemote = false;
 
-                if ($scope.isGM() && rank.rank != 0) {
+                if ($scope.isGM()) {
                     shouldShowDemote = true;
                 }
                 else if ($scope.isOfficer() && rank.officer != true) {

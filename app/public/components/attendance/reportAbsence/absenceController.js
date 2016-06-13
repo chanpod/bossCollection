@@ -38,19 +38,27 @@ angular.module("BossCollection.attendance")
         $scope.isToolSetOpen = false;
         
         
-             
+        $scope.isGM = () => {
+            if ($scope.user != undefined) {
+                
+            return permissionsService.isGM($scope.user);
+            }
+            else {
+                return false;
+            }
+        }
                 
         $scope.init = function(){
             
-            siteServices.updateTitle('Report Absence');
+            siteServices.updateTitle('Report Absence'); 
             
             if($scope.user == undefined){
                 
                 userLoginSrvc.getUser()
                     .then(function(user) {
                         $scope.user = user
-                        
-                        if (permissionsService.isOfficer($scope.user)) {
+                        console.log($scope.isGM());
+                        if (!permissionsService.isOfficer($scope.user)) {
                             self.selectedUser = $scope.user;
                             self.showContent();
                         }

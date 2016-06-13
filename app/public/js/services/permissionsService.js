@@ -10,8 +10,8 @@ angular.module("BossCollection.services")
 
             let isGM;
 
-            if (user.officer) {
-                isGM = user.raider;
+            if (user.GM != undefined) {
+                isGM = user.GM;
             }
             else {
 
@@ -31,7 +31,7 @@ angular.module("BossCollection.services")
         function isRaider (user, guildMembers){
             let isRaider;
 
-            if (user.officer) {
+            if (user.raider != undefined) {
                 isRaider = user.raider;
             }
             else {
@@ -53,7 +53,7 @@ angular.module("BossCollection.services")
 
             let isOfficer;
 
-            if (user.officer) {
+            if (user.officer != undefined) {
                 isOfficer = user.officer;
             }
             else {
@@ -76,7 +76,7 @@ angular.module("BossCollection.services")
 
             var rank;
 
-            if (user.rank) {
+            if (user.rank != undefined) {
                 rank = user.rank;
             }
             else {
@@ -98,7 +98,7 @@ angular.module("BossCollection.services")
 
             var isMember;
 
-            if (user.approved) {
+            if (user.approved != undefined) {
                 isMember = user.approved;
             }
             else {
