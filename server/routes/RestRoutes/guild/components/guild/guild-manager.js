@@ -88,9 +88,10 @@ function updateUserRank(req, res) {
     var defer = q.defer();
 
     var guildName = req.body.guildName;
-    var guildMemberName = req.body.member.user;
+    var guildMember = req.body.member;
+    var guildMemberName = guildMember.user;
     var requester = req.session.user.name
-    var guildMemberNewRank = req.body.member.rank;
+    var guildMemberNewRank = guildMember.rank;
 
     findGuild(guildName)
         .then(function(guild) {
@@ -102,7 +103,8 @@ function updateUserRank(req, res) {
                     defer.reject("Member doesn't exist.");
                 }
 
-                guild.members[indexOfMember].rank = guildMemberNewRank;
+                //guild.members[indexOfMember] = guildMember;
+                _.extend(guild.members[indexOfMember], guildMember);
 
                 guild.save(function(savedGuild) {
 
@@ -486,13 +488,13 @@ function isAdmin(memberList, memberName) {
 
     if (indexOfMember != -1) {
 
-        var memberRank = memberList[indexOfMember].rank
+        var memberRank = memberList[indexOfMember]
 
-        if (memberRank < 3) {
-            isAdmin = false;
+        if (memberRank.officer || memberRank.GM) {
+            isAdmin = true;
         }
         else {
-            isAdmin = true;
+            isAdmin = false;
         }
     }
 

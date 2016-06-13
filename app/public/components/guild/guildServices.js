@@ -98,7 +98,7 @@ angular.module("BossCollection.guild")
                         })
                         .catch(function (err) {
 
-                            defer.reject(err.data.message);
+                            defer.reject(err.data.message); 
                         })
                         .finally(function () {
                             siteServices.loadingFinished();
@@ -106,14 +106,14 @@ angular.module("BossCollection.guild")
 
                     return defer.promise;
                 },
-                getGuildMembers: function (guildName) {
+                getGuildMembers: function (guildName) { 
 
                     var defer = $q.defer();
 
                     getGuildMembers.save({ guildName: guildName }).$promise
                         .then(function (result) {
 
-                            defer.resolve(result.members);
+                            defer.resolve(result.members); 
                         })
                         .catch(function (err) {
 

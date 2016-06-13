@@ -1,5 +1,38 @@
 script#manageMembers(type="text/ng-template")    
-    md-content
+    div(layout = "column" flex layout-fill)    
+        md-toolbar().md-tall
+            div(layout-md, layout-xs = "column", layout-align = "space-between center").md-toolbar-tools
+                h2(flex)
+                    | Permissions Management
+                div(flex)
+                    md-input-container(layout, style = "background-color: white;")
+                        label Filter Ranks
+                        input(ng-model = "filterRanks")
+        md-content()
+            section(ng-repeat = "rank in ranks | filter: filterRanks | orderBy: 'rank'")
+                md-subheader().md-warn
+                    | {{rank.rank}}. {{rank.name}} 
+                    &nbsp 
+                    input(ng-model = "filterMembers", placeholder = "Filter Member")
+                md-list(layout-padding)
+                    md-list-item(ng-repeat = "guildMember in guildMembers | filter:{rank:rank.rank} | filter:filterMembers").md-list-item.md-whiteframe-3dp
+                        div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between center").md-list-item-text
+                            div(flex)
+                                {{guildMember.user}}
+                            div(flex, layout, layout-align = "end center")
+                                div(ng-if = "isOfficer()", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
+                                    md-button(ng-if = "showPromote(rank)", ng-click = "promote(guildMember)").md-primary.md-raised
+                                        | Promote
+                                    md-button(ng-if = "showDemote(rank)", ng-click = "demote(guildMember)").md-primary.md-raised
+                                        | Demote
+                                div(ng-if = "isOfficer()", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
+                                    md-button(ng-if = "isGM()", ng-click = "promote(guildMember)").md-primary.md-raised
+                                        | Promote
+                                    md-button(ng-click = "demote(guildMember)").md-primary.md-raised
+                                        | Demote
+                    
+            
+//-
         section(layout="column", flex = "90")
             md-tabs(md-dynamic-height, md-border-bottom).md-background
                 md-tab(label = "Officers")

@@ -3,7 +3,7 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService'
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
         function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService){
         
         var currentDay = moment().day();

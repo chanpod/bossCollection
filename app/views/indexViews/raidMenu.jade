@@ -18,7 +18,7 @@ md-menu(ng-if = "isMember()")
                 md-icon(md-font-library="material-icons") settings
                 | Guild Settings
         
-        md-menu-item(ng-if = "(isOfficer()) && loggedIn")
+        md-menu-item(ng-if = "isOfficer()")
             md-button(ng-click = "goTo('/manageMembers')")
                 md-icon(md-font-library="material-icons") people
                 | Manage Members
