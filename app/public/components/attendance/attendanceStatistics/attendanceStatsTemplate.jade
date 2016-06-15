@@ -1,13 +1,26 @@
 script#attendanceStats(type="text/ng-template")
   
+    
     md-content(id = "statsContainer")
+        section
+            div(flex, layout = "column", layout-align = "center center").welcomeBanner
+                h2
+                    | Attendance Portal
+                p()
+                    | View, manage, and report absences and tardies here.               
         section(flex)
-            div(layout = "column")
+            md-toolbar()
+                div(flex, layout, layout-align = "center center").md-toolbar-tools
+                    h3
+                        span
+                            | Stats
+            div(id = "stats", layout = "column")
                 div(flex)
                     md-card
                         md-card-title
                             md-card-title-text
                                 h3 Weights
+                                md-divider
                         md-card-content
                             div(layout)
                                 div(flex)
@@ -34,16 +47,15 @@ script#attendanceStats(type="text/ng-template")
                                     
                 div(flex, id="container", style="") 
                 
+            md-toolbar(id = "reports", md-scroll-shrink)
+                div().md-toolbar-tools
+                    div(flex)
+                        md-button(ng-click = "openReportModal()").md-accent.md-raised                                
+                            | New Report
+                    div(flex, layout-align = "center center", layout)
+                        h2 Reports
+                    div(flex)
             section(flex)
-                md-toolbar
-                    div().md-toolbar-tools
-                        div(flex)
-                            md-button(ng-click = "openReportModal()").md-icon-button
-                                md-icon(md-font-library="material-icons") add
-                                md-tooltip() Submit new report
-                        div(flex, layout-align = "center center", layout)
-                            h2 Reports
-                        div(flex)
                             
                 md-card                    
                     md-card-content

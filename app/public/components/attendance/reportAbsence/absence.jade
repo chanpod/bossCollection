@@ -2,14 +2,17 @@ script#absence(type="text/ng-template")
     md-content()
         section(flex = "80")
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row", ng-show = "isGM()")
+                div(layout-gt-xs="row")
+                    md-progress-circular(md-mode = "indeterminate", ng-show = "loading")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
                                 md-selected-item = "reportAbsenceCtrl.selectedUser",                                    
                                 md-search-text = "user",
                                 md-floating-label = "Select User",
                                 md-items = "user in filterSearch(user)",                                
-                                md-autofocus = true,                                
+                                md-autofocus = true,
+                                ng-disabled = "gm", 
+                                ng-cloak,                               
                                 flex = "40")
                         md-item-template
                             span(md-highlight-text = "user") {{user.user}}

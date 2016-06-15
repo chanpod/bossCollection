@@ -17,6 +17,7 @@ angular.module("BossCollection.attendance")
         $scope.typePicked = false;
         $scope.today = moment(); 
         $scope.dayDesired;
+        
         $scope.currentlySelected = moment().format('dddd - Do');
         
         self.selectedUser = {};
@@ -40,8 +41,8 @@ angular.module("BossCollection.attendance")
         
         $scope.isGM = () => {
             if ($scope.user != undefined) {
-                
-            return permissionsService.isGM($scope.user);
+
+                return permissionsService.isGM($scope.user);
             }
             else {
                 return false;
@@ -55,10 +56,14 @@ angular.module("BossCollection.attendance")
             if($scope.user == undefined){
                 
                 userLoginSrvc.getUser()
-                    .then(function(user) {
+                    .then(function (user) {
+                        
                         $scope.user = user
                         console.log($scope.isGM());
+                        $scope.gm = !permissionsService.isGM($scope.user);
+
                         if (!permissionsService.isOfficer($scope.user)) {
+
                             self.selectedUser = $scope.user;
                             self.showContent();
                         }

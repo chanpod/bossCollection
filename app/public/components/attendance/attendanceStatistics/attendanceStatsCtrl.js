@@ -5,8 +5,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia','siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter){
+    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia','siteServices', '$filter', '$anchorScroll',
+        function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, $anchorScroll){
         
         siteServices.updateTitle('Attendance Portal');    
         $scope.absenceHighchartData = [];
@@ -23,7 +23,7 @@ angular.module("BossCollection.attendance")
             
             $scope.getAbsences();
             $scope.buildHighChart();
-        }
+        }     
         
         $scope.openReportModal = function(){
             
