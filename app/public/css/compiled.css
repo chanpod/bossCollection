@@ -290,8 +290,17 @@
   overflow: hidden;
   white-space: nowrap; }
 
+.modalPadding {
+  padding: 10px; }
+
 .warning {
   background-color: red !important; }
+
+.greenIcon {
+  color: green; }
+
+.redIcon {
+  color: red; }
 
 .avatarImage {
   width: 50px;

@@ -12,27 +12,27 @@ function getListOfGuilds(req, res) {
     var defer = q.defer();
 
     GuildModel.find({})
-        .then(function(guilds) {
+        .then(function (guilds) {
 
             defer.resolve({ guilds: guilds });
-        }, function(err) {
+        }, function (err) {
 
             defer.reject(err);
         })
-    
+
     return defer.promise;
 
 }
 
 function addGuild(req, res) {
-    
+
     var defer = q.defer();
-    
+
     var guildName = req.body.guildName;
     var guildManager = req.session.user.name
 
     findUsersGuild(guildManager)
-        .then(function(guildExist) {
+        .then(function (guildExist) {
             if (guildExist) {
 
                 throw new Error("You already belong to a guild");
@@ -40,7 +40,7 @@ function addGuild(req, res) {
             return GuildModel.findOne({ name: guildName })
         })
         .then(
-        function(guild) {
+        function (guild) {
 
             if (guild != null) {
                 defer.reject("Guild already exist");
@@ -55,7 +55,7 @@ function addGuild(req, res) {
                 rank: 0
             })
 
-            return newGuild.save(function(savedGuild) {
+            return newGuild.save(function (savedGuild) {
 
                 req.session.user.guild = newGuild;
                 buildGuildCookie(req, res, newGuild);
@@ -63,15 +63,15 @@ function addGuild(req, res) {
                 return util.saveSession(req, res);
             });
         })
-        .then(function(user) {
+        .then(function (user) {
 
             defer.resolve(user);
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
         })
-        
+
     return defer.promise;
 };
 
@@ -94,7 +94,7 @@ function updateUserRank(req, res) {
     var guildMemberNewRank = guildMember.rank;
 
     findGuild(guildName)
-        .then(function(guild) {
+        .then(function (guild) {
 
             if (isAdmin(guild.members, requester)) {
 
@@ -106,16 +106,16 @@ function updateUserRank(req, res) {
                 //guild.members[indexOfMember] = guildMember;
                 _.extend(guild.members[indexOfMember], guildMember);
 
-                guild.save(function(savedGuild) {
+                guild.save(function (savedGuild) {
 
                     buildGuildCookie(req, res, guild);
 
                     util.saveSession(req, res)
-                        .then(function(user) {
+                        .then(function (user) {
 
                             defer.resolve(user);
                         })
-                }, function(err) {
+                }, function (err) {
 
                     defer.reject(err);
                 });
@@ -125,7 +125,7 @@ function updateUserRank(req, res) {
                 defer.reject("Insufficient privileges");
             }
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
         })
@@ -140,7 +140,7 @@ function getGuildMembers(req, res) {
     var guildName = req.body.guildName;
 
     findGuild(guildName)
-        .then(function(guild) {
+        .then(function (guild) {
 
             var nonMongooseGuild = guild.toObject();
             var members = nonMongooseGuild.members;
@@ -160,11 +160,11 @@ function getGuildMembers(req, res) {
             }
 
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
         })
-        
+
     return defer.promise;
 }
 
@@ -181,7 +181,7 @@ function addMember(req, res) {
     }
 
     findGuild(guildName)
-        .then(function(guild) {
+        .then(function (guild) {
 
             if (!guild) {
                 throw new Error("Guild doesn't exist. You can create it if you're the GM");
@@ -201,24 +201,24 @@ function addMember(req, res) {
 
             guild.members.push(newMember);
 
-            guild.save(function() {
+            guild.save(function () {
 
                 req.session.user.guild = guild;
                 buildGuildCookie(req, res, guild);
 
                 util.saveSession(req, res)
-                    .then(function(user) {
+                    .then(function (user) {
 
                         defer.resolve({ user: user });
                     })
             });
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
 
         })
-        
+
     return defer.promise;
 }
 
@@ -226,22 +226,22 @@ function addMember(req, res) {
  * Force kicked by officer
  */
 function kickMember(req, res) {
-    
+
     var defer = q.defer();
-    
+
     var userName = req.body.userName.user;
     var guildName = req.body.guildName
 
     removeUserFromGuild(userName, guildName)
-        .then(function(user) {
+        .then(function (user) {
 
             defer.resolve(user);
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
         })
-        
+
     return defer.promise;
 }
 
@@ -249,29 +249,29 @@ function kickMember(req, res) {
  * Voluntarily leaving a guild
  */
 function removeMember(req, res) {
-    
+
     var defer = q.defer();
-    
+
     var guildName = req.body.guildName;
     var guildMemberName = req.session.user.name;
 
     removeUserFromGuild(guildMemberName, guildName)
-        .then(function(user) {
+        .then(function (user) {
 
             delete req.session.user.guild;
 
             util.saveSession(req, res)
-                .then(function(user) {
+                .then(function (user) {
 
                     defer.resolve(user);
                 })
 
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
         })
-        
+
     return defer.promise;
 }
 
@@ -285,7 +285,7 @@ function saveGuildSettings(req, res) {
         GuildModel.findOne({ name: usersGuild })
             .then(function (guild) {
 
-                _.assign(guild, guildSettings);                
+                _.assign(guild, guildSettings);
                 guild.save(() => {
 
                     resolve({ guild: guild })
@@ -308,7 +308,7 @@ function getGuildSettings(req, res) {
 
         if (req.session.user.guild) {
             var usersGuild = req.session.user.guild.name;
-            
+
             GuildModel.findOne({ name: usersGuild })
                 .then(function (guild) {
 
@@ -336,17 +336,17 @@ function getGuildHomepage(req, res) {
     var usersGuild = req.params.guildName;
 
     GuildModel.findOne({ name: usersGuild })
-        .then(function(guild) {
+        .then(function (guild) {
 
             defer.resolve({ guild: guild });
-        }, function(err) {
+        }, function (err) {
 
             defer.reject(err);
         })
 
     return defer.promise;
 }
-    
+
 function updateGuildHomepage(req, res) {
 
     var defer = q.defer();
@@ -355,64 +355,124 @@ function updateGuildHomepage(req, res) {
     var updatedGuild = req.body.guild
 
     GuildModel.findOne({ name: usersGuild })
-        .then(function(guild) {
+        .then(function (guild) {
 
             guild.tabs = updatedGuild.tabs;
 
-            guild.save(function() {
+            guild.save(function () {
 
                 defer.resolve({ guild: guild });
             })
 
 
-        }, function(err) {
+        }, function (err) {
 
             defer.reject(err);
         })
-        
+
     return defer.promise;
 }
 
 function getRanks(req, res) {
-    
+
 }
 
 function createRank(req, res) {
-    
+
 }
 
 function updateGuildRank(req, res) {
-    
+
 }
 
 function deleteRank(req, res) {
-    
+
+}
+
+function isOfficer(userName) {
+
+    var defer = q.defer();
+
+    getMemberSettings(userName)
+        .then(member => {
+
+            let isOfficer = false;
+
+            if(member.officer || member.GM){
+                
+                isOfficer = true;
+            }
+
+            defer.resolve(isOfficer);
+        })
+
+    return defer.promise;
+}
+
+function isRaider(userName) {
+
+    var defer = q.defer();
+
+    getMemberSettings(userName)
+        .then(member => {
+
+            let isRaider = false;
+
+            if (member.raider) {
+
+                isRaider = true;
+            }
+
+            defer.resolve(isRaider);
+        })
+
+    return defer.promise;
+}
+
+function getMemberSettings(userName) {
+
+    var defer = q.defer();
+
+    findUsersGuild(userName)
+        .then(guild => {
+
+            var memberIndex = _.findIndex(guild.members, { 'user': userName });
+
+            defer.resolve(guild.members[memberIndex]);
+        })
+        .catch(err => {
+            defer.reject(err);
+        })
+
+    return defer.promise;
 }
 
 
-
-module.exports = {        
-    updateGuildHomepage:updateGuildHomepage,
+module.exports = {
+    updateGuildHomepage: updateGuildHomepage,
     buildGuildCookie: buildGuildCookie,
-    saveGuildSettings:saveGuildSettings,
+    saveGuildSettings: saveGuildSettings,
     getGuildHomepage: getGuildHomepage,
     getGuildSettings: getGuildSettings,
     getGuildMembers: getGuildMembers,
-    getListOfGuilds:getListOfGuilds,
-    findUsersGuild:findUsersGuild,
-    removeMember:removeMember,    
-    kickMember:kickMember,
-    updateUserRank:updateUserRank,
-    addMember:addMember,
+    getListOfGuilds: getListOfGuilds,
+    findUsersGuild: findUsersGuild,
+    removeMember: removeMember,
+    kickMember: kickMember,
+    updateUserRank: updateUserRank,
+    addMember: addMember,
     addGuild: addGuild,
     getRanks: getRanks,
     createRank: createRank,
     updateGuildRank: updateGuildRank,
-    deleteRank:deleteRank,
-    
-    };
+    deleteRank: deleteRank,
+    isAdmin: isAdmin,
+    isOfficer: isOfficer,
+    isRaider: isRaider
 
-function findUsersGuild (username) {
+};
+
+function findUsersGuild(username) {
     var defer = q.defer();
 
     GuildModel.findOne({ members: { $elemMatch: { user: username } } })
@@ -429,42 +489,42 @@ function findUsersGuild (username) {
     return defer.promise;
 }
 
-function buildGuildCookie (req, res, guild){
-    
+function buildGuildCookie(req, res, guild) {
+
     req.session.user.guild = {};
     req.session.user.guild.members = [];
-    
-    if(guild.members){
-        
+
+    if (guild.members) {
+
         var userIndex = doesMemberExist(guild.members, req.session.user.name);
-        req.session.user.guild.members[0] = guild.members[userIndex];    
+        req.session.user.guild.members[0] = guild.members[userIndex];
     }
-    
+
     req.session.user.guild.name = guild.name;
-    
+
 }
 
-function removeUserFromGuild(guildMemberName, guildName){
-    
+function removeUserFromGuild(guildMemberName, guildName) {
+
     var defer = q.defer();
-    
+
     findGuild(guildName)
-        .then(function(guild) {
+        .then(function (guild) {
 
             if (guild) {
 
                 var indexOfMember = doesMemberExist(guild.members, guildMemberName);
 
                 if (indexOfMember == -1) {
-                    throw new Error("Member doesn't exist.");                    
+                    throw new Error("Member doesn't exist.");
                 }
 
                 guild.members.splice(indexOfMember, 1);
 
-                guild.save(function(savedGuild) {
+                guild.save(function (savedGuild) {
                     defer.resolve();
-                    
-                }, function(err) {
+
+                }, function (err) {
 
                     defer.reject(err);
                 });
@@ -473,11 +533,11 @@ function removeUserFromGuild(guildMemberName, guildName){
                 throw new Error("Guild no longer exists?");
             }
         })
-        .fail(function(err) {
+        .fail(function (err) {
 
             defer.reject(err);
         })
-    
+
     return defer.promise;
 }
 

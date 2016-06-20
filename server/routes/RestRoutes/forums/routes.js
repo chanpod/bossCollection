@@ -4,7 +4,7 @@ var ThreadManager = require('./components/threadManager')
 var MessageManager = require('./components/messageManager')
 var ForumManager = require('./components/forumManager')
 var CategoryManager = require('./components/categoryManager');
-
+var GuildManager = require('../guild/components/guild/guild-manager.js');
 var util = require('utility');
 
 router.use(function (req, res, next) {
@@ -45,7 +45,6 @@ router.route('/getComments')
 
 router.route('/deleteComment')
     .post(function (req, res) {
-
 
         MessageManager.deleteComment(req, res)
             .then(function (response) {
@@ -90,23 +89,42 @@ router.route('/createCategory')
 
         console.log("Creating a new category...");
 
-        CategoryManager.createCategory(req, res)
+        GuildManager.isOfficer(req.session.user.name)
+            .then(isOfficer => {
+                if(isOfficer){
+
+                    CategoryManager.createCategory(req, res)
+                }
+                else{
+                    res.status(400).send(util.handleErrors("Insufficient permissions"));
+                }
+            })
     });
 
 router.route('/deleteCategory')
     .post(function (req, res) {
 
 
+        GuildManager.isOfficer(req.session.user.name)
+            .then(isOfficer => {
+                
+                if (isOfficer) {
 
-        CategoryManager.deleteCategories(req, res)
-            .then(function (response) {
+                    CategoryManager.deleteCategories(req, res)
+                        .then(function (response) {
 
-                res.status(200).send();
+                            res.status(200).send();
+                        })
+                        .fail(function (err) {
+
+                            res.status(400).send(util.handleErrors(err));
+                        })
+                }
+                else {
+                    res.status(400).send(util.handleErrors("Insufficient permissions"));
+                }
             })
-            .fail(function (err) {
-
-                res.status(400).send(util.handleErrors(err));
-            })
+        
 
     });
 

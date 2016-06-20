@@ -1,5 +1,5 @@
 script#category(type="text/ng-template")
-    md-dialog(layout = "column", aria-label = "categoryEdit").md-list.md-has-header
+    md-dialog(layout = "column", aria-label = "categoryEdit").md-list.md-has-header.modalPadding
         div(layout, layout-align = "center center")
             h4
                 | Category
@@ -8,7 +8,20 @@ script#category(type="text/ng-template")
                 div(layout = "row")
                     md-input-container(flex).md-block
                         label() Category Name
-                        input(ng-model = "object.name", required)                        
+                        input(ng-model = "object.name", required)
+                h3
+                    | Who can view this category?
+                span()
+                    | All permissions are inherited by forums within this category.
+                md-divider
+                div(layout = "column")
+                    md-switch(aria-label="officer switch", ng-model="object.permissions.officer").md-primary
+                        | Officer
+                    md-switch(aria-label="raider switch", ng-model="object.permissions.raider").md-primary
+                        | Raider
+                    md-switch(aria-label="public switch", ng-model="object.permissions.public").md-primary
+                        | Public
+  
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block
                         md-button(ng-disabled = "loading", ng-click = "saveCategory()").md-primary.md-raised

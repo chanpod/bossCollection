@@ -4,31 +4,40 @@ var q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 
+
 var ThreadManager = require('./threadManager');
 
 var util = require('utility');
 var ForumdModel = require('models/forumModels/forum.js');
 
 function createForum(req, res){
-    
+
+    var CategoryManager = require('./categoryManager');    
     var newForum = new ForumdModel();
     
     var name = req.body.forum.name;
     var categoryId = req.body.forum.categoryId;
     var threads = [];
-    
+
     newForum.name = name;
     newForum.categoryId = categoryId;
     newForum.threads = threads;
-    
-    newForum.save(function(forum){
-        
-        res.status(200).send({forum: forum});
-    }, function(err){
-        
-        res.status(400).send(util.handleErrors(err));    
-    })
-    
+
+    CategoryManager.getCategoryPermissions(categoryId)
+        .then(result => {
+
+            newForum.permissions = result;
+            newForum.save(function (forum) {
+
+                res.status(200).send({ forum: forum });
+            }, function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+        }, (err) => {
+
+            res.status(400).send(util.handleErrors(err));
+        })
 }
 
 /**
@@ -72,12 +81,30 @@ function deleteForum(req, res){
 function editForum(req, res){
     
     var defer = q.defer();
-    var query = { "_id" : req.body.forum._id};
-    
+    var forumId = req.body.forum._id 
+    var query = { "_id" : forumId};
+    var forumPermissions = req.body.forum.permissions;
+
     ForumdModel.findOneAndUpdate(query, req.body.forum)
-        .then(function(response){
-            
-            defer.resolve(response);
+        .then(function (response) {
+
+            ThreadManager.getThreads(forumId)
+                .then(function (threads) {
+
+                    _(threads.threads).forEach(function (someThread, index) {
+
+                        someThread.permissions = forumPermissions;
+                        req.body.thread = someThread;
+                        
+                        ThreadManager.editThread(req, res);
+                    })
+
+                }, function (err) {
+
+                    defer.reject(err);
+                })
+
+        
         },function(err){
             defer.reject(err);
         })
@@ -104,13 +131,27 @@ function getForums(categoryId){
 
 
 
+function getForumPermissions(forumId){
 
+    var defer = q.defer();
 
+    ForumdModel.findOne({ "_id": forumId })
+        .then((forum) => {
+
+            defer.resolve(forum.permissions);
+        }, (err) => {
+            defer.reject(err);
+        })
+        
+
+    return defer.promise;
+}
 
 
 module.exports = {
     createForum:createForum,
     getForums:getForums,
     deleteForum:deleteForum,
-    editForum:editForum
+    editForum:editForum,
+    getForumPermissions:getForumPermissions
 }

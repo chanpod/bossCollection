@@ -4,6 +4,7 @@ var q = require('q');
 var moment = require('moment');
 var _ = require('lodash');
 
+
 var MessageManager = require('./messageManager');
 
 var util = require('utility');
@@ -29,6 +30,7 @@ function getFavorites(req, res) {
 function createThread(req, res){
     
     var defer = q.defer();
+    var ForumManager = require('./forumManager');
     
     var newThread = new ThreadModel();
     
@@ -45,15 +47,24 @@ function createThread(req, res){
     newThread.dateCreated = moment.utc();
     newThread.favorite = false;
     newThread.sticky = false;
-    
-    newThread.forumID =  forumID;
-    
-    newThread.save().then(function(response){
-        
-        defer.resolve(response);
-    }, function(err){
-        defer.reject(util.handleErrors(err));
-    })
+
+    newThread.forumID = forumID;
+
+    ForumManager.getForumPermissions(forumID)
+        .then(result => {
+
+            newThread.permissions = result;
+            newThread.save().then(function (response) {
+
+                defer.resolve(response);
+            }, function (err) {
+                defer.reject(util.handleErrors(err));
+            })
+        }, (err) => {
+
+            defer.reject(err);
+        })
+
     
     return defer.promise;
 }

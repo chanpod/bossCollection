@@ -173,7 +173,7 @@ angular.module("BossCollection.forums")
                 
                 var defer = $q.defer();
 
-                
+                 
                 getForumsResource.save({}).$promise
                     .then(function (response) {
 

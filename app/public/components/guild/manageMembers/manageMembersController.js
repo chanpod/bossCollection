@@ -61,13 +61,7 @@ angular.module("BossCollection.guild")
                     user.rank--
                     user = updateUsersRank(user, $scope.ranks);
 
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
+                    $scope.saveUser(user);
                 }
 
 
@@ -106,6 +100,7 @@ angular.module("BossCollection.guild")
             }
 
             $scope.demote = function (user) {
+
                 if (user.rank == $scope.ranks.length) {
                     siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
                 }
@@ -114,17 +109,20 @@ angular.module("BossCollection.guild")
                     user.rank++;
                     user = updateUsersRank(user, $scope.ranks);
 
-                    guildServices.updateRank($scope.user.guild.name, user)
-                        .then(function () {
-
-                        })
-                        .catch(function (err) {
-                            siteServices.showMessageModal(err);
-                        })
+                    $scope.saveUser(user);
                 }
             }
 
             function updateUsersRank(user, ranks) {
+
+                let defaultRanks = {
+                    officer: false,
+                    raider: false,
+                    GM: false,
+                    approved: false
+                }
+
+                 _.extend(user, defaultRanks);
 
                 let newRank = _.find(ranks, (rank) => {
                     return rank.rank == user.rank;
@@ -140,7 +138,18 @@ angular.module("BossCollection.guild")
                 return user;
             }
 
-            $scope.kick = function (user) {
+            $scope.approve = function(user){
+
+                user.approved = true;
+                $scope.saveUser(user);
+            }
+
+            $scope.disableUser = (user) => {
+                user.approved = false;
+                $scope.saveUser(user);
+            }
+ 
+            $scope.kick = (user) => {
 
                 var userName = user;
                 var guildName = $scope.user.guild.name;
@@ -156,6 +165,17 @@ angular.module("BossCollection.guild")
                     })
                     .finally(function () {
 
+                    })
+            }
+
+            $scope.saveUser = (user) => {
+
+                guildServices.updateRank($scope.user.guild.name, user)
+                    .then(function () {
+
+                    })
+                    .catch(function (err) {
+                        siteServices.showMessageModal(err);
                     })
             }
 

@@ -60,6 +60,21 @@ angular.module('BossCollection', ['BossCollection.controllers', 'BossCollection.
     return socketFactory();
 }]). 
 */
+'user strict';
+angular.module("BossCollection.attendance", ['ngRoute']).config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.when('/attendanceStatistics', {
+            templateUrl: 'attendanceStats',
+            controller: 'attendanceStatsCtrl as ctrl'
+        }).when('/whosOut', {
+            templateUrl: 'absenceSubmissions',
+            controller: 'absenceSubmissionsController as absenceReportCtrl'
+        }).when('/auth/absence', {
+            templateUrl: 'absence',
+            controller: 'absenceReportController as ctrl'
+        });
+    }
+]);
 'use strict';
 angular.module('BossCollection.accounts', ['BossCollection.services']);
 'use strict';
@@ -81,17 +96,14 @@ angular.module("BossCollection.forums", ['ngRoute']).config(['$routeProvider',
     }
 ]);
 'user strict';
-angular.module("BossCollection.attendance", ['ngRoute']).config(['$routeProvider',
+angular.module("BossCollection.home", ['ngRoute']).config(['$routeProvider',
     function($routeProvider) {
-        $routeProvider.when('/attendanceStatistics', {
-            templateUrl: 'attendanceStats',
-            controller: 'attendanceStatsCtrl as ctrl'
-        }).when('/whosOut', {
-            templateUrl: 'absenceSubmissions',
-            controller: 'absenceSubmissionsController as absenceReportCtrl'
-        }).when('/auth/absence', {
-            templateUrl: 'absence',
-            controller: 'absenceReportController as ctrl'
+        $routeProvider.when('/', {
+            templateUrl: 'home',
+            controller: 'homeController'
+        }).when('/guild/:guildName', {
+            templateUrl: 'guildVisitHome',
+            controller: 'guildVisitController'
         });
     }
 ]);
@@ -119,16 +131,152 @@ angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
         });
     }
 ]);
-'user strict';
-angular.module("BossCollection.home", ['ngRoute']).config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.when('/', {
-            templateUrl: 'home',
-            controller: 'homeController'
-        }).when('/guild/:guildName', {
-            templateUrl: 'guildVisitHome',
-            controller: 'guildVisitController'
-        });
+angular.module("BossCollection.attendance").controller('absenceModalController', ['$scope', 'absenceService', '$mdDialog', 'data',
+    function($scope, absenceService, $mdDialog, data) {
+        $scope.init = function() {
+            if (data) {
+                $scope.absence = data;
+                $scope.absence.date = new Date($scope.absence.date);
+            } else {
+                $scope.absence = {};
+            }
+        };
+        $scope.save = function() {
+            absenceService.saveAbsence($scope.absence).then(function(response) {
+                $scope.close(response);
+            }).
+            finally(function() {});
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.close = function() {
+            $mdDialog.hide($scope.object);
+        };
+        $scope.init();
+    }
+]);
+'use strict';
+angular.module("BossCollection.attendance").factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope', 'siteServices', '$mdMedia', '$mdDialog',
+    function($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia, $mdDialog) {
+        var API_BASE = "/api/guild/absence";
+        var absence = $resource(API_BASE + '/absence');
+        var UserAbsence = $resource(API_BASE + '/absence/:userName');
+        var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
+        var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
+        var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
+        var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
+        var absenceApi = {
+            getUsersAbsences: function getUsersAbsences(user) {
+                var defer = $q.defer();
+                UserAbsence.get({
+                    userName: user
+                }, function(response) {
+                    defer.resolve(response);
+                });
+                return defer.promise;
+            },
+            submitNewAbsence: function submitNewAbsence(newAbsence) {
+                var defer = $q.defer();
+                absence.save(newAbsence).$promise.then(function(response) {
+                    defer.resolve(response);
+                }, function(err) {
+                    console.log(err);
+                    defer.reject(err.data);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            getAbsenceHistory: function getAbsenceHistory(absenceHistory) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                absenceHistoryResource.save(absenceHistory).$promise.then(function(response) {
+                    defer.resolve(response);
+                }, function(err) {
+                    console.log(err);
+                    defer.reject(err.data);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            openEditModal: function openEditModal(template, locals) {
+                var defer = $q.defer();
+                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+                $mdDialog.show({
+                    templateUrl: template,
+                    controller: 'absenceModalController',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false,
+                    locals: {
+                        data: locals
+                    },
+                    fullscreen: true
+                }).then(function(result) {
+                    defer.resolve(result);
+                }, function() {
+                    defer.reject(); //Something broke or they canceled
+                });
+                return defer.promise;
+            },
+            saveAbsence: function saveAbsence(absence) {
+                var defer = $q.defer();
+                var bodyData = {
+                    absence: absence
+                };
+                saveAbsenceResource.save(bodyData).$promise.then(function(response) {
+                    defer.resolve(response);
+                }, function(err) {
+                    console.log(err);
+                    defer.reject(err.data);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            deleteAbsence: function deleteAbsence(absence) {
+                var defer = $q.defer();
+                var bodyData = {
+                    absence: absence
+                };
+                deleteAbsenceResource.save(bodyData).$promise.then(function(response) {
+                    defer.resolve(response);
+                }, function(err) {
+                    console.log(err);
+                    defer.reject(err.data);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getAbsences: function getAbsences() {
+                var defer = $q.defer();
+                absence.get().$promise.then(function(response) {
+                    defer.resolve(response);
+                }, function(err) {
+                    console.log(err);
+                    defer.reject(err.data);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getAbsencesByDate: function getAbsencesByDate(date) {
+                var defer = $q.defer();
+                absenceByDate.get({
+                    date: date
+                }, function(response) {
+                    defer.resolve(response);
+                });
+                return defer.promise;
+            }
+        };
+        return absenceApi;
     }
 ]);
 'use strict'; /* Directives */
@@ -1015,152 +1163,132 @@ angular.module("BossCollection.forums").service('forumService', ['$location', '$
         };
     }
 ]);
-angular.module("BossCollection.attendance").controller('absenceModalController', ['$scope', 'absenceService', '$mdDialog', 'data',
-    function($scope, absenceService, $mdDialog, data) {
+angular.module("BossCollection.home").controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+    function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        $scope.guild = {};
+        $scope.editing = false;
+        $scope.content;
+        $scope.newTab;
+        $scope.guildImagesLoaded = false;
+        $scope.guildName = $routeParams.guildName;
         $scope.init = function() {
-            if (data) {
-                $scope.absence = data;
-                $scope.absence.date = new Date($scope.absence.date);
-            } else {
-                $scope.absence = {};
-            }
+            $scope.getHomepageContent();
         };
-        $scope.save = function() {
-            absenceService.saveAbsence($scope.absence).then(function(response) {
-                $scope.close(response);
+        $scope.getHomepageContent = function() {
+            $scope.guildImagesLoaded = false;
+            guildServices.getHomepageContent($scope.guildName).then(function(guild) {
+                if (guild.guild == undefined) {
+                    siteServices.showMessageModal("Guild not found. Check the spelling. Spaces and Case matter.");
+                }
+                $scope.guild = guild.guild;
+                var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">" + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
+                if ($scope.guild && $scope.guild.images) {
+                    $scope.guild.images.forEach(function(image) {
+                        sliderHTML += "<item source = " + image + "></item>";
+                    }, this);
+                }
+                sliderHTML += "</awesome-slider>";
+                document.getElementById('imageGallery').innerHTML = sliderHTML;
+                $scope.guildImagesLoaded = true;
             }).
-            finally(function() {});
+            catch (function(err) {
+                siteServices.showMessageModal(err.data);
+            });
         };
         $scope.cancel = function() {
-            $mdDialog.cancel();
+            $scope.editing = false;
         };
-        $scope.close = function() {
-            $mdDialog.hide($scope.object);
-        };
+        siteServices.updateTitle('Home');
         $scope.init();
+        Array.prototype.remove = function(from, to) {
+            var rest = this.slice((to || from) + 1 || this.length);
+            this.length = from < 0 ? this.length + from : from;
+            return this.push.apply(this, rest);
+        };
     }
 ]);
-'use strict';
-angular.module("BossCollection.attendance").factory('absenceService', ['$resource', '$q', '$location', '$cookies', '$rootScope', 'siteServices', '$mdMedia', '$mdDialog',
-    function($resource, $q, $location, $cookies, $rootScope, siteServices, $mdMedia, $mdDialog) {
-        var API_BASE = "/api/guild/absence";
-        var absence = $resource(API_BASE + '/absence');
-        var UserAbsence = $resource(API_BASE + '/absence/:userName');
-        var absenceByDate = $resource(API_BASE + '/absenceByDate/:date');
-        var absenceHistoryResource = $resource(API_BASE + '/absenceHistory');
-        var deleteAbsenceResource = $resource(API_BASE + '/deleteAbsence');
-        var saveAbsenceResource = $resource(API_BASE + '/saveAbsence');
-        var absenceApi = {
-            getUsersAbsences: function getUsersAbsences(user) {
-                var defer = $q.defer();
-                UserAbsence.get({
-                    userName: user
-                }, function(response) {
-                    defer.resolve(response);
-                });
-                return defer.promise;
-            },
-            submitNewAbsence: function submitNewAbsence(newAbsence) {
-                var defer = $q.defer();
-                absence.save(newAbsence).$promise.then(function(response) {
-                    defer.resolve(response);
-                }, function(err) {
-                    console.log(err);
-                    defer.reject(err.data);
+angular.module("BossCollection.home").controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        $scope.guild = {};
+        $scope.editing = false;
+        $scope.content;
+        $scope.newTab;
+        $scope.guildImagesLoaded = false;
+        var newTab = {
+            title: "New Tab",
+            content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details."
+        };
+        $scope.$on("loggedin", function(event, user) {
+            userLoginSrvc.getUser().then(function(user) {
+                if (user) {
+                    $scope.user = user;
+                    $scope.loggedIn = true;
+                    $scope.getHomepageContent();
+                }
+            }, function(err) {
+                $scope.user = {};
+                $scope.loggedIn = false;
+            });
+        });
+        $scope.login = function() {
+            siteServices.showLoadingBottomSheet();
+        };
+        $scope.init = function() {
+            $scope.newTab = newTab;
+            $scope.getHomepageContent();
+        };
+        $scope.getHomepageContent = function() {
+            $scope.guildImagesLoaded = false;
+            if ($scope.user && $scope.user.guild) {
+                guildServices.getHomepageContent($scope.user.guild.name).then(function(guild) {
+                    $scope.guild = guild.guild;
+                    var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">" + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
+                    if ($scope.guild && $scope.guild.images) {
+                        $scope.guild.images.forEach(function(image) {
+                            sliderHTML += "<item source = " + image + "></item>";
+                        }, this);
+                    }
+                    sliderHTML += "</awesome-slider>";
+                    document.getElementById('imageGallery').innerHTML = sliderHTML;
+                    $scope.guildImagesLoaded = true;
                 }).
-                finally(function() {});
-                return defer.promise;
-            },
-            getAbsenceHistory: function getAbsenceHistory(absenceHistory) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                absenceHistoryResource.save(absenceHistory).$promise.then(function(response) {
-                    defer.resolve(response);
-                }, function(err) {
-                    console.log(err);
-                    defer.reject(err.data);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
+                catch (function(err) {
+                    siteServices.showMessageModal(err.data);
                 });
-                return defer.promise;
-            },
-            openEditModal: function openEditModal(template, locals) {
-                var defer = $q.defer();
-                var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-                var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-                $mdDialog.show({
-                    templateUrl: template,
-                    controller: 'absenceModalController',
-                    parent: angular.element(document.body),
-                    clickOutsideToClose: false,
-                    locals: {
-                        data: locals
-                    },
-                    fullscreen: true
-                }).then(function(result) {
-                    defer.resolve(result);
-                }, function() {
-                    defer.reject(); //Something broke or they canceled
-                });
-                return defer.promise;
-            },
-            saveAbsence: function saveAbsence(absence) {
-                var defer = $q.defer();
-                var bodyData = {
-                    absence: absence
-                };
-                saveAbsenceResource.save(bodyData).$promise.then(function(response) {
-                    defer.resolve(response);
-                }, function(err) {
-                    console.log(err);
-                    defer.reject(err.data);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            deleteAbsence: function deleteAbsence(absence) {
-                var defer = $q.defer();
-                var bodyData = {
-                    absence: absence
-                };
-                deleteAbsenceResource.save(bodyData).$promise.then(function(response) {
-                    defer.resolve(response);
-                }, function(err) {
-                    console.log(err);
-                    defer.reject(err.data);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getAbsences: function getAbsences() {
-                var defer = $q.defer();
-                absence.get().$promise.then(function(response) {
-                    defer.resolve(response);
-                }, function(err) {
-                    console.log(err);
-                    defer.reject(err.data);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getAbsencesByDate: function getAbsencesByDate(date) {
-                var defer = $q.defer();
-                absenceByDate.get({
-                    date: date
-                }, function(response) {
-                    defer.resolve(response);
-                });
-                return defer.promise;
             }
         };
-        return absenceApi;
+        $scope.editTab = function() {
+            $scope.editing = true;
+        };
+        $scope.saveTab = function() {
+            guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name).then(function(res) {
+                $scope.cancel(); //It worked, do nothing.
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal(err.data);
+            });
+        };
+        $scope.deleteTab = function(index) {
+            siteServices.confirmDelete().then(function() {
+                $scope.guild.tabs.remove(index);
+                $scope.saveTab();
+            });
+        };
+        $scope.addNewTab = function() {
+            $scope.guild.tabs.push($scope.newTab);
+            $scope.saveTab();
+            $scope.newTab = newTab;
+        };
+        $scope.cancel = function() {
+            $scope.editing = false;
+        };
+        siteServices.updateTitle('Home');
+        $scope.init();
+        Array.prototype.remove = function(from, to) {
+            var rest = this.slice((to || from) + 1 || this.length);
+            this.length = from < 0 ? this.length + from : from;
+            return this.push.apply(this, rest);
+        };
     }
 ]);
 'use strict';
@@ -1416,131 +1544,434 @@ angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', 
         return guildApi;
     }
 ]);
-angular.module("BossCollection.home").controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-    function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
-        $scope.guild = {};
-        $scope.editing = false;
-        $scope.content;
-        $scope.newTab;
-        $scope.guildImagesLoaded = false;
-        $scope.guildName = $routeParams.guildName;
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendance").controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia', 'siteServices', '$filter', '$anchorScroll',
+    function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, $anchorScroll) {
+        siteServices.updateTitle('Attendance Portal');
+        $scope.absenceHighchartData = [];
+        $scope.absenceHighchartDrillDownSeries = [];
+        $scope.late = 1;
+        $scope.absent = 6;
+        $scope.weeksCounted = 4;
+        $scope.raidsPerWeek = 3;
+        $scope.startingDate = new Date();
         $scope.init = function() {
-            $scope.getHomepageContent();
+            $scope.getAbsences();
+            $scope.buildHighChart();
         };
-        $scope.getHomepageContent = function() {
-            $scope.guildImagesLoaded = false;
-            guildServices.getHomepageContent($scope.guildName).then(function(guild) {
-                if (guild.guild == undefined) {
-                    siteServices.showMessageModal("Guild not found. Check the spelling. Spaces and Case matter.");
-                }
-                $scope.guild = guild.guild;
-                var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">" + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
-                if ($scope.guild && $scope.guild.images) {
-                    $scope.guild.images.forEach(function(image) {
-                        sliderHTML += "<item source = " + image + "></item>";
-                    }, this);
-                }
-                sliderHTML += "</awesome-slider>";
-                document.getElementById('imageGallery').innerHTML = sliderHTML;
-                $scope.guildImagesLoaded = true;
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal(err.data);
+        $scope.openReportModal = function() {
+            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
+            $mdDialog.show({
+                controller: "absenceReportController as reportAbsenceCtrl",
+                templateUrl: 'absence',
+                clickOutsideToClose: false,
+                fullscreen: useFullScreen
             });
         };
-        $scope.cancel = function() {
-            $scope.editing = false;
+        $scope.getAbsences = function() {
+            $scope.currentlySelected = "All absences";
+            $scope.loading = true;
+            var absenceHistory = {
+                date: $scope.startingDate,
+                weeks: $scope.weeksCounted
+            };
+            absenceService.getAbsenceHistory(absenceHistory).then(function(result) {
+                $scope.loading = false;
+                $scope.absences = result.absences;
+                $scope.calculateAttendance();
+            }, function(err) {
+                siteServices.showMessageModal(err.data);
+                $scope.loading = false;
+                console.log(err);
+            });
         };
-        siteServices.updateTitle('Home');
+        /** 
+         *
+         *
+         *
+         */
+        $scope.calculateAttendance = function() { //get an object of unique users in the absence list
+            var listOfUsers = _.groupBy($scope.absences, "user");
+            $scope.absenceHighchartData = [];
+            $scope.absenceHighchartDrillDownSeries = [];
+            _(listOfUsers).forEach(function(user) { //group the users absences by type
+                var absentTypes = _.groupBy(user, "type");
+                var lateCount = 0;
+                var absentCount = 0; //Get the number of each type
+                if (absentTypes.late) {
+                    lateCount = absentTypes.late.length || 0;
+                }
+                if (absentTypes.absent) {
+                    absentCount = absentTypes.absent.length || 0;
+                } //Calculate total value based on weights and number of days.
+                var totalAttendancePoints = $scope.weeksCounted * $scope.raidsPerWeek * $scope.absent;
+                var lateWeight = $scope.late / $scope.absent * $scope.absent; //Get flat value by subtracting the total value minus the weighted values times the number of times they've occured a particular type. 
+                var attendanceRating = totalAttendancePoints - lateCount * lateWeight - absentCount * $scope.absent; //Divide to get the %
+                var percentAttendanceRating = attendanceRating / totalAttendancePoints; //Build the initial highchart object.
+                $scope.absenceHighchartData.push({
+                    name: user[0].user,
+                    y: percentAttendanceRating * 100,
+                    drilldown: user[0].user
+                });
+                var drillDownData = []; //build the drilldown data.
+                _(absentTypes.late).forEach(function(lateObject) {
+                    drillDownData.push([lateObject.date, $scope.late]);
+                });
+                _(absentTypes.absent).forEach(function(absentObject) {
+                    drillDownData.push([absentObject.date, $scope.absent]);
+                });
+                $scope.absenceHighchartDrillDownSeries.push({
+                    name: user[0].user,
+                    id: user[0].user,
+                    data: drillDownData
+                });
+            }, this);
+            $scope.buildHighChart();
+        };
+        $scope.redrawChart = function(seriesData, drilldownData) {
+            $scope.chart.series[0].setData([{
+                name: "Member",
+                colorByPoint: true,
+                data: $scope.absenceHighchartData
+            }]);
+            $scope.chart.drilldown.setData({
+                series: $scope.absenceHighchartDrillDownSeries
+            });
+        };
+        $scope.buildHighChart = function() {
+            $scope.chart = new Highcharts.Chart({
+                chart: {
+                    type: 'column',
+                    renderTo: 'container'
+                },
+                title: {
+                    text: 'Member attendance rates'
+                },
+                subtitle: {
+                    text: 'Click the columns to view dates missed.'
+                },
+                xAxis: {
+                    type: 'category'
+                },
+                yAxis: {
+                    title: {
+                        text: 'Percent attendance'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.1f}%'
+                        }
+                    }
+                },
+                series: [{
+                    name: "Member",
+                    colorByPoint: true,
+                    data: $scope.absenceHighchartData
+                }],
+                drilldown: {
+                    series: $scope.absenceHighchartDrillDownSeries
+                }
+            });
+        };
         $scope.init();
-        Array.prototype.remove = function(from, to) {
-            var rest = this.slice((to || from) + 1 || this.length);
-            this.length = from < 0 ? this.length + from : from;
-            return this.push.apply(this, rest);
-        };
     }
 ]);
-angular.module("BossCollection.home").controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
-        $scope.guild = {};
-        $scope.editing = false;
-        $scope.content;
-        $scope.newTab;
-        $scope.guildImagesLoaded = false;
-        var newTab = {
-            title: "New Tab",
-            content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details."
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendance").controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
+    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService) {
+        var currentDay = moment().day();
+        var self = this;
+        self.showContentBool = false;
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment();
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        self.selectedUser = {};
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
         };
-        $scope.$on("loggedin", function(event, user) {
-            userLoginSrvc.getUser().then(function(user) {
-                if (user) {
-                    $scope.user = user;
-                    $scope.loggedIn = true;
-                    $scope.getHomepageContent();
-                }
-            }, function(err) {
-                $scope.user = {};
-                $scope.loggedIn = false;
-            });
-        });
-        $scope.login = function() {
-            siteServices.showLoadingBottomSheet();
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        self.showContent = function() {
+            self.showContentBool = true;
+        };
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        $scope.isGM = function() {
+            if ($scope.user != undefined) {
+                return permissionsService.isGM($scope.user);
+            } else {
+                return false;
+            }
         };
         $scope.init = function() {
-            $scope.newTab = newTab;
-            $scope.getHomepageContent();
-        };
-        $scope.getHomepageContent = function() {
-            $scope.guildImagesLoaded = false;
-            if ($scope.user && $scope.user.guild) {
-                guildServices.getHomepageContent($scope.user.guild.name).then(function(guild) {
-                    $scope.guild = guild.guild;
-                    var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">" + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
-                    if ($scope.guild && $scope.guild.images) {
-                        $scope.guild.images.forEach(function(image) {
-                            sliderHTML += "<item source = " + image + "></item>";
-                        }, this);
+            siteServices.updateTitle('Report Absence');
+            if ($scope.user == undefined) {
+                userLoginSrvc.getUser().then(function(user) {
+                    $scope.user = user;
+                    console.log($scope.isGM());
+                    $scope.gm = !permissionsService.isGM($scope.user);
+                    if (!permissionsService.isOfficer($scope.user)) {
+                        self.selectedUser = $scope.user;
+                        self.showContent();
+                    } else {
+                        $scope.getGuildUsers();
                     }
-                    sliderHTML += "</awesome-slider>";
-                    document.getElementById('imageGallery').innerHTML = sliderHTML;
-                    $scope.guildImagesLoaded = true;
-                }).
-                catch (function(err) {
-                    siteServices.showMessageModal(err.data);
+                });
+            } else {
+                if (permissionsService.isOfficer($scope.user)) {
+                    self.selectedUser = $scope.user;
+                    self.showContent();
+                } else {
+                    $scope.getGuildUsers();
+                }
+            }
+        };
+        $scope.getGuildUsers = function() {
+            $scope.loading = true;
+            guildServices.getGuildMembers($scope.user.guild.name).then(function(users) {
+                $scope.users = users;
+                self.showContent();
+            }).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        $scope.updateList = function() {
+            $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+            $scope.getAbsencesByDate();
+        };
+
+        function calculateNumOfDaysUntil(dayDesired) {
+            var numOfDaysInWeek = 7;
+            var nextDate = dayDesired - currentDay;
+            if (nextDate < 0) {
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);
+            }
+            return nextDate;
+        }
+        $scope.formatDate = function(date) {
+            return moment.utc(date).format('dddd, MMM D');
+        };
+        $scope.getAbsences = function() {
+            $scope.currentlySelected = "All absences";
+            $scope.loading = true;
+            absenceService.getAbsences().then(function(result) {
+                $scope.loading = false;
+                $scope.absences = result.absences;
+            }, function(err) {
+                siteServices.showMessageToast(err);
+                $scope.loading = false;
+                console.log(err);
+            });
+        };
+        $scope.getAbsencesByDate = function() {
+            $scope.loading = true;
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result) {
+                $scope.loading = false;
+                $scope.absences = result.absences;
+            }, function(err) {
+                siteServices.showMessageToast(err);
+                $scope.loading = false;
+                console.log(err);
+            });
+        };
+        $scope.filterSearch = function(filterSearch) {
+            return $filter('filter')($scope.users, filterSearch);
+        };
+        $scope.submitNewAbsence = function() {
+            if ($scope.newAbsence.date == null) {
+                siteServices.showMessageModal("Must select a date");
+            } else if ($scope.newAbsence.type == null) {
+                siteServices.showMessageModal("Must select a type: Late or Absent");
+            } else {
+                if (!permissionsService.isOfficer($scope.user)) {
+                    self.selectedUser = $scope.user.name;
+                } else {
+                    $scope.newAbsence.user = self.selectedUser.user;
+                }
+                absenceService.submitNewAbsence($scope.newAbsence).then(function(result) { //TODO: Redirect to list of absences.
+                    siteServices.showMessageModal("Success");
+                }, function(err) {
+                    siteServices.showMessageModal(err);
+                    console.log(err);
                 });
             }
         };
-        $scope.editTab = function() {
-            $scope.editing = true;
-        };
-        $scope.saveTab = function() {
-            guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name).then(function(res) {
-                $scope.cancel(); //It worked, do nothing.
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal(err.data);
-            });
-        };
-        $scope.deleteTab = function(index) {
-            siteServices.confirmDelete().then(function() {
-                $scope.guild.tabs.remove(index);
-                $scope.saveTab();
-            });
-        };
-        $scope.addNewTab = function() {
-            $scope.guild.tabs.push($scope.newTab);
-            $scope.saveTab();
-            $scope.newTab = newTab;
-        };
-        $scope.cancel = function() {
-            $scope.editing = false;
-        };
-        siteServices.updateTitle('Home');
+
+        function filterOutOldDates() {}
         $scope.init();
-        Array.prototype.remove = function(from, to) {
-            var rest = this.slice((to || from) + 1 || this.length);
-            this.length = from < 0 ? this.length + from : from;
-            return this.push.apply(this, rest);
+    }
+]);
+angular.module('BossCollection.attendance').directive('absenceReport', [
+    function() {
+        return {
+            restrict: 'E',
+            controller: 'absenceReportController',
+            templateUrl: 'absence'
+        };
+    }
+]);
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendance").controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter) {
+        var currentDay = moment().day();
+        var self = this;
+        self.showContentBool = false;
+        self.newAbsence = {};
+        self.absences = [];
+        self.loading = false;
+        self.typePicked = false;
+        self.today = moment();
+        self.dayDesired;
+        self.currentlySelected = moment().format('dddd - Do');
+        self.selectedMember = undefined;
+        var ALLFUTUREABSENCES = "All Future Absences";
+        var TODAY = "Today";
+        var MYABSENCES = "My Abscences";
+        var MEMBERSABSENCES;
+        /**
+         * 0 = all future absences
+         * 1 = specific date
+         */
+        self.viewing = 0;
+        $scope.$watch('selectedMember', function(newMember) {
+            if (newMember) {
+                self.getUserAbsences(newMember.user);
+            }
+        });
+        self.init = function() {
+            self.getAbsences();
+            self.currentlySelected = ALLFUTUREABSENCES;
+            self.isToolSetOpen = false;
+        };
+        self.showContent = function() {
+            self.showContentBool = true;
+        };
+        self.updateList = function() {
+            self.viewing = 1;
+            self.currentlySelected = moment(self.dayDesired).format('dddd - Do');
+            self.getAbsencesByDate();
+        };
+        self.dateHasPassed = function(absence) {
+            var difference = moment().diff(moment(absence.date));
+            console.log(difference);
+            if (difference > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        function calculateNumOfDaysUntil(dayDesired) {
+            var numOfDaysInWeek = 7;
+            var nextDate = dayDesired - currentDay;
+            if (nextDate < 0) {
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);
+            }
+            return nextDate;
+        }
+        self.formatDate = function(date) {
+            return moment.utc(date).format('dddd, MMM D');
+        };
+        self.getAbsences = function() {
+            self.currentlySelected = ALLFUTUREABSENCES;
+            self.loading = true;
+            self.viewing = 0;
+            absenceService.getAbsences().then(function(result) {
+                self.loading = false;
+                self.absences = result.absences;
+                self.showContent();
+            }, function(err) {
+                siteServices.showMessageModal(err.data);
+                self.loading = false;
+                console.log(err);
+            });
+        };
+        self.deleteAbsence = function(absence) {
+            siteServices.confirmDelete().then(function(result) {
+                return absenceService.deleteAbsence(absence);
+            }).then(function(result) {
+                if (self.viewing == 0) {
+                    self.getAbsences();
+                } else {
+                    self.updateList();
+                }
+            }).
+            finally(function() {});
+        };
+        self.editAbsence = function(absence) {
+            absenceService.openEditModal('editAbsence', absence).then(function(result) {
+                if (self.viewing == 0) {
+                    self.getAbsences();
+                } else {
+                    self.updateList();
+                }
+            });
+        };
+        self.getTodaysAbsences = function() {
+            self.currentlySelected = TODAY;
+            self.dayDesired = new Date();
+            self.dayDesired.setSeconds(0);
+            self.dayDesired.setHours(0);
+            self.dayDesired.setMinutes(0);
+            self.getAbsencesByDate();
+        };
+        self.getAbsencesByDate = function(dateIn) {
+            self.loading = true;
+            absenceService.getAbsencesByDate(self.dayDesired).then(function(result) {
+                self.loading = false;
+                self.absences = result.absences;
+            }, function(err) {
+                siteServices.showMessageToast(err);
+                self.loading = false;
+                console.log(err);
+            });
+        };
+        self.getUserAbsences = function(userName) {
+            if (userName == $scope.user.name) {
+                self.currentlySelected = MYABSENCES;
+            } else {
+                self.currentlySelected = userName + "'s Absences";
+            }
+            self.loading = true;
+            absenceService.getUsersAbsences(userName).then(function(absences) {
+                self.loading = false;
+                self.absences = absences.absences;
+            }, function(err) {
+                self.loading = false;
+            });
+        };
+        self.init();
+    }
+]);
+angular.module('BossCollection.attendance').directive('viewAbsenceReport', [
+    function() {
+        return {
+            restrict: 'E',
+            controller: 'absenceSubmissionsController as absenceReportCtrl',
+            templateUrl: 'absenceSubmissions'
         };
     }
 ]);
@@ -2218,437 +2649,6 @@ angular.module("BossCollection.forums").controller('threadController', ['$scope'
 ]);
 'use strict';
 /**
- *
- */
-angular.module("BossCollection.attendance").controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia', 'siteServices', '$filter', '$anchorScroll',
-    function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, $anchorScroll) {
-        siteServices.updateTitle('Attendance Portal');
-        $scope.absenceHighchartData = [];
-        $scope.absenceHighchartDrillDownSeries = [];
-        $scope.late = 1;
-        $scope.absent = 6;
-        $scope.weeksCounted = 4;
-        $scope.raidsPerWeek = 3;
-        $scope.startingDate = new Date();
-        $scope.init = function() {
-            $scope.getAbsences();
-            $scope.buildHighChart();
-        };
-        $scope.openReportModal = function() {
-            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
-            $mdDialog.show({
-                controller: "absenceReportController as reportAbsenceCtrl",
-                templateUrl: 'absence',
-                clickOutsideToClose: false,
-                fullscreen: useFullScreen
-            });
-        };
-        $scope.getAbsences = function() {
-            $scope.currentlySelected = "All absences";
-            $scope.loading = true;
-            var absenceHistory = {
-                date: $scope.startingDate,
-                weeks: $scope.weeksCounted
-            };
-            absenceService.getAbsenceHistory(absenceHistory).then(function(result) {
-                $scope.loading = false;
-                $scope.absences = result.absences;
-                $scope.calculateAttendance();
-            }, function(err) {
-                siteServices.showMessageModal(err.data);
-                $scope.loading = false;
-                console.log(err);
-            });
-        };
-        /** 
-         *
-         *
-         *
-         */
-        $scope.calculateAttendance = function() { //get an object of unique users in the absence list
-            var listOfUsers = _.groupBy($scope.absences, "user");
-            $scope.absenceHighchartData = [];
-            $scope.absenceHighchartDrillDownSeries = [];
-            _(listOfUsers).forEach(function(user) { //group the users absences by type
-                var absentTypes = _.groupBy(user, "type");
-                var lateCount = 0;
-                var absentCount = 0; //Get the number of each type
-                if (absentTypes.late) {
-                    lateCount = absentTypes.late.length || 0;
-                }
-                if (absentTypes.absent) {
-                    absentCount = absentTypes.absent.length || 0;
-                } //Calculate total value based on weights and number of days.
-                var totalAttendancePoints = $scope.weeksCounted * $scope.raidsPerWeek * $scope.absent;
-                var lateWeight = $scope.late / $scope.absent * $scope.absent; //Get flat value by subtracting the total value minus the weighted values times the number of times they've occured a particular type. 
-                var attendanceRating = totalAttendancePoints - lateCount * lateWeight - absentCount * $scope.absent; //Divide to get the %
-                var percentAttendanceRating = attendanceRating / totalAttendancePoints; //Build the initial highchart object.
-                $scope.absenceHighchartData.push({
-                    name: user[0].user,
-                    y: percentAttendanceRating * 100,
-                    drilldown: user[0].user
-                });
-                var drillDownData = []; //build the drilldown data.
-                _(absentTypes.late).forEach(function(lateObject) {
-                    drillDownData.push([lateObject.date, $scope.late]);
-                });
-                _(absentTypes.absent).forEach(function(absentObject) {
-                    drillDownData.push([absentObject.date, $scope.absent]);
-                });
-                $scope.absenceHighchartDrillDownSeries.push({
-                    name: user[0].user,
-                    id: user[0].user,
-                    data: drillDownData
-                });
-            }, this);
-            $scope.buildHighChart();
-        };
-        $scope.redrawChart = function(seriesData, drilldownData) {
-            $scope.chart.series[0].setData([{
-                name: "Member",
-                colorByPoint: true,
-                data: $scope.absenceHighchartData
-            }]);
-            $scope.chart.drilldown.setData({
-                series: $scope.absenceHighchartDrillDownSeries
-            });
-        };
-        $scope.buildHighChart = function() {
-            $scope.chart = new Highcharts.Chart({
-                chart: {
-                    type: 'column',
-                    renderTo: 'container'
-                },
-                title: {
-                    text: 'Member attendance rates'
-                },
-                subtitle: {
-                    text: 'Click the columns to view dates missed.'
-                },
-                xAxis: {
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Percent attendance'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        borderWidth: 0,
-                        dataLabels: {
-                            enabled: true,
-                            format: '{point.y:.1f}%'
-                        }
-                    }
-                },
-                series: [{
-                    name: "Member",
-                    colorByPoint: true,
-                    data: $scope.absenceHighchartData
-                }],
-                drilldown: {
-                    series: $scope.absenceHighchartDrillDownSeries
-                }
-            });
-        };
-        $scope.init();
-    }
-]);
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.attendance").controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter) {
-        var currentDay = moment().day();
-        var self = this;
-        self.showContentBool = false;
-        self.newAbsence = {};
-        self.absences = [];
-        self.loading = false;
-        self.typePicked = false;
-        self.today = moment();
-        self.dayDesired;
-        self.currentlySelected = moment().format('dddd - Do');
-        self.selectedMember = undefined;
-        var ALLFUTUREABSENCES = "All Future Absences";
-        var TODAY = "Today";
-        var MYABSENCES = "My Abscences";
-        var MEMBERSABSENCES;
-        /**
-         * 0 = all future absences
-         * 1 = specific date
-         */
-        self.viewing = 0;
-        $scope.$watch('selectedMember', function(newMember) {
-            if (newMember) {
-                self.getUserAbsences(newMember.user);
-            }
-        });
-        self.init = function() {
-            self.getAbsences();
-            self.currentlySelected = ALLFUTUREABSENCES;
-            self.isToolSetOpen = false;
-        };
-        self.showContent = function() {
-            self.showContentBool = true;
-        };
-        self.updateList = function() {
-            self.viewing = 1;
-            self.currentlySelected = moment(self.dayDesired).format('dddd - Do');
-            self.getAbsencesByDate();
-        };
-        self.dateHasPassed = function(absence) {
-            var difference = moment().diff(moment(absence.date));
-            console.log(difference);
-            if (difference > 0) {
-                return false;
-            } else {
-                return true;
-            }
-        };
-
-        function calculateNumOfDaysUntil(dayDesired) {
-            var numOfDaysInWeek = 7;
-            var nextDate = dayDesired - currentDay;
-            if (nextDate < 0) {
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);
-            }
-            return nextDate;
-        }
-        self.formatDate = function(date) {
-            return moment.utc(date).format('dddd, MMM D');
-        };
-        self.getAbsences = function() {
-            self.currentlySelected = ALLFUTUREABSENCES;
-            self.loading = true;
-            self.viewing = 0;
-            absenceService.getAbsences().then(function(result) {
-                self.loading = false;
-                self.absences = result.absences;
-                self.showContent();
-            }, function(err) {
-                siteServices.showMessageModal(err.data);
-                self.loading = false;
-                console.log(err);
-            });
-        };
-        self.deleteAbsence = function(absence) {
-            siteServices.confirmDelete().then(function(result) {
-                return absenceService.deleteAbsence(absence);
-            }).then(function(result) {
-                if (self.viewing == 0) {
-                    self.getAbsences();
-                } else {
-                    self.updateList();
-                }
-            }).
-            finally(function() {});
-        };
-        self.editAbsence = function(absence) {
-            absenceService.openEditModal('editAbsence', absence).then(function(result) {
-                if (self.viewing == 0) {
-                    self.getAbsences();
-                } else {
-                    self.updateList();
-                }
-            });
-        };
-        self.getTodaysAbsences = function() {
-            self.currentlySelected = TODAY;
-            self.dayDesired = new Date();
-            self.dayDesired.setSeconds(0);
-            self.dayDesired.setHours(0);
-            self.dayDesired.setMinutes(0);
-            self.getAbsencesByDate();
-        };
-        self.getAbsencesByDate = function(dateIn) {
-            self.loading = true;
-            absenceService.getAbsencesByDate(self.dayDesired).then(function(result) {
-                self.loading = false;
-                self.absences = result.absences;
-            }, function(err) {
-                siteServices.showMessageToast(err);
-                self.loading = false;
-                console.log(err);
-            });
-        };
-        self.getUserAbsences = function(userName) {
-            if (userName == $scope.user.name) {
-                self.currentlySelected = MYABSENCES;
-            } else {
-                self.currentlySelected = userName + "'s Absences";
-            }
-            self.loading = true;
-            absenceService.getUsersAbsences(userName).then(function(absences) {
-                self.loading = false;
-                self.absences = absences.absences;
-            }, function(err) {
-                self.loading = false;
-            });
-        };
-        self.init();
-    }
-]);
-angular.module('BossCollection.attendance').directive('viewAbsenceReport', [
-    function() {
-        return {
-            restrict: 'E',
-            controller: 'absenceSubmissionsController as absenceReportCtrl',
-            templateUrl: 'absenceSubmissions'
-        };
-    }
-]);
-'use strict';
-/**
- *
- */
-angular.module("BossCollection.attendance").controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
-    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService) {
-        var currentDay = moment().day();
-        var self = this;
-        self.showContentBool = false;
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment();
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
-        self.selectedUser = {};
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        };
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
-        self.showContent = function() {
-            self.showContentBool = true;
-        };
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        $scope.isGM = function() {
-            if ($scope.user != undefined) {
-                return permissionsService.isGM($scope.user);
-            } else {
-                return false;
-            }
-        };
-        $scope.init = function() {
-            siteServices.updateTitle('Report Absence');
-            if ($scope.user == undefined) {
-                userLoginSrvc.getUser().then(function(user) {
-                    $scope.user = user;
-                    console.log($scope.isGM());
-                    $scope.gm = !permissionsService.isGM($scope.user);
-                    if (!permissionsService.isOfficer($scope.user)) {
-                        self.selectedUser = $scope.user;
-                        self.showContent();
-                    } else {
-                        $scope.getGuildUsers();
-                    }
-                });
-            } else {
-                if (permissionsService.isOfficer($scope.user)) {
-                    self.selectedUser = $scope.user;
-                    self.showContent();
-                } else {
-                    $scope.getGuildUsers();
-                }
-            }
-        };
-        $scope.getGuildUsers = function() {
-            $scope.loading = true;
-            guildServices.getGuildMembers($scope.user.guild.name).then(function(users) {
-                $scope.users = users;
-                self.showContent();
-            }).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-        $scope.updateList = function() {
-            $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
-            $scope.getAbsencesByDate();
-        };
-
-        function calculateNumOfDaysUntil(dayDesired) {
-            var numOfDaysInWeek = 7;
-            var nextDate = dayDesired - currentDay;
-            if (nextDate < 0) {
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);
-            }
-            return nextDate;
-        }
-        $scope.formatDate = function(date) {
-            return moment.utc(date).format('dddd, MMM D');
-        };
-        $scope.getAbsences = function() {
-            $scope.currentlySelected = "All absences";
-            $scope.loading = true;
-            absenceService.getAbsences().then(function(result) {
-                $scope.loading = false;
-                $scope.absences = result.absences;
-            }, function(err) {
-                siteServices.showMessageToast(err);
-                $scope.loading = false;
-                console.log(err);
-            });
-        };
-        $scope.getAbsencesByDate = function() {
-            $scope.loading = true;
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result) {
-                $scope.loading = false;
-                $scope.absences = result.absences;
-            }, function(err) {
-                siteServices.showMessageToast(err);
-                $scope.loading = false;
-                console.log(err);
-            });
-        };
-        $scope.filterSearch = function(filterSearch) {
-            return $filter('filter')($scope.users, filterSearch);
-        };
-        $scope.submitNewAbsence = function() {
-            if ($scope.newAbsence.date == null) {
-                siteServices.showMessageModal("Must select a date");
-            } else if ($scope.newAbsence.type == null) {
-                siteServices.showMessageModal("Must select a type: Late or Absent");
-            } else {
-                if (!permissionsService.isOfficer($scope.user)) {
-                    self.selectedUser = $scope.user.name;
-                } else {
-                    $scope.newAbsence.user = self.selectedUser.user;
-                }
-                absenceService.submitNewAbsence($scope.newAbsence).then(function(result) { //TODO: Redirect to list of absences.
-                    siteServices.showMessageModal("Success");
-                }, function(err) {
-                    siteServices.showMessageModal(err);
-                    console.log(err);
-                });
-            }
-        };
-
-        function filterOutOldDates() {}
-        $scope.init();
-    }
-]);
-angular.module('BossCollection.attendance').directive('absenceReport', [
-    function() {
-        return {
-            restrict: 'E',
-            controller: 'absenceReportController',
-            templateUrl: 'absence'
-        };
-    }
-]);
-'use strict';
-/**
  
  *
 
@@ -3160,10 +3160,7 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
             } else {
                 user.rank--;
                 user = updateUsersRank(user, $scope.ranks);
-                guildServices.updateRank($scope.user.guild.name, user).then(function() {}).
-                catch (function(err) {
-                    siteServices.showMessageModal(err);
-                });
+                $scope.saveUser(user);
             }
         };
         $scope.showPromote = function(rank) { //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
@@ -3193,14 +3190,18 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
             } else {
                 user.rank++;
                 user = updateUsersRank(user, $scope.ranks);
-                guildServices.updateRank($scope.user.guild.name, user).then(function() {}).
-                catch (function(err) {
-                    siteServices.showMessageModal(err);
-                });
+                $scope.saveUser(user);
             }
         };
 
         function updateUsersRank(user, ranks) {
+            var defaultRanks = {
+                officer: false,
+                raider: false,
+                GM: false,
+                approved: false
+            };
+            _.extend(user, defaultRanks);
             var newRank = _.find(ranks, function(rank) {
                 return rank.rank == user.rank;
             });
@@ -3210,6 +3211,14 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
             delete user.name;
             return user;
         }
+        $scope.approve = function(user) {
+            user.approved = true;
+            $scope.saveUser(user);
+        };
+        $scope.disableUser = function(user) {
+            user.approved = false;
+            $scope.saveUser(user);
+        };
         $scope.kick = function(user) {
             var userName = user;
             var guildName = $scope.user.guild.name;
@@ -3220,6 +3229,12 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
                 siteServices.showMessageModal(err);
             }).
             finally(function() {});
+        };
+        $scope.saveUser = function(user) {
+            guildServices.updateRank($scope.user.guild.name, user).then(function() {}).
+            catch (function(err) {
+                siteServices.showMessageModal(err);
+            });
         };
         $scope.init();
         siteServices.updateTitle('Manage Members');
