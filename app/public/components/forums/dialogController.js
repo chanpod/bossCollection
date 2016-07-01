@@ -6,7 +6,7 @@ angular.module("BossCollection.forums")
             $scope.object = {};
             $scope.loading = false;
             $scope.replying = false;
-            
+            $scope.rankSelected = {};
             
             $scope.orderBy = "dateCreated"
 
@@ -21,10 +21,8 @@ angular.module("BossCollection.forums")
                     $scope.object = {};
                 }
 
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        $scope.user = user;
-                    })
+                $scope.user = userLoginSrvc.updateUser();
+                    
             }
 
             $scope.cancel = function () {
@@ -60,9 +58,17 @@ angular.module("BossCollection.forums")
                     })
             }
 
+            $scope.setSelectedRank = (rank) => {
+                $scope.rankSelected = rank;
+            }
+
             $scope.saveCategory = function () {
 
                 $scope.loading = true;
+
+                if(typeof $scope.rankSelected.rank == 'number'){
+                    $scope.object.permissions.minRank = $scope.rankSelected.rank;
+                }
 
                 if ($scope.object._id) {
                     forumService.editCategory($scope.object)

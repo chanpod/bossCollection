@@ -12,7 +12,7 @@ script#category(type="text/ng-template")
                 h3
                     | Who can view this category?
                 span()
-                    | All permissions are inherited by forums within this category.
+                    | All permissions are inherited by forums within this category. 
                 md-divider
                 div(layout = "column")
                     md-switch(aria-label="officer switch", ng-model="object.permissions.officer").md-primary
@@ -21,6 +21,11 @@ script#category(type="text/ng-template")
                         | Raider
                     md-switch(aria-label="public switch", ng-model="object.permissions.public").md-primary
                         | Public
+                    h3 Minimum access rank
+                    span() Current Rank - {{object.permissions.minRank}}
+                    md-select(ng-model = "dontcare")
+                        md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank'")
+                            {{rank.rank}}: {{rank.name}}
   
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block

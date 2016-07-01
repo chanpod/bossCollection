@@ -133,20 +133,33 @@ function getCategories(req, res) {
 
     else {
         query = {
-            "guild": guild,
-            $or: [
-
+            $and: [
+                {"guild": guild},
                 {
-                    $and: [
-                        { "permissions.officer": userPermissions.officer },
-                        { "permissions.raider": userPermissions.raider },
-                        { "permissions.minRank": { $gte: userPermissions.rank } }
+                    $or: [
 
+                        {
+                            $and: [
+                                { "permissions.officer": userPermissions.officer },
+                                { "permissions.raider": userPermissions.raider },
+                                { "permissions.minRank": { $gte: userPermissions.rank } }
+
+                            ]
+                        },
+
+                        {
+                            $and: [
+                                { "permissions.officer": userPermissions.officer },
+                                { "permissions.raider": false },
+                                { "permissions.minRank": { $gte: userPermissions.rank } }
+
+                            ]
+                        },
+
+                        {
+                            "permissions.public": true
+                        }
                     ]
-                },
-
-                {
-                    "permissions.public": true
                 }
             ]
         }
