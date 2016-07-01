@@ -9,6 +9,12 @@ var ThreadManager = require('./threadManager');
 
 var util = require('utility');
 var CategorydModel = require('models/forumModels/category.js');
+var defaultCategoryPermissions = {
+        raider: false,
+        officer: false,
+        minRank: 0,
+        public: false
+    }
 
 function createCategory(req, res) {
 

@@ -65,9 +65,17 @@ angular.module("BossCollection.forums")
             
             $scope.newCategory = function () {
 
-                $scope.category = {};
+                $scope.category = {
+                    name: "",
+                    permissions: {
+                        raider: false,
+                        officer: false,
+                        minRank: 0,
+                        public: false
+                    }
+                };
                 
-                forumService.openBottomSheet('category')
+                forumService.openBottomSheet('category', $scope.category)
                     .then(function(result){
                         
                         forumService.removeLocalForums();

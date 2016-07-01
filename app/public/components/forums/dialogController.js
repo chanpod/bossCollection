@@ -79,12 +79,12 @@ angular.module("BossCollection.forums")
                         .catch(function (err) {
 
                         })
-                        .finally(function () {
+                        .finally(function () { 
                             $scope.loading = false;
                         })
                 }
                 else {
-                    forumService.createNewCategory({ name: $scope.object.name })
+                    forumService.createNewCategory($scope.object)
                         .then(function (result) {
 
                             $scope.close(result);
