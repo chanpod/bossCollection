@@ -127,46 +127,33 @@ function getCategories(req, res) {
     var userPermissions = req.session.user.guild.members[0];
     var query = {};
 
-    if (userPermissions.GM) {
+    if (userPermissions.GM || userPermissions.officer) {
         query = { "guild": guild };
     }
 
-    else if (userPermissions.officer) {
-
+    else {
         query = {
+            "guild": guild,
             $or: [
 
                 {
                     $and: [
-                        { "guild": guild },
-                        { "permissions.officer": true }                        
+                        { "permissions.officer": userPermissions.officer },
+                        { "permissions.raider": userPermissions.raider },
+                        { "permissions.minRank": { $gte: userPermissions.rank } }
+
                     ]
                 },
+
                 {
-                    "public": true
+                    "permissions.public": true
                 }
             ]
-        };
+        }
     }
 
-    else if (userPermissions.raider) {
-        query = {
-            $or: [
-                
-                {
-                    $and: [
-                        {"guild": guild},
-                        { "permissions.officer": false },
-                        { "permissions.raider": userPermissions.raider }
-                    ]
-                },
-                {
-                    "public": true
-                }
-            ]
-        };
 
-    }
+
 
     //query.public = true;
 
