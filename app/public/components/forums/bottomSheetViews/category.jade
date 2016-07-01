@@ -23,9 +23,11 @@ script#category(type="text/ng-template")
                         | Public
                     h3 Minimum access rank
                     span() Current Rank - {{object.permissions.minRank}}
-                    md-select(ng-model = "dontcare")
-                        md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank'")
-                            {{rank.rank}}: {{rank.name}}
+                    md-input-container
+                        label Minimum Rank
+                        md-select(ng-model = "dontcare")
+                            md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank'")
+                                {{rank.rank}}: {{rank.name}}
   
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block

@@ -177,7 +177,7 @@ function addMember(req, res) {
 
     var newMember = {
         user: memberName,
-        rank: 1
+        rank: undefined
     }
 
     findGuild(guildName)
@@ -198,6 +198,16 @@ function addMember(req, res) {
                 return;
             }
 
+            let lowestRank = 0;            
+
+            _.forEach(guild.ranks, (rank, index) => {
+
+                if (lowestRank < rank.rank) {
+                    lowestRank = rank.rank;
+                }
+            })
+
+            newMember.rank = lowestRank;
 
             guild.members.push(newMember);
 

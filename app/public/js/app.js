@@ -95,6 +95,18 @@ angular.module('BossCollection', [
 }])
 .run([function(){
     // Check service workers are supported
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
+    {
+        alert("IE is not supported. Please use a modern browser.")
+    }
+    else  // If another browser, return 0
+    {
+        
+    }
+
     
 }])
 /*

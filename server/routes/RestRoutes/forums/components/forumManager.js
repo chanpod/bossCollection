@@ -148,10 +148,12 @@ function getForumPermissions(forumId){
 }
 
 
+
+
 module.exports = {
     createForum:createForum,
     getForums:getForums,
     deleteForum:deleteForum,
     editForum:editForum,
-    getForumPermissions:getForumPermissions
+    getForumPermissions: getForumPermissions    
 }

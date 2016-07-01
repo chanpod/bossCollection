@@ -39,6 +39,10 @@ angular.module("BossCollection.guild")
                     })
             }
 
+            $scope.selectedItemChange = function (item) {
+                console.log("Item changed: " + item);
+            }
+
             $scope.joinGuild = function () {
 
                 $scope.loading = true;

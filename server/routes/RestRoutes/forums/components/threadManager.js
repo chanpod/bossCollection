@@ -123,11 +123,11 @@ function deleteThread(req, res){
 
 function getThread(threadID) {
     
-    var defer = q.defer();
-    
+    var defer = q.defer();    
+
     ThreadModel.find({_id: threadID})
         .then(function (thread) {
-
+            
             defer.resolve({ thread: thread });
         })
            

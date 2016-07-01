@@ -93,6 +93,16 @@ angular.module("BossCollection.accounts")
                         }
 
                         defer.resolve(savedUser);
+
+                        accountApi.getUserFromServer()
+                            .then((user) => {
+                                if (user.guild.name == savedUser.guild.name) {
+                                    //don't care
+                                }
+                                else {
+                                    accountApi.updateUser();
+                                }
+                            })
                     }
                     else {
                         defer.reject("User doesn't exist");

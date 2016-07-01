@@ -160,17 +160,17 @@ router.route('/thread')
             .then(function (response) {
                 
                 var thread = response.thread[0];
-                
-                if (thread.public || (thread.public == false || thread.public == undefined && util.userExist(req))) {
-                    
-                    res.status(200).send(response);
+
+                let guildUser = req.session.user.guild.members[0];
+
+                if (util.checkUserPermissions(guildUser, thread.permissions)) {
+
+                   res.status(200).send(response);
                 }
-                // else if (response.public == false || response.public == undefined && util.userExist(req)) {
-                //     res.status(200).send(response);
-                // }
                 else {
                     throw new Error("Not authorized to view this thread.")
-                }
+                }                
+               
             })
             .fail(function (err) {
                 res.status(400).send(util.handleErrors(err));

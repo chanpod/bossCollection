@@ -128,15 +128,12 @@ script#home(type="text/ng-template")
             h2
                 | Welcome to BossCollection
             p()
-                | Your home for guild management.
+                | Looks like you don't have a home yet. Get started with one of these options.          
             div()
-                span()
-                    | Get started
-            div()
-                md-button(ng-click = "login()").md-raised.md-accent
-                    | Login
-                md-button(ng-click = "goTo('auth/signup')").md-raised.md-accent
-                    | Register
+                md-button(ng-click = "goTo('/createGuild')").md-raised.md-accent
+                    | Create Guild
+                md-button(ng-click = "goTo('/joinGuild')").md-raised.md-accent
+                    | Join Guild
         div()
         div(flex)            
             div(layout-xs = "column", layout = "row", layout-align = "space-around start", layout-align-xs = "center center")

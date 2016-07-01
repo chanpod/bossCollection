@@ -53,6 +53,13 @@ angular.module('BossCollection', ['BossCollection.controllers', 'BossCollection.
     }
 ]).run([
     function() { // Check service workers are supported
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+        if (msie > 0 || !! navigator.userAgent.match(/Trident.*rv\:11\./)) // If Internet Explorer, return version number
+        {
+            alert("IE is not supported. Please use a modern browser.");
+        } else // If another browser, return 0
+        {}
     }
 ]);
 /*
@@ -77,24 +84,6 @@ angular.module("BossCollection.attendance", ['ngRoute']).config(['$routeProvider
         });
     }
 ]);
-'use strict';
-angular.module("BossCollection.forums", ['ngRoute']).config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.when('/forum', {
-            templateUrl: 'forum',
-            controller: 'forumController'
-        }).when('/forum/favorites', {
-            controller: 'favoritesController as favCtrl',
-            templateUrl: 'favorites'
-        }).when('/forum/:forumID', {
-            templateUrl: 'thread',
-            controller: 'threadController'
-        }).when('/thread/:threadID', {
-            templateUrl: 'threadComments',
-            controller: 'commentsController as ctrl'
-        });
-    }
-]);
 'user strict';
 angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
     function($routeProvider) {
@@ -116,6 +105,24 @@ angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
         }).when('/manageGuild', {
             templateUrl: 'guildSettings',
             controller: 'guildSettingsController'
+        });
+    }
+]);
+'use strict';
+angular.module("BossCollection.forums", ['ngRoute']).config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.when('/forum', {
+            templateUrl: 'forum',
+            controller: 'forumController'
+        }).when('/forum/favorites', {
+            controller: 'favoritesController as favCtrl',
+            templateUrl: 'favorites'
+        }).when('/forum/:forumID', {
+            templateUrl: 'thread',
+            controller: 'threadController'
+        }).when('/thread/:threadID', {
+            templateUrl: 'threadComments',
+            controller: 'commentsController as ctrl'
         });
     }
 ]);
@@ -209,6 +216,12 @@ angular.module("BossCollection.accounts").factory('userLoginSrvc', ['$resource',
                         saveUsersPermissions(savedUser);
                     }
                     defer.resolve(savedUser);
+                    accountApi.getUserFromServer().then(function(user) {
+                        if (user.guild.name == savedUser.guild.name) { //don't care
+                        } else {
+                            accountApi.updateUser();
+                        }
+                    });
                 } else {
                     defer.reject("User doesn't exist");
                 }
@@ -497,6 +510,259 @@ angular.module("BossCollection.attendance").factory('absenceService', ['$resourc
             }
         };
         return absenceApi;
+    }
+]);
+'use strict';
+angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', '$resource', 'siteServices', 'userLoginSrvc',
+    function($http, $q, $resource, siteServices, userLoginSrvc) {
+        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+        var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
+        var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+        var API_BASE = "/api/guild/guild";
+        var APPLICATION_API_BASE = "/api/guild/applications";
+        var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
+        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
+        var _approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
+        var _rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
+        var addGuild = $resource(API_BASE + '/addGuild');
+        var _updateRank = $resource(API_BASE + '/updateRank');
+        var changeGuildName = $resource(API_BASE + '/changeGuildName');
+        var addMember = $resource(API_BASE + '/addMember');
+        var removeMember = $resource(API_BASE + '/removeMember');
+        var kickuserResource = $resource(API_BASE + '/kickMember');
+        var _getGuildMembers = $resource(API_BASE + '/getGuildMembers');
+        var _getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
+        var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
+        var guildSettingsResource = $resource(API_BASE + "/guildSettings");
+        var guildApi = {
+            saveGuildSettings: function saveGuildSettings(guildSettings) {
+                return guildSettingsResource.save({
+                    guild: guildSettings
+                }).$promise;
+            },
+            getGuildSettings: function getGuildSettings() {
+                return guildSettingsResource.get().$promise;
+            },
+            updateHomepageContent: function updateHomepageContent(guild, guildName) {
+                var bodyData = {
+                    guild: guild
+                }; //no data, it's a get
+                return guildHomepageContentResource.save({
+                    guildName: guildName
+                }, bodyData).$promise;
+            },
+            getHomepageContent: function getHomepageContent(guildName) {
+                var bodyData = {}; //no data, it's a get
+                return guildHomepageContentResource.get({
+                    guildName: guildName
+                }).$promise;
+            },
+            kickUser: function kickUser(userName, guildName) {
+                var bodyData = {
+                    userName: userName,
+                    guildName: guildName
+                };
+                return kickuserResource.save(bodyData).$promise;
+            },
+            approveApplication: function approveApplication(application) {
+                var bodyData = {
+                    application: application
+                };
+                return _approveApplication.save(bodyData).$promise;
+            },
+            rejectApplication: function rejectApplication(application) {
+                var bodyData = {
+                    application: application
+                };
+                return _rejectApplication.save(bodyData).$promise;
+            },
+            getListOfGuilds: function getListOfGuilds() {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                _getListOfGuilds.get().$promise.then(function(guilds) {
+                    defer.resolve(guilds.guilds);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            updateRank: function updateRank(guildName, member) {
+                var defer = $q.defer();
+                _updateRank.save({
+                    guildName: guildName,
+                    member: member
+                }).$promise.then(function(result) {
+                    defer.resolve(result.members);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getGuildMembers: function getGuildMembers(guildName) {
+                var defer = $q.defer();
+                _getGuildMembers.save({
+                    guildName: guildName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.members);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            createGuild: function createGuild(guildName) {
+                var defer = $q.defer();
+                addGuild.save({
+                    guildName: guildName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.guild);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            joinGuild: function joinGuild(guildName, memberName) {
+                var defer = $q.defer();
+                addMember.save({
+                    guildName: guildName,
+                    memberName: memberName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.guild);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            leaveGuild: function leaveGuild(guildName) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                removeMember.save({
+                    guildName: guildName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.user);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getApplications: function getApplications(startDate) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                getApplicationsUrl.get({
+                    startDate: startDate
+                }).$promise.then(function(applications) {
+                    defer.resolve(applications);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getProgression: function getProgression(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=progression&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(data) {
+                    defer.resolve(data.progression);
+                }, function(err) {
+                    defer.reject("Character not found");
+                });
+                return defer.promise;
+            },
+            getItemLevel: function getItemLevel(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(data) {
+                    defer.resolve(data.items.averageItemLevelEquipped);
+                }, function(err) {
+                    defer.reject("Character not found");
+                });
+                return defer.promise;
+            },
+            validateCharacterName: function validateCharacterName(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(data) {
+                    defer.resolve(data);
+                }, function(err) {
+                    defer.reject("Character not found");
+                });
+                return defer.promise;
+            },
+            getGuild: function getGuild(realm, guildName) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                if (realm != "" && guildName != "") {
+                    var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
+                }
+                $http({
+                    method: 'GET',
+                    url: getMembersUrl
+                }).then(function(data) {
+                    defer.resolve(data.data.members);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            submitApplication: function submitApplication(newApplicant) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(characterWithSpec) {
+                    return characterWithSpec;
+                }, function(err) {
+                    defer.reject("Character not found");
+                }).then(function(characterWithSpec) {
+                    newApplicant.character.specs = characterWithSpec.talents;
+                    apply.save({
+                        "newApplicant": newApplicant
+                    }).$promise.then(function(submitted) {
+                        siteServices.loadingFinished();
+                        defer.resolve(submitted);
+                    }, function(err) {
+                        defer.reject(err);
+                    });
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            }
+        };
+
+        function getUsersRank(userName, guild) {
+            var memberListing;
+            memberListing = _.find(guild.members, {
+                user: userName
+            });
+            return memberListing.rank;
+        }
+        return guildApi;
     }
 ]);
 angular.module("BossCollection.forums").controller('dialogController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
@@ -1185,259 +1451,6 @@ angular.module("BossCollection.forums").service('forumService', ['$location', '$
         };
     }
 ]);
-'use strict';
-angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', '$resource', 'siteServices', 'userLoginSrvc',
-    function($http, $q, $resource, siteServices, userLoginSrvc) {
-        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
-        var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        var API_BASE = "/api/guild/guild";
-        var APPLICATION_API_BASE = "/api/guild/applications";
-        var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
-        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
-        var _approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
-        var _rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
-        var addGuild = $resource(API_BASE + '/addGuild');
-        var _updateRank = $resource(API_BASE + '/updateRank');
-        var changeGuildName = $resource(API_BASE + '/changeGuildName');
-        var addMember = $resource(API_BASE + '/addMember');
-        var removeMember = $resource(API_BASE + '/removeMember');
-        var kickuserResource = $resource(API_BASE + '/kickMember');
-        var _getGuildMembers = $resource(API_BASE + '/getGuildMembers');
-        var _getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
-        var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
-        var guildSettingsResource = $resource(API_BASE + "/guildSettings");
-        var guildApi = {
-            saveGuildSettings: function saveGuildSettings(guildSettings) {
-                return guildSettingsResource.save({
-                    guild: guildSettings
-                }).$promise;
-            },
-            getGuildSettings: function getGuildSettings() {
-                return guildSettingsResource.get().$promise;
-            },
-            updateHomepageContent: function updateHomepageContent(guild, guildName) {
-                var bodyData = {
-                    guild: guild
-                }; //no data, it's a get
-                return guildHomepageContentResource.save({
-                    guildName: guildName
-                }, bodyData).$promise;
-            },
-            getHomepageContent: function getHomepageContent(guildName) {
-                var bodyData = {}; //no data, it's a get
-                return guildHomepageContentResource.get({
-                    guildName: guildName
-                }).$promise;
-            },
-            kickUser: function kickUser(userName, guildName) {
-                var bodyData = {
-                    userName: userName,
-                    guildName: guildName
-                };
-                return kickuserResource.save(bodyData).$promise;
-            },
-            approveApplication: function approveApplication(application) {
-                var bodyData = {
-                    application: application
-                };
-                return _approveApplication.save(bodyData).$promise;
-            },
-            rejectApplication: function rejectApplication(application) {
-                var bodyData = {
-                    application: application
-                };
-                return _rejectApplication.save(bodyData).$promise;
-            },
-            getListOfGuilds: function getListOfGuilds() {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                _getListOfGuilds.get().$promise.then(function(guilds) {
-                    defer.resolve(guilds.guilds);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            updateRank: function updateRank(guildName, member) {
-                var defer = $q.defer();
-                _updateRank.save({
-                    guildName: guildName,
-                    member: member
-                }).$promise.then(function(result) {
-                    defer.resolve(result.members);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getGuildMembers: function getGuildMembers(guildName) {
-                var defer = $q.defer();
-                _getGuildMembers.save({
-                    guildName: guildName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.members);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {});
-                return defer.promise;
-            },
-            createGuild: function createGuild(guildName) {
-                var defer = $q.defer();
-                addGuild.save({
-                    guildName: guildName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.guild);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {});
-                return defer.promise;
-            },
-            joinGuild: function joinGuild(guildName, memberName) {
-                var defer = $q.defer();
-                addMember.save({
-                    guildName: guildName,
-                    memberName: memberName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.guild);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data);
-                }).
-                finally(function() {});
-                return defer.promise;
-            },
-            leaveGuild: function leaveGuild(guildName) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                removeMember.save({
-                    guildName: guildName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.user);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getApplications: function getApplications(startDate) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                getApplicationsUrl.get({
-                    startDate: startDate
-                }).$promise.then(function(applications) {
-                    defer.resolve(applications);
-                }, function(err) {
-                    defer.reject(err);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getProgression: function getProgression(characterName, realm) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=progression&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(data) {
-                    defer.resolve(data.progression);
-                }, function(err) {
-                    defer.reject("Character not found");
-                });
-                return defer.promise;
-            },
-            getItemLevel: function getItemLevel(characterName, realm) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(data) {
-                    defer.resolve(data.items.averageItemLevelEquipped);
-                }, function(err) {
-                    defer.reject("Character not found");
-                });
-                return defer.promise;
-            },
-            validateCharacterName: function validateCharacterName(characterName, realm) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(data) {
-                    defer.resolve(data);
-                }, function(err) {
-                    defer.reject("Character not found");
-                });
-                return defer.promise;
-            },
-            getGuild: function getGuild(realm, guildName) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                if (realm != "" && guildName != "") {
-                    var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
-                }
-                $http({
-                    method: 'GET',
-                    url: getMembersUrl
-                }).then(function(data) {
-                    defer.resolve(data.data.members);
-                }, function(err) {
-                    defer.reject(err);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            submitApplication: function submitApplication(newApplicant) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(characterWithSpec) {
-                    return characterWithSpec;
-                }, function(err) {
-                    defer.reject("Character not found");
-                }).then(function(characterWithSpec) {
-                    newApplicant.character.specs = characterWithSpec.talents;
-                    apply.save({
-                        "newApplicant": newApplicant
-                    }).$promise.then(function(submitted) {
-                        siteServices.loadingFinished();
-                        defer.resolve(submitted);
-                    }, function(err) {
-                        defer.reject(err);
-                    });
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            }
-        };
-
-        function getUsersRank(userName, guild) {
-            var memberListing;
-            memberListing = _.find(guild.members, {
-                user: userName
-            });
-            return memberListing.rank;
-        }
-        return guildApi;
-    }
-]);
 angular.module("BossCollection.home").controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
     function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
         $scope.guild = {};
@@ -1857,6 +1870,150 @@ angular.module("BossCollection.attendance").controller("attendanceStatsCtrl", ["
 /**
  *
  */
+angular.module("BossCollection.attendance").controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
+    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService) {
+        var currentDay = moment().day();
+        var self = this;
+        self.showContentBool = false;
+        $scope.newAbsence = {};
+        $scope.absences = {};
+        $scope.loading = false;
+        $scope.typePicked = false;
+        $scope.today = moment();
+        $scope.dayDesired;
+        $scope.currentlySelected = moment().format('dddd - Do');
+        self.selectedUser = {};
+        $scope.toolbar = {
+            isOpen: false,
+            direction: "right"
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        self.showContent = function() {
+            self.showContentBool = true;
+        };
+        $scope.currentlySelected = "Today";
+        $scope.isToolSetOpen = false;
+        $scope.isGM = function() {
+            if ($scope.user != undefined) {
+                return permissionsService.isGM($scope.user);
+            } else {
+                return false;
+            }
+        };
+        $scope.init = function() {
+            siteServices.updateTitle('Report Absence');
+            if ($scope.user == undefined) {
+                userLoginSrvc.getUser().then(function(user) {
+                    $scope.user = user;
+                    console.log($scope.isGM());
+                    $scope.gm = !permissionsService.isGM($scope.user);
+                    if (!permissionsService.isOfficer($scope.user)) {
+                        self.selectedUser = $scope.user;
+                        self.showContent();
+                    } else {
+                        $scope.getGuildUsers();
+                    }
+                });
+            } else {
+                if (permissionsService.isOfficer($scope.user)) {
+                    self.selectedUser = $scope.user;
+                    self.showContent();
+                } else {
+                    $scope.getGuildUsers();
+                }
+            }
+        };
+        $scope.getGuildUsers = function() {
+            $scope.loading = true;
+            guildServices.getGuildMembers($scope.user.guild.name).then(function(users) {
+                $scope.users = users;
+                self.showContent();
+            }).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        $scope.updateList = function() {
+            $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
+            $scope.getAbsencesByDate();
+        };
+
+        function calculateNumOfDaysUntil(dayDesired) {
+            var numOfDaysInWeek = 7;
+            var nextDate = dayDesired - currentDay;
+            if (nextDate < 0) {
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);
+            }
+            return nextDate;
+        }
+        $scope.formatDate = function(date) {
+            return moment.utc(date).format('dddd, MMM D');
+        };
+        $scope.getAbsences = function() {
+            $scope.currentlySelected = "All absences";
+            $scope.loading = true;
+            absenceService.getAbsences().then(function(result) {
+                $scope.loading = false;
+                $scope.absences = result.absences;
+            }, function(err) {
+                siteServices.showMessageToast(err);
+                $scope.loading = false;
+                console.log(err);
+            });
+        };
+        $scope.getAbsencesByDate = function() {
+            $scope.loading = true;
+            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result) {
+                $scope.loading = false;
+                $scope.absences = result.absences;
+            }, function(err) {
+                siteServices.showMessageToast(err);
+                $scope.loading = false;
+                console.log(err);
+            });
+        };
+        $scope.filterSearch = function(filterSearch) {
+            return $filter('filter')($scope.users, filterSearch);
+        };
+        $scope.submitNewAbsence = function() {
+            if ($scope.newAbsence.date == null) {
+                siteServices.showMessageModal("Must select a date");
+            } else if ($scope.newAbsence.type == null) {
+                siteServices.showMessageModal("Must select a type: Late or Absent");
+            } else {
+                if (!permissionsService.isOfficer($scope.user)) {
+                    self.selectedUser = $scope.user.name;
+                } else {
+                    $scope.newAbsence.user = self.selectedUser.user;
+                }
+                absenceService.submitNewAbsence($scope.newAbsence).then(function(result) { //TODO: Redirect to list of absences.
+                    siteServices.showMessageModal("Success");
+                }, function(err) {
+                    siteServices.showMessageModal(err);
+                    console.log(err);
+                });
+            }
+        };
+
+        function filterOutOldDates() {}
+        $scope.init();
+    }
+]);
+angular.module('BossCollection.attendance').directive('absenceReport', [
+    function() {
+        return {
+            restrict: 'E',
+            controller: 'absenceReportController',
+            templateUrl: 'absence'
+        };
+    }
+]);
+'use strict';
+/**
+ *
+ */
 angular.module("BossCollection.attendance").controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
     function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter) {
         var currentDay = moment().day();
@@ -2000,146 +2157,598 @@ angular.module('BossCollection.attendance').directive('viewAbsenceReport', [
 ]);
 'use strict';
 /**
+ 
  *
+
  */
-angular.module("BossCollection.attendance").controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
-    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService) {
-        var currentDay = moment().day();
-        var self = this;
-        self.showContentBool = false;
-        $scope.newAbsence = {};
-        $scope.absences = {};
-        $scope.loading = false;
-        $scope.typePicked = false;
-        $scope.today = moment();
-        $scope.dayDesired;
-        $scope.currentlySelected = moment().format('dddd - Do');
-        self.selectedUser = {};
-        $scope.toolbar = {
-            isOpen: false,
-            direction: "right"
-        };
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
-        self.showContent = function() {
-            self.showContentBool = true;
-        };
-        $scope.currentlySelected = "Today";
-        $scope.isToolSetOpen = false;
-        $scope.isGM = function() {
-            if ($scope.user != undefined) {
-                return permissionsService.isGM($scope.user);
-            } else {
-                return false;
-            }
-        };
+angular.module("BossCollection.guild").controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices', '$mdDialog',
+    function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog) {
+        siteServices.updateTitle('Applications');
+        $scope.application = {};
+        $scope.validCharacterName = false;
+        $scope.charRequirementsIncomplete = false;
+        $scope.charRealmError = false;
+        $scope.searchingForUser = false;
+        $scope.icon = "error";
         $scope.init = function() {
-            siteServices.updateTitle('Report Absence');
-            if ($scope.user == undefined) {
-                userLoginSrvc.getUser().then(function(user) {
-                    $scope.user = user;
-                    console.log($scope.isGM());
-                    $scope.gm = !permissionsService.isGM($scope.user);
-                    if (!permissionsService.isOfficer($scope.user)) {
-                        self.selectedUser = $scope.user;
-                        self.showContent();
-                    } else {
-                        $scope.getGuildUsers();
+            realmServices.getRealms().then(function(realms) {
+                $scope.realms = realms;
+            }).then(function() {
+                return $scope.getGuilds();
+            }).then(function() {
+                return $scope.loggedIn();
+            }).
+            catch (function(err) {
+                console.log(err);
+            }).
+            finally(function() {
+                $timeout(function() {
+                    siteServices.hideLoadingModal();
+                }, 500);
+            });
+        };
+        $scope.getGuilds = function() {
+            return guildServices.getListOfGuilds().then(function(guilds) {
+                $scope.listOfGuilds = guilds;
+            });
+        };
+        $scope.filterGuildsSearch = function(filterSearch) {
+            return $filter('filter')($scope.listOfGuilds, filterSearch);
+        };
+        $scope.filterSearch = function(filterSearch) {
+            return $filter('filter')($scope.realms, filterSearch);
+        };
+        $scope.loggedIn = function() {
+            userLoginSrvc.getUser().then(function(user) { //Success, let them fill out the form.
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal("Please log in before attempting to apply.");
+                $location.path('/');
+            }).
+            finally(function() {});
+        };
+        $scope.validateCharactername = function(callback) {
+            if ($scope.application.realm) {
+                $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                $scope.searchingForUser = true;
+                guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name).then(function(character) {
+                    $scope.validCharacterName = true;
+                    $scope.icon = "check_circle";
+                    $scope.application.character = character;
+                    return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
+                }, function(err) {
+                    $scope.icon = "error";
+                    siteServices.showMessageToast(err);
+                    $scope.validCharacterName = false;
+                }).then(function(result) {
+                    $scope.application.itemLevel = result;
+                    return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
+                }).then(function(result) {
+                    $scope.parseProgression(result);
+                    if (callback) {
+                        callback();
                     }
+                }).
+                finally(function() {
+                    $scope.searchingForUser = false;
                 });
             } else {
-                if (permissionsService.isOfficer($scope.user)) {
-                    self.selectedUser = $scope.user;
-                    self.showContent();
-                } else {
-                    $scope.getGuildUsers();
+                $scope.validCharacterName = false;
+                if (callback) {
+                    callback();
                 }
             }
         };
-        $scope.getGuildUsers = function() {
+        $scope.parseProgression = function(result) {
+            $scope.raids = result.raids;
+            $scope.hfc = _.find($scope.raids, function(raid) {
+                return raid.name == "Hellfire Citadel";
+            });
+            $scope.brf = _.find($scope.raids, function(raid) {
+                return raid.name == "Blackrock Foundry";
+            });
+            $scope.hm = _.find($scope.raids, function(raid) {
+                return raid.name == "Highmaul";
+            });
+            $scope.application.progression = {};
+            $scope.application.progression.hfc = $scope.hfc;
+            $scope.application.progression.brf = $scope.brf;
+            $scope.application.progression.hm = $scope.hm;
+        };
+        $scope.submitApplication = function() {
+            $scope.validateCharactername(function() {
+                if ($scope.validCharacterName == false) {
+                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                } else if ($scope.guildSelected != undefined) {
+                    $scope.application.guildName = $scope.guildSelected.name;
+                    $scope.isLoading = true;
+                    guildServices.submitApplication($scope.application).then(function(result) {
+                        $scope.showConfirm();
+                    }, function(err) {
+                        $scope.isLoading = false;
+                        siteServices.showMessageToast(err);
+                    });
+                } else {
+                    siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
+                }
+            });
+        };
+        $scope.showConfirm = function() { // Appending dialog to document.body to cover sidenav in docs app
+            $mdDialog.show($mdDialog.alert().clickOutsideToClose(false).title("Application Successful!").textContent("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion. You will also receive an email with the registered email account with whether or not your application was accepted or rejected.").ariaLabel('message popup').ok('Got it!').openFrom({
+                left: -50,
+                width: 30,
+                height: 80
+            }).closeTo({
+                right: 1500
+            })).then(function() {
+                $scope.isLoading = false;
+                $location.path('/');
+            }, function() {
+                $scope.status = 'You decided to keep your debt.';
+            });
+        };
+        $scope.init();
+    }
+]);
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
+    function($scope, $location, $http, $timeout, guildServices, siteServices) {
+        siteServices.updateTitle('View Applications');
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
+        $scope.loading = true;
+        $scope.numOfNewApplicants = 0;
+        $scope.startDate = moment();
+        $scope.startDate.month($scope.startDate.month() - 2);
+        $scope.filterStatus = function(status) {
+            return function(application) {
+                return application.status == status;
+            };
+            /**
+                var filteredArray = _.filter($scope.applications, function(application){
+                    return application.status == status;
+                })
+                
+                return filteredArray;
+                 */
+        };
+        $scope.approveApplicant = function(application) {
+            guildServices.approveApplication(application).then(function() {
+                application.status = "Approved";
+            }).
+            catch (function(err) {}).
+            finally(function() {});
+        };
+        $scope.rejectApplicant = function(application) {
+            guildServices.rejectApplication(application).then(function() {
+                application.status = "Rejected";
+            }).
+            catch (function(err) {}).
+            finally(function() {});
+        };
+        $scope.openComments = function(comments) {
+            siteServices.showMessageModal(comments, "Comments");
+        };
+        $scope.openMenu = function($mdOpenMenu, ev) {
+            $mdOpenMenu(ev);
+        };
+        $scope.goTo = function(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+        $scope.buildArmoryUrl = function(realm, character) {
+            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+            $scope.goTo(url);
+        };
+        $scope.getApplications = function() {
+            guildServices.getApplications($scope.startDate).then(function(applications) {
+                $scope.loading = false;
+                $scope.applications = applications.applications; //object to array
+                var newApplicants = _.find($scope.applications, function(applicant) {
+                    return applicant.status == "Applied";
+                });
+                if (newApplicants != undefined) {
+                    $scope.numOfNewApplicants = 1;
+                }
+                convertClasses();
+            }, function(err) {
+                $scope.loading = false;
+                console.log(err);
+                siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
+            });
+        };
+
+        function convertClasses() {
+            for (var i = 0; i < $scope.applications.length; i++) {
+                var classType = classes[$scope.applications[i].character.class];
+                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+            }
+        }
+        $scope.getNormalProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].normalKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getHeroicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].heroicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getMythicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].mythicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getApplications();
+    }
+]);
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild").controller("createGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        siteServices.updateTitle('Create Guild');
+        $scope.guildName = "";
+        $scope.loading = false;
+        $scope.joinGuild = function() {
             $scope.loading = true;
-            guildServices.getGuildMembers($scope.user.guild.name).then(function(users) {
-                $scope.users = users;
-                self.showContent();
+            guildServices.createGuild($scope.guildName).then(function() {
+                var user = userLoginSrvc.updateUser();
+                siteServices.showMessageModal("Successfully created " + user.guild.name);
+                $location.path('/');
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal(err);
             }).
             finally(function() {
                 $scope.loading = false;
             });
         };
-        $scope.updateList = function() {
-            $scope.currentlySelected = moment($scope.dayDesired).format('dddd - Do');
-            $scope.getAbsencesByDate();
+    }
+]);
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild").controller("guildSettingsController", ["$scope", '$rootScope', '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', '$q',
+    function($scope, $rootScope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, $q) { //user comes from parent controller navbar
+        $scope.guildMembers;
+        $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM'];
+        $scope.changesMade = false;
+        $scope.loading = false;
+        var defaultRank = {
+            name: "{name me}",
+            raider: false,
+            officer: false,
+            rank: null,
+            gm: false
         };
-
-        function calculateNumOfDaysUntil(dayDesired) {
-            var numOfDaysInWeek = 7;
-            var nextDate = dayDesired - currentDay;
-            if (nextDate < 0) {
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);
-            }
-            return nextDate;
-        }
-        $scope.formatDate = function(date) {
-            return moment.utc(date).format('dddd, MMM D');
+        $scope.init = function() {
+            siteServices.updateTitle('Guild Settings');
+            $scope.guildSettings();
         };
-        $scope.getAbsences = function() {
-            $scope.currentlySelected = "All absences";
-            $scope.loading = true;
-            absenceService.getAbsences().then(function(result) {
-                $scope.loading = false;
-                $scope.absences = result.absences;
-            }, function(err) {
-                siteServices.showMessageToast(err);
-                $scope.loading = false;
-                console.log(err);
+        $scope.addNewImage = function() {
+            $scope.guild.images.push("");
+        };
+        $scope.removeImage = function(index) {
+            $scope.guild.images.splice(index, 1);
+        };
+        $scope.guildSettings = function() {
+            guildServices.getGuildSettings().then(function(response) {
+                $scope.guild = response.guild;
             });
         };
-        $scope.getAbsencesByDate = function() {
-            $scope.loading = true;
-            absenceService.getAbsencesByDate($scope.dayDesired).then(function(result) {
-                $scope.loading = false;
-                $scope.absences = result.absences;
-            }, function(err) {
-                siteServices.showMessageToast(err);
-                $scope.loading = false;
-                console.log(err);
-            });
+        $scope.changeDetected = function() {
+            $scope.changesMade = true;
         };
-        $scope.filterSearch = function(filterSearch) {
-            return $filter('filter')($scope.users, filterSearch);
-        };
-        $scope.submitNewAbsence = function() {
-            if ($scope.newAbsence.date == null) {
-                siteServices.showMessageModal("Must select a date");
-            } else if ($scope.newAbsence.type == null) {
-                siteServices.showMessageModal("Must select a type: Late or Absent");
-            } else {
-                if (!permissionsService.isOfficer($scope.user)) {
-                    self.selectedUser = $scope.user.name;
+        $scope.deleteRank = function(rankIn) {
+            $scope.changeDetected();
+            $scope.checkIfRankIsInUse(rankIn).then(function(isInUse) {
+                if (isInUse) {
+                    siteServices.showMessageModal("Rank still being used by someone. Please remove all usage of the rank before deleting.");
                 } else {
-                    $scope.newAbsence.user = self.selectedUser.user;
+                    _.find($scope.guild.ranks, function(rank, index) {
+                        if (rankIn.rank == rank.rank) {
+                            var ranksArray = $scope.guild.ranks;
+                            ranksArray.splice(index, 1);
+                            $scope.guild.ranks = ranksArray;
+                        }
+                    });
                 }
-                absenceService.submitNewAbsence($scope.newAbsence).then(function(result) { //TODO: Redirect to list of absences.
-                    siteServices.showMessageModal("Success");
-                }, function(err) {
-                    siteServices.showMessageModal(err);
-                    console.log(err);
+            });
+        };
+        $scope.checkIfRankIsInUse = function(rankRemoved) {
+            var defer = $q.defer();
+            guildServices.getGuildMembers($scope.guild.name).then(function(members) {
+                var membersRankRemoved = _.find(members, function(member) {
+                    return member.rank == rankRemoved.rank;
                 });
+                if (membersRankRemoved != undefined) {
+                    defer.resolve(true);
+                } else {
+                    defer.resolve(false);
+                }
+            }).
+            catch (function(err) {
+                siteServices.showMessageToast("Something went wrong. Try again in a few.");
+                defer.reject(err);
+            });
+            return defer.promise;
+        };
+        $scope.updateGuildSettings = function() {
+            $scope.loading = true;
+            guildServices.saveGuildSettings($scope.guild).then(function(response) {
+                $scope.loading = false;
+                $scope.changesMade = false;
+                $rootScope.$broadcast('loggedin');
+            }).
+            catch (function(err) {
+                $scope.loading = false;
+            });
+        };
+        $scope.addNewRank = function() {
+            $scope.changesMade = true;
+            var newRank = {
+                name: "{name me}",
+                raider: false,
+                officer: false,
+                rank: null,
+                gm: false
+            };
+            newRank.rank = $scope.guild.ranks.length;
+            $scope.guild.ranks.push(newRank);
+        };
+        $scope.promoteRank = function(rankIn) {
+            $scope.changesMade = true;
+            if (rankIn.rank != 0) {
+                var promotedRankindex = 0;
+                for (var i = 0; i < $scope.guild.ranks.length; i++) {
+                    if (rankIn.rank == $scope.guild.ranks[i].rank) {
+                        promotedRankindex = i;
+                    }
+                }
+                var demotedRankindex = 0;
+                for (var i = 0; i < $scope.guild.ranks.length; i++) {
+                    if ($scope.guild.ranks[i].rank == rankIn.rank - 1) {
+                        demotedRankindex = i;
+                    }
+                }
+                rankIn.rank = rankIn.rank - 1;
+                $scope.guild.ranks[promotedRankindex] = rankIn;
+                var tempRank = $scope.guild.ranks[demotedRankindex];
+                tempRank.rank = tempRank.rank + 1;
+                $scope.guild.ranks[demotedRankindex] = tempRank;
             }
         };
-
-        function filterOutOldDates() {}
+        $scope.demoteRank = function(rankIn) {
+            $scope.changesMade = true;
+            var promotedRankindex = 0;
+            if (rankIn.rank != $scope.guild.ranks.length - 1) {
+                for (var i = 0; i < $scope.guild.ranks.length; i++) {
+                    if (rankIn.rank == $scope.guild.ranks[i].rank) {
+                        promotedRankindex = i;
+                    }
+                }
+                var demotedRankindex = 0;
+                for (var i = 0; i < $scope.guild.ranks.length; i++) {
+                    if ($scope.guild.ranks[i].rank == rankIn.rank + 1) {
+                        demotedRankindex = i;
+                    }
+                }
+                rankIn.rank = rankIn.rank + 1;
+                $scope.guild.ranks[promotedRankindex] = rankIn;
+                var tempRank = $scope.guild.ranks[demotedRankindex];
+                tempRank.rank = tempRank.rank - 1;
+                $scope.guild.ranks[demotedRankindex] = tempRank;
+            }
+        };
         $scope.init();
     }
 ]);
-angular.module('BossCollection.attendance').directive('absenceReport', [
-    function() {
-        return {
-            restrict: 'E',
-            controller: 'absenceReportController',
-            templateUrl: 'absence'
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild").controller("joinGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
+    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+        $scope.listOfGuilds = [];
+        $scope.loading = false;
+        siteServices.updateTitle('Join Guild');
+        $scope.init = function() {
+            $scope.getGuilds();
         };
+        $scope.filterSearch = function(filterSearch) {
+            return $filter('filter')($scope.listOfGuilds, filterSearch);
+        };
+        $scope.getGuilds = function() {
+            guildServices.getListOfGuilds().then(function(guilds) {
+                $scope.listOfGuilds = guilds;
+            });
+        };
+        $scope.selectedItemChange = function(item) {
+            console.log("Item changed: " + item);
+        };
+        $scope.joinGuild = function() {
+            $scope.loading = true;
+            if ($scope.guildName) {
+                guildServices.joinGuild($scope.guildName.name, $scope.user.name).then(function(guild) {
+                    siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
+                    userLoginSrvc.refreshUserFromServer();
+                    $location.path('/');
+                }).
+                catch (function(err) {
+                    siteServices.showMessageModal(err);
+                }).
+                finally(function() {
+                    $scope.loading = false;
+                });
+            } else {
+                siteServices.showMessageToast("Guild doesn't exist");
+                $scope.loading = false;
+            }
+        };
+        $scope.init();
+    }
+]);
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
+angular.module("BossCollection.guild").controller("manageMembersController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', 'permissionsService',
+    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, permissionsService) { //user comes from parent controller navbar
+        $scope.guildMembers;
+        $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM'];
+        $scope.init = function() {
+            $scope.getMembers();
+            $scope.getGuildSettings();
+        };
+        $scope.getGuildSettings = function() {
+            guildServices.getGuildSettings().then(function(response) {
+                $scope.guild = response.guild;
+                $scope.ranks = $scope.guild.ranks;
+            });
+        };
+        $scope.getMembers = function() {
+            if ($scope.user.name != "") {
+                guildServices.getGuildMembers($scope.user.guild.name).then(function(guildMembers) {
+                    $scope.guildMembers = guildMembers;
+                });
+            } else {
+                userLoginSrvc.getUser().then(function(user) {
+                    guildServices.getGuildMembers(user.guild.name).then(function(guildMembers) {
+                        $scope.guildMembers = guildMembers;
+                    });
+                });
+            }
+        };
+        $scope.promote = function(user) {
+            if (permissionsService.isOfficer($scope.user, $scope.user.guild.members) && permissionsService.isOfficer(user, $scope.user.guild.members) && !permissionsService.isGM($scope.user, $scope.user.guild.members)) {
+                siteServices.showMessageModal("Can't promote any further. Only the GM can do this.");
+            } else {
+                user.rank--;
+                user = updateUsersRank(user, $scope.ranks);
+                $scope.saveUser(user);
+            }
+        };
+        $scope.showPromote = function(rank) { //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
+            var shouldShowPromote = false;
+            if ($scope.isGM() && rank.rank != 0) {
+                shouldShowPromote = true;
+            } else if ($scope.isOfficer() && $scope.user.rank < rank.rank) {
+                shouldShowPromote = true;
+            }
+            return shouldShowPromote;
+        };
+        $scope.showDemote = function(rank) { //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
+            var shouldShowDemote = false;
+            if ($scope.isGM()) {
+                shouldShowDemote = true;
+            } else if ($scope.isOfficer() && rank.officer != true) {
+                shouldShowDemote = true;
+            }
+            if (rank.rank == $scope.ranks.length - 1) {
+                shouldShowDemote = false;
+            }
+            return shouldShowDemote;
+        };
+        $scope.demote = function(user) {
+            if (user.rank == $scope.ranks.length) {
+                siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
+            } else {
+                user.rank++;
+                user = updateUsersRank(user, $scope.ranks);
+                $scope.saveUser(user);
+            }
+        };
+
+        function updateUsersRank(user, ranks) {
+            var defaultRanks = {
+                officer: false,
+                raider: false,
+                GM: false,
+                approved: false
+            };
+            _.extend(user, defaultRanks);
+            var newRank = _.find(ranks, function(rank) {
+                return rank.rank == user.rank;
+            });
+            delete newRank.$$hashKey;
+            delete newRank._id;
+            _.extend(user, newRank);
+            delete user.name;
+            return user;
+        }
+        $scope.approve = function(user) {
+            user.approved = true;
+            $scope.saveUser(user);
+        };
+        $scope.disableUser = function(user) {
+            user.approved = false;
+            $scope.saveUser(user);
+        };
+        $scope.kick = function(user) {
+            var userName = user;
+            var guildName = $scope.user.guild.name;
+            guildServices.kickUser(userName, guildName).then(function(reponse) {
+                $scope.getMembers();
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal(err);
+            }).
+            finally(function() {});
+        };
+        $scope.saveUser = function(user) {
+            guildServices.updateRank($scope.user.guild.name, user).then(function() {}).
+            catch (function(err) {
+                siteServices.showMessageModal(err);
+            });
+        };
+        $scope.init();
+        siteServices.updateTitle('Manage Members');
     }
 ]);
 angular.module("BossCollection.forums").controller('commentsController', ['$scope', '$routeParams', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'userLoginSrvc',
@@ -2667,599 +3276,6 @@ angular.module("BossCollection.forums").controller('threadController', ['$scope'
             forumService.saveThreadCounts($scope.savedThreads);
         };
         $scope.init();
-    }
-]);
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild").controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices', '$mdDialog',
-    function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog) {
-        siteServices.updateTitle('Applications');
-        $scope.application = {};
-        $scope.validCharacterName = false;
-        $scope.charRequirementsIncomplete = false;
-        $scope.charRealmError = false;
-        $scope.searchingForUser = false;
-        $scope.icon = "error";
-        $scope.init = function() {
-            realmServices.getRealms().then(function(realms) {
-                $scope.realms = realms;
-            }).then(function() {
-                return $scope.getGuilds();
-            }).then(function() {
-                return $scope.loggedIn();
-            }).
-            catch (function(err) {
-                console.log(err);
-            }).
-            finally(function() {
-                $timeout(function() {
-                    siteServices.hideLoadingModal();
-                }, 500);
-            });
-        };
-        $scope.getGuilds = function() {
-            return guildServices.getListOfGuilds().then(function(guilds) {
-                $scope.listOfGuilds = guilds;
-            });
-        };
-        $scope.filterGuildsSearch = function(filterSearch) {
-            return $filter('filter')($scope.listOfGuilds, filterSearch);
-        };
-        $scope.filterSearch = function(filterSearch) {
-            return $filter('filter')($scope.realms, filterSearch);
-        };
-        $scope.loggedIn = function() {
-            userLoginSrvc.getUser().then(function(user) { //Success, let them fill out the form.
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal("Please log in before attempting to apply.");
-                $location.path('/');
-            }).
-            finally(function() {});
-        };
-        $scope.validateCharactername = function(callback) {
-            if ($scope.application.realm) {
-                $scope.validCharacterName = false; //Immediately invalidate until response comes back
-                $scope.searchingForUser = true;
-                guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name).then(function(character) {
-                    $scope.validCharacterName = true;
-                    $scope.icon = "check_circle";
-                    $scope.application.character = character;
-                    return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
-                }, function(err) {
-                    $scope.icon = "error";
-                    siteServices.showMessageToast(err);
-                    $scope.validCharacterName = false;
-                }).then(function(result) {
-                    $scope.application.itemLevel = result;
-                    return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
-                }).then(function(result) {
-                    $scope.parseProgression(result);
-                    if (callback) {
-                        callback();
-                    }
-                }).
-                finally(function() {
-                    $scope.searchingForUser = false;
-                });
-            } else {
-                $scope.validCharacterName = false;
-                if (callback) {
-                    callback();
-                }
-            }
-        };
-        $scope.parseProgression = function(result) {
-            $scope.raids = result.raids;
-            $scope.hfc = _.find($scope.raids, function(raid) {
-                return raid.name == "Hellfire Citadel";
-            });
-            $scope.brf = _.find($scope.raids, function(raid) {
-                return raid.name == "Blackrock Foundry";
-            });
-            $scope.hm = _.find($scope.raids, function(raid) {
-                return raid.name == "Highmaul";
-            });
-            $scope.application.progression = {};
-            $scope.application.progression.hfc = $scope.hfc;
-            $scope.application.progression.brf = $scope.brf;
-            $scope.application.progression.hm = $scope.hm;
-        };
-        $scope.submitApplication = function() {
-            $scope.validateCharactername(function() {
-                if ($scope.validCharacterName == false) {
-                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                } else if ($scope.guildSelected != undefined) {
-                    $scope.application.guildName = $scope.guildSelected.name;
-                    $scope.isLoading = true;
-                    guildServices.submitApplication($scope.application).then(function(result) {
-                        $scope.showConfirm();
-                    }, function(err) {
-                        $scope.isLoading = false;
-                        siteServices.showMessageToast(err);
-                    });
-                } else {
-                    siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
-                }
-            });
-        };
-        $scope.showConfirm = function() { // Appending dialog to document.body to cover sidenav in docs app
-            $mdDialog.show($mdDialog.alert().clickOutsideToClose(false).title("Application Successful!").textContent("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion. You will also receive an email with the registered email account with whether or not your application was accepted or rejected.").ariaLabel('message popup').ok('Got it!').openFrom({
-                left: -50,
-                width: 30,
-                height: 80
-            }).closeTo({
-                right: 1500
-            })).then(function() {
-                $scope.isLoading = false;
-                $location.path('/');
-            }, function() {
-                $scope.status = 'You decided to keep your debt.';
-            });
-        };
-        $scope.init();
-    }
-]);
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
-    function($scope, $location, $http, $timeout, guildServices, siteServices) {
-        siteServices.updateTitle('View Applications');
-        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
-        $scope.loading = true;
-        $scope.numOfNewApplicants = 0;
-        $scope.startDate = moment();
-        $scope.startDate.month($scope.startDate.month() - 2);
-        $scope.filterStatus = function(status) {
-            return function(application) {
-                return application.status == status;
-            };
-            /**
-                var filteredArray = _.filter($scope.applications, function(application){
-                    return application.status == status;
-                })
-                
-                return filteredArray;
-                 */
-        };
-        $scope.approveApplicant = function(application) {
-            guildServices.approveApplication(application).then(function() {
-                application.status = "Approved";
-            }).
-            catch (function(err) {}).
-            finally(function() {});
-        };
-        $scope.rejectApplicant = function(application) {
-            guildServices.rejectApplication(application).then(function() {
-                application.status = "Rejected";
-            }).
-            catch (function(err) {}).
-            finally(function() {});
-        };
-        $scope.openComments = function(comments) {
-            siteServices.showMessageModal(comments, "Comments");
-        };
-        $scope.openMenu = function($mdOpenMenu, ev) {
-            $mdOpenMenu(ev);
-        };
-        $scope.goTo = function(url) {
-            var win = window.open(url, '_blank');
-            win.focus();
-        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
-        $scope.buildArmoryUrl = function(realm, character) {
-            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
-            $scope.goTo(url);
-        };
-        $scope.getApplications = function() {
-            guildServices.getApplications($scope.startDate).then(function(applications) {
-                $scope.loading = false;
-                $scope.applications = applications.applications; //object to array
-                var newApplicants = _.find($scope.applications, function(applicant) {
-                    return applicant.status == "Applied";
-                });
-                if (newApplicants != undefined) {
-                    $scope.numOfNewApplicants = 1;
-                }
-                convertClasses();
-            }, function(err) {
-                $scope.loading = false;
-                console.log(err);
-                siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-            });
-        };
-
-        function convertClasses() {
-            for (var i = 0; i < $scope.applications.length; i++) {
-                var classType = classes[$scope.applications[i].character.class];
-                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
-            }
-        }
-        $scope.getNormalProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].normalKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getHeroicProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].heroicKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getMythicProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].mythicKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getApplications();
-    }
-]);
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild").controller("createGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
-        siteServices.updateTitle('Create Guild');
-        $scope.guildName = "";
-        $scope.loading = false;
-        $scope.joinGuild = function() {
-            $scope.loading = true;
-            guildServices.createGuild($scope.guildName).then(function() {
-                var user = userLoginSrvc.updateUser();
-                siteServices.showMessageModal("Successfully created " + user.guild.name);
-                $location.path('/');
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal(err);
-            }).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-    }
-]);
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild").controller("guildSettingsController", ["$scope", '$rootScope', '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', '$q',
-    function($scope, $rootScope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, $q) { //user comes from parent controller navbar
-        $scope.guildMembers;
-        $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM'];
-        $scope.changesMade = false;
-        $scope.loading = false;
-        var defaultRank = {
-            name: "{name me}",
-            raider: false,
-            officer: false,
-            rank: null,
-            gm: false
-        };
-        $scope.init = function() {
-            siteServices.updateTitle('Guild Settings');
-            $scope.guildSettings();
-        };
-        $scope.addNewImage = function() {
-            $scope.guild.images.push("");
-        };
-        $scope.removeImage = function(index) {
-            $scope.guild.images.splice(index, 1);
-        };
-        $scope.guildSettings = function() {
-            guildServices.getGuildSettings().then(function(response) {
-                $scope.guild = response.guild;
-            });
-        };
-        $scope.changeDetected = function() {
-            $scope.changesMade = true;
-        };
-        $scope.deleteRank = function(rankIn) {
-            $scope.changeDetected();
-            $scope.checkIfRankIsInUse(rankIn).then(function(isInUse) {
-                if (isInUse) {
-                    siteServices.showMessageModal("Rank still being used by someone. Please remove all usage of the rank before deleting.");
-                } else {
-                    _.find($scope.guild.ranks, function(rank, index) {
-                        if (rankIn.rank == rank.rank) {
-                            var ranksArray = $scope.guild.ranks;
-                            ranksArray.splice(index, 1);
-                            $scope.guild.ranks = ranksArray;
-                        }
-                    });
-                }
-            });
-        };
-        $scope.checkIfRankIsInUse = function(rankRemoved) {
-            var defer = $q.defer();
-            guildServices.getGuildMembers($scope.guild.name).then(function(members) {
-                var membersRankRemoved = _.find(members, function(member) {
-                    return member.rank == rankRemoved.rank;
-                });
-                if (membersRankRemoved != undefined) {
-                    defer.resolve(true);
-                } else {
-                    defer.resolve(false);
-                }
-            }).
-            catch (function(err) {
-                siteServices.showMessageToast("Something went wrong. Try again in a few.");
-                defer.reject(err);
-            });
-            return defer.promise;
-        };
-        $scope.updateGuildSettings = function() {
-            $scope.loading = true;
-            guildServices.saveGuildSettings($scope.guild).then(function(response) {
-                $scope.loading = false;
-                $scope.changesMade = false;
-                $rootScope.$broadcast('loggedin');
-            }).
-            catch (function(err) {
-                $scope.loading = false;
-            });
-        };
-        $scope.addNewRank = function() {
-            $scope.changesMade = true;
-            var newRank = {
-                name: "{name me}",
-                raider: false,
-                officer: false,
-                rank: null,
-                gm: false
-            };
-            newRank.rank = $scope.guild.ranks.length;
-            $scope.guild.ranks.push(newRank);
-        };
-        $scope.promoteRank = function(rankIn) {
-            $scope.changesMade = true;
-            if (rankIn.rank != 0) {
-                var promotedRankindex = 0;
-                for (var i = 0; i < $scope.guild.ranks.length; i++) {
-                    if (rankIn.rank == $scope.guild.ranks[i].rank) {
-                        promotedRankindex = i;
-                    }
-                }
-                var demotedRankindex = 0;
-                for (var i = 0; i < $scope.guild.ranks.length; i++) {
-                    if ($scope.guild.ranks[i].rank == rankIn.rank - 1) {
-                        demotedRankindex = i;
-                    }
-                }
-                rankIn.rank = rankIn.rank - 1;
-                $scope.guild.ranks[promotedRankindex] = rankIn;
-                var tempRank = $scope.guild.ranks[demotedRankindex];
-                tempRank.rank = tempRank.rank + 1;
-                $scope.guild.ranks[demotedRankindex] = tempRank;
-            }
-        };
-        $scope.demoteRank = function(rankIn) {
-            $scope.changesMade = true;
-            var promotedRankindex = 0;
-            if (rankIn.rank != $scope.guild.ranks.length - 1) {
-                for (var i = 0; i < $scope.guild.ranks.length; i++) {
-                    if (rankIn.rank == $scope.guild.ranks[i].rank) {
-                        promotedRankindex = i;
-                    }
-                }
-                var demotedRankindex = 0;
-                for (var i = 0; i < $scope.guild.ranks.length; i++) {
-                    if ($scope.guild.ranks[i].rank == rankIn.rank + 1) {
-                        demotedRankindex = i;
-                    }
-                }
-                rankIn.rank = rankIn.rank + 1;
-                $scope.guild.ranks[promotedRankindex] = rankIn;
-                var tempRank = $scope.guild.ranks[demotedRankindex];
-                tempRank.rank = tempRank.rank - 1;
-                $scope.guild.ranks[demotedRankindex] = tempRank;
-            }
-        };
-        $scope.init();
-    }
-]);
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild").controller("joinGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
-        $scope.listOfGuilds = [];
-        $scope.loading = false;
-        siteServices.updateTitle('Join Guild');
-        $scope.init = function() {
-            $scope.getGuilds();
-        };
-        $scope.filterSearch = function(filterSearch) {
-            return $filter('filter')($scope.listOfGuilds, filterSearch);
-        };
-        $scope.getGuilds = function() {
-            guildServices.getListOfGuilds().then(function(guilds) {
-                $scope.listOfGuilds = guilds;
-            });
-        };
-        $scope.joinGuild = function() {
-            $scope.loading = true;
-            if ($scope.guildName) {
-                guildServices.joinGuild($scope.guildName.name, $scope.user.name).then(function(guild) {
-                    siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                    userLoginSrvc.refreshUserFromServer();
-                    $location.path('/');
-                }).
-                catch (function(err) {
-                    siteServices.showMessageModal(err);
-                }).
-                finally(function() {
-                    $scope.loading = false;
-                });
-            } else {
-                siteServices.showMessageToast("Guild doesn't exist");
-                $scope.loading = false;
-            }
-        };
-        $scope.init();
-    }
-]);
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild").controller("manageMembersController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', 'permissionsService',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, permissionsService) { //user comes from parent controller navbar
-        $scope.guildMembers;
-        $scope.ranks = ['Applicant', 'Member', 'Officer', 'GM'];
-        $scope.init = function() {
-            $scope.getMembers();
-            $scope.getGuildSettings();
-        };
-        $scope.getGuildSettings = function() {
-            guildServices.getGuildSettings().then(function(response) {
-                $scope.guild = response.guild;
-                $scope.ranks = $scope.guild.ranks;
-            });
-        };
-        $scope.getMembers = function() {
-            if ($scope.user.name != "") {
-                guildServices.getGuildMembers($scope.user.guild.name).then(function(guildMembers) {
-                    $scope.guildMembers = guildMembers;
-                });
-            } else {
-                userLoginSrvc.getUser().then(function(user) {
-                    guildServices.getGuildMembers(user.guild.name).then(function(guildMembers) {
-                        $scope.guildMembers = guildMembers;
-                    });
-                });
-            }
-        };
-        $scope.promote = function(user) {
-            if (permissionsService.isOfficer($scope.user, $scope.user.guild.members) && permissionsService.isOfficer(user, $scope.user.guild.members) && !permissionsService.isGM($scope.user, $scope.user.guild.members)) {
-                siteServices.showMessageModal("Can't promote any further. Only the GM can do this.");
-            } else {
-                user.rank--;
-                user = updateUsersRank(user, $scope.ranks);
-                $scope.saveUser(user);
-            }
-        };
-        $scope.showPromote = function(rank) { //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
-            var shouldShowPromote = false;
-            if ($scope.isGM() && rank.rank != 0) {
-                shouldShowPromote = true;
-            } else if ($scope.isOfficer() && $scope.user.rank < rank.rank) {
-                shouldShowPromote = true;
-            }
-            return shouldShowPromote;
-        };
-        $scope.showDemote = function(rank) { //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
-            var shouldShowDemote = false;
-            if ($scope.isGM()) {
-                shouldShowDemote = true;
-            } else if ($scope.isOfficer() && rank.officer != true) {
-                shouldShowDemote = true;
-            }
-            if (rank.rank == $scope.ranks.length - 1) {
-                shouldShowDemote = false;
-            }
-            return shouldShowDemote;
-        };
-        $scope.demote = function(user) {
-            if (user.rank == $scope.ranks.length) {
-                siteServices.showMessageModal("Can't demote any further. They are effectively kicked at this rank.");
-            } else {
-                user.rank++;
-                user = updateUsersRank(user, $scope.ranks);
-                $scope.saveUser(user);
-            }
-        };
-
-        function updateUsersRank(user, ranks) {
-            var defaultRanks = {
-                officer: false,
-                raider: false,
-                GM: false,
-                approved: false
-            };
-            _.extend(user, defaultRanks);
-            var newRank = _.find(ranks, function(rank) {
-                return rank.rank == user.rank;
-            });
-            delete newRank.$$hashKey;
-            delete newRank._id;
-            _.extend(user, newRank);
-            delete user.name;
-            return user;
-        }
-        $scope.approve = function(user) {
-            user.approved = true;
-            $scope.saveUser(user);
-        };
-        $scope.disableUser = function(user) {
-            user.approved = false;
-            $scope.saveUser(user);
-        };
-        $scope.kick = function(user) {
-            var userName = user;
-            var guildName = $scope.user.guild.name;
-            guildServices.kickUser(userName, guildName).then(function(reponse) {
-                $scope.getMembers();
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal(err);
-            }).
-            finally(function() {});
-        };
-        $scope.saveUser = function(user) {
-            guildServices.updateRank($scope.user.guild.name, user).then(function() {}).
-            catch (function(err) {
-                siteServices.showMessageModal(err);
-            });
-        };
-        $scope.init();
-        siteServices.updateTitle('Manage Members');
     }
 ]);
 angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil',

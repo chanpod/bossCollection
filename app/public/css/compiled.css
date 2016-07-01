@@ -271,15 +271,6 @@
 .loadingModal {
   background-color: rgba(255, 255, 255, 0); }
 
-.warning {
-  background-color: red !important; }
-
-.greenIcon {
-  color: green; }
-
-.redIcon {
-  color: red; }
-
 .editAbsenceModal {
   min-width: 50%;
   min-height: 50%; }
@@ -301,6 +292,15 @@
 
 .modalPadding {
   padding: 10px; }
+
+.warning {
+  background-color: red !important; }
+
+.greenIcon {
+  color: green; }
+
+.redIcon {
+  color: red; }
 
 .avatarImage {
   width: 50px;
