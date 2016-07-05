@@ -152,12 +152,12 @@ angular.module("BossCollection.guild")
                 })
 
                 $scope.application.progression = {};
-                
+
                 $scope.application.progression.hfc = $scope.hfc;
                 $scope.application.progression.brf = $scope.brf;
                 $scope.application.progression.hm = $scope.hm;
             }
-            
+
             $scope.submitApplication = function () {
 
                 $scope.validateCharactername(function () {
@@ -166,8 +166,14 @@ angular.module("BossCollection.guild")
 
                         siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
                     }
-                    else if ($scope.guildSelected != undefined) {
+                    else if ($scope.guildSelected == undefined) {
 
+                        siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
+                    }
+                    else if ($scope.application.desiredRole == undefined) {
+                        siteServices.showMessageToast("Please select a role.");
+                    }
+                    else {
                         $scope.application.guildName = $scope.guildSelected.name;
 
                         $scope.isLoading = true;
@@ -182,9 +188,6 @@ angular.module("BossCollection.guild")
                                 $scope.isLoading = false;
                                 siteServices.showMessageToast(err);
                             })
-                    }
-                    else {
-                        siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
                     }
                 })
             }

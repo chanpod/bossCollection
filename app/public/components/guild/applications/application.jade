@@ -1,8 +1,16 @@
-script#application(type="text/ng-template")    
+script#application(type="text/ng-template") 
+      
     md-content
-        section(layout="column", flex = "80")
+        section()
+            div(flex, layout = "column", layout-align = "center center").welcomeBanner
+                h2
+                    | Application
+                p()
+                    | This process will gather your character info from the wow armory. If there's any issues because of the armory, please contact the guild
+                    | directly.                                
+        section(layout="column",layout-padding, layout-align = "center center")
             form(name = "editAccountForm", ng-submit = "submitApplication()")
-                div(layout)
+                div(layout="column")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "guild.name",
                                 md-selected-item = "guildSelected",                                    
@@ -11,8 +19,8 @@ script#application(type="text/ng-template")
                                 md-items = "guild in filterGuildsSearch(guild)",
                                 flex)
                         md-item-template
-                            span(md-highlight-text = "guild"){{guild.name}}
-                div(layout, layout-xs="column", ng-if = "guildSelected != undefined")
+                            span(md-highlight-text = "guild.name") {{guild.name}}
+                div(layout="column", layout-xs="column", ng-if = "guildSelected != undefined")
                     div(ng-show = "searchingForUser")
                         md-progress-linear (md-mode="indeterminate")
                     md-input-container(flex).md-block.md-icon-float
@@ -32,27 +40,31 @@ script#application(type="text/ng-template")
                                     flex,
                                     ng-blur = "validateCharactername()")
                         md-item-template
-                            span(md-highlight-text = "realm"){{realm.name}}
-                        div().hint Actually click/tap on the item in the dropdown
+                            span(md-highlight-text = "realm.name"){{realm.name}}
+                        div().hint Actually click/tap on the item in the dropdown (or use arrow keys and enter)
                         
-                div(layout, layout-xs="column", ng-if = "guildSelected != undefined && validCharacterName")
+                div(layout = "column", layout-xs="column", ng-if = "guildSelected != undefined && validCharacterName")
                     md-input-container(flex).md-block
                         label() Item Level
                         input(ng-model = "application.itemLevel", required, disabled)
                     
-                div(layout, layout-xs="column")
+                div(layout = "column",, layout-xs="column")
                     md-input-container(flex).md-block
                         label() Previous Guild
                         input(ng-model = "application.previousGuild", required)
                     md-input-container(flex).md-block
                         label() Desired Role
-                        input(ng-model = "application.desiredRole", required)
-                div(layout, layout-xs="column")
+                        md-select(ng-model = "application.desiredRole", required)
+                            md-option(value = "Ranged DPS") Ranged DPS
+                            md-option(value = "Melee DPS") Melee DPS
+                            md-option(value = "Healer") Healer
+                            md-option(value = "Tank") Tank
+                div(layout = "column",, layout-xs="column")
                     md-input-container(flex).md-block
                         label()
                             | Anything Else?
                         textarea(ng-model = "application.comments")
-                div(layout, layout-xs="column")
+                div(layout = "column",, layout-xs="column")
                     md-progress-circular( md-mode="indeterminate", ng-if = "isLoading")
                     md-input-container().md-block
                     md-button(type = "submit").md-primary.md-raised
