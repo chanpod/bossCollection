@@ -1,7 +1,9 @@
 script#home(type="text/ng-template")  
   
   md-content()
-    section(id = "imageGallery").imageGallery        
+    section(layout, id = "imageGallery").imageGallery
+        div(flex)     
+            img(style = "width: 100%; height: 100%", src = "/images/expansionBanners/legionbanner.png")    
         
     section(layout="column", ng-if = "user.guild")
         md-tabs(md-dynamic-height, md-border-bottom).md-background
