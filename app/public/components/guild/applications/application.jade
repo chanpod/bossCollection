@@ -47,8 +47,10 @@ script#application(type="text/ng-template")
                     md-input-container(flex).md-block
                         label() Item Level
                         input(ng-model = "application.itemLevel", required, disabled)
-                    
-                div(layout = "column",, layout-xs="column")
+                div(ng-if = "guildSelected != undefined && validCharacterName") 
+                    img(src = "http://us.battle.net/static-render/us/{{application.character.thumbnail}}")
+                    img(src = "/images/classIcons/images/class/64/{{className}}.png") 
+                div(layout = "column", layout-xs="column")
                     md-input-container(flex).md-block
                         label() Previous Guild
                         input(ng-model = "application.previousGuild", required)

@@ -94,6 +94,7 @@ angular.module("BossCollection.guild")
                             $scope.validCharacterName = true;
                             $scope.icon = "check_circle";
                             $scope.application.character = character;
+                            $scope.className = guildServices.getClassName(character.class);
 
                             return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
 
@@ -101,11 +102,11 @@ angular.module("BossCollection.guild")
                         function (err) {
                             $scope.icon = "error";
                             siteServices.showMessageToast(err);
-                            $scope.validCharacterName = false;
+                            $scope.validCharacterName = false; 
                         })
                         .then(function (result) {
 
-                            $scope.application.itemLevel = result;
+                            $scope.application.itemLevel = result; 
 
                             return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
 
@@ -113,7 +114,7 @@ angular.module("BossCollection.guild")
                         })
                         .then(function (result) {
 
-                            $scope.parseProgression(result);
+                            $scope.parseProgression(result); 
 
                             if (callback) {
                                 callback();

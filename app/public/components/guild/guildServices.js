@@ -11,6 +11,8 @@ angular.module("BossCollection.guild")
             var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
             var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
+            var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"]
+
             var API_BASE = "/api/guild/guild";
             var APPLICATION_API_BASE = "/api/guild/applications";
 
@@ -32,6 +34,9 @@ angular.module("BossCollection.guild")
             var guildSettingsResource = $resource(API_BASE + "/guildSettings");
 
             var guildApi = {
+                getClassName: function (classID) {
+                    return classes[classID];
+                },
                 saveGuildSettings: function (guildSettings) {
                     return guildSettingsResource.save({ guild: guildSettings }).$promise;
                 },
@@ -98,7 +103,7 @@ angular.module("BossCollection.guild")
                         })
                         .catch(function (err) {
 
-                            defer.reject(err.data.message); 
+                            defer.reject(err.data.message);
                         })
                         .finally(function () {
                             siteServices.loadingFinished();
@@ -106,14 +111,14 @@ angular.module("BossCollection.guild")
 
                     return defer.promise;
                 },
-                getGuildMembers: function (guildName) { 
+                getGuildMembers: function (guildName) {
 
                     var defer = $q.defer();
 
                     getGuildMembers.save({ guildName: guildName }).$promise
                         .then(function (result) {
 
-                            defer.resolve(result.members); 
+                            defer.resolve(result.members);
                         })
                         .catch(function (err) {
 

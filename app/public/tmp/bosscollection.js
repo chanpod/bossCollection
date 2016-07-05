@@ -1204,6 +1204,7 @@ angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', 
         var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
         var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
         var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
         var API_BASE = "/api/guild/guild";
         var APPLICATION_API_BASE = "/api/guild/applications";
         var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
@@ -1221,6 +1222,9 @@ angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', 
         var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
         var guildSettingsResource = $resource(API_BASE + "/guildSettings");
         var guildApi = {
+            getClassName: function getClassName(classID) {
+                return classes[classID];
+            },
             saveGuildSettings: function saveGuildSettings(guildSettings) {
                 return guildSettingsResource.save({
                     guild: guildSettings
@@ -2744,6 +2748,7 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
                     $scope.validCharacterName = true;
                     $scope.icon = "check_circle";
                     $scope.application.character = character;
+                    $scope.className = guildServices.getClassName(character.class);
                     return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
                 }, function(err) {
                     $scope.icon = "error";
