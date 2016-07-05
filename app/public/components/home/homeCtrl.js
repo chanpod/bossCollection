@@ -11,23 +11,7 @@ angular.module("BossCollection.home")
  
             var newTab = { title: "New Tab", content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details." };
 
-            $scope.$on("loggedin", (event, user) => {
-
-                userLoginSrvc.getUser()
-                    .then(function (user) {
-                        if (user) {
-                            $scope.user = user;
-                            $scope.loggedIn = true;
-                            $scope.getHomepageContent();
-                        }
-                    },
-                    function (err) {
-                        $scope.user = {};
-                        $scope.loggedIn = false;
-                    })
-
-
-            })  
+           
 
             $scope.login = () =>{
                 siteServices.showLoadingBottomSheet();

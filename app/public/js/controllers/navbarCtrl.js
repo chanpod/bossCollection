@@ -75,7 +75,7 @@ angular.module("BossCollection.controllers")
 
                 userLoginSrvc.logout().then(function (response) {
                     //navigate to some page
-                    $scope.user = {};
+                    $scope.user = undefined;
                 },
                     function (err) {
                         console.log(err);
@@ -193,7 +193,7 @@ angular.module("BossCollection.controllers")
                         }
                     },
                     function (err) {
-                        $scope.user = {};
+                        $scope.user = undefined;
                         $scope.loggedIn = false;
                     })
                     .then(function (guildSettings) {
