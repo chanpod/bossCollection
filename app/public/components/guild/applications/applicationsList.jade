@@ -1,122 +1,55 @@
-md-card-header
-    md-card-header-text
-        span().md-headline
-            {{application.character.name}} - {{application.dateApplied | date: format}}
-        span().md-subhead
-            {{application.character.class}} - {{application.itemLevel}}
-        
-md-card-content(layout = "column")
-    
-    //-div(flex, id="{{application.character.name}}", style="", ng-init = "buildCharts(application.character.name)")
-    
-    div(layout, layout-align = "space-around center")
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Role 
-                span {{application.desiredRole}}
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Previous Guild
-                span {{application.previousGuild}}
-        div(flex)
-            div(layout="column")
-                h3
-                    | Realm
-                span {{application.realm.name}}
-        div(flex)
-            div(layout="column")
-                h3
-                    | Battle Tag
-                span {{application.battleTag}}
-    br
-    div(layout, layout-align = "space-around center")
-        h2
-            | Progression      
-    div(layout, layout-align = "space-around center")
-        md-toolbar()
-            div().md-toolbar-tools
-                h2
-                    span        
-                        | HFC
-    div(layout, layout-align = "space-around center")        
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Normal
-                span {{getNormalProgression(application.progression.hfc)}}
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Heroic
-                span {{getHeroicProgression(application.progression.hfc)}}
-        div(flex)
-            div(layout="column")
-                h3
-                    | Mythic
-                span {{getMythicProgression(application.progression.hfc)}}
-    br
-    div(layout, layout-align = "space-around center")
-        md-toolbar()
-            div().md-toolbar-tools
-                h2
-                    span        
-                        | BRF
-    div(layout, layout-align = "space-around center")        
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Normal
-                span {{getNormalProgression(application.progression.brf)}}
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Heroic
-                span {{getHeroicProgression(application.progression.brf)}}
-        div(flex)
-            div(layout="column")
-                h3
-                    | Mythic
-                span {{getMythicProgression(application.progression.brf)}}
-    br
-    div(layout, layout-align = "space-around center")
-        md-toolbar()
-            div().md-toolbar-tools
-                h2
-                    span        
-                        | HM
-    div(layout, layout-align = "space-around center")        
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Normal
-                span {{getNormalProgression(application.progression.hm)}}
-        div(flex)
-            div(layout = "column")
-                h3
-                    | Heroic
-                span {{getHeroicProgression(application.progression.hm)}}
-        div(flex)
-            div(layout="column")
-                h3
-                    | Mythic
-                span {{getMythicProgression(application.progression.hm)}}
+div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between center", layout).md-list-item-text
+    div(flex, layout, layout-align = "start center")
+        img(src = "http://us.battle.net/static-render/us/{{application.character.thumbnail}}")
+        img(src = "/images/classIcons/images/class/64/{{getClassName(application)}}.png")
+        {{application.character.name}} - {{application.dateApplied | date: format}}
+
+    div(flex, layout, layout-align = "end center") 
             
-    md-card-actions(layout = "row", layout-align = "end end")
-        md-button(ng-click = "openComments(application.comments)").md-icon-button
-            md-icon(md-font-library="material-icons") message
-        md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-icon-button
-            md-icon(md-font-library="material-icons") call_made
-        md-menu(ng-if = "isOfficer()")
-            md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
-                md-icon(md-font-library="material-icons", md-menu-origin) more_vert
-            md-menu-content
-                md-menu-item
-                    md-button(ng-click = "approveApplicant(application)")
-                        md-icon(md-font-library="material-icons") check_circle
-                        | Accept Application
-                md-menu-item
-                    md-button(ng-click = "rejectApplicant(application)")
-                        md-icon(md-font-library="material-icons") close
-                        | Reject application
+        div(flex, layout = "row",  layout-align = "end center")
+            md-button(ng-click = "openComments(application)").md-primary.md-raised
+                md-icon(md-font-library="material-icons") open_in_new
+                | Details
+            md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-primary.md-raised
+                md-icon(md-font-library="material-icons") call_made
+                | Armory Profile
+            md-menu(ng-if = "isOfficer()")
+                md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                    md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+                md-menu-content
+                    md-menu-item
+                        md-button(ng-click = "approveApplicant(application)")
+                            md-icon(md-font-library="material-icons") check_circle
+                            | Accept Application
+                    md-menu-item
+                        md-button(ng-click = "rejectApplicant(application)")
+                            md-icon(md-font-library="material-icons") close
+                            | Reject application 
+//-
+    md-card-header
+        md-card-header-text
+            span().md-headline
+                {{application.character.name}} - {{application.dateApplied | date: format}}
+            span().md-subhead
+                {{application.character.class}} - {{application.itemLevel}}
+            
+    md-card-content(layout = "column")   
+        
+                
+        md-card-actions(layout = "row", layout-align = "end end")
+            md-button(ng-click = "openComments(application)").md-icon-button
+                md-icon(md-font-library="material-icons") message
+            md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-icon-button
+                md-icon(md-font-library="material-icons") call_made
+            md-menu(ng-if = "isOfficer()")
+                md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                    md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+                md-menu-content
+                    md-menu-item
+                        md-button(ng-click = "approveApplicant(application)")
+                            md-icon(md-font-library="material-icons") check_circle
+                            | Accept Application
+                    md-menu-item
+                        md-button(ng-click = "rejectApplicant(application)")
+                            md-icon(md-font-library="material-icons") close
+                            | Reject application

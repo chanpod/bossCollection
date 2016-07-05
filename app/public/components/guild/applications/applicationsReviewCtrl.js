@@ -5,8 +5,8 @@
 
  */
 angular.module("BossCollection.guild")
-    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
-        function ($scope, $location, $http, $timeout, guildServices, siteServices) {
+    .controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
+        function ($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
 
             siteServices.updateTitle('View Applications');
 
@@ -18,6 +18,7 @@ angular.module("BossCollection.guild")
             $scope.numOfNewApplicants = 0;
             $scope.startDate = moment();
             $scope.startDate.month($scope.startDate.month() - 2); 
+            $scope.startDate = $scope.startDate.toDate(); 
             $scope.filterStatus = function (status) {
 
                 return function (application) {
@@ -61,9 +62,21 @@ angular.module("BossCollection.guild")
                     })
             }
 
-            $scope.openComments = function (comments) {
+            $scope.getClassName = function(application) { 
+                return application.character.class.toLowerCase() 
+            }
 
-                siteServices.showMessageModal(comments, "Comments");
+            $scope.openComments = function (application) {
+
+      //          siteServices.showMessageModal(comments, "Comments");
+                $mdDialog.show({
+                    templateUrl: "appDetails",
+                    controller: 'appDetailsController',
+                    parent: angular.element(document.body),
+                    clickOutsideToClose: false,
+                    locals: { data: application },
+                    fullscreen: true
+                })
             }
 
             $scope.openMenu = function ($mdOpenMenu, ev) {
@@ -122,65 +135,7 @@ angular.module("BossCollection.guild")
                 }
             }
 
-            $scope.getNormalProgression = function (progression) {
-
-                try {
-                    var raidProgression = 0;
-                    var raidLength = progression.bosses.length;
-                    for (var i = 0; i < raidLength; i++) {
-
-                        if (progression.bosses[i].normalKills > 0) {
-                            raidProgression++;
-                        }
-                    }
-
-                    return raidProgression + "/" + raidLength;
-                }
-                catch (err) {
-                    return 0 + "/" + 0;
-                }
-
-            }
-
-            $scope.getHeroicProgression = function (progression) {
-
-                try {
-                    var raidProgression = 0;
-                    var raidLength = progression.bosses.length;
-                    for (var i = 0; i < raidLength; i++) {
-
-                        if (progression.bosses[i].heroicKills > 0) {
-                            raidProgression++;
-                        }
-                    }
-
-                    return raidProgression + "/" + raidLength;
-                }
-                catch (err) {
-                    return 0 + "/" + 0;
-                }
-
-            }
-
-            $scope.getMythicProgression = function (progression) {
-
-                try {
-                    var raidProgression = 0;
-                    var raidLength = progression.bosses.length;
-                    for (var i = 0; i < raidLength; i++) {
-
-                        if (progression.bosses[i].mythicKills > 0) {
-                            raidProgression++;
-                        }
-                    }
-
-                    return raidProgression + "/" + raidLength;
-                }
-                catch (err) {
-                    return 0 + "/" + 0;
-                }
-
-            }
+            
 
             $scope.getApplications()
 

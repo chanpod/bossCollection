@@ -1,0 +1,40 @@
+md-toolbar()
+    div().md-toolbar-tools
+        h2
+            span        
+                | Character Details
+        span(flex)
+        md-button(ng-click = "close($event)")
+            md-icon(md-font-library="material-icons") close            
+div(flex)
+    img(style = "width: 100%;height: 100%;" src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
+div(flex, layout = "column", layout-align = "center start")
+    md-toolbar
+        div().md-toolbar-tools
+            h2
+                span        
+                    | Comments
+div(flex, layout = "column", layout-align = "center start", layout-padding).md-whiteframe-4dp
+    | {{application.comments}}
+br
+div(flex, layout = "column", layout-align = "center start") 
+    md-toolbar
+        div().md-toolbar-tools
+            h2
+                span        
+                    | Details
+div(flex, layout = "column", layout-align = "center start", layout-padding).md-whiteframe-4dp
+    div(layout, flex)            
+        b Role: 
+        | {{application.desiredRole}}
+    div(flex)
+        b Previous Guild: 
+        | {{application.previousGuild}}
+    div(flex)            
+        b Realm: 
+        | {{application.realm.name}}
+    div(flex)            
+        b Battle Tag: 
+        | {{application.battleTag}}
+br
+include progressionTable

@@ -1,29 +1,31 @@
 script#reviewApplications(type="text/ng-template")
-    md-content()
-        
-        md-datepicker(ng-model = "startDate", md-placeholder="Select date", ng-change = "getApplications()")
-        div().hint Get applications after this date. Initial date is two months before today.
-        br
+    md-content(layout-padding)
+        div(layout)
+            div(layout, flex)
+                h3() From
+                md-datepicker(ng-model = "startDate", md-placeholder="Select date", ng-change = "getApplications()")
+            span(flex)
+                h3 To Today
         section(layout-xs="column", layout="row")
-            div(flex-xs, flex-gt-xs="60")
+            div(flex)
                 
                 md-tabs(md-dynamic-height md-border-bottom)
                     md-tab(label = "New Applications")
                         md-content()
-                            div(ng-show = "numOfNewApplicants == 0")
-                                h3 No New Applications
-                            md-card(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'")    
-                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments                    
-                                include applicationsList
-                    md-tab(label = "Approved")
+                            div(ng-show = "numOfNewApplicants == 0") 
+                                h3 No New Applications 
+                            md-list(layout-padding)
+                                md-list-item(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp
+                                    include applicationsList
+                             
+                    md-tab(label = "Approved") 
                         md-content()
-                            md-card(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'")
-                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
-                                include applicationsList
+                            md-list(layout-padding)
+                                md-list-item(ng-repeat = "application in applications | filter:filterStatus('Approved') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp
+                                    include applicationsList
                     md-tab(label = "Denied")
                         md-content()
-                            md-card(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'")
-                                img(src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
+                            md-list-item(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp                                                         
                                 include applicationsList
                         
                     

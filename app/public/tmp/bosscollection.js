@@ -2688,6 +2688,68 @@ angular.module("BossCollection.forums").controller('threadController', ['$scope'
         $scope.init();
     }
 ]);
+angular.module("BossCollection.forums").controller('appDetailsController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
+    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
+        $scope.orderBy = "dateCreated";
+        $scope.init = function() {
+            if (data) {
+                $scope.application = data;
+            } else {
+                $scope.application = {};
+            }
+            $scope.user = userLoginSrvc.updateUser();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.getNormalProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].normalKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getHeroicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].heroicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getMythicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].mythicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.close = function() {
+            $mdDialog.hide(self.thread);
+        };
+        $scope.init();
+    }
+]);
 'use strict';
 /**
  
@@ -2832,14 +2894,15 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
  *
 
  */
-angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices',
-    function($scope, $location, $http, $timeout, guildServices, siteServices) {
+angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
+    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
         siteServices.updateTitle('View Applications');
         var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
         $scope.loading = true;
         $scope.numOfNewApplicants = 0;
         $scope.startDate = moment();
         $scope.startDate.month($scope.startDate.month() - 2);
+        $scope.startDate = $scope.startDate.toDate();
         $scope.filterStatus = function(status) {
             return function(application) {
                 return application.status == status;
@@ -2866,8 +2929,20 @@ angular.module("BossCollection.guild").controller("applicationsReviewController"
             catch (function(err) {}).
             finally(function() {});
         };
-        $scope.openComments = function(comments) {
-            siteServices.showMessageModal(comments, "Comments");
+        $scope.getClassName = function(application) {
+            return application.character.class.toLowerCase();
+        };
+        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
+            $mdDialog.show({
+                templateUrl: "appDetails",
+                controller: 'appDetailsController',
+                parent: angular.element(document.body),
+                clickOutsideToClose: false,
+                locals: {
+                    data: application
+                },
+                fullscreen: true
+            });
         };
         $scope.openMenu = function($mdOpenMenu, ev) {
             $mdOpenMenu(ev);
@@ -2904,48 +2979,6 @@ angular.module("BossCollection.guild").controller("applicationsReviewController"
                 $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
             }
         }
-        $scope.getNormalProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].normalKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getHeroicProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].heroicKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getMythicProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].mythicKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
         $scope.getApplications();
     }
 ]);

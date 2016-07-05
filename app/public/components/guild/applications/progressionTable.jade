@@ -1,0 +1,71 @@
+div(layout, layout-align = "space-around center")
+    h2
+        | Progression      
+div(layout, layout-align = "space-around center")
+    md-toolbar()
+        div().md-toolbar-tools
+            h2
+                span        
+                    | HFC
+div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
+    div(flex)
+        div(layout = "column")
+            h3
+                | Normal
+            span {{getNormalProgression(application.progression.hfc)}}
+    div(flex)
+        div(layout = "column")
+            h3
+                | Heroic
+            span {{getHeroicProgression(application.progression.hfc)}}
+    div(flex) 
+        div(layout="column")
+            h3
+                | Mythic
+            span {{getMythicProgression(application.progression.hfc)}}
+br
+div(layout, layout-align = "space-around center")
+    md-toolbar()
+        div().md-toolbar-tools
+            h2
+                span        
+                    | BRF
+div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
+    div(flex)
+        div(layout = "column")
+            h3
+                | Normal
+            span {{getNormalProgression(application.progression.brf)}}
+    div(flex)
+        div(layout = "column")
+            h3
+                | Heroic 
+            span {{getHeroicProgression(application.progression.brf)}}
+    div(flex)
+        div(layout="column")
+            h3
+                | Mythic
+            span {{getMythicProgression(application.progression.brf)}}
+br
+div(layout, layout-align = "space-around center")
+    md-toolbar()
+        div().md-toolbar-tools
+            h2
+                span        
+                    | HM
+div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
+    div(flex)
+        div(layout = "column")
+            h3
+                | Normal
+            span {{getNormalProgression(application.progression.hm)}}
+    div(flex)
+        div(layout = "column")
+            h3
+                | Heroic
+            span {{getHeroicProgression(application.progression.hm)}}
+    div(flex)
+        div(layout="column")
+            h3
+                | Mythic
+            span {{getMythicProgression(application.progression.hm)}}
