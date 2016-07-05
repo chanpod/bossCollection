@@ -24,7 +24,7 @@ md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-
                     | Apply to a Guild
             md-divider
             md-menu-item(ng-if = "hasGuild() && isMember()")
-                md-button(ng-click = "goTo('/forum')")
+                md-button(ng-click = "goTo('/forum')") 
                     md-icon(md-font-library="material-icons") today
                     | Forums
             md-divider(ng-if = "!hasGuild() || isOfficer()")            

@@ -9,20 +9,28 @@ script#application(type="text/ng-template")
                     | This process will gather your character info from the wow armory. If there's any issues because of the armory, please contact the guild
                     | directly.                                
         section(layout="column",layout-padding, layout-align = "center center")
+
             form(name = "editAccountForm", ng-submit = "submitApplication()")
+
                 div(layout="column")
+
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "guild.name",
-                                md-selected-item = "guildSelected",                                    
-                                md-search-text = "guild",
+                                md-selected-item = "guildSelected",
+                                md-search-text = "guildName",
+                                md-select-on-match="true",
+                                md-no-cache = "true",
                                 md-floating-label = "Select Guild to Apply To",
-                                md-items = "guild in filterGuildsSearch(guild)",
-                                flex)
+                                md-items = "guild in listOfGuilds | filter:guildName")
+
                         md-item-template
-                            span(md-highlight-text = "guild.name") {{guild.name}}
+                            span(md-highlight-text = "guildName") {{guild.name}}
+
                 div(layout="column", layout-xs="column", ng-if = "guildSelected != undefined")
+
                     div(ng-show = "searchingForUser")
                         md-progress-linear (md-mode="indeterminate")
+
                     md-input-container(flex).md-block.md-icon-float
                         label() Character Name
                         md-icon(md-font-library="material-icons", ng-class = "validCharacterName ? 'characterSuccess' : 'characterError' ") {{icon}}
@@ -31,6 +39,7 @@ script#application(type="text/ng-template")
                             ng-blur = "validateCharactername()", required)
                         
                     md-autocomplete(md-min-length = "1",
+                                    md-select-on-match="true"
                                     md-item-text = "realm.name",
                                     md-selected-item = "application.realm",
                                     md-selected-item-change="validateCharactername()"
@@ -39,6 +48,7 @@ script#application(type="text/ng-template")
                                     md-items = "realm in filterSearch(realm)",
                                     flex,
                                     ng-blur = "validateCharactername()")
+
                         md-item-template
                             span(md-highlight-text = "realm.name"){{realm.name}}
                         div().hint Actually click/tap on the item in the dropdown (or use arrow keys and enter)

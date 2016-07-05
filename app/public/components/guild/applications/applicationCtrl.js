@@ -57,7 +57,7 @@ angular.module("BossCollection.guild")
             }
 
             $scope.filterGuildsSearch = function (filterSearch) {
-                return $filter('filter')($scope.listOfGuilds, filterSearch);
+                return $filter('filter')($scope.listOfGuilds, filterSearch);                
             }
 
             $scope.filterSearch = function (filterSearch) {
