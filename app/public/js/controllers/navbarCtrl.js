@@ -152,11 +152,17 @@ angular.module("BossCollection.controllers")
             }
 
             $scope.hasGuild = function () {
-                if ($scope.user.guild) {
-                    return true
+                try {
+                    
+                    if ($scope.user.guild) {
+                        return true
+                    }
+                    else {
+                        return false
+                    }
                 }
-                else {
-                    return false
+                catch (err) {
+                    return false;
                 }
             }
 
