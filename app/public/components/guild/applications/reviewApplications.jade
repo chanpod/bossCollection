@@ -25,8 +25,9 @@ script#reviewApplications(type="text/ng-template")
                                     include applicationsList
                     md-tab(label = "Denied")
                         md-content()
-                            md-list-item(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp                                                         
-                                include applicationsList
+                            md-list(layout-padding)
+                                md-list-item(ng-repeat = "application in applications | filter:filterStatus('Rejected') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp                                                         
+                                    include applicationsList
                         
                     
     ad()                    
