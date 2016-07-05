@@ -38,7 +38,7 @@ script#application(type="text/ng-template")
                         input(id = "characterNameInput", ng-model = "application.characterName", 
                             ng-blur = "validateCharactername()", required)
                         
-                    md-autocomplete(md-min-length = "1",
+                    md-autocomplete(md-min-length = "0",
                                     md-select-on-match="true"
                                     md-item-text = "realm.name",
                                     md-selected-item = "application.realm",
