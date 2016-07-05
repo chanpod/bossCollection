@@ -203,9 +203,13 @@ angular.module("BossCollection.controllers")
                         $scope.loggedIn = false;
                     })
                     .then(function (guildSettings) {
-
-                        if (guildSettings.guild) {
-                            $scope.user.guild = guildSettings.guild;
+                        try {
+                            if (guildSettings.guild) {
+                                $scope.user.guild = guildSettings.guild;
+                            }
+                        }
+                        catch (err) {
+                            //not sure why, but this was occasionally null when it shouldn't be.
                         }
                     })
             }
