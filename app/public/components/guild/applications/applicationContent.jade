@@ -34,7 +34,7 @@ div(flex, layout = "column", layout-align = "center start", layout-padding).md-w
     div(flex)            
         b Realm: 
         | {{application.realm.name}}
-    div(flex)            
+    div(ng-show = "!isOfficer()", flex)            
         b Battle Tag: 
         | {{application.battleTag}}
 br
