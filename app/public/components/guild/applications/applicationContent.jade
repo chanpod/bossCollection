@@ -1,13 +1,14 @@
 md-toolbar()
-    div().md-toolbar-tools
-        h2
-            span        
-                | Character Details
+    div().md-toolbar-tools        
         span(flex)
         md-button(ng-click = "close($event)")
             md-icon(md-font-library="material-icons") close            
 div(flex)
     img(style = "width: 100%;height: 100%;" src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
+    div().characterName
+        {{application.character.name}}
+        br
+        {{application.itemLevel}}
 div(flex, layout = "column", layout-align = "center start")
     md-toolbar
         div().md-toolbar-tools

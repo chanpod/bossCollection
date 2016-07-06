@@ -9,3 +9,64 @@
 .redIcon{
     color: red;
 } 
+
+@media (min-width: 1501px) {
+  .characterName{
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    color: white;
+    font-size: 60px;
+    text-shadow: 2px 2px black;
+
+}
+}
+
+@media (max-width: 1500px) {
+  .characterName{
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    color: white;
+    font-size: 40px;
+    text-shadow: 2px 2px black;
+
+}
+}
+
+@media (max-width: 849px) {
+  .characterName{
+    position: absolute;
+    top: 8%;
+    left: 5%;
+    color: white;
+    font-size: 40px;
+    text-shadow: 2px 2px black;
+
+}
+}
+
+@media (max-width: 700px) {
+  .characterName{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    color: white;
+    font-size: 40px;
+    text-shadow: 2px 2px black;
+
+}
+}
+
+@media (max-width: 520px) {
+  .characterName{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    color: white;
+    font-size: 25px;
+    text-shadow: 2px 2px black;
+
+}
+}
+
