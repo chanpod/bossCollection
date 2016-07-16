@@ -9,7 +9,7 @@ md-menu(ng-if = "isMember()")
             md-button(ng-click = "goTo('/reviewApplications')")
                 md-icon(md-font-library="material-icons") inbox
                 | View Applications
-        md-menu-item(ng-if = "isRaider()")
+        md-menu-item(ng-if = "isRaider() || isOfficer()")
             md-button(ng-click = "goTo('/attendanceStatistics')")
                 md-icon(md-font-library="material-icons") poll
                 | Attendance Portal
