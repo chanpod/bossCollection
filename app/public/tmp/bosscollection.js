@@ -3279,7 +3279,7 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
                 officer: false,
                 raider: false,
                 GM: false,
-                approved: false
+                approved: user.approved
             };
             _.extend(user, defaultRanks);
             var newRank = _.find(ranks, function(rank) {

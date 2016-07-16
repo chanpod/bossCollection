@@ -53,7 +53,10 @@ angular.module("BossCollection.guild")
 
             $scope.promote = function (user) {
 
-                if (permissionsService.isOfficer($scope.user, $scope.user.guild.members) && permissionsService.isOfficer(user, $scope.user.guild.members) && !permissionsService.isGM($scope.user, $scope.user.guild.members)) {
+                if (permissionsService.isOfficer($scope.user, $scope.user.guild.members)
+                    && permissionsService.isOfficer(user, $scope.user.guild.members)
+                    && !permissionsService.isGM($scope.user, $scope.user.guild.members)) {
+
                     siteServices.showMessageModal("Can't promote any further. Only the GM can do this.");
                 }
                 else {
@@ -77,7 +80,7 @@ angular.module("BossCollection.guild")
                 else if ($scope.isOfficer() && $scope.user.rank < rank.rank) {
                     shouldShowPromote = true;
                 }
-                
+
                 return shouldShowPromote;
             }
 
@@ -95,7 +98,7 @@ angular.module("BossCollection.guild")
                 if (rank.rank == $scope.ranks.length - 1) {
                     shouldShowDemote = false;
                 }
-                
+
                 return shouldShowDemote;
             }
 
@@ -119,10 +122,10 @@ angular.module("BossCollection.guild")
                     officer: false,
                     raider: false,
                     GM: false,
-                    approved: false
+                    approved: user.approved
                 }
 
-                 _.extend(user, defaultRanks);
+                _.extend(user, defaultRanks);
 
                 let newRank = _.find(ranks, (rank) => {
                     return rank.rank == user.rank;
@@ -138,7 +141,7 @@ angular.module("BossCollection.guild")
                 return user;
             }
 
-            $scope.approve = function(user){
+            $scope.approve = function (user) {
 
                 user.approved = true;
                 $scope.saveUser(user);
@@ -148,7 +151,7 @@ angular.module("BossCollection.guild")
                 user.approved = false;
                 $scope.saveUser(user);
             }
- 
+
             $scope.kick = (user) => {
 
                 var userName = user;
