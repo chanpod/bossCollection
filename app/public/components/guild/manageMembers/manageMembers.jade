@@ -25,7 +25,7 @@ script#manageMembers(type="text/ng-template")
                                         | Promote
                                     md-button(ng-if = "showDemote(rank)", ng-click = "demote(guildMember)").md-primary.md-raised
                                         | Demote
-                                    md-button(ng-click = "kick(guildMember)").md-primary.md-raised
+                                    md-button(ng-if = "showDemote(rank)", ng-click = "kick(guildMember)").md-primary.md-raised
                                         | Kick
                                     md-button(ng-click = "disableUser(guildMember)", ng-if = "isOfficer(rank) && guildMember.approved && !guildMember.GM").md-icon-button 
                                         md-icon(md-font-library="material-icons").greenIcon check_circle
