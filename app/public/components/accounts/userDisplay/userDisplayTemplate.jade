@@ -5,4 +5,4 @@ script#userDisplayTemplate(type="text/ng-template")
             img(ng-if = "avatarUrl == undefined", src="images/appLogo.png").avatarImage
         div(layout, layout-align = "center center")
             span(style = "font-size: {{fontsize}}px").userFont
-                {{ user}} 
+                | {{user}} 

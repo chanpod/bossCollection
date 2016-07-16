@@ -53,9 +53,9 @@ script#thread(type="text/ng-template")
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
                             div(flex).threadSubject
-                                {{thread.title}}
+                                |  {{thread.title}}
                             div(hide-sm, hide-xs, flex)
-                                    {{formatDate(thread.dateCreated)}}
+                                    |  {{formatDate(thread.dateCreated)}}
                             div( ng-if = "thread.sticky")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
@@ -67,9 +67,9 @@ script#thread(type="text/ng-template")
                                     | Comments: {{thread.commentCount}}
                             div(flex)
                                 div(hide-md, flex)
-                                    {{formatDate(thread.dateCreated)}}
+                                    |  {{formatDate(thread.dateCreated)}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
-                        {{thread.message}}
+                        |  {{thread.message}}
                         
                 div( layout-align = "end center", layout)
                 
@@ -94,9 +94,9 @@ script#thread(type="text/ng-template")
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
                             div(flex).threadSubject
-                                {{thread.title}}
+                                |  {{thread.title}}
                             div(hide-sm, hide-xs, flex)
-                                {{formatDate(thread.dateCreated)}}
+                                |  {{formatDate(thread.dateCreated)}}
                             div( ng-if = "thread.sticky")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
@@ -108,9 +108,9 @@ script#thread(type="text/ng-template")
                                     | Comments: {{thread.commentCount}}
                             div(flex)
                                 div(hide-md, flex)
-                                    {{formatDate(thread.dateCreated)}}
+                                    |  {{formatDate(thread.dateCreated)}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
-                        {{thread.message}}
+                        |  {{thread.message}}
                         
                 div( layout-align = "end center", layout)
                 

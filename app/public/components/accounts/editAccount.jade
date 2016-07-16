@@ -44,7 +44,7 @@ script#editAccount(type="text/ng-template")
                         md-list-item().secondary-button-padding.md-2-line
                             md-button(ng-click = "leaveGuild()").md-secondary.md-raised Leave Guild
                             div().md-list-item-text
-                                {{user.guild.name}}
+                                | {{user.guild.name}}
                         md-divider
             div(flex)
                 div()

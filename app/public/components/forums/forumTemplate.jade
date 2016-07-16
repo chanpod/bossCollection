@@ -26,7 +26,7 @@ script#forum(type="text/ng-template")
                 md-toolbar().md-scroll-shrink
                     div().md-toolbar-tools
                         div().forumCategoryTitle
-                            {{category.name}}
+                            | {{category.name}}
                             
                         span(flex)
                         div(ng-show = "isOfficer()")
@@ -44,7 +44,7 @@ script#forum(type="text/ng-template")
                                 div(layout-padding, layout = "column").md-list-item-text
                                     div(flex, layout = "row")
                                         h3()
-                                            {{forum.name}}
+                                            | {{forum.name}}
                                     div(flex, layout = "row", layout-align = "start center")
                                         span()
                                         span(layout-align = "start center")

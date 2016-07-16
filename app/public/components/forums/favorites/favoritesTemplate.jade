@@ -35,9 +35,9 @@ script#favorites(type="text/ng-template")
                     div(layout-padding, layout = "column").md-list-item-text
                         div(layout-align = "space-between center", layout)
                             div(flex).threadSubject
-                                {{thread.title}}
+                                | {{thread.title}}
                             div(hide-sm, hide-xs, flex)
-                                    {{favCtrl.formatDate(thread.dateCreated)}}
+                                    | {{favCtrl.formatDate(thread.dateCreated)}}
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
                             div(flex)
                                 p( layout-align = "start center")                                    
@@ -46,7 +46,7 @@ script#favorites(type="text/ng-template")
                                 div(layout-align = "center center")
                                     | Comments: {{thread.commentCount}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
-                        {{thread.message}}
+                        | {{thread.message}}
                         
                 div( layout-align = "center center", layout)
                     md-menu(ng-if = "isOfficer")

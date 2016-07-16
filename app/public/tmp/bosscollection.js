@@ -123,6 +123,9 @@ angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
         }).when('/manageGuild', {
             templateUrl: 'guildSettings',
             controller: 'guildSettingsController'
+        }).when('/myApplications', {
+            templateUrl: 'myApplications',
+            controller: 'myApplicationsCtrl'
         });
     }
 ]);
@@ -1209,6 +1212,7 @@ angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', 
         var APPLICATION_API_BASE = "/api/guild/applications";
         var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
         var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
+        var getUserApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/user/:user');
         var _approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
         var _rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
         var addGuild = $resource(API_BASE + '/addGuild');
@@ -1357,6 +1361,21 @@ angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', 
                 siteServices.startLoading();
                 getApplicationsUrl.get({
                     startDate: startDate
+                }).$promise.then(function(applications) {
+                    defer.resolve(applications);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getUserApplications: function getUserApplications(user) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                getUserApplicationsUrl.get({
+                    user: user
                 }).$promise.then(function(applications) {
                     defer.resolve(applications);
                 }, function(err) {
@@ -3318,6 +3337,68 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
         };
         $scope.init();
         siteServices.updateTitle('Manage Members');
+    }
+]);
+angular.module("BossCollection.guild").controller('myApplicationsCtrl', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
+    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
+        $scope.orderBy = "dateCreated";
+        $scope.init = function() {
+            if (data) {
+                $scope.application = data;
+            } else {
+                $scope.application = {};
+            }
+            $scope.user = userLoginSrvc.updateUser();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.getNormalProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].normalKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getHeroicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].heroicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getMythicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].mythicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.close = function() {
+            $mdDialog.hide(self.thread);
+        };
+        $scope.init();
     }
 ]);
 angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil',

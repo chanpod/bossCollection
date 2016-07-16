@@ -27,7 +27,7 @@ script#category(type="text/ng-template")
                         label Minimum Rank
                         md-select(ng-model = "dontcare")
                             md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank'")
-                                {{rank.rank}}: {{rank.name}}
+                                | {{rank.rank}}: {{rank.name}}
   
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block
@@ -36,5 +36,3 @@ script#category(type="text/ng-template")
                     md-input-container().md-block
                         md-button(ng-click = "cancel()").md-primary.md-raised
                             | Cancel
-               
-            

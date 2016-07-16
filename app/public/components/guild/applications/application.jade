@@ -50,20 +50,25 @@ script#application(type="text/ng-template")
                                     ng-blur = "validateCharactername()")
 
                         md-item-template
-                            span(md-highlight-text = "realm.name"){{realm.name}}
+                            span(md-highlight-text = "realm.name")
+                                | {{realm.name}}
                         div().hint Actually click/tap on the item in the dropdown (or use arrow keys and enter)
                         
                 div(layout = "column", layout-xs="column", ng-if = "guildSelected != undefined && validCharacterName")
                     md-input-container(flex).md-block
                         label() Item Level
                         input(ng-model = "application.itemLevel", required, disabled)
+
                 div(ng-if = "guildSelected != undefined && validCharacterName") 
                     img(src = "http://us.battle.net/static-render/us/{{application.character.thumbnail}}")
                     img(src = "/images/classIcons/images/class/64/{{className}}.png") 
+
                 div(layout = "column", layout-xs="column")
+
                     md-input-container(flex).md-block
                         label() Previous Guild
                         input(ng-model = "application.previousGuild", required)
+
                     md-input-container(flex).md-block
                         label() Desired Role
                         md-select(ng-model = "application.desiredRole", required)
@@ -71,11 +76,13 @@ script#application(type="text/ng-template")
                             md-option(value = "Melee DPS") Melee DPS
                             md-option(value = "Healer") Healer
                             md-option(value = "Tank") Tank
+
                 div(layout = "column",, layout-xs="column")
                     md-input-container(flex).md-block
                         label()
                             | Anything Else?
                         textarea(ng-model = "application.comments")
+
                 div(layout = "column",, layout-xs="column")
                     md-progress-circular( md-mode="indeterminate", ng-if = "isLoading")
                     md-input-container().md-block

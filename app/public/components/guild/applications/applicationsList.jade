@@ -2,7 +2,7 @@ div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between
     div(flex, layout, layout-align = "start center")
         img(src = "http://us.battle.net/static-render/us/{{application.character.thumbnail}}")
         img(src = "/images/classIcons/images/class/64/{{getClassName(application)}}.png")
-        {{application.character.name}} - {{application.dateApplied | date: format}}
+        | {{application.character.name}} - {{application.dateApplied | date: format}}
 
     div(flex, layout, layout-align = "end center") 
             
@@ -25,31 +25,3 @@ div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between
                         md-button(ng-click = "rejectApplicant(application)")
                             md-icon(md-font-library="material-icons") close
                             | Reject application 
-//-
-    md-card-header
-        md-card-header-text
-            span().md-headline
-                {{application.character.name}} - {{application.dateApplied | date: format}}
-            span().md-subhead
-                {{application.character.class}} - {{application.itemLevel}}
-            
-    md-card-content(layout = "column")   
-        
-                
-        md-card-actions(layout = "row", layout-align = "end end")
-            md-button(ng-click = "openComments(application)").md-icon-button
-                md-icon(md-font-library="material-icons") message
-            md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-icon-button
-                md-icon(md-font-library="material-icons") call_made
-            md-menu(ng-if = "isOfficer()")
-                md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
-                    md-icon(md-font-library="material-icons", md-menu-origin) more_vert
-                md-menu-content
-                    md-menu-item
-                        md-button(ng-click = "approveApplicant(application)")
-                            md-icon(md-font-library="material-icons") check_circle
-                            | Accept Application
-                    md-menu-item
-                        md-button(ng-click = "rejectApplicant(application)")
-                            md-icon(md-font-library="material-icons") close
-                            | Reject application

@@ -19,21 +19,21 @@ script#absenceSubmissions(type="text/ng-template")
                     list-guild-members(selected-member = "selectedMember", guild = "user.guild.name")
                     div(flex)
                         h2
-                            {{absenceReportCtrl.currentlySelected | date: 'dddd'}}
+                            | {{absenceReportCtrl.currentlySelected | date: 'dddd'}}
                     
                     div(layout-gt-sm = "column")
                         md-card(flex-gt-md = "50", ng-repeat = "absence in absenceReportCtrl.absences | orderBy: 'date'")
                             md-card-content
                                 h3
                                     md-icon(md-font-library="material-icons") person &nbsp
-                                    {{absence.user}}                                 
+                                    | {{absence.user}}                                 
                                 h4  
                                     md-icon(md-font-library="material-icons") date_range &nbsp
-                                    {{absenceReportCtrl.formatDate(absence.date)}} - {{absence.type}}
+                                    | {{absenceReportCtrl.formatDate(absence.date)}} - {{absence.type}}
                                 p
                                     md-icon(md-font-library="material-icons") message &nbsp
                                     br
-                                    {{absence.reason}}
+                                    | {{absence.reason}}
                             md-card-actions(ng-if = "isOfficer() || (user.name == absence.user && absenceReportCtrl.dateHasPassed(absence))", layout="row", layout-align="end center")
                                 md-button(ng-click = "absenceReportCtrl.editAbsence(absence)").md-icon-button
                                     md-icon(md-font-library="material-icons", aria-label = "edit absence") mode_edit

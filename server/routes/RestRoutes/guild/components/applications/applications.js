@@ -84,6 +84,26 @@ function rejectApplication(req, res) {
     return defer.promise;
 }
 
+function getUserApplications(req, res) {
+
+    var defer = q.defer();
+    console.log("Getting applications...");
+
+
+    var user = req.params.user;
+
+    ApplicationModel.find({guild: req.session.user.guild.name, user: user})
+        .then(function (applications) {
+
+            defer.resolve({ "applications": applications });
+        },
+        function (err) {
+            defer.reject(err);
+        })
+
+    return defer.promise;
+}
+
 function getApplications(req, res) {
 
     var defer = q.defer();
@@ -122,7 +142,8 @@ module.exports = {
     getApplications: getApplications,
     rejectApplication: rejectApplication,
     approveApplication: approveApplication,
-    submitApplication: submitApplication
+    submitApplication: submitApplication,
+    getUserApplications:getUserApplications
 };
 
 function approveApplicationEmail(application) {

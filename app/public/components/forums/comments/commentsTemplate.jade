@@ -23,7 +23,7 @@ script#threadComments(type="text/ng-template")
                     | Favorites
                 div(flex, hide-gt-xs)
                 div(flex, layout, layout-align = "center center", hide-xs).titleOverflow
-                    {{ctrl.thread.title}}           
+                    | {{ctrl.thread.title}}           
                 md-button(ng-click = "openCommentBox()", aria-label = "reply", layout-align = "end center").md-icon-button
                     md-icon(md-font-library="material-icons", aria-label = "edit category") reply
                     md-tooltip() Reply
@@ -42,7 +42,7 @@ script#threadComments(type="text/ng-template")
                             user-display(user = "ctrl.thread.user")
                         div(flex, layout, layout-align = "center center")
                             h2()
-                                {{ctrl.thread.title}}     
+                                | {{ctrl.thread.title}}     
                                    
                 md-card-content.wordWrap
                     p()
@@ -83,7 +83,7 @@ script#threadComments(type="text/ng-template")
                                     user-display(user = "comment.user")                                   
                                 div(flex, layout-align = "end center", layout)
                                     span()
-                                        {{formatDate(comment.dateCreated)}}
+                                        | {{formatDate(comment.dateCreated)}}
                                 
                             md-divider
                                     display-markdown(markdown = "comment.message", ng-if = "!comment.editing")

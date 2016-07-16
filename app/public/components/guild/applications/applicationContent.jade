@@ -6,9 +6,9 @@ md-toolbar()
 div(flex)
     img(style = "width: 100%;height: 100%;" src="images/classBackdrops/{{application.character.class}}.jpg").md-card-imageself.getComments
     div().characterName
-        {{application.character.name}}
+        | {{application.character.name}}
         br
-        {{application.itemLevel}}
+        | {{application.itemLevel}}
 div(flex, layout = "column", layout-align = "center start")
     md-toolbar
         div().md-toolbar-tools

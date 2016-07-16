@@ -28,4 +28,8 @@ angular.module("BossCollection.guild", ['ngRoute'])
                 templateUrl: 'guildSettings', 
                 controller: 'guildSettingsController'
             })
+            .when('/myApplications', { 
+                templateUrl: 'myApplications', 
+                controller: 'myApplicationsCtrl'
+            })
     }]);

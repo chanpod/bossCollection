@@ -9,7 +9,7 @@ md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-
                         i() &nbsp beta
                 md-list-item(ng-if = "user.guild")
                     h1().md-toolbar-tools
-                        {{user.guild.name}}
+                        | {{user.guild.name}}
     md-content(role = "navigation").md-primary
         md-list.md-primary(ng-if = "loggedIn")            
             md-menu-item()

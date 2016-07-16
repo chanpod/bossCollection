@@ -17,7 +17,8 @@ script#joinGuild(type="text/ng-template")
                                 md-floating-label = "Select Guild",
                                 md-items = "guild in filterSearch(guildSearch)") 
                         md-item-template
-                            span(md-highlight-text = "guildSearch"){{guild.name}}
+                            span(md-highlight-text = "guildSearch")
+                                | {{guild.name}}
            
                 div(layout)
                     md-input-container().md-block

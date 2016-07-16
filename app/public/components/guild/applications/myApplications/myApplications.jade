@@ -1,0 +1,16 @@
+script#myApplications(type="text/ng-template")
+    md-content(layout-padding)        
+        section(layout-xs="column", layout="row")
+            div(flex)
+                md-content()
+                    div(ng-show = "numOfNewApplicants == 0") 
+                        h3 No Applications Submitted 
+                    md-list(layout-padding)
+                        md-list-item(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp
+                            include ../applicationsList
+                
+                    
+    ad()                    
+ 
+        
+                                        
