@@ -27,7 +27,7 @@ script#forum(type="text/ng-template")
                     div().md-toolbar-tools
                         div().forumCategoryTitle
                             {{category.name}}
-                            md-tooltop(hide-gt-sm) {{category.name}}
+                            
                         span(flex)
                         div(ng-show = "isOfficer()")
                             md-button(ng-click = "deleteCategory(category)").md-icon-button
