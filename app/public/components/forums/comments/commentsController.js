@@ -46,7 +46,7 @@ angular.module("BossCollection.forums")
             }
             
             self.editThread = function(thread){
-
+                
                 forumService.openBottomSheet('threadEdit', thread);
             }
             
@@ -57,6 +57,9 @@ angular.module("BossCollection.forums")
                 return forumService.getComments(self.threadID, $scope.messageCount)
                     .then(function(comments){
 
+                        if(self.thread.comments.length == comments.comments.length){
+                            $scope.disableLoadMore = true;
+                        }
                         self.thread.comments = comments.comments;
                     })
                     .finally(function(){

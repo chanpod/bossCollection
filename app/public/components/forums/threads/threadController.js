@@ -298,7 +298,7 @@ angular.module("BossCollection.forums")
             }
 
             $scope.editThread = function(forum){
-
+                
                 forumService.openBottomSheet('threadEdit', forum);
             }
 

@@ -25,13 +25,21 @@ angular.module("BossCollection.forums")
                     $scope.object = {};
                 }
 
-                $scope.user = data.user;
-                $scope.determinePermissions();
+                if (data.user) {
+                    try {
+
+                        $scope.user = data.user;
+                        $scope.determinePermissions();
+                    }
+                    catch (err) {
+                        //don't care
+                    }
+                }
 
 
             }
 
-            $scope.determinePermissions = function() {
+            $scope.determinePermissions = function () {
 
                 if ($scope.object.permissions) {
 
@@ -49,8 +57,8 @@ angular.module("BossCollection.forums")
 
                         $scope.selectedPermission = PUBLIC;
                     }
-                    else{
-                        
+                    else {
+
                         $scope.selectedPermission = MEMBERS;
                     }
 
@@ -58,7 +66,7 @@ angular.module("BossCollection.forums")
 
                     $scope.user.guild.ranks.forEach((rank, index) => {
 
-                        if(rank.rank == $scope.object.permissions.minRank){
+                        if (rank.rank == $scope.object.permissions.minRank) {
                             $scope.rankSelected = rank;
                         }
                     })
@@ -132,7 +140,7 @@ angular.module("BossCollection.forums")
                         $scope.object.permissions.raider = false;
                         $scope.object.permissions.officer = false;
                     }
-                    else{
+                    else {
                         $scope.object.permissions.public = false;
                         $scope.object.permissions.raider = false;
                         $scope.object.permissions.officer = false;
@@ -179,9 +187,9 @@ angular.module("BossCollection.forums")
 
                     if ($scope.rankSelected == undefined) {
 
-                        if($scope.object.permissions.minRank)
+                        if ($scope.object.permissions.minRank)
 
-                        $scope.visiblityStatement = "Any rank " + $scope.object.permissions.minRank + ". " + $scope.selectedPermission + defaultEndingMessage;
+                            $scope.visiblityStatement = "Any rank " + $scope.object.permissions.minRank + ". " + $scope.selectedPermission + defaultEndingMessage;
                     }
                     else {
 
@@ -193,7 +201,7 @@ angular.module("BossCollection.forums")
                 else if ($scope.selectedPermission == undefined) {
                     $scope.visiblityStatement = "Permissions not defined yet...";
                 }
- 
+
             }
 
             $scope.saveThread = function () {
