@@ -96,6 +96,19 @@ angular.module("BossCollection.guild")
                 $scope.goTo(url);
             }
 
+            $scope.deleteApplication = (application) => {
+
+                siteServices.confirmDelete()
+                    .then(function (result) {
+                        
+                        guildServices.deleteApplication(application._id)
+                            .then(function (user) {
+
+                                $scope.getApplications();
+                            })
+                    })
+            }
+
             $scope.getApplications = function () {
 
                 guildServices.getUserApplications($scope.user.name, $scope.startDate)

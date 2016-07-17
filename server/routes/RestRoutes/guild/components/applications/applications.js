@@ -5,6 +5,7 @@ var ApplicationModel = require('models/applications.js');
 var EmailDispatcher = require('../../../account/modules/email-dispatcher');
 var UserModel = require('models/user.js');
 var moment = require('moment');
+var util = require('utility');
 
 var statuses = {
     approved: "Approved",
@@ -31,7 +32,7 @@ function submitApplication(req, res) {
     },
         function (err) {
 
-            defer.reject(err);
+            defer.reject(util.handleErrors(err));
         })
 
     return defer.promise;
@@ -57,6 +58,8 @@ function approveApplication(req, res) {
                     defer.resolve({ application: application });
                 })
             }
+        }, (err) => {
+            defer.reject(util.handleErrors(err));
         })
 
     return defer.promise;
@@ -79,6 +82,30 @@ function rejectApplication(req, res) {
                 defer.resolve({ application: application });
             })
 
+        }, (err) => {
+            defer.reject(util.handleErrors(err));
+        })
+
+    return defer.promise;
+}
+
+function deleteApplication(req, res) {
+
+    var defer = q.defer();
+
+    var appID = req.body.appID;
+
+    ApplicationModel.findOne({ _id: appID })
+        .then(function (applicationModel) {
+
+            
+            applicationModel.remove(function () {
+                
+                defer.resolve(true);
+            })
+
+        }, (err) => {
+            defer.reject(util.handleErrors(err));
         })
 
     return defer.promise;
@@ -110,7 +137,8 @@ function getUserApplications(req, res) {
             defer.resolve({ "applications": applications });
         },
         function (err) {
-            defer.reject(err);
+            
+            defer.reject(util.handleErrors(err));
         })
 
     return defer.promise;
@@ -155,7 +183,8 @@ module.exports = {
     rejectApplication: rejectApplication,
     approveApplication: approveApplication,
     submitApplication: submitApplication,
-    getUserApplications:getUserApplications
+    getUserApplications:getUserApplications,
+    deleteApplication:deleteApplication
 };
 
 function approveApplicationEmail(application) {

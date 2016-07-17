@@ -22,6 +22,7 @@ angular.module("BossCollection.guild")
             var getUserApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/user/:user/:startDate');
             var approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
             var rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
+            var deleteApplicationResource = $resource(APPLICATION_API_BASE + '/deleteApplication');
 
             var addGuild = $resource(API_BASE + '/addGuild');
             var updateRank = $resource(API_BASE + '/updateRank');
@@ -200,6 +201,28 @@ angular.module("BossCollection.guild")
                     siteServices.startLoading();
 
                     getApplicationsUrl.get({ startDate: startDate }).$promise
+                        .then(function (applications) {
+
+                            defer.resolve(applications);
+                        },
+                        function (err) {
+
+                            defer.reject(err);
+                        })
+                        .finally(function () {
+                            siteServices.loadingFinished();
+                        })
+
+                    return defer.promise;
+                },
+
+                deleteApplication: (appID) => {
+
+                    var defer = $q.defer();
+
+                    siteServices.startLoading();
+
+                    deleteApplicationResource.save({ appID: appID}).$promise
                         .then(function (applications) {
 
                             defer.resolve(applications);

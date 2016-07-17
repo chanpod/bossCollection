@@ -19,6 +19,9 @@ script#myApplications(type="text/ng-template")
                                         | {{application.guild}} - {{application.status}}
                                 div(flex)
                                     include ../reviewApplication/applicationsList
+                                div(flex)
+                                    md-button(ng-click = "deleteApplication(application)").md-primary Delete
+
                 
                     
     ad()                     

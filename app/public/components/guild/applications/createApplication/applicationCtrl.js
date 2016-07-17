@@ -214,7 +214,7 @@ angular.module("BossCollection.guild")
                 ).then(function () {
 
                     $scope.isLoading = false;
-                    $location.path('/');
+                    $location.path('/myApplications');
 
                 }, function () {
                     $scope.status = 'You decided to keep your debt.';
