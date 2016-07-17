@@ -181,14 +181,25 @@ router.route('/getThreads')
     .post(function (req, res) {
 
         console.log("Getting threads...");
+        let guildUser = req.session.user.guild.members[0];
 
-        ThreadManager.getThreads(req.body.forumId)
-            .then(function (response) {
 
-                res.status(200).send(response);
-            })
-            .fail(function (err) {
-                res.status(400).send(util.handleErrors(err));
+        ForumManager.getForumPermissions(req.body.forumId)
+            .then((forumPermissions) => {
+                
+                if (util.checkUserPermissions(guildUser, forumPermissions)) {
+                    ThreadManager.getThreads(req.body.forumId)
+                        .then(function (response) {
+
+                            res.status(200).send(response);
+                        })
+                        .fail(function (err) {
+                            res.status(400).send(util.handleErrors(err));
+                        })
+                }
+                else{
+                    res.status(400).send(util.handleErrors("Not authorized!"));
+                }
             })
 
     });
