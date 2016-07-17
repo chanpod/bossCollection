@@ -11,23 +11,40 @@ script#category(type="text/ng-template")
                         input(ng-model = "object.name", required)
                 h3
                     | Who can view this category?
+                div()
+                    h3
+                        | {{visiblityStatement}} 
                 span()
-                    | All permissions are inherited by forums within this category. 
-                md-divider
+                    | All permissions are inherited by forums within this category.
+
+                
                 div(layout = "column")
-                    md-switch(aria-label="officer switch", ng-model="object.permissions.officer").md-primary
-                        | Officer
-                    md-switch(aria-label="raider switch", ng-model="object.permissions.raider").md-primary
-                        | Raider
-                    md-switch(aria-label="public switch", ng-model="object.permissions.public").md-primary
-                        | Public
-                    h3 Minimum access rank
-                    span() Current Rank - {{object.permissions.minRank}}
-                    md-input-container
-                        label Minimum Rank
-                        md-select(ng-model = "dontcare")
-                            md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank'")
-                                | {{rank.rank}}: {{rank.name}}
+                    br
+                    md-radio-group(ng-model = "selectedPermission", ng-change = "getVisibilityStatement()")
+                        md-radio-button(value="Officer", class="md-primary")
+                            | Officer
+                        md-radio-button(value="Raider", class="md-primary")
+                            | Raider
+                        md-radio-button(value="Members", class="md-primary")
+                            | Members          
+                        md-radio-button(value="Public", class="md-primary")
+                            | Public          
+                    div(ng-if = "selectedPermission != 'Public'")
+                        h3 Minimum {{selectedPermission}} rank
+                        span() Current Rank: {{object.permissions.minRank}}
+                        br
+                        br
+                        md-input-container(ng-if = "selectedPermission == 'Members'")
+                            label Minimum Rank
+                            md-select(ng-model = "dontcare", ng-change = "getVisibilityStatement()")
+                                md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank'")
+                                    | {{rank.rank}}: {{rank.name}}
+                        md-input-container(ng-if = "selectedPermission != 'Members'")
+                            label Minimum Rank
+                            md-select(ng-model = "dontcare", ng-change = "getVisibilityStatement()")
+                                md-option(ng-click = "setSelectedRank(rank)", ng-repeat = "rank in user.guild.ranks | orderBy: 'rank' | filter: selectedPermission")
+                                    | {{rank.rank}}: {{rank.name}}
+                    
   
                 div(layout = "row", layout-align = "space-around center")
                     md-input-container().md-block

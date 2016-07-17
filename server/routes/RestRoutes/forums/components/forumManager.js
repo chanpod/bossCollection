@@ -91,12 +91,24 @@ function editForum(req, res){
             ThreadManager.getThreads(forumId)
                 .then(function (threads) {
 
+                    if(threads.threads.length == 0){
+                        defer.resolve(true);
+                    }
+
                     _(threads.threads).forEach(function (someThread, index) {
 
                         someThread.permissions = forumPermissions;
                         req.body.thread = someThread;
                         
-                        ThreadManager.editThread(req, res);
+                        ThreadManager.editThread(req, res)
+                            .then((result) => {
+                                if(index == threads.threads.length - 1){
+                                    defer.resolve(true);
+                                }
+                            }, (err) => {
+                                defer.reject(err);
+                            })
+                            
                     })
 
                 }, function (err) {

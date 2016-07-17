@@ -520,15 +520,39 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
         $scope.object = {};
         $scope.loading = false;
         $scope.replying = false;
-        $scope.rankSelected = {};
+        $scope.rankSelected;
         $scope.orderBy = "dateCreated";
+        var OFFICER = "Officer";
+        var RAIDER = "Raider";
+        var PUBLIC = "Public";
+        var MEMBERS = "Members";
         $scope.init = function() {
             if (data) {
                 $scope.object = data;
             } else {
                 $scope.object = {};
             }
-            $scope.user = userLoginSrvc.updateUser();
+            $scope.user = data.user;
+            $scope.determinePermissions();
+        };
+        $scope.determinePermissions = function() {
+            if ($scope.object.permissions) {
+                if ($scope.object.permissions.officer) {
+                    $scope.selectedPermission = OFFICER;
+                } else if ($scope.object.permissions.raider) {
+                    $scope.selectedPermission = RAIDER;
+                } else if ($scope.object.permissions.public) {
+                    $scope.selectedPermission = PUBLIC;
+                } else {
+                    $scope.selectedPermission = MEMBERS;
+                }
+                $scope.getVisibilityStatement();
+                $scope.user.guild.ranks.forEach(function(rank, index) {
+                    if (rank.rank == $scope.object.permissions.minRank) {
+                        $scope.rankSelected = rank;
+                    }
+                });
+            }
         };
         $scope.cancel = function() {
             $mdDialog.cancel();
@@ -558,6 +582,23 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 $scope.object.permissions.minRank = $scope.rankSelected.rank;
             }
             if ($scope.object._id) {
+                if ($scope.selectedPermission == OFFICER) {
+                    $scope.object.permissions.officer = true;
+                    $scope.object.permissions.raider = false;
+                    $scope.object.permissions.public = false;
+                } else if ($scope.selectedPermission == RAIDER) {
+                    $scope.object.permissions.raider = true;
+                    $scope.object.permissions.officer = false;
+                    $scope.object.permissions.public = false;
+                } else if ($scope.selectedPermission == PUBLIC) {
+                    $scope.object.permissions.public = true;
+                    $scope.object.permissions.raider = false;
+                    $scope.object.permissions.officer = false;
+                } else {
+                    $scope.object.permissions.public = false;
+                    $scope.object.permissions.raider = false;
+                    $scope.object.permissions.officer = false;
+                }
                 forumService.editCategory($scope.object).then(function(result) {
                     $scope.close(result);
                 }).
@@ -573,6 +614,22 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 finally(function() {
                     $scope.loading = false;
                 });
+            }
+        };
+        $scope.getVisibilityStatement = function() {
+            $scope.visiblityStatement = "";
+            var defaultEndingMessage = " and up can see these forums";
+            if ($scope.selectedPermission == PUBLIC) {
+                $scope.visiblityStatement = "Anyone can see these forums.";
+            } else if ($scope.selectedPermission == RAIDER || $scope.selectedPermission == OFFICER || $scope.selectedPermission == MEMBERS) {
+                if ($scope.rankSelected == undefined) {
+                    if ($scope.object.permissions.minRank) $scope.visiblityStatement = "Any rank " + $scope.object.permissions.minRank + ". " + $scope.selectedPermission + defaultEndingMessage;
+                } else {
+                    var currentRankSelected = $scope.rankSelected.rank + ". " + $scope.rankSelected.name;
+                    $scope.visiblityStatement = "Anyone of rank " + currentRankSelected + defaultEndingMessage;
+                }
+            } else if ($scope.selectedPermission == undefined) {
+                $scope.visiblityStatement = "Permissions not defined yet...";
             }
         };
         $scope.saveThread = function() {
@@ -689,6 +746,7 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
                     public: false
                 }
             };
+            $scope.category.user = $scope.user;
             forumService.openBottomSheet('category', $scope.category).then(function(result) {
                 forumService.removeLocalForums();
                 $scope.getForums();
@@ -699,6 +757,7 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
             });
         };
         $scope.editCategory = function(category) { //$scope.category = category;
+            category.user = $scope.user;
             forumService.openBottomSheet('category', category).then(function(result) {
                 forumService.removeLocalForums();
                 $scope.getForums();
@@ -746,6 +805,7 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
             }
         };
         $scope.editForum = function(forum) {
+            forum.user = $scope.user;
             forumService.openBottomSheet('forumEdit', forum).then(function(result) {
                 forumService.removeLocalForums();
                 $scope.getForums();
@@ -2707,300 +2767,6 @@ angular.module("BossCollection.forums").controller('threadController', ['$scope'
         $scope.init();
     }
 ]);
-angular.module("BossCollection.forums").controller('appDetailsController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
-    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
-        $scope.orderBy = "dateCreated";
-        $scope.init = function() {
-            if (data) {
-                $scope.application = data;
-            } else {
-                $scope.application = {};
-            }
-            $scope.user = userLoginSrvc.updateUser();
-        };
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
-        $scope.getNormalProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].normalKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getHeroicProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].heroicKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.getMythicProgression = function(progression) {
-            try {
-                var raidProgression = 0;
-                var raidLength = progression.bosses.length;
-                for (var i = 0; i < raidLength; i++) {
-                    if (progression.bosses[i].mythicKills > 0) {
-                        raidProgression++;
-                    }
-                }
-                return raidProgression + "/" + raidLength;
-            } catch (err) {
-                return 0 + "/" + 0;
-            }
-        };
-        $scope.close = function() {
-            $mdDialog.hide(self.thread);
-        };
-        $scope.init();
-    }
-]);
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild").controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices', '$mdDialog',
-    function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog) {
-        siteServices.updateTitle('Applications');
-        $scope.application = {};
-        $scope.validCharacterName = false;
-        $scope.charRequirementsIncomplete = false;
-        $scope.charRealmError = false;
-        $scope.searchingForUser = false;
-        $scope.icon = "error";
-        $scope.init = function() {
-            realmServices.getRealms().then(function(realms) {
-                $scope.realms = realms;
-            }).then(function() {
-                return $scope.getGuilds();
-            }).then(function() {
-                return $scope.loggedIn();
-            }).
-            catch (function(err) {
-                console.log(err);
-            }).
-            finally(function() {
-                $timeout(function() {
-                    siteServices.hideLoadingModal();
-                }, 500);
-            });
-        };
-        $scope.getGuilds = function() {
-            return guildServices.getListOfGuilds().then(function(guilds) {
-                $scope.listOfGuilds = guilds;
-            });
-        };
-        $scope.filterGuildsSearch = function(filterSearch) {
-            return $filter('filter')($scope.listOfGuilds, filterSearch);
-        };
-        $scope.filterSearch = function(filterSearch) {
-            return $filter('filter')($scope.realms, filterSearch);
-        };
-        $scope.loggedIn = function() {
-            userLoginSrvc.getUser().then(function(user) { //Success, let them fill out the form.
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal("Please log in before attempting to apply.");
-                $location.path('/');
-            }).
-            finally(function() {});
-        };
-        $scope.validateCharactername = function(callback) {
-            if ($scope.application.realm) {
-                $scope.validCharacterName = false; //Immediately invalidate until response comes back
-                $scope.searchingForUser = true;
-                guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name).then(function(character) {
-                    $scope.validCharacterName = true;
-                    $scope.icon = "check_circle";
-                    $scope.application.character = character;
-                    $scope.className = guildServices.getClassName(character.class);
-                    return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
-                }, function(err) {
-                    $scope.icon = "error";
-                    siteServices.showMessageToast(err);
-                    $scope.validCharacterName = false;
-                }).then(function(result) {
-                    $scope.application.itemLevel = result;
-                    return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
-                }).then(function(result) {
-                    $scope.parseProgression(result);
-                    if (callback) {
-                        callback();
-                    }
-                }).
-                finally(function() {
-                    $scope.searchingForUser = false;
-                });
-            } else {
-                $scope.validCharacterName = false;
-                if (callback) {
-                    callback();
-                }
-            }
-        };
-        $scope.parseProgression = function(result) {
-            $scope.raids = result.raids;
-            $scope.hfc = _.find($scope.raids, function(raid) {
-                return raid.name == "Hellfire Citadel";
-            });
-            $scope.brf = _.find($scope.raids, function(raid) {
-                return raid.name == "Blackrock Foundry";
-            });
-            $scope.hm = _.find($scope.raids, function(raid) {
-                return raid.name == "Highmaul";
-            });
-            $scope.application.progression = {};
-            $scope.application.progression.hfc = $scope.hfc;
-            $scope.application.progression.brf = $scope.brf;
-            $scope.application.progression.hm = $scope.hm;
-        };
-        $scope.submitApplication = function() {
-            $scope.validateCharactername(function() {
-                if ($scope.validCharacterName == false) {
-                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
-                } else if ($scope.guildSelected == undefined) {
-                    siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
-                } else if ($scope.application.desiredRole == undefined) {
-                    siteServices.showMessageToast("Please select a role.");
-                } else {
-                    $scope.application.guildName = $scope.guildSelected.name;
-                    $scope.isLoading = true;
-                    guildServices.submitApplication($scope.application).then(function(result) {
-                        $scope.showConfirm();
-                    }, function(err) {
-                        $scope.isLoading = false;
-                        siteServices.showMessageToast(err);
-                    });
-                }
-            });
-        };
-        $scope.showConfirm = function() { // Appending dialog to document.body to cover sidenav in docs app
-            $mdDialog.show($mdDialog.alert().clickOutsideToClose(false).title("Application Successful!").textContent("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion. You will also receive an email with the registered email account with whether or not your application was accepted or rejected.").ariaLabel('message popup').ok('Got it!').openFrom({
-                left: -50,
-                width: 30,
-                height: 80
-            }).closeTo({
-                right: 1500
-            })).then(function() {
-                $scope.isLoading = false;
-                $location.path('/');
-            }, function() {
-                $scope.status = 'You decided to keep your debt.';
-            });
-        };
-        $scope.init();
-    }
-]);
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
-    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
-        siteServices.updateTitle('View Applications');
-        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
-        $scope.loading = true;
-        $scope.numOfNewApplicants = 0;
-        $scope.startDate = moment();
-        $scope.startDate.month($scope.startDate.month() - 2);
-        $scope.startDate = $scope.startDate.toDate();
-        $scope.filterStatus = function(status) {
-            return function(application) {
-                return application.status == status;
-            };
-            /**
-                var filteredArray = _.filter($scope.applications, function(application){
-                    return application.status == status;
-                })
-                
-                return filteredArray;
-                 */
-        };
-        $scope.approveApplicant = function(application) {
-            guildServices.approveApplication(application).then(function() {
-                application.status = "Approved";
-            }).
-            catch (function(err) {}).
-            finally(function() {});
-        };
-        $scope.rejectApplicant = function(application) {
-            guildServices.rejectApplication(application).then(function() {
-                application.status = "Rejected";
-            }).
-            catch (function(err) {}).
-            finally(function() {});
-        };
-        $scope.getClassName = function(application) {
-            return application.character.class.toLowerCase();
-        };
-        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
-            $mdDialog.show({
-                templateUrl: "appDetails",
-                controller: 'appDetailsController',
-                parent: angular.element(document.body),
-                clickOutsideToClose: false,
-                locals: {
-                    data: application
-                },
-                fullscreen: true
-            });
-        };
-        $scope.openMenu = function($mdOpenMenu, ev) {
-            $mdOpenMenu(ev);
-        };
-        $scope.goTo = function(url) {
-            var win = window.open(url, '_blank');
-            win.focus();
-        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
-        $scope.buildArmoryUrl = function(realm, character) {
-            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
-            $scope.goTo(url);
-        };
-        $scope.getApplications = function() {
-            guildServices.getApplications($scope.startDate).then(function(applications) {
-                $scope.loading = false;
-                $scope.applications = applications.applications; //object to array
-                var newApplicants = _.find($scope.applications, function(applicant) {
-                    return applicant.status == "Applied";
-                });
-                if (newApplicants != undefined) {
-                    $scope.numOfNewApplicants = 1;
-                }
-                convertClasses();
-            }, function(err) {
-                $scope.loading = false;
-                console.log(err);
-                siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-            });
-        };
-
-        function convertClasses() {
-            for (var i = 0; i < $scope.applications.length; i++) {
-                var classType = classes[$scope.applications[i].character.class];
-                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
-            }
-        }
-        $scope.getApplications();
-    }
-]);
 'use strict';
 /**
  * This is the description for my class.
@@ -3339,6 +3105,144 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
         siteServices.updateTitle('Manage Members');
     }
 ]);
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild").controller("applicationController", ["$scope", '$location', '$http', '$timeout', '$filter', 'realmServices', 'guildServices', 'userLoginSrvc', 'siteServices', '$mdDialog',
+    function($scope, $location, $http, $timeout, $filter, realmServices, guildServices, userLoginSrvc, siteServices, $mdDialog) {
+        siteServices.updateTitle('Applications');
+        $scope.application = {};
+        $scope.validCharacterName = false;
+        $scope.charRequirementsIncomplete = false;
+        $scope.charRealmError = false;
+        $scope.searchingForUser = false;
+        $scope.icon = "error";
+        $scope.init = function() {
+            realmServices.getRealms().then(function(realms) {
+                $scope.realms = realms;
+            }).then(function() {
+                return $scope.getGuilds();
+            }).then(function() {
+                return $scope.loggedIn();
+            }).
+            catch (function(err) {
+                console.log(err);
+            }).
+            finally(function() {
+                $timeout(function() {
+                    siteServices.hideLoadingModal();
+                }, 500);
+            });
+        };
+        $scope.getGuilds = function() {
+            return guildServices.getListOfGuilds().then(function(guilds) {
+                $scope.listOfGuilds = guilds;
+            });
+        };
+        $scope.filterGuildsSearch = function(filterSearch) {
+            return $filter('filter')($scope.listOfGuilds, filterSearch);
+        };
+        $scope.filterSearch = function(filterSearch) {
+            return $filter('filter')($scope.realms, filterSearch);
+        };
+        $scope.loggedIn = function() {
+            userLoginSrvc.getUser().then(function(user) { //Success, let them fill out the form.
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal("Please log in before attempting to apply.");
+                $location.path('/');
+            }).
+            finally(function() {});
+        };
+        $scope.validateCharactername = function(callback) {
+            if ($scope.application.realm) {
+                $scope.validCharacterName = false; //Immediately invalidate until response comes back
+                $scope.searchingForUser = true;
+                guildServices.validateCharacterName($scope.application.characterName, $scope.application.realm.name).then(function(character) {
+                    $scope.validCharacterName = true;
+                    $scope.icon = "check_circle";
+                    $scope.application.character = character;
+                    $scope.className = guildServices.getClassName(character.class);
+                    return guildServices.getItemLevel($scope.application.characterName, $scope.application.realm.name);
+                }, function(err) {
+                    $scope.icon = "error";
+                    siteServices.showMessageToast(err);
+                    $scope.validCharacterName = false;
+                }).then(function(result) {
+                    $scope.application.itemLevel = result;
+                    return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
+                }).then(function(result) {
+                    $scope.parseProgression(result);
+                    if (callback) {
+                        callback();
+                    }
+                }).
+                finally(function() {
+                    $scope.searchingForUser = false;
+                });
+            } else {
+                $scope.validCharacterName = false;
+                if (callback) {
+                    callback();
+                }
+            }
+        };
+        $scope.parseProgression = function(result) {
+            $scope.raids = result.raids;
+            $scope.hfc = _.find($scope.raids, function(raid) {
+                return raid.name == "Hellfire Citadel";
+            });
+            $scope.brf = _.find($scope.raids, function(raid) {
+                return raid.name == "Blackrock Foundry";
+            });
+            $scope.hm = _.find($scope.raids, function(raid) {
+                return raid.name == "Highmaul";
+            });
+            $scope.application.progression = {};
+            $scope.application.progression.hfc = $scope.hfc;
+            $scope.application.progression.brf = $scope.brf;
+            $scope.application.progression.hm = $scope.hm;
+        };
+        $scope.submitApplication = function() {
+            $scope.validateCharactername(function() {
+                if ($scope.validCharacterName == false) {
+                    siteServices.showMessageToast("Sorry, we couldn't find your character. Please verify your Realm and Character are correct.");
+                } else if ($scope.guildSelected == undefined) {
+                    siteServices.showMessageToast("Did you selected a guild? If you don't see yours in the dropdown, they may not exist on this site.");
+                } else if ($scope.application.desiredRole == undefined) {
+                    siteServices.showMessageToast("Please select a role.");
+                } else {
+                    $scope.application.guildName = $scope.guildSelected.name;
+                    $scope.isLoading = true;
+                    guildServices.submitApplication($scope.application).then(function(result) {
+                        $scope.showConfirm();
+                    }, function(err) {
+                        $scope.isLoading = false;
+                        siteServices.showMessageToast(err);
+                    });
+                }
+            });
+        };
+        $scope.showConfirm = function() { // Appending dialog to document.body to cover sidenav in docs app
+            $mdDialog.show($mdDialog.alert().clickOutsideToClose(false).title("Application Successful!").textContent("You've successfully submitted your application to " + $scope.guildSelected.name + ". They will get in touch with you to review your application at their discretion. You will also receive an email with the registered email account with whether or not your application was accepted or rejected.").ariaLabel('message popup').ok('Got it!').openFrom({
+                left: -50,
+                width: 30,
+                height: 80
+            }).closeTo({
+                right: 1500
+            })).then(function() {
+                $scope.isLoading = false;
+                $location.path('/');
+            }, function() {
+                $scope.status = 'You decided to keep your debt.';
+            });
+        };
+        $scope.init();
+    }
+]);
 angular.module("BossCollection.guild").controller('myApplicationsCtrl', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
     function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
         $scope.orderBy = "dateCreated";
@@ -3401,6 +3305,100 @@ angular.module("BossCollection.guild").controller('myApplicationsCtrl', ['$scope
         $scope.init();
     }
 ]);
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
+    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
+        siteServices.updateTitle('View Applications');
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
+        $scope.loading = true;
+        $scope.numOfNewApplicants = 0;
+        $scope.startDate = moment();
+        $scope.startDate.month($scope.startDate.month() - 2);
+        $scope.startDate = $scope.startDate.toDate();
+        $scope.filterStatus = function(status) {
+            return function(application) {
+                return application.status == status;
+            };
+            /**
+                var filteredArray = _.filter($scope.applications, function(application){
+                    return application.status == status;
+                })
+                
+                return filteredArray;
+                 */
+        };
+        $scope.approveApplicant = function(application) {
+            guildServices.approveApplication(application).then(function() {
+                application.status = "Approved";
+            }).
+            catch (function(err) {}).
+            finally(function() {});
+        };
+        $scope.rejectApplicant = function(application) {
+            guildServices.rejectApplication(application).then(function() {
+                application.status = "Rejected";
+            }).
+            catch (function(err) {}).
+            finally(function() {});
+        };
+        $scope.getClassName = function(application) {
+            return application.character.class.toLowerCase();
+        };
+        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
+            $mdDialog.show({
+                templateUrl: "appDetails",
+                controller: 'appDetailsController',
+                parent: angular.element(document.body),
+                clickOutsideToClose: false,
+                locals: {
+                    data: application
+                },
+                fullscreen: true
+            });
+        };
+        $scope.openMenu = function($mdOpenMenu, ev) {
+            $mdOpenMenu(ev);
+        };
+        $scope.goTo = function(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+        $scope.buildArmoryUrl = function(realm, character) {
+            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+            $scope.goTo(url);
+        };
+        $scope.getApplications = function() {
+            guildServices.getApplications($scope.startDate).then(function(applications) {
+                $scope.loading = false;
+                $scope.applications = applications.applications; //object to array
+                var newApplicants = _.find($scope.applications, function(applicant) {
+                    return applicant.status == "Applied";
+                });
+                if (newApplicants != undefined) {
+                    $scope.numOfNewApplicants = 1;
+                }
+                convertClasses();
+            }, function(err) {
+                $scope.loading = false;
+                console.log(err);
+                siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
+            });
+        };
+
+        function convertClasses() {
+            for (var i = 0; i < $scope.applications.length; i++) {
+                var classType = classes[$scope.applications[i].character.class];
+                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+            }
+        }
+        $scope.getApplications();
+    }
+]);
 angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil',
     function(guildServices, $filter, $mdUtil) {
         return {
@@ -3429,6 +3427,68 @@ angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServ
             },
             templateUrl: 'listGuildMembersTemplate'
         };
+    }
+]);
+angular.module("BossCollection.forums").controller('appDetailsController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
+    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
+        $scope.orderBy = "dateCreated";
+        $scope.init = function() {
+            if (data) {
+                $scope.application = data;
+            } else {
+                $scope.application = {};
+            }
+            $scope.user = userLoginSrvc.updateUser();
+        };
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+        $scope.getNormalProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].normalKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getHeroicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].heroicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.getMythicProgression = function(progression) {
+            try {
+                var raidProgression = 0;
+                var raidLength = progression.bosses.length;
+                for (var i = 0; i < raidLength; i++) {
+                    if (progression.bosses[i].mythicKills > 0) {
+                        raidProgression++;
+                    }
+                }
+                return raidProgression + "/" + raidLength;
+            } catch (err) {
+                return 0 + "/" + 0;
+            }
+        };
+        $scope.close = function() {
+            $mdDialog.hide(self.thread);
+        };
+        $scope.init();
     }
 ]);
 'use strict';

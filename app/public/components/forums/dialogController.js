@@ -6,10 +6,14 @@ angular.module("BossCollection.forums")
             $scope.object = {};
             $scope.loading = false;
             $scope.replying = false;
-            $scope.rankSelected = {};
-            
+            $scope.rankSelected;
+
             $scope.orderBy = "dateCreated"
 
+            const OFFICER = "Officer";
+            const RAIDER = "Raider";
+            const PUBLIC = "Public";
+            const MEMBERS = "Members";
 
             $scope.init = function () {
 
@@ -21,20 +25,57 @@ angular.module("BossCollection.forums")
                     $scope.object = {};
                 }
 
-                $scope.user = userLoginSrvc.updateUser();
-                    
+                $scope.user = data.user;
+                $scope.determinePermissions();
+
+
+            }
+
+            $scope.determinePermissions = function() {
+
+                if ($scope.object.permissions) {
+
+                    if ($scope.object.permissions.officer) {
+
+                        $scope.selectedPermission = OFFICER;
+
+                    }
+                    else if ($scope.object.permissions.raider) {
+
+                        $scope.selectedPermission = RAIDER;
+
+                    }
+                    else if ($scope.object.permissions.public) {
+
+                        $scope.selectedPermission = PUBLIC;
+                    }
+                    else{
+                        
+                        $scope.selectedPermission = MEMBERS;
+                    }
+
+                    $scope.getVisibilityStatement();
+
+                    $scope.user.guild.ranks.forEach((rank, index) => {
+
+                        if(rank.rank == $scope.object.permissions.minRank){
+                            $scope.rankSelected = rank;
+                        }
+                    })
+                }
+
             }
 
             $scope.cancel = function () {
 
                 $mdDialog.cancel();
             }
-            
-            $scope.orderByDateCreated = function(){
+
+            $scope.orderByDateCreated = function () {
                 $scope.orderBy = "dateCreated"
             }
-            
-            $scope.orderByDateCreatedReversed = function(){
+
+            $scope.orderByDateCreatedReversed = function () {
                 $scope.orderBy = "-dateCreated"
             }
 
@@ -66,11 +107,37 @@ angular.module("BossCollection.forums")
 
                 $scope.loading = true;
 
-                if(typeof $scope.rankSelected.rank == 'number'){
+                if (typeof $scope.rankSelected.rank == 'number') {
                     $scope.object.permissions.minRank = $scope.rankSelected.rank;
                 }
 
                 if ($scope.object._id) {
+
+                    if ($scope.selectedPermission == OFFICER) {
+
+                        $scope.object.permissions.officer = true;
+                        $scope.object.permissions.raider = false;
+                        $scope.object.permissions.public = false;
+
+                    }
+                    else if ($scope.selectedPermission == RAIDER) {
+
+                        $scope.object.permissions.raider = true;
+                        $scope.object.permissions.officer = false;
+                        $scope.object.permissions.public = false;
+                    }
+                    else if ($scope.selectedPermission == PUBLIC) {
+
+                        $scope.object.permissions.public = true;
+                        $scope.object.permissions.raider = false;
+                        $scope.object.permissions.officer = false;
+                    }
+                    else{
+                        $scope.object.permissions.public = false;
+                        $scope.object.permissions.raider = false;
+                        $scope.object.permissions.officer = false;
+                    }
+
                     forumService.editCategory($scope.object)
                         .then(function (result) {
 
@@ -79,7 +146,7 @@ angular.module("BossCollection.forums")
                         .catch(function (err) {
 
                         })
-                        .finally(function () { 
+                        .finally(function () {
                             $scope.loading = false;
                         })
                 }
@@ -99,15 +166,45 @@ angular.module("BossCollection.forums")
 
             }
 
+            $scope.getVisibilityStatement = () => {
+
+                $scope.visiblityStatement = "";
+
+                let defaultEndingMessage = " and up can see these forums";
+
+                if ($scope.selectedPermission == PUBLIC) {
+                    $scope.visiblityStatement = "Anyone can see these forums.";
+                }
+                else if ($scope.selectedPermission == RAIDER || $scope.selectedPermission == OFFICER || $scope.selectedPermission == MEMBERS) {
+
+                    if ($scope.rankSelected == undefined) {
+
+                        if($scope.object.permissions.minRank)
+
+                        $scope.visiblityStatement = "Any rank " + $scope.object.permissions.minRank + ". " + $scope.selectedPermission + defaultEndingMessage;
+                    }
+                    else {
+
+                        let currentRankSelected = $scope.rankSelected.rank + ". " + $scope.rankSelected.name;
+
+                        $scope.visiblityStatement = "Anyone of rank " + currentRankSelected + defaultEndingMessage;
+                    }
+                }
+                else if ($scope.selectedPermission == undefined) {
+                    $scope.visiblityStatement = "Permissions not defined yet...";
+                }
+ 
+            }
+
             $scope.saveThread = function () {
 
                 var thread;
-                
+
                 if ($scope.object._id) {
 
                     thread = $scope.object;
                     $scope.loading = true;
-                    
+
                     forumService.editThread(thread)
                         .then(function (response) {
 
@@ -127,9 +224,9 @@ angular.module("BossCollection.forums")
                         forumId: $scope.object.forum._id,
                         message: $scope.object.message
                     }
-                    
+
                     $scope.loading = true;
-                    
+
                     forumService.createThread(thread)
                         .then(function (response) {
 
@@ -143,18 +240,18 @@ angular.module("BossCollection.forums")
                         })
                 }
             }
-            
+
             $scope.formatDate = function (date) {
-                
-                var localTime  = moment.utc(date).toDate();
-        
+
+                var localTime = moment.utc(date).toDate();
+
                 return moment(localTime).format('dddd, MMM D hh:mm');
             }
 
             $scope.close = function () {
                 $mdDialog.hide(self.thread);
             }
-            
+
             $scope.saveForum = function () {
 
                 $scope.loading = true;
@@ -195,6 +292,6 @@ angular.module("BossCollection.forums")
                         })
                 }
             }
-            
+
             $scope.init();
         }]);

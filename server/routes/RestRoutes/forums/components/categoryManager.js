@@ -10,11 +10,11 @@ var ThreadManager = require('./threadManager');
 var util = require('utility');
 var CategorydModel = require('models/forumModels/category.js');
 var defaultCategoryPermissions = {
-        raider: false,
-        officer: false,
-        minRank: 0,
-        public: false
-    }
+    raider: false,
+    officer: false,
+    minRank: 0,
+    public: false
+}
 
 function createCategory(req, res) {
 
@@ -133,14 +133,36 @@ function getCategories(req, res) {
     var userPermissions = req.session.user.guild.members[0];
     var query = {};
 
-    if (userPermissions.GM || userPermissions.officer) {
+    if (userPermissions.GM) {
         query = { "guild": guild };
+    }
+
+    else if (userPermissions.officer) {
+        query = {
+            $and: [
+                { "guild": guild },
+                {
+                    $or: [
+
+                        {
+                            $and: [
+                                { "permissions.minRank": { $gte: userPermissions.rank } }
+                            ]
+                        },
+
+                        {
+                            "permissions.public": true
+                        }
+                    ]
+                }
+            ]
+        }
     }
 
     else {
         query = {
             $and: [
-                {"guild": guild},
+                { "guild": guild },
                 {
                     $or: [
 

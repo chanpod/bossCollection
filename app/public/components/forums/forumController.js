@@ -74,6 +74,8 @@ angular.module("BossCollection.forums")
                         public: false
                     }
                 };
+
+                $scope.category.user = $scope.user;
                 
                 forumService.openBottomSheet('category', $scope.category)
                     .then(function(result){
@@ -97,7 +99,7 @@ angular.module("BossCollection.forums")
             $scope.editCategory = function (category) {
 
                 //$scope.category = category;
-                
+                category.user = $scope.user;
                 forumService.openBottomSheet('category', category)
                     .then(function(result){
                         forumService.removeLocalForums();
@@ -163,7 +165,7 @@ angular.module("BossCollection.forums")
             }
             
             $scope.editForum = function(forum){
-                
+                forum.user = $scope.user;
                 forumService.openBottomSheet('forumEdit', forum)
                     .then(function (result) {
                         
