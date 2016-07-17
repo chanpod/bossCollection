@@ -117,6 +117,7 @@ angular.module("BossCollection.guild")
                         $scope.loading = false;
                         $scope.changesMade = false;
                         $rootScope.$broadcast('loggedin');
+                        siteServices.successfulUpdate();
                     })
                     .catch(err => {
                         $scope.loading = false;

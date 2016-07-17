@@ -146,7 +146,7 @@ angular.module("BossCollection.forums")
                 
                 forumService.deleteComment(comment)
                     .then(function (result) {
-
+                        siteServices.successfulUpdate();
                         self.getComments();
                     })
                     .catch(function (err) {

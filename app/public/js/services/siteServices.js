@@ -29,6 +29,10 @@ angular.module("BossCollection.services")
             
             $rootScope.$broadcast('navbarTitle', newTitle)
         }
+
+        function successfulUpdate(){
+            showMessageToast("Success");
+        }
         
         function showLoadingBottomSheet($event){
             
@@ -147,6 +151,7 @@ angular.module("BossCollection.services")
             hideBottomSheet:hideBottomSheet,
             showLoadingModal:showLoadingModal,
             hideLoadingModal:hideLoadingModal,
-            confirmDelete:confirmDelete
+            confirmDelete:confirmDelete,
+            successfulUpdate:successfulUpdate
         }
     }])

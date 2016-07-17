@@ -121,7 +121,7 @@ angular.module("BossCollection.attendance")
                         return absenceService.deleteAbsence(absence);
                     })
                     .then(function(result) {
-
+                        siteServices.successfulUpdate();
                         if (self.viewing == 0) {
                             self.getAbsences();
                         }

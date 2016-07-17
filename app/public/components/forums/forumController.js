@@ -121,8 +121,12 @@ angular.module("BossCollection.forums")
                         }
                     })
                     .then(function(response){
+                        siteServices.successfulUpdate();
                         forumService.removeLocalForums();
                         $scope.getForums();
+                    })
+                    .catch((err) => {
+                        siteServices.showMessageToast("Oops, something broke");
                     })
             }
             

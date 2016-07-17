@@ -53,7 +53,7 @@ angular.module("BossCollection.accounts")
                     updateAccount.save(updatedUser).$promise
                         .then(function (response) {
 
-
+                            siteServices.successfulUpdate();
                             defer.resolve(response);
                         },
                         function (err) {

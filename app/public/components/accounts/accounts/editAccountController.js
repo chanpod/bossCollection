@@ -16,7 +16,7 @@ angular.module("BossCollection.accounts")
                     .then(function (result) {
                         guildServices.leaveGuild(guildName)
                             .then(function (user) {
-
+                                siteServices.successfulUpdate();
                                 $scope.user = userLoginSrvc.updateUser();
                             })
                     })

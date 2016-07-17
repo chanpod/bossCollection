@@ -137,7 +137,7 @@ angular.module("BossCollection.forums")
                         }
                     })
                     .then(function(response){
-
+                        siteServices.successfulUpdate();
                         self.refresh();
                     })
             }

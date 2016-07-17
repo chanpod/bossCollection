@@ -95,18 +95,24 @@ function deleteApplication(req, res) {
 
     var appID = req.body.appID;
 
-    ApplicationModel.findOne({ _id: appID })
-        .then(function (applicationModel) {
+    try {
 
-            
-            applicationModel.remove(function () {
-                
-                defer.resolve(true);
+        ApplicationModel.findOne({ _id: appID })
+            .then(function (applicationModel) {
+
+
+                applicationModel.remove(function () {
+
+                    defer.resolve(true);
+                })
+
+            }, (err) => {
+                defer.reject(util.handleErrors(err));
             })
-
-        }, (err) => {
-            defer.reject(util.handleErrors(err));
-        })
+    }
+    catch (err) {
+        defer.reject(util.handleErrors(err));
+    }
 
     return defer.promise;
 }

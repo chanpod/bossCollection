@@ -94,7 +94,7 @@ angular.module("BossCollection.forums")
 
                 forumService.deleteForum($scope.object)
                     .then(function (result) {
-
+                        siteServices.successfulUpdate();
                         $scope.close(result);
                     })
             }
