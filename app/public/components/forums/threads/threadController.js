@@ -149,7 +149,7 @@ angular.module("BossCollection.forums")
                         $scope.sortThreads();
                     })
                     .catch(function(err){
-
+                        siteServices.showMessageToast(err);
                         $scope.loading = false;
                     })
             }

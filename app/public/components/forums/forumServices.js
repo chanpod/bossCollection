@@ -302,6 +302,8 @@ angular.module("BossCollection.forums")
                     .then(function (response) {
 
                         defer.resolve(response.threads);
+                    }, (err) => {
+                        defer.reject(err);
                     })
 
                 return defer.promise;
