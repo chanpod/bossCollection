@@ -7,7 +7,12 @@ script#myApplications(type="text/ng-template")
                         h3 No Applications Submitted 
                     md-list(layout-padding)
                         md-list-item(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp
-                            include ../reviewApplication/applicationsList
+                            div(flex, layout = "column")
+                                div(flex, layout, layout-align = "center center")
+                                    h3
+                                        | {{application.guild}} - {{application.status}}
+                                div(flex)
+                                    include ../reviewApplication/applicationsList
                 
                     
     ad()                     

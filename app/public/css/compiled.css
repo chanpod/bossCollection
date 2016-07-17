@@ -302,6 +302,9 @@
 .redIcon {
   color: red; }
 
+.padding {
+  padding: 5px; }
+
 @media (min-width: 1501px) {
   .characterName {
     position: absolute;
@@ -359,6 +362,45 @@
 .noImageIcon {
   padding-bottom: 12px; }
 
+.threadComments {
+  overflow: scroll; }
+
+.commentsDialog {
+  overflow: hidden;
+  min-width: 80%;
+  min-height: 80%; }
+
+.reply {
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  width: 100%; }
+
+.editThreadScrollFix {
+  overflow: scroll; }
+
+.threadSubject {
+  font-size: 23px; }
+
+#vertical-container {
+  min-height: 100px;
+  height: 70vh !important; }
+
+.confirmCommentDelete {
+  position: absolute;
+  left: 0;
+  bottom: 50%;
+  padding: 0;
+  background: white;
+  width: 100%;
+  z-index: 1000; }
+
+.threadMessagePreview {
+  max-width: 75%;
+  word-wrap: break-word;
+  text-overflow: clip;
+  max-height: 50%; }
+
 .toolbarFixedContentContainer {
   height: 100%; }
 
@@ -398,42 +440,3 @@
 
 .wordWrap {
   word-wrap: break-word; }
-
-.threadComments {
-  overflow: scroll; }
-
-.commentsDialog {
-  overflow: hidden;
-  min-width: 80%;
-  min-height: 80%; }
-
-.reply {
-  position: absolute;
-  right: 15px;
-  bottom: 15px;
-  width: 100%; }
-
-.editThreadScrollFix {
-  overflow: scroll; }
-
-.threadSubject {
-  font-size: 23px; }
-
-#vertical-container {
-  min-height: 100px;
-  height: 70vh !important; }
-
-.confirmCommentDelete {
-  position: absolute;
-  left: 0;
-  bottom: 50%;
-  padding: 0;
-  background: white;
-  width: 100%;
-  z-index: 1000; }
-
-.threadMessagePreview {
-  max-width: 75%;
-  word-wrap: break-word;
-  text-overflow: clip;
-  max-height: 50%; }
