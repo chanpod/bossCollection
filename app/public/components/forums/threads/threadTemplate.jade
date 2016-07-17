@@ -54,7 +54,8 @@ script#thread(type="text/ng-template")
                         div(layout-align = "space-between center", layout)
                             div(flex).threadSubject
                                 |  {{thread.title}}
-                            div(hide-sm, hide-xs, flex)
+                            div(layout, hide-sm, hide-xs, flex, layout-align = "end center")
+                                div()
                                     |  {{formatDate(thread.dateCreated)}}
                             div( ng-if = "thread.sticky")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
@@ -66,7 +67,7 @@ script#thread(type="text/ng-template")
                                 div(layout-align = "center center")
                                     | Comments: {{thread.commentCount}}
                             div(flex)
-                                div(hide-md, flex)
+                                div(hide-gt-sm, flex)
                                     |  {{formatDate(thread.dateCreated)}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
                         |  {{thread.message}}
@@ -95,8 +96,9 @@ script#thread(type="text/ng-template")
                         div(layout-align = "space-between center", layout)
                             div(flex).threadSubject
                                 |  {{thread.title}}
-                            div(hide-sm, hide-xs, flex)
-                                |  {{formatDate(thread.dateCreated)}}
+                            div(layout, hide-sm, hide-xs, flex, layout-align = "end center")
+                                div()
+                                    |  {{formatDate(thread.dateCreated)}}
                             div( ng-if = "thread.sticky")
                                 md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
                         div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
@@ -107,7 +109,7 @@ script#thread(type="text/ng-template")
                                 div(layout-align = "center center")
                                     | Comments: {{thread.commentCount}}
                             div(flex)
-                                div(hide-md, flex)
+                                div(hide-gt-sm, flex)
                                     |  {{formatDate(thread.dateCreated)}}
                     md-tooltip(style = "max-width:75%;").threadMessagePreview
                         |  {{thread.message}}
