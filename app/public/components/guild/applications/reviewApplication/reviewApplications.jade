@@ -1,10 +1,10 @@
 script#reviewApplications(type="text/ng-template")
     md-content(layout-padding)
-        div(layout)
-            div(layout, flex)
+        div(layout, layout-align = "center center")
+            div(layout, flex, layout-align = "center center")
                 h3() From
                 md-datepicker(ng-model = "startDate", md-placeholder="Select date", ng-change = "getApplications()")
-            span(flex)
+            div(layout, flex, layout-align = "center center")
                 h3 To Today
         section(layout-xs="column", layout="row")
             div(flex)
