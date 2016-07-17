@@ -98,7 +98,7 @@ angular.module("BossCollection.guild")
 
             $scope.getApplications = function () {
 
-                guildServices.getUserApplications($scope.user.name)
+                guildServices.getUserApplications($scope.user.name, $scope.startDate)
                     .then(function (applications) {
                         $scope.loading = false;
                         $scope.applications = applications.applications; //object to array

@@ -92,7 +92,19 @@ function getUserApplications(req, res) {
 
     var user = req.params.user;
 
-    ApplicationModel.find({guild: req.session.user.guild.name, user: user})
+    var date = moment();
+
+    if (req.params.startDate) {
+        date = moment(req.params.startDate);
+    }
+    else {
+
+        date.month((date.month() - 2))
+    }
+
+    ApplicationModel.find({guild: req.session.user.guild.name, user: user, dateApplied: {
+            $gte: date.toISOString()
+        }})
         .then(function (applications) {
 
             defer.resolve({ "applications": applications });
