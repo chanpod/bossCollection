@@ -53,6 +53,7 @@ angular.module("BossCollection.forums")
             self.getComments = function(){
                 
                 self.loading = true
+                $scope.disableLoadMore = false;
                 
                 return forumService.getComments(self.threadID, $scope.messageCount)
                     .then(function(comments){
