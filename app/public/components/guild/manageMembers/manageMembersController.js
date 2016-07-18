@@ -109,6 +109,20 @@ angular.module("BossCollection.guild")
                 return shouldShowDemote;
             }
 
+            $scope.showKick = (rank) => {
+                //(isGM() || (isOfficer() && rank.rank != 1)) && rank.rank != 0
+                var shouldShowDemote = false;
+
+                if ($scope.isGM()) {
+                    shouldShowDemote = true;
+                }
+                else if ($scope.isOfficer() && rank.officer != true) {
+                    shouldShowDemote = true;
+                }                
+
+                return shouldShowDemote;
+            }
+
             $scope.demote = function (user) {
 
                 if (user.rank == $scope.ranks.length) {
