@@ -190,7 +190,11 @@ function addMember(req, res) {
 
     var newMember = {
         user: memberName,
-        rank: undefined
+        rank: undefined,
+        officer: false,
+        raider: false,
+        GM: false,
+        approved: false
     }
 
     findGuild(guildName)
@@ -207,8 +211,7 @@ function addMember(req, res) {
             var indexOfMember = doesMemberExist(guild.members, memberName);
             if (indexOfMember != -1) {
 
-                throw new Error("You are already a part of this guild.");
-                return;
+                throw new Error("You are already a part of this guild.");                
             }
 
             let lowestRank = 0;            
