@@ -52,8 +52,21 @@ function addGuild(req, res) {
             newGuild.name = guildName;
             newGuild.members.push({
                 user: guildManager,
-                rank: 0
+                rank: 0,
+                officer: true,
+                raider: true,
+                GM: true,
+                approved: true
             })
+
+            newGuild.ranks = [
+                {
+                    name: "GM",
+                    raider: true,
+                    officer: true,
+                    rank: 0
+                }
+            ]
 
             return newGuild.save(function (savedGuild) {
 
