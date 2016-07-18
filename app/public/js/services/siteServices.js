@@ -7,7 +7,7 @@ angular.module("BossCollection.services")
         function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q) {
 
             var alreadyLoading = false;
-
+            var isToastOpen = false;
             function startLoading() {
 
                 if (alreadyLoading) {
@@ -100,12 +100,27 @@ angular.module("BossCollection.services")
             }
 
             function showMessageToast(message) {
-                $mdToast.show(
-                    $mdToast.simple()
-                        .textContent(message)
-                        .position("bottom")
-                        .hideDelay(4000)
-                );
+                
+                var toast = $mdToast.simple()
+                    .textContent(message)
+                    .action('X')
+                    .position("bottom")
+                    .hideDelay(4000)
+
+                if (!isToastOpen) {
+                    isToastOpen = true;
+                    $mdToast.show(toast)
+                        .then(response => {
+                            console.log("CLosing");
+                            $mdToast.hide();
+                            isToastOpen = false;
+                        })
+                }
+                else {
+
+                    $mdToast.hide();
+                    isToastOpen = false;
+                }
             }
 
             function hideLoadingModal() {

@@ -99,7 +99,7 @@ angular.module("BossCollection.attendance")
                     self.showContent();  
                 })
                 .catch(function (err) {
-                    siteServices.handleError(err);
+                    //siteServices.handleError(err);
                 })
                 .finally(function(){
                     

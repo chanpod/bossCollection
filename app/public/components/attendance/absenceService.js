@@ -101,7 +101,7 @@ angular.module("BossCollection.attendance")
                     
                     saveAbsenceResource.save(bodyData).$promise
                         .then(function (response) {
-
+                            siteServices.successfulUpdate();
                             defer.resolve(response);
                         },
                         function (err) {

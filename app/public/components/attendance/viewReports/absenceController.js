@@ -61,7 +61,7 @@ angular.module("BossCollection.attendance")
             self.dateHasPassed = function(absence) {
 
                 var difference = moment().diff(moment(absence.date))
-                console.log(difference);
+                //console.log(difference);
                 if (difference > 0) {
                     return false;
                 }
@@ -121,7 +121,7 @@ angular.module("BossCollection.attendance")
                         return absenceService.deleteAbsence(absence);
                     })
                     .then(function(result) {
-                        siteServices.successfulUpdate();
+                        //siteServices.successfulUpdate();
                         if (self.viewing == 0) {
                             self.getAbsences();
                         }
@@ -172,9 +172,7 @@ angular.module("BossCollection.attendance")
             self.getAbsencesByDate = function(dateIn) {
 
                 self.loading = true;
-
-
-
+                
                 absenceService.getAbsencesByDate(self.dayDesired).then(function(result) {
 
                     self.loading = false;

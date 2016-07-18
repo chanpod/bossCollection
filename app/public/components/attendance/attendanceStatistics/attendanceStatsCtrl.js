@@ -47,21 +47,25 @@ angular.module("BossCollection.attendance")
                 weeks:$scope.weeksCounted
             }
             
-            absenceService.getAbsenceHistory(absenceHistory).then(function (result) {
+            absenceService.getAbsenceHistory(absenceHistory)
+                .then(function (result) {
 
-                $scope.loading = false;
-                $scope.absences = result.absences;
-                $scope.calculateAttendance();
-
-            },
-                function (err) {
-                    siteServices.handleError(err)
                     $scope.loading = false;
+                    $scope.absences = result.absences;
+                    $scope.calculateAttendance();
+
+                })
+                .catch(function (err) {
+                    siteServices.handleError(err)
+
                     console.log(err);
                 })
+                .finally(() => {
+                    $scope.loading = false;
+                })
         }
-        
-        /** 
+
+        /**
          * 
          * 
          * 
