@@ -37,7 +37,7 @@ angular.module("BossCollection.home")
 
             $scope.init =  () => {
 
-                $scope.newTab = newTab;
+                $scope.newTab = Object.assign({}, newTab);
 
                 $scope.getHomepageContent();
 
@@ -112,7 +112,8 @@ angular.module("BossCollection.home")
 
                 $scope.saveTab();
 
-                $scope.newTab = newTab;
+                $scope.newTab = Object.assign({}, newTab);
+                //$scope.newTab = newTab; 
             }
 
             $scope.cancel = function () {
