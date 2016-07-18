@@ -84,24 +84,6 @@ angular.module("BossCollection.attendance", ['ngRoute']).config(['$routeProvider
         });
     }
 ]);
-'use strict';
-angular.module("BossCollection.forums", ['ngRoute']).config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.when('/forum', {
-            templateUrl: 'forum',
-            controller: 'forumController'
-        }).when('/forum/favorites', {
-            controller: 'favoritesController as favCtrl',
-            templateUrl: 'favorites'
-        }).when('/forum/:forumID', {
-            templateUrl: 'thread',
-            controller: 'threadController'
-        }).when('/thread/:threadID', {
-            templateUrl: 'threadComments',
-            controller: 'commentsController as ctrl'
-        });
-    }
-]);
 'user strict';
 angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
     function($routeProvider) {
@@ -126,6 +108,24 @@ angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
         }).when('/myApplications', {
             templateUrl: 'myApplications',
             controller: 'myApplicationsCtrl'
+        });
+    }
+]);
+'use strict';
+angular.module("BossCollection.forums", ['ngRoute']).config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.when('/forum', {
+            templateUrl: 'forum',
+            controller: 'forumController'
+        }).when('/forum/favorites', {
+            controller: 'favoritesController as favCtrl',
+            templateUrl: 'favorites'
+        }).when('/forum/:forumID', {
+            templateUrl: 'thread',
+            controller: 'threadController'
+        }).when('/thread/:threadID', {
+            templateUrl: 'threadComments',
+            controller: 'commentsController as ctrl'
         });
     }
 ]);
@@ -515,6 +515,296 @@ angular.module("BossCollection.attendance").factory('absenceService', ['$resourc
             }
         };
         return absenceApi;
+    }
+]);
+'use strict';
+angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', '$resource', 'siteServices', 'userLoginSrvc',
+    function($http, $q, $resource, siteServices, userLoginSrvc) {
+        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+        var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
+        var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
+        var API_BASE = "/api/guild/guild";
+        var APPLICATION_API_BASE = "/api/guild/applications";
+        var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
+        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
+        var getUserApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/user/:user/:startDate');
+        var _approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
+        var _rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
+        var deleteApplicationResource = $resource(APPLICATION_API_BASE + '/deleteApplication');
+        var addGuild = $resource(API_BASE + '/addGuild');
+        var _updateRank = $resource(API_BASE + '/updateRank');
+        var changeGuildName = $resource(API_BASE + '/changeGuildName');
+        var addMember = $resource(API_BASE + '/addMember');
+        var removeMember = $resource(API_BASE + '/removeMember');
+        var kickuserResource = $resource(API_BASE + '/kickMember');
+        var _getGuildMembers = $resource(API_BASE + '/getGuildMembers');
+        var _getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
+        var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
+        var guildSettingsResource = $resource(API_BASE + "/guildSettings");
+        var guildApi = {
+            getClassName: function getClassName(classID) {
+                return classes[classID];
+            },
+            saveGuildSettings: function saveGuildSettings(guildSettings) {
+                return guildSettingsResource.save({
+                    guild: guildSettings
+                }).$promise;
+            },
+            getGuildSettings: function getGuildSettings() {
+                return guildSettingsResource.get().$promise;
+            },
+            updateHomepageContent: function updateHomepageContent(guild, guildName) {
+                var bodyData = {
+                    guild: guild
+                }; //no data, it's a get
+                return guildHomepageContentResource.save({
+                    guildName: guildName
+                }, bodyData).$promise;
+            },
+            getHomepageContent: function getHomepageContent(guildName) {
+                var bodyData = {}; //no data, it's a get
+                return guildHomepageContentResource.get({
+                    guildName: guildName
+                }).$promise;
+            },
+            kickUser: function kickUser(userName, guildName) {
+                var bodyData = {
+                    userName: userName,
+                    guildName: guildName
+                };
+                return kickuserResource.save(bodyData).$promise;
+            },
+            approveApplication: function approveApplication(application) {
+                var bodyData = {
+                    application: application
+                };
+                return _approveApplication.save(bodyData).$promise;
+            },
+            rejectApplication: function rejectApplication(application) {
+                var bodyData = {
+                    application: application
+                };
+                return _rejectApplication.save(bodyData).$promise;
+            },
+            getListOfGuilds: function getListOfGuilds() {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                _getListOfGuilds.get().$promise.then(function(guilds) {
+                    defer.resolve(guilds.guilds);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            updateRank: function updateRank(guildName, member) {
+                var defer = $q.defer();
+                _updateRank.save({
+                    guildName: guildName,
+                    member: member
+                }).$promise.then(function(result) {
+                    defer.resolve(result.members);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getGuildMembers: function getGuildMembers(guildName) {
+                var defer = $q.defer();
+                _getGuildMembers.save({
+                    guildName: guildName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.members);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            createGuild: function createGuild(guildName) {
+                var defer = $q.defer();
+                addGuild.save({
+                    guildName: guildName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.guild);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            joinGuild: function joinGuild(guildName, memberName) {
+                var defer = $q.defer();
+                addMember.save({
+                    guildName: guildName,
+                    memberName: memberName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.guild);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data);
+                }).
+                finally(function() {});
+                return defer.promise;
+            },
+            leaveGuild: function leaveGuild(guildName) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                removeMember.save({
+                    guildName: guildName
+                }).$promise.then(function(result) {
+                    defer.resolve(result.user);
+                }).
+                catch (function(err) {
+                    defer.reject(err.data.message);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getApplications: function getApplications(startDate) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                getApplicationsUrl.get({
+                    startDate: startDate
+                }).$promise.then(function(applications) {
+                    defer.resolve(applications);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            deleteApplication: function deleteApplication(appID) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                deleteApplicationResource.save({
+                    appID: appID
+                }).$promise.then(function(applications) {
+                    defer.resolve(applications);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getUserApplications: function getUserApplications(user, date) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                getUserApplicationsUrl.get({
+                    user: user,
+                    startDate: date
+                }).$promise.then(function(applications) {
+                    defer.resolve(applications);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            getProgression: function getProgression(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=progression&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(data) {
+                    defer.resolve(data.progression);
+                }, function(err) {
+                    defer.reject("Character not found");
+                });
+                return defer.promise;
+            },
+            getItemLevel: function getItemLevel(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(data) {
+                    defer.resolve(data.items.averageItemLevelEquipped);
+                }, function(err) {
+                    defer.reject("Character not found");
+                });
+                return defer.promise;
+            },
+            validateCharacterName: function validateCharacterName(characterName, realm) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(data) {
+                    defer.resolve(data);
+                }, function(err) {
+                    defer.reject("Character not found");
+                });
+                return defer.promise;
+            },
+            getGuild: function getGuild(realm, guildName) {
+                var defer = $q.defer();
+                siteServices.startLoading();
+                if (realm != "" && guildName != "") {
+                    var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
+                }
+                $http({
+                    method: 'GET',
+                    url: getMembersUrl
+                }).then(function(data) {
+                    defer.resolve(data.data.members);
+                }, function(err) {
+                    defer.reject(err);
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            },
+            submitApplication: function submitApplication(newApplicant) {
+                var defer = $q.defer();
+                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
+                var getCharacter = $resource(getCharacterUrl);
+                getCharacter.get().$promise.then(function(characterWithSpec) {
+                    return characterWithSpec;
+                }, function(err) {
+                    defer.reject("Character not found");
+                }).then(function(characterWithSpec) {
+                    newApplicant.character.specs = characterWithSpec.talents;
+                    apply.save({
+                        "newApplicant": newApplicant
+                    }).$promise.then(function(submitted) {
+                        siteServices.loadingFinished();
+                        defer.resolve(submitted);
+                    }, function(err) {
+                        defer.reject(err);
+                    });
+                }).
+                finally(function() {
+                    siteServices.loadingFinished();
+                });
+                return defer.promise;
+            }
+        };
+
+        function getUsersRank(userName, guild) {
+            var memberListing;
+            memberListing = _.find(guild.members, {
+                user: userName
+            });
+            return memberListing.rank;
+        }
+        return guildApi;
     }
 ]);
 angular.module("BossCollection.forums").controller('dialogController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
@@ -1274,296 +1564,6 @@ angular.module("BossCollection.forums").service('forumService', ['$location', '$
         };
     }
 ]);
-'use strict';
-angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', '$resource', 'siteServices', 'userLoginSrvc',
-    function($http, $q, $resource, siteServices, userLoginSrvc) {
-        var getMembersUrl = "https://us.api.battle.net/wow/guild/Zul'jin/mkdir%20Bosscollection?fields=members,items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
-        var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
-        var API_BASE = "/api/guild/guild";
-        var APPLICATION_API_BASE = "/api/guild/applications";
-        var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
-        var getApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/:startDate');
-        var getUserApplicationsUrl = $resource(APPLICATION_API_BASE + '/getApplications/user/:user/:startDate');
-        var _approveApplication = $resource(APPLICATION_API_BASE + '/approveApplication');
-        var _rejectApplication = $resource(APPLICATION_API_BASE + '/rejectApplication');
-        var deleteApplicationResource = $resource(APPLICATION_API_BASE + '/deleteApplication');
-        var addGuild = $resource(API_BASE + '/addGuild');
-        var _updateRank = $resource(API_BASE + '/updateRank');
-        var changeGuildName = $resource(API_BASE + '/changeGuildName');
-        var addMember = $resource(API_BASE + '/addMember');
-        var removeMember = $resource(API_BASE + '/removeMember');
-        var kickuserResource = $resource(API_BASE + '/kickMember');
-        var _getGuildMembers = $resource(API_BASE + '/getGuildMembers');
-        var _getListOfGuilds = $resource(API_BASE + '/listOfGuilds');
-        var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
-        var guildSettingsResource = $resource(API_BASE + "/guildSettings");
-        var guildApi = {
-            getClassName: function getClassName(classID) {
-                return classes[classID];
-            },
-            saveGuildSettings: function saveGuildSettings(guildSettings) {
-                return guildSettingsResource.save({
-                    guild: guildSettings
-                }).$promise;
-            },
-            getGuildSettings: function getGuildSettings() {
-                return guildSettingsResource.get().$promise;
-            },
-            updateHomepageContent: function updateHomepageContent(guild, guildName) {
-                var bodyData = {
-                    guild: guild
-                }; //no data, it's a get
-                return guildHomepageContentResource.save({
-                    guildName: guildName
-                }, bodyData).$promise;
-            },
-            getHomepageContent: function getHomepageContent(guildName) {
-                var bodyData = {}; //no data, it's a get
-                return guildHomepageContentResource.get({
-                    guildName: guildName
-                }).$promise;
-            },
-            kickUser: function kickUser(userName, guildName) {
-                var bodyData = {
-                    userName: userName,
-                    guildName: guildName
-                };
-                return kickuserResource.save(bodyData).$promise;
-            },
-            approveApplication: function approveApplication(application) {
-                var bodyData = {
-                    application: application
-                };
-                return _approveApplication.save(bodyData).$promise;
-            },
-            rejectApplication: function rejectApplication(application) {
-                var bodyData = {
-                    application: application
-                };
-                return _rejectApplication.save(bodyData).$promise;
-            },
-            getListOfGuilds: function getListOfGuilds() {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                _getListOfGuilds.get().$promise.then(function(guilds) {
-                    defer.resolve(guilds.guilds);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            updateRank: function updateRank(guildName, member) {
-                var defer = $q.defer();
-                _updateRank.save({
-                    guildName: guildName,
-                    member: member
-                }).$promise.then(function(result) {
-                    defer.resolve(result.members);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getGuildMembers: function getGuildMembers(guildName) {
-                var defer = $q.defer();
-                _getGuildMembers.save({
-                    guildName: guildName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.members);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {});
-                return defer.promise;
-            },
-            createGuild: function createGuild(guildName) {
-                var defer = $q.defer();
-                addGuild.save({
-                    guildName: guildName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.guild);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {});
-                return defer.promise;
-            },
-            joinGuild: function joinGuild(guildName, memberName) {
-                var defer = $q.defer();
-                addMember.save({
-                    guildName: guildName,
-                    memberName: memberName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.guild);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data);
-                }).
-                finally(function() {});
-                return defer.promise;
-            },
-            leaveGuild: function leaveGuild(guildName) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                removeMember.save({
-                    guildName: guildName
-                }).$promise.then(function(result) {
-                    defer.resolve(result.user);
-                }).
-                catch (function(err) {
-                    defer.reject(err.data.message);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getApplications: function getApplications(startDate) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                getApplicationsUrl.get({
-                    startDate: startDate
-                }).$promise.then(function(applications) {
-                    defer.resolve(applications);
-                }, function(err) {
-                    defer.reject(err);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            deleteApplication: function deleteApplication(appID) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                deleteApplicationResource.save({
-                    appID: appID
-                }).$promise.then(function(applications) {
-                    defer.resolve(applications);
-                }, function(err) {
-                    defer.reject(err);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getUserApplications: function getUserApplications(user, date) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                getUserApplicationsUrl.get({
-                    user: user,
-                    startDate: date
-                }).$promise.then(function(applications) {
-                    defer.resolve(applications);
-                }, function(err) {
-                    defer.reject(err);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            getProgression: function getProgression(characterName, realm) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=progression&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(data) {
-                    defer.resolve(data.progression);
-                }, function(err) {
-                    defer.reject("Character not found");
-                });
-                return defer.promise;
-            },
-            getItemLevel: function getItemLevel(characterName, realm) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?fields=items&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(data) {
-                    defer.resolve(data.items.averageItemLevelEquipped);
-                }, function(err) {
-                    defer.reject("Character not found");
-                });
-                return defer.promise;
-            },
-            validateCharacterName: function validateCharacterName(characterName, realm) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + realm + "/" + characterName + "?locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(data) {
-                    defer.resolve(data);
-                }, function(err) {
-                    defer.reject("Character not found");
-                });
-                return defer.promise;
-            },
-            getGuild: function getGuild(realm, guildName) {
-                var defer = $q.defer();
-                siteServices.startLoading();
-                if (realm != "" && guildName != "") {
-                    var getMembersUrl = blizzardBaseUrl + encodeURIComponent(realm) + "/" + encodeURIComponent(guildName) + blizzardEndingUrl;
-                }
-                $http({
-                    method: 'GET',
-                    url: getMembersUrl
-                }).then(function(data) {
-                    defer.resolve(data.data.members);
-                }, function(err) {
-                    defer.reject(err);
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            },
-            submitApplication: function submitApplication(newApplicant) {
-                var defer = $q.defer();
-                var getCharacterUrl = "https://us.api.battle.net/wow/character/" + newApplicant.realm.name + "/" + newApplicant.character.name + "?fields=talents&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
-                var getCharacter = $resource(getCharacterUrl);
-                getCharacter.get().$promise.then(function(characterWithSpec) {
-                    return characterWithSpec;
-                }, function(err) {
-                    defer.reject("Character not found");
-                }).then(function(characterWithSpec) {
-                    newApplicant.character.specs = characterWithSpec.talents;
-                    apply.save({
-                        "newApplicant": newApplicant
-                    }).$promise.then(function(submitted) {
-                        siteServices.loadingFinished();
-                        defer.resolve(submitted);
-                    }, function(err) {
-                        defer.reject(err);
-                    });
-                }).
-                finally(function() {
-                    siteServices.loadingFinished();
-                });
-                return defer.promise;
-            }
-        };
-
-        function getUsersRank(userName, guild) {
-            var memberListing;
-            memberListing = _.find(guild.members, {
-                user: userName
-            });
-            return memberListing.rank;
-        }
-        return guildApi;
-    }
-]);
 angular.module("BossCollection.home").controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
     function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
         $scope.guild = {};
@@ -1825,11 +1825,16 @@ angular.module('BossCollection.accounts').directive('userDisplay', [
     }
 ]);
 'use strict'; /* Directives */
-angular.module('BossCollection.accounts').controller('userDisplayController', ['$scope', 'userLoginSrvc',
-    function($scope, userLoginSrvc) {
+angular.module('BossCollection.accounts').controller('userDisplayController', ['$rootScope', '$scope', 'userLoginSrvc',
+    function($rootScope, $scope, userLoginSrvc) {
         $scope.$watch('user', function(user) {
             if ($scope.avatarUrl == undefined) {
                 getAvatarUrl();
+            }
+        });
+        $rootScope.$on("loggedin", function(event, user) {
+            if (user.loggedIn == false) {
+                $scope.avatarUrl = undefined;
             }
         });
 
@@ -1986,152 +1991,6 @@ angular.module("BossCollection.attendance").controller("attendanceStatsCtrl", ["
 /**
  *
  */
-angular.module("BossCollection.attendance").controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter) {
-        var currentDay = moment().day();
-        var self = this;
-        self.showContentBool = false;
-        self.newAbsence = {};
-        self.absences = [];
-        self.loading = false;
-        self.typePicked = false;
-        self.today = moment();
-        self.dayDesired;
-        self.currentlySelected = moment().format('dddd - Do');
-        self.selectedMember = undefined;
-        var ALLFUTUREABSENCES = "All Future Absences";
-        var TODAY = "Today";
-        var MYABSENCES = "My Abscences";
-        var MEMBERSABSENCES;
-        /**
-         * 0 = all future absences
-         * 1 = specific date
-         */
-        self.viewing = 0;
-        $scope.$watch('selectedMember', function(newMember) {
-            if (newMember) {
-                self.getUserAbsences(newMember.user);
-            }
-        });
-        self.init = function() {
-            self.getAbsences();
-            self.currentlySelected = ALLFUTUREABSENCES;
-            self.isToolSetOpen = false;
-        };
-        self.showContent = function() {
-            self.showContentBool = true;
-        };
-        self.updateList = function() {
-            self.viewing = 1;
-            self.currentlySelected = moment(self.dayDesired).format('dddd - Do');
-            self.getAbsencesByDate();
-        };
-        self.dateHasPassed = function(absence) {
-            var difference = moment().diff(moment(absence.date));
-            console.log(difference);
-            if (difference > 0) {
-                return false;
-            } else {
-                return true;
-            }
-        };
-
-        function calculateNumOfDaysUntil(dayDesired) {
-            var numOfDaysInWeek = 7;
-            var nextDate = dayDesired - currentDay;
-            if (nextDate < 0) {
-                nextDate = numOfDaysInWeek - Math.abs(nextDate);
-            }
-            return nextDate;
-        }
-        self.formatDate = function(date) {
-            return moment.utc(date).format('dddd, MMM D');
-        };
-        self.getAbsences = function() {
-            self.currentlySelected = ALLFUTUREABSENCES;
-            self.loading = true;
-            self.viewing = 0;
-            absenceService.getAbsences().then(function(result) {
-                self.loading = false;
-                self.absences = result.absences;
-                self.showContent();
-            }, function(err) {
-                siteServices.showMessageModal(err.data);
-                self.loading = false;
-                console.log(err);
-            });
-        };
-        self.deleteAbsence = function(absence) {
-            siteServices.confirmDelete().then(function(result) {
-                return absenceService.deleteAbsence(absence);
-            }).then(function(result) {
-                siteServices.successfulUpdate();
-                if (self.viewing == 0) {
-                    self.getAbsences();
-                } else {
-                    self.updateList();
-                }
-            }).
-            finally(function() {});
-        };
-        self.editAbsence = function(absence) {
-            absenceService.openEditModal('editAbsence', absence).then(function(result) {
-                if (self.viewing == 0) {
-                    self.getAbsences();
-                } else {
-                    self.updateList();
-                }
-            });
-        };
-        self.getTodaysAbsences = function() {
-            self.currentlySelected = TODAY;
-            self.dayDesired = new Date();
-            self.dayDesired.setSeconds(0);
-            self.dayDesired.setHours(0);
-            self.dayDesired.setMinutes(0);
-            self.getAbsencesByDate();
-        };
-        self.getAbsencesByDate = function(dateIn) {
-            self.loading = true;
-            absenceService.getAbsencesByDate(self.dayDesired).then(function(result) {
-                self.loading = false;
-                self.absences = result.absences;
-            }, function(err) {
-                siteServices.showMessageToast(err);
-                self.loading = false;
-                console.log(err);
-            });
-        };
-        self.getUserAbsences = function(userName) {
-            if (userName == $scope.user.name) {
-                self.currentlySelected = MYABSENCES;
-            } else {
-                self.currentlySelected = userName + "'s Absences";
-            }
-            self.loading = true;
-            absenceService.getUsersAbsences(userName).then(function(absences) {
-                self.loading = false;
-                self.absences = absences.absences;
-            }, function(err) {
-                self.loading = false;
-            });
-        };
-        self.init();
-    }
-]);
-angular.module('BossCollection.attendance').directive('viewAbsenceReport', [
-    function() {
-        return {
-            restrict: 'E',
-            controller: 'absenceSubmissionsController as absenceReportCtrl',
-            templateUrl: 'absenceSubmissions'
-        };
-    }
-]);
-'use strict';
-/**
- *
- */
 angular.module("BossCollection.attendance").controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
     function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService) {
         var currentDay = moment().day();
@@ -2272,538 +2131,150 @@ angular.module('BossCollection.attendance').directive('absenceReport', [
         };
     }
 ]);
-angular.module("BossCollection.forums").controller('commentsController', ['$scope', '$routeParams', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'userLoginSrvc',
-    function($scope, $routeParams, siteServices, forumService, $mdBottomSheet, $mdDialog, userLoginSrvc) {
+'use strict';
+/**
+ *
+ */
+angular.module("BossCollection.attendance").controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
+    function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter) {
+        var currentDay = moment().day();
         var self = this;
-        self.threadSearch = "";
-        self.orderBy = "-dateCreated";
-        self.orderByString = 'Newest';
+        self.showContentBool = false;
+        self.newAbsence = {};
+        self.absences = [];
         self.loading = false;
-        $scope.messageCount = 25;
-        $scope.comment = "";
-        $scope.commentToDelete;
-        $scope.init = function() {
-            self.isComingFromFavorites = forumService.getIsComingFromFavorites();
-            self.threadID = $routeParams.threadID;
-            self.loading = true;
-            forumService.getSelectedThread(self.threadID).then(function(thread) {
-                if (thread.thread) {
-                    self.thread = thread.thread[0];
-                } else {
-                    self.thread = thread;
-                }
-            }).then(function() {
-                return self.getComments();
-            }).
-            finally(function() {
-                self.loading = false;
-            });
-        };
-        self.editThread = function(thread) {
-            forumService.openBottomSheet('threadEdit', thread);
-        };
-        self.getComments = function() {
-            self.loading = true;
-            $scope.disableLoadMore = false;
-            return forumService.getComments(self.threadID, $scope.messageCount).then(function(comments) {
-                if (self.thread.comments.length == comments.comments.length) {
-                    $scope.disableLoadMore = true;
-                }
-                self.thread.comments = comments.comments;
-            }).
-            finally(function() {
-                self.loading = false;
-            });
-        };
-        $scope.goBack = function() {
-            if (forumService.getIsComingFromFavorites()) {
-                forumService.setIsComingFromFavorites(false);
-                $scope.goToBackwards('/forum/favorites');
-            } else {
-                $scope.goToBackwards('/forum/' + self.thread.forumID);
+        self.typePicked = false;
+        self.today = moment();
+        self.dayDesired;
+        self.currentlySelected = moment().format('dddd - Do');
+        self.selectedMember = undefined;
+        var ALLFUTUREABSENCES = "All Future Absences";
+        var TODAY = "Today";
+        var MYABSENCES = "My Abscences";
+        var MEMBERSABSENCES;
+        /**
+         * 0 = all future absences
+         * 1 = specific date
+         */
+        self.viewing = 0;
+        $scope.$watch('selectedMember', function(newMember) {
+            if (newMember) {
+                self.getUserAbsences(newMember.user);
             }
-        };
-        self.flipOrderBySorting = function() {
-            if (self.orderBy == "dateCreated") {
-                self.orderByString = 'Newest';
-                self.orderBy = "-dateCreated";
-            } else {
-                self.orderByString = 'Oldest';
-                self.orderBy = "dateCreated";
-            }
-        };
-        $scope.loadMoreComments = function() {
-            $scope.messageCount += 25;
-            self.getComments();
-        };
-        $scope.cancelComment = function() {
-            $scope.replying = false;
-        };
-        $scope.cancelCommentEdit = function(comment) {
-            comment.editing = false;
-        };
-        $scope.saveCommentEdit = function(comment) {
-            forumService.editComment(comment).then(function(savedComment) {
-                $scope.cancelCommentEdit(comment);
-            });
-        };
-        $scope.formatDate = function(date) {
-            var localTime = moment.utc(date).toDate();
-            return moment(localTime).format('dddd, MMM D hh:mm a');
-        };
-        $scope.confirmDelete = function(comment) {
-            $scope.commentToDelete = comment;
-            forumService.confirmDelete().then(function(result) {
-                if (result) {
-                    $scope.deleteComment(comment);
-                }
-            }).then(function(response) {
-                self.getComments();
-            });
-        };
-        $scope.deleteComment = function(comment) {
-            $scope.loading = true;
-            forumService.deleteComment(comment).then(function(result) {
-                siteServices.successfulUpdate();
-                self.getComments();
-            }).
-            catch (function(err) {}).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-        $scope.saveComment = function() {
-            var comment = {
-                message: self.thread.newComment,
-                threadId: self.thread._id
-            };
-            forumService.createComment(comment).then(function(comment) {
-                self.thread.newComment = "";
-                self.thread.comments.push(comment.comment);
-                $scope.cancelComment();
-            });
-        };
-        $scope.openCommentBox = function() {
-            $scope.replying = true;
-        };
-        $scope.close = function() {
-            $mdDialog.hide(self.thread);
-        };
-        $scope.init();
-    }
-]);
-angular.module("BossCollection.forums").controller('favoritesController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
-    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
-        var self = this;
-        self.favorites = {};
-        self.loading = false;
-        self.orderBy = "-dateCreated";
-        self.orderByString = 'Newest';
-        self.masterThread = [];
-        siteServices.updateTitle('Favorites');
-        self.getLength = function() {
-            return self.threads.length;
-        };
-        self.getItemAtIndex = function(index) {
-            return self.threads[index];
-        };
-        self.formatDate = function(date) {
-            var localTime = moment.utc(date).toDate();
-            return moment(localTime).format('dddd, MMM D hh:mm a');
-        };
+        });
         self.init = function() {
-            self.loading = true;
-            self.savedThreads = forumService.getThreadCountsLocal();
-            forumService.getFavorites().then(function(favorites) {
-                self.favorites = favorites;
-            }).then(function(threads) {
-                sortFavorites();
-            }).
-            catch (function(err) {
-                self.loading = false;
-            }).
-            finally(function() {
-                self.loading = false;
-            });
+            self.getAbsences();
+            self.currentlySelected = ALLFUTUREABSENCES;
+            self.isToolSetOpen = false;
         };
-        self.listStyle = {
-            height: $window.innerHeight - 312 + 'px'
+        self.showContent = function() {
+            self.showContentBool = true;
         };
-        self.initInfiniteScroll = function() {
-            self.threadRepeat = {
-                toLoad: 0,
-                numLoaded: 0,
-                threads: self.threads,
-                getItemAtIndex: function getItemAtIndex(index) {
-                    if (index > this.numLoaded && index < self.threads.length) {
-                        this.fetchMoreThreads(index);
-                        return null;
-                    }
-                    if (index < self.threads.length) {
-                        return self.threads[index];
-                    }
-                },
-                getLength: function getLength() {
-                    if (self.threads.length == 0) {
-                        return 0;
-                    } else {
-                        return this.numLoaded + 1;
-                    }
-                },
-                fetchMoreThreads: function fetchMoreThreads(index) {
-                    if (this.toLoad < index) {
-                        this.toLoad += 20;
-                        this.numLoaded = this.toLoad;
-                        if (this.numLoaded > self.threads.length) {
-                            this.numLoaded = self.threads.length - 1;
-                        }
-                    }
-                }
-            };
+        self.updateList = function() {
+            self.viewing = 1;
+            self.currentlySelected = moment(self.dayDesired).format('dddd - Do');
+            self.getAbsencesByDate();
         };
-        self.refresh = function() {
-            self.loading = true;
-            forumService.getFavorites().then(function(favorites) {
-                self.favorites = favorites;
-            }).then(function(threads) {
-                sortFavorites();
-            }).
-            catch (function(err) {
-                self.loading = false;
-            }).
-            finally(function() {
-                self.loading = false;
-            });
-        };
-        self.deleteThread = function(thread) {
-            forumService.confirmDelete().then(function(result) {
-                if (result) {
-                    return forumService.deleteThread(thread);
-                }
-            }).then(function(response) {
-                siteServices.successfulUpdate();
-                self.refresh();
-            });
-        };
-        $scope.$watch('threadSearch', function() {
-            sortFavorites();
-        });
-        $scope.$watch('orderBy', function() { //sortFavorites();
-        });
-
-        function sortFavorites() {
-            self.threads = $filter('filter')(self.masterThread, self.threadSearch);
-            self.threads = $filter('orderBy')(self.threads, self.orderBy);
-            if (self.threadRepeat) {
-                self.threadRepeat.numLoaded = self.threads.length - 1;
-            }
-        }
-        self.flipOrderBySorting = function() {
-            if (self.orderBy == "dateCreated") {
-                self.orderByString = 'Newest';
-                self.orderBy = "-dateCreated";
-            } else {
-                self.orderByString = 'Oldest';
-                self.orderBy = "dateCreated";
-            }
-        };
-        self.orderByDateCreatedReversed = function() {
-            self.orderByString = 'Oldest';
-            self.orderBy = "-dateCreated";
-        };
-        self.openThread = function(thread) {
-            forumService.setSelectedThread(thread);
-            forumService.setIsComingFromFavorites(true);
-            self.updateThreadViewed(thread);
-            $scope.goTo('/thread/' + thread._id);
-        };
-        self.isFavorite = function(thread) {
-            var doesExist = _.find(thread.favorites, function(username) {
-                return $scope.user.name == username;
-            });
-            if (doesExist != undefined) {
-                return true;
-            } else {
+        self.dateHasPassed = function(absence) {
+            var difference = moment().diff(moment(absence.date));
+            console.log(difference);
+            if (difference > 0) {
                 return false;
-            }
-        };
-        self.favoriteThread = function(thread) {
-            var doesExist = self.isFavorite(thread);
-            if (doesExist == false) {
-                if (thread.favorites == undefined) {
-                    thread.favorites = [];
-                }
-                thread.favorites.push($scope.user.name);
             } else {
-                _.remove(thread.favorites, function(favorite) {
-                    return favorite == $scope.user.name;
-                });
-            }
-            $scope.loading = false;
-            forumService.editThread(thread).then(function(response) {}).
-            catch (function(err) {}).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-        self.createThread = function() {
-            forumService.openBottomSheet('threadEdit', {
-                forum: self.favorites
-            }).then(function(response) {
-                self.refresh();
-            });
-        };
-        self.editThread = function(forum) {
-            forumService.openBottomSheet('threadEdit', forum);
-        };
-        self.goBack = function() {
-            $scope.goBack();
-        };
-        self.isRead = function(threadIn) {
-            var oldThread = _.find(self.savedThreads, function(thread) {
-                return thread._id == threadIn._id;
-            });
-            if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
-                return "unread";
-            } else {
-                return "read";
+                return true;
             }
         };
-        self.updateThreadViewed = function(threadIn) {
-            var threadIndexTracker;
-            _.find(self.savedThreads, function(thread, threadIndex) {
-                if (thread._id == threadIn._id) {
-                    threadIndexTracker == threadIndex;
-                    self.savedThreads[threadIndex] = threadIn;
+
+        function calculateNumOfDaysUntil(dayDesired) {
+            var numOfDaysInWeek = 7;
+            var nextDate = dayDesired - currentDay;
+            if (nextDate < 0) {
+                nextDate = numOfDaysInWeek - Math.abs(nextDate);
+            }
+            return nextDate;
+        }
+        self.formatDate = function(date) {
+            return moment.utc(date).format('dddd, MMM D');
+        };
+        self.getAbsences = function() {
+            self.currentlySelected = ALLFUTUREABSENCES;
+            self.loading = true;
+            self.viewing = 0;
+            absenceService.getAbsences().then(function(result) {
+                self.loading = false;
+                self.absences = result.absences;
+                self.showContent();
+            }, function(err) {
+                siteServices.showMessageModal(err.data);
+                self.loading = false;
+                console.log(err);
+            });
+        };
+        self.deleteAbsence = function(absence) {
+            siteServices.confirmDelete().then(function(result) {
+                return absenceService.deleteAbsence(absence);
+            }).then(function(result) {
+                siteServices.successfulUpdate();
+                if (self.viewing == 0) {
+                    self.getAbsences();
+                } else {
+                    self.updateList();
+                }
+            }).
+            finally(function() {});
+        };
+        self.editAbsence = function(absence) {
+            absenceService.openEditModal('editAbsence', absence).then(function(result) {
+                if (self.viewing == 0) {
+                    self.getAbsences();
+                } else {
+                    self.updateList();
                 }
             });
-            if (self.savedThreads.length == 0 || threadIndexTracker == undefined) {
-                self.savedThreads.push(threadIn);
+        };
+        self.getTodaysAbsences = function() {
+            self.currentlySelected = TODAY;
+            self.dayDesired = new Date();
+            self.dayDesired.setSeconds(0);
+            self.dayDesired.setHours(0);
+            self.dayDesired.setMinutes(0);
+            self.getAbsencesByDate();
+        };
+        self.getAbsencesByDate = function(dateIn) {
+            self.loading = true;
+            absenceService.getAbsencesByDate(self.dayDesired).then(function(result) {
+                self.loading = false;
+                self.absences = result.absences;
+            }, function(err) {
+                siteServices.showMessageToast(err);
+                self.loading = false;
+                console.log(err);
+            });
+        };
+        self.getUserAbsences = function(userName) {
+            if (userName == $scope.user.name) {
+                self.currentlySelected = MYABSENCES;
+            } else {
+                self.currentlySelected = userName + "'s Absences";
             }
-            forumService.saveThreadCounts(self.savedThreads);
+            self.loading = true;
+            absenceService.getUsersAbsences(userName).then(function(absences) {
+                self.loading = false;
+                self.absences = absences.absences;
+            }, function(err) {
+                self.loading = false;
+            });
         };
         self.init();
     }
 ]);
-angular.module("BossCollection.forums").controller('threadController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
-    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
-        var lodash = require('lodash');
-        $scope.forum = {};
-        $scope.loading = false;
-        $scope.orderBy = "-dateCreated";
-        $scope.orderByString = 'Newest';
-        $scope.masterThread = [];
-        $scope.sticky = 'true';
-        $scope.getLength = function() {
-            return $scope.threads.length;
+angular.module('BossCollection.attendance').directive('viewAbsenceReport', [
+    function() {
+        return {
+            restrict: 'E',
+            controller: 'absenceSubmissionsController as absenceReportCtrl',
+            templateUrl: 'absenceSubmissions'
         };
-        $scope.getItemAtIndex = function(index) {
-            return $scope.threads[index];
-        };
-        $scope.formatDate = function(date) {
-            var localTime = moment.utc(date).toDate();
-            return moment(localTime).format('dddd, MMM D hh:mm a');
-        };
-        $scope.init = function() {
-            $scope.loading = true;
-            $scope.savedThreads = forumService.getThreadCountsLocal();
-            forumService.getCurrentForum().then(function(forum) {
-                $scope.forum = forum;
-            }).then(function() {
-                siteServices.updateTitle('Forums');
-                if ($scope.forum.threads.length > 0) {
-                    return $scope.forum.threads;
-                } else {
-                    return forumService.getThreads($scope.forum);
-                }
-            }).then(function(threads) {
-                $scope.threads = threads;
-                $scope.forum.threads = threads;
-                forumService.setForum($scope.forum);
-                $scope.masterThread = threads;
-                if ($scope.savedThreads == undefined) {
-                    $scope.savedThreads = threads;
-                    forumService.saveThreadCounts(threads);
-                } //$scope.initInfiniteScroll();
-                $scope.sortThreads();
-            }).
-            catch (function(err) {
-                $scope.loading = false;
-            }).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-        $scope.getStickyThreads = function() {};
-        $scope.listStyle = {
-            height: $window.innerHeight - 312 + 'px'
-        };
-        $scope.initInfiniteScroll = function() {
-            $scope.threadRepeat = {
-                toLoad: 0,
-                numLoaded: 0,
-                threads: $scope.threads,
-                getItemAtIndex: function getItemAtIndex(index) {
-                    if (index > this.numLoaded && index < $scope.threads.length) {
-                        this.fetchMoreThreads(index);
-                        return null;
-                    }
-                    if (index < $scope.threads.length) {
-                        return $scope.threads[index];
-                    }
-                },
-                getLength: function getLength() {
-                    if ($scope.threads.length == 0) {
-                        return 0;
-                    } else {
-                        return this.numLoaded + 1;
-                    }
-                },
-                fetchMoreThreads: function fetchMoreThreads(index) {
-                    if (this.toLoad < index) {
-                        this.toLoad += 20;
-                        this.numLoaded = this.toLoad;
-                        if (this.numLoaded > $scope.threads.length) {
-                            this.numLoaded = $scope.threads.length - 1;
-                        }
-                    }
-                }
-            };
-        };
-        $scope.refresh = function() {
-            $scope.loading = true;
-            forumService.getThreads($scope.forum).then(function(threads) {
-                $scope.loading = false;
-                $scope.threads = threads;
-                $scope.forum.threads = $scope.threads;
-                forumService.setForum($scope.forum);
-                $scope.masterThread = threads;
-                $scope.sortThreads();
-            }).
-            catch (function(err) {
-                siteServices.showMessageToast(err);
-                $scope.loading = false;
-            });
-        };
-        $scope.deleteThread = function(thread) {
-            forumService.confirmDelete().then(function(result) {
-                if (result) {
-                    return forumService.deleteThread(thread);
-                }
-            }).then(function(response) {
-                $scope.refresh();
-            });
-        };
-        $scope.$watch('threadSearch', function() {
-            $scope.sortThreads();
-        });
-        $scope.sortThreads = function() {
-            $scope.stickyThreads = _.filter($scope.masterThread, function(thread) {
-                return thread.sticky == true;
-            });
-            $scope.threads = _.filter($scope.masterThread, function(thread) {
-                return thread.sticky != true;
-            });
-            $scope.threads = $filter('filter')($scope.threads, $scope.threadSearch);
-            $scope.stickyThreads = $filter('orderBy')($scope.stickyThreads, [$scope.orderBy]);
-            $scope.threads = $filter('orderBy')($scope.threads, [$scope.orderBy]);
-        };
-        $scope.flipOrderBySorting = function() {
-            if ($scope.orderBy == "dateCreated") {
-                $scope.orderByString = 'Newest';
-                $scope.orderBy = "-dateCreated";
-            } else {
-                $scope.orderByString = 'Oldest';
-                $scope.orderBy = "dateCreated";
-            }
-        };
-        $scope.orderByDateCreatedReversed = function() {
-            $scope.orderByString = 'Oldest';
-            $scope.orderBy = "-dateCreated";
-        };
-        $scope.openThread = function(thread) {
-            forumService.setSelectedThread(thread);
-            forumService.setIsComingFromFavorites(false);
-            $scope.updateThreadViewed(thread);
-            $scope.goTo('/thread/' + thread._id);
-        };
-        $scope.stickyThread = function(thread) {
-            if (thread.sticky) {
-                thread.sticky = !thread.sticky;
-            } else {
-                thread.sticky = true;
-            }
-            $scope.saveThread(thread);
-        };
-        $scope.isFavorite = function(thread) {
-            var doesExist = _.find(thread.favorites, function(username) {
-                return $scope.user.name == username;
-            });
-            if (doesExist != undefined) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-        $scope.favoriteThread = function(thread) {
-            var doesExist = $scope.isFavorite(thread);
-            if (doesExist == false) {
-                if (thread.favorites == undefined) {
-                    thread.favorites = [];
-                }
-                thread.favorites.push($scope.user.name);
-            } else {
-                _.remove(thread.favorites, function(favorite) {
-                    return favorite == $scope.user.name;
-                });
-            }
-            $scope.saveThread(thread);
-        };
-        $scope.saveThread = function(thread) {
-            $scope.loading = false;
-            forumService.editThread(thread).then(function(response) {}).
-            catch (function(err) {}).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-        $scope.createThread = function() {
-            forumService.openBottomSheet('threadEdit', {
-                forum: $scope.forum
-            }).then(function(response) {
-                $scope.refresh();
-            });
-        };
-        $scope.editThread = function(forum) {
-            forumService.openBottomSheet('threadEdit', forum);
-        };
-        $scope.goBack = function() {
-            $scope.goToBackwards('/forum');
-        };
-        $scope.isRead = function(threadIn) {
-            var oldThread = _.find($scope.savedThreads, function(thread) {
-                return thread._id == threadIn._id;
-            });
-            if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
-                return "unread";
-            } else {
-                return "read";
-            }
-        };
-        $scope.updateThreadViewed = function(threadIn) {
-            var threadIndexTracker;
-            _.find($scope.savedThreads, function(thread, threadIndex) {
-                if (thread._id == threadIn._id) {
-                    threadIndexTracker == threadIndex;
-                    $scope.savedThreads[threadIndex] = threadIn;
-                }
-            });
-            if ($scope.savedThreads.length == 0 || threadIndexTracker == undefined) {
-                $scope.savedThreads.push(threadIn);
-            }
-            forumService.saveThreadCounts($scope.savedThreads);
-        };
-        $scope.init();
     }
 ]);
 'use strict';
@@ -3143,6 +2614,540 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
         };
         $scope.init();
         siteServices.updateTitle('Manage Members');
+    }
+]);
+angular.module("BossCollection.forums").controller('favoritesController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
+    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
+        var self = this;
+        self.favorites = {};
+        self.loading = false;
+        self.orderBy = "-dateCreated";
+        self.orderByString = 'Newest';
+        self.masterThread = [];
+        siteServices.updateTitle('Favorites');
+        self.getLength = function() {
+            return self.threads.length;
+        };
+        self.getItemAtIndex = function(index) {
+            return self.threads[index];
+        };
+        self.formatDate = function(date) {
+            var localTime = moment.utc(date).toDate();
+            return moment(localTime).format('dddd, MMM D hh:mm a');
+        };
+        self.init = function() {
+            self.loading = true;
+            self.savedThreads = forumService.getThreadCountsLocal();
+            forumService.getFavorites().then(function(favorites) {
+                self.favorites = favorites;
+            }).then(function(threads) {
+                sortFavorites();
+            }).
+            catch (function(err) {
+                self.loading = false;
+            }).
+            finally(function() {
+                self.loading = false;
+            });
+        };
+        self.listStyle = {
+            height: $window.innerHeight - 312 + 'px'
+        };
+        self.initInfiniteScroll = function() {
+            self.threadRepeat = {
+                toLoad: 0,
+                numLoaded: 0,
+                threads: self.threads,
+                getItemAtIndex: function getItemAtIndex(index) {
+                    if (index > this.numLoaded && index < self.threads.length) {
+                        this.fetchMoreThreads(index);
+                        return null;
+                    }
+                    if (index < self.threads.length) {
+                        return self.threads[index];
+                    }
+                },
+                getLength: function getLength() {
+                    if (self.threads.length == 0) {
+                        return 0;
+                    } else {
+                        return this.numLoaded + 1;
+                    }
+                },
+                fetchMoreThreads: function fetchMoreThreads(index) {
+                    if (this.toLoad < index) {
+                        this.toLoad += 20;
+                        this.numLoaded = this.toLoad;
+                        if (this.numLoaded > self.threads.length) {
+                            this.numLoaded = self.threads.length - 1;
+                        }
+                    }
+                }
+            };
+        };
+        self.refresh = function() {
+            self.loading = true;
+            forumService.getFavorites().then(function(favorites) {
+                self.favorites = favorites;
+            }).then(function(threads) {
+                sortFavorites();
+            }).
+            catch (function(err) {
+                self.loading = false;
+            }).
+            finally(function() {
+                self.loading = false;
+            });
+        };
+        self.deleteThread = function(thread) {
+            forumService.confirmDelete().then(function(result) {
+                if (result) {
+                    return forumService.deleteThread(thread);
+                }
+            }).then(function(response) {
+                siteServices.successfulUpdate();
+                self.refresh();
+            });
+        };
+        $scope.$watch('threadSearch', function() {
+            sortFavorites();
+        });
+        $scope.$watch('orderBy', function() { //sortFavorites();
+        });
+
+        function sortFavorites() {
+            self.threads = $filter('filter')(self.masterThread, self.threadSearch);
+            self.threads = $filter('orderBy')(self.threads, self.orderBy);
+            if (self.threadRepeat) {
+                self.threadRepeat.numLoaded = self.threads.length - 1;
+            }
+        }
+        self.flipOrderBySorting = function() {
+            if (self.orderBy == "dateCreated") {
+                self.orderByString = 'Newest';
+                self.orderBy = "-dateCreated";
+            } else {
+                self.orderByString = 'Oldest';
+                self.orderBy = "dateCreated";
+            }
+        };
+        self.orderByDateCreatedReversed = function() {
+            self.orderByString = 'Oldest';
+            self.orderBy = "-dateCreated";
+        };
+        self.openThread = function(thread) {
+            forumService.setSelectedThread(thread);
+            forumService.setIsComingFromFavorites(true);
+            self.updateThreadViewed(thread);
+            $scope.goTo('/thread/' + thread._id);
+        };
+        self.isFavorite = function(thread) {
+            var doesExist = _.find(thread.favorites, function(username) {
+                return $scope.user.name == username;
+            });
+            if (doesExist != undefined) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        self.favoriteThread = function(thread) {
+            var doesExist = self.isFavorite(thread);
+            if (doesExist == false) {
+                if (thread.favorites == undefined) {
+                    thread.favorites = [];
+                }
+                thread.favorites.push($scope.user.name);
+            } else {
+                _.remove(thread.favorites, function(favorite) {
+                    return favorite == $scope.user.name;
+                });
+            }
+            $scope.loading = false;
+            forumService.editThread(thread).then(function(response) {}).
+            catch (function(err) {}).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        self.createThread = function() {
+            forumService.openBottomSheet('threadEdit', {
+                forum: self.favorites
+            }).then(function(response) {
+                self.refresh();
+            });
+        };
+        self.editThread = function(forum) {
+            forumService.openBottomSheet('threadEdit', forum);
+        };
+        self.goBack = function() {
+            $scope.goBack();
+        };
+        self.isRead = function(threadIn) {
+            var oldThread = _.find(self.savedThreads, function(thread) {
+                return thread._id == threadIn._id;
+            });
+            if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
+                return "unread";
+            } else {
+                return "read";
+            }
+        };
+        self.updateThreadViewed = function(threadIn) {
+            var threadIndexTracker;
+            _.find(self.savedThreads, function(thread, threadIndex) {
+                if (thread._id == threadIn._id) {
+                    threadIndexTracker == threadIndex;
+                    self.savedThreads[threadIndex] = threadIn;
+                }
+            });
+            if (self.savedThreads.length == 0 || threadIndexTracker == undefined) {
+                self.savedThreads.push(threadIn);
+            }
+            forumService.saveThreadCounts(self.savedThreads);
+        };
+        self.init();
+    }
+]);
+angular.module("BossCollection.forums").controller('commentsController', ['$scope', '$routeParams', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'userLoginSrvc',
+    function($scope, $routeParams, siteServices, forumService, $mdBottomSheet, $mdDialog, userLoginSrvc) {
+        var self = this;
+        self.threadSearch = "";
+        self.orderBy = "-dateCreated";
+        self.orderByString = 'Newest';
+        self.loading = false;
+        $scope.messageCount = 25;
+        $scope.comment = "";
+        $scope.commentToDelete;
+        $scope.init = function() {
+            self.isComingFromFavorites = forumService.getIsComingFromFavorites();
+            self.threadID = $routeParams.threadID;
+            self.loading = true;
+            forumService.getSelectedThread(self.threadID).then(function(thread) {
+                if (thread.thread) {
+                    self.thread = thread.thread[0];
+                } else {
+                    self.thread = thread;
+                }
+            }).then(function() {
+                return self.getComments();
+            }).
+            finally(function() {
+                self.loading = false;
+            });
+        };
+        self.editThread = function(thread) {
+            forumService.openBottomSheet('threadEdit', thread);
+        };
+        self.getComments = function() {
+            self.loading = true;
+            $scope.disableLoadMore = false;
+            return forumService.getComments(self.threadID, $scope.messageCount).then(function(comments) {
+                if (self.thread.comments.length == comments.comments.length) {
+                    $scope.disableLoadMore = true;
+                }
+                self.thread.comments = comments.comments;
+            }).
+            finally(function() {
+                self.loading = false;
+            });
+        };
+        $scope.goBack = function() {
+            if (forumService.getIsComingFromFavorites()) {
+                forumService.setIsComingFromFavorites(false);
+                $scope.goToBackwards('/forum/favorites');
+            } else {
+                $scope.goToBackwards('/forum/' + self.thread.forumID);
+            }
+        };
+        self.flipOrderBySorting = function() {
+            if (self.orderBy == "dateCreated") {
+                self.orderByString = 'Newest';
+                self.orderBy = "-dateCreated";
+            } else {
+                self.orderByString = 'Oldest';
+                self.orderBy = "dateCreated";
+            }
+        };
+        $scope.loadMoreComments = function() {
+            $scope.messageCount += 25;
+            self.getComments();
+        };
+        $scope.cancelComment = function() {
+            $scope.replying = false;
+        };
+        $scope.cancelCommentEdit = function(comment) {
+            comment.editing = false;
+        };
+        $scope.saveCommentEdit = function(comment) {
+            forumService.editComment(comment).then(function(savedComment) {
+                $scope.cancelCommentEdit(comment);
+            });
+        };
+        $scope.formatDate = function(date) {
+            var localTime = moment.utc(date).toDate();
+            return moment(localTime).format('dddd, MMM D hh:mm a');
+        };
+        $scope.confirmDelete = function(comment) {
+            $scope.commentToDelete = comment;
+            forumService.confirmDelete().then(function(result) {
+                if (result) {
+                    $scope.deleteComment(comment);
+                }
+            }).then(function(response) {
+                self.getComments();
+            });
+        };
+        $scope.deleteComment = function(comment) {
+            $scope.loading = true;
+            forumService.deleteComment(comment).then(function(result) {
+                siteServices.successfulUpdate();
+                self.getComments();
+            }).
+            catch (function(err) {}).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        $scope.saveComment = function() {
+            var comment = {
+                message: self.thread.newComment,
+                threadId: self.thread._id
+            };
+            forumService.createComment(comment).then(function(comment) {
+                self.thread.newComment = "";
+                self.thread.comments.push(comment.comment);
+                $scope.cancelComment();
+            });
+        };
+        $scope.openCommentBox = function() {
+            $scope.replying = true;
+        };
+        $scope.close = function() {
+            $mdDialog.hide(self.thread);
+        };
+        $scope.init();
+    }
+]);
+angular.module("BossCollection.forums").controller('threadController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
+    function($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
+        var lodash = require('lodash');
+        $scope.forum = {};
+        $scope.loading = false;
+        $scope.orderBy = "-dateCreated";
+        $scope.orderByString = 'Newest';
+        $scope.masterThread = [];
+        $scope.sticky = 'true';
+        $scope.getLength = function() {
+            return $scope.threads.length;
+        };
+        $scope.getItemAtIndex = function(index) {
+            return $scope.threads[index];
+        };
+        $scope.formatDate = function(date) {
+            var localTime = moment.utc(date).toDate();
+            return moment(localTime).format('dddd, MMM D hh:mm a');
+        };
+        $scope.init = function() {
+            $scope.loading = true;
+            $scope.savedThreads = forumService.getThreadCountsLocal();
+            forumService.getCurrentForum().then(function(forum) {
+                $scope.forum = forum;
+            }).then(function() {
+                siteServices.updateTitle('Forums');
+                if ($scope.forum.threads.length > 0) {
+                    return $scope.forum.threads;
+                } else {
+                    return forumService.getThreads($scope.forum);
+                }
+            }).then(function(threads) {
+                $scope.threads = threads;
+                $scope.forum.threads = threads;
+                forumService.setForum($scope.forum);
+                $scope.masterThread = threads;
+                if ($scope.savedThreads == undefined) {
+                    $scope.savedThreads = threads;
+                    forumService.saveThreadCounts(threads);
+                } //$scope.initInfiniteScroll();
+                $scope.sortThreads();
+            }).
+            catch (function(err) {
+                $scope.loading = false;
+            }).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        $scope.getStickyThreads = function() {};
+        $scope.listStyle = {
+            height: $window.innerHeight - 312 + 'px'
+        };
+        $scope.initInfiniteScroll = function() {
+            $scope.threadRepeat = {
+                toLoad: 0,
+                numLoaded: 0,
+                threads: $scope.threads,
+                getItemAtIndex: function getItemAtIndex(index) {
+                    if (index > this.numLoaded && index < $scope.threads.length) {
+                        this.fetchMoreThreads(index);
+                        return null;
+                    }
+                    if (index < $scope.threads.length) {
+                        return $scope.threads[index];
+                    }
+                },
+                getLength: function getLength() {
+                    if ($scope.threads.length == 0) {
+                        return 0;
+                    } else {
+                        return this.numLoaded + 1;
+                    }
+                },
+                fetchMoreThreads: function fetchMoreThreads(index) {
+                    if (this.toLoad < index) {
+                        this.toLoad += 20;
+                        this.numLoaded = this.toLoad;
+                        if (this.numLoaded > $scope.threads.length) {
+                            this.numLoaded = $scope.threads.length - 1;
+                        }
+                    }
+                }
+            };
+        };
+        $scope.refresh = function() {
+            $scope.loading = true;
+            forumService.getThreads($scope.forum).then(function(threads) {
+                $scope.loading = false;
+                $scope.threads = threads;
+                $scope.forum.threads = $scope.threads;
+                forumService.setForum($scope.forum);
+                $scope.masterThread = threads;
+                $scope.sortThreads();
+            }).
+            catch (function(err) {
+                siteServices.showMessageToast(err);
+                $scope.loading = false;
+            });
+        };
+        $scope.deleteThread = function(thread) {
+            forumService.confirmDelete().then(function(result) {
+                if (result) {
+                    return forumService.deleteThread(thread);
+                }
+            }).then(function(response) {
+                $scope.refresh();
+            });
+        };
+        $scope.$watch('threadSearch', function() {
+            $scope.sortThreads();
+        });
+        $scope.sortThreads = function() {
+            $scope.stickyThreads = _.filter($scope.masterThread, function(thread) {
+                return thread.sticky == true;
+            });
+            $scope.threads = _.filter($scope.masterThread, function(thread) {
+                return thread.sticky != true;
+            });
+            $scope.threads = $filter('filter')($scope.threads, $scope.threadSearch);
+            $scope.stickyThreads = $filter('orderBy')($scope.stickyThreads, [$scope.orderBy]);
+            $scope.threads = $filter('orderBy')($scope.threads, [$scope.orderBy]);
+        };
+        $scope.flipOrderBySorting = function() {
+            if ($scope.orderBy == "dateCreated") {
+                $scope.orderByString = 'Newest';
+                $scope.orderBy = "-dateCreated";
+            } else {
+                $scope.orderByString = 'Oldest';
+                $scope.orderBy = "dateCreated";
+            }
+        };
+        $scope.orderByDateCreatedReversed = function() {
+            $scope.orderByString = 'Oldest';
+            $scope.orderBy = "-dateCreated";
+        };
+        $scope.openThread = function(thread) {
+            forumService.setSelectedThread(thread);
+            forumService.setIsComingFromFavorites(false);
+            $scope.updateThreadViewed(thread);
+            $scope.goTo('/thread/' + thread._id);
+        };
+        $scope.stickyThread = function(thread) {
+            if (thread.sticky) {
+                thread.sticky = !thread.sticky;
+            } else {
+                thread.sticky = true;
+            }
+            $scope.saveThread(thread);
+        };
+        $scope.isFavorite = function(thread) {
+            var doesExist = _.find(thread.favorites, function(username) {
+                return $scope.user.name == username;
+            });
+            if (doesExist != undefined) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        $scope.favoriteThread = function(thread) {
+            var doesExist = $scope.isFavorite(thread);
+            if (doesExist == false) {
+                if (thread.favorites == undefined) {
+                    thread.favorites = [];
+                }
+                thread.favorites.push($scope.user.name);
+            } else {
+                _.remove(thread.favorites, function(favorite) {
+                    return favorite == $scope.user.name;
+                });
+            }
+            $scope.saveThread(thread);
+        };
+        $scope.saveThread = function(thread) {
+            $scope.loading = false;
+            forumService.editThread(thread).then(function(response) {}).
+            catch (function(err) {}).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        $scope.createThread = function() {
+            forumService.openBottomSheet('threadEdit', {
+                forum: $scope.forum
+            }).then(function(response) {
+                $scope.refresh();
+            });
+        };
+        $scope.editThread = function(forum) {
+            forumService.openBottomSheet('threadEdit', forum);
+        };
+        $scope.goBack = function() {
+            $scope.goToBackwards('/forum');
+        };
+        $scope.isRead = function(threadIn) {
+            var oldThread = _.find($scope.savedThreads, function(thread) {
+                return thread._id == threadIn._id;
+            });
+            if (oldThread == undefined || oldThread.commentCount != threadIn.commentCount) {
+                return "unread";
+            } else {
+                return "read";
+            }
+        };
+        $scope.updateThreadViewed = function(threadIn) {
+            var threadIndexTracker;
+            _.find($scope.savedThreads, function(thread, threadIndex) {
+                if (thread._id == threadIn._id) {
+                    threadIndexTracker == threadIndex;
+                    $scope.savedThreads[threadIndex] = threadIn;
+                }
+            });
+            if ($scope.savedThreads.length == 0 || threadIndexTracker == undefined) {
+                $scope.savedThreads.push(threadIn);
+            }
+            forumService.saveThreadCounts($scope.savedThreads);
+        };
+        $scope.init();
     }
 ]);
 'use strict';

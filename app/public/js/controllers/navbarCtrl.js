@@ -48,9 +48,6 @@ angular.module("BossCollection.controllers")
                 $scope.goTo(path);
 
                 $scope.reversed = false;
-
-
-
             }
 
             $scope.goToExternal = function (path) {
@@ -153,7 +150,7 @@ angular.module("BossCollection.controllers")
 
             $scope.hasGuild = function () {
                 try {
-                    
+
                     if ($scope.user.guild) {
                         return true
                     }
@@ -195,7 +192,7 @@ angular.module("BossCollection.controllers")
                             $scope.user = user;
                             $scope.loggedIn = true;
 
-                            return guildServices.getGuildSettings(); 
+                            return guildServices.getGuildSettings();
                         }
                     },
                     function (err) {
