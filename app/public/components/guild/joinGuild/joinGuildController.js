@@ -7,8 +7,8 @@
  */
 angular.module("BossCollection.guild")
     .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', '$mdDialog',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, $mdDialog) {
 
 
             $scope.listOfGuilds = [];
@@ -52,11 +52,10 @@ angular.module("BossCollection.guild")
                     guildServices.joinGuild($scope.guildName.name, $scope.user.name)
                         .then(function (guild) {
 
-                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                            
-                            userLoginSrvc.refreshUserFromServer();
 
-                            $location.path('/');
+                            $scope.succesfullyJoinedGuild();
+                            
+                            
 
 
                         })
@@ -71,6 +70,35 @@ angular.module("BossCollection.guild")
                     siteServices.showMessageToast("Guild doesn't exist");
                     $scope.loading = false;
                 }
+            }
+
+            $scope.succesfullyJoinedGuild = ()=> {
+
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(false)
+                        .title("Success!")
+                        .textContent("You will be able to access the guild services once you've been approved.")
+                        .ariaLabel('message popup')
+                        .ok('Got it!')
+                        .openFrom({
+                            left: -50,
+                            width: 30,
+                            height: 80
+                        })
+                        .closeTo({
+                            right: 1500
+                        })
+                ).then(function () {
+
+                    $scope.isLoading = false;
+                    userLoginSrvc.refreshUserFromServer();
+
+                    $location.path('/');
+
+                }, function () {
+                    //console.l = 'Crap, it didn\'t work it seems. Refresh the page and see?';
+                });
             }
 
             $scope.init();

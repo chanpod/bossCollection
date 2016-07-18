@@ -157,18 +157,23 @@ angular.module("BossCollection.guild")
                 var userName = user;
                 var guildName = $scope.user.guild.name;
 
-                guildServices.kickUser(userName, guildName)
-                    .then(function (reponse) {
+                siteServices.confirmDelete()
+                    .then(result => {
 
-                        $scope.getMembers();
-                    })
-                    .catch(function (err) {
+                        guildServices.kickUser(userName, guildName)
+                            .then(function (reponse) {
 
-                        siteServices.showMessageModal(err);
-                    })
-                    .finally(function () {
+                                $scope.getMembers();
+                            })
+                            .catch(function (err) {
 
+                                siteServices.showMessageModal(err);
+                            })
+                            .finally(function () {
+
+                            })
                     })
+
             }
 
             $scope.saveUser = (user) => {
