@@ -740,6 +740,7 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
             }).
             catch (function(err) {
                 $scope.loading = false;
+                siteServices.handleError(err);
                 console.log(err);
             });
         };
@@ -4490,6 +4491,16 @@ angular.module("BossCollection.services").factory('siteServices', ['$rootScope',
                 }
             });
         }
+
+        function handleError(error) {
+            var message = "";
+            if (error.data) {
+                message = error.data.message;
+            } else {
+                message = error.message;
+            }
+            showMessageModal(message);
+        }
         return {
             startLoading: startLoading,
             loadingFinished: loadingFinished,
@@ -4502,7 +4513,8 @@ angular.module("BossCollection.services").factory('siteServices', ['$rootScope',
             showLoadingModal: showLoadingModal,
             hideLoadingModal: hideLoadingModal,
             confirmDelete: confirmDelete,
-            successfulUpdate: successfulUpdate
+            successfulUpdate: successfulUpdate,
+            handleError: handleError
         };
     }
 ]);

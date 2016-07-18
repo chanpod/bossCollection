@@ -59,6 +59,7 @@ angular.module("BossCollection.forums")
                     .catch(function(err){
                         
                         $scope.loading = false;
+                        siteServices.handleError(err);
                         console.log(err);
                     })
             }

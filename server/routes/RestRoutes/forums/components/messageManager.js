@@ -79,7 +79,7 @@ function deleteComment(req, res) {
 function getComments(threadId, messageCount){
     
     var defer = q.defer();
-
+    
     commentModel.find({threadID: threadId}).limit(messageCount)
         .then(function(comments){
             

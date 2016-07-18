@@ -10,8 +10,9 @@ router.use(function(req, res, next) {
     
     var errMessage = "You must be logged in and a part of a guild to use this";
     var allowedUrl = "/guild/guildHomepage";
+    var loginUrl = "/login";
 
-    if (!req.url.match(allowedUrl) && req.method != "GET") {
+    if (!req.url.match(allowedUrl) && req.method != "GET" && !req.url.match(loginUrl)) {
 
         try{
 

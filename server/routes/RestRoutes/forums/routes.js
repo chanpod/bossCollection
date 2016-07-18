@@ -8,7 +8,7 @@ var GuildManager = require('../guild/components/guild/guild-manager.js');
 var util = require('utility');
 
 router.use(function (req, res, next) {
-
+    
     next();
 })
 

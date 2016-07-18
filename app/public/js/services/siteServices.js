@@ -139,6 +139,18 @@ angular.module("BossCollection.services")
                 }
             )
         }
+
+        function handleError(error) {
+            let message = "";
+            if (error.data) {
+                message = error.data.message;
+            }
+            else {
+                message = error.message;
+            }
+
+            showMessageModal(message);
+        }
         
         return {
             startLoading:startLoading,
@@ -152,6 +164,7 @@ angular.module("BossCollection.services")
             showLoadingModal:showLoadingModal,
             hideLoadingModal:hideLoadingModal,
             confirmDelete:confirmDelete,
-            successfulUpdate:successfulUpdate
+            successfulUpdate: successfulUpdate,
+            handleError:handleError
         }
     }])
