@@ -46,7 +46,7 @@ angular.module("BossCollection.accounts")
                 },
                     function (err) {
 
-                        siteServices.showMessageModal(err);
+                        siteServices.handleError(err);
                     })
             }
         }])

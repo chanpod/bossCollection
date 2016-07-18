@@ -4,38 +4,38 @@
 
 angular.module("BossCollection.services")
     .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast', '$q',
-    function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q) {
-        
-        var alreadyLoading = false;
-        
-        function startLoading(){
-            
-            if(alreadyLoading){
-                
-            }
-            else{
-                alreadyLoading = true;
-                showLoadingModal();    
-            }
-            
-        }
-        
-        function loadingFinished(){
-            hideLoadingModal();
-            alreadyLoading = false;
-        }
-        
-        function updateTitle(newTitle){
-            
-            $rootScope.$broadcast('navbarTitle', newTitle)
-        }
+        function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q) {
 
-        function successfulUpdate(){
-            showMessageToast("Success");
-        }
-        
-        function showLoadingBottomSheet($event){
-            
+            var alreadyLoading = false;
+
+            function startLoading() {
+
+                if (alreadyLoading) {
+
+                }
+                else {
+                    alreadyLoading = true;
+                    showLoadingModal();
+                }
+
+            }
+
+            function loadingFinished() {
+                hideLoadingModal();
+                alreadyLoading = false;
+            }
+
+            function updateTitle(newTitle) {
+
+                $rootScope.$broadcast('navbarTitle', newTitle)
+            }
+
+            function successfulUpdate() {
+                showMessageToast("Success");
+            }
+
+            function showLoadingBottomSheet($event) {
+
 
                 $mdBottomSheet.show({
                     templateUrl: 'logInModal',
@@ -43,10 +43,10 @@ angular.module("BossCollection.services")
                     targetEvent: $event,
                     escapeToClose: false
                 })
-            
-        }
-        
-        function confirmDelete(event, callback) {
+
+            }
+
+            function confirmDelete(event, callback) {
 
                 var defer = $q.defer();
 
@@ -69,19 +69,19 @@ angular.module("BossCollection.services")
 
                 return defer.promise;
             }
-        
-        function hideLoadingBottomSheet(){
-            
-            $mdBottomSheet.hide();
-        }
-        
-        function hideBottomSheet(){
-            
-            $mdBottomSheet.hide();
-        }
-        
-        function showMessageModal(message, title){
-            $mdDialog.show(
+
+            function hideLoadingBottomSheet() {
+
+                $mdBottomSheet.hide();
+            }
+
+            function hideBottomSheet() {
+
+                $mdBottomSheet.hide();
+            }
+
+            function showMessageModal(message, title) {
+                $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(false)
                         .title(title)
@@ -96,75 +96,84 @@ angular.module("BossCollection.services")
                         .closeTo({
                             right: 1500
                         })
-                    );
-        }
-        
-        function showMessageToast(message){
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(message)
-                    .position("top")
-                    .hideDelay(4000)
                 );
-        }
-        
-        function hideLoadingModal(){
-            
-            if(alreadyLoading == false){
-                
             }
-            else{
-                alreadyLoading = false;
-                $mdDialog.hide();
+
+            function showMessageToast(message) {
+                $mdToast.show(
+                    $mdToast.simple()
+                        .textContent(message)
+                        .position("bottom")
+                        .hideDelay(4000)
+                );
             }
-        }
-        
-        function shouldWeBeLoading(){
-            return alreadyLoading;
-        }
-        
-        function showLoadingModal(){
-            
-            $mdDialog.show(
-                {
-                    templateUrl: 'loadingModal',
-                    onComplete: function(){
-                        
-                        if(!alreadyLoading){
-                            
-                            $mdDialog.hide();
-                        }
-                    }           
-                    
+
+            function hideLoadingModal() {
+
+                if (alreadyLoading == false) {
+
                 }
-            )
-        }
-
-        function handleError(error) {
-            let message = "";
-            if (error.data) {
-                message = error.data.message;
-            }
-            else {
-                message = error.message;
+                else {
+                    alreadyLoading = false;
+                    $mdDialog.hide();
+                }
             }
 
-            showMessageModal(message);
-        }
-        
-        return {
-            startLoading:startLoading,
-            loadingFinished:loadingFinished,
-            updateTitle:updateTitle,
-            showLoadingBottomSheet:showLoadingBottomSheet,
-            hideLoadingBottomSheet:hideLoadingBottomSheet,
-            showMessageModal:showMessageModal,
-            showMessageToast:showMessageToast,
-            hideBottomSheet:hideBottomSheet,
-            showLoadingModal:showLoadingModal,
-            hideLoadingModal:hideLoadingModal,
-            confirmDelete:confirmDelete,
-            successfulUpdate: successfulUpdate,
-            handleError:handleError
-        }
-    }])
+            function shouldWeBeLoading() {
+                return alreadyLoading;
+            }
+
+            function showLoadingModal() {
+
+                $mdDialog.show(
+                    {
+                        templateUrl: 'loadingModal',
+                        onComplete: function () {
+
+                            if (!alreadyLoading) {
+
+                                $mdDialog.hide();
+                            }
+                        }
+
+                    }
+                )
+            }
+
+            function handleError(error) {
+
+                let defaultError = "Well, crap. Something broke and we weren't able to determine the error.";
+                let message = "";
+
+                if (error.data) {
+                    message = error.data.message;
+                }
+                else {
+                    message = error.message;
+                }
+
+                if (typeof message === "string") {
+
+                    showMessageModal(message);
+                }
+                else {
+                    showMessageModal(defaultError);
+                }
+            }
+
+            return {
+                startLoading: startLoading,
+                loadingFinished: loadingFinished,
+                updateTitle: updateTitle,
+                showLoadingBottomSheet: showLoadingBottomSheet,
+                hideLoadingBottomSheet: hideLoadingBottomSheet,
+                showMessageModal: showMessageModal,
+                showMessageToast: showMessageToast,
+                hideBottomSheet: hideBottomSheet,
+                showLoadingModal: showLoadingModal,
+                hideLoadingModal: hideLoadingModal,
+                confirmDelete: confirmDelete,
+                successfulUpdate: successfulUpdate,
+                handleError: handleError
+            }
+        }])

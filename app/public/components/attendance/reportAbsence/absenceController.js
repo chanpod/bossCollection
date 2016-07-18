@@ -138,7 +138,7 @@ angular.module("BossCollection.attendance")
                 $scope.absences = result.absences; 
             }, 
             function(err){
-                siteServices.showMessageToast(err) 
+                siteServices.handleError(err) 
                 $scope.loading = false;
                 console.log(err);  
             })
@@ -154,7 +154,7 @@ angular.module("BossCollection.attendance")
                 $scope.absences = result.absences; 
             }, 
             function(err){
-                siteServices.showMessageToast(err) 
+                siteServices.handleError(err) 
                 $scope.loading = false;
                 console.log(err);  
             })

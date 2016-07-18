@@ -201,6 +201,9 @@ router.route('/getThreads')
                     res.status(400).send(util.handleErrors("Not authorized!"));
                 }
             })
+            .catch(err => {
+                res.status(400).send(util.handleErrors("Not authorized!"));
+            })
 
     });
 

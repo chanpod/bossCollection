@@ -175,7 +175,7 @@ angular.module("BossCollection.attendance")
                     self.absences = result.absences;
                 },
                     function(err) {
-                        siteServices.showMessageToast(err)
+                        siteServices.handleError(err)
                         self.loading = false;
                         console.log(err);
                     })

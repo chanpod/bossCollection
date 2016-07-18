@@ -454,7 +454,7 @@ angular.module("BossCollection.forums")
                         defer.resolve(comment)
                     }, 
                     function(err){
-                        siteServices.showMessageToast(err.data.message)
+                        siteServices.handleError(err.data.message)
                         defer.reject(err);
                     })
                 

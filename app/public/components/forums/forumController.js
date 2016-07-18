@@ -127,7 +127,7 @@ angular.module("BossCollection.forums")
                         $scope.getForums();
                     })
                     .catch((err) => {
-                        siteServices.showMessageToast("Oops, something broke");
+                        siteServices.handleError("err");
                     })
             }
             

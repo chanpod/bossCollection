@@ -36,8 +36,11 @@ angular.module("BossCollection.forums")
                 
                 
                 forumService.getCurrentForum()
-                    .then(function(forum){
-                        $scope.forum = forum;
+                    .then(function (forum) {
+                        if (forum == undefined) {
+                            throw new Error("Couldn't find the threads or you do not have permissions to view them.");
+                        }
+                        $scope.forum = forum; 
                     })
                     .then(function(){
                         
@@ -72,6 +75,7 @@ angular.module("BossCollection.forums")
                     })
                     .catch(function(err){
 
+                        siteServices.handleError(err);
                         $scope.loading = false;
                     })
                     .finally(function(){
@@ -149,7 +153,7 @@ angular.module("BossCollection.forums")
                         $scope.sortThreads();
                     })
                     .catch(function(err){
-                        siteServices.showMessageToast(err);
+                        siteServices.handleError(err);
                         $scope.loading = false;
                     })
             }

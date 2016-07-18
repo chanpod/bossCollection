@@ -67,7 +67,7 @@ angular.module("BossCollection.guild")
                         })
                 }
                 else{
-                    siteServices.showMessageToast("Guild doesn't exist");
+                    siteServices.handleError("Guild doesn't exist");
                     $scope.loading = false;
                 }
             }

@@ -133,7 +133,7 @@ angular.module("BossCollection.guild")
 
                         $scope.loading = false;
                         console.log(err);
-                        siteServices.showMessageToast("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
+                        siteServices.handleError("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
                     })
             }
 

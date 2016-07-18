@@ -99,7 +99,7 @@ angular.module("BossCollection.guild")
 
                     })
                     .catch(err => {
-                        siteServices.showMessageToast("Something went wrong. Try again in a few.");
+                        siteServices.handleError("Something went wrong. Try again in a few.");
                         defer.reject(err);
                     })
 

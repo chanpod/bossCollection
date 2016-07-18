@@ -101,7 +101,7 @@ angular.module("BossCollection.guild")
                         },
                         function (err) {
                             $scope.icon = "error";
-                            siteServices.showMessageToast(err);
+                            siteServices.handleError(err);
                             $scope.validCharacterName = false; 
                         })
                         .then(function (result) {
@@ -187,7 +187,7 @@ angular.module("BossCollection.guild")
                             },
                             function (err) {
                                 $scope.isLoading = false;
-                                siteServices.showMessageToast(err);
+                                siteServices.handleError(err);
                             })
                     }
                 })
