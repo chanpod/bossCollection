@@ -7,26 +7,10 @@ var guildManager = require('./components/guild/guildManagerRoutes.js');
 
 var util = require('utility');
 
-router.use(function(req,res, next){
-    
-  var errMessage = "You must be logged in and a part of a guild to use this";
-  next();
-  /*
-  if(req.session.user){
-      
-      if (req.session.user.guild) {
-          
-       }
-       else{
-          
-           //res.status(400).send(util.handleErrors(errMessage));
-       }
-  }
-  
-  else{
-      res.status(400).send(util.handleErrors(errMessage));
-  }
-  */
+router.use(function (req, res, next) {
+
+    next();
+ 
 })
 
 router.use('/absence', absence);
