@@ -55,7 +55,7 @@ angular.module("BossCollection.attendance")
 
             },
                 function (err) {
-                    siteServices.showMessageModal(err.data)
+                    siteServices.handleError(err)
                     $scope.loading = false;
                     console.log(err);
                 })

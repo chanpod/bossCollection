@@ -1,7 +1,7 @@
 angular.module("BossCollection.attendance")
     .controller('absenceModalController', [
-        '$scope', 'absenceService', '$mdDialog', 'data',
-        function($scope, absenceService, $mdDialog, data){
+        '$scope', 'absenceService', '$mdDialog', 'data', 'siteServices',
+        function($scope, absenceService, $mdDialog, data, siteServices){
         
         
         
@@ -24,7 +24,10 @@ angular.module("BossCollection.attendance")
                 .then(function(response){
                     
                     $scope.close(response);
-                })               
+                })   
+                .catch(function (err) {
+                    siteServices.handleError(err);
+                })
                 .finally(function(){
                     
                 })

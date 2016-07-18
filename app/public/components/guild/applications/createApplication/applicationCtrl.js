@@ -35,8 +35,7 @@ angular.module("BossCollection.guild")
                         return $scope.loggedIn()
                     })
                     .catch(function (err) {
-
-                        console.log(err);
+                        siteServices.handleError(err);
                     })
                     .finally(function () {
                         $timeout(function () {
@@ -53,6 +52,9 @@ angular.module("BossCollection.guild")
                     .then(function (guilds) {
 
                         $scope.listOfGuilds = guilds;
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
 
@@ -73,7 +75,7 @@ angular.module("BossCollection.guild")
                 })
                     .catch(function (err) {
 
-                        siteServices.showMessageModal("Please log in before attempting to apply.")
+                        siteServices.handleError(err)
                         $location.path('/')
                     })
                     .finally(function () {
@@ -119,6 +121,9 @@ angular.module("BossCollection.guild")
                             if (callback) {
                                 callback();
                             }
+                        })
+                        .catch(function (err) {
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.searchingForUser = false;

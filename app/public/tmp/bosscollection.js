@@ -368,8 +368,8 @@ angular.module("BossCollection.accounts").factory('userLoginSrvc', ['$resource',
         return accountApi;
     }
 ]);
-angular.module("BossCollection.attendance").controller('absenceModalController', ['$scope', 'absenceService', '$mdDialog', 'data',
-    function($scope, absenceService, $mdDialog, data) {
+angular.module("BossCollection.attendance").controller('absenceModalController', ['$scope', 'absenceService', '$mdDialog', 'data', 'siteServices',
+    function($scope, absenceService, $mdDialog, data, siteServices) {
         $scope.init = function() {
             if (data) {
                 $scope.absence = data;
@@ -381,6 +381,9 @@ angular.module("BossCollection.attendance").controller('absenceModalController',
         $scope.save = function() {
             absenceService.saveAbsence($scope.absence).then(function(response) {
                 $scope.close(response);
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             }).
             finally(function() {});
         };
@@ -862,12 +865,18 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
         $scope.deleteCategory = function() {
             forumService.deleteCategory($scope.object).then(function(result) {
                 $scope.close(result);
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.deleteForum = function() {
             forumService.deleteForum($scope.object).then(function(result) {
                 siteServices.successfulUpdate();
                 $scope.close(result);
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.setSelectedRank = function(rank) {
@@ -899,7 +908,9 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 forumService.editCategory($scope.object).then(function(result) {
                     $scope.close(result);
                 }).
-                catch (function(err) {}).
+                catch (function(err) {
+                    siteServices.handleError(err);
+                }).
                 finally(function() {
                     $scope.loading = false;
                 });
@@ -907,7 +918,9 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 forumService.createNewCategory($scope.object).then(function(result) {
                     $scope.close(result);
                 }).
-                catch (function(err) {}).
+                catch (function(err) {
+                    siteServices.handleError(err);
+                }).
                 finally(function() {
                     $scope.loading = false;
                 });
@@ -937,7 +950,9 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 forumService.editThread(thread).then(function(response) {
                     $scope.close(response);
                 }).
-                catch (function(err) {}).
+                catch (function(err) {
+                    siteServices.handleError(err);
+                }).
                 finally(function() {
                     $scope.loading = false;
                 });
@@ -951,7 +966,9 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 forumService.createThread(thread).then(function(response) {
                     $scope.close(response);
                 }).
-                catch (function(err) {}).
+                catch (function(err) {
+                    siteServices.handleError(err);
+                }).
                 finally(function() {
                     $scope.loading = false;
                 });
@@ -971,7 +988,9 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                 forumService.editForum(forum).then(function(response) {
                     $scope.close(response);
                 }).
-                catch (function(err) {}).
+                catch (function(err) {
+                    siteServices.handleError(err);
+                }).
                 finally(function() {
                     $scope.loading = false;
                 });
@@ -984,7 +1003,7 @@ angular.module("BossCollection.forums").controller('dialogController', ['$scope'
                     $scope.close(response);
                 }).
                 catch (function(err) {
-                    $scope.loading = false;
+                    siteServices.handleError(err);
                 }).
                 finally(function() {
                     $scope.loading = false;
@@ -1010,6 +1029,9 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
         $scope.refreshForums = function() {
             forumService.getForumsForced().then(function(forums) {
                 $scope.forums = forums;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.getForums = function() {
@@ -1060,7 +1082,7 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
                 forumService.removeLocalForums();
                 $scope.getForums();
             }).
-            catch (function(err) { //Didn't save
+            catch (function(err) { //siteServices.handleError(err);
             });
         };
         $scope.deleteCategory = function(category) {
@@ -1074,7 +1096,7 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
                 $scope.getForums();
             }).
             catch (function(err) {
-                siteServices.handleError("err");
+                siteServices.handleError(err);
             });
         };
         $scope.createForum = function(category) {
@@ -1121,6 +1143,9 @@ angular.module("BossCollection.forums").controller('forumController', ['$scope',
             }).then(function(response) {
                 forumService.removeLocalForums();
                 $scope.getForums();
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.goToForum = function(forum) {
@@ -1591,7 +1616,7 @@ angular.module("BossCollection.home").controller("guildVisitController", ["$scop
                 $scope.guildImagesLoaded = true;
             }).
             catch (function(err) {
-                siteServices.showMessageModal(err.data);
+                siteServices.handleError(err);
             });
         };
         $scope.cancel = function() {
@@ -1705,6 +1730,9 @@ angular.module("BossCollection.accounts").controller("editAccountController", ["
                 guildServices.leaveGuild(guildName).then(function(user) {
                     siteServices.successfulUpdate();
                     $scope.user = userLoginSrvc.updateUser();
+                }).
+                catch (function(err) {
+                    siteServices.handleError(err);
                 });
             });
         };
@@ -1774,6 +1802,9 @@ angular.module("BossCollection.accounts").controller("loginController", ["$scope
                     if ($location.path() == "/auth/application") {} else {
                         $location.path("/");
                     }
+                }).
+                catch (function(err) {
+                    siteServices.handleError(err);
                 });
             }, function(err) {
                 siteServices.showMessageModal(err);
@@ -1798,8 +1829,8 @@ angular.module("BossCollection.accounts").controller("signupController", ["$scop
             userLoginSrvc.registerNewUser($scope.user).then(function(result) { //save user to cookie
             }, function(err) {
                 $scope.passwordsMatch = true;
-                $scope.openFromLeft(err);
                 console.log(err);
+                siteServices.handleError(err);
             });
         };
         $scope.openFromLeft = function(errorMessage) {
@@ -1823,8 +1854,8 @@ angular.module('BossCollection.accounts').directive('userDisplay', [
     }
 ]);
 'use strict'; /* Directives */
-angular.module('BossCollection.accounts').controller('userDisplayController', ['$rootScope', '$scope', 'userLoginSrvc',
-    function($rootScope, $scope, userLoginSrvc) {
+angular.module('BossCollection.accounts').controller('userDisplayController', ['$rootScope', '$scope', 'userLoginSrvc', 'siteServices',
+    function($rootScope, $scope, userLoginSrvc, siteServices) {
         $scope.$watch('user', function(user) {
             if ($scope.avatarUrl == undefined) {
                 getAvatarUrl();
@@ -1839,6 +1870,9 @@ angular.module('BossCollection.accounts').controller('userDisplayController', ['
         function getAvatarUrl() {
             userLoginSrvc.getAvatar($scope.user).then(function(avatarUrl) {
                 $scope.avatarUrl = avatarUrl;
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal(err);
             });
         }
     }
@@ -1882,7 +1916,7 @@ angular.module("BossCollection.attendance").controller("attendanceStatsCtrl", ["
                 $scope.absences = result.absences;
                 $scope.calculateAttendance();
             }, function(err) {
-                siteServices.showMessageModal(err.data);
+                siteServices.handleError(err);
                 $scope.loading = false;
                 console.log(err);
             });
@@ -2034,6 +2068,9 @@ angular.module("BossCollection.attendance").controller("absenceReportController"
                     } else {
                         $scope.getGuildUsers();
                     }
+                }).
+                catch (function(err) {
+                    siteServices.handleError(err);
                 });
             } else {
                 if (permissionsService.isOfficer($scope.user)) {
@@ -2049,6 +2086,9 @@ angular.module("BossCollection.attendance").controller("absenceReportController"
             guildServices.getGuildMembers($scope.user.guild.name).then(function(users) {
                 $scope.users = users;
                 self.showContent();
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             }).
             finally(function() {
                 $scope.loading = false;
@@ -2110,7 +2150,7 @@ angular.module("BossCollection.attendance").controller("absenceReportController"
                 absenceService.submitNewAbsence($scope.newAbsence).then(function(result) { //TODO: Redirect to list of absences.
                     siteServices.showMessageModal("Success");
                 }, function(err) {
-                    siteServices.showMessageModal(err);
+                    siteServices.handleError(err);
                     console.log(err);
                 });
             }
@@ -2203,7 +2243,7 @@ angular.module("BossCollection.attendance").controller("absenceSubmissionsContro
                 self.absences = result.absences;
                 self.showContent();
             }, function(err) {
-                siteServices.showMessageModal(err.data);
+                siteServices.handleError(err.data);
                 self.loading = false;
                 console.log(err);
             });
@@ -2219,6 +2259,9 @@ angular.module("BossCollection.attendance").controller("absenceSubmissionsContro
                     self.updateList();
                 }
             }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {});
         };
         self.editAbsence = function(absence) {
@@ -2228,6 +2271,9 @@ angular.module("BossCollection.attendance").controller("absenceSubmissionsContro
                 } else {
                     self.updateList();
                 }
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         self.getTodaysAbsences = function() {
@@ -2261,6 +2307,7 @@ angular.module("BossCollection.attendance").controller("absenceSubmissionsContro
                 self.absences = absences.absences;
             }, function(err) {
                 self.loading = false;
+                siteServices.handleError(err);
             });
         };
         self.init();
@@ -2295,7 +2342,7 @@ angular.module("BossCollection.guild").controller("createGuildController", ["$sc
                 $location.path('/');
             }).
             catch (function(err) {
-                siteServices.showMessageModal(err);
+                siteServices.handleError(err);
             }).
             finally(function() {
                 $scope.loading = false;
@@ -2336,6 +2383,9 @@ angular.module("BossCollection.guild").controller("guildSettingsController", ["$
         $scope.guildSettings = function() {
             guildServices.getGuildSettings().then(function(response) {
                 $scope.guild = response.guild;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.changeDetected = function() {
@@ -2355,6 +2405,9 @@ angular.module("BossCollection.guild").controller("guildSettingsController", ["$
                         }
                     });
                 }
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.checkIfRankIsInUse = function(rankRemoved) {
@@ -2384,6 +2437,9 @@ angular.module("BossCollection.guild").controller("guildSettingsController", ["$
                 siteServices.successfulUpdate();
             }).
             catch (function(err) {
+                siteServices.handleError(err);
+            }).
+            finally(function() {
                 $scope.loading = false;
             });
         };
@@ -2467,6 +2523,9 @@ angular.module("BossCollection.guild").controller("joinGuildController", ["$scop
         $scope.getGuilds = function() {
             guildServices.getListOfGuilds().then(function(guilds) {
                 $scope.listOfGuilds = guilds;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.selectedItemChange = function(item) {
@@ -2479,7 +2538,7 @@ angular.module("BossCollection.guild").controller("joinGuildController", ["$scop
                     $scope.succesfullyJoinedGuild();
                 }).
                 catch (function(err) {
-                    siteServices.showMessageModal(err);
+                    siteServices.handleError(err);
                 }).
                 finally(function() {
                     $scope.loading = false;
@@ -2500,8 +2559,7 @@ angular.module("BossCollection.guild").controller("joinGuildController", ["$scop
                 $scope.isLoading = false;
                 userLoginSrvc.refreshUserFromServer();
                 $location.path('/');
-            }, function() { //console.l = 'Crap, it didn\'t work it seems. Refresh the page and see?';
-            });
+            }, function() {});
         };
         $scope.init();
     }
@@ -2525,6 +2583,9 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
             guildServices.getGuildSettings().then(function(response) {
                 $scope.guild = response.guild;
                 $scope.ranks = $scope.guild.ranks;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.getMembers = function() {
@@ -2537,6 +2598,9 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
                     guildServices.getGuildMembers(user.guild.name).then(function(guildMembers) {
                         $scope.guildMembers = guildMembers;
                     });
+                }).
+                catch (function(err) {
+                    siteServices.handleError(err);
                 });
             }
         };
@@ -2609,19 +2673,19 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
             var userName = user;
             var guildName = $scope.user.guild.name;
             siteServices.confirmDelete().then(function(result) {
-                guildServices.kickUser(userName, guildName).then(function(reponse) {
+                return guildServices.kickUser(userName, guildName).then(function(reponse) {
                     $scope.getMembers();
-                }).
-                catch (function(err) {
-                    siteServices.showMessageModal(err);
-                }).
-                finally(function() {});
-            });
+                });
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
+            finally(function() {});
         };
         $scope.saveUser = function(user) {
             guildServices.updateRank($scope.user.guild.name, user).then(function() {}).
             catch (function(err) {
-                siteServices.showMessageModal(err);
+                siteServices.handleError(err);
             });
         };
         $scope.init();
@@ -2651,6 +2715,9 @@ angular.module("BossCollection.forums").controller('commentsController', ['$scop
             }).then(function() {
                 return self.getComments();
             }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {
                 self.loading = false;
             });
@@ -2666,6 +2733,9 @@ angular.module("BossCollection.forums").controller('commentsController', ['$scop
                     $scope.disableLoadMore = true;
                 }
                 self.thread.comments = comments.comments;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             }).
             finally(function() {
                 self.loading = false;
@@ -2701,6 +2771,9 @@ angular.module("BossCollection.forums").controller('commentsController', ['$scop
         $scope.saveCommentEdit = function(comment) {
             forumService.editComment(comment).then(function(savedComment) {
                 $scope.cancelCommentEdit(comment);
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.formatDate = function(date) {
@@ -2737,6 +2810,9 @@ angular.module("BossCollection.forums").controller('commentsController', ['$scop
                 self.thread.newComment = "";
                 self.thread.comments.push(comment.comment);
                 $scope.cancelComment();
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.openCommentBox = function() {
@@ -2776,7 +2852,7 @@ angular.module("BossCollection.forums").controller('favoritesController', ['$sco
                 sortFavorites();
             }).
             catch (function(err) {
-                self.loading = false;
+                siteServices.handleError(err);
             }).
             finally(function() {
                 self.loading = false;
@@ -2825,7 +2901,7 @@ angular.module("BossCollection.forums").controller('favoritesController', ['$sco
                 sortFavorites();
             }).
             catch (function(err) {
-                self.loading = false;
+                siteServices.handleError(err);
             }).
             finally(function() {
                 self.loading = false;
@@ -2839,6 +2915,9 @@ angular.module("BossCollection.forums").controller('favoritesController', ['$sco
             }).then(function(response) {
                 siteServices.successfulUpdate();
                 self.refresh();
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.$watch('threadSearch', function() {
@@ -2897,7 +2976,9 @@ angular.module("BossCollection.forums").controller('favoritesController', ['$sco
             }
             $scope.loading = false;
             forumService.editThread(thread).then(function(response) {}).
-            catch (function(err) {}).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {
                 $scope.loading = false;
             });
@@ -3052,6 +3133,9 @@ angular.module("BossCollection.forums").controller('threadController', ['$scope'
                 }
             }).then(function(response) {
                 $scope.refresh();
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.$watch('threadSearch', function() {
@@ -3122,7 +3206,9 @@ angular.module("BossCollection.forums").controller('threadController', ['$scope'
         $scope.saveThread = function(thread) {
             $scope.loading = false;
             forumService.editThread(thread).then(function(response) {}).
-            catch (function(err) {}).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {
                 $scope.loading = false;
             });
@@ -3190,7 +3276,7 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
                 return $scope.loggedIn();
             }).
             catch (function(err) {
-                console.log(err);
+                siteServices.handleError(err);
             }).
             finally(function() {
                 $timeout(function() {
@@ -3201,6 +3287,9 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
         $scope.getGuilds = function() {
             return guildServices.getListOfGuilds().then(function(guilds) {
                 $scope.listOfGuilds = guilds;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.filterGuildsSearch = function(filterSearch) {
@@ -3213,7 +3302,7 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
             userLoginSrvc.getUser().then(function(user) { //Success, let them fill out the form.
             }).
             catch (function(err) {
-                siteServices.showMessageModal("Please log in before attempting to apply.");
+                siteServices.handleError(err);
                 $location.path('/');
             }).
             finally(function() {});
@@ -3240,6 +3329,9 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
                     if (callback) {
                         callback();
                     }
+                }).
+                catch (function(err) {
+                    siteServices.handleError(err);
                 }).
                 finally(function() {
                     $scope.searchingForUser = false;
@@ -3335,14 +3427,18 @@ angular.module("BossCollection.guild").controller("myApplicationsCtrl", ["$scope
             guildServices.approveApplication(application).then(function() {
                 application.status = "Approved";
             }).
-            catch (function(err) {}).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {});
         };
         $scope.rejectApplicant = function(application) {
             guildServices.rejectApplication(application).then(function() {
                 application.status = "Rejected";
             }).
-            catch (function(err) {}).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {});
         };
         $scope.getClassName = function(application) {
@@ -3376,6 +3472,9 @@ angular.module("BossCollection.guild").controller("myApplicationsCtrl", ["$scope
                 guildServices.deleteApplication(application._id).then(function(user) {
                     $scope.getApplications();
                 });
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
             });
         };
         $scope.getApplications = function() {
@@ -3436,14 +3535,18 @@ angular.module("BossCollection.guild").controller("applicationsReviewController"
             guildServices.approveApplication(application).then(function() {
                 application.status = "Approved";
             }).
-            catch (function(err) {}).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {});
         };
         $scope.rejectApplicant = function(application) {
             guildServices.rejectApplication(application).then(function() {
                 application.status = "Rejected";
             }).
-            catch (function(err) {}).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
             finally(function() {});
         };
         $scope.getClassName = function(application) {
@@ -3515,6 +3618,9 @@ angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServ
                     console.log($scope.guild);
                     guildServices.getGuildMembers($scope.guild).then(function(users) {
                         $scope.users = users;
+                    }).
+                    catch (function(err) {
+                        siteServices.handleError(err);
                     }).
                     finally(function() {
                         $scope.loading = false;

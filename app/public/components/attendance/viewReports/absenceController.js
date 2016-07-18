@@ -106,7 +106,7 @@ angular.module("BossCollection.attendance")
                 },
                     function(err) {
 
-                        siteServices.showMessageModal(err.data)
+                        siteServices.handleError(err.data)
 
                         self.loading = false;
                         console.log(err);
@@ -129,6 +129,9 @@ angular.module("BossCollection.attendance")
                             self.updateList();
                         }
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
                     .finally(function() {
 
                     })
@@ -147,6 +150,9 @@ angular.module("BossCollection.attendance")
                         }
 
 
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
 
@@ -198,6 +204,7 @@ angular.module("BossCollection.attendance")
                     },
                     function(err){
                         self.loading = false;
+                        siteServices.handleError(err);
                     })
             }
 

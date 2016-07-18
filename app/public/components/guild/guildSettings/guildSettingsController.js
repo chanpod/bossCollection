@@ -45,6 +45,9 @@ angular.module("BossCollection.guild")
                     .then((response) => {
                         $scope.guild = response.guild
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
 
             $scope.changeDetected = () => {
@@ -75,6 +78,9 @@ angular.module("BossCollection.guild")
                                 }
                             })
                         }
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
 
@@ -119,7 +125,11 @@ angular.module("BossCollection.guild")
                         $rootScope.$broadcast('loggedin');
                         siteServices.successfulUpdate();
                     })
-                    .catch(err => {
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
+                    .finally(() => {
+
                         $scope.loading = false;
                     })
             }

@@ -2,7 +2,7 @@
 /* Directives */
 
 angular.module('BossCollection.accounts').
-    controller('userDisplayController', ['$rootScope', '$scope', 'userLoginSrvc', function($rootScope, $scope, userLoginSrvc) {
+    controller('userDisplayController', ['$rootScope', '$scope', 'userLoginSrvc', 'siteServices', function($rootScope, $scope, userLoginSrvc, siteServices) {
 
         $scope.$watch('user', function(user) {
 
@@ -24,8 +24,12 @@ angular.module('BossCollection.accounts').
             userLoginSrvc.getAvatar($scope.user)
                 .then(function(avatarUrl) {
                     $scope.avatarUrl = avatarUrl;
-                    
+
                 })
+                .catch(function (err) {
+                    siteServices.showMessageModal(err);
+                })
+            
         }
 
     }]);

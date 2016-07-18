@@ -19,6 +19,9 @@ angular.module("BossCollection.accounts")
                                 siteServices.successfulUpdate();
                                 $scope.user = userLoginSrvc.updateUser();
                             })
+                            .catch(err => {
+                                siteServices.handleError(err);
+                            })
                     })
             }
             

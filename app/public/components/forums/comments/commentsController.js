@@ -38,6 +38,9 @@ angular.module("BossCollection.forums")
                         
                         return self.getComments();        
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
                     .finally(function(){
                         self.loading = false;
                     })
@@ -62,6 +65,9 @@ angular.module("BossCollection.forums")
                             $scope.disableLoadMore = true;
                         }
                         self.thread.comments = comments.comments;
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
                     .finally(function(){
                         
@@ -114,6 +120,9 @@ angular.module("BossCollection.forums")
                     .then(function (savedComment) {
 
                         $scope.cancelCommentEdit(comment);
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
             
@@ -175,6 +184,9 @@ angular.module("BossCollection.forums")
                         self.thread.newComment = "";
                         self.thread.comments.push(comment.comment);
                         $scope.cancelComment();
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
 

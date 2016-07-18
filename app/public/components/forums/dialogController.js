@@ -96,6 +96,9 @@ angular.module("BossCollection.forums")
 
                         $scope.close(result);
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
 
             $scope.deleteForum = function () {
@@ -104,6 +107,9 @@ angular.module("BossCollection.forums")
                     .then(function (result) {
                         siteServices.successfulUpdate();
                         $scope.close(result);
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
 
@@ -152,7 +158,7 @@ angular.module("BossCollection.forums")
                             $scope.close(result);
                         })
                         .catch(function (err) {
-
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -165,7 +171,7 @@ angular.module("BossCollection.forums")
                             $scope.close(result);
                         })
                         .catch(function (err) {
-
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -219,7 +225,7 @@ angular.module("BossCollection.forums")
                             $scope.close(response);
                         })
                         .catch(function (err) {
-
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -241,7 +247,7 @@ angular.module("BossCollection.forums")
                             $scope.close(response);
                         })
                         .catch(function (err) {
-
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -273,7 +279,7 @@ angular.module("BossCollection.forums")
                             $scope.close(response);
                         })
                         .catch(function (err) {
-
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -293,7 +299,7 @@ angular.module("BossCollection.forums")
                             $scope.close(response);
                         })
                         .catch(function (err) {
-                            $scope.loading = false;
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;

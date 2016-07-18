@@ -41,7 +41,7 @@ angular.module("BossCollection.guild")
                         application.status = "Approved";
                     })
                     .catch(function (err) {
-
+                        siteServices.handleError(err);
                     })
                     .finally(function () {
 
@@ -55,7 +55,7 @@ angular.module("BossCollection.guild")
                         application.status = "Rejected";
                     })
                     .catch(function (err) {
-
+                        siteServices.handleError(err);
                     })
                     .finally(function () {
 
@@ -106,6 +106,9 @@ angular.module("BossCollection.guild")
 
                                 $scope.getApplications();
                             })
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
             }
 

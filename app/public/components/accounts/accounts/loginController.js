@@ -78,6 +78,9 @@ angular.module("BossCollection.accounts")
                             $location.path("/");
                         }
                     })
+                    .catch(err => {
+                        siteServices.handleError(err);
+                    })
                 
             },
             function(err){

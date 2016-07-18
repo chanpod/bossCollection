@@ -28,6 +28,10 @@ angular.module("BossCollection.guild")
                         $scope.guild = response.guild
                         $scope.ranks = $scope.guild.ranks;
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
+                
             }
 
             $scope.getMembers = function () {
@@ -47,6 +51,9 @@ angular.module("BossCollection.guild")
                                 .then(function (guildMembers) {
                                     $scope.guildMembers = guildMembers
                                 })
+                        })
+                        .catch(function (err) {
+                            siteServices.handleError(err);
                         })
                 }
             }
@@ -160,20 +167,18 @@ angular.module("BossCollection.guild")
                 siteServices.confirmDelete()
                     .then(result => {
 
-                        guildServices.kickUser(userName, guildName)
+                        return guildServices.kickUser(userName, guildName)
                             .then(function (reponse) {
 
                                 $scope.getMembers();
-                            })
-                            .catch(function (err) {
-
-                                siteServices.showMessageModal(err);
-                            })
-                            .finally(function () {
-
-                            })
+                            })                            
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
+                    .finally(function () {
 
+                    })
             }
 
             $scope.saveUser = (user) => {
@@ -183,7 +188,7 @@ angular.module("BossCollection.guild")
 
                     })
                     .catch(function (err) {
-                        siteServices.showMessageModal(err);
+                        siteServices.handleError(err);
                     })
             }
 

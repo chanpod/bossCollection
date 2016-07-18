@@ -28,6 +28,9 @@ angular.module("BossCollection.forums")
                         
                         $scope.forums = forums;
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
             
             $scope.getForums = function(){
@@ -106,8 +109,8 @@ angular.module("BossCollection.forums")
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })
-                    .catch(function(err){
-                        //Didn't save
+                    .catch(function (err) {
+                        //siteServices.handleError(err);
                     })
             } 
 
@@ -127,7 +130,7 @@ angular.module("BossCollection.forums")
                         $scope.getForums();
                     })
                     .catch((err) => {
-                        siteServices.handleError("err");
+                        siteServices.handleError(err);
                     })
             }
             
@@ -193,6 +196,9 @@ angular.module("BossCollection.forums")
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })
+                     .catch(function (err) {
+                         siteServices.handleError(err);
+                     })
             } 
 
             $scope.goToForum = function (forum) {

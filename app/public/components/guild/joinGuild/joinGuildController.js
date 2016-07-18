@@ -37,6 +37,9 @@ angular.module("BossCollection.guild")
 
                         $scope.listOfGuilds = guilds;
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
 
             $scope.selectedItemChange = function (item) {
@@ -60,7 +63,7 @@ angular.module("BossCollection.guild")
 
                         })
                         .catch(function (err) {
-                            siteServices.showMessageModal(err);
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
@@ -97,7 +100,7 @@ angular.module("BossCollection.guild")
                     $location.path('/');
 
                 }, function () {
-                    //console.l = 'Crap, it didn\'t work it seems. Refresh the page and see?';
+                   
                 });
             }
 

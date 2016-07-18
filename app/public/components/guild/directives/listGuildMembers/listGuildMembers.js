@@ -23,6 +23,9 @@ angular.module("BossCollection.guild")
 
                             $scope.users = users;                            
                         })
+                        .catch(function (err) {
+                            siteServices.handleError(err);
+                        })
                         .finally(function() {
 
                             $scope.loading = false;

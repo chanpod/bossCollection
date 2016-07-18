@@ -71,6 +71,9 @@ angular.module("BossCollection.attendance")
                             $scope.getGuildUsers();
                         }
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
                 
             }
             else{
@@ -94,6 +97,9 @@ angular.module("BossCollection.attendance")
                     
                     $scope.users = users;
                     self.showContent();  
+                })
+                .catch(function (err) {
+                    siteServices.handleError(err);
                 })
                 .finally(function(){
                     
@@ -192,7 +198,7 @@ angular.module("BossCollection.attendance")
                     siteServices.showMessageModal("Success");
                 },
                     function (err) {
-                        siteServices.showMessageModal(err);
+                        siteServices.handleError(err);
                         console.log(err);
                     })
             }

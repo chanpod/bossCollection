@@ -172,6 +172,9 @@ angular.module("BossCollection.forums")
 
                         $scope.refresh();
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
             
             $scope.$watch('threadSearch', function(){
@@ -286,7 +289,7 @@ angular.module("BossCollection.forums")
                         
                     })
                     .catch(function (err) {
-
+                        siteServices.handleError(err);
                     })
                     .finally(function () {
                         $scope.loading = false;

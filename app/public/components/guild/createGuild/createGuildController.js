@@ -27,8 +27,8 @@ angular.module("BossCollection.guild")
                         
                         $location.path('/');           
                     })
-                    .catch(function(err){
-                        siteServices.showMessageModal(err);
+                    .catch(function (err) {
+                        siteServices.handleError(err);
                     })
                     .finally(function(){
                         $scope.loading = false;

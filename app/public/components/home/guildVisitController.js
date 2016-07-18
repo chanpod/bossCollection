@@ -44,7 +44,7 @@ angular.module("BossCollection.home")
                             $scope.guildImagesLoaded = true;
                         })
                         .catch(function (err) {
-                            siteServices.showMessageModal(err.data);
+                            siteServices.handleError(err);
                         }) 
 
             }
