@@ -22,35 +22,30 @@ angular.module("BossCollection.home")
 
                 $scope.guildImagesLoaded = false;
 
-                guildServices.getHomepageContent($scope.guildName)
-                    .then(function(guild) {
+                guildServices.getHomepageContent($scope.user.guild.name)
+                        .then(function (guild) {
 
-                        if(guild.guild == undefined){
-                            siteServices.showMessageModal("Guild not found. Check the spelling. Spaces and Case matter.");
-                        }
-                        
-                        $scope.guild = guild.guild;
-                        
-                        var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                            + "<item source=\"/images/expansionBanners/wodbanner.jpg\"></item>";
-                        
-                        
-                        
-                        if ($scope.guild && $scope.guild.images) {
-                            $scope.guild.images.forEach(function(image) {
-                                sliderHTML += "<item source = " + image + "></item>"
-                            }, this);
-                        } 
+                            $scope.guild = guild.guild;
 
-                        sliderHTML += "</awesome-slider>";
+                            // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                            //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
 
-                        document.getElementById('imageGallery').innerHTML = sliderHTML;
+                            // if ($scope.guild && $scope.guild.images) {
+                            //     $scope.guild.images.forEach(function (image) {
+                            //         sliderHTML += "<item source = " + image + "></item>"
+                            //     }, this);
+                            // }
 
-                        $scope.guildImagesLoaded = true;
-                    })
-                    .catch(function(err) {
-                        siteServices.showMessageModal(err.data);
-                    })
+
+                            // sliderHTML += "</awesome-slider>";
+
+                            // document.getElementById('imageGallery').innerHTML = sliderHTML;
+
+                            $scope.guildImagesLoaded = true;
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err.data);
+                        }) 
 
             }
             

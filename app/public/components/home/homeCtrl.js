@@ -43,7 +43,7 @@ angular.module("BossCollection.home")
 
             }
  
-            $scope.getHomepageContent = () => {
+            $scope.getHomepageContent = () => { 
 
                 $scope.guildImagesLoaded = false;
                 
