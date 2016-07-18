@@ -33,14 +33,17 @@ script#thread(type="text/ng-template")
                         md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised.md-primary My Post (Not yet implemented)
                             md-tooltip() See post you've created
         ad()
+        
         div(layout-align = "center center")
             div(layout, layout-align = "center center")
                 h1() {{forum.name}}
         div(layout = "row", layout-align = "space-between center", flex)
+
             md-input-container().md-block.md-icon-float
                 label() Search
                 md-icon(md-font-library="material-icons") search
                 input(type = "text", ng-model = "threadSearch")
+
             div()                
                 md-button(ng-click = "flipOrderBySorting()").md-primary.md-raised
                     md-icon(md-font-library="material-icons") date_range
@@ -89,6 +92,7 @@ script#thread(type="text/ng-template")
                         md-tooltip() Favorite 
                         
             md-divider(ng-if="!$last")     
+
             div(ng-repeat = "thread in threads | filter:sortThreads()", ng-class = "isRead(thread)", layout = "column")
             
                 md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
@@ -116,7 +120,7 @@ script#thread(type="text/ng-template")
                         
                 div( layout-align = "end center", layout)
                 
-                    md-menu(ng-if = "isOfficer()")
+                    md-menu(ng-if = "isOfficer() || thread.user == user.name")
                         md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
                             

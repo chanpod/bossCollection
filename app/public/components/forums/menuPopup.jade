@@ -9,12 +9,12 @@ md-menu-content
             md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
             | Edit
                                                 
-    md-menu-item(ng-if = "thread.sticky")
+    md-menu-item(ng-if = "isOfficer() && thread.sticky")
         md-button(ng-click = "stickyThread(thread)")
             md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
             | Remove Sticky
                 
-    md-menu-item(ng-if = "!thread.sticky")
+    md-menu-item(ng-if = "isOfficer() && !thread.sticky")
         md-button(ng-click = "stickyThread(thread)")
             md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark_border
             | Sticky
