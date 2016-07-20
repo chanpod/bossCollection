@@ -163,13 +163,13 @@ angular.module("BossCollection.attendance")
                 self.dayDesired = new Date();
 
                 self.dayDesired.setSeconds(0);
-                self.dayDesired.setHours(0);
+                self.dayDesired.setHours(0); 
                 self.dayDesired.setMinutes(0);
 
                 self.getAbsencesByDate();
             }
 
-            self.getAbsencesByDate = function(dateIn) {
+            self.getAbsencesByDate = function(dateIn) { 
 
                 self.loading = true;
                 

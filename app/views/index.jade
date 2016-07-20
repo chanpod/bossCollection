@@ -1,7 +1,7 @@
 extends layout
 
 block body
-    section(ng-controller = "navbar", layout = "row", flex, ng-cloak, md-swipe-right = "openSideBar('left')", md-swipe-left = "closeSideBar('left')")
+    section(ng-controller = "navbar", layout, flex, ng-cloak, md-swipe-right = "openSideBar('left')", md-swipe-left = "closeSideBar('left')")
         include indexViews/sideNav
                     
         div(layout = "column", flex)

@@ -13,6 +13,23 @@ angular.module("BossCollection.forums")
             $scope.messageCount = 25;
             $scope.comment = "";
             $scope.commentToDelete;
+
+            $scope.showModal = (message, title) => {
+                
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(false)
+                        .title(title)
+                        .textContent(message)
+                        .ariaLabel('message popup')
+                        .ok('Got it!')
+                        .openFrom({
+                            left: -50,
+                            width: 30,
+                            height: 80
+                        })                        
+                );
+            }
             
             $scope.init = function(){
                 

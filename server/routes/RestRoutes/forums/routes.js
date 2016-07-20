@@ -7,16 +7,22 @@ var CategoryManager = require('./components/categoryManager');
 var GuildManager = require('../guild/components/guild/guild-manager.js');
 var util = require('utility');
 
-router.use(function(req, res, next) {
-    
+router.use(function (req, res, next) {
+
     var errMessage = "You must be logged in and a part of a guild to use this";
     var allowedUrl = "/guild/guildHomepage";
     var loginUrl = "/login";
     var logoutUrl = "/logout";
-    
 
- next();
-    
+    if (util.userExist(req)) {
+
+        next();
+    }
+    else {
+        let err = "Please login!";
+        res.status(400).send(util.handleErrors(err));
+    }
+
 })
 
 //=======Comment Routes ================
@@ -98,11 +104,11 @@ router.route('/createCategory')
 
         GuildManager.isOfficer(req.session.user.name)
             .then(isOfficer => {
-                if(isOfficer){
+                if (isOfficer) {
 
                     CategoryManager.createCategory(req, res)
                 }
-                else{
+                else {
                     res.status(400).send(util.handleErrors("Insufficient permissions"));
                 }
             })
@@ -114,7 +120,7 @@ router.route('/deleteCategory')
 
         GuildManager.isOfficer(req.session.user.name)
             .then(isOfficer => {
-                
+
                 if (isOfficer) {
 
                     CategoryManager.deleteCategories(req, res)
@@ -131,7 +137,7 @@ router.route('/deleteCategory')
                     res.status(400).send(util.handleErrors("Insufficient permissions"));
                 }
             })
-        
+
 
     });
 
@@ -162,22 +168,22 @@ router.route('/editCategory')
 
 router.route('/thread')
     .post(function (req, res) {
-        
+
         ThreadManager.getThread(req.body.threadID)
             .then(function (response) {
-                
+
                 var thread = response.thread[0];
 
                 let guildUser = req.session.user.guild.members[0];
 
                 if (util.checkUserPermissions(guildUser, thread.permissions)) {
 
-                   res.status(200).send(response);
+                    res.status(200).send(response);
                 }
                 else {
                     throw new Error("Not authorized to view this thread.")
-                }                
-               
+                }
+
             })
             .fail(function (err) {
                 res.status(400).send(util.handleErrors(err));
@@ -193,7 +199,7 @@ router.route('/getThreads')
 
         ForumManager.getForumPermissions(req.body.forumId)
             .then((forumPermissions) => {
-                
+
                 if (util.checkUserPermissions(guildUser, forumPermissions)) {
                     ThreadManager.getThreads(req.body.forumId)
                         .then(function (response) {
@@ -204,7 +210,7 @@ router.route('/getThreads')
                             res.status(400).send(util.handleErrors(err));
                         })
                 }
-                else{
+                else {
                     res.status(400).send(util.handleErrors("Not authorized!"));
                 }
             })

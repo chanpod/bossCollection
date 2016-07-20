@@ -192,7 +192,7 @@ angular.module("BossCollection.forums")
                             return forumService.deleteForum(forum);
                         }
                     })
-                    .then(function(response){
+                    .then(function(response){ 
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })

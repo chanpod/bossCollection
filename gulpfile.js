@@ -70,7 +70,7 @@ gulp.task("CSS", function () {
 
 gulp.task('build', function () {
 
-    runSequence('clean', 'concatJade', 'concatJS', 'browserify', 'concatSass', 'vendorCss', 'concatVendor');
+    runSequence('clean', 'concatJade', 'JS', 'concatSass', 'vendorCss', 'concatVendor');
 })
 
 gulp.task('browserify', function () {

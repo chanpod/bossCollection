@@ -153,11 +153,14 @@ angular.module("BossCollection.services")
 
                 if (typeof message === "string") {
 
-                    showMessageToast(message);
+                    showMessageModal(message);
                 }
                 else {
-                    showMessageToast(defaultError);
+                    message = defaultError;
+                    showMessageModal(defaultError);
                 }
+
+                return message;
             }
 
             return {

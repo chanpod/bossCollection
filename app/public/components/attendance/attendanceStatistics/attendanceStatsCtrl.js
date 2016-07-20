@@ -46,7 +46,7 @@ angular.module("BossCollection.attendance")
                 date:$scope.startingDate, 
                 weeks:$scope.weeksCounted
             }
-            
+             
             absenceService.getAbsenceHistory(absenceHistory)
                 .then(function (result) {
 
