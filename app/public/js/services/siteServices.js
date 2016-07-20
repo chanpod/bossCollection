@@ -101,11 +101,16 @@ angular.module("BossCollection.services")
             }
 
             function showMessageToast(message) {
-                
+                try {
+                    
                 $mdToast.show($mdToast.simple()
                     .textContent(message)
                     .hideDelay(4000))
                     .action('X')
+                }
+                catch(err){
+                    //Don't care
+                }
             }
 
             function hideLoadingModal() {
