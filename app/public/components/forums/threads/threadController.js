@@ -50,7 +50,7 @@ angular.module("BossCollection.forums")
                             return $scope.forum.threads
                         }
                         else{
-                            return forumService.getThreads($scope.forum);    
+                            return forumService.getThreads($scope.forum._id);    
                         }
                         
                     })
@@ -71,6 +71,7 @@ angular.module("BossCollection.forums")
                         //$scope.initInfiniteScroll();
                         
                         $scope.sortThreads();
+                        $scope.refresh();
                         
                     })
                     .catch(function(err){
@@ -140,7 +141,7 @@ angular.module("BossCollection.forums")
 
                 $scope.loading = true;
 
-                forumService.getThreads($scope.forum)
+                forumService.getThreads($scope.forum._id)
                     .then(function(threads){
 
                         $scope.loading = false;
@@ -152,7 +153,8 @@ angular.module("BossCollection.forums")
                         $scope.masterThread = threads;
                         $scope.sortThreads();
                     })
-                    .catch(function(err){
+                    .catch(function (err) {
+                        
                         siteServices.handleError(err);
                         $scope.loading = false;
                     })

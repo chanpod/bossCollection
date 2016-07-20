@@ -48,7 +48,7 @@ angular.module("BossCollection.accounts")
 
                     var defer = $q.defer();
 
-                    siteServices.startLoading();
+                    
 
                     updateAccount.save(updatedUser).$promise
                         .then(function (response) {
@@ -62,7 +62,7 @@ angular.module("BossCollection.accounts")
                             defer.reject(err.data.message);
                         })
                         .finally(function () {
-                            siteServices.loadingFinished();
+                            
                         })
 
                     return defer.promise;

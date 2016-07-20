@@ -47,6 +47,8 @@ script#editAccount(type="text/ng-template")
                                 | {{user.guild.name}}
                         md-divider
             div(flex)
+                md-progress-linear(ng-show = "loading", md-mode="indeterminate")
+
                 div()
                     md-input-container(flex).md-block
                         md-button(type = "submit").md-primary.md-raised

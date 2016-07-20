@@ -275,6 +275,9 @@ angular.module("BossCollection.forums")
                             currentForum = forum;
                             defer.resolve(forum);
                         })
+                        .catch((error) => {
+                            defer.reject(error);
+                        })
                 }
 
                 return defer.promise;

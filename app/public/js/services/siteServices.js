@@ -105,6 +105,7 @@ angular.module("BossCollection.services")
                 $mdToast.show($mdToast.simple()
                     .textContent(message)
                     .hideDelay(4000))
+                    .action('X')
             }
 
             function hideLoadingModal() {
@@ -146,6 +147,9 @@ angular.module("BossCollection.services")
 
                 if (error.data) {
                     message = error.data.message;
+                }
+                else if (typeof error === "string") {
+                    message = error;
                 }
                 else {
                     message = error.message;
