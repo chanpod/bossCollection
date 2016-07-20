@@ -135,7 +135,7 @@ function getUserApplications(req, res) {
         date.month((date.month() - 2))
     }
 
-    ApplicationModel.find({guild: req.session.user.guild.name, user: user, dateApplied: {
+    ApplicationModel.find({user: user, dateApplied: {
             $gte: date.toISOString()
         }})
         .then(function (applications) {
