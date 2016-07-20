@@ -80,7 +80,8 @@ angular.module("BossCollection.services")
                 $mdBottomSheet.hide();
             }
 
-            function showMessageModal(message, title) {
+            function showMessageModal(message, title) { 
+                $mdDialog.hide();
                 $mdDialog.show(
                     $mdDialog.alert()
                         .clickOutsideToClose(false)
@@ -101,26 +102,9 @@ angular.module("BossCollection.services")
 
             function showMessageToast(message) {
                 
-                var toast = $mdToast.simple()
+                $mdToast.show($mdToast.simple()
                     .textContent(message)
-                    .action('X')
-                    .position("bottom")
-                    .hideDelay(4000)
-
-                if (!isToastOpen) {
-                    isToastOpen = true;
-                    $mdToast.show(toast)
-                        .then(response => {
-                            console.log("CLosing");
-                            $mdToast.hide();
-                            isToastOpen = false;
-                        })
-                }
-                else {
-
-                    $mdToast.hide();
-                    isToastOpen = false;
-                }
+                    .hideDelay(4000))
             }
 
             function hideLoadingModal() {
@@ -169,10 +153,10 @@ angular.module("BossCollection.services")
 
                 if (typeof message === "string") {
 
-                    showMessageModal(message);
+                    showMessageToast(message);
                 }
                 else {
-                    showMessageModal(defaultError);
+                    showMessageToast(defaultError);
                 }
             }
 

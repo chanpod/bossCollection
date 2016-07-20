@@ -7,9 +7,16 @@ var CategoryManager = require('./components/categoryManager');
 var GuildManager = require('../guild/components/guild/guild-manager.js');
 var util = require('utility');
 
-router.use(function (req, res, next) {
+router.use(function(req, res, next) {
     
-    next();
+    var errMessage = "You must be logged in and a part of a guild to use this";
+    var allowedUrl = "/guild/guildHomepage";
+    var loginUrl = "/login";
+    var logoutUrl = "/logout";
+    
+
+ next();
+    
 })
 
 //=======Comment Routes ================

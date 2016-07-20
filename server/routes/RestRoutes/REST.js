@@ -8,31 +8,7 @@ var util = require('utility');
 
 router.use(function(req, res, next) {
     
-    var errMessage = "You must be logged in and a part of a guild to use this";
-    var allowedUrl = "/guild/guildHomepage";
-    var loginUrl = "/login";
-    var logoutUrl = "/logout";
-
-    if (!req.url.match(allowedUrl) && req.method != "GET" && !req.url.match(loginUrl) && !req.url.match(logoutUrl)) {
-
-        try{
-
-            if (req.session.user.guild.members[0].approved == true) {
-                next();
-            }
-            else {
-
-                throw new Error("Unauthorized");
-            }
-        }
-        catch(err){
-            res.status(400).send(util.handleErrors(err));
-        }
-    }
-    else {
-
-        next();
-    }
+   next();
     
 })
 

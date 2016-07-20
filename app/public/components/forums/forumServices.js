@@ -380,13 +380,13 @@ angular.module("BossCollection.forums")
                 var defer = $q.defer();
                 
                 if(thread == undefined){
-                    getThreadResource.save({threadID:threadID}).$promise
+                    getThreadResource.save({threadID:threadID}).$promise 
                         .then(function(threadData){
                             
                             defer.resolve(threadData);
                         })
                         .catch(function (err) {
-                            siteServices.showMessageModal(err.data.message);
+                            siteServices.handleError(err);
                             defer.reject(err);
                         })
                         .finally(function () {
