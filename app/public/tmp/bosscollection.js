@@ -2206,7 +2206,7 @@ angular.module("BossCollection.attendance").controller("absenceSubmissionsContro
          */
         self.viewing = 0;
         self.updateSelectedMember = function(newMember) {
-            if (newMember != $scope.selectedMember) {
+            if (newMember != $scope.selectedMember && newMember != undefined) {
                 self.getUserAbsences(newMember.user);
             }
         };
@@ -2327,7 +2327,11 @@ angular.module("BossCollection.attendance").controller("absenceSubmissionsContro
             if (userName == $scope.user.name) {
                 self.currentlySelected = MYABSENCES;
             } else {
-                self.currentlySelected = userName + "'s Absences";
+                if (userName != undefined) {
+                    self.currentlySelected = userName + "'s Absences";
+                } else {
+                    self.currentlySelected = "No one selected";
+                }
             }
             self.loading = true;
             absenceService.getUsersAbsences(userName).then(function(absences) {
@@ -3117,6 +3121,68 @@ angular.module("BossCollection.guild").controller("guildSettingsController", ["$
  * @class Controllers
  * @constructor No Controller
  */
+angular.module("BossCollection.guild").controller("joinGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', '$mdDialog',
+    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, $mdDialog) {
+        $scope.listOfGuilds = [];
+        $scope.loading = false;
+        siteServices.updateTitle('Join Guild');
+        $scope.init = function() {
+            $scope.getGuilds();
+        };
+        $scope.filterSearch = function(filterSearch) {
+            return $filter('filter')($scope.listOfGuilds, filterSearch);
+        };
+        $scope.getGuilds = function() {
+            guildServices.getListOfGuilds().then(function(guilds) {
+                $scope.listOfGuilds = guilds;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            });
+        };
+        $scope.selectedItemChange = function(item) {
+            console.log("Item changed: " + item);
+        };
+        $scope.joinGuild = function() {
+            $scope.loading = true;
+            if ($scope.guildName) {
+                guildServices.joinGuild($scope.guildName.name, $scope.user.name).then(function(guild) {
+                    $scope.succesfullyJoinedGuild();
+                }).
+                catch (function(err) {
+                    siteServices.handleError(err);
+                }).
+                finally(function() {
+                    $scope.loading = false;
+                });
+            } else {
+                siteServices.handleError("Guild doesn't exist");
+                $scope.loading = false;
+            }
+        };
+        $scope.succesfullyJoinedGuild = function() {
+            $mdDialog.show($mdDialog.alert().clickOutsideToClose(false).title("Success!").textContent("You will be able to access the guild services once you've been approved.").ariaLabel('message popup').ok('Got it!').openFrom({
+                left: -50,
+                width: 30,
+                height: 80
+            }).closeTo({
+                right: 1500
+            })).then(function() {
+                $scope.isLoading = false;
+                userLoginSrvc.refreshUserFromServer();
+                $location.path('/');
+            }, function() {});
+        };
+        $scope.init();
+    }
+]);
+'use strict';
+/**
+ * This is the description for my class.
+ *
+ * @class Controllers
+ * @constructor No Controller
+ */
 angular.module("BossCollection.guild").controller("manageMembersController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', 'permissionsService',
     function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, permissionsService) { //user comes from parent controller navbar
         $scope.guildMembers;
@@ -3245,104 +3311,6 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
         };
         $scope.init();
         siteServices.updateTitle('Manage Members');
-    }
-]);
-'use strict';
-/**
- * This is the description for my class.
- *
- * @class Controllers
- * @constructor No Controller
- */
-angular.module("BossCollection.guild").controller("joinGuildController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', '$mdDialog',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, $mdDialog) {
-        $scope.listOfGuilds = [];
-        $scope.loading = false;
-        siteServices.updateTitle('Join Guild');
-        $scope.init = function() {
-            $scope.getGuilds();
-        };
-        $scope.filterSearch = function(filterSearch) {
-            return $filter('filter')($scope.listOfGuilds, filterSearch);
-        };
-        $scope.getGuilds = function() {
-            guildServices.getListOfGuilds().then(function(guilds) {
-                $scope.listOfGuilds = guilds;
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            });
-        };
-        $scope.selectedItemChange = function(item) {
-            console.log("Item changed: " + item);
-        };
-        $scope.joinGuild = function() {
-            $scope.loading = true;
-            if ($scope.guildName) {
-                guildServices.joinGuild($scope.guildName.name, $scope.user.name).then(function(guild) {
-                    $scope.succesfullyJoinedGuild();
-                }).
-                catch (function(err) {
-                    siteServices.handleError(err);
-                }).
-                finally(function() {
-                    $scope.loading = false;
-                });
-            } else {
-                siteServices.handleError("Guild doesn't exist");
-                $scope.loading = false;
-            }
-        };
-        $scope.succesfullyJoinedGuild = function() {
-            $mdDialog.show($mdDialog.alert().clickOutsideToClose(false).title("Success!").textContent("You will be able to access the guild services once you've been approved.").ariaLabel('message popup').ok('Got it!').openFrom({
-                left: -50,
-                width: 30,
-                height: 80
-            }).closeTo({
-                right: 1500
-            })).then(function() {
-                $scope.isLoading = false;
-                userLoginSrvc.refreshUserFromServer();
-                $location.path('/');
-            }, function() {});
-        };
-        $scope.init();
-    }
-]);
-angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil', 'siteServices',
-    function(guildServices, $filter, $mdUtil, siteServices) {
-        return {
-            restrict: 'E',
-            scope: {
-                guild: "=guild",
-                selectedMember: "=selectedMember"
-            },
-            link: function link($scope) {
-                $scope.userSelected = function() {};
-                $scope.getGuildUsers = function() {
-                    $scope.loading = true;
-                    console.log($scope.guild);
-                    guildServices.getGuildMembers($scope.guild).then(function(users) {
-                        $scope.users = users;
-                    }).
-                    catch (function(err) {
-                        if (err == "You don't have sufficient priveleges.") {
-                            console.log(err);
-                        } else {
-                            siteServices.handleError(err);
-                        }
-                    }).
-                    finally(function() {
-                        $scope.loading = false;
-                    });
-                };
-                $scope.filterSearch = function(filterSearch) {
-                    return $filter('filter')($scope.users, filterSearch);
-                };
-                $scope.getGuildUsers();
-            },
-            templateUrl: 'listGuildMembersTemplate'
-        };
     }
 ]);
 'use strict';
@@ -3495,6 +3463,104 @@ angular.module("BossCollection.guild").controller("applicationController", ["$sc
  *
 
  */
+angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
+    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
+        siteServices.updateTitle('View Applications');
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
+        $scope.loading = true;
+        $scope.numOfNewApplicants = 0;
+        $scope.startDate = moment();
+        $scope.startDate.month($scope.startDate.month() - 2);
+        $scope.startDate = $scope.startDate.toDate();
+        $scope.filterStatus = function(status) {
+            return function(application) {
+                return application.status == status;
+            };
+            /**
+                var filteredArray = _.filter($scope.applications, function(application){
+                    return application.status == status;
+                })
+                
+                return filteredArray;
+                 */
+        };
+        $scope.approveApplicant = function(application) {
+            guildServices.approveApplication(application).then(function() {
+                application.status = "Approved";
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
+            finally(function() {});
+        };
+        $scope.rejectApplicant = function(application) {
+            guildServices.rejectApplication(application).then(function() {
+                application.status = "Rejected";
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
+            finally(function() {});
+        };
+        $scope.getClassName = function(application) {
+            return application.character.class.toLowerCase();
+        };
+        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
+            $mdDialog.show({
+                templateUrl: "appDetails",
+                controller: 'appDetailsController',
+                parent: angular.element(document.body),
+                clickOutsideToClose: false,
+                locals: {
+                    data: application
+                },
+                fullscreen: true
+            });
+        };
+        $scope.openMenu = function($mdOpenMenu, ev) {
+            $mdOpenMenu(ev);
+        };
+        $scope.goTo = function(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+        $scope.buildArmoryUrl = function(realm, character) {
+            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+            $scope.goTo(url);
+        };
+        $scope.getApplications = function() {
+            guildServices.getApplications($scope.startDate).then(function(applications) {
+                $scope.loading = false;
+                $scope.applications = applications.applications; //object to array
+                var newApplicants = _.find($scope.applications, function(applicant) {
+                    return applicant.status == "Applied";
+                });
+                if (newApplicants != undefined) {
+                    $scope.numOfNewApplicants = 1;
+                }
+                convertClasses();
+            }, function(err) {
+                $scope.loading = false;
+                console.log(err);
+                siteServices.handleError("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
+            });
+        };
+
+        function convertClasses() {
+            for (var i = 0; i < $scope.applications.length; i++) {
+                var classType = classes[$scope.applications[i].character.class];
+                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+            }
+        }
+        $scope.getApplications();
+    }
+]);
+'use strict';
+/**
+ 
+ *
+
+ */
 angular.module("BossCollection.guild").controller("myApplicationsCtrl", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
     function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
         siteServices.updateTitle('View Applications');
@@ -3597,102 +3663,40 @@ angular.module("BossCollection.guild").controller("myApplicationsCtrl", ["$scope
         $scope.getApplications();
     }
 ]);
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild").controller("applicationsReviewController", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
-    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
-        siteServices.updateTitle('View Applications');
-        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
-        $scope.loading = true;
-        $scope.numOfNewApplicants = 0;
-        $scope.startDate = moment();
-        $scope.startDate.month($scope.startDate.month() - 2);
-        $scope.startDate = $scope.startDate.toDate();
-        $scope.filterStatus = function(status) {
-            return function(application) {
-                return application.status == status;
-            };
-            /**
-                var filteredArray = _.filter($scope.applications, function(application){
-                    return application.status == status;
-                })
-                
-                return filteredArray;
-                 */
+angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil', 'siteServices',
+    function(guildServices, $filter, $mdUtil, siteServices) {
+        return {
+            restrict: 'E',
+            scope: {
+                guild: "=guild",
+                selectedMember: "=selectedMember"
+            },
+            link: function link($scope) {
+                $scope.userSelected = function() {};
+                $scope.getGuildUsers = function() {
+                    $scope.loading = true;
+                    console.log($scope.guild);
+                    guildServices.getGuildMembers($scope.guild).then(function(users) {
+                        $scope.users = users;
+                    }).
+                    catch (function(err) {
+                        if (err == "You don't have sufficient priveleges.") {
+                            console.log(err);
+                        } else {
+                            siteServices.handleError(err);
+                        }
+                    }).
+                    finally(function() {
+                        $scope.loading = false;
+                    });
+                };
+                $scope.filterSearch = function(filterSearch) {
+                    return $filter('filter')($scope.users, filterSearch);
+                };
+                $scope.getGuildUsers();
+            },
+            templateUrl: 'listGuildMembersTemplate'
         };
-        $scope.approveApplicant = function(application) {
-            guildServices.approveApplication(application).then(function() {
-                application.status = "Approved";
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            }).
-            finally(function() {});
-        };
-        $scope.rejectApplicant = function(application) {
-            guildServices.rejectApplication(application).then(function() {
-                application.status = "Rejected";
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            }).
-            finally(function() {});
-        };
-        $scope.getClassName = function(application) {
-            return application.character.class.toLowerCase();
-        };
-        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
-            $mdDialog.show({
-                templateUrl: "appDetails",
-                controller: 'appDetailsController',
-                parent: angular.element(document.body),
-                clickOutsideToClose: false,
-                locals: {
-                    data: application
-                },
-                fullscreen: true
-            });
-        };
-        $scope.openMenu = function($mdOpenMenu, ev) {
-            $mdOpenMenu(ev);
-        };
-        $scope.goTo = function(url) {
-            var win = window.open(url, '_blank');
-            win.focus();
-        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
-        $scope.buildArmoryUrl = function(realm, character) {
-            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
-            $scope.goTo(url);
-        };
-        $scope.getApplications = function() {
-            guildServices.getApplications($scope.startDate).then(function(applications) {
-                $scope.loading = false;
-                $scope.applications = applications.applications; //object to array
-                var newApplicants = _.find($scope.applications, function(applicant) {
-                    return applicant.status == "Applied";
-                });
-                if (newApplicants != undefined) {
-                    $scope.numOfNewApplicants = 1;
-                }
-                convertClasses();
-            }, function(err) {
-                $scope.loading = false;
-                console.log(err);
-                siteServices.handleError("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-            });
-        };
-
-        function convertClasses() {
-            for (var i = 0; i < $scope.applications.length; i++) {
-                var classType = classes[$scope.applications[i].character.class];
-                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
-            }
-        }
-        $scope.getApplications();
     }
 ]);
 angular.module("BossCollection.forums").controller('appDetailsController', ['$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',

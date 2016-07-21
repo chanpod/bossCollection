@@ -160,13 +160,7 @@ function getGuildMembers(req, res) {
 
             if (guild) {
 
-                if (isAdmin(members, req.session.user.name)) {
-
-                    defer.resolve({ members: members })
-                }
-                else {
-                    throw new Error("You don't have sufficient priveleges.")
-                }
+                defer.resolve({ members: members })
             }
             else {
                 throw new Error("You don't belong to a guild.")
@@ -211,10 +205,10 @@ function addMember(req, res) {
             var indexOfMember = doesMemberExist(guild.members, memberName);
             if (indexOfMember != -1) {
 
-                throw new Error("You are already a part of this guild.");                
+                throw new Error("You are already a part of this guild.");
             }
 
-            let lowestRank = 0;            
+            let lowestRank = 0;
 
             _.forEach(guild.ranks, (rank, index) => {
 
@@ -424,8 +418,8 @@ function isOfficer(userName) {
 
             let isOfficer = false;
 
-            if(member.officer || member.GM){
-                
+            if (member.officer || member.GM) {
+
                 isOfficer = true;
             }
 
