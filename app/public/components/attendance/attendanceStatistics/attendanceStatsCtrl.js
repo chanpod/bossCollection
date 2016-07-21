@@ -18,6 +18,8 @@ angular.module("BossCollection.attendance")
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
         $scope.startingDate = new Date();
+        $scope.abscenceTypeOpen = false;
+        $scope.selectedMode = 'md-fling';
         
         $scope.init = function(){
             

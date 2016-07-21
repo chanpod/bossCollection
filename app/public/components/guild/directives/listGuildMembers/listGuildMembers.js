@@ -6,11 +6,12 @@ angular.module("BossCollection.guild")
             scope: {
                 guild: "=guild",
                 selectedMember: "=selectedMember"
+                
             },
             link: function ($scope) {
 
-                $scope.userSelected = function () {
-                    //Don't care?   
+                $scope.userSelected = function () { 
+                    
                 }
 
                 $scope.getGuildUsers = function () {

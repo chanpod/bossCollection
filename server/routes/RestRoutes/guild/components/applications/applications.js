@@ -120,7 +120,7 @@ function deleteApplication(req, res) {
 function getUserApplications(req, res) {
 
     var defer = q.defer();
-    console.log("Getting applications...");
+    console.log("Getting applications..."); 
 
 
     var user = req.params.user;

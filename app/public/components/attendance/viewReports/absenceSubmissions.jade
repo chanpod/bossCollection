@@ -5,24 +5,49 @@ script#absenceSubmissions(type="text/ng-template")
         section(layout="column")
             div(flex) 
                 
-                div(flex, layout = "column", layout-xs = "column", layout-align = "center start")
-                    md-datepicker(md-open-on-focus, flex, ng-model = "absenceReportCtrl.dayDesired", ng-change = "absenceReportCtrl.updateList()", md-placeholder="Select Date")
-                    div(layout = "row", layout-xs = "column")
-                        md-button(ng-click = "absenceReportCtrl.getAbsences()").md-primary.md-raised
-                            | Future Absences
-                        md-button( ng-click = "absenceReportCtrl.getUserAbsences(user.name)").md-primary.md-raised
-                            | My absences
-                        md-button( ng-click = "absenceReportCtrl.getTodaysAbsences()").md-primary.md-raised
-                            | Today
+                div(flex, layout = "column", layout-xs = "column", layout-align = "center start")                    
+                    md-fab-speed-dial(md-open = "absenceReportCtrl.abscenceTypeOpen", md-direction = "right", ng-class="absenceReportCtrl.selectedMode")
+                            md-fab-trigger()
+                                md-button().md-fab.md-primary
+                                    md-icon(md-font-library="material-icons", aria-label = "edit absence") menu
+                            md-fab-actions()
+                                md-button( ng-click = "absenceReportCtrl.getUserAbsences(user.name)").md-fab.md-raised.md-mini
+                                    md-icon(md-font-library="material-icons", aria-label = "edit absence") person
+                            
+                                md-button( ng-click = "absenceReportCtrl.getTodaysAbsences()").md-fab.md-raised.md-mini
+                                    md-icon(md-font-library="material-icons", aria-label = "edit absence") today
+                            
+                                md-button( ng-click = "absenceReportCtrl.getAbsences()").md-fab.md-raised.md-mini
+                                    md-icon(md-font-library="material-icons", aria-label = "edit absence") access_time
+                                md-button(ng-click = "openReportModal()").md-fab.md-raised.md-mini                                
+                                    md-icon(md-font-library="material-icons", aria-label = "edit absence") add
+
+                    
                 md-divider
-                div(flex, layout = "column")
-                    list-guild-members(selected-member = "selectedMember", guild = "user.guild.name")
+                div(flex, layout = "column", layout-align = "center center")
+                    
+                    div()
+                        md-datepicker(md-open-on-focus, flex, ng-model = "absenceReportCtrl.dayDesired", ng-change = "absenceReportCtrl.updateList()", md-placeholder="Select Date")
+                        h3 OR
+                        div(layout-gt-xs="row", ng-if = "!gm") 
+                            
+                            md-progress-circular(md-mode = "indeterminate", ng-show = "absenceReportCtrl.loading")
+                            md-autocomplete(md-min-length = "0",
+                                        md-item-text = "user.user",
+                                        md-selected-item = "absenceReportCtrl.selectedMember.selectedMember",                                    
+                                        md-search-text = "userSearch",
+                                        md-floating-label = "Select User",
+                                        md-items = "user in absenceReportCtrl.filterSearch(userSearch)",                                
+                                        md-selected-item-change="absenceReportCtrl.updateSelectedMember(user)"
+                                        flex = "40")
+                                md-item-template
+                                    span(md-highlight-text = "userSearch") {{user.user}}
                     div(flex)
                         h2
                             | {{absenceReportCtrl.currentlySelected | date: 'dddd'}}
                     
                     div(layout-gt-sm = "column")
-                        md-card(flex-gt-md = "50", ng-repeat = "absence in absenceReportCtrl.absences | orderBy: 'date'")
+                        md-card(flex-gt-md, ng-repeat = "absence in absenceReportCtrl.absences | orderBy: 'date'")
                             md-card-content
                                 h3
                                     md-icon(md-font-library="material-icons") person &nbsp

@@ -1,21 +1,25 @@
 script#absence(type="text/ng-template")    
-    md-content()
-        section(flex = "80")
+    md-content(layout = "column", layout-align = "center center")
+        div(layout, layout-align = "center center")
+            h2
+                | New Report
+        section(flex)
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row")
+                div(layout-gt-xs="row", ng-if = "!gm")
                     md-progress-circular(md-mode = "indeterminate", ng-show = "loading")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
                                 md-selected-item = "reportAbsenceCtrl.selectedUser",                                    
-                                md-search-text = "user",
+                                md-search-text = "userSearch",
                                 md-floating-label = "Select User",
-                                md-items = "user in filterSearch(user)",                                
+                                md-items = "user in filterSearch(userSearch)",                                
                                 md-autofocus = true,
-                                ng-disabled = "gm", 
+                                ng-disabled = "gm",
+                                 
                                 ng-cloak,                               
                                 flex = "40")
                         md-item-template
-                            span(md-highlight-text = "user") {{user.user}}
+                            span(md-highlight-text = "userSearch") {{user.user}}
                         
                 md-datepicker(md-open-on-focus, ng-model = "newAbsence.date", md-placeholder="Select date", required).datePickerAdjust
                 
@@ -25,7 +29,7 @@ script#absence(type="text/ng-template")
                             | Late
                         md-radio-button(value="absent") 
                             | Absent
-                md-input-container(flex-gt-md = "70").md-block
+                md-input-container(flex-gt-md).md-block
                     label(for="reason") Reason...   
                     textarea(id = "reason", required = "required", ng-model = "newAbsence.reason")
                 div(layout)

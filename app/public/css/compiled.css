@@ -275,24 +275,6 @@
   min-width: 50%;
   min-height: 50%; }
 
-.read {
-  border-left: 15px solid gray; }
-
-.unread {
-  border-left: 15px solid green; }
-
-.favorite {
-  color: green; }
-
-.forumCategoryTitle {
-  flex: 1;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap; }
-
-.modalPadding {
-  padding: 10px; }
-
 .warning {
   background-color: red !important; }
 
@@ -349,6 +331,24 @@
     color: white;
     font-size: 25px;
     text-shadow: 2px 2px black; } }
+
+.read {
+  border-left: 15px solid gray; }
+
+.unread {
+  border-left: 15px solid green; }
+
+.favorite {
+  color: green; }
+
+.forumCategoryTitle {
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; }
+
+.modalPadding {
+  padding: 10px; }
 
 .avatarImage {
   width: 50px;

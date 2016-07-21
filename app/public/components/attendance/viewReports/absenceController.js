@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter) {
+    .controller("absenceSubmissionsController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices) {
 
             var currentDay = moment().day();
             var self = this;
@@ -17,35 +17,68 @@ angular.module("BossCollection.attendance")
             self.today = moment();
             self.dayDesired;
             self.currentlySelected = moment().format('dddd - Do');
-            self.selectedMember = undefined;
+            self.selectedMember = {};
+            self.abscenceTypeOpen = false;
+            self.selectedMode = 'md-fling';
 
             var ALLFUTUREABSENCES = "All Future Absences";
             var TODAY = "Today";
             var MYABSENCES = "My Abscences";
             var MEMBERSABSENCES
 
+
             /**
              * 0 = all future absences
              * 1 = specific date
              */
             self.viewing = 0;
-
-            $scope.$watch('selectedMember', function(newMember) {
-
-                if (newMember) {                    
+            
+            self.updateSelectedMember = (newMember) => {
+                if (newMember != $scope.selectedMember) {                    
                     
                     self.getUserAbsences(newMember.user);
                 }
-            })
-            
+            }
+
             self.init = function() {
 
                 self.getAbsences()
 
                 self.currentlySelected = ALLFUTUREABSENCES;
                 self.isToolSetOpen = false;
+                self.getGuildUsers();
 
             }
+
+             self.getGuildUsers = function () {
+
+                    self.loading = true;
+
+                    guildServices.getGuildMembers($scope.user.guild.name)
+                        .then(function (users) {
+
+                            self.users = users;
+                        })
+                        .catch(function (err) {
+                            
+                            if (err == "You don't have sufficient priveleges.") {
+                                console.log(err);
+                            }
+                            else {
+
+                                siteServices.handleError(err);
+                            }
+                        })
+                        .finally(function () {
+
+                            self.loading = false;
+                        })
+                }
+
+                self.filterSearch = function (filterSearch) {
+
+                    return $filter('filter')(self.users, filterSearch);
+                }
 
             self.showContent = function() {
                 self.showContentBool = true;
