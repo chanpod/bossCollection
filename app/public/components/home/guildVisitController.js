@@ -22,7 +22,7 @@ angular.module("BossCollection.home")
 
                 $scope.guildImagesLoaded = false;
 
-                guildServices.getHomepageContent($scope.user.guild.name)
+                guildServices.getHomepageContent(guildName)
                         .then(function (guild) {
 
                             $scope.guild = guild.guild;
