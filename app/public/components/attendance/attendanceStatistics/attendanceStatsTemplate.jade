@@ -39,7 +39,7 @@ script#attendanceStats(type="text/ng-template")
                                         input(type = "number", ng-model = "raidsPerWeek")
                                 div(flex)
                                     md-hint() Defaults to today
-                                    md-datepicker(ng-model = "startingDate", md-placeholder="Start Date", required).datePickerAdjust
+                                    md-datepicker(md-open-on-focus, ng-model = "startingDate", md-placeholder="Start Date", required).datePickerAdjust
                             div()
                                 md-button(ng-click = "getAbsences()").md-raised.md-primary
                                     md-icon(md-font-library="material-icons") refresh

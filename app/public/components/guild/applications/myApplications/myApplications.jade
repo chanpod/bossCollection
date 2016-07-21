@@ -4,7 +4,7 @@ script#myApplications(type="text/ng-template")
         div(layout, layout-align = "center center")
             div(layout, flex, layout-align = "center center")
                 h3() From
-                md-datepicker(ng-model = "startDate", md-placeholder="Select date", ng-change = "getApplications()")
+                md-datepicker(md-open-on-focus, ng-model = "startDate", md-placeholder="Select date", ng-change = "getApplications()")
             div(layout, flex, layout-align = "center center")
                 h3 To Today    
         section(layout-xs="column", layout="row")

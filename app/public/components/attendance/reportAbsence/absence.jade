@@ -17,7 +17,7 @@ script#absence(type="text/ng-template")
                         md-item-template
                             span(md-highlight-text = "user") {{user.user}}
                         
-                md-datepicker(ng-model = "newAbsence.date", md-placeholder="Select date", required).datePickerAdjust
+                md-datepicker(md-open-on-focus, ng-model = "newAbsence.date", md-placeholder="Select date", required).datePickerAdjust
                 
                 div(layout-gt-xs="row").radioButtonFix
                     md-radio-group(ng-model="newAbsence.type", required)
