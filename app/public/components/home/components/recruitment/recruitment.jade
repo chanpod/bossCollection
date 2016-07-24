@@ -6,7 +6,7 @@ script#recruitmentTemplate(type="text/ng-template")
                 md-button(ng-click = "editRecruitment()").md-raised.md-primary
                     | Edit
         div(layout = "column")     
-            div(layout)   
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -17,19 +17,25 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/deathknight.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/deathknight/blood.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 1                                    
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/blood.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 1                                   
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/deathknight/frost.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | H
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/frost.png").md-card-imageself.getComments
                                     span()
                                         | 0
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/deathknight/unholy.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | N
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/unholy.png").md-card-imageself.getComments
                                     span()
                                         | 3
                                 
@@ -43,22 +49,28 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/mage.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/mage/arcane.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/arcane.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/mage/frost.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/frost.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/mage/fire.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/fire.png").md-card-imageself.getComments
                                     span()
-                                        | 10
-            div(layout)   
+                                        | 5
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -69,51 +81,59 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/hunter.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/hunter/marksman.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/marksman.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/hunter/beastmastery.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/beastmastery.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/hunter/survival.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/survival.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Druid
+                                    | Monk
                                 span(ng-if = "true", class = "md-subhead")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
-                                img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/druid.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex).card-media
+                                img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/monk.png").md-card-imageself.getComments
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/druid/balance.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/brewmaster.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/druid/feral.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/mistweaver.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/druid/guardian.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/windwalker.png").md-card-imageself.getComments
                                     span()
-                                        | 10
-                                div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/druid/restoration.png").md-card-imageself.getComments
-                                    span()
-                                        | 10
-            div(layout)   
+                                        | 5
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -124,21 +144,27 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/paladin.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/paladin/holy.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/holy.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/paladin/retribution.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/retribution.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/paladin/protection.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/protection.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -149,22 +175,28 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/priest.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/priest/holy.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/holy.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/priest/discipline.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/discipline.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/priest/shadow.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/shadow.png").md-card-imageself.getComments
                                     span()
-                                        | 10
-            div(layout)   
+                                        | 5
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -175,21 +207,27 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/rogue.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/rogue/subtlety.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/subtlety.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/rogue/combat.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/combat.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/rogue/assassination.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/assassination.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
             
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
@@ -201,22 +239,28 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/shaman.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/shaman/elemental.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/elemental.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/shaman/enhancement.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/enhancement.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/shaman/restoration.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/restoration.png").md-card-imageself.getComments
                                     span()
-                                        | 10
-            div(layout)   
+                                        | 5
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -227,21 +271,27 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/warlock.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/warlock/affliction.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/affliction.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/warlock/demonology.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/demonology.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/warlock/destruction.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/destruction.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
             
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
@@ -253,22 +303,28 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/warrior.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/warrior/arms.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/arms.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/warrior/fury.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/fury.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/warrior/protection.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/protection.png").md-card-imageself.getComments
                                     span()
-                                        | 10
-            div(layout)   
+                                        | 5
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -279,43 +335,61 @@ script#recruitmentTemplate(type="text/ng-template")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
+                            div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/demonhunter.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/demonhunter/havoc.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/havoc.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/demonhunter/vengeance.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/vengeance.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 
+                
+                
+            div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Monk
+                                    | Druid
                                 span(ng-if = "true", class = "md-subhead")
                                     | Any Spec - 2
                             md-card-title-media()
                         md-card-content(layout)
-                            div().md-media-lg.card-media
-                                img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/monk.png").md-card-imageself.getComments
-                            div(layout = "column", layout-align = "center space-between")
+                            div(flex).card-media
+                                img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/druid.png").md-card-imageself.getComments
+                            div(flex, layout = "column", layout-align = "end space-between")
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/monk/brewmaster.png").md-card-imageself.getComments
                                     span(layout-align = "center center")
-                                        | 10
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/balance.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/monk/mistweaver.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/feral.png").md-card-imageself.getComments
                                     span()
-                                        | 10
+                                        | 5
                                 div(flex, layout, layout-align = "center center")
-                                    img(style = "width: 75%;height: 75%;" src="images/classIcons/images/spec/monk/windwalker.png").md-card-imageself.getComments
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/guardian.png").md-card-imageself.getComments
                                     span()
-                                        | 10
-                
+                                        | 5
+                                div(flex, layout, layout-align = "center center")
+                                    span(layout-align = "center center")
+                                        | M
+                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/restoration.png").md-card-imageself.getComments
+                                    span()
+                                        | 5
 
   

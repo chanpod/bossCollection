@@ -3,7 +3,7 @@ angular.module("BossCollection.home")
     .controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
              
-             console.log("Get recruitment object");
+             console.log("Get recruitment object");             
 
              $scope.init = () => {
 
@@ -36,8 +36,6 @@ angular.module("BossCollection.home")
                             
                             //Something broke or they canceled
                         })
-
-                
             }
 
             $scope.getRecruitment = () => {
