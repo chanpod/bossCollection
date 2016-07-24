@@ -1,12 +1,15 @@
 script#recruitmentTemplate(type="text/ng-template")
     section(layout = "column", layout-align = "center center")
-        h2
-            |  Recruitment Needs
-            span(ng-if = "isOfficer()")
+        md-toolbar
+            md-toolbar-tools(layout, layout-align = "center center")
                 
-        div(layout = "column")     
+                h2
+                    |  Recruitment Needs
+            
+                
+        div(layout = "column", ng-if = "!loading")     
             div(layout = "column", layout-gt-sm = "row")   
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -24,17 +27,18 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.deathknight.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.deathknight.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}} 
+                                        div(ng-show = "!recruitment.recruitmentNeeds.deathknight.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.deathknight.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}} 
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.deathknight)").md-raised.md-primary
                                 | Edit
                                 
                                 
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -51,17 +55,18 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.mage.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.mage.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.mage.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.mage.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.mage)").md-raised.md-primary
                                 | Edit
 
             div(layout = "column", layout-gt-sm = "row")   
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -78,16 +83,17 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.hunter.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.hunter.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.hunter.anySpec")                                            
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.hunter.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.hunter)").md-raised.md-primary
                                 | Edit
 
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -104,17 +110,18 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.monk.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.monk.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.monk.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.monk.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.monk)").md-raised.md-primary
                                 | Edit
 
             div(layout = "column", layout-gt-sm = "row")   
-                section()
+                section(flex)
 
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
@@ -134,16 +141,17 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.paladin.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.paladin.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.paladin.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.paladin.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.paladin)").md-raised.md-primary
                                 | Edit
 
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -163,17 +171,18 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.priest.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.priest.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.priest.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.priest.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.priest)").md-raised.md-primary
                                 | Edit
 
             div(layout = "column", layout-gt-sm = "row")   
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -193,16 +202,17 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.rogue.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.rogue.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.rogue.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.rogue.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.rogue)").md-raised.md-primary
                                 | Edit
             
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -222,16 +232,17 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.shaman.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.shaman.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.shaman.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.shaman.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.shaman)").md-raised.md-primary
                                 | Edit
             div(layout = "column", layout-gt-sm = "row")   
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -251,16 +262,17 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.warlock.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.warlock.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.warlock.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.warlock.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.warlock)").md-raised.md-primary
                                 | Edit
             
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -280,17 +292,18 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.warrior.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.warrior.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.warrior.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.warrior.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.warrior)").md-raised.md-primary
                                 | Edit
 
             div(layout = "column", layout-gt-sm = "row")   
-                section()
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -310,19 +323,20 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.demonhunter.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.demonhunter.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.demonhunter.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.demonhunter.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.demonhunter)").md-raised.md-primary
                                 | Edit
                                 
                 
                 
-            div(layout = "column", layout-gt-sm = "row")   
-                section()
+               
+                section(flex)
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
@@ -342,12 +356,13 @@ script#recruitmentTemplate(type="text/ng-template")
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.druid.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
                                         img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/{{spec.spec}}.png").md-card-imageself.getComments
-                                        span(layout-align = "center center")
-                                            | {{spec.desire}} 
-                                        span(ng-if = "!recruitment.recruitmentNeeds.druid.anySpec", layout-align = "center center")
-                                            | &nbsp- {{spec.amount}}
+                                        div(ng-show = "!recruitment.recruitmentNeeds.druid.anySpec")
+                                            span(layout-align = "center center")
+                                                | {{spec.desire}} 
+                                            span(ng-if = "!recruitment.recruitmentNeeds.druid.anySpec", layout-align = "center center")
+                                                | &nbsp- {{spec.amount}}
 
-                        md-card-actions()
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.druid)").md-raised.md-primary
                                 | Edit
 

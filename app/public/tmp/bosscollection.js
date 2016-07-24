@@ -3714,11 +3714,18 @@ angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServ
         };
     }
 ]);
-angular.module("BossCollection.home").controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
+angular.module("BossCollection.home").controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', '$routeParams', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
+    function($scope, $location, $http, $timeout, $routeParams, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
         console.log("Get recruitment object");
+        $scope.loading = true;
+        $scope.savedRecruitment = {};
         $scope.desireOptions = ["High", "Med", "Low", "None"];
         $scope.init = function() {
+            if ($scope.user) {
+                $scope.guildName = $scope.user.guild.name;
+            } else {
+                $scope.guildName = $routeParams.guildName;
+            }
             $scope.getRecruitment();
         };
         $scope.editRecruitment = function(classObject) {
@@ -3727,6 +3734,7 @@ angular.module("BossCollection.home").controller("recruitmentController", ["$sco
             var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
             $scope.selectedClass = classObject;
+            angular.copy($scope.recruitment, $scope.savedRecruitment);
             $mdDialog.show({
                 templateUrl: template,
                 locals: {
@@ -3751,33 +3759,47 @@ angular.module("BossCollection.home").controller("recruitmentController", ["$sco
             });
         };
         $scope.cancel = function() {
+            angular.copy($scope.savedRecruitment, $scope.recruitment);
+            $mdDialog.hide();
+        };
+        $scope.close = function() {
             $mdDialog.hide();
         };
         $scope.getRecruitment = function() {
-            guildServices.getRecruitment($scope.user.guild.name).then(function(recruitment) {
+            $scope.loading = true;
+            guildServices.getRecruitment($scope.guildName).then(function(recruitment) {
                 console.log(recruitment);
                 $scope.recruitment = recruitment.recruitment;
             }).
             catch (function(err) {
                 console.log(err);
                 siteServices.handleError(err);
+            }).
+            finally(function() {
+                $scope.loading = false;
             });
         };
         $scope.saveRecruitment = function() { //guildName, recruitment
             guildServices.updateRecruitment($scope.user.guild.name, $scope.recruitment).then(function(recruitment) {
                 console.log(recruitment);
                 $scope.recruitment = recruitment;
+                $scope.close();
             }).
             catch (function(err) {
                 console.log(err);
                 siteServices.handleError(err);
+            }).
+            finally(function() {
+                siteServices.successfulUpdate();
             });
         };
         $scope.getRecruitmentSpecTyle = function(classType) {
-            if (classType.anySpec) {
-                return "Any Spec ";
-            } else {
-                return "Amount ";
+            if (classType != undefined) {
+                if (classType.anySpec) {
+                    return "Any Spec ";
+                } else {
+                    return "Amount ";
+                }
             }
         };
         $scope.init();

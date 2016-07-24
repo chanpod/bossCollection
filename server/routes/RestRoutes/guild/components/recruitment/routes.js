@@ -14,19 +14,7 @@ router.use(function (req, res, next) {
 
     try {
 
-        if (util.userExist(req)) {
-
-            if (util.userHasGuild(req)) {
-
-                next();
-            }
-            else {
-                throw new Error("You are not part of a guild!");
-            }
-        }
-        else {
-            throw new Error("Please login!");
-        }
+        next();
 
     }
     catch (err) {

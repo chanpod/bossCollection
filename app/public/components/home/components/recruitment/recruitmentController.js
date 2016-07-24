@@ -1,9 +1,11 @@
 
 angular.module("BossCollection.home")
-    .controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
+    .controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', '$routeParams', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
+        function ($scope, $location, $http, $timeout, $routeParams, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
 
             console.log("Get recruitment object");
+            $scope.loading = true;
+            $scope.savedRecruitment = {};
 
             $scope.desireOptions = [
                 "High",
@@ -14,6 +16,14 @@ angular.module("BossCollection.home")
 
             $scope.init = () => {
 
+
+                if ($scope.user) {
+
+                    $scope.guildName = $scope.user.guild.name;
+                }
+                else {
+                    $scope.guildName = $routeParams.guildName
+                }
                 $scope.getRecruitment();
             }
 
@@ -25,6 +35,8 @@ angular.module("BossCollection.home")
                 var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
                 var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
                 $scope.selectedClass = classObject;
+
+                angular.copy($scope.recruitment, $scope.savedRecruitment);
 
                 $mdDialog.show({
                     templateUrl: template,
@@ -55,26 +67,38 @@ angular.module("BossCollection.home")
 
                         classObject.total += parseInt(value.amount);
                     }
-                    else{
+                    else {
                         value.amount = 0;
                     }
                 })
             }
 
             $scope.cancel = () => {
+
+                angular.copy($scope.savedRecruitment, $scope.recruitment);
                 $mdDialog.hide();
             }
 
-            $scope.getRecruitment = () => {
+            $scope.close = () => {
+                $mdDialog.hide();
+            }
 
-                guildServices.getRecruitment($scope.user.guild.name)
+
+
+            $scope.getRecruitment = () => {
+                $scope.loading = true;
+                guildServices.getRecruitment($scope.guildName)
                     .then(recruitment => {
                         console.log(recruitment)
                         $scope.recruitment = recruitment.recruitment;
+
                     })
                     .catch(err => {
                         console.log(err)
                         siteServices.handleError(err);
+                    })
+                    .finally(() => {
+                        $scope.loading = false;
                     })
             }
 
@@ -85,20 +109,27 @@ angular.module("BossCollection.home")
                     .then(recruitment => {
                         console.log(recruitment)
                         $scope.recruitment = recruitment;
+                        $scope.close();
                     })
                     .catch(err => {
                         console.log(err)
                         siteServices.handleError(err);
                     })
+                    .finally(() => {
+                        siteServices.successfulUpdate();
+                    })
             }
 
             $scope.getRecruitmentSpecTyle = (classType) => {
 
-                if (classType.anySpec) {
-                    return "Any Spec ";
-                }
-                else {
-                    return "Amount ";
+                if (classType != undefined) {
+
+                    if (classType.anySpec) {
+                        return "Any Spec ";
+                    }
+                    else {
+                        return "Amount ";
+                    }
                 }
             }
 

@@ -28,7 +28,7 @@ function getRecruitment(req, res) {
     var defer = q.defer();
 
     let guildName = req.params.guildName;
-
+    
     RecruitmentModel.findOne({ guild: guildName })
         .then(function (recruitment) {
 
