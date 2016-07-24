@@ -3717,14 +3717,16 @@ angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServ
 angular.module("BossCollection.home").controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
     function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
         console.log("Get recruitment object");
+        $scope.desireOptions = ["High", "Med", "Low", "None"];
         $scope.init = function() {
             $scope.getRecruitment();
         };
-        $scope.editRecruitment = function() {
+        $scope.editRecruitment = function(classObject) {
             console.log("Open edit modal");
             var template = "recruitmentEditTemplate";
             var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
             var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+            $scope.selectedClass = classObject;
             $mdDialog.show({
                 templateUrl: template,
                 locals: {
@@ -3738,6 +3740,19 @@ angular.module("BossCollection.home").controller("recruitmentController", ["$sco
             }).then(function(result) {}, function() { //Something broke or they canceled
             });
         };
+        $scope.calculateTotal = function(classObject) {
+            classObject.total = 0;
+            _.forEach(classObject.specs, function(value, key) {
+                if (value.desire != "None") {
+                    classObject.total += parseInt(value.amount);
+                } else {
+                    value.amount = 0;
+                }
+            });
+        };
+        $scope.cancel = function() {
+            $mdDialog.hide();
+        };
         $scope.getRecruitment = function() {
             guildServices.getRecruitment($scope.user.guild.name).then(function(recruitment) {
                 console.log(recruitment);
@@ -3749,9 +3764,6 @@ angular.module("BossCollection.home").controller("recruitmentController", ["$sco
             });
         };
         $scope.saveRecruitment = function() { //guildName, recruitment
-            $scope.recruitment.recruitmentNeeds.push({
-                spec: "Marksman"
-            });
             guildServices.updateRecruitment($scope.user.guild.name, $scope.recruitment).then(function(recruitment) {
                 console.log(recruitment);
                 $scope.recruitment = recruitment;
@@ -3760,6 +3772,13 @@ angular.module("BossCollection.home").controller("recruitmentController", ["$sco
                 console.log(err);
                 siteServices.handleError(err);
             });
+        };
+        $scope.getRecruitmentSpecTyle = function(classType) {
+            if (classType.anySpec) {
+                return "Any Spec ";
+            } else {
+                return "Amount ";
+            }
         };
         $scope.init();
     }
@@ -4348,6 +4367,27 @@ angular.module("BossCollection.directives").directive('myEnter', function() {
         });
     };
 });
+angular.module('BossCollection.directives').directive('displayMarkdown', ['$sce',
+    function($sce) {
+        return {
+            restrict: 'E',
+            scope: {
+                markdown: '=markdown'
+            },
+            link: function link(scope) {
+                var converter = new showdown.Converter();
+                scope.converToHtml = function() {
+                    scope.html = $sce.trustAsHtml(converter.makeHtml(scope.markdown));
+                };
+                scope.$watch('markdown', function() {
+                    scope.converToHtml(scope.markdown);
+                });
+                scope.converToHtml(scope.markdown);
+            },
+            templateUrl: 'displayMarkdownDirective'
+        };
+    }
+]);
 angular.module('BossCollection.directives').directive('inputMarkdown', ['$sce',
     function($sce) {
         return {
@@ -4376,27 +4416,6 @@ angular.module('BossCollection.directives').directive('inputMarkdown', ['$sce',
                 scope.converToHtml(scope.markdown);
             },
             templateUrl: 'inputField'
-        };
-    }
-]);
-angular.module('BossCollection.directives').directive('displayMarkdown', ['$sce',
-    function($sce) {
-        return {
-            restrict: 'E',
-            scope: {
-                markdown: '=markdown'
-            },
-            link: function link(scope) {
-                var converter = new showdown.Converter();
-                scope.converToHtml = function() {
-                    scope.html = $sce.trustAsHtml(converter.makeHtml(scope.markdown));
-                };
-                scope.$watch('markdown', function() {
-                    scope.converToHtml(scope.markdown);
-                });
-                scope.converToHtml(scope.markdown);
-            },
-            templateUrl: 'displayMarkdownDirective'
         };
     }
 ]);

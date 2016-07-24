@@ -3,8 +3,7 @@ script#recruitmentTemplate(type="text/ng-template")
         h2
             |  Recruitment Needs
             span(ng-if = "isOfficer()")
-                md-button(ng-click = "editRecruitment()").md-raised.md-primary
-                    | Edit
+                
         div(layout = "column")     
             div(layout = "column", layout-gt-sm = "row")   
                 section()
@@ -12,344 +11,313 @@ script#recruitmentTemplate(type="text/ng-template")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Death Knight
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
-                            md-card-title-media()
+                                    | {{recruitment.recruitmentNeeds.deathknight.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.deathknight)}} - {{recruitment.recruitmentNeeds.deathknight.total}}
+                                
+                            md-card-title-media() 
                         md-card-content(layout)
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/deathknight.png").md-card-imageself.getComments
-                            div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/blood.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 1                                   
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | H
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/frost.png").md-card-imageself.getComments
-                                    span()
-                                        | 0
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | N
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/unholy.png").md-card-imageself.getComments
-                                    span()
-                                        | 3
+                            div(flex, layout = "column", layout-align = "center space-between")
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.deathknight.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.deathknight.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}} 
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.deathknight)").md-raised.md-primary
+                                | Edit
+                                
                                 
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Mage
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.mage.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.mage)}} - {{recruitment.recruitmentNeeds.mage.total}}
                             md-card-title-media()
                         md-card-content(layout)
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/mage.png").md-card-imageself.getComments
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/arcane.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/frost.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/fire.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.mage.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.mage.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.mage)").md-raised.md-primary
+                                | Edit
+
             div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Hunter
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.hunter.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.hunter)}} - {{recruitment.recruitmentNeeds.hunter.total}}
                             md-card-title-media()
                         md-card-content(layout)
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/hunter.png").md-card-imageself.getComments
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/marksman.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/beastmastery.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/survival.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.hunter.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.hunter.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.hunter)").md-raised.md-primary
+                                | Edit
+
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Monk
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.monk.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.monk)}} - {{recruitment.recruitmentNeeds.monk.total}}
                             md-card-title-media()
                         md-card-content(layout)
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/monk.png").md-card-imageself.getComments
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/brewmaster.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/mistweaver.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/windwalker.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.monk.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.monk.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.monk)").md-raised.md-primary
+                                | Edit
+
             div(layout = "column", layout-gt-sm = "row")   
                 section()
+
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
+
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Paladin
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.paladin.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.paladin)}} - {{recruitment.recruitmentNeeds.paladin.total}}
                             md-card-title-media()
+
                         md-card-content(layout)
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/paladin.png").md-card-imageself.getComments
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/holy.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/retribution.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/protection.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.paladin.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.paladin.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.paladin)").md-raised.md-primary
+                                | Edit
+
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Priest
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.priest.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.priest)}} - {{recruitment.recruitmentNeeds.priest.total}}
                             md-card-title-media()
+
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/priest.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/holy.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/discipline.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/shadow.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.priest.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.priest.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.priest)").md-raised.md-primary
+                                | Edit
+
             div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Rogue
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.rogue.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.rogue)}} - {{recruitment.recruitmentNeeds.rogue.total}}
                             md-card-title-media()
+                            
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/rogue.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/subtlety.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/combat.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/assassination.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.rogue.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.rogue.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.rogue)").md-raised.md-primary
+                                | Edit
             
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Shaman
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.shaman.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.shaman)}} - {{recruitment.recruitmentNeeds.shaman.total}}
                             md-card-title-media()
+                            
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/shaman.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/elemental.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/enhancement.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/restoration.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.shaman.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.shaman.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.shaman)").md-raised.md-primary
+                                | Edit
             div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Warlock
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.warlock.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.warlock)}} - {{recruitment.recruitmentNeeds.warlock.total}}
                             md-card-title-media()
+                            
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/warlock.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/affliction.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/demonology.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/destruction.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.warlock.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.warlock.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.warlock)").md-raised.md-primary
+                                | Edit
             
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Warrior
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.warrior.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.warrior)}} - {{recruitment.recruitmentNeeds.warrior.total}}
                             md-card-title-media()
+                            
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/warrior.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/arms.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/fury.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/protection.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.warrior.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.warrior.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.warrior)").md-raised.md-primary
+                                | Edit
+
             div(layout = "column", layout-gt-sm = "row")   
                 section()
                     md-card(md-theme = "dark-grey", style = "color: white")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Demon Hunter
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.demonhunter.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.demonhunter)}} - {{recruitment.recruitmentNeeds.demonhunter.total}}
                             md-card-title-media()
+                            
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/demonhunter.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/havoc.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/vengeance.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.demonhunter.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.demonhunter.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.demonhunter)").md-raised.md-primary
+                                | Edit
                                 
                 
                 
@@ -359,37 +327,28 @@ script#recruitmentTemplate(type="text/ng-template")
                         md-card-title
                             md-card-title-text(layout-align = "center center")
                                 span(class="md-headline") 
-                                    | Druid
-                                span(ng-if = "true", class = "md-subhead")
-                                    | Any Spec - 2
+                                    | {{recruitment.recruitmentNeeds.druid.class}}
+                                span(class = "md-subhead")
+                                    | {{getRecruitmentSpecTyle(recruitment.recruitmentNeeds.druid)}} - {{recruitment.recruitmentNeeds.druid.total}}
                             md-card-title-media()
+                            
                         md-card-content(layout)
+
                             div(flex).card-media
                                 img(style = "width: 75%;height: 75%;" src="images/classIcons/images/crests/druid.png").md-card-imageself.getComments
+
                             div(flex, layout = "column", layout-align = "end space-between")
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/balance.png").md-card-imageself.getComments
-                                    span(layout-align = "center center")
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/feral.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/guardian.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
-                                div(flex, layout, layout-align = "center center")
-                                    span(layout-align = "center center")
-                                        | M
-                                    img(style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/restoration.png").md-card-imageself.getComments
-                                    span()
-                                        | 5
+
+                                div(ng-repeat = "spec in recruitment.recruitmentNeeds.druid.specs", flex, layout, layout-align = "center center")
+                                    div(layout, layout-align = "start center")
+                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/{{spec.spec}}.png").md-card-imageself.getComments
+                                        span(layout-align = "center center")
+                                            | {{spec.desire}} 
+                                        span(ng-if = "!recruitment.recruitmentNeeds.druid.anySpec", layout-align = "center center")
+                                            | &nbsp- {{spec.amount}}
+
+                        md-card-actions()
+                            md-button(ng-click = "editRecruitment(recruitment.recruitmentNeeds.druid)").md-raised.md-primary
+                                | Edit
 
   

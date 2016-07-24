@@ -119,11 +119,11 @@ function initializeRecruitment(recruitmentNeeds) {
                 value.specs.blood.desire = desire;
                 value.specs.blood.amount = amount;
 
-                value.specs.blood.spec = "frost";
+                value.specs.frost.spec = "frost";
                 value.specs.frost.desire = desire;
                 value.specs.frost.amount = amount;
 
-                value.specs.blood.spec = "unholy";
+                value.specs.unholy.spec = "unholy";
                 value.specs.unholy.desire = desire;
                 value.specs.unholy.amount = amount;
 
