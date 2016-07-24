@@ -34,7 +34,7 @@ router.use(function (req, res, next) {
     }
 })
 
-router.route('/recruitment/:guildName')
+router.route('/:guildName')
     .get(function (req, res) {
         Recruitment.getRecruitment(req, res)
             .then((result) => {
@@ -50,7 +50,7 @@ router.route('/recruitment/:guildName')
         var requester = req.session.user.name;
 
         //========== PROTECTED ===============
-        GuildManager.getGuild(req.session.user.guild)
+        GuildManager.getGuild(req.session.user.guild.name)
             .then(guild => {
 
                 if(GuildManager.isAdmin(guild.members, requester)){

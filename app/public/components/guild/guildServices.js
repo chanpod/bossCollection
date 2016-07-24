@@ -15,6 +15,7 @@ angular.module("BossCollection.guild")
 
             var API_BASE = "/api/guild/guild";
             var APPLICATION_API_BASE = "/api/guild/applications";
+            var RECRUITMENT_API_BASE = "/api/guild/recruitment";
 
 
             var apply = $resource(APPLICATION_API_BASE + '/applicationSubmission');
@@ -35,7 +36,7 @@ angular.module("BossCollection.guild")
             var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
             var guildSettingsResource = $resource(API_BASE + "/guildSettings");
 
-            var guildRecruitmentResource = $resource(API_BASE + "/recruitment/:guildName");
+            var guildRecruitmentResource = $resource(RECRUITMENT_API_BASE + "/:guildName");
 
             var guildApi = {
                 getClassName: function (classID) {

@@ -2,6 +2,9 @@ script#recruitmentTemplate(type="text/ng-template")
     section(layout = "column", layout-align = "center center")
         h2
             |  Recruitment Needs
+            span(ng-if = "isOfficer()")
+                md-button(ng-click = "editRecruitment()").md-raised.md-primary
+                    | Edit
         div(layout = "column")     
             div(layout)   
                 section()

@@ -24,7 +24,7 @@ function getRecruitment(req, res) {
                 createRecruitment(guildName)
                     .then(recruitment => {
 
-                        defer.resolve({ RECRUITMENT: recruitment });
+                        defer.resolve({ recruitment: recruitment });
                     })
                     .catch(err => {
                         
@@ -33,7 +33,7 @@ function getRecruitment(req, res) {
             }
             else {
 
-                defer.resolve({ RECRUITMENT: recruitment });
+                defer.resolve({ recruitment: recruitment });
             }
         }, function (err) {
 
@@ -48,11 +48,12 @@ function updateRecruitment(req, res) {
     var defer = q.defer();
 
     let recruitmentID = req.body.recruitment._id;
+    let recruitmentObject = req.body.recruitment;
 
-    RecruitmentModel.findOneAndUpdate({ _id: recruitmentID })
+    RecruitmentModel.findOneAndUpdate({_id: recruitmentID}, recruitmentObject)
         .then(function (recruitment) {
 
-            defer.resolve({ RECRUITMENT: recruitment });
+            defer.resolve(recruitmentObject);
         }, function (err) {
 
             defer.reject(util.handleError(err));

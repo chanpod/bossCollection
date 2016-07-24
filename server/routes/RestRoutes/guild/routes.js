@@ -4,6 +4,7 @@ var router = express.Router();
 var absence = require('./components/absence/absenceRoutes.js');
 var applications = require('./components/applications/applicationsRoutes.js');
 var guildManager = require('./components/guild/guildManagerRoutes.js');
+var recruitmentRoutes = require('./components/recruitment/routes.js');
 
 var util = require('utility');
 
@@ -21,5 +22,6 @@ router.use(function (req, res, next) {
 router.use('/absence', absence);
 router.use('/applications', applications);
 router.use('/guild', guildManager);
+router.use('/recruitment', recruitmentRoutes);
 
 module.exports = router;
