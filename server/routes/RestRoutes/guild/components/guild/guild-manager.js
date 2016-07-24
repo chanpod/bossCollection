@@ -488,7 +488,8 @@ module.exports = {
     deleteRank: deleteRank,
     isAdmin: isAdmin,
     isOfficer: isOfficer,
-    isRaider: isRaider
+    isRaider: isRaider,
+    getGuild: findGuild
 
 };
 
