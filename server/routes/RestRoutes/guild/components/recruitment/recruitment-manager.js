@@ -19,7 +19,22 @@ function getRecruitment(req, res) {
     RecruitmentModel.findOne({ guild: guildName })
         .then(function (recruitment) {
 
-            defer.resolve({ RECRUITMENT: recruitment });
+            if (recruitment == undefined) {
+
+                createRecruitment(guildName)
+                    .then(recruitment => {
+
+                        defer.resolve({ RECRUITMENT: recruitment });
+                    })
+                    .catch(err => {
+                        
+                        defer.reject(util.handleError(err));
+                    })
+            }
+            else {
+
+                defer.resolve({ RECRUITMENT: recruitment });
+            }
         }, function (err) {
 
             defer.reject(util.handleError(err));
@@ -34,11 +49,11 @@ function updateRecruitment(req, res) {
 
     let recruitmentID = req.body.recruitment._id;
 
-    RecruitmentModel.findOneAndUpdate({_id: recruitmentID})
-        .then(function(recruitment) {
+    RecruitmentModel.findOneAndUpdate({ _id: recruitmentID })
+        .then(function (recruitment) {
 
             defer.resolve({ RECRUITMENT: recruitment });
-        }, function(err) {
+        }, function (err) {
 
             defer.reject(util.handleError(err));
         })
@@ -47,13 +62,31 @@ function updateRecruitment(req, res) {
 
 }
 
-function createRecruitment(guildName){
+function createRecruitment(guildName) {
 
+    var defer = q.defer();
+
+    var newRecruitment = new RecruitmentModel();
+
+    newRecruitment.recruitmentNeeds = [];
+    newRecruitment.guild = guildName;
+
+    newRecruitment.save().then(function (result) {
+
+        defer.resolve(result);
+    },
+        function (err) {
+
+            defer.reject(util.handleErrors(err));
+        })
+
+    return defer.promise;
 }
 
 var recruitment = {
     updateRecruitment: updateRecruitment,
-    createRecruitment:createRecruitment
+    createRecruitment: createRecruitment,
+    getRecruitment: getRecruitment,
 }
 
 module.exports = recruitment;

@@ -35,6 +35,8 @@ angular.module("BossCollection.guild")
             var guildHomepageContentResource = $resource(API_BASE + '/guildHomepage/:guildName');
             var guildSettingsResource = $resource(API_BASE + "/guildSettings");
 
+            var guildRecruitmentResource = $resource(API_BASE + "/recruitment/:guildName");
+
             var guildApi = {
                 getClassName: function (classID) {
                     return classes[classID];
@@ -54,6 +56,14 @@ angular.module("BossCollection.guild")
 
                     var bodyData = {}; //no data, it's a get
                     return guildHomepageContentResource.get({ guildName: guildName }).$promise
+                },
+
+                getRecruitment : (guildName) => {
+                    return guildRecruitmentResource.get({guildName: guildName}).$promise;
+                },
+
+                updateRecruitment: (guildName, recruitment) => {
+                    return guildRecruitmentResource.save({guildName: guildName}, {recruitment: recruitment}).$promise;
                 },
                 kickUser: function (userName, guildName) {
 
