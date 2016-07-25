@@ -201,6 +201,9 @@ script#home(type="text/ng-template")
                     section
                         span()
                             | Integrated links to your tools of choice.
+
+    div(ng-if = "user && user.guild")
+        recruitment
             
     ad(flex, layout, layout-align = "center center")
     
