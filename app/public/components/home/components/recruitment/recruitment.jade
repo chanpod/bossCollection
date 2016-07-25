@@ -26,7 +26,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.deathknight.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/deathknight/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(src="images/classIcons/images/spec/deathknight/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.deathknight.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -54,7 +54,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.mage.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/mage/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/mage/{{spec.spec}}.png").md-card-imageself.getComments.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.mage.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -82,7 +82,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.hunter.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/hunter/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/hunter/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.hunter.anySpec")                                            
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -109,7 +109,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.monk.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/monk/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/monk/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.monk.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -140,7 +140,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.paladin.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/paladin/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/paladin/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.paladin.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -170,7 +170,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.priest.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/priest/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/priest/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.priest.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -201,7 +201,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.rogue.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/rogue/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/rogue/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.rogue.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -231,7 +231,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.shaman.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/shaman/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/shaman/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.shaman.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -261,7 +261,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.warlock.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warlock/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/warlock/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.warlock.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -291,7 +291,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.warrior.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/warrior/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/warrior/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.warrior.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -322,7 +322,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.demonhunter.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/demonhunter/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/demonhunter/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.demonhunter.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
@@ -355,7 +355,7 @@ script#recruitmentTemplate(type="text/ng-template")
 
                                 div(ng-repeat = "spec in recruitment.recruitmentNeeds.druid.specs", flex, layout, layout-align = "center center")
                                     div(layout, layout-align = "start center")
-                                        img(flex, style = "width: 25%;height: 25%;" src="images/classIcons/images/spec/druid/{{spec.spec}}.png").md-card-imageself.getComments
+                                        img(flex, src="images/classIcons/images/spec/druid/{{spec.spec}}.png").md-card-imageself.specIcons
                                         div(ng-show = "!recruitment.recruitmentNeeds.druid.anySpec")
                                             span(layout-align = "center center")
                                                 | {{spec.desire}} 
