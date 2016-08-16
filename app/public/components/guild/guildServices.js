@@ -11,7 +11,7 @@ angular.module("BossCollection.guild")
             var blizzardBaseUrl = "https://us.api.battle.net/wow/guild/";
             var blizzardEndingUrl = "?fields=members&locale=en_US&apikey=fqvadba9c8auw7brtdr72vv7hfntbx7d";
 
-            var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"]
+            var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid", "demon hunter"]
 
             var API_BASE = "/api/guild/guild";
             var APPLICATION_API_BASE = "/api/guild/applications";

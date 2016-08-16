@@ -12,7 +12,7 @@ script#reviewApplications(type="text/ng-template")
                 md-tabs(md-dynamic-height md-border-bottom)
                     md-tab(label = "New Applications")
                         md-content()
-                            div(ng-show = "numOfNewApplicants == 0") 
+                            div(ng-show = "numOfNewApplicants == 0")
                                 h3 No New Applications 
                             md-list(layout-padding)
                                 md-list-item(ng-repeat = "application in applications | filter:filterStatus('Applied') | orderBy: '-dateApplied'").md-list-item.md-whiteframe-3dp

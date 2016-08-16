@@ -12,7 +12,7 @@ angular.module("BossCollection.guild")
 
 
 
-            var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"]
+            var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid", "demon hunter"]
 
             $scope.loading = true;
             $scope.numOfNewApplicants = 0;
