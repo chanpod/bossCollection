@@ -10,7 +10,7 @@ angular.module("BossCollection.controllers")
             $scope.currentRosterDropdown = true;
             $scope.applicantsDropdown = false;
             
-            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid"]
+            var classes = ["placeholder","warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock","monk","druid", "demon hunter"]
             
             $scope.raiders = [];
             $scope.trials = [];

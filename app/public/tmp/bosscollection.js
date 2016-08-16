@@ -104,18 +104,6 @@ angular.module("BossCollection.forums", ['ngRoute']).config(['$routeProvider',
     }
 ]);
 'user strict';
-angular.module("BossCollection.home", ['ngRoute']).config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.when('/', {
-            templateUrl: 'home',
-            controller: 'homeController'
-        }).when('/guild/:guildName', {
-            templateUrl: 'guildVisitHome',
-            controller: 'guildVisitController'
-        });
-    }
-]);
-'user strict';
 angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/auth/application', {
@@ -139,6 +127,18 @@ angular.module("BossCollection.guild", ['ngRoute']).config(['$routeProvider',
         }).when('/myApplications', {
             templateUrl: 'myApplications',
             controller: 'myApplicationsCtrl'
+        });
+    }
+]);
+'user strict';
+angular.module("BossCollection.home", ['ngRoute']).config(['$routeProvider',
+    function($routeProvider) {
+        $routeProvider.when('/', {
+            templateUrl: 'home',
+            controller: 'homeController'
+        }).when('/guild/:guildName', {
+            templateUrl: 'guildVisitHome',
+            controller: 'guildVisitController'
         });
     }
 ]);
@@ -1300,133 +1300,6 @@ angular.module("BossCollection.forums").service('forumService', ['$location', '$
         };
     }
 ]);
-angular.module("BossCollection.home").controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-    function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
-        $scope.guild = {};
-        $scope.editing = false;
-        $scope.content;
-        $scope.newTab;
-        $scope.guildImagesLoaded = false;
-        $scope.guildName = $routeParams.guildName;
-        $scope.init = function() {
-            $scope.getHomepageContent();
-        };
-        $scope.getHomepageContent = function() {
-            $scope.guildImagesLoaded = false;
-            guildServices.getHomepageContent($scope.guildName).then(function(guild) {
-                $scope.guild = guild.guild; // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
-                // if ($scope.guild && $scope.guild.images) {
-                //     $scope.guild.images.forEach(function (image) {
-                //         sliderHTML += "<item source = " + image + "></item>"
-                //     }, this);
-                // }
-                // sliderHTML += "</awesome-slider>";
-                // document.getElementById('imageGallery').innerHTML = sliderHTML;
-                $scope.guildImagesLoaded = true;
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            });
-        };
-        $scope.cancel = function() {
-            $scope.editing = false;
-        };
-        siteServices.updateTitle('Home');
-        $scope.init();
-        Array.prototype.remove = function(from, to) {
-            var rest = this.slice((to || from) + 1 || this.length);
-            this.length = from < 0 ? this.length + from : from;
-            return this.push.apply(this, rest);
-        };
-    }
-]);
-angular.module("BossCollection.home").controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
-    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
-        $scope.guild = {};
-        $scope.editing = false;
-        $scope.content;
-        $scope.newTab;
-        $scope.guildImagesLoaded = false;
-        var newTab = {
-            title: "New Tab",
-            content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details."
-        };
-        $scope.$on("loggedin", function(event, user) {
-            userLoginSrvc.getUser().then(function(user) {
-                if (user) {
-                    $scope.user = user;
-                    $scope.loggedIn = true;
-                    $scope.getHomepageContent();
-                }
-            }, function(err) {
-                $scope.user = undefined;
-                $scope.guild = undefined;
-                document.getElementById('imageGallery').innerHTML = "";
-                $scope.loggedIn = false;
-            });
-        });
-        $scope.login = function() {
-            siteServices.showLoadingBottomSheet();
-        };
-        $scope.init = function() {
-            $scope.newTab = Object.assign({}, newTab);
-            $scope.getHomepageContent();
-        };
-        $scope.getHomepageContent = function() {
-            $scope.guildImagesLoaded = false;
-            if ($scope.user && $scope.user.guild) {
-                guildServices.getHomepageContent($scope.user.guild.name).then(function(guild) {
-                    $scope.guild = guild.guild; // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                    //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
-                    // if ($scope.guild && $scope.guild.images) {
-                    //     $scope.guild.images.forEach(function (image) {
-                    //         sliderHTML += "<item source = " + image + "></item>"
-                    //     }, this);
-                    // }
-                    // sliderHTML += "</awesome-slider>";
-                    // document.getElementById('imageGallery').innerHTML = sliderHTML;
-                    $scope.guildImagesLoaded = true;
-                }).
-                catch (function(err) {
-                    siteServices.showMessageModal(err.data);
-                });
-            }
-        };
-        $scope.editTab = function() {
-            $scope.editing = true;
-        };
-        $scope.saveTab = function() {
-            guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name).then(function(res) {
-                $scope.cancel(); //It worked, do nothing.
-            }).
-            catch (function(err) {
-                siteServices.showMessageModal(err.data);
-            });
-        };
-        $scope.deleteTab = function(index) {
-            siteServices.confirmDelete().then(function() {
-                $scope.guild.tabs.remove(index);
-                $scope.saveTab();
-            });
-        };
-        $scope.addNewTab = function() {
-            $scope.guild.tabs.push($scope.newTab);
-            $scope.saveTab();
-            $scope.newTab = Object.assign({}, newTab); //$scope.newTab = newTab; 
-        };
-        $scope.cancel = function() {
-            $scope.editing = false;
-        };
-        siteServices.updateTitle('Home');
-        $scope.init();
-        Array.prototype.remove = function(from, to) {
-            var rest = this.slice((to || from) + 1 || this.length);
-            this.length = from < 0 ? this.length + from : from;
-            return this.push.apply(this, rest);
-        };
-    }
-]);
 'use strict';
 angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', '$resource', 'siteServices', 'userLoginSrvc',
     function($http, $q, $resource, siteServices, userLoginSrvc) {
@@ -1729,6 +1602,133 @@ angular.module("BossCollection.guild").factory('guildServices', ['$http', '$q', 
             return memberListing.rank;
         }
         return guildApi;
+    }
+]);
+angular.module("BossCollection.home").controller("guildVisitController", ["$scope", '$location', '$routeParams', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+    function($scope, $location, $routeParams, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        $scope.guild = {};
+        $scope.editing = false;
+        $scope.content;
+        $scope.newTab;
+        $scope.guildImagesLoaded = false;
+        $scope.guildName = $routeParams.guildName;
+        $scope.init = function() {
+            $scope.getHomepageContent();
+        };
+        $scope.getHomepageContent = function() {
+            $scope.guildImagesLoaded = false;
+            guildServices.getHomepageContent($scope.guildName).then(function(guild) {
+                $scope.guild = guild.guild; // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
+                // if ($scope.guild && $scope.guild.images) {
+                //     $scope.guild.images.forEach(function (image) {
+                //         sliderHTML += "<item source = " + image + "></item>"
+                //     }, this);
+                // }
+                // sliderHTML += "</awesome-slider>";
+                // document.getElementById('imageGallery').innerHTML = sliderHTML;
+                $scope.guildImagesLoaded = true;
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            });
+        };
+        $scope.cancel = function() {
+            $scope.editing = false;
+        };
+        siteServices.updateTitle('Home');
+        $scope.init();
+        Array.prototype.remove = function(from, to) {
+            var rest = this.slice((to || from) + 1 || this.length);
+            this.length = from < 0 ? this.length + from : from;
+            return this.push.apply(this, rest);
+        };
+    }
+]);
+angular.module("BossCollection.home").controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
+    function($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
+        $scope.guild = {};
+        $scope.editing = false;
+        $scope.content;
+        $scope.newTab;
+        $scope.guildImagesLoaded = false;
+        var newTab = {
+            title: "New Tab",
+            content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details."
+        };
+        $scope.$on("loggedin", function(event, user) {
+            userLoginSrvc.getUser().then(function(user) {
+                if (user) {
+                    $scope.user = user;
+                    $scope.loggedIn = true;
+                    $scope.getHomepageContent();
+                }
+            }, function(err) {
+                $scope.user = undefined;
+                $scope.guild = undefined;
+                document.getElementById('imageGallery').innerHTML = "";
+                $scope.loggedIn = false;
+            });
+        });
+        $scope.login = function() {
+            siteServices.showLoadingBottomSheet();
+        };
+        $scope.init = function() {
+            $scope.newTab = Object.assign({}, newTab);
+            $scope.getHomepageContent();
+        };
+        $scope.getHomepageContent = function() {
+            $scope.guildImagesLoaded = false;
+            if ($scope.user && $scope.user.guild) {
+                guildServices.getHomepageContent($scope.user.guild.name).then(function(guild) {
+                    $scope.guild = guild.guild; // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                    //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
+                    // if ($scope.guild && $scope.guild.images) {
+                    //     $scope.guild.images.forEach(function (image) {
+                    //         sliderHTML += "<item source = " + image + "></item>"
+                    //     }, this);
+                    // }
+                    // sliderHTML += "</awesome-slider>";
+                    // document.getElementById('imageGallery').innerHTML = sliderHTML;
+                    $scope.guildImagesLoaded = true;
+                }).
+                catch (function(err) {
+                    siteServices.showMessageModal(err.data);
+                });
+            }
+        };
+        $scope.editTab = function() {
+            $scope.editing = true;
+        };
+        $scope.saveTab = function() {
+            guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name).then(function(res) {
+                $scope.cancel(); //It worked, do nothing.
+            }).
+            catch (function(err) {
+                siteServices.showMessageModal(err.data);
+            });
+        };
+        $scope.deleteTab = function(index) {
+            siteServices.confirmDelete().then(function() {
+                $scope.guild.tabs.remove(index);
+                $scope.saveTab();
+            });
+        };
+        $scope.addNewTab = function() {
+            $scope.guild.tabs.push($scope.newTab);
+            $scope.saveTab();
+            $scope.newTab = Object.assign({}, newTab); //$scope.newTab = newTab; 
+        };
+        $scope.cancel = function() {
+            $scope.editing = false;
+        };
+        siteServices.updateTitle('Home');
+        $scope.init();
+        Array.prototype.remove = function(from, to) {
+            var rest = this.slice((to || from) + 1 || this.length);
+            this.length = from < 0 ? this.length + from : from;
+            return this.push.apply(this, rest);
+        };
     }
 ]);
 'use strict';
@@ -3328,214 +3328,6 @@ angular.module("BossCollection.guild").controller("manageMembersController", ["$
         siteServices.updateTitle('Manage Members');
     }
 ]);
-angular.module("BossCollection.home").controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', '$routeParams', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
-    function($scope, $location, $http, $timeout, $routeParams, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
-        console.log("Get recruitment object");
-        $scope.loading = true;
-        $scope.savedRecruitment = {};
-        $scope.desireOptions = ["High", "Med", "Low", "None"];
-        $scope.init = function() {
-            if ($scope.user) {
-                $scope.guildName = $scope.user.guild.name;
-            } else {
-                $scope.guildName = $routeParams.guildName;
-            }
-            $scope.getRecruitment();
-        };
-        $scope.editRecruitment = function(classObject) {
-            console.log("Open edit modal");
-            var template = "recruitmentEditTemplate";
-            var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
-            $scope.selectedClass = classObject;
-            angular.copy($scope.recruitment, $scope.savedRecruitment);
-            $mdDialog.show({
-                templateUrl: template,
-                locals: {
-                    parent: $scope
-                },
-                bindToController: true,
-                controller: angular.noop,
-                controllerAs: 'ctrl',
-                clickOutsideToClose: false,
-                fullscreen: true
-            }).then(function(result) {}, function() { //Something broke or they canceled
-            });
-        };
-        $scope.calculateTotal = function(classObject) {
-            classObject.total = 0;
-            _.forEach(classObject.specs, function(value, key) {
-                if (value.desire != "None") {
-                    classObject.total += parseInt(value.amount);
-                } else {
-                    value.amount = 0;
-                }
-            });
-        };
-        $scope.cancel = function() {
-            angular.copy($scope.savedRecruitment, $scope.recruitment);
-            $mdDialog.hide();
-        };
-        $scope.close = function() {
-            $mdDialog.hide();
-        };
-        $scope.getRecruitment = function() {
-            $scope.loading = true;
-            guildServices.getRecruitment($scope.guildName).then(function(recruitment) {
-                console.log(recruitment);
-                $scope.recruitment = recruitment.recruitment;
-            }).
-            catch (function(err) {
-                console.log(err);
-                siteServices.handleError(err);
-            }).
-            finally(function() {
-                $scope.loading = false;
-            });
-        };
-        $scope.saveRecruitment = function() { //guildName, recruitment
-            guildServices.updateRecruitment($scope.user.guild.name, $scope.recruitment).then(function(recruitment) {
-                console.log(recruitment);
-                $scope.recruitment = recruitment;
-                $scope.close();
-            }).
-            catch (function(err) {
-                console.log(err);
-                siteServices.handleError(err);
-            }).
-            finally(function() {
-                siteServices.successfulUpdate();
-            });
-        };
-        $scope.getRecruitmentSpecTyle = function(classType) {
-            if (classType != undefined) {
-                if (classType.anySpec) {
-                    return "Any Spec ";
-                } else {
-                    return "Amount ";
-                }
-            }
-        };
-        $scope.init();
-    }
-]);
-angular.module("BossCollection.home").directive('recruitment', [
-    function() {
-        return {
-            restrict: 'E',
-            templateUrl: 'recruitmentTemplate',
-            controller: "recruitmentController"
-        };
-    }
-]);
-'use strict';
-/**
- 
- *
-
- */
-angular.module("BossCollection.guild").controller("myApplicationsCtrl", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
-    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
-        siteServices.updateTitle('View Applications');
-        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
-        $scope.loading = true;
-        $scope.numOfNewApplicants = 0;
-        $scope.startDate = moment();
-        $scope.startDate.month($scope.startDate.month() - 2);
-        $scope.startDate = $scope.startDate.toDate();
-        $scope.filterStatus = function(status) {
-            return function(application) {
-                return application.status == status;
-            };
-            /**
-                var filteredArray = _.filter($scope.applications, function(application){
-                    return application.status == status;
-                })
-                
-                return filteredArray;
-                 */
-        };
-        $scope.approveApplicant = function(application) {
-            guildServices.approveApplication(application).then(function() {
-                application.status = "Approved";
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            }).
-            finally(function() {});
-        };
-        $scope.rejectApplicant = function(application) {
-            guildServices.rejectApplication(application).then(function() {
-                application.status = "Rejected";
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            }).
-            finally(function() {});
-        };
-        $scope.getClassName = function(application) {
-            return application.character.class.toLowerCase();
-        };
-        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
-            $mdDialog.show({
-                templateUrl: "appDetails",
-                controller: 'appDetailsController',
-                parent: angular.element(document.body),
-                clickOutsideToClose: false,
-                locals: {
-                    data: application
-                },
-                fullscreen: true
-            });
-        };
-        $scope.openMenu = function($mdOpenMenu, ev) {
-            $mdOpenMenu(ev);
-        };
-        $scope.goTo = function(url) {
-            var win = window.open(url, '_blank');
-            win.focus();
-        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
-        $scope.buildArmoryUrl = function(realm, character) {
-            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
-            $scope.goTo(url);
-        };
-        $scope.deleteApplication = function(application) {
-            siteServices.confirmDelete().then(function(result) {
-                guildServices.deleteApplication(application._id).then(function(user) {
-                    $scope.getApplications();
-                });
-            }).
-            catch (function(err) {
-                siteServices.handleError(err);
-            });
-        };
-        $scope.getApplications = function() {
-            guildServices.getUserApplications($scope.user.name, $scope.startDate).then(function(applications) {
-                $scope.loading = false;
-                $scope.applications = applications.applications; //object to array
-                var newApplicants = _.find($scope.applications, function(applicant) {
-                    return applicant.status == "Applied";
-                });
-                if (newApplicants != undefined) {
-                    $scope.numOfNewApplicants = 1;
-                }
-                convertClasses();
-            }, function(err) {
-                $scope.loading = false;
-                console.log(err);
-                siteServices.handleError("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
-            });
-        };
-
-        function convertClasses() {
-            for (var i = 0; i < $scope.applications.length; i++) {
-                var classType = classes[$scope.applications[i].character.class];
-                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
-            }
-        }
-        $scope.getApplications();
-    }
-]);
 'use strict';
 /**
  
@@ -3778,6 +3570,114 @@ angular.module("BossCollection.guild").controller("applicationsReviewController"
         $scope.getApplications();
     }
 ]);
+'use strict';
+/**
+ 
+ *
+
+ */
+angular.module("BossCollection.guild").controller("myApplicationsCtrl", ["$scope", '$location', '$http', '$timeout', 'guildServices', 'siteServices', '$mdDialog',
+    function($scope, $location, $http, $timeout, guildServices, siteServices, $mdDialog) {
+        siteServices.updateTitle('View Applications');
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid", "demon hunter"];
+        $scope.loading = true;
+        $scope.numOfNewApplicants = 0;
+        $scope.startDate = moment();
+        $scope.startDate.month($scope.startDate.month() - 2);
+        $scope.startDate = $scope.startDate.toDate();
+        $scope.filterStatus = function(status) {
+            return function(application) {
+                return application.status == status;
+            };
+            /**
+                var filteredArray = _.filter($scope.applications, function(application){
+                    return application.status == status;
+                })
+                
+                return filteredArray;
+                 */
+        };
+        $scope.approveApplicant = function(application) {
+            guildServices.approveApplication(application).then(function() {
+                application.status = "Approved";
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
+            finally(function() {});
+        };
+        $scope.rejectApplicant = function(application) {
+            guildServices.rejectApplication(application).then(function() {
+                application.status = "Rejected";
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            }).
+            finally(function() {});
+        };
+        $scope.getClassName = function(application) {
+            return application.character.class.toLowerCase();
+        };
+        $scope.openComments = function(application) { //          siteServices.showMessageModal(comments, "Comments");
+            $mdDialog.show({
+                templateUrl: "appDetails",
+                controller: 'appDetailsController',
+                parent: angular.element(document.body),
+                clickOutsideToClose: false,
+                locals: {
+                    data: application
+                },
+                fullscreen: true
+            });
+        };
+        $scope.openMenu = function($mdOpenMenu, ev) {
+            $mdOpenMenu(ev);
+        };
+        $scope.goTo = function(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }; //'http://us.battle.net/wow/en/character/{{application.realm.name}}/{{application.character.name}}/simple'
+        $scope.buildArmoryUrl = function(realm, character) {
+            var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+            $scope.goTo(url);
+        };
+        $scope.deleteApplication = function(application) {
+            siteServices.confirmDelete().then(function(result) {
+                guildServices.deleteApplication(application._id).then(function(user) {
+                    $scope.getApplications();
+                });
+            }).
+            catch (function(err) {
+                siteServices.handleError(err);
+            });
+        };
+        $scope.getApplications = function() {
+            guildServices.getUserApplications($scope.user.name, $scope.startDate).then(function(applications) {
+                $scope.loading = false;
+                $scope.applications = applications.applications; //object to array
+                var newApplicants = _.find($scope.applications, function(applicant) {
+                    return applicant.status == "Applied";
+                });
+                if (newApplicants != undefined) {
+                    $scope.numOfNewApplicants = 1;
+                }
+                convertClasses();
+            }, function(err) {
+                $scope.loading = false;
+                console.log(err);
+                siteServices.handleError("Seems something broke. Try again in a few... Make sure you're logged in and a part of a guild.");
+            });
+        };
+
+        function convertClasses() {
+            for (var i = 0; i < $scope.applications.length; i++) {
+                var classType = classes[$scope.applications[i].character.class];
+                $scope.applications[i].character.class = classType.charAt(0).toUpperCase() + classType.slice(1);
+            }
+        }
+        $scope.getApplications();
+    }
+]);
 angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServices', '$filter', '$mdUtil', 'siteServices',
     function(guildServices, $filter, $mdUtil, siteServices) {
         return {
@@ -3811,6 +3711,106 @@ angular.module("BossCollection.guild").directive('listGuildMembers', ['guildServ
                 $scope.getGuildUsers();
             },
             templateUrl: 'listGuildMembersTemplate'
+        };
+    }
+]);
+angular.module("BossCollection.home").controller("recruitmentController", ["$scope", '$location', '$http', '$timeout', '$routeParams', 'siteServices', 'guildServices', 'userLoginSrvc', '$mdMedia', '$mdDialog',
+    function($scope, $location, $http, $timeout, $routeParams, siteServices, guildServices, userLoginSrvc, $mdMedia, $mdDialog) {
+        console.log("Get recruitment object");
+        $scope.loading = true;
+        $scope.savedRecruitment = {};
+        $scope.desireOptions = ["High", "Med", "Low", "None"];
+        $scope.init = function() {
+            if ($scope.user) {
+                $scope.guildName = $scope.user.guild.name;
+            } else {
+                $scope.guildName = $routeParams.guildName;
+            }
+            $scope.getRecruitment();
+        };
+        $scope.editRecruitment = function(classObject) {
+            console.log("Open edit modal");
+            var template = "recruitmentEditTemplate";
+            var customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && customFullscreen;
+            $scope.selectedClass = classObject;
+            angular.copy($scope.recruitment, $scope.savedRecruitment);
+            $mdDialog.show({
+                templateUrl: template,
+                locals: {
+                    parent: $scope
+                },
+                bindToController: true,
+                controller: angular.noop,
+                controllerAs: 'ctrl',
+                clickOutsideToClose: false,
+                fullscreen: true
+            }).then(function(result) {}, function() { //Something broke or they canceled
+            });
+        };
+        $scope.calculateTotal = function(classObject) {
+            classObject.total = 0;
+            _.forEach(classObject.specs, function(value, key) {
+                if (value.desire != "None") {
+                    classObject.total += parseInt(value.amount);
+                } else {
+                    value.amount = 0;
+                }
+            });
+        };
+        $scope.cancel = function() {
+            angular.copy($scope.savedRecruitment, $scope.recruitment);
+            $mdDialog.hide();
+        };
+        $scope.close = function() {
+            $mdDialog.hide();
+        };
+        $scope.getRecruitment = function() {
+            $scope.loading = true;
+            guildServices.getRecruitment($scope.guildName).then(function(recruitment) {
+                console.log(recruitment);
+                $scope.recruitment = recruitment.recruitment;
+            }).
+            catch (function(err) {
+                console.log(err);
+                siteServices.handleError(err);
+            }).
+            finally(function() {
+                $scope.loading = false;
+            });
+        };
+        $scope.saveRecruitment = function() { //guildName, recruitment
+            guildServices.updateRecruitment($scope.user.guild.name, $scope.recruitment).then(function(recruitment) {
+                console.log(recruitment);
+                $scope.recruitment = recruitment;
+                $scope.close();
+            }).
+            catch (function(err) {
+                console.log(err);
+                siteServices.handleError(err);
+            }).
+            finally(function() {
+                siteServices.successfulUpdate();
+            });
+        };
+        $scope.getRecruitmentSpecTyle = function(classType) {
+            if (classType != undefined) {
+                if (classType.anySpec) {
+                    return "Any Spec ";
+                } else {
+                    return "Amount ";
+                }
+            }
+        };
+        $scope.init();
+    }
+]);
+angular.module("BossCollection.home").directive('recruitment', [
+    function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'recruitmentTemplate',
+            controller: "recruitmentController"
         };
     }
 ]);
@@ -4029,7 +4029,7 @@ angular.module("BossCollection.controllers").controller("rosterController", ["$s
         siteServices.updateTitle('Guild Roster');
         $scope.currentRosterDropdown = true;
         $scope.applicantsDropdown = false;
-        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid"];
+        var classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid", "demon hunter"];
         $scope.raiders = [];
         $scope.trials = [];
         $scope.trialRanks = [9];
