@@ -3,7 +3,7 @@ script#guildVisitHome(type="text/ng-template")
   md-content()
     section(layout, id = "imageGallery").imageGallery
         div(flex)     
-            img(style = "width: 100%; height: 100%", src = "/images/expansionBanners/legionbanner.png")    
+            video(src = "/videos/bannerVideo.mp4",autoplay, loop, style = "width: 100%;height:100%")
     section(ng-if = "guild.tabs.length == 0")
         h3 This guild hasn't added any content to their page yet.
     section(layout="column", ng-if = "guild.tabs.length > 0")
