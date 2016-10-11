@@ -88,6 +88,10 @@ angular.module("BossCollection.attendance")
                 
         }
         
+        $scope.isOfficer = ()=>{
+            return permissionsService.isOfficer($scope.user);
+        }
+
         $scope.getGuildUsers = function(){
             
             $scope.loading = true;

@@ -5,7 +5,7 @@ script#absence(type="text/ng-template")
                 | New Report
         section(flex)
             form(ng-submit = "submitNewAbsence()")
-                div(layout-gt-xs="row", ng-if = "!gm")
+                div(layout-gt-xs="row", ng-show = "gm || isOfficer()")
                     md-progress-circular(md-mode = "indeterminate", ng-show = "loading")
                     md-autocomplete(md-min-length = "0",
                                 md-item-text = "user.user",
@@ -14,7 +14,7 @@ script#absence(type="text/ng-template")
                                 md-floating-label = "Select User",
                                 md-items = "user in filterSearch(userSearch)",                                
                                 md-autofocus = true,
-                                ng-disabled = "gm",
+                                ng-disabled = "!gm || !isOfficer()",
                                  
                                 ng-cloak,                               
                                 flex = "40")

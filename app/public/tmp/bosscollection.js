@@ -2105,6 +2105,9 @@ angular.module("BossCollection.attendance").controller("absenceReportController"
                 }
             }
         };
+        $scope.isOfficer = function() {
+            return permissionsService.isOfficer($scope.user);
+        };
         $scope.getGuildUsers = function() {
             $scope.loading = true;
             guildServices.getGuildMembers($scope.user.guild.name).then(function(users) {
