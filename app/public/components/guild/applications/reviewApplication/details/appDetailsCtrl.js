@@ -1,7 +1,7 @@
 angular.module("BossCollection.forums")
     .controller('appDetailsController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', 'data', 'userLoginSrvc', 'guildServices',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, data, userLoginSrvc, guildServices) {
             
             $scope.orderBy = "dateCreated"
 
@@ -11,6 +11,7 @@ angular.module("BossCollection.forums")
                 if (data) {
 
                     $scope.application = data;
+                    $scope.updateProgression();
                 }
                 else { 
                     $scope.application = {};
@@ -22,6 +23,51 @@ angular.module("BossCollection.forums")
             $scope.cancel = function () {
 
                 $mdDialog.cancel();
+            }
+
+            $scope.updateProgression = function(){
+                guildServices.getProgression($scope.application.character.name, $scope.application.realm.name)
+                    .then(function(result){
+                         $scope.parseProgression(result);
+                    })
+            }
+
+            $scope.parseProgression = function (result) {
+
+                $scope.raids = result.raids;
+
+                $scope.hfc = _.find($scope.raids, function (raid) {
+
+                    return raid.name == "Hellfire Citadel";
+                })
+
+                $scope.brf = _.find($scope.raids, function (raid) {
+
+                    return raid.name == "Blackrock Foundry";
+                })
+ 
+                $scope.hm = _.find($scope.raids, function (raid) {  
+
+                    return raid.name == "Highmaul";
+                })
+
+                $scope.en = _.find($scope.raids, function (raid) {  
+
+                    return raid.name == "The Emerald Nightmare";
+                })
+
+                $scope.nh = _.find($scope.raids, function (raid) {  
+
+                    return raid.name == "Nighthold";
+                })
+
+                $scope.application.progression = {};
+
+                $scope.application.progression.hfc = $scope.hfc;
+                $scope.application.progression.brf = $scope.brf;
+                $scope.application.progression.hm = $scope.hm;
+                $scope.application.progression.en = $scope.en;
+                $scope.application.progression.nh = $scope.nh;
             }
             
             $scope.getNormalProgression = function (progression) {

@@ -19,6 +19,7 @@ script#application(type="text/ng-template")
                                 md-selected-item = "guildSelected",
                                 md-search-text = "guildName",
                                 md-select-on-match="true",
+                                md-selected-item-change="selectedGuildChange(item)"
                                 md-no-cache = "true",
                                 md-floating-label = "Select Guild to Apply To",
                                 md-items = "guild in listOfGuilds | filter:guildName")
@@ -76,6 +77,12 @@ script#application(type="text/ng-template")
                             md-option(value = "Melee DPS") Melee DPS
                             md-option(value = "Healer") Healer
                             md-option(value = "Tank") Tank
+
+                    md-input-container(ng-if = "guildSelected != undefined", flex).md-block
+                        label() Which raid team?
+                        md-select(ng-model = "application.raidTeam", required)
+                            md-option(ng-repeat = "rank in raidRanks" value = "{{rank.name}}") {{rank.name}}
+                            
 
                 div(layout = "column",, layout-xs="column")
                     md-input-container(flex).md-block

@@ -112,7 +112,6 @@ angular.module("BossCollection.guild")
 
                             return guildServices.getProgression($scope.application.characterName, $scope.application.realm.name);
 
-
                         })
                         .then(function (result) {
 
@@ -152,9 +151,19 @@ angular.module("BossCollection.guild")
                     return raid.name == "Blackrock Foundry";
                 })
 
-                $scope.hm = _.find($scope.raids, function (raid) {
+                $scope.hm = _.find($scope.raids, function (raid) {  
 
                     return raid.name == "Highmaul";
+                })
+
+                $scope.en = _.find($scope.raids, function (raid) {  
+
+                    return raid.name == "The Emerald Nightmare";
+                })
+
+                $scope.nh = _.find($scope.raids, function (raid) {  
+
+                    return raid.name == "Nighthold";
                 })
 
                 $scope.application.progression = {};
@@ -162,6 +171,21 @@ angular.module("BossCollection.guild")
                 $scope.application.progression.hfc = $scope.hfc;
                 $scope.application.progression.brf = $scope.brf;
                 $scope.application.progression.hm = $scope.hm;
+                $scope.application.progression.en = $scope.en;
+                $scope.application.progression.nh = $scope.nh;
+            }
+
+            $scope.selectedGuildChange = function(guildSelected){
+                console.log($scope.guildSelected);
+ 
+                $scope.createRaidRanks(); 
+            }
+
+            $scope.createRaidRanks = function(){
+                $scope.raidRanks = _.filter($scope.guildSelected.ranks, {raider: true})
+                console.log(raidRanks);
+
+                
             }
 
             $scope.submitApplication = function () {

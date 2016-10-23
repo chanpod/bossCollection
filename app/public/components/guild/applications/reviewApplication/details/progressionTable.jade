@@ -1,71 +1,121 @@
 div(layout, layout-align = "space-around center")
     h2
-        | Progression      
+        | Progression
+
 div(layout, layout-align = "space-around center")
-    md-toolbar()
-        div().md-toolbar-tools
-            h2
-                span        
-                    | HFC
+        md-toolbar()
+            div().md-toolbar-tools
+                h2
+                    span        
+                        | Emerald Nightmare
 div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
     div(flex)
         div(layout = "column")
             h3
                 | Normal
-            span {{getNormalProgression(application.progression.hfc)}}
+            span {{getNormalProgression(application.progression.en)}}
     div(flex)
         div(layout = "column")
             h3
                 | Heroic
-            span {{getHeroicProgression(application.progression.hfc)}}
+            span {{getHeroicProgression(application.progression.en)}}
     div(flex) 
         div(layout="column")
             h3
-                | Mythic
-            span {{getMythicProgression(application.progression.hfc)}}
+                | Mythic 
+            span {{getMythicProgression(application.progression.en)}}
+md-divider 
 br
 div(layout, layout-align = "space-around center")
     md-toolbar()
         div().md-toolbar-tools
-            h2
+            h2 
                 span        
-                    | BRF
+                    | Nighthold 
 div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
     div(flex)
         div(layout = "column")
             h3
                 | Normal
-            span {{getNormalProgression(application.progression.brf)}}
+            span {{getNormalProgression(application.progression.nh)}}
     div(flex)
         div(layout = "column")
-            h3
+            h3 
                 | Heroic 
-            span {{getHeroicProgression(application.progression.brf)}}
+            span {{getHeroicProgression(application.progression.nh)}}
     div(flex)
         div(layout="column")
             h3
                 | Mythic
-            span {{getMythicProgression(application.progression.brf)}}
-br
-div(layout, layout-align = "space-around center")
-    md-toolbar()
-        div().md-toolbar-tools
-            h2
-                span        
-                    | HM
-div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
-    div(flex)
-        div(layout = "column")
-            h3
-                | Normal
-            span {{getNormalProgression(application.progression.hm)}}
-    div(flex)
-        div(layout = "column")
-            h3
-                | Heroic
-            span {{getHeroicProgression(application.progression.hm)}}
-    div(flex)
-        div(layout="column")
-            h3
-                | Mythic
-            span {{getMythicProgression(application.progression.hm)}}
+            span {{getMythicProgression(application.progression.nh)}}
+        
+    
+    //-
+        div(layout, layout-align = "space-around center")
+            md-toolbar()
+                div().md-toolbar-tools
+                    h2
+                        span        
+                            | HFC
+        div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
+            div(flex)
+                div(layout = "column")
+                    h3
+                        | Normal
+                    span {{getNormalProgression(application.progression.hfc)}}
+            div(flex)
+                div(layout = "column")
+                    h3
+                        | Heroic
+                    span {{getHeroicProgression(application.progression.hfc)}}
+            div(flex) 
+                div(layout="column")
+                    h3
+                        | Mythic
+                    span {{getMythicProgression(application.progression.hfc)}}
+        br
+        div(layout, layout-align = "space-around center")
+            md-toolbar()
+                div().md-toolbar-tools
+                    h2
+                        span        
+                            | BRF
+        div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
+            div(flex)
+                div(layout = "column")
+                    h3
+                        | Normal
+                    span {{getNormalProgression(application.progression.brf)}}
+            div(flex)
+                div(layout = "column")
+                    h3
+                        | Heroic 
+                    span {{getHeroicProgression(application.progression.brf)}}
+            div(flex)
+                div(layout="column")
+                    h3
+                        | Mythic
+                    span {{getMythicProgression(application.progression.brf)}}
+        br
+        div(layout, layout-align = "space-around center")
+            md-toolbar()
+                div().md-toolbar-tools
+                    h2
+                        span        
+                            | HM
+        div(flex, layout, layout-align = "center start", layout-padding).md-whiteframe-4dp        
+            div(flex)
+                div(layout = "column")
+                    h3
+                        | Normal
+                    span {{getNormalProgression(application.progression.hm)}}
+            div(flex)
+                div(layout = "column")
+                    h3
+                        | Heroic
+                    span {{getHeroicProgression(application.progression.hm)}}
+            div(flex)
+                div(layout="column")
+                    h3
+                        | Mythic
+                    span {{getMythicProgression(application.progression.hm)}}
