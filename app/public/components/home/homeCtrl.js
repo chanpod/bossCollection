@@ -2,13 +2,13 @@
 angular.module("BossCollection.home")
     .controller("homeController", ["$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc',
         function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc) {
-            
+
             $scope.guild = {};
             $scope.editing = false;
             $scope.content;
             $scope.newTab;
             $scope.guildImagesLoaded = false;
- 
+
             var newTab = { title: "New Tab", content: "Insert Content here. Markup supported. Click on the question mark in the preview bar below to get more details." };
 
             $scope.$on("loggedin", (event, user) => {
@@ -29,24 +29,24 @@ angular.module("BossCollection.home")
                     })
 
 
-            })  
+            })
 
-            $scope.login = () =>{
+            $scope.login = () => {
                 siteServices.showLoadingBottomSheet();
             }
 
-            $scope.init =  () => {
+            $scope.init = () => {
 
                 $scope.newTab = Object.assign({}, newTab);
 
                 $scope.getHomepageContent();
 
             }
- 
-            $scope.getHomepageContent = () => { 
+
+            $scope.getHomepageContent = () => {
 
                 $scope.guildImagesLoaded = false;
-                
+
                 if ($scope.user && $scope.user.guild) {
 
                     guildServices.getHomepageContent($scope.user.guild.name)
@@ -72,14 +72,40 @@ angular.module("BossCollection.home")
                         })
                         .catch(function (err) {
                             siteServices.showMessageModal(err.data);
-                        }) 
+                        })
                 }
-            }  
-  
+                else {
+                    guildServices.getHomepageContent("mkdir BossCollection")
+                        .then(function (guild) {
+
+                            $scope.guild = guild.guild;
+
+                            // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
+                            //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
+
+                            // if ($scope.guild && $scope.guild.images) {
+                            //     $scope.guild.images.forEach(function (image) {
+                            //         sliderHTML += "<item source = " + image + "></item>"
+                            //     }, this);
+                            // }
+
+
+                            // sliderHTML += "</awesome-slider>";
+
+                            // document.getElementById('imageGallery').innerHTML = sliderHTML;
+
+                            $scope.guildImagesLoaded = true;
+                        })
+                        .catch(function (err) {
+                            siteServices.showMessageModal(err.data);
+                        })
+                }
+            }
+
             $scope.editTab = function () {
                 $scope.editing = true;
-            }  
-   
+            }
+
             $scope.saveTab = function () {
 
                 guildServices.updateHomepageContent($scope.guild, $scope.user.guild.name)
@@ -93,7 +119,7 @@ angular.module("BossCollection.home")
                         siteServices.showMessageModal(err.data);
                     })
 
-            } 
+            }
 
             $scope.deleteTab = function (index) {
 
@@ -102,9 +128,9 @@ angular.module("BossCollection.home")
 
                         $scope.guild.tabs.remove(index);
                         $scope.saveTab();
- 
+
                     })
-            }  
+            }
 
             $scope.addNewTab = function () {
 

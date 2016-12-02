@@ -4,7 +4,7 @@ script#home(type="text/ng-template")
     
     video(src = "/videos/bannerVideo.mp4",autoplay, loop, style = "width: 100%;height:100%")     
         
-    section(layout="column", ng-if = "user.guild")
+    section(layout="column")
         md-tabs(md-dynamic-height, md-border-bottom).md-background
             md-tab(ng-repeat = "tab in guild.tabs", label = "{{tab.title}}")
                 md-content().md-padding
@@ -201,8 +201,7 @@ script#home(type="text/ng-template")
                         span()
                             | Integrated links to your tools of choice.
 
-    div(ng-if = "user && user.guild")
-        recruitment
+    
             
     ad(flex, layout, layout-align = "center center")
     
