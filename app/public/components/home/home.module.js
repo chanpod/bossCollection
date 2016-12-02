@@ -5,8 +5,8 @@ angular.module("BossCollection.home", ['ngRoute'])
 
         $routeProvider
         .when('/', {
-            templateUrl: 'home',
-            controller: 'homeController'
+            templateUrl: 'guildVisitHome',
+            controller: 'guildVisitController'
         }) 
         .when('/guild/:guildName', {
             templateUrl: 'guildVisitHome',
