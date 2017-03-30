@@ -18,6 +18,7 @@ angular.module("BossCollection.forums")
             var deleteThreadResource = $resource(FORUM_API_BASE + '/deleteThread');
             var editThreadResource = $resource(FORUM_API_BASE + '/editThread')
             var getThreadResource = $resource(FORUM_API_BASE + '/thread');
+            var getFavoritesResource = $resource(FORUM_API_BASE + '/favorites');
             var createCommentResource = $resource(FORUM_API_BASE + '/createComment', {}, {});
             var getCommentsResource = $resource(FORUM_API_BASE + '/getComments', {}, {});
             var editCommentResource = $resource(FORUM_API_BASE + '/editComment', {}, {});
@@ -27,7 +28,29 @@ angular.module("BossCollection.forums")
             var forums;
             var currentForum;            
             var thread;
-            
+            var comingFromFavorites = false;
+
+            function setIsComingFromFavorites(boolean) {
+                comingFromFavorites = boolean;
+            }    
+
+            function getIsComingFromFavorites() {
+                return comingFromFavorites;
+            }
+
+            function getFavorites() {
+
+                var defer = $q.defer();                
+
+                getFavoritesResource.get().$promise
+                    .then(function (response) {
+
+                        defer.resolve(response.favorites);
+                    });
+
+                return defer.promise;
+            }            
+
             //==== Category Functions ==================
             
             function deleteCategory(category) {
@@ -146,6 +169,24 @@ angular.module("BossCollection.forums")
                 return defer.promise;
             }
             
+            function getForumsForced(){
+                
+                var defer = $q.defer();
+
+                 
+                getForumsResource.save({}).$promise
+                    .then(function (response) {
+
+                        forums = response.forums;
+                        defer.resolve(response.forums);
+                    }, function (err) {
+
+                        defer.reject(err);
+                    })
+                
+                return defer.promise;
+            }
+            
             function removeLocalForums(){
                 forums = undefined;
             }
@@ -234,6 +275,9 @@ angular.module("BossCollection.forums")
                             currentForum = forum;
                             defer.resolve(forum);
                         })
+                        .catch((error) => {
+                            defer.reject(error);
+                        })
                 }
 
                 return defer.promise;
@@ -261,6 +305,8 @@ angular.module("BossCollection.forums")
                     .then(function (response) {
 
                         defer.resolve(response.threads);
+                    }, (err) => {
+                        defer.reject(err);
                     })
 
                 return defer.promise;
@@ -284,6 +330,8 @@ angular.module("BossCollection.forums")
                     .finally(function () {
 
                     })
+                    
+                return defer.promise;
             }
 
             function editThread(thread) {
@@ -335,13 +383,13 @@ angular.module("BossCollection.forums")
                 var defer = $q.defer();
                 
                 if(thread == undefined){
-                    getThreadResource.save({threadID:threadID}).$promise
+                    getThreadResource.save({threadID:threadID}).$promise 
                         .then(function(threadData){
                             
                             defer.resolve(threadData);
                         })
                         .catch(function (err) {
-
+                            
                             defer.reject(err);
                         })
                         .finally(function () {
@@ -417,11 +465,11 @@ angular.module("BossCollection.forums")
                 return defer.promise;
             }
 
-            function getComments(threadId){
+            function getComments(threadId, messageCount){
                 
                 var defer = $q.defer();
                 
-                var bodyData = {threadId: threadId};
+                var bodyData = {threadId: threadId, messageCount: messageCount};
                 
                 getCommentsResource.save(bodyData).$promise
                     .then(function(comments){
@@ -511,6 +559,7 @@ angular.module("BossCollection.forums")
                 deleteForum: deleteForum,
                 cancel: cancel,
                 getForums: getForums,
+                getForumsForced:getForumsForced,
                 removeLocalForums:removeLocalForums,
                 getThreads: getThreads,
                 getCurrentForum: getSelectedForum,
@@ -527,7 +576,10 @@ angular.module("BossCollection.forums")
                 getThreadCountsLocal:getThreadCountsLocal,
                 setSelectedThread:setSelectedThread,
                 removeSelectedThread:removeSelectedThread,
-                getSelectedThread:getSelectedThread
+                getSelectedThread: getSelectedThread,
+                getFavorites: getFavorites,
+                getIsComingFromFavorites: getIsComingFromFavorites,
+                setIsComingFromFavorites:setIsComingFromFavorites
             }
         }]) 
         

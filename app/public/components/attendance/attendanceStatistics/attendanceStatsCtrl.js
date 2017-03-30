@@ -5,8 +5,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia','siteServices', '$filter',
-        function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter){
+    .controller("attendanceStatsCtrl", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia','siteServices', '$filter', '$anchorScroll',
+        function($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, $anchorScroll){
         
         siteServices.updateTitle('Attendance Portal');    
         $scope.absenceHighchartData = [];
@@ -18,12 +18,14 @@ angular.module("BossCollection.attendance")
         $scope.weeksCounted = 4;
         $scope.raidsPerWeek = 3;
         $scope.startingDate = new Date();
+        $scope.abscenceTypeOpen = false;
+        $scope.selectedMode = 'md-fling';
         
         $scope.init = function(){
             
             $scope.getAbsences();
             $scope.buildHighChart();
-        }
+        }     
         
         $scope.openReportModal = function(){
             
@@ -46,22 +48,26 @@ angular.module("BossCollection.attendance")
                 date:$scope.startingDate, 
                 weeks:$scope.weeksCounted
             }
-            
-            absenceService.getAbsenceHistory(absenceHistory).then(function (result) {
+             
+            absenceService.getAbsenceHistory(absenceHistory)
+                .then(function (result) {
 
-                $scope.loading = false;
-                $scope.absences = result.absences;
-                $scope.calculateAttendance();
-
-            },
-                function (err) {
-                    siteServices.showMessageModal(err.message)
                     $scope.loading = false;
+                    $scope.absences = result.absences;
+                    $scope.calculateAttendance();
+
+                })
+                .catch(function (err) {
+                    siteServices.handleError(err)
+
                     console.log(err);
                 })
+                .finally(() => {
+                    $scope.loading = false;
+                })
         }
-        
-        /** 
+
+        /**
          * 
          * 
          * 
@@ -121,7 +127,7 @@ angular.module("BossCollection.attendance")
                     drillDownData.push([
                         absentObject.date,
                         $scope.absent
-                    ])
+                    ]) 
                 })  
                 
                 

@@ -2,7 +2,7 @@
 
 angular.module("BossCollection.accounts")
     .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
-        'siteServices', 
+        'siteServices',
         function ($resource, $q, $location, $cookies, $rootScope, siteServices) {
             var ACCOUNT_API_URL_BASE = "/api/account"
             var registration = $resource('/api/account/signup', {},
@@ -11,57 +11,58 @@ angular.module("BossCollection.accounts")
                 })
 
             var login = $resource(ACCOUNT_API_URL_BASE + '/login')
-            var logout = $resource(ACCOUNT_API_URL_BASE +  '/logout');
+            var logout = $resource(ACCOUNT_API_URL_BASE + '/logout');
             var loggedIn = $resource(ACCOUNT_API_URL_BASE + '/loggedin');
             var updateAccount = $resource(ACCOUNT_API_URL_BASE + '/updateAccount');
             var getUser = $resource(ACCOUNT_API_URL_BASE + '/currentUser');
             var getUserAvatar = $resource(ACCOUNT_API_URL_BASE + '/user/:userName/avatar');
-            var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password'); 
-            var savedUser = null; 
+            var lostPassword = $resource(ACCOUNT_API_URL_BASE + '/lost-password');
+            var savedUser = null;
 
-            var accountApi = { 
-                getAvatar: function(userName){
+            var accountApi = {
+                getAvatar: function (userName) {
+
                     var defer = $q.defer();
-                    
-                    getUserAvatar.get({userName: userName}, function(response){
+
+                    getUserAvatar.get({ userName: userName }, function (response) {
                         defer.resolve(response.avatarUrl);
                     })
-                    
+
                     return defer.promise;
                 },
-                lostPassword: function(email){
-                    
+                lostPassword: function (email) {
+
                     var defer = $q.defer();
-                    
-                  lostPassword.save({"email": email}).$promise
-                    .then(function(response){
-                        
-                        defer.resolve(response);
-                    }, function(err){
-                        defer.reject(err.data.message);
-                    })  
-                    
+
+                    lostPassword.save({ "email": email }).$promise
+                        .then(function (response) {
+
+                            defer.resolve(response);
+                        }, function (err) {
+                            defer.reject(err.data.message);
+                        })
+
                     return defer.promise;
                 },
                 updateAccount: function (updatedUser) {
 
-                    var defer = $q.defer(); 
+                    var defer = $q.defer();
 
-                    siteServices.startLoading();
+                    
 
                     updateAccount.save(updatedUser).$promise
                         .then(function (response) {
 
-
+                            siteServices.successfulUpdate();
                             defer.resolve(response);
                         },
-                            function (err) {
+                        function (err) {
 
-                                console.log(err);
-                                defer.reject(err.data.message);
-                            })
+                            console.log(err);
+                            defer.reject(err.data.message);
+                        })
                         .finally(function () {
-                            siteServices.loadingFinished();
+                            
                         })
 
                     return defer.promise;
@@ -71,7 +72,7 @@ angular.module("BossCollection.accounts")
                     savedUser = getUserFromCookie();
 
                     if (savedUser && savedUser.guild) {
-                        saveUsersRank(savedUser);
+                        saveUsersPermissions(savedUser);
                     }
 
                     $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
@@ -88,10 +89,20 @@ angular.module("BossCollection.accounts")
                     if (savedUser) {
 
                         if (savedUser && savedUser.guild) {
-                            saveUsersRank(savedUser);
+                            saveUsersPermissions(savedUser);
                         }
 
                         defer.resolve(savedUser);
+
+                        accountApi.getUserFromServer()
+                            .then((user) => {
+                                if (user.guild.name == savedUser.guild.name) {
+                                    //don't care
+                                }
+                                else {
+                                    accountApi.updateUser();
+                                }
+                            })
                     }
                     else {
                         defer.reject("User doesn't exist");
@@ -100,13 +111,35 @@ angular.module("BossCollection.accounts")
 
                     return defer.promise;
                 },
-                ifLoggedIn: function(){
-                    
+
+                getUserFromServer: () => {
+
                     var defer = $q.defer();
-                    
-                    this.getUser()
-                        .then(function(){
+
+                    getUser.get().$promise
+                        .then(function (user) {
                             
+                            defer.resolve(user);
+                        },
+                        function (err) {
+
+                            console.log(err);
+                            defer.reject(err);
+                        })
+                        .finally(function () {
+
+                        })
+
+                    return defer.promise;
+                },
+
+                ifLoggedIn: function () {
+
+                    var defer = $q.defer();
+
+                    this.getUser()
+                        .then(function () {
+
                             if (savedUser) {
                                 defer.resolve(true);
                             }
@@ -114,10 +147,10 @@ angular.module("BossCollection.accounts")
                                 defer.resolve(false);
                             }
                         })
-                        .fail(function(err){
+                        .fail(function (err) {
                             defer.reject(err);
                         })
-                    
+
                     return defer.promise;
                 },
                 refreshUserFromServer: function () {
@@ -132,11 +165,11 @@ angular.module("BossCollection.accounts")
                             accountApi.updateUser();
                             defer.resolve();
                         },
-                            function (err) {
+                        function (err) {
 
-                                console.log(err);
-                                defer.reject(err);
-                            })
+                            console.log(err);
+                            defer.reject(err);
+                        })
                         .finally(function () {
                             siteServices.loadingFinished();
                         })
@@ -179,17 +212,17 @@ angular.module("BossCollection.accounts")
 
                     console.log("Register new user");
                     //socket.emit("getBossInfo", boss); 
-                
+
                     siteServices.startLoading();
 
                     registration.save(newUser).$promise
                         .then(function (result) {
 
                             savedUser = getUserFromCookie();
-                            saveUsersRank(savedUser);
-                            
+                            saveUsersPermissions(savedUser);
+
                             accountApi.updateUser();
-                            
+
                             $location.path("/");
                         }, function (err) {
                             console.log(err.data);
@@ -212,16 +245,16 @@ angular.module("BossCollection.accounts")
                         .then(function (loggedInUser) {
 
                             savedUser = loggedInUser;
-                            saveUsersRank(loggedInUser);
+                            saveUsersPermissions(loggedInUser);
 
                             $rootScope.$broadcast("loggedin", { user: savedUser, loggedIn: true });
                             siteServices.hideLoadingBottomSheet();
                         },
-                            function (err) {
+                        function (err) {
 
 
-                                defer.reject(err.data);
-                            })
+                            defer.reject(err.data.message);
+                        })
                         .finally(function () {
 
 
@@ -231,13 +264,13 @@ angular.module("BossCollection.accounts")
                     return defer.promise;
                 }
             };
-            
-            
+
+
             function getUserFromCookie() {
 
                 var userCookie = $cookies.get("user");
                 var user = undefined;
-                
+
                 if (userCookie) {
                     var jsonString = userCookie.substring(userCookie.indexOf("{"), userCookie.lastIndexOf("}") + 1);
                     user = JSON.parse(jsonString);
@@ -246,20 +279,31 @@ angular.module("BossCollection.accounts")
                 return user;
             }
 
-            function saveUsersRank(user) {
+            function saveUsersPermissions(user) {
+
                 var memberListing;
+
                 if (savedUser && savedUser.guild) {
+
                     memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
+
                     savedUser.rank = memberListing.rank
+                    savedUser.officer = memberListing.officer
+                    savedUser.raider = memberListing.raider
+                    savedUser.GM = memberListing.GM
+                    savedUser.approved = memberListing.approved
+
                     return memberListing.rank;
                 }
                 else {
+
                     if (user && user.guild) {
+
                         memberListing = _.find(savedUser.guild.members, { user: savedUser.name });
                         return memberListing.rank;
                     }
                     else {
-                        return 0;
+                        return undefined;
                     }
                 }
             }

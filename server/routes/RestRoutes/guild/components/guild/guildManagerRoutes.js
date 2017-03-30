@@ -7,6 +7,29 @@ var util = require('utility');
 
 var Guild = require('./guild-manager.js');
 
+router.route('/guildSettings')
+    .get(function (req, res) {
+        Guild.getGuildSettings(req, res)
+            .then((result) => {
+                res.status(200).send(result);
+            })
+            .catch(function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+    .post(function (req, res) {
+        
+        Guild.saveGuildSettings(req, res)
+            .then((result) => {
+                res.status(200).send(result);
+            })
+            .catch((err) => {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 router.route('/listOfGuilds')
     .get(function (req, res) {
 
@@ -15,7 +38,7 @@ router.route('/listOfGuilds')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -29,7 +52,7 @@ router.route('/addGuild')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -47,12 +70,12 @@ router.route('/addGuild')
 router.route('/updateRank')
     .post(function (req, res) {
 
-        Guild.updateRank(req, res)
+        Guild.updateUserRank(req, res)
             .then(function(result) {
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -73,7 +96,7 @@ router.route('/getGuildMembers')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -87,7 +110,7 @@ router.route('/addMember')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -105,7 +128,7 @@ router.route('/kickMember')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -122,23 +145,71 @@ router.route('/removeMember')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
     })
 
+router.route('/ranks')
+    .get((req, res) => {
+        
+        Guild.getRanks(req, res)
+            .then((result) => {
 
+                res.status(200).send(result);
+            })
+            .catch((err) => {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+    .post((req, res) => {
+        
+        Guild.createRank(req, res)
+            .then((result) => {
+
+                res.status(200).send(result);
+            })
+            .catch((err) => {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+    .put((req, res) => {
+        
+        Guild.updateGuildRank(req, res)
+            .then((result) => {
+
+                res.status(200).send(result);
+            })
+            .catch((err) => {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+    .delete((req, res) => {
+        
+        Guild.deleteRank(req, res)
+            .then((result) => {
+
+                res.status(200).send(result);
+            })
+            .catch((err) => {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
 
 router.route('/guildHomepage/:guildName')
     .get(function(req, res){
         
        Guild.getGuildHomepage(req, res)
-            .then(function(result) {
+            .then(function(result) { 
 
-                res.status(200).send(result);
+                res.status(200).send(result); 
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })
@@ -150,7 +221,7 @@ router.route('/guildHomepage/:guildName')
 
                 res.status(200).send(result);
             })
-            .fail(function(err) {
+            .fail((err) => {
 
                 res.status(400).send(util.handleErrors(err));
             })

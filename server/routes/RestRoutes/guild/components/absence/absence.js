@@ -125,12 +125,14 @@ function getAbsenceHistory(req, res){
     var numOfWeeks = req.body.weeks;
     var numOfDaysHistory = numOfWeeks * 7;
     var startingDate = standardiseTime(req.body.date);
-    
+
     if(startingDate == undefined){
         startingDate = standardiseTime(moment());
     }
-        
-    var currentDayOfYear = moment().dayOfYear();
+
+    var myMoment = moment(startingDate);
+    
+    var currentDayOfYear = myMoment.dayOfYear();
     
     var endDate = moment().dayOfYear(currentDayOfYear - numOfDaysHistory);
     

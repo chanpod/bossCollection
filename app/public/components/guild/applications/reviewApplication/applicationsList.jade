@@ -1,0 +1,28 @@
+div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between center", layout).md-list-item-text
+    div(flex, layout, layout-align = "start center")
+        img(src = "http://us.battle.net/static-render/us/{{application.character.thumbnail}}").padding
+        img(src = "/images/classIcons/images/class/64/{{getClassName(application)}}.png")
+        | {{application.character.name}} - {{application.dateApplied | date: format}}
+
+    
+    
+            
+    div(flex, layout = "row",  layout-align = "end center")
+        md-button(ng-click = "openComments(application)").md-primary.md-raised
+            md-icon(md-font-library="material-icons") open_in_new
+            | Details
+        md-button(ng-click = "buildArmoryUrl(application.realm.name, application.character.name)").md-primary.md-raised
+            md-icon(md-font-library="material-icons") call_made
+            | Armory Profile
+        md-menu(ng-if = "isOfficer() && user.name != application.user")
+            md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+            md-menu-content
+                md-menu-item
+                    md-button(ng-click = "approveApplicant(application)")
+                        md-icon(md-font-library="material-icons") check_circle
+                        | Accept Application
+                md-menu-item
+                    md-button(ng-click = "rejectApplicant(application)")
+                        md-icon(md-font-library="material-icons") close
+                        | Reject application 

@@ -10,24 +10,23 @@ angular.module("BossCollection.accounts")
 
             $scope.passwordsMatch = false;
 
-            
+
 
             $scope.register = function () {
 
                 userLoginSrvc.registerNewUser($scope.user).then(function (result) {
                     //save user to cookie
-                    
+
                 },
                     function (err) {
-                        $scope.passwordsMatch = true;
-                        $scope.openFromLeft(err);
+                        $scope.passwordsMatch = true;                        
                         console.log(err);
-                    })
-
+                        siteServices.handleError(err);
+                    })                    
             }
 
             $scope.openFromLeft = function (errorMessage) {
-                
+
                 siteServices.showMessageModal(errorMessage);
             };
 

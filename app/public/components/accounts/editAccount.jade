@@ -36,7 +36,7 @@ script#editAccount(type="text/ng-template")
                         input(id="battleTag", ng-model = "user.avatarUrl")
                         md-hint() Uses image url only. EG use imgur
                     div(ng-if = "user.avatarUrl != undefined")
-                        h3 Avatar
+                        h3 Avatar Preview
                         img(src = "{{user.avatarUrl}}").avatarImage
                     md-list
                         md-subheader().md-no-sticky
@@ -44,9 +44,11 @@ script#editAccount(type="text/ng-template")
                         md-list-item().secondary-button-padding.md-2-line
                             md-button(ng-click = "leaveGuild()").md-secondary.md-raised Leave Guild
                             div().md-list-item-text
-                                {{user.guild.name}}
+                                | {{user.guild.name}}
                         md-divider
             div(flex)
+                md-progress-linear(ng-show = "loading", md-mode="indeterminate")
+
                 div()
                     md-input-container(flex).md-block
                         md-button(type = "submit").md-primary.md-raised

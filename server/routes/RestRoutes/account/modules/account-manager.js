@@ -29,7 +29,7 @@ exports.updateAvatarUrl = function(userName, avatarUrl){
 exports.getAvatarUrl = function(userName){
     
     var defer = q.defer();
-    
+
     UserModel.findOne({name:userName}, function(err, user){       
        
        if(err){
@@ -140,16 +140,13 @@ exports.manualLogin = function(user, pass, callback)
 			
 		}	else{
             
-            console.log(pass);
-            console.log(userFound.password);
-            
 			validatePassword(pass, userFound.password, function(err, res) {
 				if (res){
 					
                     defer.resolve(userFound);
 				}	else{
                     
-					defer.reject(util.handleErrors('invalid password: ' + err));
+					defer.reject(util.handleErrors('invalid password'));
 				}
 			});
 		}
@@ -196,7 +193,7 @@ exports.addNewAccount = function(newUser, callback)
                     newUser.password = newHash;
                     // append date stamp when record was created //
                     newUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
-                    console.log("Adding new user: " + newUser);
+                    
                     newUser = new UserModel(newUser);
                     
                     newUser.save(function(savedUser){
@@ -215,9 +212,6 @@ exports.addNewAccount = function(newUser, callback)
 exports.updateAccount = function(userAccount, callback)
 {
     var defer = q.defer();
-    
-    console.log("Saving account: " + JSON.stringify(userAccount));
-    //console.log(userModel);
 
     var query = {"name" : userAccount.name};
     
@@ -246,20 +240,13 @@ exports.updatePassword = function(email, newPass, callback)
 		}	
         else{
             
-            console.log("Creating new passwith with pass: " + newPass);
-            
             var newHash = saltAndHash(newPass);
             
-            
-            
-            
             user.password = newHash;
-            console.log("New Password: " + user.password);
             
             user.save()
-                .then(function (updatedUser) {
+                .then(function (updatedUser) {                    
                     
-                    console.log("User updated with new password: " + updatedUser._doc.password);
                     defer.resolve(updatedUser);
                 },
                 function(err){
@@ -355,9 +342,9 @@ var saltAndHash = function(pass, callback)
 var validatePassword = function(plainPass, hashedPass, callback)
 {
 	var salt = hashedPass.substr(0, 10);
-    console.log("Creating hash with password: " + plainPass);
+    
 	var validHash = salt + md5(plainPass + salt);
-    //console.log(validHash);
+    
 	callback(null, hashedPass === validHash);
 }
 

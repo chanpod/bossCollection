@@ -18,6 +18,12 @@ angular.module('BossCollection.directives')
                         '_blank' // <- This is what makes it open in a new window.
                         );
                 }
+
+                scope.$watch('input', function (input) {
+
+                    scope.input = input;
+
+                })
                 
                 scope.converToHtml = function (){
                     

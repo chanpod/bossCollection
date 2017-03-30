@@ -8,7 +8,9 @@ angular.module('BossCollection.accounts').
             templateUrl: 'userDisplayTemplate',
             controller: 'userDisplayController',
             scope: {
-                user: '=user'
+                user: '=user',
+                fontsize: '=fontsize',
+                hideicon: '=hideIcon'
             } 
         }  
   }]); 

@@ -4,33 +4,24 @@ var router = express.Router();
 var absence = require('./components/absence/absenceRoutes.js');
 var applications = require('./components/applications/applicationsRoutes.js');
 var guildManager = require('./components/guild/guildManagerRoutes.js');
+var recruitmentRoutes = require('./components/recruitment/routes.js');
 
 var util = require('utility');
 
-router.use(function(req,res, next){
-    
-  var errMessage = "You must be logged in and a part of a guild to use this";
-  next();
-  /*
-  if(req.session.user){
-      
-      if (req.session.user.guild) {
-          
-       }
-       else{
-          
-           //res.status(400).send(util.handleErrors(errMessage));
-       }
-  }
-  
-  else{
-      res.status(400).send(util.handleErrors(errMessage));
-  }
-  */
+router.use(function (req, res, next) {
+
+    var errMessage = "You must be logged in and a part of a guild to use this";
+    var allowedUrl = "/guild/guildHomepage";
+    var loginUrl = "/login";
+    var logoutUrl = "/logout";
+    var joinGuild = "/guild/addMember"
+
+    next();
 })
 
 router.use('/absence', absence);
 router.use('/applications', applications);
 router.use('/guild', guildManager);
+router.use('/recruitment', recruitmentRoutes);
 
 module.exports = router;

@@ -15,9 +15,8 @@ angular.module("BossCollection.accounts")
         }
         
         
-        
         $scope.init = function () {
-        }
+        } 
         
         $scope.resetPassword = function(){
             
@@ -78,6 +77,9 @@ angular.module("BossCollection.accounts")
                         else {
                             $location.path("/");
                         }
+                    })
+                    .catch(err => {
+                        siteServices.handleError(err);
                     })
                 
             },

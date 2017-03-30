@@ -35,17 +35,21 @@ router.post('/user/:userName/avatar/:avatarUrl', function(req, res){
 router.get('/user/:userName/avatar', function(req, res){
     
     var userName = req.params.userName;
-    
-    AM.getAvatarUrl(userName)
-        .then(function(response){
-            res.status(200).send(response);
-        })
-        .fail(function(err){
-            res.status(400).send(err);
-        })
-    
-})
 
+    if (util.userExist(req)) {
+        
+        AM.getAvatarUrl(userName)
+            .then(function (response) {
+                res.status(200).send(response);
+            })
+            .fail(function (err) {
+                res.status(400).send(err);
+            })
+    }
+    else {
+        res.status(400).send(util.handleErrors("No user found. Must be logged in"));
+    }
+})
 
 router.post('/loggedin', function (req, res) {
 
@@ -197,7 +201,7 @@ router.post('/updateAccount', function (req, res) {
     var newPassword = req.body.newPassword;
     var verifyPassword = req.body.passwordVerify;
 
-    console.log("Current password: " + sessionPassword);
+    
 
     AM.validatePassword(currentPassword, sessionPassword)
         .then(function () {
@@ -384,7 +388,6 @@ router.get('/reset', function (req, res) {
     });
 });
 
-router.get('*', function (req, res) { res.render('404', { title: 'Page Not Found' }); });
 
 function setUser(req, res) {
     var defer = q.defer();

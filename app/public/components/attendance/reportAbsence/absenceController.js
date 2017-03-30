@@ -3,8 +3,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog',
-        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog){
+    .controller("absenceReportController", ["$scope", '$location', 'userLoginSrvc', 'absenceService', 'siteServices', '$filter', 'guildServices', '$mdDialog', 'permissionsService',
+        function($scope, $location, userLoginSrvc, absenceService, siteServices, $filter, guildServices, $mdDialog, permissionsService){
         
         var currentDay = moment().day();
         
@@ -17,6 +17,7 @@ angular.module("BossCollection.attendance")
         $scope.typePicked = false;
         $scope.today = moment(); 
         $scope.dayDesired;
+        
         $scope.currentlySelected = moment().format('dddd - Do');
         
         self.selectedUser = {};
@@ -38,19 +39,31 @@ angular.module("BossCollection.attendance")
         $scope.isToolSetOpen = false;
         
         
-             
+        $scope.isGM = () => {
+            if ($scope.user != undefined) {
+
+                return permissionsService.isGM($scope.user);
+            }
+            else {
+                return false;
+            }
+        }
                 
         $scope.init = function(){
             
-            siteServices.updateTitle('Report Absence');
+            siteServices.updateTitle('Report Absence'); 
             
             if($scope.user == undefined){
                 
                 userLoginSrvc.getUser()
-                    .then(function(user) {
-                        $scope.user = user
+                    .then(function (user) {
                         
-                        if ($scope.user.rank < 3) {
+                        $scope.user = user
+                        console.log($scope.isGM());
+                        $scope.gm = !permissionsService.isGM($scope.user);
+
+                        if (!permissionsService.isOfficer($scope.user)) {
+
                             self.selectedUser = $scope.user;
                             self.showContent();
                         }
@@ -58,10 +71,13 @@ angular.module("BossCollection.attendance")
                             $scope.getGuildUsers();
                         }
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
                 
             }
             else{
-                if ($scope.user.rank < 3) {
+                if (permissionsService.isOfficer($scope.user)) {
                     self.selectedUser = $scope.user;
                     self.showContent();
                 }
@@ -72,6 +88,10 @@ angular.module("BossCollection.attendance")
                 
         }
         
+        $scope.isOfficer = ()=>{
+            return permissionsService.isOfficer($scope.user);
+        }
+
         $scope.getGuildUsers = function(){
             
             $scope.loading = true;
@@ -81,6 +101,9 @@ angular.module("BossCollection.attendance")
                     
                     $scope.users = users;
                     self.showContent();  
+                })
+                .catch(function (err) {
+                    //siteServices.handleError(err);
                 })
                 .finally(function(){
                     
@@ -125,7 +148,7 @@ angular.module("BossCollection.attendance")
                 $scope.absences = result.absences; 
             }, 
             function(err){
-                siteServices.showMessageToast(err) 
+                siteServices.handleError(err) 
                 $scope.loading = false;
                 console.log(err);  
             })
@@ -141,7 +164,7 @@ angular.module("BossCollection.attendance")
                 $scope.absences = result.absences; 
             }, 
             function(err){
-                siteServices.showMessageToast(err) 
+                siteServices.handleError(err) 
                 $scope.loading = false;
                 console.log(err);  
             })
@@ -163,7 +186,7 @@ angular.module("BossCollection.attendance")
             }
             else { 
                 
-                if ($scope.user.rank < 3) {
+                if (!permissionsService.isOfficer($scope.user)) {
                     
                     self.selectedUser = $scope.user.name;
                 }
@@ -179,7 +202,7 @@ angular.module("BossCollection.attendance")
                     siteServices.showMessageModal("Success");
                 },
                     function (err) {
-                        siteServices.showMessageModal(err);
+                        siteServices.handleError(err);
                         console.log(err);
                     })
             }

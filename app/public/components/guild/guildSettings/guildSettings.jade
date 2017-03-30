@@ -1,0 +1,77 @@
+script#guildSettings(type="text/ng-template")
+    div
+        form(name = "editAccountForm", ng-submit = "updateGuildSettings()", layout = "column", layout-xs = "column")
+            div(layout = "row", layout-xs = "column")
+                div(flex, layout = "column")
+                    div(flex)
+                        md-input-container(flex).md-block
+                            label() Logs Link
+                            input(id = "logsLink", ng-model = "guild.logsLink", aria-label = "logs link")
+                        
+                    div(flex)
+                        md-input-container(flex).md-block
+                            label() Progression Link
+                            input(id="progressionLink", ng-model = "guild.progressionlink", aria-label = "progressionLink")                    
+            md-card
+                md-card-title
+                    md-card-title-text                                           
+                        h2 Images for homepage banner
+                md-card-content       
+                    div(flex, ng-if = "user.guild")
+                        
+                        md-button(ng-click = "addNewImage()").md-raised.md-primary
+                            | Add another image
+                            
+                        div(ng-repeat = "imageUrl in guild.images track by $index")
+                            md-card
+                                md-card-content                   
+                                    md-input-container(flex).md-block                        
+                                        input(ng-model = "guild.images[$index]", aria-label = "guild image url")
+                                        md-hint() Uses image url only. EG use imgur
+                                md-card-actions
+                                    md-button(ng-click = "removeImage($index)").md-raised.md-primary Remove
+            md-card
+                md-card-title
+                    md-card-title-text
+                        h2 Ranks
+                md-card-content
+                    div()
+                        md-button(ng-click = "addNewRank()").md-raised.md-primary
+                            | New Rank
+                        md-list(ng-cloak)
+                            md-list-item(ng-repeat = "rank in guild.ranks | orderBy: 'rank'").secondary-button-padding
+                                p
+                                    md-input-container(flex).md-block                                        
+                                        input(ng-model = "rank.name", ng-change = "changeDetected()", aria-label = "rank name")
+                                     
+                                md-menu()
+                                    md-button(aria-label="Open rank settings menu", ng-click="openMenu($mdOpenMenu, $event)").md-icon-button
+                                        md-icon(md-font-library="material-icons", aria-label = "refresh forum") more_vert
+                                    md-menu-content(style = "padding: 15px", layout-align = "center center")                                        
+                                            
+                                        md-button(ng-click = "promoteRank(rank)")
+                                            md-icon(md-font-library="material-icons", aria-label = "refresh forum") keyboard_arrow_up
+                                            | Increase Rank                                            
+                                            
+                                        md-button(ng-click = "demoteRank(rank)")
+                                            md-icon(md-font-library="material-icons", aria-label = "refresh forum") keyboard_arrow_down
+                                            | Decrease Rank
+                                        
+                                        md-button(ng-click = "deleteRank(rank)")
+                                            md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                            | Delete
+                                            
+                                        md-switch(ng-model = "rank.officer", aria-label = "Rank Switch")
+                                            | Officer
+                                            
+                                        md-switch(ng-model = "rank.raider", aria-label = "Rank Switch")
+                                            | Raider
+                    md-toolbar(ng-if = "changesMade").warning
+                        div() Changes detected. Please save or they won't be applied.
+                    
+            div(flex)
+                div(layout, layout-align = "start center") 
+                    md-input-container().md-block
+                        md-button(type = "submit").md-primary.md-raised
+                            | Save 
+                    md-progress-circular(ng-if = "loading", md-mode="indeterminate")

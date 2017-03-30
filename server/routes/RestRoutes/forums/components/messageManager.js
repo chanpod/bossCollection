@@ -13,10 +13,17 @@ function createComment(req, res){
     
     var newComment = new commentModel();
     
-    
     var threadId = req.body.comment.threadId;
     var message = req.body.comment.message;
-    var user = req.session.user.name;
+
+    if (util.userExist(req)) {
+        
+        var user = req.session.user.name;
+    }    
+    else {
+        defer.reject("Not logged in.");
+    }
+    
     
     
     newComment.user = user;
@@ -69,11 +76,11 @@ function deleteComment(req, res) {
     return defer.promise;
 }
 
-function getComments(threadId){
+function getComments(threadId, messageCount){
     
     var defer = q.defer();
     
-    commentModel.find({threadID: threadId})
+    commentModel.find({threadID: threadId}).limit(messageCount)
         .then(function(comments){
             
             defer.resolve({comments: comments});

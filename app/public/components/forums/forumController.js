@@ -1,7 +1,7 @@
 angular.module("BossCollection.forums")
     .controller('forumController', [
-        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout',
-        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout) {
+        '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$timeout', 'userLoginSrvc',
+        function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $timeout,userLoginSrvc) {
 
             
             siteServices.updateTitle('Forums');
@@ -14,12 +14,23 @@ angular.module("BossCollection.forums")
             }
 
 
-            $scope.markdown = "";
+            $scope.markdown = "";  
             
             $scope.init = function(){
                 
                 $scope.savedForums = forumService.getForumCountsLocal();
                 $scope.getForums();
+            }
+            
+            $scope.refreshForums = function(){
+                forumService.getForumsForced()
+                    .then(function(forums){
+                        
+                        $scope.forums = forums;
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
             
             $scope.getForums = function(){
@@ -39,18 +50,38 @@ angular.module("BossCollection.forums")
                         
                         
                     })
+                    .then(function () {
+                        return userLoginSrvc.getAvatar($scope.user.name)
+                            .then(function (result) {
+                                return result
+                            })
+                    })
+                    .then(function (avatarUrl) {
+                        $scope.avatarUrl = avatarUrl;
+                    })
                     .catch(function(err){
                         
                         $scope.loading = false;
+                        siteServices.handleError(err);
                         console.log(err);
                     })
             }
             
             $scope.newCategory = function () {
 
-                $scope.category = {};
+                $scope.category = {
+                    name: "",
+                    permissions: {
+                        raider: false,
+                        officer: false,
+                        minRank: 0,
+                        public: false
+                    }
+                };
+
+                $scope.category.user = $scope.user;
                 
-                forumService.openBottomSheet('category')
+                forumService.openBottomSheet('category', $scope.category)
                     .then(function(result){
                         
                         forumService.removeLocalForums();
@@ -72,14 +103,14 @@ angular.module("BossCollection.forums")
             $scope.editCategory = function (category) {
 
                 //$scope.category = category;
-                
+                category.user = $scope.user;
                 forumService.openBottomSheet('category', category)
                     .then(function(result){
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })
-                    .catch(function(err){
-                        //Didn't save
+                    .catch(function (err) {
+                        //siteServices.handleError(err);
                     })
             } 
 
@@ -94,8 +125,12 @@ angular.module("BossCollection.forums")
                         }
                     })
                     .then(function(response){
+                        siteServices.successfulUpdate();
                         forumService.removeLocalForums();
                         $scope.getForums();
+                    })
+                    .catch((err) => {
+                        siteServices.handleError(err);
                     })
             }
             
@@ -138,7 +173,7 @@ angular.module("BossCollection.forums")
             }
             
             $scope.editForum = function(forum){
-                
+                forum.user = $scope.user;
                 forumService.openBottomSheet('forumEdit', forum)
                     .then(function (result) {
                         
@@ -157,10 +192,13 @@ angular.module("BossCollection.forums")
                             return forumService.deleteForum(forum);
                         }
                     })
-                    .then(function(response){
+                    .then(function(response){ 
                         forumService.removeLocalForums();
                         $scope.getForums();
                     })
+                     .catch(function (err) {
+                         siteServices.handleError(err);
+                     })
             } 
 
             $scope.goToForum = function (forum) {
@@ -173,30 +211,40 @@ angular.module("BossCollection.forums")
             }
             
             $scope.updateForumViewed = function(forumIn){
-                
-                var catIndexTracker, forumIndexTracker;
-                
-                _.find($scope.savedForums.categories, function(cat, catIndex){
-                    if(cat._id == forumIn.categoryId){
-                        catIndexTracker = catIndex;
-                        _.find(cat.forums, function (forum, forumIndex) {
+                try{
+                    var catIndexTracker, forumIndexTracker;
+                    
+                    _.find($scope.savedForums.categories, function(cat, catIndex){
+                        if(cat._id == forumIn.categoryId){
+                            catIndexTracker = catIndex;
+                            _.find(cat.forums, function (forum, forumIndex) {
 
-                            if (forum._id == forumIn._id) {
-                                
-                                forumIndexTracker = forumIndex;
+                                if (forum._id == forumIn._id) {
+                                    
+                                    forumIndexTracker = forumIndex;
+                                }
+                            })
+                            
+                            if(forumIndexTracker == undefined){
+                                cat.forums.push(forumIn);
                             }
-                        })
-                        
-                        if(forumIndexTracker == undefined){
-                            cat.forums.push(forumIn);
                         }
+                    })
+                    
+                    if(catIndexTracker == undefined){
+                        
+                        $scope.savedForums.categories = $scope.forums.categories;
+                        forumService.saveForumCounts($scope.savedForums);
                     }
-                })
-                
-                $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
-                
-                
-                forumService.saveForumCounts($scope.savedForums);
+                    
+                    $scope.savedForums.categories[catIndexTracker].forums[forumIndexTracker] = forumIn;
+                    
+                    
+                    forumService.saveForumCounts($scope.savedForums);
+                }
+                catch(err){
+                    console.log(err);
+                }
             }
 
             $scope.init();

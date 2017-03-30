@@ -1,60 +1,44 @@
 script#manageMembers(type="text/ng-template")    
-    md-content
-        section(layout="column", flex = "90")
-            md-tabs(md-dynamic-height, md-border-bottom).md-background
-                md-tab(label = "Officers")
-                    md-content.md-padding
-                        md-card
-                            md-list()
-                                md-list-item(ng-repeat = "member in guildMembers | filter:{rank:3}").md-1-item
-                                    div(layout = "row", layout-xs = "column").md-list-item-text
-                                        p(flex)
-                                            {{member.user}}
-                                        div(ng-if = "user.rank == 4", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
-                                            md-button(ng-click = "demote(member)").md-primary.md-raised
-                                                | Demote
-                                        div(ng-if = "user.rank == 4", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
-                                            md-button(ng-click = "demote(member)").md-primary.md-raised
-                                                | Demote
-                                    md-divider(ng-if="!$last")
-                md-tab(label = "Members")
-                    md-content.md-padding
-                        md-card
-                            md-list()
-                                md-list-item(ng-repeat = "member in guildMembers | filter:{rank:2}").md-1-item
-                                    div(layout = "row", layout-xs = "column", layout-align = "space-between center").md-list-item-text
-                                        p(flex)
-                                            {{member.user}}
-                                        div(ng-if = "user.rank > 2", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
-                                            md-button(ng-if = "user.rank > 3", ng-click = "promote(member)").md-primary.md-raised
-                                                | Promote
-                                            md-button(ng-click = "demote(member)").md-primary.md-raised
-                                                | Demote
-                                        div(ng-if = "user.rank > 2", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
-                                            md-button(ng-if = "user.rank > 3", ng-click = "promote(member)").md-primary.md-raised
-                                                | Promote
-                                            md-button(ng-click = "demote(member)").md-primary.md-raised
-                                                | Demote
-                                    md-divider(ng-if="!$last")
-                md-tab(label = "Applicants - {{guildMembers | applicants:guildMembers}}")
-                    md-content.md-padding
-                        md-card
-                            md-list()
-                                md-list-item(ng-repeat = "member in guildMembers | filter:{rank:1}").md-1-item
-                                    div(layout = "row", layout-xs = "column", layout-align = "space-between center").md-list-item-text
-                                        p(flex)
-                                            {{member.user}}
-                                        div(ng-if = "user.rank > 2", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
-                                            md-button(ng-click = "promote(member)").md-primary.md-raised
-                                                | Promote
-                                        div(ng-if = "user.rank > 2", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
-                                            md-button(ng-click = "promote(member)").md-primary.md-raised
-                                                | Promote
-                                        div(ng-if = "user.rank > 2", flex, layout = "row",  layout-align = "end center")
-                                            md-button(ng-click = "kick(member)").md-primary.md-raised
-                                                | Kick
-                                        
-                                    md-divider(ng-if="!$last")
-                    
-                
-           
+    div(layout = "column" flex layout-fill)    
+        md-toolbar().md-tall
+            div(layout-md, layout-xs = "column", layout-align = "space-between center").md-toolbar-tools
+                h2(flex)
+                    | Permissions Management
+                div(flex)
+                    md-input-container(layout, style = "background-color: white;")
+                        label Filter Ranks
+                        input(ng-model = "filterRanks")
+        md-content()
+            section(ng-repeat = "rank in ranks | filter: filterRanks | orderBy: 'rank'")
+                md-subheader().md-warn
+                    | {{rank.rank}}. {{rank.name}}  
+                    | &nbsp 
+                    input(ng-model = "filterMembers", placeholder = "Filter Member")
+                md-list(layout-padding)
+                    md-list-item(ng-repeat = "guildMember in guildMembers | filter:{rank:rank.rank} | filter:filterMembers").md-list-item.md-whiteframe-3dp
+                        div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between center").md-list-item-text
+                            div(flex)
+                                | {{guildMember.user}}
+                            div(flex, layout, layout-align = "end center")
+                                div(ng-if = "isOfficer() && user.approved", hide-xs ,flex, layout = "row",  layout-align = "end center").md-secondary
+                                    md-button(ng-if = "showPromote(rank)", ng-click = "promote(guildMember)").md-primary.md-raised
+                                        | Promote
+                                    md-button(ng-if = "showDemote(rank)", ng-click = "demote(guildMember)").md-primary.md-raised
+                                        | Demote
+                                    md-button(ng-if = "showKick(rank)", ng-click = "kick(guildMember)").md-primary.md-raised
+                                        | Kick
+                                    md-button(ng-click = "disableUser(guildMember)", ng-if = "isOfficer(rank) && guildMember.approved && !guildMember.GM").md-icon-button 
+                                        md-icon(md-font-library="material-icons").greenIcon check_circle
+                                    md-button(ng-click = "approve(guildMember)", ng-if = "isOfficer(rank) && !guildMember.approved && !guildMember.GM").md-icon-button 
+                                        md-icon(md-font-library="material-icons").redIcon cancel
+                                div(ng-if = "isOfficer() && user.approved", hide-gt-xs , flex, layout = "row",  layout-align = "end center")
+                                    md-button(ng-if = "isGM()", ng-click = "promote(guildMember)").md-primary.md-raised
+                                        | Promote
+                                    md-button(ng-click = "demote(guildMember)").md-primary.md-raised
+                                        | Demote 
+                                    md-button(ng-if = "showKick(rank)",ng-click = "kick(guildMember)").md-primary.md-raised
+                                        | Kick
+                                    md-button(ng-click = "disableUser(guildMember)", ng-if = "isOfficer(rank) && guildMember.approved && !guildMember.GM").md-icon-button 
+                                        md-icon(md-font-library="material-icons").greenIcon check_circle
+                                    md-button(ng-click = "approve(guildMember)", ng-if = "isOfficer(rank) && !guildMember.approved && !guildMember.GM").md-icon-button 
+                                        md-icon(md-font-library="material-icons").redIcon cancel

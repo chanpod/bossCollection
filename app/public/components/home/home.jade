@@ -1,9 +1,10 @@
 script#home(type="text/ng-template")  
   
-  md-content
-    section(id = "imageGallery").imageGallery        
+  md-content()
+    
+    video(src = "/videos/bannerVideo.mp4",autoplay, loop, style = "width: 100%;height:100%")     
         
-    section(layout="column", ng-if = "user.guild")
+    section(layout="column")
         md-tabs(md-dynamic-height, md-border-bottom).md-background
             md-tab(ng-repeat = "tab in guild.tabs", label = "{{tab.title}}")
                 md-content().md-padding
@@ -23,12 +24,12 @@ script#home(type="text/ng-template")
                                         | Save
                                     md-button(ng-click = "cancel()").md-raised.md-primary
                                         | Cancel
-                        md-card-actions(ng-if = "user.rank > 2")
+                        md-card-actions(ng-if = "isOfficer()")
                             md-button(ng-click = "editTab($index)").md-icon-button
                                 md-icon(md-font-library="material-icons") edit
                             md-button(ng-click = "deleteTab($index)").md-icon-button
                                 md-icon(md-font-library="material-icons") delete
-            md-tab(label = "{{newTab.title}}", ng-if = "user.rank > 2")
+            md-tab(label = "{{newTab.title}}", ng-if = "isOfficer()")
                 md-card
                     md-card-content                            
                         div(flex, layout = "column")
@@ -43,36 +44,9 @@ script#home(type="text/ng-template")
                                     | Save
         
         
+    
+
+    
             
-        
-    section(layout="column", ng-if = "!user.guild")
-        div(flex, layout-align = "center center")
-            h3
-                | Welcome to BossCollection.net
-            p()
-                | To get started, login, create or join a guild, and start using the site!
-        div(flex)
-            md-card
-                md-card-title
-                    md-card-title-text
-                        h3
-                            | Features
-                md-card-content
-                    ul
-                        li
-                            | Modern, mobile friendly site for your guild!
-                        li
-                            | Built in application management! Approve or reject applicants and they'll get an email informing them of your decision.
-                        li
-                            | Attendance tool and statistics.
-                        li
-                            | Forums
-                        li
-                            | Easier management of site functionality.
-                        li
-                            | Integrated links to logs and progression sites of your choice. 
-                            i
-                                | Not implemented yet...
-            
-    ad(flex)
+    ad(flex, layout, layout-align = "center center")
     

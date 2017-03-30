@@ -1,16 +1,17 @@
+
 angular.module("BossCollection.forums")
     .controller('threadController', [
         '$scope', '$location', 'siteServices', 'forumService', '$mdBottomSheet', '$mdDialog', '$window', '$filter', '$timeout',
         function ($scope, $location, siteServices, forumService, $mdBottomSheet, $mdDialog, $window, $filter, $timeout) {
 
-            
+            var lodash = require('lodash');            
 
             $scope.forum = {};
             $scope.loading = false;
             $scope.orderBy = "-dateCreated";
             $scope.orderByString = 'Newest';
             $scope.masterThread = []
-            
+            $scope.sticky = 'true';
             
 
             $scope.getLength = function (){
@@ -35,18 +36,21 @@ angular.module("BossCollection.forums")
                 
                 
                 forumService.getCurrentForum()
-                    .then(function(forum){
-                        $scope.forum = forum;
+                    .then(function (forum) {
+                        if (forum == undefined) {
+                            throw new Error("Couldn't find the threads or you do not have permissions to view them.");
+                        }
+                        $scope.forum = forum; 
                     })
                     .then(function(){
                         
-                        siteServices.updateTitle($scope.forum.name + ' Forum');
+                        siteServices.updateTitle('Forums');
                         
                         if($scope.forum.threads.length > 0){
                             return $scope.forum.threads
                         }
                         else{
-                            return forumService.getThreads($scope.forum);    
+                            return forumService.getThreads($scope.forum._id);    
                         }
                         
                     })
@@ -66,11 +70,13 @@ angular.module("BossCollection.forums")
                         
                         //$scope.initInfiniteScroll();
                         
-                        sortThreads();
+                        $scope.sortThreads();
+                        $scope.refresh();
                         
                     })
                     .catch(function(err){
 
+                        siteServices.handleError(err);
                         $scope.loading = false;
                     })
                     .finally(function(){
@@ -78,6 +84,10 @@ angular.module("BossCollection.forums")
                         $scope.loading = false;
                     })
             }
+
+            $scope.getStickyThreads = function () {                
+                
+            }            
 
             $scope.listStyle = {
                 height: ($window.innerHeight - 312) + 'px'
@@ -127,20 +137,25 @@ angular.module("BossCollection.forums")
                
            }
 
-            $scope.refresh = function(){
+            $scope.refresh = () => {
 
                 $scope.loading = true;
 
-                forumService.getThreads($scope.forum)
+                forumService.getThreads($scope.forum._id)
                     .then(function(threads){
 
                         $scope.loading = false;
                         $scope.threads = threads;
+                        
+                        $scope.forum.threads = $scope.threads
+                        forumService.setForum($scope.forum);
+                        
                         $scope.masterThread = threads;
-                        sortThreads();
+                        $scope.sortThreads();
                     })
-                    .catch(function(err){
-
+                    .catch(function (err) {
+                        
+                        siteServices.handleError(err);
                         $scope.loading = false;
                     })
             }
@@ -159,28 +174,34 @@ angular.module("BossCollection.forums")
 
                         $scope.refresh();
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
             }
             
             $scope.$watch('threadSearch', function(){
                 
-                sortThreads();
+                $scope.sortThreads();
                 
-            })
+            })            
             
-            $scope.$watch('orderBy', function(){
-                
-                //sortThreads();
-                
-            })
             
-            function sortThreads(){
+            $scope.sortThreads = function(){
                 
-                $scope.threads = $filter('filter')($scope.masterThread, $scope.threadSearch);
-                $scope.threads = $filter('orderBy')($scope.threads, $scope.orderBy);
                 
-                if($scope.threadRepeat){
-                    $scope.threadRepeat.numLoaded = $scope.threads.length - 1;    
-                }
+                $scope.stickyThreads = _.filter($scope.masterThread, function (thread) {
+                    return thread.sticky == true;
+                })
+
+                $scope.threads = _.filter($scope.masterThread, function (thread) {
+                    return thread.sticky != true;
+                })
+
+                $scope.threads = $filter('filter')($scope.threads, $scope.threadSearch);
+                
+                $scope.stickyThreads = $filter('orderBy')($scope.stickyThreads, [$scope.orderBy]); 
+                $scope.threads = $filter('orderBy')($scope.threads, [ $scope.orderBy]);                
+                
             }
 
             $scope.flipOrderBySorting = function(){
@@ -205,9 +226,76 @@ angular.module("BossCollection.forums")
             $scope.openThread = function(thread){
                 
                 forumService.setSelectedThread(thread);
+                forumService.setIsComingFromFavorites(false);
                 $scope.updateThreadViewed(thread);
                 
                 $scope.goTo('/thread/' + thread._id);
+            }
+
+            $scope.stickyThread = function (thread) {
+                
+                if (thread.sticky) {
+                    
+                    thread.sticky = !thread.sticky;
+                }
+                else {
+                    thread.sticky = true;
+                }
+
+                $scope.saveThread(thread);
+            }    
+
+            $scope.isFavorite = function (thread) {
+
+                var doesExist = _.find(thread.favorites, function (username) {
+                    return $scope.user.name == username;
+                })  
+
+                if (doesExist != undefined) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+            $scope.favoriteThread = function (thread) {
+
+                var doesExist = $scope.isFavorite(thread);
+                
+                if (doesExist == false) {
+
+                    if (thread.favorites == undefined) {
+                        thread.favorites = [];
+                    }
+                    
+                    thread.favorites.push($scope.user.name);
+                }
+                else {
+
+                    _.remove(thread.favorites, function (favorite) {
+                        return favorite == $scope.user.name;
+                    })
+                }
+                
+                $scope.saveThread(thread);
+            }     
+
+            $scope.saveThread = function (thread) {
+                
+                $scope.loading = false;
+                
+                forumService.editThread(thread)
+                    .then(function (response) {
+
+                        
+                    })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
+                    .finally(function () {
+                        $scope.loading = false;
+                    })
             }
 
             $scope.createThread = function () {
@@ -219,7 +307,7 @@ angular.module("BossCollection.forums")
             }
 
             $scope.editThread = function(forum){
-
+                
                 forumService.openBottomSheet('threadEdit', forum);
             }
 

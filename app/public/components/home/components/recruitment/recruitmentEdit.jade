@@ -1,0 +1,45 @@
+script#recruitmentEditTemplate(type="text/ng-template")
+    md-dialog(layout = "column", aria-label = "categoryEdit").md-list.md-has-header.modalPadding
+        section(layout = "column", layout-align = "center center")
+            h2
+                |  Recruitment Edit
+            div(layout = "column")
+                div(flex, layout = "column")
+                    div(flex)
+                        h3
+                            | {{ctrl.parent.selectedClass.ctrl.parent.selectedClass}}
+                    div(flex, layout)
+                        md-input-container                        
+                            md-switch(ng-model="ctrl.parent.selectedClass.anySpec", ng-change = "ctrl.parent.calculateTotal(ctrl.parent.selectedClass)")
+                                | Any Spec?
+                    div(flex, ng-if = "ctrl.parent.selectedClass.anySpec")
+                        md-input-container
+                            label()
+                                | How many?
+                            input(ng-model="ctrl.parent.selectedClass.total")
+                    md-divider
+                    div(flex, ng-if = "!ctrl.parent.selectedClass.anySpec")
+                        h2
+                            | Specs
+                        div(layout = "column")
+                            div(ng-repeat = "spec in ctrl.parent.selectedClass.specs")
+                                h3 
+                                    | {{spec.spec}}
+                                
+                                div(layout, layout-align = "center space-between")
+                                    md-input-container(flex)
+                                        label()
+                                            | Desire?
+                                        md-select( ng-change = "ctrl.parent.calculateTotal(ctrl.parent.selectedClass)", ng-model = "spec.desire")
+                                            md-option(ng-repeat = "desire in ctrl.parent.desireOptions", value = "{{desire}}")
+                                                | {{desire}}
+                                    md-input-container(ng-if = "spec.desire != 'None'", flex)
+                                        label()
+                                            | How many?
+                                        input(ng-model="spec.amount", ng-change = "ctrl.parent.calculateTotal(ctrl.parent.selectedClass)")                           
+
+                    
+                div(layout, flex)     
+                    md-button(ng-click = "ctrl.parent.saveRecruitment()").md-primary.md-raised Save
+                
+                    md-button(ng-click = "ctrl.parent.cancel()").md-primary.md-raised Cancel

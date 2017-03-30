@@ -7,10 +7,10 @@ angular.module("BossCollection.home", ['ngRoute'])
         .when('/', {
             templateUrl: 'home',
             controller: 'homeController'
-        })
+        }) 
         .when('/guild/:guildName', {
             templateUrl: 'guildVisitHome',
             controller: 'guildVisitController'
-        })
-        
-    }]); 
+        })   
+         
+    }]);         

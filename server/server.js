@@ -35,7 +35,8 @@ console.log("========= Starting server ============")
 console.log("App root directory: " + __dirname);
 
 app.set('views', path.join(__dirname, 'app/views'));
-app.set('view engine', 'jade');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'app/public')));
 app.enable("jsonp callback");
 
@@ -43,14 +44,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-var mongooseDB  = mongoose.connect("mongodb://localhost/bosscollection");
+var mongooseDB  = mongoose.connect("mongodb://gm:bc20@ds119598.mlab.com:19598/heroku_mx218mgg");
 
 app.use(session({
 	secret: 'faeb4453e5d14fe6f6d04637f78077c76c73d1b4',
 	proxy: true,
 	resave: false,
-	saveUninitialized: true,
-	store: new MongoStore({ host: 'localhost', port: 27017, db: 'bosscollection'})
+	saveUninitialized: true,	
 	})
 );
 
@@ -59,12 +59,8 @@ app.use(session({
  */
 
 
-
-
 var router = express.Router();
 var routes = require('./routes/router.js')(app);
-
-
 
 
 /**

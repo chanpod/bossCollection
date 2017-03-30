@@ -1,15 +1,15 @@
-md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2
-    md-toolbar().md-primary
+md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-sm')").md-sidenav.md-whiteframe-z2.legionShadow.legionGradient
+    md-toolbar().md-primary.legionGradient
         md-list.md-primary
                 md-list-item()
-                    img(ng-click = "goTo('/')", src = "/images/wodLogo.png", style = "width:100%") 
+                    img(ng-click = "goTo('/')", src = "/images/logo.png", style = "width:100%") 
                 md-list-item
                     h1(ng-click = "goTo('/')").md-toolbar-tools
                         | Bosscollection 
                         i() &nbsp beta
-                md-list-item()
+                md-list-item(ng-if = "user.guild")
                     h1().md-toolbar-tools
-                        {{user.guild.name}}                
+                        | {{user.guild.name}}
     md-content(role = "navigation").md-primary
         md-list.md-primary(ng-if = "loggedIn")            
             md-menu-item()
@@ -18,43 +18,38 @@ md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-
                     | Home
             md-divider
         md-list.md-primary(ng-if = "loggedIn")            
-            md-menu-item(ng-if = "!hasGuild() || user.rank < 2")
+            md-menu-item()
                 md-button(ng-click = "goTo('/auth/application')")
                     md-icon(md-font-library="material-icons") send
                     | Apply to a Guild
             md-divider
-            md-menu-item(ng-if = "user.rank > 1")
-                md-button(ng-click = "goTo('/forum')")
+            md-menu-item()
+                md-button(ng-click = "goTo('/myApplications')")
+                    md-icon(md-font-library="material-icons") send
+                    | My Applications
+            md-divider
+            md-menu-item(ng-if = "hasGuild() && isMember()")
+                md-button(ng-click = "goTo('/forum')") 
                     md-icon(md-font-library="material-icons") today
                     | Forums
-            md-divider(ng-if = "!user.guild || user.rank > 2")            
+            md-divider(ng-if = "!hasGuild() || isOfficer()")            
             include guildManagement                
         md-list
             md-divider
             include raidMenu   
-        md-list.md-primary(ng-if = "user.rank > 1")
+        md-list.md-primary()
             md-divider                 
             md-menu-item()
                 md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")
                     md-icon(md-font-library="material-icons") equalizer
                     | Logs
-        md-list.md-primary(ng-if = "user.rank > 1")
+        md-list.md-primary()
             md-divider            
             md-menu-item()
                 md-button(ng-click = "goToExternal('http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection')")
                     md-icon(md-font-library="material-icons") trending_up
                     | Progression
-        md-list.md-primary(ng-if = "!loggedIn")
-            md-divider
-            md-menu-item()
-                md-button(ng-click = "showLoginBottomSheet($event)")
-                    md-icon(md-font-library="material-icons") account_circle
-                    | Log In
-            md-divider
-            md-menu-item()
-                md-button(ng-click = "goTo('auth/signup')")
-                    md-icon(md-font-library="material-icons") account_circle
-                    | Register
+
            
             
             

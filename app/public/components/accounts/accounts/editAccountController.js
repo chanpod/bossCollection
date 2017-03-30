@@ -7,6 +7,8 @@ angular.module("BossCollection.accounts")
         function ($scope, $location, $http, userLoginSrvc, siteServices, guildServices) {
 
             siteServices.updateTitle('Account');
+            $scope.loading = false;
+
 
             $scope.leaveGuild = function () {
 
@@ -16,8 +18,11 @@ angular.module("BossCollection.accounts")
                     .then(function (result) {
                         guildServices.leaveGuild(guildName)
                             .then(function (user) {
-
+                                siteServices.successfulUpdate();
                                 $scope.user = userLoginSrvc.updateUser();
+                            })
+                            .catch(err => {
+                                siteServices.handleError(err);
                             })
                     })
             }
@@ -38,7 +43,8 @@ angular.module("BossCollection.accounts")
             }
             $scope.updateAccount = function () {
 
-                
+                $scope.loading = true;
+
                 userLoginSrvc.updateAccount($scope.user).then(function (response) {
 
                     $scope.user = userLoginSrvc.updateUser();
@@ -46,7 +52,10 @@ angular.module("BossCollection.accounts")
                 },
                     function (err) {
 
-                        siteServices.showMessageModal(err);
+                        siteServices.handleError(err);
                     })
+                    .finally(() => {
+                        $scope.loading = false;
+                })
             }
         }])

@@ -7,17 +7,19 @@ script#joinGuild(type="text/ng-template")
                     md-input-container(flex-gt-xs = "30").md-block
                         label() User Name
                         md-icon(md-font-library="material-icons") person
-                        input(ng-model = "user.name", disabled)
-                    md-autocomplete(md-min-length = "0",
+                        input(ng-model = "user.name", disabled) 
+                    md-autocomplete( 
                                 md-item-text = "guild.name",
-                                md-selected-item = "guildName",                                    
-                                md-search-text = "guild",
+                                md-no-cache = "true",
+                                md-selected-item = "guildName",    
+                                md-selected-item-change="selectedItemChange(item)"                                
+                                md-search-text = "guildSearch",
                                 md-floating-label = "Select Guild",
-                                md-items = "guild in filterSearch(guild)",
-                                flex)
+                                md-items = "guild in filterSearch(guildSearch)") 
                         md-item-template
-                            span(md-highlight-text = "guild"){{guild.name}}
-                        //-input(id="guildName", ng-model = "guildName", required)
+                            span(md-highlight-text = "guildSearch")
+                                | {{guild.name}}
+           
                 div(layout)
                     md-input-container().md-block
                     md-button(type = "submit").md-primary.md-raised

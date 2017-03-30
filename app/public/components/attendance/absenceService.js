@@ -30,7 +30,7 @@ angular.module("BossCollection.attendance")
                     var defer = $q.defer();
  
                     absence.save(newAbsence).$promise
-                        .then(function (response) {
+                        .then(function (response) { 
 
                             defer.resolve(response);
                         },
@@ -101,7 +101,7 @@ angular.module("BossCollection.attendance")
                     
                     saveAbsenceResource.save(bodyData).$promise
                         .then(function (response) {
-
+                            siteServices.successfulUpdate();
                             defer.resolve(response);
                         },
                         function (err) {
@@ -122,7 +122,7 @@ angular.module("BossCollection.attendance")
                     
                     deleteAbsenceResource.save(bodyData).$promise
                         .then(function (response) {
-
+                            siteServices.successfulUpdate();
                             defer.resolve(response);
                         },
                         function (err) {

@@ -7,8 +7,8 @@
  */
 angular.module("BossCollection.guild")
     .controller("joinGuildController", [
-        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter',
-        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter) {
+        "$scope", '$location', '$http', '$timeout', 'siteServices', 'guildServices', 'userLoginSrvc', '$filter', '$mdDialog',
+        function ($scope, $location, $http, $timeout, siteServices, guildServices, userLoginSrvc, $filter, $mdDialog) {
 
 
             $scope.listOfGuilds = [];
@@ -37,6 +37,13 @@ angular.module("BossCollection.guild")
 
                         $scope.listOfGuilds = guilds;
                     })
+                    .catch(function (err) {
+                        siteServices.handleError(err);
+                    })
+            }
+
+            $scope.selectedItemChange = function (item) {
+                console.log("Item changed: " + item);
             }
 
             $scope.joinGuild = function () {
@@ -48,25 +55,53 @@ angular.module("BossCollection.guild")
                     guildServices.joinGuild($scope.guildName.name, $scope.user.name)
                         .then(function (guild) {
 
-                            siteServices.showMessageModal("Success! You will be able to access the guild services once you've been promoted to member.");
-                            
-                            userLoginSrvc.refreshUserFromServer();
 
-                            $location.path('/');
+                            $scope.succesfullyJoinedGuild();
+                            
+                            
 
 
                         })
                         .catch(function (err) {
-                            siteServices.showMessageModal(err);
+                            siteServices.handleError(err);
                         })
                         .finally(function () {
                             $scope.loading = false;
                         })
                 }
                 else{
-                    siteServices.showMessageToast("Guild doesn't exist");
+                    siteServices.handleError("Guild doesn't exist");
                     $scope.loading = false;
                 }
+            }
+
+            $scope.succesfullyJoinedGuild = ()=> {
+
+                $mdDialog.show(
+                    $mdDialog.alert()
+                        .clickOutsideToClose(false)
+                        .title("Success!")
+                        .textContent("You will be able to access the guild services once you've been approved.")
+                        .ariaLabel('message popup')
+                        .ok('Got it!')
+                        .openFrom({
+                            left: -50,
+                            width: 30,
+                            height: 80
+                        })
+                        .closeTo({
+                            right: 1500
+                        })
+                ).then(function () {
+
+                    $scope.isLoading = false;
+                    userLoginSrvc.refreshUserFromServer();
+
+                    $location.path('/');
+
+                }, function () {
+                   
+                });
             }
 
             $scope.init();

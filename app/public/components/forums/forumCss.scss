@@ -5,3 +5,18 @@
 .unread{
     border-left:15px solid green;
 }
+
+.favorite{
+    color: green;
+}
+
+.forumCategoryTitle{
+    flex: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.modalPadding{
+    padding: 10px;
+}

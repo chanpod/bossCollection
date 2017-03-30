@@ -1,4 +1,4 @@
-'user strict'
+'use strict'
 
 angular.module("BossCollection.forums", ['ngRoute'])
     .config(['$routeProvider',  function ($routeProvider) {
@@ -8,6 +8,10 @@ angular.module("BossCollection.forums", ['ngRoute'])
             templateUrl: 'forum',
             controller: 'forumController'
         })
+		.when('/forum/favorites', {
+			controller: 'favoritesController as favCtrl',
+			templateUrl: 'favorites'
+		})
         .when('/forum/:forumID', {
             templateUrl: 'thread',
             controller: 'threadController'
@@ -18,3 +22,4 @@ angular.module("BossCollection.forums", ['ngRoute'])
         })
 
     }]);
+
