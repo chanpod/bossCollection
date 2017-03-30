@@ -37,29 +37,19 @@ md-sidenav(ng-cloak, md-component-id ="left", md-is-locked-open = "$mdMedia('gt-
         md-list
             md-divider
             include raidMenu   
-        md-list.md-primary(ng-if = "isMember() && user.guild.logsLink != undefined")
+        md-list.md-primary()
             md-divider                 
             md-menu-item()
-                md-button(ng-click = "goToExternal(user.guild.logsLink)")
+                md-button(ng-click = "goToExternal('https://www.warcraftlogs.com/guilds/36279')")
                     md-icon(md-font-library="material-icons") equalizer
                     | Logs
-        md-list.md-primary(ng-if = "isMember() && user.guild.progressionlink != undefined")
+        md-list.md-primary()
             md-divider            
             md-menu-item()
-                md-button(ng-click = "goToExternal(user.guild.progressionlink)")
+                md-button(ng-click = "goToExternal('http://www.wowprogress.com/guild/us/zul-jin/mkdir+BossCollection')")
                     md-icon(md-font-library="material-icons") trending_up
                     | Progression
-        md-list.md-primary(ng-if = "!loggedIn")
-            md-divider
-            md-menu-item()
-                md-button(ng-click = "showLoginBottomSheet($event)")
-                    md-icon(md-font-library="material-icons") account_circle
-                    | Log In
-            md-divider
-            md-menu-item()
-                md-button(ng-click = "goTo('auth/signup')")
-                    md-icon(md-font-library="material-icons") account_circle
-                    | Register
+
            
             
             
