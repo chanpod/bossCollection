@@ -2,11 +2,14 @@ script#logIn(type="text/ng-template")
     md-bottom-sheet().md-list.md-has-header
         div
             form(name = "logInForm")
+                div(layout)
+                    h2
+                        | Admin Login
                 div(layout = "row")
                     md-input-container(flex).md-block
                         label() Username
                         input(ng-model = "user.name", required)
-                        div().hint case sensitive
+                        div().hint case sensitive sdf
                 div(layout = "row")
                     md-input-container(flex).md-block
                         label() Password
@@ -14,5 +17,5 @@ script#logIn(type="text/ng-template")
                 div(layout = "row")
                     md-input-container(flex).md-block
                         md-button(ng-click = "login()").md-primary.md-raised
-                            | Sign in
+                            | Sign in 
             
