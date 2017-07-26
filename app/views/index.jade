@@ -32,6 +32,10 @@ block body
                                     md-button(ng-click = "goTo('/forum/favorites')") 
                                         md-icon(md-font-library="material-icons") favorite
                                         | Favorites
+                                md-menu-item(ng-show = "loggedIn && isMember()")
+                                    md-button(ng-click = "goTo('/sheetsAttendance')") 
+                                        md-icon(md-font-library="material-icons") favorite
+                                        | Sheets Tool
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "logout()")
                                         md-icon(md-font-library="material-icons") exit_to_app
@@ -80,7 +84,8 @@ block body
     
     //-Absence
     include ../public/components/attendance/attendanceStatistics/attendanceStatsTemplate
-    include ../public/components/attendance/reportAbsence/absence
+    include ../public/components/attendance/attendanceStatistics/sheetsAttendance
+    include ../public/components/attendance/reportAbsence/absence 
     include ../public/components/attendance/viewReports/absenceSubmissions
     include ../public/components/attendance/editAbsenceModal
     include ../public/components/guild/directives/listGuildMembers/listGuildMembersTemplate

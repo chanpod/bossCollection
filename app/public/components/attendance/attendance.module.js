@@ -9,6 +9,11 @@ angular.module("BossCollection.attendance", ['ngRoute'])
                 controller: 'attendanceStatsCtrl as ctrl'
             })
 
+            .when('/sheetsAttendance', {
+                templateUrl: 'sheetsStats',
+                controller: 'googleSheetsAttendance as ctrl'
+            })
+
             .when('/whosOut', {
                 templateUrl: 'absenceSubmissions',
                 controller: 'absenceSubmissionsController as absenceReportCtrl'

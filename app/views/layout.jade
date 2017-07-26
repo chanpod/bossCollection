@@ -29,7 +29,9 @@ html(ng-app="BossCollection")
         
 
     body(layout = "column", flex)
-        
+        script(async defer src="https://apis.google.com/js/api.js",
+            onload="this.onload=function(){};handleClientLoad()".
+            onreadystatechange="if (this.readyState === 'complete') this.onload()")
         script(src='/tmp/vendor.js')
         script(src='/tmp/main.js')
         
