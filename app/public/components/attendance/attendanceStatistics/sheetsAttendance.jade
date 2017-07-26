@@ -11,8 +11,12 @@ script#sheetsStats(type="text/ng-template")
                 span()
                     md-button(ng-click = "handleAuthClick()").md-raised.md-primary Authorize
                     md-button(ng-click = "handleSignoutClick()").md-raised.md-primary Remove Authorization
-        md-progress-circular(ng-show = "!loading", md-mode="indeterminate")
-        section(flex, ng-show = "!signedIn")
+        section(layout layout-align = "center center")
+            md-progress-circular(ng-show = "loading", md-mode="indeterminate")
+            div(ng-show = "error")
+                h2(style = "color:red;")
+                    {{errorMessage}}
+        section(flex, ng-show = "!signedIn && !loading")
             span
                 | Please authorize this app to access your google sheet.
         section(flex, ng-show = "signedIn") 
@@ -30,33 +34,45 @@ script#sheetsStats(type="text/ng-template")
                                 
                                 md-divider
                         md-card-content
-                            div(flex, layout = "row")
-                                div(flex)
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() Sheet ID
-                                        input(type = "text", ng-model = "sheetId")
-                                    
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() Sheet Name
-                                        input(type = "text", ng-model = "sheetName")
-                                    
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() Row Start Cell
-                                        input(type = "text", ng-model = "startCell")
-                                    
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() End Column
-                                        input(type = "text", ng-model = "endColumn")
-                                div(flex)
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() Sheet Name (optional)
-                                        input(type = "text", ng-model = "headerSheetName")
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() Header Row Start Cell
-                                        input(type = "text", ng-model = "headerStartCell")
-                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
-                                        label() Header End Column
-                                        input(type = "text", ng-model = "headerEndColumn")
+                            form
+                                div(flex, layout = "row")                                    
+                                    div(flex)
+                                        md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                            label() Sheet ID
+                                            input(type = "text", ng-model = "sheetId", ng-blur = "getSheetNames()")
+                                        
+                                        md-autocomplete(md-min-length = "0",
+                                                    md-item-text = "sheetName",
+                                                    md-selected-item = "sheetName",                                    
+                                                    md-search-text = "sheet     ",
+                                                    md-floating-label = "Sheet Name",
+                                                    md-items = "sheetName in sheetNames",                                                                                    
+                                                    ng-cloak,                               
+                                                    flex = "40")
+                                            md-item-template
+                                                span(md-highlight-text = "sheetName") {{sheetName}}
+
+                                        //- md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        //-     label() Sheet Name
+                                        //-     input(type = "text", ng-model = "sheetName", required)
+                                        
+                                        md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                            label() Row Start Cell
+                                            input(type = "text", ng-model = "startCell", required)
+                                        
+                                        md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                            label() End Column
+                                            input(type = "text", ng-model = "endColumn", required)
+                                    div(flex)
+                                        md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                            label() Sheet Name (optional)
+                                            input(type = "text", ng-model = "headerSheetName", required)
+                                        md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                            label() Header Row Start Cell
+                                            input(type = "text", ng-model = "headerStartCell")
+                                        md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                            label() Header End Column
+                                            input(type = "text", ng-model = "headerEndColumn", required)
                         md-card-actions
                             md-button(ng-click = "getSheetTableData()").md-primary.md-raised
                                 | Get Sheet Data

@@ -12,7 +12,7 @@ angular.module("BossCollection.attendance")
             $scope.DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
             $scope.SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
 
-            $scope.sheetId = "";
+            $scope.sheetId = "1oPSfalySLEKWQT8OCjLb-Vxdfo-6aNImY_HhrQ7vTRs";
             $scope.sheetName = "OldSheet";
             $scope.startCell = "A2";
             $scope.endColumn = "B";
@@ -21,12 +21,18 @@ angular.module("BossCollection.attendance")
             $scope.headerStartCell = "A1";
             $scope.headerEndColumn = "B";
 
+            $scope.sheetNames = [];
+
+            $scope.errorMessage = "Oops. Something went wrong. Did you spell the name of the sheet correctly? And does data exist in the range you specified?"
+
             $scope.init = () => {
                 $scope.loading = true;
 
                 gapi.load('client:auth2', $scope.initClient);
 
             }
+
+            
 
             $scope.initClient = () => {
                 gapi.client.init({
@@ -39,10 +45,34 @@ angular.module("BossCollection.attendance")
 
                     // Handle the initial sign-in state.
                     $scope.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+
+
                     $scope.loading = false;
+                    $scope.getSheetNames();
+                    $scope.$digest();
                     // authorizeButton.onclick = handleAuthClick;
                     // signoutButton.onclick = handleSignoutClick;
                 });
+            }
+
+            $scope.getSheetNames = () => {
+
+                $scope.sheetNames = [];
+                $scope.sheets = [];
+
+                gapi.client.sheets.spreadsheets.get({
+                    spreadsheetId: $scope.sheetId
+                })
+                    .then(function (result) {  
+                        console.log(result);
+                        $scope.sheets = result.result.sheets;
+                         
+                        _.forEach($scope.sheets, function(sheet) {
+                            $scope.sheetNames.push(sheet.properties.title);
+                        }, this);
+                        // $scope.sheetNames = result.result.sheets
+                    })
+
             }
 
             /**
@@ -52,11 +82,12 @@ angular.module("BossCollection.attendance")
             $scope.updateSigninStatus = (isSignedIn) => {
                 if (isSignedIn) {
                     $scope.signedIn = true;
-                    //listMajors();
-                    $scope.$digest();
+
                 } else {
                     $scope.signedIn = false;
                 }
+
+                $scope.$digest();
             }
 
             /**
@@ -74,26 +105,18 @@ angular.module("BossCollection.attendance")
             }
 
             /**
-             * Append a pre element to the body containing the given message
-             * as its text node. Used to display the results of the API call.
-             *
-             * @param {string} message Text to be placed in pre element.
-             */
-            function appendPre(message) {
-                var pre = document.getElementById('content');
-                var textContent = document.createTextNode(message + '\n');
-                pre.appendChild(textContent);
-            }
- 
-            /**
              * Print the names and majors of students in a sample spreadsheet:
              * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
              */
             $scope.getSheetTableData = () => {
                 $scope.loading = true;
+                $scope.error = false;
+                $scope.sheetData = [];
+                $scope.sheetHeaders = [];
+
                 let range = $scope.sheetName.trim() + "!" + $scope.startCell + ':' + $scope.endColumn;
 
-                $scope.getTableHeaders(); 
+                $scope.getTableHeaders();
                 $scope.getSheetData($scope.sheetId, range, handleTableData);
             }
 
@@ -110,6 +133,8 @@ angular.module("BossCollection.attendance")
                 console.log(response);
 
                 $scope.sheetData = response.result;
+                $scope.loading = false;
+
                 $scope.$digest();
             }
 
@@ -117,6 +142,7 @@ angular.module("BossCollection.attendance")
                 console.log(response);
 
                 $scope.sheetHeaders = response.result;
+                $scope.loading = false;
                 $scope.$digest();
             }
 
@@ -132,14 +158,19 @@ angular.module("BossCollection.attendance")
 
                 // },
 
+
                 gapi.client.sheets.spreadsheets.values.get({
-                    spreadsheetId: $scope.sheetId || '1oPSfalySLEKWQT8OCjLb-Vxdfo-6aNImY_HhrQ7vTRs',
+                    spreadsheetId: $scope.sheetId,
                     range: range,
                 }).then(callback,
                     function (response) {
                         // appendPre('Error: ' + response.result.error.message);
                         console.log(response);
                         $scope.error = true;
+
+                        $scope.loading = false;
+
+                        $scope.$digest();
                     });
             }
 
