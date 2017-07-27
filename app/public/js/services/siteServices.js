@@ -1,7 +1,4 @@
 'use strict';
-
-
-
 angular.module("BossCollection.services")
     .factory('siteServices', ['$rootScope', '$mdBottomSheet', '$mdDialog', '$mdToast', '$q',
         function ($rootScope, $mdBottomSheet, $mdDialog, $mdToast, $q) {

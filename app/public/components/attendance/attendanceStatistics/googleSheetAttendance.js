@@ -5,14 +5,17 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("googleSheetsAttendance", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia', 'siteServices', '$filter', '$anchorScroll',
-        function ($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, $anchorScroll) {
+    .controller("googleSheetsAttendance", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia', 'siteServices', '$filter', 'sheetsService', '$timeout',
+        function ($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, sheetsService, $timeout) {
 
             $scope.CLIENT_ID = "1099140712491-esphn576cqr56kiqvsqi4kjd683jc9fm.apps.googleusercontent.com";
             $scope.DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
             $scope.SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
 
-            $scope.sheetId = "1oPSfalySLEKWQT8OCjLb-Vxdfo-6aNImY_HhrQ7vTRs";
+            $scope.sheetId = "";
+            $scope.sheetUrl = "";
+
+            $scope.sheetNames = [];
             $scope.sheetName = "OldSheet";
             $scope.startCell = "A2";
             $scope.endColumn = "B";
@@ -21,156 +24,170 @@ angular.module("BossCollection.attendance")
             $scope.headerStartCell = "A1";
             $scope.headerEndColumn = "B";
 
-            $scope.sheetNames = [];
-
+            $scope.loading = true;
             $scope.errorMessage = "Oops. Something went wrong. Did you spell the name of the sheet correctly? And does data exist in the range you specified?"
+            $scope.gapiObject;
 
             $scope.init = () => {
-                $scope.loading = true;
 
-                gapi.load('client:auth2', $scope.initClient);
+                if (sheetsService.getInitializing() == true) {
 
-            }
 
-            
+                    $timeout(() => {
+                        $scope.init();
+                    }, 500)
 
-            $scope.initClient = () => {
-                gapi.client.init({
-                    discoveryDocs: $scope.DISCOVERY_DOCS,
-                    clientId: $scope.CLIENT_ID,
-                    scope: $scope.SCOPES
-                }).then(function () {
-                    // Listen for sign-in state changes.
-                    gapi.auth2.getAuthInstance().isSignedIn.listen($scope.updateSigninStatus);
-
-                    // Handle the initial sign-in state.
-                    $scope.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-
+                }
+                else {
 
                     $scope.loading = false;
-                    $scope.getSheetNames();
-                    $scope.$digest();
-                    // authorizeButton.onclick = handleAuthClick;
-                    // signoutButton.onclick = handleSignoutClick;
-                });
+                    $scope.signedIn = sheetsService.isSignedIn();
+
+                    if ($scope.signedIn == false) {
+                        $scope.gapiObject = sheetsService.getApiObject();
+                        $scope.gapiObject.auth2.getAuthInstance().isSignedIn.listen($scope.userAuthorizedApp());                        
+                    }
+                    else{
+                        $scope.sheetUrl = localStorage.getItem('sheetName');
+                        if($scope.sheetUrl == null){
+                            $scope.sheetUrl = '';
+                        }
+                        else{
+                            $scope.getSheetNames();
+                        }
+                    }
+                }
+            }
+
+            $scope.userAuthorizedApp = () => {
+                if (sheetsService.isSignedIn() == true) {
+                    $scope.init();
+                }
             }
 
             $scope.getSheetNames = () => {
 
                 $scope.sheetNames = [];
                 $scope.sheets = [];
+                $scope.sheetId = parseSheetId($scope.sheetUrl);
+                $scope.loading = true;
 
-                gapi.client.sheets.spreadsheets.get({
-                    spreadsheetId: $scope.sheetId
-                })
-                    .then(function (result) {  
-                        console.log(result);
+                localStorage.setItem('sheetName', $scope.sheetUrl);
+
+                sheetsService.getSheets($scope.sheetId)
+                    .then(function (result) {
+                        $scope.loading = false;
                         $scope.sheets = result.result.sheets;
-                         
-                        _.forEach($scope.sheets, function(sheet) {
+
+                        _.forEach($scope.sheets, function (sheet) {
                             $scope.sheetNames.push(sheet.properties.title);
                         }, this);
-                        // $scope.sheetNames = result.result.sheets
+                    }, function(error){
+                        $scope.loading = false;
                     })
 
             }
 
-            /**
-       *  Called when the signed in status changes, to update the UI
-       *  appropriately. After a sign-in, the API is called.
-       */
-            $scope.updateSigninStatus = (isSignedIn) => {
-                if (isSignedIn) {
-                    $scope.signedIn = true;
+            function parseSheetId(sheetUrl) {
+                //https://docs.google.com/spreadsheets/d/1m2uEpQjpmxX4g7iHO5NSITAl8rH1Z7EH3v0NA6OCSK8/edit#gid=1805832991
+                let splitString = sheetUrl.split('/');
+                let sheetId = '';
 
-                } else {
-                    $scope.signedIn = false;
+                _.forEach(splitString, (string, index) => {
+                    if(string == 'd'){
+                        sheetId = splitString[index + 1];
+                    }
+                })
+
+                if (sheetUrl == '' || sheetUrl == undefined) {
+                    return '1oPSfalySLEKWQT8OCjLb-Vxdfo-6aNImY_HhrQ7vTRs';
                 }
+                else {
 
-                $scope.$digest();
+                    return sheetId;
+                }
             }
 
             /**
              *  Sign in the user upon button click.
              */
             $scope.handleAuthClick = (event) => {
-                gapi.auth2.getAuthInstance().signIn();
+                if (sheetsService.isSignedIn() == false) {
+
+                    sheetsService.signIn()
+                        .then((result) => {
+                            if (result) {
+
+                                $scope.init();
+                            }
+                        })
+                }
+                else {
+                    $scope.signedIn = true;
+                }
             }
 
             /**
              *  Sign out the user upon button click.
              */
             $scope.handleSignoutClick = (event) => {
-                gapi.auth2.getAuthInstance().signOut();
+
+                sheetsService.signOut()
+                    .then((result) => {
+                        if (result) {
+
+                            $scope.init();
+                        }
+                    })
             }
 
             /**
              * Print the names and majors of students in a sample spreadsheet:
              * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
              */
-            $scope.getSheetTableData = () => {
+            $scope.getSheetTableData = (sheetName) => {
                 $scope.loading = true;
                 $scope.error = false;
                 $scope.sheetData = [];
                 $scope.sheetHeaders = [];
+                $scope.sheetName = sheetName;
+                
+                let range = sheetName + "!" + $scope.startCell + ':' + $scope.endColumn;
 
-                let range = $scope.sheetName.trim() + "!" + $scope.startCell + ':' + $scope.endColumn;
-
-                $scope.getTableHeaders();
+                $scope.getTableHeaders(sheetName);
                 $scope.getSheetData($scope.sheetId, range, handleTableData);
             }
 
-            $scope.getTableHeaders = () => {
+            $scope.getTableHeaders = (sheetName) => {
                 $scope.loading = true;
 
-                let headerSheetName = $scope.headerSheetName || $scope.sheetName;
+                let headerSheetName = sheetName;
                 let range = headerSheetName.trim() + "!" + $scope.headerStartCell + ':' + $scope.headerEndColumn;
 
                 $scope.getSheetData(headerSheetName, range, handleHeaders);
             }
 
             function handleTableData(response) {
-                console.log(response);
 
                 $scope.sheetData = response.result;
                 $scope.loading = false;
-
-                $scope.$digest();
             }
 
             function handleHeaders(response) {
-                console.log(response);
 
                 $scope.sheetHeaders = response.result;
                 $scope.loading = false;
-                $scope.$digest();
             }
 
             $scope.getSheetData = (sheetId, range, callback) => {
 
-                console.log(range);
-
-                // function (response) {
-                //     console.log(response);
-                //     $scope.loading = false;
-                //     $scope.sheetData = response.result;
-                //     $scope.$digest();
-
-                // },
-
-
-                gapi.client.sheets.spreadsheets.values.get({
-                    spreadsheetId: $scope.sheetId,
-                    range: range,
-                }).then(callback,
+                sheetsService.getSheetData($scope.sheetId, range)
+                    .then(callback,
                     function (response) {
-                        // appendPre('Error: ' + response.result.error.message);
+
                         console.log(response);
                         $scope.error = true;
-
                         $scope.loading = false;
-
-                        $scope.$digest();
                     });
             }
 
