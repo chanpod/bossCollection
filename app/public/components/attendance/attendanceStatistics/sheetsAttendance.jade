@@ -90,14 +90,17 @@ script#sheetsStats(type="text/ng-template")
                 md-card-title
                     md-card-title-text
                         h3 {{sheetName}} Data
-                        
+                        div()
+                            md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                label() Filter
+                                input(type = "text", ng-model = "dataTableSort")
                         md-divider
-                md-card-content                                    
+                md-card-content(layout, layout-align = "center center")                                   
                     
                     table().table
                         tr()
                             th(ng-repeat = "header in sheetHeaders.values[0]")
                                 | {{header}}
-                        tr(ng-repeat = "rowValues in sheetData.values")
+                        tr(ng-repeat = "rowValues in sheetData.values | filter:dataTableSort")
                             td(ng-repeat = "data in rowValues")
                                 | {{data}}

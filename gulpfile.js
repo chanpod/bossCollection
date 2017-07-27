@@ -151,7 +151,10 @@ gulp.task('concatVendorProduction', function () {
         './node_modules/highcharts/modules/data.js',
         './node_modules/highcharts/modules/drilldown.js',
         './node_modules/highcharts/modules/exporting.js',
-        './node_modules/highcharts/modules/solid-gauge.js'
+        './node_modules/highcharts/modules/solid-gauge.js',
+        './node_modules/angular-data-grid/dist/dataGrid.min.js',
+        './node_modules/angular-data-grid/dist/loading-bar.min.js',
+        './node_modules/angular-data-grid/dist/pagination.min.js',
 
     ])
         .pipe(concat('vendor.js'))
