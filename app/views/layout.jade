@@ -14,6 +14,7 @@ html(ng-app="BossCollection")
     link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
     link(rel="stylesheet", href="/vendor/octicons/octicons/octicons.css")
     link(rel="stylesheet", href="/tmp/angular-material.min.css")
+    link(rel="stylesheet", href="https://rawgit.com/daniel-nagy/md-data-table/master/dist/md-data-table.css")
     link(rel='stylesheet', href='/tmp/bosscollection.min.css')
   
     
@@ -31,9 +32,10 @@ html(ng-app="BossCollection")
     body(layout = "column", flex)
         script(async defer src="https://apis.google.com/js/api.js",
             onload="this.onload=function(){};handleClientLoad()".
-            onreadystatechange="if (this.readyState === 'complete') this.onload()")
-        script(src="bower_components/angular-data-grid/dist/dataGrid.min.js")
+            onreadystatechange="if (this.readyState === 'complete') this.onload()")        
         script(src='/tmp/vendor.js')
+        
+        script(src='https://rawgit.com/daniel-nagy/md-data-table/master/dist/md-data-table.js')
         script(src='/tmp/main.js')
         
         //-script(async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")

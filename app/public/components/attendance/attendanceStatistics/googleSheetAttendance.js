@@ -5,8 +5,8 @@
  *
  */
 angular.module("BossCollection.attendance")
-    .controller("googleSheetsAttendance", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia', 'siteServices', '$filter', 'sheetsService', '$timeout',
-        function ($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, sheetsService, $timeout) {
+    .controller("googleSheetsAttendance", ["$scope", '$location', 'userLoginSrvc', 'absenceService', '$mdDialog', '$mdMedia', 'siteServices', '$filter', 'sheetsService', '$timeout', '$q',
+        function ($scope, $location, userLoginSrvc, absenceService, $mdDialog, $mdMedia, siteServices, $filter, sheetsService, $timeout, $q) {
 
             $scope.CLIENT_ID = "1099140712491-esphn576cqr56kiqvsqi4kjd683jc9fm.apps.googleusercontent.com";
             $scope.DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
@@ -45,14 +45,14 @@ angular.module("BossCollection.attendance")
 
                     if ($scope.signedIn == false) {
                         $scope.gapiObject = sheetsService.getApiObject();
-                        $scope.gapiObject.auth2.getAuthInstance().isSignedIn.listen($scope.userAuthorizedApp());                        
+                        $scope.gapiObject.auth2.getAuthInstance().isSignedIn.listen($scope.userAuthorizedApp());
                     }
-                    else{
+                    else {
                         $scope.sheetUrl = localStorage.getItem('sheetName');
-                        if($scope.sheetUrl == null){
+                        if ($scope.sheetUrl == null) {
                             $scope.sheetUrl = '';
                         }
-                        else{
+                        else {
                             $scope.getSheetNames();
                         }
                     }
@@ -63,6 +63,10 @@ angular.module("BossCollection.attendance")
                 if (sheetsService.isSignedIn() == true) {
                     $scope.init();
                 }
+            }
+
+            $scope.sort = function (rows) {
+                return rows[$scope.selectedHeader];
             }
 
             $scope.getSheetNames = () => {
@@ -78,11 +82,11 @@ angular.module("BossCollection.attendance")
                     .then(function (result) {
                         $scope.loading = false;
                         $scope.sheets = result.result.sheets;
-
-                        _.forEach($scope.sheets, function (sheet) {
-                            $scope.sheetNames.push(sheet.properties.title);
-                        }, this);
-                    }, function(error){
+                        $scope.sheetName = $scope.sheets[0].properties.title;
+                        // _.forEach($scope.sheets, function (sheet) {
+                        //     $scope.sheetNames.push(sheet.properties.title);
+                        // }, this);
+                    }, function (error) {
                         $scope.loading = false;
                     })
 
@@ -94,7 +98,7 @@ angular.module("BossCollection.attendance")
                 let sheetId = '';
 
                 _.forEach(splitString, (string, index) => {
-                    if(string == 'd'){
+                    if (string == 'd') {
                         sheetId = splitString[index + 1];
                     }
                 })
@@ -145,26 +149,62 @@ angular.module("BossCollection.attendance")
              * Print the names and majors of students in a sample spreadsheet:
              * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
              */
-            $scope.getSheetTableData = (sheetName) => {
+            $scope.getSheetTableData = () => {
                 $scope.loading = true;
                 $scope.error = false;
                 $scope.sheetData = [];
                 $scope.sheetHeaders = [];
-                $scope.sheetName = sheetName;
-                
+                let sheetName = $scope.sheetName;
+
                 let range = sheetName + "!" + $scope.startCell + ':' + $scope.endColumn;
 
-                $scope.getTableHeaders(sheetName);
-                $scope.getSheetData($scope.sheetId, range, handleTableData);
+                $scope.getTableHeaders(sheetName, range);
+
             }
 
-            $scope.getTableHeaders = (sheetName) => {
+            $scope.setSelectedSheet = (selectedSheet) => {
+                $scope.sheetName = selectedSheet;
+            }
+
+            $scope.buildTableObject = () => {
+                let headers = $scope.sheetHeaders.values[0];
+                let data = $scope.sheetData.values;
+
+                let length = headers.length;
+
+                let tableObject = [];
+
+                _.forEach(data, (rowData) => {
+
+                    let tempObject = {};
+                    for (let i = 0; i < length; i++) {
+                        tempObject[headers[i]] = rowData[i];
+                    }
+
+                    tableObject.push(tempObject);
+                })
+
+                $scope.tableObject = tableObject;
+            }
+            
+
+            $scope.getTableHeaders = (sheetName, dataRange) => {
                 $scope.loading = true;
 
                 let headerSheetName = sheetName;
                 let range = headerSheetName.trim() + "!" + $scope.headerStartCell + ':' + $scope.headerEndColumn;
 
-                $scope.getSheetData(headerSheetName, range, handleHeaders);
+                $scope.getSheetData(headerSheetName, range)
+                    .then((result) => {
+                        handleHeaders(result);
+                        return $scope.getSheetData($scope.sheetId, dataRange);
+                    })
+                    .then((result) => {
+                        handleTableData(result);
+
+                        $scope.buildTableObject();
+                    })
+
             }
 
             function handleTableData(response) {
@@ -179,16 +219,33 @@ angular.module("BossCollection.attendance")
                 $scope.loading = false;
             }
 
+            $scope.sortBy = (sortBy) => {
+                if ($scope.selectedHeader == sortBy) {
+
+                    $scope.selectedHeader = "-" + sortBy;
+                }
+                else {
+
+                    $scope.selectedHeader = sortBy;
+                }
+            }
+
             $scope.getSheetData = (sheetId, range, callback) => {
+                let defer = $q.defer();
 
                 sheetsService.getSheetData($scope.sheetId, range)
-                    .then(callback,
+                    .then((response) => {
+                        defer.resolve(response);
+                    },
                     function (response) {
 
                         console.log(response);
+                        defer.reject(response);
                         $scope.error = true;
                         $scope.loading = false;
                     });
+
+                return defer.promise;
             }
 
             // function createDD() {

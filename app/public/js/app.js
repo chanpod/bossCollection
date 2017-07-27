@@ -2,7 +2,7 @@
 
 
 
-angular.module('BossCollection', [
+angular.module('BossCollection', [    
     'BossCollection.controllers',
     'BossCollection.services',
     'BossCollection.directives',
@@ -15,8 +15,9 @@ angular.module('BossCollection', [
     'ngRoute',
     'ngResource',
     'ngCookies',
+    'md.data.table',
     'ngMaterial',
-    'ngAnimate'
+    'ngAnimate',
 
 ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', '$sceDelegateProvider', '$mdThemingProvider',

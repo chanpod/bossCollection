@@ -30,6 +30,30 @@ var prettify = require('gulp-js-prettify');
  * minifyCss //minifies css files in tmp
  */
 
+var vendorDependencies = [
+    './node_modules/lodash/lodash.min.js',
+    './node_modules/angular/angular.min.js',
+    './node_modules/md-data-table/dist/md-data-table.js',
+    './node_modules/md-data-table/dist/md-data-table-templates.js',
+    './node_modules/angular-cookies/angular-cookies.min.js',
+    './node_modules/angular-resource/angular-resource.min.js',
+    './node_modules/angular-route/angular-route.min.js',
+    './node_modules/angular-animate/angular-animate.min.js',
+    './node_modules/angular-messages/angular-messages.min.js',
+    './node_modules/angular-aria/angular-aria.min.js',
+    './node_modules/showdown/dist/showdown.min.js',
+    './node_modules/angular-material/angular-material.min.js',
+    './node_modules/moment/min/moment.min.js',
+    './node_modules/highcharts/highcharts.js',
+    './node_modules/highcharts/highcharts-more.js',
+    './node_modules/highcharts/modules/data.js',
+    './node_modules/highcharts/modules/drilldown.js',
+    './node_modules/highcharts/modules/exporting.js',
+    './node_modules/highcharts/modules/solid-gauge.js',
+
+
+]
+
 gulp.task('default', function () {
     // place code for your default task here
 });
@@ -43,15 +67,24 @@ gulp.task('watch', function () {
         './app/public/js/**/*.sass',
         '!./app/public/js/tmp/**'
     ], batch(function (events, done) {
-        gulp.start('concatSass', done);
+        gulp.start('concatSass', done).on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        });
     }));
 
     gulp.watch(["./app/public/js/**/*.js", './app/public/components/**/*.js', '!./app/public/js/tmp/**']).on('change', batch(function (events, done) {
-        gulp.start('JS', done);
+        gulp.start('JS', done).on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        });
     }));
 
     gulp.watch("app/**/*.jade").on('change', batch(function (events, done) {
-        gulp.start('concatJade', done);
+        gulp.start('concatJade', done).on('error', function (err) {
+            console.log(err);
+            this.emit('end');
+        });
     }));
 
     browserSync.init({
@@ -104,27 +137,8 @@ gulp.task("concatJade", function () {
 
 gulp.task('concatVendor', function () {
 
-    return gulp.src([
-        './node_modules/lodash/lodash.min.js',
-        './node_modules/angular/angular.min.js',
-        './node_modules/angular-cookies/angular-cookies.min.js',
-        './node_modules/angular-resource/angular-resource.min.js',
-        './node_modules/angular-route/angular-route.min.js',
-        './node_modules/angular-animate/angular-animate.min.js',
-        './node_modules/angular-messages/angular-messages.min.js',
-        './node_modules/angular-aria/angular-aria.min.js',
-        './node_modules/showdown/dist/showdown.min.js',
-        './node_modules/angular-material/angular-material.min.js',
-        './node_modules/moment/min/moment.min.js',
-        './node_modules/highcharts/highcharts.js',
-        './node_modules/highcharts/highcharts-more.js',
-        './node_modules/highcharts/modules/data.js',
-        './node_modules/highcharts/modules/drilldown.js',
-        './node_modules/highcharts/modules/exporting.js',
-        './node_modules/highcharts/modules/solid-gauge.js'
-
-    ])
-        .pipe(concat('vendor.js'))        
+    return gulp.src(vendorDependencies)
+        .pipe(concat('vendor.js'))
         .on('error', function (err) {
             console.log(err);
             this.emit('end');
@@ -134,29 +148,7 @@ gulp.task('concatVendor', function () {
 
 gulp.task('concatVendorProduction', function () {
 
-    return gulp.src([
-        './node_modules/lodash/lodash.min.js',
-        './node_modules/angular/angular.min.js',
-        './node_modules/angular-cookies/angular-cookies.min.js',
-        './node_modules/angular-resource/angular-resource.min.js',
-        './node_modules/angular-route/angular-route.min.js',
-        './node_modules/angular-animate/angular-animate.min.js',
-        './node_modules/angular-messages/angular-messages.min.js',
-        './node_modules/angular-aria/angular-aria.min.js',
-        './node_modules/showdown/dist/showdown.min.js',
-        './node_modules/angular-material/angular-material.min.js',
-        './node_modules/moment/min/moment.min.js',
-        './node_modules/highcharts/highcharts.js',
-        './node_modules/highcharts/highcharts-more.js',
-        './node_modules/highcharts/modules/data.js',
-        './node_modules/highcharts/modules/drilldown.js',
-        './node_modules/highcharts/modules/exporting.js',
-        './node_modules/highcharts/modules/solid-gauge.js',
-        './node_modules/angular-data-grid/dist/dataGrid.min.js',
-        './node_modules/angular-data-grid/dist/loading-bar.min.js',
-        './node_modules/angular-data-grid/dist/pagination.min.js',
-
-    ])
+    return gulp.src(vendorDependencies)
         .pipe(concat('vendor.js'))
         .pipe(minify())
         .on('error', function (err) {
@@ -185,7 +177,7 @@ gulp.task('concatJS', function () {
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(prettify({collapseWhitespace: true}))
+        .pipe(prettify({ collapseWhitespace: true }))
         .pipe(gulp.dest('./app/public/tmp/'))
 
         .pipe(minify())
@@ -195,7 +187,7 @@ gulp.task('concatJS', function () {
             this.emit('end');
         })
         .pipe(gulp.dest('./app/public/tmp/'))
-        
+
 
 
 })
@@ -203,7 +195,8 @@ gulp.task('concatJS', function () {
 gulp.task('vendorCss', function () {
 
     return gulp.src([
-        './node_modules/angular-material/angular-material.min.css'
+        './node_modules/angular-material/angular-material.min.css',
+        './node_modules/md-data-table/dist/md-data-table-style.css'
     ])
         .pipe(concat('angular-material.min.css'))
         .on('error', function (err) {
