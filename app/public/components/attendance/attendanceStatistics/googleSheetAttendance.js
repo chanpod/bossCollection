@@ -25,6 +25,7 @@ angular.module("BossCollection.attendance")
             $scope.headerEndColumn = "B";
 
             $scope.loading = true;
+            $scope.sheetDataLoading = false;
             $scope.errorMessage = "Oops. Something went wrong. Did you spell the name of the sheet correctly? And does data exist in the range you specified?"
             $scope.gapiObject;
 
@@ -150,7 +151,7 @@ angular.module("BossCollection.attendance")
              * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
              */
             $scope.getSheetTableData = () => {
-                $scope.loading = true;
+                $scope.sheetDataLoading = true;
                 $scope.error = false;
                 $scope.sheetData = [];
                 $scope.sheetHeaders = [];
@@ -164,6 +165,7 @@ angular.module("BossCollection.attendance")
 
             $scope.setSelectedSheet = (selectedSheet) => {
                 $scope.sheetName = selectedSheet;
+                $scope.getSheetTableData();
             }
 
             $scope.buildTableObject = () => {
@@ -189,7 +191,7 @@ angular.module("BossCollection.attendance")
             
 
             $scope.getTableHeaders = (sheetName, dataRange) => {
-                $scope.loading = true;
+                $scope.sheetDataLoading = true;
 
                 let headerSheetName = sheetName;
                 let range = headerSheetName.trim() + "!" + $scope.headerStartCell + ':' + $scope.headerEndColumn;
@@ -210,13 +212,13 @@ angular.module("BossCollection.attendance")
             function handleTableData(response) {
 
                 $scope.sheetData = response.result;
-                $scope.loading = false;
+                $scope.sheetDataLoading = false;
             }
 
             function handleHeaders(response) {
 
                 $scope.sheetHeaders = response.result;
-                $scope.loading = false;
+                $scope.sheetDataLoading = false;
             }
 
             $scope.sortBy = (sortBy) => {
