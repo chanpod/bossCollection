@@ -61,8 +61,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "start": "node server/server",
-    "postinstall": "npm run build",
+    "start": "node server/server",    
     "build": "rimraf dist && webpack --bail --progress --profile",
     "webpack": "npm run server",
     "server": "webpack-dev-server --history-api-fallback --inline --progress --port 3000 --devtool source-map"
