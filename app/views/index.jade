@@ -16,7 +16,7 @@ block body
                                 | {{title}}
                     div(flex, hide-xs, layout-align = "center center", layout)
                         h2
-                            | {{user.guild.name}}
+                            | TBD
                     div(flex)
                         md-menu(flex, layout-align = "end center", layout)
                             div(layout, ng-click = "openMenu($mdOpenMenu, $event)", md-ink-ripple="#FF0000").mousePointer                           
@@ -28,14 +28,6 @@ block body
                                     md-button(ng-click = "goTo('/auth/updateAccount')")
                                         md-icon(md-font-library="material-icons") mode_edit
                                         | Update
-                                md-menu-item(ng-show = "loggedIn && isMember()")
-                                    md-button(ng-click = "goTo('/forum/favorites')") 
-                                        md-icon(md-font-library="material-icons") favorite
-                                        | Favorites
-                                md-menu-item(ng-show = "loggedIn && isMember()")
-                                    md-button(ng-click = "goTo('/sheetsAttendance')") 
-                                        md-icon(md-font-library="material-icons") favorite
-                                        | Sheets Tool
                                 md-menu-item(ng-show = "loggedIn")
                                     md-button(ng-click = "logout()")
                                         md-icon(md-font-library="material-icons") exit_to_app

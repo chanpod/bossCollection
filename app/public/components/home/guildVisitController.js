@@ -23,7 +23,7 @@ angular.module("BossCollection.home")
                 $scope.guildImagesLoaded = false;
 
                 if($scope.guildName == undefined){
-                    $scope.guildName = "mkdir BossCollection";
+                    $scope.guildName = "TBD"; 
                 }
 
                 guildServices.getHomepageContent($scope.guildName)

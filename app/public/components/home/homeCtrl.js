@@ -24,7 +24,7 @@ angular.module("BossCollection.home")
                     function (err) {
                         $scope.user = undefined;
                         $scope.guild = undefined;
-                        document.getElementById('imageGallery').innerHTML = "";
+                        // document.getElementById('imageGallery').innerHTML = "";
                         $scope.loggedIn = false;
                     })
 
@@ -53,20 +53,7 @@ angular.module("BossCollection.home")
                         .then(function (guild) {
 
                             $scope.guild = guild.guild;
-
-                            // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                            //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
-
-                            // if ($scope.guild && $scope.guild.images) {
-                            //     $scope.guild.images.forEach(function (image) {
-                            //         sliderHTML += "<item source = " + image + "></item>"
-                            //     }, this);
-                            // }
-
-
-                            // sliderHTML += "</awesome-slider>";
-
-                            // document.getElementById('imageGallery').innerHTML = sliderHTML;
+                     
 
                             $scope.guildImagesLoaded = true;
                         })
@@ -75,24 +62,11 @@ angular.module("BossCollection.home")
                         })
                 }
                 else {
-                    guildServices.getHomepageContent("mkdir BossCollection")
+                    guildServices.getHomepageContent("TBD")
                         .then(function (guild) {
 
                             $scope.guild = guild.guild;
-
-                            // var sliderHTML = "<awesome-slider  height=\"x60%\" autostart=\"true\" bullets=\"true\">"
-                            //     + "<item source=\"/images/expansionBanners/legionbanner.png\"></item>";
-
-                            // if ($scope.guild && $scope.guild.images) {
-                            //     $scope.guild.images.forEach(function (image) {
-                            //         sliderHTML += "<item source = " + image + "></item>"
-                            //     }, this);
-                            // }
-
-
-                            // sliderHTML += "</awesome-slider>";
-
-                            // document.getElementById('imageGallery').innerHTML = sliderHTML;
+           
 
                             $scope.guildImagesLoaded = true;
                         })
