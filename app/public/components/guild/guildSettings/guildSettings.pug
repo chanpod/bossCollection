@@ -45,7 +45,7 @@ script#guildSettings(type="text/ng-template")
                                         input(ng-model = "rank.name", ng-change = "changeDetected()", aria-label = "rank name")
                                      
                                 md-menu()
-                                    md-button(aria-label="Open rank settings menu", ng-click="openMenu($mdOpenMenu, $event)").md-icon-button
+                                    md-button(aria-label="Open rank settings menu", ng-click="openMenu($mdMenu, $event)").md-icon-button
                                         md-icon(md-font-library="material-icons", aria-label = "refresh forum") more_vert
                                     md-menu-content(style = "padding: 15px", layout-align = "center center")                                        
                                             

@@ -15,7 +15,7 @@ div(flex, layout-md = "row", layout-xs = "column", layout-align = "space-between
             md-icon(md-font-library="material-icons") call_made
             | Armory Profile
         md-menu(ng-if = "isOfficer() && user.name != application.user")
-            md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+            md-button(ng-click = "openMenu($mdMenu, $event)").md-icon-button
                 md-icon(md-font-library="material-icons", md-menu-origin) more_vert
             md-menu-content
                 md-menu-item

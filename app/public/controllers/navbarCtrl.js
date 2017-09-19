@@ -23,9 +23,9 @@ angular.module("BossCollection.controllers")
                 siteServices.showLoadingBottomSheet($event);
             }
 
-            $scope.openMenu = function ($mdOpenMenu, ev) {
+            $scope.openMenu = function ($mdMenu, ev) {
                 originatorEv = ev;
-                $mdOpenMenu(ev);
+                $mdMenu.open(ev);
             };
 
             $scope.goTo = function (path) {

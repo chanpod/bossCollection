@@ -79,8 +79,8 @@ angular.module("BossCollection.guild")
                 })
             }
 
-            $scope.openMenu = function ($mdOpenMenu, ev) {
-                $mdOpenMenu(ev);
+            $scope.openMenu = function ($mdMenu, ev) {
+                $mdMenu.open(ev);
             }
 
             $scope.goTo = function (url) {

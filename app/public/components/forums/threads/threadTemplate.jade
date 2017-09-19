@@ -78,7 +78,7 @@ script#thread(type="text/ng-template")
                 div( layout-align = "end center", layout)
                 
                     md-menu(ng-if = "isOfficer()")
-                        md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                        md-button(ng-click = "openMenu($mdMenu, $event)").md-icon-button
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
                             
                         include ../menuPopup.jade
@@ -121,7 +121,7 @@ script#thread(type="text/ng-template")
                 div( layout-align = "end center", layout)
                 
                     md-menu(ng-if = "isOfficer() || thread.user == user.name")
-                        md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                        md-button(ng-click = "openMenu($mdMenu, $event)").md-icon-button
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
                             
                         include ../menuPopup.jade 

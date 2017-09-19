@@ -50,7 +50,7 @@ script#favorites(type="text/ng-template")
                         
                 div( layout-align = "center center", layout)
                     md-menu(ng-if = "isOfficer")
-                        md-button(ng-click = "openMenu($mdOpenMenu, $event)").md-icon-button
+                        md-button(ng-click = "openMenu($mdMenu, $event)").md-icon-button
                             md-icon(md-font-library="material-icons", md-menu-origin) more_vert
                         include ../menuPopup.jade 
                     md-button(ng-if = "favCtrl.isFavorite(thread)", ng-click = "favCtrl.favoriteThread(thread)").md-icon-button.md-ink-ripple
