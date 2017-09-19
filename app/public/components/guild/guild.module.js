@@ -1,6 +1,8 @@
-'user strict'
+var ModuleName = "BossCollection.guild";
 
-angular.module("BossCollection.guild", ['ngRoute'])
+export default ModuleName;
+
+angular.module(ModuleName, ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider

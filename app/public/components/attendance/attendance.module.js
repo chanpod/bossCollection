@@ -1,6 +1,8 @@
-'user strict'
+var ModuleName = "BossCollection.attendance";
 
-var app = angular.module("BossCollection.attendance", ['ngRoute'])
+export default ModuleName;
+
+var app = angular.module(ModuleName, ['ngRoute'])
     .config(['$routeProvider', function ($routeProvider) {
 
         $routeProvider

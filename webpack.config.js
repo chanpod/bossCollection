@@ -30,7 +30,7 @@ module.exports = function makeWebpackConfig() {
      * Karma will set this when it's a test build
      */
     config.entry = isTest ? void 0 : {
-        app: './app/public/js/app.js'
+        app: './app/public/app.js'
     };
 
     /**
@@ -45,7 +45,7 @@ module.exports = function makeWebpackConfig() {
 
         // Output path from the view of the page
         // Uses webpack-dev-server in development
-        publicPath: isProd ? '/Web/SPA/dist/' : '/',
+        publicPath: isProd ? '/dist/' : '/',
 
         // Filename for entry points
         // Only adds hash in build mode
@@ -90,7 +90,7 @@ module.exports = function makeWebpackConfig() {
             exclude: /node_modules/
         },
         {
-            test: /\.jade/,
+            test: /\.(jade|pug)/,
             loader: 'pug-loader'
         },
         {
@@ -202,7 +202,7 @@ module.exports = function makeWebpackConfig() {
         // Render index.html
         config.plugins.push(
             new HtmlWebpackPlugin({
-                template: './app/public/index.html',
+                template: './app/views/index.pug',
                 inject: 'body',
                 filename: 'index.html'
             }),
@@ -226,9 +226,9 @@ module.exports = function makeWebpackConfig() {
             new webpack.optimize.UglifyJsPlugin(),
 
             new HtmlWebpackPlugin({
-                template: './src/public/index.html',
+                template: './src/views/index.pug',
                 inject: 'body',
-                filename: 'index.cshtml'
+                filename: 'index.html'
             }),
 
             // Copy assets from the public folder
@@ -248,10 +248,7 @@ module.exports = function makeWebpackConfig() {
         contentBase: './src/public',
         stats: 'minimal',
         proxy: {
-            '/api/*': 'http://localhost:7423',
-            '/Documents/*': 'http://localhost:7423',
-            '/Admin/*': 'http://localhost:7423',
-            '/Account/*': 'http://localhost:7423',
+            '/api/*': 'http://localhost:4000'            
         }
     };
 

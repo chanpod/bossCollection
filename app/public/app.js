@@ -1,21 +1,38 @@
-'use strict';
+import angular from 'angular';
+import 'angular-route';
+import 'angular-messages';
+import 'angular-sanitize';
+import 'angular-cookies';
+import 'angular-resource';
+import 'angular-material';
 
 
 
-angular.module('BossCollection', [    
-    'BossCollection.controllers',
-    'BossCollection.services',
-    'BossCollection.directives',
-    'BossCollection.accounts',
-    'BossCollection.filters',
-    'BossCollection.forums',
-    'BossCollection.attendance',
-    'BossCollection.guild',
-    'BossCollection.home',
+//Vendor CSS
+import 'angular-material/angular-material.min.css';
+
+import BossCollectionControllers from './controllers/controllers.module';
+import BossCollectionServices from './services/services.module';
+import BossCollectionDirectives from './directives/directives.module';
+import BossCollectionAccounts from './components/accounts/accounts.module';
+import BossCollectionFilters from './filters/filters.module';
+import BossCollectionAttendance from './components/attendance/attendance.module';
+import BossCollectionGuild from './components/guild/guild.module';
+import BossCollectionHome from './components/home/home.module';
+
+
+angular.module('BossCollection', [
+    BossCollectionControllers,
+    BossCollectionServices,
+    BossCollectionDirectives,
+    BossCollectionAccounts,
+    BossCollectionFilters,
+    BossCollectionAttendance,
+    BossCollectionGuild,
+    BossCollectionHome,
     'ngRoute',
     'ngResource',
-    'ngCookies',
-    'md.data.table',
+    'ngCookies',    
     'ngMaterial',
     'ngAnimate',
 

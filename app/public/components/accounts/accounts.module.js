@@ -1,2 +1,6 @@
-'use strict';
-angular.module('BossCollection.accounts', ['BossCollection.services'])
+var ModuleName = "BossCollection.accounts";
+
+angular.module(ModuleName, ['BossCollection.services']);
+
+export default ModuleName;
+

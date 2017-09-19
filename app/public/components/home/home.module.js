@@ -1,6 +1,8 @@
-'user strict'
+var ModuleName = "BossCollection.home";
 
-angular.module("BossCollection.home", ['ngRoute'])
+export default ModuleName;
+
+angular.module(ModuleName, ['ngRoute'])
     .config(['$routeProvider', function($routeProvider) {
 
         $routeProvider
