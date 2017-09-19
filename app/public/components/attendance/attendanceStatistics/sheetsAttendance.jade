@@ -65,11 +65,12 @@ script#sheetsStats(type="text/ng-template")
                                 | Sheets
                         md-button(ng-click = "getSheetTableData()").md-raised
                             | Get Sheet Data
-                md-tabs(md-dynamic-height, md-border-bottom) 
-                    md-tab(label="{{sheet.properties.title}}", ng-repeat = "sheet in sheets", ng-click = "setSelectedSheet(sheet.properties.title)")
-                        md-content().md-padding
-                            div(id = "stats", layout = "column")
-                                div(flex)
+                div(flex, layout, layout-align = "center center")
+                    md-tabs(flex, md-dynamic-height, md-border-bottom) 
+                        md-tab(label="{{sheet.properties.title}}", ng-repeat = "sheet in sheets", ng-click = "setSelectedSheet(sheet.properties.title)")
+                            md-content().md-padding
+                                div(id = "stats", layout = "column")
+                                    div(flex)
                                     
                         
             section(flex, ng-show = "sheetData != undefined")  

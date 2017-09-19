@@ -21,7 +21,7 @@ angular.module("BossCollection.attendance")
             $scope.endColumn = "B";
 
             $scope.headerSheetName = "";
-            $scope.headerStartCell = "A1";
+            $scope.headerStartCell = "A1"; 
             $scope.headerEndColumn = "B";
 
             $scope.loading = true;
@@ -156,7 +156,7 @@ angular.module("BossCollection.attendance")
                 $scope.sheetData = [];
                 $scope.sheetHeaders = [];
                 let sheetName = $scope.sheetName;
-
+                $location.search('sheetName', sheetName); 
                 let range = sheetName + "!" + $scope.startCell + ':' + $scope.endColumn;
 
                 $scope.getTableHeaders(sheetName, range);
@@ -170,7 +170,7 @@ angular.module("BossCollection.attendance")
 
             $scope.buildTableObject = () => {
                 let headers = $scope.sheetHeaders.values[0];
-                let data = $scope.sheetData.values;
+                let data = $scope.sheetData.values; 
 
                 let length = headers.length;
 
