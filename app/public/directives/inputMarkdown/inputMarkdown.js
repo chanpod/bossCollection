@@ -1,3 +1,5 @@
+var showdown = require('showdown');
+
 angular.module('BossCollection.directives')
     .directive('inputMarkdown', ['$sce', function($sce){
         

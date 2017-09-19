@@ -6,11 +6,12 @@ import 'angular-cookies';
 import 'angular-resource';
 import 'angular-material';
 import _ from 'lodash';
-
+import 'ng-showdown';
 
 //Vendor CSS
 import 'angular-material/angular-material.min.css';
 import './vendor/octicons/octicons/octicons.css';
+
 
 import BossCollectionControllers from './controllers/controllers.module';
 import BossCollectionServices from './services/services.module';
@@ -30,7 +31,8 @@ angular.module('BossCollection', [
     BossCollectionFilters,
     BossCollectionAttendance,
     BossCollectionGuild,
-    BossCollectionHome,
+    BossCollectionHome,    
+    'ng-showdown',
     'ngRoute',
     'ngResource',
     'ngCookies',    
