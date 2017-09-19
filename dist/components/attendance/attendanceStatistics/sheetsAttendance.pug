@@ -1,0 +1,105 @@
+script#sheetsStats(type="text/ng-template")
+  
+    
+    
+    md-content(id = "statsContainer")
+        section
+            div(flex, layout = "column", layout-align = "center center").welcomeBanner
+                h2
+                    | Sheet Data viewer
+                p()
+                    | View data from google sheets in a table format with tools for filtering and sorting.
+                span().md-subhead There's a default sheet provided even though the input for the sheet url is blank so you can demo the app.
+                span()
+                    md-button(ng-click = "handleAuthClick()", ng-show = "!signedIn").md-raised.md-primary Authorize
+                    md-button(ng-click = "handleSignoutClick()", ng-show = "signedIn").md-raised.md-primary Remove Authorization
+                br
+                div(flex,  ng-show = "signedIn")
+                    h3
+                        | Please enter the url for your google sheet
+                    md-input-container(style = "width:100%;color:#fff;")
+                        label(style = "color:#fff;") Sheet URL
+                        input(style = "color:#fff;", type = "text", ng-model = "sheetUrl", ng-blur = "getSheetNames()")
+        section(layout layout-align = "center center")
+            md-progress-circular(ng-show = "loading", md-mode="indeterminate")
+            div(ng-show = "error")
+                h2(style = "color:red;")
+                    | {{errorMessage}}
+        section(flex, ng-show = "!signedIn && !loading")
+            span
+                | Please authorize this app to access your google sheet.
+        section(ng-show = "signedIn")
+            section(flex)
+                md-card
+                    md-card-title
+                        md-card-title-text
+                            span().md-headline Config
+                            span().md-subhead Select one of the tabs below, configure the section of the sheet you want to display and click on the "Get Sheet Data" button.
+                            
+                            md-divider
+                    md-card-content
+                        form
+                            div(flex, layout = "row")                                    
+                                div(flex)                                        
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Row Start Cell
+                                        input(type = "text", ng-model = "startCell", required)
+                                    
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() End Column
+                                        input(type = "text", ng-model = "endColumn", required)
+                                div(flex)                                    
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Header Row Start Cell
+                                        input(type = "text", ng-model = "headerStartCell")
+                                    md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                        label() Header End Column
+                                        input(type = "text", ng-model = "headerEndColumn", required)
+                    
+                        
+            section(flex, ng-show = "signedIn") 
+                md-toolbar()
+                    div(flex, layout, layout-align = "center center").md-toolbar-tools
+                        h3
+                            span
+                                | Sheets
+                        md-button(ng-click = "getSheetTableData()").md-raised
+                            | Get Sheet Data
+                div(flex, layout, layout-align = "center center")
+                    md-tabs(flex, md-dynamic-height, md-border-bottom) 
+                        md-tab(label="{{sheet.properties.title}}", ng-repeat = "sheet in sheets", ng-click = "setSelectedSheet(sheet.properties.title)")
+                            md-content().md-padding
+                                div(id = "stats", layout = "column")
+                                    div(flex)
+                                    
+                        
+            section(flex, ng-show = "sheetData != undefined")  
+                md-toolbar()
+                    div(flex, layout, layout-align = "center center").md-toolbar-tools
+                        h3
+                            span
+                                | Data
+                md-progress-linear(ng-show = "sheetDataLoading", md-mode="indeterminate")
+                md-card()
+                    md-card-title
+                        md-card-title-text
+                            h3 {{sheetName}} Data
+                            div()
+                                md-input-container(flex-gt-xs = "30").md-block.md-icon-float
+                                    label() Filter
+                                    input(type = "text", ng-model = "dataTableSort")
+                            md-divider
+                    md-card-content(layout, layout-align = "center center")                                   
+                        
+                        md-table-container(style = "width:100%;")
+                            table(md-table)
+                                thead(md-head md-order="query.order")
+                                    tr().md-row
+                                        th(md-column, md-order-by = "{{header}}", ng-click = "sortBy(header)", ng-repeat = "header in sheetHeaders.values[0]").md-table-header
+                                            | {{header}}
+                                
+                                tbody(md-body)   
+                                    tr(md-row, ng-repeat = "rowValues in tableObject | filter:dataTableSort | orderBy:sort").md-table-content-row
+                                        td(md-cell, ng-repeat = "data in rowValues").md-table-content
+                                            | {{data}}
+                        

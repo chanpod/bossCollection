@@ -1,0 +1,136 @@
+script#thread(type="text/ng-template")    
+    md-content(flex, aria-label = "threadTemplate")
+        md-toolbar(flex).md-scroll-shrink
+                div().md-toolbar-tools
+                    md-button(ng-click = "goBack()").md-icon-button
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") keyboard_backspace
+                    | Forums
+                    span(flex)
+                    md-button(ng-click = "createThread()").md-icon-button
+                        md-icon(md-font-library="material-icons", aria-label = "new thread") add
+                        md-tooltip() Create new thread
+                    md-button(ng-click = "refresh()").md-icon-button
+                        md-icon(md-font-library="material-icons", aria-label = "refresh forum") refresh
+                        md-tooltip() Refresh Forum data
+        md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+        
+        div(layout-align = "center center")
+                md-card
+                    md-card-header                        
+                        md-card-header-text
+                            span().md-headline
+                                user-display(user = "user.name")
+                            span().md-subhead                    
+                    md-card-actions(layout, layout-xs = "column")
+                        md-button(ng-click = "goTo('/forum/favorites')").md-raised.md-primary Favorites
+                        br
+                        md-button(ng-click = "refresh()").md-raised.md-primary
+                            | Refresh
+                        br
+                        md-button(ng-click = "createThread()").md-raised.md-primary
+                            | Create Thread
+                        br
+                        md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised.md-primary My Post (Not yet implemented)
+                            md-tooltip() See post you've created
+        ad()
+        
+        div(layout-align = "center center")
+            div(layout, layout-align = "center center")
+                h1() {{forum.name}}
+        div(layout = "row", layout-align = "space-between center", flex)
+
+            md-input-container().md-block.md-icon-float
+                label() Search
+                md-icon(md-font-library="material-icons") search
+                input(type = "text", ng-model = "threadSearch")
+
+            div()                
+                md-button(ng-click = "flipOrderBySorting()").md-primary.md-raised
+                    md-icon(md-font-library="material-icons") date_range
+                    | &nbsp {{orderByString}}
+                    
+        md-list(layout = "column", layout-align = "center stretch", flex)     
+            div(ng-repeat = "thread in stickyThreads | filter:sortThreads()", ng-class = "isRead(thread)", layout = "column")
+            
+                md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
+                    div(layout-padding, layout = "column").md-list-item-text
+                        div(layout-align = "space-between center", layout)
+                            div(flex).threadSubject
+                                |  {{thread.title}}
+                            div(layout, hide-sm, hide-xs, flex, layout-align = "end center")
+                                div()
+                                    |  {{formatDate(thread.dateCreated)}}
+                            div( ng-if = "thread.sticky")
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
+                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
+                            div(flex)
+                                p( layout-align = "start center")                                    
+                                    user-display(user = "thread.user")
+                            div(flex)
+                                div(layout-align = "center center")
+                                    | Comments: {{thread.commentCount}}
+                            div(flex)
+                                div(hide-gt-sm, flex)
+                                    |  {{formatDate(thread.dateCreated)}}
+                    md-tooltip(style = "max-width:75%;").threadMessagePreview
+                        |  {{thread.message}}
+                        
+                div( layout-align = "end center", layout)
+                
+                    md-menu(ng-if = "isOfficer()")
+                        md-button(ng-click = "openMenu($mdMenu, $event)").md-icon-button
+                            md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+                            
+                        include ../menuPopup.jade
+                                     
+                                   
+                    md-button(ng-if = "isFavorite(thread)", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                        md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
+                        md-tooltip() Favorite
+                    md-button(ng-if = "!isFavorite(thread)", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") favorite_border
+                        md-tooltip() Favorite 
+                        
+            md-divider(ng-if="!$last")     
+
+            div(ng-repeat = "thread in threads | filter:sortThreads()", ng-class = "isRead(thread)", layout = "column")
+            
+                md-list-item(flex, ng-click = "openThread(thread)", layout-align = "space-between").md-2-line.mousePointer
+                    div(layout-padding, layout = "column").md-list-item-text
+                        div(layout-align = "space-between center", layout)
+                            div(flex).threadSubject
+                                |  {{thread.title}}
+                            div(layout, hide-sm, hide-xs, flex, layout-align = "end center")
+                                div()
+                                    |  {{formatDate(thread.dateCreated)}}
+                            div( ng-if = "thread.sticky")
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") bookmark
+                        div(layout-sm = "column", layout-gt-sm = "row",  layout-align-gt-sm = "space-around center")
+                            div(flex)
+                                p( layout-align = "start center")                                    
+                                    user-display(user = "thread.user")
+                            div(flex)
+                                div(layout-align = "center center")
+                                    | Comments: {{thread.commentCount}}
+                            div(flex)
+                                div(hide-gt-sm, flex)
+                                    |  {{formatDate(thread.dateCreated)}}
+                    md-tooltip(style = "max-width:75%;").threadMessagePreview
+                        |  {{thread.message}}
+                        
+                div( layout-align = "end center", layout)
+                
+                    md-menu(ng-if = "isOfficer() || thread.user == user.name")
+                        md-button(ng-click = "openMenu($mdMenu, $event)").md-icon-button
+                            md-icon(md-font-library="material-icons", md-menu-origin) more_vert
+                            
+                        include ../menuPopup.jade 
+                                   
+                    md-button(ng-if = "isFavorite(thread)", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                        md-icon(md-font-library="material-icons", aria-label = "delete category").favorite favorite
+                        md-tooltip() Favorite
+                    md-button(ng-if = "!isFavorite(thread)", ng-click = "favoriteThread(thread)").md-icon-button.md-ink-ripple
+                        md-icon(md-font-library="material-icons", aria-label = "delete category") favorite_border
+                        md-tooltip() Favorite
+                        
+            md-divider(ng-if="!$last")

@@ -1,0 +1,20 @@
+script#forumEdit(type="text/ng-template")
+    md-dialog(layout = "column", aria-label = "forumEdit").md-list.md-has-header.modalPadding
+        div(layout, layout-align = "center center")
+            h4
+                | Forum
+        div()
+            form(name = "logInForm")
+                div(layout = "row")
+                    md-input-container(flex).md-block
+                        label() Forum Name
+                        input(ng-model = "object.name", required)                        
+                div(layout = "row", layout-align = "space-around center")
+                    md-input-container().md-block
+                        md-button(ng-disabled = "loading", ng-click = "saveForum()").md-primary.md-raised
+                            | Save
+                    md-input-container().md-block
+                        md-button(ng-click = "cancel()").md-primary.md-raised
+                            | Cancel
+               
+            

@@ -1,0 +1,99 @@
+script#application(type="text/ng-template") 
+      
+    md-content
+        section()
+            div(flex, layout = "column", layout-align = "center center").welcomeBanner
+                h2
+                    | Application
+                p()
+                    | This process will gather your character info from the wow armory. If there's any issues because of the armory, please contact the guild
+                    | directly.                                
+        section(layout="column",layout-padding, layout-align = "center center")
+
+            form(name = "editAccountForm", ng-submit = "submitApplication()")
+
+                div(layout="column")
+
+                    md-autocomplete(md-min-length = "0",
+                                md-item-text = "guild.name",
+                                md-selected-item = "guildSelected",
+                                md-search-text = "guildName",
+                                md-select-on-match="true",
+                                md-selected-item-change="selectedGuildChange(item)"
+                                md-no-cache = "true",
+                                md-floating-label = "Select Guild to Apply To",
+                                md-items = "guild in listOfGuilds | filter:guildName")
+
+                        md-item-template
+                            span(md-highlight-text = "guildName") {{guild.name}}
+
+                div(layout="column", layout-xs="column", ng-if = "guildSelected != undefined")
+
+                    div(ng-show = "searchingForUser")
+                        md-progress-linear (md-mode="indeterminate")
+
+                    md-input-container(flex).md-block.md-icon-float
+                        label() Character Name
+                        md-icon(md-font-library="material-icons", ng-class = "validCharacterName ? 'characterSuccess' : 'characterError' ") {{icon}}
+                            md-tooltip() ! Means your character wasn't retrieved from the server. Green check mark means success.
+                        input(id = "characterNameInput", ng-model = "application.characterName", 
+                            ng-blur = "validateCharactername()", required)
+                        
+                    md-autocomplete(md-min-length = "0",
+                                    md-select-on-match="true"
+                                    md-item-text = "realm.name",
+                                    md-selected-item = "application.realm",
+                                    md-selected-item-change="validateCharactername()"
+                                    md-search-text = "realm",                                                                      
+                                    md-floating-label = "Select Realm",
+                                    md-items = "realm in filterSearch(realm)",
+                                    flex,
+                                    ng-blur = "validateCharactername()")
+
+                        md-item-template
+                            span(md-highlight-text = "realm.name")
+                                | {{realm.name}}
+                        div().hint Actually click/tap on the item in the dropdown (or use arrow keys and enter)
+                        
+                div(layout = "column", layout-xs="column", ng-if = "guildSelected != undefined && validCharacterName")
+                    md-input-container(flex).md-block
+                        label() Item Level
+                        input(ng-model = "application.itemLevel", required, disabled)
+
+                div(ng-if = "guildSelected != undefined && validCharacterName") 
+                    img(src = "http://us.battle.net/static-render/us/{{application.character.thumbnail}}")
+                    img(src = "/images/classIcons/images/class/64/{{className}}.png") 
+
+                div(layout = "column", layout-xs="column")
+
+                    md-input-container(flex).md-block
+                        label() Previous Guild
+                        input(ng-model = "application.previousGuild", required)
+
+                    md-input-container(flex).md-block
+                        label() Desired Role
+                        md-select(ng-model = "application.desiredRole", required)
+                            md-option(value = "Ranged DPS") Ranged DPS
+                            md-option(value = "Melee DPS") Melee DPS
+                            md-option(value = "Healer") Healer
+                            md-option(value = "Tank") Tank
+
+                    md-input-container(ng-if = "guildSelected != undefined", flex).md-block
+                        label() Which raid team?
+                        md-select(ng-model = "application.raidTeam", required)
+                            md-option(ng-repeat = "rank in raidRanks" value = "{{rank.name}}") {{rank.name}}
+                            
+
+                div(layout = "column",, layout-xs="column")
+                    md-input-container(flex).md-block
+                        label()
+                            | Anything Else?
+                        textarea(ng-model = "application.comments")
+
+                div(layout = "column",, layout-xs="column")
+                    md-progress-circular( md-mode="indeterminate", ng-if = "isLoading")
+                    md-input-container().md-block
+                    md-button(type = "submit").md-primary.md-raised
+                            | Submit
+        ad
+  

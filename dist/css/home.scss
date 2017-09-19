@@ -1,0 +1,36 @@
+
+.welcomeBanner{
+  background: linear-gradient(to bottom,#142B0E, rgb(36, 76, 25)); 
+  color: white;
+  padding: 10px;
+  min-height: 400px  !important;
+  margin-bottom: 10px;
+}
+
+.legionGradient{
+  background: linear-gradient(to bottom,#4286f4, #82cff6); 
+}
+
+.adjustForHomepage{
+  padding-top:0 !important;
+}
+
+.welcomeBannerFeatures{
+  font-size: 20px
+}
+
+.iconSection{
+  padding: 10px;
+}
+
+.iconSection md-icon{
+  font-size: 50px;
+  padding-right:20px;
+  color: black;  
+  
+}
+
+.featureSection {
+  padding: 10px;
+  max-width: 250px;
+}

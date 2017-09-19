@@ -34,10 +34,10 @@ __dirname = path.join(__dirname, '../');
 console.log("========= Starting server ============")
 console.log("App root directory: " + __dirname);
 
-app.set('views', path.join(__dirname, 'app/views'));
+app.set('views', path.join(__dirname, 'dist'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'app/public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 app.enable("jsonp callback");
 
 app.use(bodyParser.json());

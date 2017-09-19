@@ -1,0 +1,59 @@
+script#forum(type="text/ng-template")
+    
+    md-content(layout = "column", layout-fill)    
+        div(flex)
+            md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+            div(layout-align = "center center")
+                md-card 
+                    md-card-header                        
+                        md-card-header-text
+                            span().md-headline
+                                user-display(user = "user.name")
+                            span().md-subhead                                
+                    md-card-actions(layout, layout-xs = "column")
+                        md-button(ng-click = "goTo('/forum/favorites')").md-raised Favorites
+                        br
+                        md-button(ng-click = "refreshForums()").md-raised
+                            | Refresh
+                        br
+                        md-button(ng-if = "isOfficer()", ng-click = "newCategory()").md-raised
+                            | Create Category
+                        br
+                        md-button(ng-click = "goTo('/forum/myPost')", ng-disabled = "true").md-raised My Post (Not yet implemented)
+                            md-tooltip() See post you've created
+            ad()
+            div(ng-repeat = "category in forums.categories")            
+                md-toolbar().md-scroll-shrink
+                    div().md-toolbar-tools
+                        div().forumCategoryTitle
+                            | {{category.name}}
+                            
+                        span(flex)
+                        div(ng-show = "isOfficer()")
+                            md-button(ng-click = "deleteCategory(category)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                            md-button(ng-click = "editCategory(category)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+                            md-button(ng-click = "createForum(category)").md-icon-button
+                                md-icon(md-font-library="material-icons", aria-label = "add new forum") add
+                md-progress-linear(ng-if = "loading", md-mode="indeterminate")
+                md-list
+                    div(ng-repeat = "forum in category.forums", ng-class = "isRead(forum, category)")
+                        div(layout = "row")
+                            md-list-item(flex, ng-click = "goToForum(forum)").md-2-line.mousePointer
+                                div(layout-padding, layout = "column").md-list-item-text
+                                    div(flex, layout = "row")
+                                        h3()
+                                            | {{forum.name}}
+                                    div(flex, layout = "row", layout-align = "start center")
+                                        span()
+                                        span(layout-align = "start center")
+                                            div()
+                                                | Threads: {{forum.threadCount}}
+                            div(ng-show = "isGM()", layout-align = "center center", layout)
+                                md-button(ng-click = "deleteForum(forum)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "delete category") delete
+                                md-button(ng-click = "editForum(forum)").md-icon-button
+                                    md-icon(md-font-library="material-icons", aria-label = "edit category") mode_edit
+            ad()
+                            

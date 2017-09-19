@@ -45,7 +45,7 @@ module.exports = function makeWebpackConfig() {
 
         // Output path from the view of the page
         // Uses webpack-dev-server in development
-        publicPath: isProd ? '/dist/' : '/',
+        publicPath: isProd ? '/' : '/',
 
         // Filename for entry points
         // Only adds hash in build mode
@@ -219,14 +219,14 @@ module.exports = function makeWebpackConfig() {
         config.plugins.push(
             // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
             // Only emit files when there are no errors
-            new webpack.NoErrorsPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(),
 
             // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
             // Minify all javascript, switch loaders to minimizing mode
             new webpack.optimize.UglifyJsPlugin(),
 
             new HtmlWebpackPlugin({
-                template: './src/views/index.pug',
+                template: './app/views/index.pug',
                 inject: 'body',
                 filename: 'index.html'
             }),
@@ -234,7 +234,7 @@ module.exports = function makeWebpackConfig() {
             // Copy assets from the public folder
             // Reference: https://github.com/kevlened/copy-webpack-plugin
             new CopyWebpackPlugin([{
-                from: __dirname + '/src/public'
+                from: __dirname + '/app/public'
             }])
         )
     }
@@ -245,7 +245,7 @@ module.exports = function makeWebpackConfig() {
      * Reference: http://webpack.github.io/docs/webpack-dev-server.html
      */
     config.devServer = {
-        contentBase: './src/public',
+        contentBase: './app/public',
         stats: 'minimal',
         proxy: {
             '/api/*': 'http://localhost:4000',            

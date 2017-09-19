@@ -1,0 +1,28 @@
+script#guildVisitHome(type="text/ng-template")  
+  
+  md-content()
+    section(layout, id = "imageGallery").imageGallery
+        div(flex)     
+            //-video(src = "/videos/bannerVideo.mp4",autoplay, loop, style = "width: 100%;height:100%")
+            img(src = "/images/resiliencelogoblue.jpg", style = "width: 100%;height:100%")
+    section(ng-if = "guild.tabs.length == 0")
+        h3 This guild hasn't added any content to their page yet.
+    section(layout="column", ng-if = "guild.tabs.length > 0")
+        md-tabs(md-dynamic-height, md-border-bottom).md-background
+            md-tab(ng-repeat = "tab in guild.tabs", label = "{{tab.title}}")
+                md-content().md-padding
+                    md-card
+                        md-card-content
+                            div(ng-if = "!editing")
+                                display-markdown(markdown = "tab.content")
+                            div(flex, layout = "column", ng-if = "editing")
+                                div(flex)
+                                    md-input-container(flex).md-block
+                                        label() Tab Title
+                                        input(ng-model = "tab.title")
+                                    
+                                    input-markdown(flex, input = "tab.content")  
+            
+            
+    ad(flex)
+    
