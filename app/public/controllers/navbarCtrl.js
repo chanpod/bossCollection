@@ -1,7 +1,4 @@
-'use strict';
-/**
- *
- */
+
 angular.module("BossCollection.controllers")
     .controller("navbar", ["$scope", '$location', 'userLoginSrvc', '$rootScope', '$mdSidenav', 'siteServices', 'guildServices', 'permissionsService',
         function ($scope, $location, userLoginSrvc, $rootScope, $mdSidenav, siteServices, guildServices, permissionsService) {

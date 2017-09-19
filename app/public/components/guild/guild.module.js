@@ -35,3 +35,5 @@ angular.module(ModuleName, ['ngRoute'])
                 controller: 'myApplicationsCtrl'
             })
     }]);
+
+    require('./guildServices.js');

@@ -5,11 +5,12 @@ import 'angular-sanitize';
 import 'angular-cookies';
 import 'angular-resource';
 import 'angular-material';
-
+import _ from 'lodash';
 
 
 //Vendor CSS
 import 'angular-material/angular-material.min.css';
+import './vendor/octicons/octicons/octicons.css';
 
 import BossCollectionControllers from './controllers/controllers.module';
 import BossCollectionServices from './services/services.module';

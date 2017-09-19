@@ -65,7 +65,7 @@
     "postinstall": "npm run build",
     "build": "rimraf dist && webpack --bail --progress --profile",
     "webpack": "npm run server",
-    "server": "webpack-dev-server --history-api-fallback --inline --progress --port 4000 --devtool source-map"
+    "server": "webpack-dev-server --history-api-fallback --inline --progress --port 3000 --devtool source-map"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",

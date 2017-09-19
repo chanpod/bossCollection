@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module("BossCollection.accounts")
     .factory('userLoginSrvc', ['$resource', '$q', '$location', '$cookies', '$rootScope',
         'siteServices',

@@ -16,3 +16,5 @@ angular.module(ModuleName, ['ngRoute'])
         })   
          
     }]);         
+
+    require('./homeCtrl.js');
