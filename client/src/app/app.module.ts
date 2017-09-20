@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule }    from '@angular/http';
 
 import { AppComponent } from './app.component';
 
@@ -13,6 +14,10 @@ import { HomeComponent } from './home/home.component';
 import {RoutingModule} from './routing/routing.module';
 import { LayoutComponent } from './layout/layout.component';
 
+//Services
+import {UserService} from './services/user.service';
+import {ApiService} from './services/api.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,9 +28,13 @@ import { LayoutComponent } from './layout/layout.component';
     BrowserModule,
     MaterialModule,
     BrowserAnimationsModule,
-    RoutingModule
+    RoutingModule,
+    HttpModule
   ],
-  providers: [],
+  providers: [
+    UserService,
+    ApiService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

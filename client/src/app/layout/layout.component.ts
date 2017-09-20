@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 //3rd party
-import {MdToolbarModule} from '@angular/material';
+
 
 @Component({
   selector: 'layout',

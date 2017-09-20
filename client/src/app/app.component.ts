@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {LayoutComponent} from './layout/layout.component';
+import { LayoutComponent } from './layout/layout.component';
+
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +10,8 @@ import {LayoutComponent} from './layout/layout.component';
 })
 export class AppComponent {
   title = 'app';
+
+  constructor(private userService: UserService) {
+    this.userService.getUser();
+  }
 }
