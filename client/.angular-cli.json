@@ -18,9 +18,11 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": [
-        "styles.css",
-        "../node_modules/flexboxgrid/dist/flexboxgrid.min.css"
+      "styles": [        
+        "styles.scss",
+        "../node_modules/flexboxgrid/dist/flexboxgrid.min.css",
+        "../node_modules/flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css",
+        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

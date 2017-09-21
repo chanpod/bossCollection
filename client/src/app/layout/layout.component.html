@@ -1,24 +1,31 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<md-toolbar color="primary" class="row center-xs">
+<div class="dark-theme">
 
-  <div class="col-xs-4 row start-xs">
-    <span *ngIf = "user?.name != undefined"> Welcome {{user.name}} </span>
-    <button *ngIf = "user?.name == undefined" md-button routerLink=""> Home </button>
-  </div>
+  <md-toolbar color="primary" class="row center-xs">
 
-  <div class="col-xs-4 ">
-    TBD
-  </div>
-
-  <div class="col-xs-4 ">
-
-    <div class="row end-xs">
-      <button *ngIf = "user?.name == undefined" md-raised-button color = "accent" routerLink="login"> Login </button>
-      <button *ngIf = "user?.name != undefined" md-raised-button color = "accent" (click) = "logout()" > Logout </button>
+    <div class="col-xs-3 col-sm-4 hidden-xs row start-xs">
+      <span *ngIf="user?.name != undefined"> Welcome {{user.name}} </span>
+      <button *ngIf="user?.name == undefined" md-button routerLink=""> Home </button>
     </div>
 
-  </div>
+    <div class="col-xs-3 hidden-sm hidden-md hidden-lg">
+
+    </div>
+
+    <div class="col-xs-6 col-sm-4 center-xs">
+      TBD
+    </div>
+
+    <div class="col-xs-3 col-sm-4">
+
+      <div class="row end-xs">
+        <button *ngIf="user?.name == undefined" md-raised-button color="accent" routerLink="login"> Login </button>
+        <button *ngIf="user?.name != undefined" md-raised-button color="accent" (click)="logout()"> Logout </button>
+      </div>
+
+    </div>
 
 
 
-</md-toolbar>
+  </md-toolbar>
+</div>

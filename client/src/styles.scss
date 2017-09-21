@@ -1,0 +1,17 @@
+@import './styles.css';
+@import '~@angular/material/theming';
+@include mat-core();
+$primary: mat-palette($mat-grey, 900);
+$accent:  mat-palette($mat-light-blue, 600, 100, 800);
+$warn:    mat-palette($mat-red, 600);
+$darkTheme: mat-dark-theme($primary, $accent, $warn);
+
+$primary-light: mat-palette($mat-blue, 900);
+
+$theme: mat-light-theme($primary-light, $accent, $warn);
+
+@include angular-material-theme($theme);
+.dark-theme{
+
+    @include angular-material-theme($darkTheme);
+}

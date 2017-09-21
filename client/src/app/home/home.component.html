@@ -1,3 +1,59 @@
-<p>
-  home works!
-</p>
+<div class="row col-xs-12 light-theme center-xs">
+  <div class="col-xs-12 logBackdrop">
+
+    <img src="assets/images/TBDLogo.png" style="width: 50%;height:100%" />
+  </div>
+
+  <button *ngIf="userService.isGM()" md-raised-button color="accent" (click)="openNewTabDialog()"> New Tab </button>
+
+  <div class="col-md-8 col-xs-12">
+
+
+    <md-tab-group class="card-shadow">
+      <div *ngFor="let tab of tabs; let i = index">
+
+        <md-tab [label]="tab.title">
+          <md-card>
+            <md-card-content>
+
+              <markdown style="text-align: start;" [data]="tab.content"> </markdown>
+
+              <div *ngIf="editingTab">
+                <md-toolbar color="accent" class="row center-xs">
+                  Preview Changes
+                </md-toolbar>
+                <textarea style="width:95%;min-height:250px;" [(ngModel)]="tab.content"> {{tab.content}}</textarea>
+              </div>
+
+            </md-card-content>
+
+            <md-card-actions *ngIf="userService.isGM()">
+
+              <button md-icon-button *ngIf="!editingTab">
+                      <md-icon class="md-24" aria-label="Example icon-button with a heart icon" (click) = "toggleEditing()">edit</md-icon>
+                    </button>
+
+              <button md-icon-button *ngIf="editingTab" (click)="saveTabs()">
+                          <md-icon class="md-24" aria-label="Example icon-button with a heart icon">save</md-icon>
+                      </button>
+
+              <button md-icon-button *ngIf="editingTab" (click)="toggleEditing()">
+                          <md-icon mdTooltip="Cancel" class="md-24" aria-label="Example icon-button with a heart icon">cancel</md-icon>
+                      </button>
+
+              <button md-icon-button>
+                          <md-icon class="md-24" aria-label="Example icon-button with a heart icon" (click) = "deleteTab(i)">delete</md-icon>
+                      </button>
+
+
+            </md-card-actions>
+
+          </md-card>
+        </md-tab>
+
+      </div>
+
+
+    </md-tab-group>
+  </div>
+</div>

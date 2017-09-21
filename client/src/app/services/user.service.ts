@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Subject } from "rxjs/Rx";
+import { BehaviorSubject } from "rxjs/Rx";
 
 import { ApiService } from './api.service';
 
 //3rd party
-
+import _ from 'lodash';
 
 @Injectable()
 export class UserService {
 
-  public user: Subject<any> = new Subject();
+  public user: BehaviorSubject<any> = new BehaviorSubject({});
   private ACCOUNT_API_URL_BASE: string = "/account";
 
   constructor(private apiService: ApiService) {
@@ -35,7 +35,7 @@ export class UserService {
       .subscribe((response) => {
         console.log("Logged out successfully");
         this.user.next({});
-      })      
+      })
   }
 
   login(username, password) {
@@ -51,6 +51,25 @@ export class UserService {
         this.getUser();
       })
 
+  }
+
+  isGM() {
+    let isValidGM = false;
+    let user = this.user.getValue();
+
+    if (user.guild) {
+
+
+      user.guild.members.forEach((member, index) => {
+
+        if (member.user == user.name) {
+          isValidGM = true;
+        }
+      });
+
+    }
+
+    return isValidGM;
   }
 
 }

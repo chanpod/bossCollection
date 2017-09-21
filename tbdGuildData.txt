@@ -1,0 +1,111 @@
+{
+    "_id": {
+        "$oid": "56b24cf5f518337974d36c77"
+    },
+    "name": "TBD",
+    "images": [],
+    "progressionlink": "",
+    "logsLink": "",
+    "ranks": [
+        {
+            "name": "GM",
+            "raider": false,
+            "officer": true,
+            "rank": 0,
+            "_id": {
+                "$oid": "576d3c15d6e95adf0fd53d36"
+            }
+        },
+        {
+            "name": "Officer",
+            "raider": false,
+            "officer": true,
+            "rank": 1,
+            "_id": {
+                "$oid": "576d3c15d6e95adf0fd53d35"
+            }
+        },
+        {
+            "name": "Mythic Raider",
+            "raider": true,
+            "officer": false,
+            "rank": 3,
+            "_id": {
+                "$oid": "576d3c15d6e95adf0fd53d34"
+            }
+        },
+        {
+            "name": "Lead",
+            "raider": false,
+            "officer": true,
+            "rank": 2,
+            "_id": {
+                "$oid": "576d3c15d6e95adf0fd53d33"
+            }
+        },
+        {
+            "name": "Member",
+            "raider": false,
+            "officer": false,
+            "rank": 5,
+            "_id": {
+                "$oid": "576d3c15d6e95adf0fd53d32"
+            }
+        }
+    ],
+    "members": [
+        {
+            "user": "GuildMaster",
+            "rank": 0,
+            "officer": true,
+            "raider": true,
+            "GM": true,
+            "approved": true,
+            "_id": {
+                "$oid": "56b24cf5f518337974d36c78"
+            }
+        },
+        {
+            "user": "Lumi",
+            "rank": 0,
+            "officer": true,
+            "raider": true,
+            "GM": false,
+            "approved": true,
+            "_id": {
+                "$oid": "59c11f7533449a120064717b"
+            }
+        }
+    ],
+    "__v": 217,
+    "tabs": [
+        {
+            "title": "Attendance",
+            "content": "<h3> Attendance Expecations  <\/h3>\n\nTBD Raiders are expected to maintain high attendance.  Obviously missing raids for real life reasons is perfectly fine, but in order to keep roster numbers as low as possible AND have a stable roster for mythic, ideally we want raiders to commit to the raid schedule.\n\nMost importantly, please post in the MIA channel when you know you will be missing or be late to a Main Raid ASAP so officers can plan ahead.\n\n<u> No-show without posting in MIA Channel <\/u>\n\nIf you do not post in the MIA channel or notify an officer at least 30 minutes before raid start and a no-show to raid, the following will happen:\n- 1st time - you will lose 25% of your TOTAL EP;\n- 2nd time - you will lose 50% of your TOTAL EP;\n- 3rd time - you will lose ALL EP and get demoted to Social.\n\nNote: Having the Discord app on your phone is handy to notify being late/MIA if something comes up suddenly.",
+            "_id": {
+                "$oid": "59c1128d8969116c19a296c6"
+            }
+        },
+        {
+            "title": "General Info",
+            "content": "<h3> Guild Master <\/h3>\nLuminarra\n\n<h3> Officers <\/h3>\nSorael\nAbnercadaver\nQuirks\nArcosa\n\n<h3> Main Raid Times<\/h3>\nSunday - 6 PM - 10 PM EST\nMonday - 7 PM - 10 PM EST\n\n<h3> (Optional alt/casual run) <\/h3>\nThursdays - 7 PM - 10 PM EST or earlier\n\n<h3> Current Progression <\/h3>\n5/9M Tomb of Sargaras | 9/9H Tomb of Sargaras\nUpcoming Boss: Mistress Sassz'ine - Mythic difficulty\n\n<h3> Previous Tiers in Legion <\/h3>\n8/10M Nighthold | 10/10H NH\n7/7M Emerald Nightmare | 7/7H EN\n\n<md-divider> <\/md-divider>\n\n<h3> Overall Raider Expectations <\/h3>\n\n<a target = \"_blank\" href = \"https://docs.google.com/document/d/1xhIMQa5oHUXseeYRi_GXHR43F944ybDX5dTabCGSyD0/edit?usp=sharing\" class = \"md-button md-raised md-primary\"> Raider Expectations <\/a>\n\n<a target = \"_blank\" href = \"https://docs.google.com/spreadsheets/d/1ebJrXbySWrmthLkVey-IXg-fVTTNHN4g3ZdiAknCB5E/edit#gid=997148295\" class = \"md-button md-raised md-primary\"> Roster <\/a>\n\n<h3> Logs <\/h3>\n\n<a target = \"_blank\" href = \"https://www.warcraftlogs.com/guilds/283959\" class = \"md-button md-raised md-primary\"> Logs <\/a>",
+            "_id": {
+                "$oid": "59c119fa8969116c19a296cb"
+            }
+        },
+        {
+            "title": "Loot System",
+            "content": "<h3> EP/GP <\/h3>\nFor every <b> Main Raid <\/b>, you earn Effort Points (EP).  For every item you win, your Gear Points (GP) increases.  Your Priority Rating (PR) is calculated as EP/GP.  When an item drops, raiders have an option to choose certain upgrade/loot options.  All BIS upgrades will be given priority, followed by Major > Minor > etc.  Within that tier system, the highest PR wins the item.\n<b> Note: Officers reserve the right to act as Loot Council in certain cases.  Read the doc for more info. <\/b>\n\nPriority for Loot Options: BIS > Major > Minor > WF/TF Tier > Offspec > Transmog\n\nBIS - 125% of GP Cost\n\nMajor - 100% of GP Cost\n\nMinor - 75% of GP Cost\n\nWF/TF Tier Only - 15% of GP Cost (Must have Tier Piece >= to Token ilvl)\n\nOffspec - 0% of GP Cost\n\nTransmog - 0% of GP Cost\n\nDecay - Both EP and GP decay on a weekly basis (15%); so your PR is never affected from the decay, but hoarding EP is less effective.\n\n<md-divider> <\/md-divider>\n\nStandby - Raiders on standby earn EP.  If you are on standby, be sure to whisper the EPGP Loot Master, (usually Luminarra), the following: \"epgp standby <raider name>\"  - <raider name> is simply replaced by your main's name. Example: /w Luminarra epgp standby Sorael\n\n\n\nTrial Members - Trial members will earn EP at the same rate as Raiders.  But loot priority will be given to main Raiders over Trial members, regardless of PR or loot option chosen.  However, officers may decide to award loot to Trials in certain situations (e.g. if a Tier token only gets WF/TF options from Raiders and is a Major upgrade for a Trial member, the officers may assign the Token to the Trial at cost).\n\nComprehensive Explanation - <a target = \"_blank\" href = \"https://docs.google.com/document/d/1-bDbqAaS2FNyWAESUtxyWmjidpGihhR57SvkU8BwvaA/edit?usp=sharing\" class = \"md-button md-raised md-primary\"> Docs Link <\/a>",
+            "_id": {
+                "$oid": "59c119fa8969116c19a296ca"
+            }
+        },
+        {
+            "title": "Addons",
+            "content": "<h3> Required Addons <\/h3>\n\n\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/rclootcouncil\"> RCLootCouncil <\/a>\n\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/269161-rclootcouncil-epgp\"> RCLootCouncil - EPGP<\/a>\n \n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/epgp-dkp-reloaded\"> EPGP DKP Reloaded<\/a>\n\n\n<md-divider> <\/md-divider>\n<h3> Other addons <\/h3>\n<div class = \"layout layout-align-start-center\">\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/deadly-boss-mods\"> Deadly Boss Mods<\/a>\n<b> OR <\/b>\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/big-wigs\"> Bigwigs<\/a>\n<\/div>\n\nExorsus Raid Tools - Explanations of mechanics and any raider assignments (healer cd rotations, soaks, etc.) will be found in RT notes\n\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/exorsus-raid-tools\"> Exorsus Raid Tools<\/a>\n\nWeakauras 2 - Tracking personal informations + important raid mechanics\n\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://mods.curse.com/addons/wow/weakauras-2\"> Weakauras 2 <\/a>\n\n-Please import a TOS WA pack enhance your raid awareness.  Some suggestions:\n\n<div class = \"layout layout-align-start-center\">\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://wago.io/Vyfk0e9-X\"> Weak Aura Pack 1<\/a>\n<b> OR <\/b>\n<a class = \"md-button md-raised md-primary\" target = \"_blank\" href = \"https://wago.io/VkiM7IJXX\"> Weak Aura Pack 2<\/a>\n<\/div>",
+            "_id": {
+                "$oid": "59c11c7d8969116c19a296d1"
+            }
+        }
+    ]
+}
