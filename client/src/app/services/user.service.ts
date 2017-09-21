@@ -34,6 +34,7 @@ export class UserService {
     this.apiService.post(this.ACCOUNT_API_URL_BASE + "/logout", {})
       .subscribe((response) => {
         console.log("Logged out successfully");
+        this.user.next({});
       })      
   }
 

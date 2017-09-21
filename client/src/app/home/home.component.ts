@@ -15,6 +15,12 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         
+        this.userService.user.subscribe((user) => {
+
+            if(user.name != undefined){
+                
+            }
+        })
     }
 
 }

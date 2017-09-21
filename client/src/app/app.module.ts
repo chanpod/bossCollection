@@ -19,6 +19,7 @@ import { LayoutComponent } from './layout/layout.component';
 //Services
 import { UserService } from './services/user.service';
 import { ApiService } from './services/api.service';
+import { GuildService } from './services/guild.service';
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
@@ -39,7 +40,8 @@ import { LoginComponent } from './login/login.component';
   ],
   providers: [
     UserService,
-    ApiService
+    ApiService,
+    GuildService
   ],
   bootstrap: [AppComponent]
 })
