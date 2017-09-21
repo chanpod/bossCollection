@@ -20,7 +20,12 @@
 
               <div *ngIf="editingTab">
                 <md-toolbar color="accent" class="row center-xs">
-                  Preview Changes
+                  Modify Content - Preview Changes above
+                  <a target = "_blank" href="https://dimpu.github.io/angular2-markdown/" md-icon-button>
+                    <md-icon mdTooltip="Markdown Help" class="md-24" aria-label="helpIcon">help</md-icon>
+                  </a>
+
+                  HTML supported
                 </md-toolbar>
                 <textarea style="width:95%;min-height:250px;" [(ngModel)]="tab.content"> {{tab.content}}</textarea>
               </div>
@@ -30,19 +35,19 @@
             <md-card-actions *ngIf="userService.isGM()">
 
               <button md-icon-button *ngIf="!editingTab">
-                      <md-icon class="md-24" aria-label="Example icon-button with a heart icon" (click) = "toggleEditing()">edit</md-icon>
+                      <md-icon class="md-24" aria-label="edit icon" (click) = "toggleEditing()">edit</md-icon>
                     </button>
 
               <button md-icon-button *ngIf="editingTab" (click)="saveTabs()">
-                          <md-icon class="md-24" aria-label="Example icon-button with a heart icon">save</md-icon>
+                          <md-icon class="md-24" aria-label="save icon">save</md-icon>
                       </button>
 
               <button md-icon-button *ngIf="editingTab" (click)="toggleEditing()">
-                          <md-icon mdTooltip="Cancel" class="md-24" aria-label="Example icon-button with a heart icon">cancel</md-icon>
+                          <md-icon mdTooltip="Cancel" class="md-24" aria-label="cancel icon">cancel</md-icon>
                       </button>
 
               <button md-icon-button>
-                          <md-icon class="md-24" aria-label="Example icon-button with a heart icon" (click) = "deleteTab(i)">delete</md-icon>
+                          <md-icon class="md-24" aria-label="delete icon" (click) = "deleteTab(i)">delete</md-icon>
                       </button>
 
 
