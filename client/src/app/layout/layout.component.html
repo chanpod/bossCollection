@@ -1,2 +1,24 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<md-toolbar color = "primary">My App</md-toolbar>
+<md-toolbar color="primary" class="row center-xs">
+
+  <div class="col-xs-4 row start-xs">
+    <span *ngIf = "user?.name != undefined"> Welcome {{user.name}} </span>
+    <button *ngIf = "user?.name == undefined" md-button routerLink=""> Home </button>
+  </div>
+
+  <div class="col-xs-4 ">
+    TBD
+  </div>
+
+  <div class="col-xs-4 ">
+
+    <div class="row end-xs">
+      <button *ngIf = "user == undefined" md-raised-button color = "accent" routerLink="login"> Login </button>
+      <button *ngIf = "user != undefined" md-raised-button color = "accent" (click) = "logout()" > Logout </button>
+    </div>
+
+  </div>
+
+
+
+</md-toolbar>

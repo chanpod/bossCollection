@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { UserService } from '../services/user.service';
+
 //3rd party
 
 
@@ -10,9 +12,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
-  constructor() { }
+  user: any = undefined;
+
+  constructor(private userService: UserService) {
+
+    userService.user.subscribe((user) => {
+      this.updateBasedOnUser(user);
+    })
+  }
 
   ngOnInit() {
+  }
+
+  updateBasedOnUser(user: any) {
+
+    this.user = user;
+  }
+
+  logout(){
+    this.userService.logout();
   }
 
 }

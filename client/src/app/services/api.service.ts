@@ -12,8 +12,13 @@ export class ApiService {
 
   get(url) {
     return this.http.get(this.url + url)
-      .map((res: Response) => res.json())
+      .map((res: Response) => res.json());      
 
+  }
+
+  post(url, body) {
+    return this.http.post(this.url + url, body)
+      .map((res: Response) => res.json());
   }
 
 }

@@ -1,2 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body { 
+    margin: 0;
+    padding: 0;
+}
+
+hr {
+    display: block;
+    margin: 10px 0 10px 0;
+    border-top: 1px solid rgba(0, 0, 0, .32);
+    width: 100%
+  }

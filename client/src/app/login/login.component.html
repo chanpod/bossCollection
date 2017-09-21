@@ -1,0 +1,33 @@
+<md-card>
+  <md-card-header>
+    <md-card-title>
+      <h2>Login </h2>
+    </md-card-title>
+  </md-card-header>
+
+  <hr />
+
+  <md-card-content>
+
+    <div class="row ">
+
+      <div class="xs-col-12">
+        <form class="row center-xs" [formGroup] = "LoginForm">
+
+          <md-form-field class="col-xs-12">
+            <input mdInput placeholder="username" name = "name" formControlName = "Name"/>
+          </md-form-field>
+
+          <md-form-field class="col-xs-12">
+            <input mdInput placeholder="password" type="password" formControlName = "Password"/>
+          </md-form-field>
+
+          <div class="col-xs-12 start-xs">
+            <button md-raised-button (click) = "login()"> Login </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </md-card-content>
+</md-card>
