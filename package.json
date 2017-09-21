@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": "7.10.1",
-    "npm": "5.2"
+    "node": "6.11.3",
+    "npm": "5.3"
   },
   "dependencies": {
     "body-parser": "^1.0.2",
@@ -16,8 +16,8 @@
     "emailjs": "^1.0.1",
     "error-handler": "^0.1.4",
     "es6-promise": "^3.0.2",
-    "express": "^4.1.2",
-    "express-session": "^1.11.2",
+    "express": "4.15.4",
+    "express-session": "^1.15.5",
     "ipaddr": "0.0.9",
     "lodash": "^4.0.1",
     "method-override": "^1.0.0",
