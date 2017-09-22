@@ -4,31 +4,60 @@
 
         <hr />
     </div>
-    <div class="col-xs-6">
+    <div class="col-xs-11 col-md-6 row">
+
         <form [formGroup]="CreateAppFormGroup" class="row">
 
-            <md-form-field class="col-xs-12 col-md-6">
-                <input mdInput placeholder="Character Name" name="name" formControlName="characterName" />
+
+            <md-form-field class="col-xs-11 col-md-7">
+                <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="characterName"
+                />
             </md-form-field>
 
-            <md-form-field class="col-xs-12 col-md-6">
-                <input mdInput placeholder="Realm" name="realm" formControlName="realm" />
-            </md-form-field>
+            <button style="padding-top:10px;" md-icon-button>
+                    <md-icon [style.color] = "iconColor"> {{icon}} </md-icon>
+                </button>
 
-            <md-form-field class="col-xs-12 col-md-6">
+
+            <md-select formControlName="realm" (blur)="checkCharacterName()" class="col-xs-12 col-md-7" placeholder="Select Realm">
+                <md-option *ngFor="let realm of realms" [value]="realm.name">
+                    {{ realm.name }}
+                </md-option>
+            </md-select>
+
+            <md-form-field class="col-xs-12 col-md-7">
                 <input mdInput placeholder="Previous Guild" name="previousGuild" formControlName="previousGuild" />
             </md-form-field>
 
-            <md-form-field class="col-xs-12 col-md-6">
+            <!-- <md-form-field class="col-xs-12 col-md-6">
                 <input mdInput placeholder="Desired Role" name="desiredRole" formControlName="desiredRole" />
-            </md-form-field>
+            </md-form-field> -->
+            <md-select formControlName="desiredRole" placeholder="Desired Role" class="col-xs-12 col-md-7">
 
+                <md-option value="Ranged DPS">
+                    Ranged DPS
+                </md-option>
+
+                <md-option value="Melee DPS">
+                    Melee DPS
+                </md-option>
+
+                <md-option value="Tank">
+                    Tank
+                </md-option>
+
+                <md-option value="Healer">
+                    Healer
+                </md-option>
+
+            </md-select>
             <md-form-field class="col-xs-12 col-md-12">
-                <textarea class = "commentsInput" mdInput placeholder="Tell us about yourself" name="desiredRole" formControlName="comments"> </textarea>
+                <textarea class="commentsInput" mdInput placeholder="Tell us about yourself" name="desiredRole" formControlName="comments"> </textarea>
+
             </md-form-field>
 
-            <div class = "col-xs-12">
-                <button md-raised-button color="primary"> Submit </button>
+            <div class="col-xs-12">
+                <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary"> Submit </button>
             </div>
         </form>
     </div>

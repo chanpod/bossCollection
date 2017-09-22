@@ -1,3 +1,11 @@
 .commentsInput{
-    min-height:250px;
+    min-height:200px;
+}
+
+.redIcon{
+    color:red;
+}
+
+.greenIcon{
+    color:green;
 }

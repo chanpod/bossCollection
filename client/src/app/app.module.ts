@@ -25,6 +25,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { UserService } from './services/user.service';
 import { ApiService } from './services/api.service';
 import { GuildService } from './services/guild.service';
+import { BlizzardService } from './services/blizzard.service';
 
 //Modules
 import {ApplicationModule} from './application/application.module';
@@ -57,7 +58,8 @@ import {ApplicationModule} from './application/application.module';
   providers: [
     UserService,
     ApiService,
-    GuildService
+    GuildService,
+    BlizzardService
   ],
   bootstrap: [AppComponent]
 })
