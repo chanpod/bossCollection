@@ -1,0 +1,35 @@
+<div class="row center-xs">
+    <div class="col-xs-8">
+        <h2> Application for TBD </h2>
+
+        <hr />
+    </div>
+    <div class="col-xs-6">
+        <form [formGroup]="CreateAppFormGroup" class="row">
+
+            <md-form-field class="col-xs-12 col-md-6">
+                <input mdInput placeholder="Character Name" name="name" formControlName="characterName" />
+            </md-form-field>
+
+            <md-form-field class="col-xs-12 col-md-6">
+                <input mdInput placeholder="Realm" name="realm" formControlName="realm" />
+            </md-form-field>
+
+            <md-form-field class="col-xs-12 col-md-6">
+                <input mdInput placeholder="Previous Guild" name="previousGuild" formControlName="previousGuild" />
+            </md-form-field>
+
+            <md-form-field class="col-xs-12 col-md-6">
+                <input mdInput placeholder="Desired Role" name="desiredRole" formControlName="desiredRole" />
+            </md-form-field>
+
+            <md-form-field class="col-xs-12 col-md-12">
+                <textarea class = "commentsInput" mdInput placeholder="Tell us about yourself" name="desiredRole" formControlName="comments"> </textarea>
+            </md-form-field>
+
+            <div class = "col-xs-12">
+                <button md-raised-button color="primary"> Submit </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<layout></layout>\r\n<div class=\"row center-xs\">\r\n    <div class=\"col-xs-12 center-xs\">\r\n        <router-outlet></router-outlet>\r\n    </div>\r\n</div>"
+module.exports = "<layout></layout>\n<div class=\"row center-xs\">\n    <div class=\"col-xs-12 center-xs\">\n        <router-outlet></router-outlet>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -101,10 +101,10 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/@angular/platform-browser/animations.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_hammerjs__ = __webpack_require__("../../../../hammerjs/hammer.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_hammerjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_hammerjs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ngx_cookie__ = __webpack_require__("../../../../ngx-cookie/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_angular2_markdown__ = __webpack_require__("../../../../angular2-markdown/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_ngx_cookie__ = __webpack_require__("../../../../ngx-cookie/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_angular2_markdown__ = __webpack_require__("../../../../angular2-markdown/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__home_newTab_component__ = __webpack_require__("../../../../../src/app/home/newTab.component.ts");
@@ -113,6 +113,7 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -142,6 +143,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+//Modules
+
 var AppModule = (function () {
     function AppModule() {
     }
@@ -165,11 +168,12 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
             __WEBPACK_IMPORTED_MODULE_14__routing_routing_module__["a" /* RoutingModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* HttpModule */],
-            __WEBPACK_IMPORTED_MODULE_8_ngx_cookie__["a" /* CookieModule */],
-            __WEBPACK_IMPORTED_MODULE_9_angular2_markdown__["a" /* MarkdownModule */].forRoot(),
-            __WEBPACK_IMPORTED_MODULE_10_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
+            __WEBPACK_IMPORTED_MODULE_9_ngx_cookie__["a" /* CookieModule */],
+            __WEBPACK_IMPORTED_MODULE_10_angular2_markdown__["a" /* MarkdownModule */].forRoot(),
+            __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */]
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_19__application_application_module__["a" /* ApplicationModule */]
         ],
         providers: [
             __WEBPACK_IMPORTED_MODULE_16__services_user_service__["a" /* UserService */],
@@ -181,6 +185,179 @@ AppModule = __decorate([
 ], AppModule);
 
 //# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/application/application.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApplicationModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__ = __webpack_require__("../../../../../src/app/application/create-application/create-application.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__routing_routing_module__ = __webpack_require__("../../../../../src/app/application/routing/routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/@angular/platform-browser/animations.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_hammerjs__ = __webpack_require__("../../../../hammerjs/hammer.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_hammerjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_hammerjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+//Routing
+
+//3rd Party
+
+
+
+
+var ApplicationModule = (function () {
+    function ApplicationModule() {
+    }
+    return ApplicationModule;
+}());
+ApplicationModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"],
+            __WEBPACK_IMPORTED_MODULE_4__routing_routing_module__["a" /* RoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"],
+            __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_5__angular_material__["a" /* MaterialModule */]
+        ],
+        declarations: [__WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__["a" /* CreateApplicationComponent */]]
+    })
+], ApplicationModule);
+
+//# sourceMappingURL=application.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/application/create-application/create-application.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".commentsInput{\r\n    min-height:250px;\r\n}", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/application/create-application/create-application.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row center-xs\">\n    <div class=\"col-xs-8\">\n        <h2> Application for TBD </h2>\n\n        <hr />\n    </div>\n    <div class=\"col-xs-6\">\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row\">\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"characterName\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Realm\" name=\"realm\" formControlName=\"realm\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Desired Role\" name=\"desiredRole\" formControlName=\"desiredRole\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-12\">\n                <textarea class = \"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\n            </md-form-field>\n\n            <div class = \"col-xs-12\">\n                <button md-raised-button color=\"primary\"> Submit </button>\n            </div>\n        </form>\n    </div>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/application/create-application/create-application.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateApplicationComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var CreateApplicationComponent = (function () {
+    function CreateApplicationComponent(userService) {
+        this.userService = userService;
+    }
+    CreateApplicationComponent.prototype.ngOnInit = function () {
+        this.CreateAppFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
+            characterName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
+            realm: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
+            previousGuild: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
+            desiredRole: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
+            comments: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]()
+        });
+    };
+    return CreateApplicationComponent;
+}());
+CreateApplicationComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-create-application',
+        template: __webpack_require__("../../../../../src/app/application/create-application/create-application.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/application/create-application/create-application.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object])
+], CreateApplicationComponent);
+
+var _a;
+//# sourceMappingURL=create-application.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/application/routing/routing.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export routes */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RoutingModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__ = __webpack_require__("../../../../../src/app/application/create-application/create-application.component.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+//Components
+
+var routes = [
+    {
+        path: 'createApplication', component: __WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__["a" /* CreateApplicationComponent */]
+    }
+];
+var RoutingModule = (function () {
+    function RoutingModule() {
+    }
+    return RoutingModule;
+}());
+RoutingModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */].forRoot(routes)
+        ],
+        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */]]
+    })
+], RoutingModule);
+
+//# sourceMappingURL=routing.module.js.map
 
 /***/ }),
 
@@ -205,7 +382,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs\">\r\n  <div class=\"col-xs-12 logBackdrop\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12\">\r\n\r\n\r\n    <md-tab-group class=\"card-shadow\">\r\n      <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n        <md-tab [label]=\"tab.title\">\r\n          <md-card>\r\n            <md-card-content>\r\n\r\n              <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n              <div *ngIf=\"editingTab\">\r\n                <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                  Modify Content - Preview Changes above\r\n                  <a target = \"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                    <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                  </a>\r\n\r\n                  HTML supported\r\n                </md-toolbar>\r\n                <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n              </div>\r\n\r\n            </md-card-content>\r\n\r\n            <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n              <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n              <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n            </md-card-actions>\r\n\r\n          </md-card>\r\n        </md-tab>\r\n\r\n      </div>\r\n\r\n\r\n    </md-tab-group>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs\">\n  <div class=\"col-xs-12 logBackdrop\">\n\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\n  </div>\n\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\n\n  <div class=\"col-md-8 col-xs-12\">\n\n\n    <md-tab-group class=\"card-shadow\">\n      <div *ngFor=\"let tab of tabs; let i = index\">\n\n        <md-tab [label]=\"tab.title\">\n          <md-card>\n            <md-card-content>\n\n              <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\n\n              <div *ngIf=\"editingTab\">\n                <md-toolbar color=\"accent\" class=\"row center-xs\">\n                  Modify Content - Preview Changes above\n                  <a target = \"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\n                    <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\n                  </a>\n\n                  HTML supported\n                </md-toolbar>\n                <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\n              </div>\n\n            </md-card-content>\n\n            <md-card-actions *ngIf=\"userService.isGM()\">\n\n              <button md-icon-button *ngIf=\"!editingTab\">\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\n                    </button>\n\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\n                      </button>\n\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\n                      </button>\n\n              <button md-icon-button>\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\n                      </button>\n\n\n            </md-card-actions>\n\n          </md-card>\n        </md-tab>\n\n      </div>\n\n\n    </md-tab-group>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -396,7 +573,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/layout/layout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\"> Welcome {{user.name}} </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\r\n      TBD\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4\">\r\n\r\n      <div class=\"row end-xs\">\r\n        <button *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" (click)=\"logout()\"> Logout </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div class=\"dark-theme\">\n\n  <md-toolbar color=\"primary\" class=\"row center-xs\">\n\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\n      <span *ngIf=\"user?.name != undefined\"> Welcome {{user.name}} </span>\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\n    </div>\n\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\n\n    </div>\n\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\n      <a md-button routerLink = \"\" style = \"font-size: 20px;\"> TBD </a>\n    </div>\n\n    <div class=\"col-xs-3 col-sm-4\">\n\n      <div class=\"row end-xs\">\n        <button *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" (click)=\"logout()\"> Logout </button>\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\n      </div>\n\n    </div>\n\n\n\n  </md-toolbar>\n</div>"
 
 /***/ }),
 
@@ -473,7 +650,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n\r\n\r\n  <md-card>\r\n    <md-card-header>\r\n      <md-card-title>\r\n        <h2>Login </h2>\r\n      </md-card-title>\r\n    </md-card-header>\r\n\r\n    <hr />\r\n\r\n    <md-card-content>\r\n\r\n      <div class=\"row \">\r\n\r\n        <div class=\"xs-col-12\">\r\n          <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\r\n\r\n            <md-form-field class=\"col-xs-12\">\r\n              <input mdInput placeholder=\"username\" name=\"name\" formControlName=\"Name\" />\r\n            </md-form-field>\r\n\r\n            <md-form-field class=\"col-xs-12\">\r\n              <input mdInput placeholder=\"password\" type=\"password\" formControlName=\"Password\" />\r\n            </md-form-field>\r\n\r\n            <div class=\"col-xs-12 start-xs\">\r\n              <button md-raised-button (click)=\"login()\"> Login </button>\r\n            </div>\r\n          </form>\r\n        </div>\r\n\r\n      </div>\r\n    </md-card-content>\r\n  </md-card>\r\n\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\n\n\n  <md-card>\n    <md-card-header>\n      <md-card-title>\n        <h2>Login </h2>\n      </md-card-title>\n    </md-card-header>\n\n    <hr />\n\n    <md-card-content>\n\n      <div class=\"row \">\n\n        <div class=\"xs-col-12\">\n          <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\n\n            <md-form-field class=\"col-xs-12\">\n              <input mdInput placeholder=\"username\" name=\"name\" formControlName=\"Name\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12\">\n              <input mdInput placeholder=\"password\" type=\"password\" formControlName=\"Password\" />\n            </md-form-field>\n\n            <div class=\"col-xs-12 start-xs\">\n              <button md-raised-button (click)=\"login()\"> Login </button>\n            </div>\n          </form>\n        </div>\n\n      </div>\n    </md-card-content>\n  </md-card>\n\n</div>"
 
 /***/ }),
 

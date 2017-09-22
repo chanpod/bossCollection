@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-xs-6 col-sm-4 center-xs">
-      TBD
+      <a md-button routerLink = "" style = "font-size: 20px;"> TBD </a>
     </div>
 
     <div class="col-xs-3 col-sm-4">
@@ -21,6 +21,7 @@
       <div class="row end-xs">
         <button *ngIf="user?.name == undefined" md-raised-button color="accent" routerLink="login"> Login </button>
         <button *ngIf="user?.name != undefined" md-raised-button color="accent" (click)="logout()"> Logout </button>
+        <button *ngIf="user?.name != undefined" md-raised-button color="accent" routerLink="createApplication"> Apply </button>
       </div>
 
     </div>

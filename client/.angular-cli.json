@@ -22,7 +22,8 @@
         "styles.scss",
         "../node_modules/flexboxgrid/dist/flexboxgrid.min.css",
         "../node_modules/flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css",
-        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
+        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+        "../node_modules/roboto-fontface/css/roboto/roboto-fontface.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

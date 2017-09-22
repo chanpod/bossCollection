@@ -8,9 +8,9 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { CookieModule } from 'ngx-cookie';
 import { MarkdownModule } from 'angular2-markdown';
-import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
 //Components
 import { LoginComponent } from './login/login.component';
@@ -26,6 +26,9 @@ import { UserService } from './services/user.service';
 import { ApiService } from './services/api.service';
 import { GuildService } from './services/guild.service';
 
+//Modules
+import {ApplicationModule} from './application/application.module';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +36,7 @@ import { GuildService } from './services/guild.service';
     HomeComponent,
     DialogOverviewExampleDialog,
     LayoutComponent,
-    LoginComponent
+    LoginComponent    
   ],
   entryComponents: [
     DialogOverviewExampleDialog
@@ -48,7 +51,8 @@ import { GuildService } from './services/guild.service';
     MarkdownModule.forRoot(),
     ToastModule.forRoot(),
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ApplicationModule
   ],
   providers: [
     UserService,
