@@ -113,7 +113,8 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -140,6 +141,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 //Services
+
 
 
 
@@ -173,12 +175,13 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_19__application_application_module__["a" /* ApplicationModule */]
+            __WEBPACK_IMPORTED_MODULE_20__application_application_module__["a" /* ApplicationModule */]
         ],
         providers: [
             __WEBPACK_IMPORTED_MODULE_16__services_user_service__["a" /* UserService */],
             __WEBPACK_IMPORTED_MODULE_17__services_api_service__["a" /* ApiService */],
-            __WEBPACK_IMPORTED_MODULE_18__services_guild_service__["a" /* GuildService */]
+            __WEBPACK_IMPORTED_MODULE_18__services_guild_service__["a" /* GuildService */],
+            __WEBPACK_IMPORTED_MODULE_19__services_blizzard_service__["a" /* BlizzardService */]
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -253,7 +256,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".commentsInput{\r\n    min-height:250px;\r\n}", ""]);
+exports.push([module.i, ".commentsInput{\r\n    min-height:200px;\r\n}\r\n\r\n.redIcon{\r\n    color:red;\r\n}\r\n\r\n.greenIcon{\r\n    color:green;\r\n}", ""]);
 
 // exports
 
@@ -266,7 +269,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/create-application/create-application.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\n    <div class=\"col-xs-8\">\n        <h2> Application for TBD </h2>\n\n        <hr />\n    </div>\n    <div class=\"col-xs-6\">\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row\">\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"characterName\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Realm\" name=\"realm\" formControlName=\"realm\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Desired Role\" name=\"desiredRole\" formControlName=\"desiredRole\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12 col-md-12\">\n                <textarea class = \"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\n            </md-form-field>\n\n            <div class = \"col-xs-12\">\n                <button md-raised-button color=\"primary\"> Submit </button>\n            </div>\n        </form>\n    </div>\n</div>"
+module.exports = "<div class=\"row center-xs\">\n    <div class=\"col-xs-8\">\n        <h2> Application for TBD </h2>\n\n        <hr />\n    </div>\n    <div class=\"col-xs-11 col-md-6 row\">\n\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row\">\n\n\n            <md-form-field class=\"col-xs-11 col-md-7\">\n                <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"characterName\"\n                />\n            </md-form-field>\n\n            <button style=\"padding-top:10px;\" md-icon-button>\n                    <md-icon [style.color] = \"iconColor\"> {{icon}} </md-icon>\n                </button>\n\n\n            <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"col-xs-12 col-md-7\" placeholder=\"Select Realm\">\n                <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\n                    {{ realm.name }}\n                </md-option>\n            </md-select>\n\n            <md-form-field class=\"col-xs-12 col-md-7\">\n                <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\n            </md-form-field>\n\n            <!-- <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Desired Role\" name=\"desiredRole\" formControlName=\"desiredRole\" />\n            </md-form-field> -->\n            <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"col-xs-12 col-md-7\">\n\n                <md-option value=\"Ranged DPS\">\n                    Ranged DPS\n                </md-option>\n\n                <md-option value=\"Melee DPS\">\n                    Melee DPS\n                </md-option>\n\n                <md-option value=\"Tank\">\n                    Tank\n                </md-option>\n\n                <md-option value=\"Healer\">\n                    Healer\n                </md-option>\n\n            </md-select>\n            <md-form-field class=\"col-xs-12 col-md-12\">\n                <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\n\n            </md-form-field>\n\n            <div class=\"col-xs-12\">\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\"> Submit </button>\n            </div>\n        </form>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -278,6 +281,7 @@ module.exports = "<div class=\"row center-xs\">\n    <div class=\"col-xs-8\">\n 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -290,18 +294,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CreateApplicationComponent = (function () {
-    function CreateApplicationComponent(userService) {
+    function CreateApplicationComponent(userService, blizzardService) {
         this.userService = userService;
+        this.blizzardService = blizzardService;
+        this.characterIsValid = false;
+        this.characterIsValid = false;
+        this.validateCharacter = this.validateCharacter.bind(this);
     }
     CreateApplicationComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.iconColor = "red";
+        this.icon = "cancel";
+        this.application = {
+            characterName: "",
+            realm: "",
+            desiredRole: ""
+        };
         this.CreateAppFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
-            characterName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
+            characterName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', this.validateCharacter),
             realm: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
             previousGuild: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
-            desiredRole: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
+            desiredRole: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["k" /* Validators */].required),
             comments: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]()
         });
+        this.blizzardService.getRealms()
+            .subscribe(function (realms) {
+            _this.realms = realms.realms;
+        });
+    };
+    CreateApplicationComponent.prototype.checkCharacterName = function () {
+        var _this = this;
+        this.iconColor = "red";
+        this.icon = "cancel";
+        this.characterIsValid = false;
+        var characterName = this.CreateAppFormGroup.controls.characterName.value;
+        var realmName = this.CreateAppFormGroup.controls.realm.value;
+        this.blizzardService.getCharacter(realmName, characterName)
+            .subscribe(function (result) {
+            console.log(result);
+            _this.iconColor = "green";
+            _this.icon = "check_circle";
+            _this.characterIsValid = true;
+            _this.CreateAppFormGroup.controls.characterName.updateValueAndValidity();
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    CreateApplicationComponent.prototype.validateCharacter = function (c) {
+        if (this.characterIsValid == true) {
+            return null;
+        }
+        else {
+            return {
+                validateCharacter: {
+                    valid: false
+                }
+            };
+        }
     };
     return CreateApplicationComponent;
 }());
@@ -311,10 +362,10 @@ CreateApplicationComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/application/create-application/create-application.component.html"),
         styles: [__webpack_require__("../../../../../src/app/application/create-application/create-application.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */]) === "function" && _b || Object])
 ], CreateApplicationComponent);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=create-application.component.js.map
 
 /***/ }),
@@ -799,6 +850,56 @@ ApiService = __decorate([
 
 var _a;
 //# sourceMappingURL=api.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/blizzard.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BlizzardService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var BlizzardService = (function () {
+    function BlizzardService(http) {
+        this.http = http;
+        this.api = "https://us.api.battle.net/wow";
+        this.apiKey = "fqvadba9c8auw7brtdr72vv7hfntbx7d";
+    }
+    BlizzardService.prototype.getCharacter = function (realmName, characterName) {
+        var url = "/character/" + realmName + "/" + characterName + "?" + this.getEndOfApiUrl();
+        return this.get(this.api + url);
+    };
+    BlizzardService.prototype.getRealms = function () {
+        var url = "/realm/status?" + this.getEndOfApiUrl();
+        return this.get(this.api + url);
+    };
+    BlizzardService.prototype.getEndOfApiUrl = function () {
+        return "locale=en_US&apikey=" + this.apiKey;
+    };
+    BlizzardService.prototype.get = function (url) {
+        return this.http.get(url).map(function (response) { return response.json(); });
+    };
+    return BlizzardService;
+}());
+BlizzardService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Http */]) === "function" && _a || Object])
+], BlizzardService);
+
+var _a;
+//# sourceMappingURL=blizzard.service.js.map
 
 /***/ }),
 
