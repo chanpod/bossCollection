@@ -22,6 +22,7 @@
         <button *ngIf="user?.name == undefined" md-raised-button color="accent" routerLink="login"> Login </button>
         <button *ngIf="user?.name != undefined" md-raised-button color="accent" (click)="logout()"> Logout </button>
         <button *ngIf="user?.name != undefined" md-raised-button color="accent" routerLink="createApplication"> Apply </button>
+        <button *ngIf="user?.name != undefined" md-raised-button color="accent" routerLink="viewApplications"> View Apps </button>
       </div>
 
     </div>

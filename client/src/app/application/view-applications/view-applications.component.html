@@ -1,0 +1,38 @@
+<div class="row center-xs">
+  <div class="row col-xs-12 center-xs">
+    <md-spinner *ngIf="loading"></md-spinner>
+  </div>
+  <div class="col-xs-12 col-md-6">
+
+
+    <md-table [dataSource]="applications">
+
+      <ng-container mdColumnDef="Character">
+        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>
+        <md-cell *mdCellDef="let row">
+          <div class="row center-xs middle-xs">
+
+            <img src="assets/images/classIcons/images/class/64/{{row.character.class}}.png" /> {{row.character}}
+
+          </div>
+        </md-cell>
+      </ng-container>
+
+      <ng-container mdColumnDef="Date Applied">
+        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>
+        <md-cell *mdCellDef="let row"> {{row.dateApplied | date:'shortDate'}} </md-cell>
+      </ng-container>
+
+      <ng-container mdColumnDef="View Application">
+        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>
+        <md-cell *mdCellDef="let row">
+          <button (click)="viewApp(row)" md-raised-button color="primary"> View </button>
+        </md-cell>
+      </ng-container>
+
+      <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+      <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
+
+    </md-table>
+  </div>
+</div>

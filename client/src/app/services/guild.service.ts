@@ -30,4 +30,12 @@ export class GuildService {
     return this.apiService.post(this.APP_API_BASE_URL + "/applicationSubmission", body);
   }
 
+  getApplications() {
+    return this.apiService.get(this.APP_API_BASE_URL + "/getApplications/TBD")
+  }
+
+  getApplication(appId) {
+    return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
+  } 
+
 }

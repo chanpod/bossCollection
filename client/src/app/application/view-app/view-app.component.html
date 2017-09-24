@@ -1,0 +1,23 @@
+<div class="row center-xs">
+  <div class="row col-xs-12 center-xs">
+    <md-spinner *ngIf="loading"></md-spinner>
+  </div>
+
+  <div class="col-xs-12">
+
+    Name: {{app?.character}}
+    <br/>
+    Current Realm: {{app?.realm}}
+    <br/>
+    Previous Guild: {{app?.previousGuild}}
+    <br/>
+    Role: {{app?.desiredRole}}
+    <br/>
+    Comments: {{app?.comments}}
+    <br/>
+    <img src = "http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}" />
+    <br/>
+    Item Level: {{armoryData?.items.averageItemLevelEquipped}}
+  </div>
+
+</div>

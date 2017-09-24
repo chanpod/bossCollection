@@ -75,6 +75,34 @@ router.route('/getApplications')
             })
     })
 
+router.route('/getApplication/:appId')
+    .get(function (req, res) {
+
+        Application.getApplication(req, res)
+            .then(function (result) {
+
+                res.status(200).send(result);
+            })
+            .fail(function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
+router.route('/getApplications/:guild')
+    .get(function (req, res) {
+
+        Application.getGuildApplications(req, res)
+            .then(function (result) {
+
+                res.status(200).send(result);
+            })
+            .fail(function (err) {
+
+                res.status(400).send(util.handleErrors(err));
+            })
+    })
+
 
 router.route('/deleteApplication')
     .post(function (req, res) {

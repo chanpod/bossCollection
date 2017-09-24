@@ -120,7 +120,7 @@ function deleteApplication(req, res) {
 function getUserApplications(req, res) {
 
     var defer = q.defer();
-    console.log("Getting applications..."); 
+    console.log("Getting applications...");
 
 
     var user = req.params.user;
@@ -135,16 +135,66 @@ function getUserApplications(req, res) {
         date.month((date.month() - 2))
     }
 
-    ApplicationModel.find({user: user, dateApplied: {
+    ApplicationModel.find({
+        user: user, dateApplied: {
             $gte: date.toISOString()
-        }})
+        }
+    })
         .then(function (applications) {
 
             defer.resolve({ "applications": applications });
         },
         function (err) {
-            
+
             defer.reject(util.handleErrors(err));
+        })
+
+    return defer.promise;
+}
+
+function getApplication(req, res) {
+    var defer = q.defer();
+
+    var appId = req.params.appId;
+
+    ApplicationModel.find({
+        _id: appId
+    })
+        .then((application) => {
+            defer.resolve(application);
+        })
+
+    return defer.promise;
+}
+
+function getGuildApplications(req, res) {
+    var guild = req.params.guild;
+
+    var defer = q.defer();
+    console.log("Getting applications...");
+
+
+    var date = moment();
+
+    if (req.params.startDate) {
+        date = moment(req.params.startDate);
+    }
+    else {
+
+        date.month((date.month() - 2))
+    }
+
+    ApplicationModel.find({
+        guild: guild, dateApplied: {
+            $gte: date.toISOString()
+        }
+    })
+        .then(function (applications) {
+
+            defer.resolve({ "applications": applications });
+        },
+        function (err) {
+            defer.reject(err);
         })
 
     return defer.promise;
@@ -189,8 +239,10 @@ module.exports = {
     rejectApplication: rejectApplication,
     approveApplication: approveApplication,
     submitApplication: submitApplication,
-    getUserApplications:getUserApplications,
-    deleteApplication:deleteApplication
+    getUserApplications: getUserApplications,
+    deleteApplication: deleteApplication,
+    getGuildApplications: getGuildApplications,
+    getApplication: getApplication
 };
 
 function approveApplicationEmail(application) {

@@ -5,6 +5,8 @@ import { UserService } from '../../services/user.service';
 import { BlizzardService } from '../../services/blizzard.service';
 import { GuildService } from '../../services/guild.service';
 
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+
 @Component({
   selector: 'app-create-application',
   templateUrl: './create-application.component.html',
@@ -21,6 +23,7 @@ export class CreateApplicationComponent implements OnInit {
     guildName: string,
     comments: string,
     previousGuild: string,
+    class: string
 
   };
   characterIsValid: boolean = false;
@@ -33,7 +36,8 @@ export class CreateApplicationComponent implements OnInit {
   constructor(
     private userService: UserService,
     private blizzardService: BlizzardService,
-    private guildService: GuildService
+    private guildService: GuildService,
+    private toastr: ToastsManager
   ) {
     this.characterIsValid = false;
 
@@ -51,7 +55,8 @@ export class CreateApplicationComponent implements OnInit {
       desiredRole: "",
       guildName: "TBD",
       previousGuild: '',
-      comments: ''
+      comments: '',
+      class: ''
     };
 
     this.CreateAppFormGroup = new FormGroup({
@@ -85,6 +90,7 @@ export class CreateApplicationComponent implements OnInit {
         this.iconColor = "green";
         this.icon = "check_circle";
         this.characterIsValid = true;
+        this.application.class = this.blizzardService.getClass(result.class);
 
         this.CreateAppFormGroup.controls.character.updateValueAndValidity();
 
@@ -109,17 +115,22 @@ export class CreateApplicationComponent implements OnInit {
   }
 
   submitApplication() {
+
     let formGroup = this.CreateAppFormGroup.value;
+
     this.application = {
       guildName: this.application.guildName,
+      class: this.application.class,
       ...formGroup
     };
 
     this.guildService.submitApplication(this.application)
-      .subscribe((result) => {
-        console.log(result);
+      .subscribe((result) => {        
+        this.toastr.success("Application submitted successfully!", "Success");
       }, (error) => {
+
         console.log(error);
+        this.toastr.error("Hmm. Something didn't work. Please try again", "It broke!");
       })
   }
 

@@ -11,6 +11,8 @@ import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { ViewApplicationsComponent } from './view-applications/view-applications.component';
+import { ViewAppComponent } from './view-app/view-app.component';
 
 @NgModule({
   imports: [
@@ -22,6 +24,6 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
     BrowserAnimationsModule,
     MaterialModule
   ],
-  declarations: [CreateApplicationComponent]
+  declarations: [CreateApplicationComponent, ViewApplicationsComponent, ViewAppComponent]
 })
 export class ApplicationModule { } 
