@@ -260,7 +260,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".commentsInput{\r\n    min-height:200px;\r\n}\r\n\r\n.redIcon{\r\n    color:red;\r\n}\r\n\r\n.greenIcon{\r\n    color:green;\r\n}", ""]);
+exports.push([module.i, ".commentsInput{\r\n    min-height:200px;\r\n    min-width:100%;\r\n}\r\n\r\n.redIcon{\r\n    color:red;\r\n}\r\n\r\n.greenIcon{\r\n    color:green;\r\n}\r\n\r\n.classBackgroundBase{\r\n    width:100%; \r\n    background-size: cover;\r\n    background-repeat: no-repeat;\r\n}\r\n\r\n.shamanBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/shaman.jpg") + "); \r\n}\r\n\r\n.hunterBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/hunter.jpg") + "); \r\n}\r\n\r\n.demonhunterBackground{\r\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \r\n}\r\n\r\n.druidBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/druid.jpg") + "); \r\n}\r\n\r\n.paladinBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/paladin.jpg") + "); \r\n}\r\n\r\n.deathknightBackground{\r\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/death knight.jpg") + "'); \r\n}\r\n\r\n.monkBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/monk.jpg") + "); \r\n}\r\n\r\n.mageBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/mage.jpg") + "); \r\n}\r\n\r\n.priestBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/priest.jpg") + "); \r\n}\r\n\r\n.rogueBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/rogue.jpg") + "); \r\n}\r\n\r\n.warlockBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/warlock.jpg") + "); \r\n}\r\n\r\n.warriorBackground{\r\n    background-image: url(" + __webpack_require__("../../../../../src/assets/images/classBackdrops/warrior.jpg") + "); \r\n}\r\n\r\n.fullWidthField{\r\n    width:100%;\r\n}", ""]);
 
 // exports
 
@@ -273,7 +273,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/create-application/create-application.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n    <div class=\"col-xs-8\">\r\n        <h2> Application for TBD </h2>\r\n\r\n        <hr />\r\n    </div>\r\n    <div class=\"col-xs-11 col-md-6 row\">\r\n\r\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row\">\r\n\r\n\r\n            <md-form-field class=\"col-xs-11 col-md-7\">\r\n                <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                />\r\n            </md-form-field>\r\n\r\n            <button style=\"padding-top:10px;\" md-icon-button>\r\n                    <md-icon [style.color] = \"iconColor\"> {{icon}} </md-icon>\r\n                </button>\r\n\r\n\r\n            <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"col-xs-12 col-md-7\" placeholder=\"Select Realm\">\r\n                <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                    {{ realm.name }}\r\n                </md-option>\r\n            </md-select>\r\n\r\n            <md-form-field class=\"col-xs-12 col-md-7\">\r\n                <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n            </md-form-field>\r\n\r\n            <!-- <md-form-field class=\"col-xs-12 col-md-6\">\r\n                <input mdInput placeholder=\"Desired Role\" name=\"desiredRole\" formControlName=\"desiredRole\" />\r\n            </md-form-field> -->\r\n            <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"col-xs-12 col-md-7\">\r\n\r\n                <md-option value=\"Ranged DPS\">\r\n                    Ranged DPS\r\n                </md-option>\r\n\r\n                <md-option value=\"Melee DPS\">\r\n                    Melee DPS\r\n                </md-option>\r\n\r\n                <md-option value=\"Tank\">\r\n                    Tank\r\n                </md-option>\r\n\r\n                <md-option value=\"Healer\">\r\n                    Healer\r\n                </md-option>\r\n\r\n            </md-select>\r\n            <md-form-field class=\"col-xs-12 col-md-12\">\r\n                <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\r\n\r\n            </md-form-field>\r\n\r\n            <div class=\"col-xs-12\">\r\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click) = \"submitApplication()\"> Submit </button>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>"
+module.exports = "<div class=\"row center-xs classBackgroundBase {{classBackground}}\">\r\n    <div class=\"col-xs-12 dark-theme\">\r\n        <md-card>\r\n\r\n            <h2> Application for TBD </h2>\r\n        </md-card>\r\n\r\n\r\n    </div>\r\n    <div class=\"col-xs-12 col-md-12 row center-xs\">\r\n\r\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row center-xs\">\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n                    <md-form-field class = \"fullWidthField\">\r\n                        <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                        />\r\n                    </md-form-field>\r\n                    \r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n\r\n                    <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"fullWidthField\" placeholder=\"Select Realm\">\r\n                        <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                            {{ realm.name }}\r\n                        </md-option>\r\n                    </md-select>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6\">\r\n\r\n                    <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"fullWidthField\">\r\n\r\n                        <md-option value=\"Ranged DPS\">\r\n                            Ranged DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Melee DPS\">\r\n                            Melee DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Tank\">\r\n                            Tank\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Healer\">\r\n                            Healer\r\n                        </md-option>\r\n\r\n                    </md-select>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n                    <md-form-field class=\"fullWidthField\">\r\n                        <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n                    </md-form-field>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 row\">\r\n                    <md-form-field class=\"fullWidthField\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\r\n\r\n                    </md-form-field>\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 row\">\r\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click)=\"submitApplication()\"> Submit </button>\r\n                </md-card>  \r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -326,6 +326,7 @@ var CreateApplicationComponent = (function () {
         var _this = this;
         this.iconColor = "red";
         this.icon = "cancel";
+        this.classBackground = "druidBackground";
         this.application = {
             character: "",
             realm: "",
@@ -357,10 +358,12 @@ var CreateApplicationComponent = (function () {
         this.blizzardService.getCharacter(realmName, character)
             .subscribe(function (result) {
             console.log(result);
+            _this.characterObject = result;
             _this.iconColor = "green";
             _this.icon = "check_circle";
             _this.characterIsValid = true;
-            _this.application.class = _this.blizzardService.getClass(result.class);
+            _this.application.class = _this.blizzardService.getClass(_this.characterObject.class);
+            _this.classBackground = _this.application.class + "Background";
             _this.CreateAppFormGroup.controls.character.updateValueAndValidity();
         }, function (error) {
             console.log(error);
@@ -664,7 +667,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\r\n.card-shadow{\r\n    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);\r\n}\r\n\r\n.logBackdrop{\r\n    background-color: black;\r\n}", ""]);
+exports.push([module.i, "\r\n.card-shadow{\r\n    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);\r\n}\r\n\r\n.logBackdrop{\r\n    background-color: black;\r\n}\r\n\r\n.demonhunterBackground{\r\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \r\n}\r\n\r\n.classBackgroundBase{\r\n    width:100%; \r\n    background-size: cover;\r\n    background-repeat: no-repeat;\r\n}", ""]);
 
 // exports
 
@@ -677,7 +680,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs\">\r\n  <div class=\"col-xs-12 logBackdrop\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12\">\r\n\r\n\r\n    <md-tab-group class=\"card-shadow\">\r\n      <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n        <md-tab [label]=\"tab.title\">\r\n          <md-card>\r\n            <md-card-content>\r\n\r\n              <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n              <div *ngIf=\"editingTab\">\r\n                <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                  Modify Content - Preview Changes above\r\n                  <a target = \"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                    <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                  </a>\r\n\r\n                  HTML supported\r\n                </md-toolbar>\r\n                <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n              </div>\r\n\r\n            </md-card-content>\r\n\r\n            <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n              <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n              <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n            </md-card-actions>\r\n\r\n          </md-card>\r\n        </md-tab>\r\n\r\n      </div>\r\n\r\n\r\n    </md-tab-group>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase\" style = \"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n    <md-card>\r\n\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -1120,7 +1123,7 @@ var BlizzardService = (function () {
         this.http = http;
         this.api = "https://us.api.battle.net/wow";
         this.apiKey = "fqvadba9c8auw7brtdr72vv7hfntbx7d";
-        this.classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid", "demon hunter"];
+        this.classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "deathknight", "shaman", "mage", "warlock", "monk", "druid", "demonhunter"];
     }
     BlizzardService.prototype.getCharacter = function (realmName, characterName) {
         var url = "/character/" + realmName + "/" + characterName + "?" + this.getEndOfApiUrl();
@@ -1288,6 +1291,90 @@ UserService = __decorate([
 
 var _a;
 //# sourceMappingURL=user.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/death knight.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "death knight.5d493f87a6383934eefd.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/demon hunter.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "demon hunter.460d696d77273c02fb06.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/druid.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "druid.c87a90a3fd4d92e534b1.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/hunter.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "hunter.100891d4fb71171b860a.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/mage.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "mage.782b1bd35068c1845141.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/monk.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "monk.80384e18ec77308aa9d3.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/paladin.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "paladin.9b28cfba5e591afcbf5e.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/priest.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "priest.04df7ca87303f78b914a.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/rogue.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "rogue.63885ff9308a1e9dd31a.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/shaman.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "shaman.9fbdcf55c3c9bd032bfb.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/warlock.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "warlock.d3de6574179a20b469b9.jpg";
+
+/***/ }),
+
+/***/ "../../../../../src/assets/images/classBackdrops/warrior.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "warrior.b6e410d91e0a4f5f5f34.jpg";
 
 /***/ }),
 
