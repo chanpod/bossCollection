@@ -6,3 +6,13 @@
 .logBackdrop{
     background-color: black;
 }
+
+.demonhunterBackground{
+    background-image: url('../../assets/images/classBackdrops/demon hunter.jpg'); 
+}
+
+.classBackgroundBase{
+    width:100%; 
+    background-size: cover;
+    background-repeat: no-repeat;
+}

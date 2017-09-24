@@ -1,4 +1,6 @@
-<div class="row col-xs-12 light-theme center-xs">
+<div class="row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase" style = "height:100%;">
+
+
   <div class="col-xs-12 logBackdrop">
 
     <img src="assets/images/TBDLogo.png" style="width: 50%;height:100%" />
@@ -6,59 +8,61 @@
 
   <button *ngIf="userService.isGM()" md-raised-button color="accent" (click)="openNewTabDialog()"> New Tab </button>
 
-  <div class="col-md-8 col-xs-12">
+  <div class="col-md-8 col-xs-12 ">
+    <md-card>
 
 
-    <md-tab-group class="card-shadow">
-      <div *ngFor="let tab of tabs; let i = index">
+      <md-tab-group class="card-shadow">
+        <div *ngFor="let tab of tabs; let i = index">
 
-        <md-tab [label]="tab.title">
-          <md-card>
-            <md-card-content>
+          <md-tab [label]="tab.title">
+            <md-card>
+              <md-card-content>
 
-              <markdown style="text-align: start;" [data]="tab.content"> </markdown>
+                <markdown style="text-align: start;" [data]="tab.content"> </markdown>
 
-              <div *ngIf="editingTab">
-                <md-toolbar color="accent" class="row center-xs">
-                  Modify Content - Preview Changes above
-                  <a target = "_blank" href="https://dimpu.github.io/angular2-markdown/" md-icon-button>
-                    <md-icon mdTooltip="Markdown Help" class="md-24" aria-label="helpIcon">help</md-icon>
-                  </a>
+                <div *ngIf="editingTab">
+                  <md-toolbar color="accent" class="row center-xs">
+                    Modify Content - Preview Changes above
+                    <a target="_blank" href="https://dimpu.github.io/angular2-markdown/" md-icon-button>
+                      <md-icon mdTooltip="Markdown Help" class="md-24" aria-label="helpIcon">help</md-icon>
+                    </a>
 
-                  HTML supported
-                </md-toolbar>
-                <textarea style="width:95%;min-height:250px;" [(ngModel)]="tab.content"> {{tab.content}}</textarea>
-              </div>
+                    HTML supported
+                  </md-toolbar>
+                  <textarea style="width:95%;min-height:250px;" [(ngModel)]="tab.content"> {{tab.content}}</textarea>
+                </div>
 
-            </md-card-content>
+              </md-card-content>
 
-            <md-card-actions *ngIf="userService.isGM()">
+              <md-card-actions *ngIf="userService.isGM()">
 
-              <button md-icon-button *ngIf="!editingTab">
+                <button md-icon-button *ngIf="!editingTab">
                       <md-icon class="md-24" aria-label="edit icon" (click) = "toggleEditing()">edit</md-icon>
                     </button>
 
-              <button md-icon-button *ngIf="editingTab" (click)="saveTabs()">
+                <button md-icon-button *ngIf="editingTab" (click)="saveTabs()">
                           <md-icon class="md-24" aria-label="save icon">save</md-icon>
                       </button>
 
-              <button md-icon-button *ngIf="editingTab" (click)="toggleEditing()">
+                <button md-icon-button *ngIf="editingTab" (click)="toggleEditing()">
                           <md-icon mdTooltip="Cancel" class="md-24" aria-label="cancel icon">cancel</md-icon>
                       </button>
 
-              <button md-icon-button>
+                <button md-icon-button>
                           <md-icon class="md-24" aria-label="delete icon" (click) = "deleteTab(i)">delete</md-icon>
                       </button>
 
 
-            </md-card-actions>
+              </md-card-actions>
 
-          </md-card>
-        </md-tab>
+            </md-card>
+          </md-tab>
 
-      </div>
+        </div>
 
 
-    </md-tab-group>
+      </md-tab-group>
+    </md-card>
   </div>
 </div>

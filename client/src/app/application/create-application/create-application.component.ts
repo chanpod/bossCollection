@@ -16,6 +16,8 @@ export class CreateApplicationComponent implements OnInit {
 
   CreateAppFormGroup: FormGroup;
   user: any;
+  characterObject: any;
+  classBackground: string;
   application: {
     character: string,
     realm: string,
@@ -48,6 +50,7 @@ export class CreateApplicationComponent implements OnInit {
 
     this.iconColor = "red";
     this.icon = "cancel";
+    this.classBackground = "druidBackground";
 
     this.application = {
       character: "",
@@ -86,11 +89,13 @@ export class CreateApplicationComponent implements OnInit {
     this.blizzardService.getCharacter(realmName, character)
       .subscribe((result) => {
         console.log(result);
+        this.characterObject = result;
 
         this.iconColor = "green";
         this.icon = "check_circle";
         this.characterIsValid = true;
-        this.application.class = this.blizzardService.getClass(result.class);
+        this.application.class = this.blizzardService.getClass(this.characterObject.class);
+        this.classBackground = this.application.class + "Background";
 
         this.CreateAppFormGroup.controls.character.updateValueAndValidity();
 

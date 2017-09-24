@@ -13,7 +13,7 @@ export class BlizzardService {
 
     this.api = "https://us.api.battle.net/wow";
     this.apiKey = "fqvadba9c8auw7brtdr72vv7hfntbx7d"
-    this.classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "death knight", "shaman", "mage", "warlock", "monk", "druid", "demon hunter"];
+    this.classes = ["placeholder", "warrior", "paladin", "hunter", "rogue", "priest", "deathknight", "shaman", "mage", "warlock", "monk", "druid", "demonhunter"];
 
   }
 

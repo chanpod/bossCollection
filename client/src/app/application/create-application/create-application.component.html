@@ -1,63 +1,94 @@
-<div class="row center-xs">
-    <div class="col-xs-8">
-        <h2> Application for TBD </h2>
+<div class="row center-xs classBackgroundBase {{classBackground}}">
+    <div class="col-xs-12 dark-theme">
+        <md-card>
 
-        <hr />
+            <h2> Application for TBD </h2>
+        </md-card>
+
+
     </div>
-    <div class="col-xs-11 col-md-6 row">
+    <div class="col-xs-12 col-md-12 row center-xs">
 
-        <form [formGroup]="CreateAppFormGroup" class="row">
+        <form [formGroup]="CreateAppFormGroup" class="row center-xs">
+            <div class="col-xs-12 center-xs row">
+
+                <md-card class="col-xs-12 col-md-6 ">
+
+                    <md-form-field class = "fullWidthField">
+                        <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="character"
+                        />
+                    </md-form-field>
+                    
+                </md-card>
+            </div>
+
+            <div class="col-xs-12 center-xs row">
+
+                <md-card class="col-xs-12 col-md-6 ">
 
 
-            <md-form-field class="col-xs-11 col-md-7">
-                <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="character"
-                />
-            </md-form-field>
+                    <md-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField" placeholder="Select Realm">
+                        <md-option *ngFor="let realm of realms" [value]="realm.name">
+                            {{ realm.name }}
+                        </md-option>
+                    </md-select>
 
-            <button style="padding-top:10px;" md-icon-button>
-                    <md-icon [style.color] = "iconColor"> {{icon}} </md-icon>
-                </button>
+                </md-card>
+            </div>
 
+            <div class="col-xs-12 center-xs row">
 
-            <md-select formControlName="realm" (blur)="checkCharacterName()" class="col-xs-12 col-md-7" placeholder="Select Realm">
-                <md-option *ngFor="let realm of realms" [value]="realm.name">
-                    {{ realm.name }}
-                </md-option>
-            </md-select>
+                <md-card class="col-xs-12 col-md-6">
 
-            <md-form-field class="col-xs-12 col-md-7">
-                <input mdInput placeholder="Previous Guild" name="previousGuild" formControlName="previousGuild" />
-            </md-form-field>
+                    <md-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField">
 
-            <!-- <md-form-field class="col-xs-12 col-md-6">
-                <input mdInput placeholder="Desired Role" name="desiredRole" formControlName="desiredRole" />
-            </md-form-field> -->
-            <md-select formControlName="desiredRole" placeholder="Desired Role" class="col-xs-12 col-md-7">
+                        <md-option value="Ranged DPS">
+                            Ranged DPS
+                        </md-option>
 
-                <md-option value="Ranged DPS">
-                    Ranged DPS
-                </md-option>
+                        <md-option value="Melee DPS">
+                            Melee DPS
+                        </md-option>
 
-                <md-option value="Melee DPS">
-                    Melee DPS
-                </md-option>
+                        <md-option value="Tank">
+                            Tank
+                        </md-option>
 
-                <md-option value="Tank">
-                    Tank
-                </md-option>
+                        <md-option value="Healer">
+                            Healer
+                        </md-option>
 
-                <md-option value="Healer">
-                    Healer
-                </md-option>
+                    </md-select>
 
-            </md-select>
-            <md-form-field class="col-xs-12 col-md-12">
-                <textarea class="commentsInput" mdInput placeholder="Tell us about yourself" name="desiredRole" formControlName="comments"> </textarea>
+                </md-card>
+            </div>
 
-            </md-form-field>
+            <div class="col-xs-12 center-xs row">
 
-            <div class="col-xs-12">
-                <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary" (click) = "submitApplication()"> Submit </button>
+                <md-card class="col-xs-12 col-md-6 ">
+
+                    <md-form-field class="fullWidthField">
+                        <input mdInput placeholder="Previous Guild" name="previousGuild" formControlName="previousGuild" />
+                    </md-form-field>
+
+                </md-card>
+            </div>
+
+            <div class="col-xs-12 center-xs row">
+
+                <md-card class="col-xs-12 col-md-6 row">
+                    <md-form-field class="fullWidthField">
+                        <textarea class="commentsInput" mdInput placeholder="Tell us about yourself" name="desiredRole" formControlName="comments"> </textarea>
+
+                    </md-form-field>
+                </md-card>
+            </div>
+
+            <div class="col-xs-12 center-xs row">
+
+                <md-card class="col-xs-12 col-md-6 row">
+                <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary" (click)="submitApplication()"> Submit </button>
+                </md-card>  
             </div>
         </form>
     </div>
