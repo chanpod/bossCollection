@@ -20,8 +20,8 @@ function submitApplication(req, res) {
     var newApplication = new ApplicationModel(req.body.newApplicant);
     var dateApplied = moment();
 
-    newApplication.user = req.session.user.name;
-    newApplication.battleTag = req.session.user.battleTag;
+    // newApplication.user = req.session.user.name;
+    // newApplication.battleTag = req.session.user.battleTag;
     newApplication.dateApplied = dateApplied;
     newApplication.guild = req.body.newApplicant.guildName
     newApplication.status = statuses.applied

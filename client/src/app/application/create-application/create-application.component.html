@@ -10,7 +10,7 @@
 
 
             <md-form-field class="col-xs-11 col-md-7">
-                <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="characterName"
+                <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="character"
                 />
             </md-form-field>
 
@@ -57,7 +57,7 @@
             </md-form-field>
 
             <div class="col-xs-12">
-                <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary"> Submit </button>
+                <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary" (click) = "submitApplication()"> Submit </button>
             </div>
         </form>
     </div>

@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<layout></layout>\n<div class=\"row center-xs\">\n    <div class=\"col-xs-12 center-xs\">\n        <router-outlet></router-outlet>\n    </div>\n</div>"
+module.exports = "<layout></layout>\r\n<div class=\"row center-xs\">\r\n    <div class=\"col-xs-12 center-xs\">\r\n        <router-outlet></router-outlet>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -269,7 +269,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/create-application/create-application.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\n    <div class=\"col-xs-8\">\n        <h2> Application for TBD </h2>\n\n        <hr />\n    </div>\n    <div class=\"col-xs-11 col-md-6 row\">\n\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row\">\n\n\n            <md-form-field class=\"col-xs-11 col-md-7\">\n                <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"characterName\"\n                />\n            </md-form-field>\n\n            <button style=\"padding-top:10px;\" md-icon-button>\n                    <md-icon [style.color] = \"iconColor\"> {{icon}} </md-icon>\n                </button>\n\n\n            <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"col-xs-12 col-md-7\" placeholder=\"Select Realm\">\n                <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\n                    {{ realm.name }}\n                </md-option>\n            </md-select>\n\n            <md-form-field class=\"col-xs-12 col-md-7\">\n                <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\n            </md-form-field>\n\n            <!-- <md-form-field class=\"col-xs-12 col-md-6\">\n                <input mdInput placeholder=\"Desired Role\" name=\"desiredRole\" formControlName=\"desiredRole\" />\n            </md-form-field> -->\n            <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"col-xs-12 col-md-7\">\n\n                <md-option value=\"Ranged DPS\">\n                    Ranged DPS\n                </md-option>\n\n                <md-option value=\"Melee DPS\">\n                    Melee DPS\n                </md-option>\n\n                <md-option value=\"Tank\">\n                    Tank\n                </md-option>\n\n                <md-option value=\"Healer\">\n                    Healer\n                </md-option>\n\n            </md-select>\n            <md-form-field class=\"col-xs-12 col-md-12\">\n                <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\n\n            </md-form-field>\n\n            <div class=\"col-xs-12\">\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\"> Submit </button>\n            </div>\n        </form>\n    </div>\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n    <div class=\"col-xs-8\">\r\n        <h2> Application for TBD </h2>\r\n\r\n        <hr />\r\n    </div>\r\n    <div class=\"col-xs-11 col-md-6 row\">\r\n\r\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row\">\r\n\r\n\r\n            <md-form-field class=\"col-xs-11 col-md-7\">\r\n                <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                />\r\n            </md-form-field>\r\n\r\n            <button style=\"padding-top:10px;\" md-icon-button>\r\n                    <md-icon [style.color] = \"iconColor\"> {{icon}} </md-icon>\r\n                </button>\r\n\r\n\r\n            <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"col-xs-12 col-md-7\" placeholder=\"Select Realm\">\r\n                <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                    {{ realm.name }}\r\n                </md-option>\r\n            </md-select>\r\n\r\n            <md-form-field class=\"col-xs-12 col-md-7\">\r\n                <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n            </md-form-field>\r\n\r\n            <!-- <md-form-field class=\"col-xs-12 col-md-6\">\r\n                <input mdInput placeholder=\"Desired Role\" name=\"desiredRole\" formControlName=\"desiredRole\" />\r\n            </md-form-field> -->\r\n            <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"col-xs-12 col-md-7\">\r\n\r\n                <md-option value=\"Ranged DPS\">\r\n                    Ranged DPS\r\n                </md-option>\r\n\r\n                <md-option value=\"Melee DPS\">\r\n                    Melee DPS\r\n                </md-option>\r\n\r\n                <md-option value=\"Tank\">\r\n                    Tank\r\n                </md-option>\r\n\r\n                <md-option value=\"Healer\">\r\n                    Healer\r\n                </md-option>\r\n\r\n            </md-select>\r\n            <md-form-field class=\"col-xs-12 col-md-12\">\r\n                <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\r\n\r\n            </md-form-field>\r\n\r\n            <div class=\"col-xs-12\">\r\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click) = \"submitApplication()\"> Submit </button>\r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -282,6 +282,15 @@ module.exports = "<div class=\"row center-xs\">\n    <div class=\"col-xs-8\">\n 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -295,10 +304,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CreateApplicationComponent = (function () {
-    function CreateApplicationComponent(userService, blizzardService) {
+    function CreateApplicationComponent(userService, blizzardService, guildService) {
         this.userService = userService;
         this.blizzardService = blizzardService;
+        this.guildService = guildService;
         this.characterIsValid = false;
         this.characterIsValid = false;
         this.validateCharacter = this.validateCharacter.bind(this);
@@ -308,12 +319,15 @@ var CreateApplicationComponent = (function () {
         this.iconColor = "red";
         this.icon = "cancel";
         this.application = {
-            characterName: "",
+            character: "",
             realm: "",
-            desiredRole: ""
+            desiredRole: "",
+            guildName: "TBD",
+            previousGuild: '',
+            comments: ''
         };
         this.CreateAppFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
-            characterName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', this.validateCharacter),
+            character: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', this.validateCharacter),
             realm: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
             previousGuild: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](),
             desiredRole: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["k" /* Validators */].required),
@@ -329,15 +343,15 @@ var CreateApplicationComponent = (function () {
         this.iconColor = "red";
         this.icon = "cancel";
         this.characterIsValid = false;
-        var characterName = this.CreateAppFormGroup.controls.characterName.value;
+        var character = this.CreateAppFormGroup.controls.character.value;
         var realmName = this.CreateAppFormGroup.controls.realm.value;
-        this.blizzardService.getCharacter(realmName, characterName)
+        this.blizzardService.getCharacter(realmName, character)
             .subscribe(function (result) {
             console.log(result);
             _this.iconColor = "green";
             _this.icon = "check_circle";
             _this.characterIsValid = true;
-            _this.CreateAppFormGroup.controls.characterName.updateValueAndValidity();
+            _this.CreateAppFormGroup.controls.character.updateValueAndValidity();
         }, function (error) {
             console.log(error);
         });
@@ -354,6 +368,16 @@ var CreateApplicationComponent = (function () {
             };
         }
     };
+    CreateApplicationComponent.prototype.submitApplication = function () {
+        var formGroup = this.CreateAppFormGroup.value;
+        this.application = __assign({ guildName: this.application.guildName }, formGroup);
+        this.guildService.submitApplication(this.application)
+            .subscribe(function (result) {
+            console.log(result);
+        }, function (error) {
+            console.log(error);
+        });
+    };
     return CreateApplicationComponent;
 }());
 CreateApplicationComponent = __decorate([
@@ -362,10 +386,10 @@ CreateApplicationComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/application/create-application/create-application.component.html"),
         styles: [__webpack_require__("../../../../../src/app/application/create-application/create-application.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_guild_service__["a" /* GuildService */]) === "function" && _c || Object])
 ], CreateApplicationComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=create-application.component.js.map
 
 /***/ }),
@@ -433,7 +457,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs\">\n  <div class=\"col-xs-12 logBackdrop\">\n\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\n  </div>\n\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\n\n  <div class=\"col-md-8 col-xs-12\">\n\n\n    <md-tab-group class=\"card-shadow\">\n      <div *ngFor=\"let tab of tabs; let i = index\">\n\n        <md-tab [label]=\"tab.title\">\n          <md-card>\n            <md-card-content>\n\n              <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\n\n              <div *ngIf=\"editingTab\">\n                <md-toolbar color=\"accent\" class=\"row center-xs\">\n                  Modify Content - Preview Changes above\n                  <a target = \"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\n                    <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\n                  </a>\n\n                  HTML supported\n                </md-toolbar>\n                <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\n              </div>\n\n            </md-card-content>\n\n            <md-card-actions *ngIf=\"userService.isGM()\">\n\n              <button md-icon-button *ngIf=\"!editingTab\">\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\n                    </button>\n\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\n                      </button>\n\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\n                      </button>\n\n              <button md-icon-button>\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\n                      </button>\n\n\n            </md-card-actions>\n\n          </md-card>\n        </md-tab>\n\n      </div>\n\n\n    </md-tab-group>\n  </div>\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs\">\r\n  <div class=\"col-xs-12 logBackdrop\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12\">\r\n\r\n\r\n    <md-tab-group class=\"card-shadow\">\r\n      <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n        <md-tab [label]=\"tab.title\">\r\n          <md-card>\r\n            <md-card-content>\r\n\r\n              <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n              <div *ngIf=\"editingTab\">\r\n                <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                  Modify Content - Preview Changes above\r\n                  <a target = \"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                    <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                  </a>\r\n\r\n                  HTML supported\r\n                </md-toolbar>\r\n                <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n              </div>\r\n\r\n            </md-card-content>\r\n\r\n            <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n              <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n              <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n              <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n            </md-card-actions>\r\n\r\n          </md-card>\r\n        </md-tab>\r\n\r\n      </div>\r\n\r\n\r\n    </md-tab-group>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -624,7 +648,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/layout/layout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<div class=\"dark-theme\">\n\n  <md-toolbar color=\"primary\" class=\"row center-xs\">\n\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\n      <span *ngIf=\"user?.name != undefined\"> Welcome {{user.name}} </span>\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\n    </div>\n\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\n\n    </div>\n\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\n      <a md-button routerLink = \"\" style = \"font-size: 20px;\"> TBD </a>\n    </div>\n\n    <div class=\"col-xs-3 col-sm-4\">\n\n      <div class=\"row end-xs\">\n        <button *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" (click)=\"logout()\"> Logout </button>\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\n      </div>\n\n    </div>\n\n\n\n  </md-toolbar>\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\"> Welcome {{user.name}} </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\r\n      <a md-button routerLink = \"\" style = \"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4\">\r\n\r\n      <div class=\"row end-xs\">\r\n        <button *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" (click)=\"logout()\"> Logout </button>\r\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
 
 /***/ }),
 
@@ -701,7 +725,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\n\n\n  <md-card>\n    <md-card-header>\n      <md-card-title>\n        <h2>Login </h2>\n      </md-card-title>\n    </md-card-header>\n\n    <hr />\n\n    <md-card-content>\n\n      <div class=\"row \">\n\n        <div class=\"xs-col-12\">\n          <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\n\n            <md-form-field class=\"col-xs-12\">\n              <input mdInput placeholder=\"username\" name=\"name\" formControlName=\"Name\" />\n            </md-form-field>\n\n            <md-form-field class=\"col-xs-12\">\n              <input mdInput placeholder=\"password\" type=\"password\" formControlName=\"Password\" />\n            </md-form-field>\n\n            <div class=\"col-xs-12 start-xs\">\n              <button md-raised-button (click)=\"login()\"> Login </button>\n            </div>\n          </form>\n        </div>\n\n      </div>\n    </md-card-content>\n  </md-card>\n\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n\r\n\r\n  <md-card>\r\n    <md-card-header>\r\n      <md-card-title>\r\n        <h2>Login </h2>\r\n      </md-card-title>\r\n    </md-card-header>\r\n\r\n    <hr />\r\n\r\n    <md-card-content>\r\n\r\n      <div class=\"row \">\r\n\r\n        <div class=\"xs-col-12\">\r\n          <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\r\n\r\n            <md-form-field class=\"col-xs-12\">\r\n              <input mdInput placeholder=\"username\" name=\"name\" formControlName=\"Name\" />\r\n            </md-form-field>\r\n\r\n            <md-form-field class=\"col-xs-12\">\r\n              <input mdInput placeholder=\"password\" type=\"password\" formControlName=\"Password\" />\r\n            </md-form-field>\r\n\r\n            <div class=\"col-xs-12 start-xs\">\r\n              <button md-raised-button (click)=\"login()\"> Login </button>\r\n            </div>\r\n          </form>\r\n        </div>\r\n\r\n      </div>\r\n    </md-card-content>\r\n  </md-card>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -924,16 +948,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var GuildService = (function () {
     function GuildService(apiService) {
         this.apiService = apiService;
-        this.ACCOUNT_API_URL_BASE = "/guild/guild";
+        this.GUILD_API_BASE_URL = "/guild/guild";
+        this.APP_API_BASE_URL = "/guild/applications";
     }
     GuildService.prototype.getTabs = function (guildName) {
-        return this.apiService.get(this.ACCOUNT_API_URL_BASE + "/guildHomepage/" + guildName);
+        return this.apiService.get(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName);
     };
     GuildService.prototype.updateTabs = function (guildObject, guildName) {
         var body = {
             guild: guildObject
         };
-        return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/guildHomepage/" + guildName, body);
+        return this.apiService.post(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName, body);
+    };
+    GuildService.prototype.submitApplication = function (newApplication) {
+        var body = { "newApplicant": newApplication };
+        return this.apiService.post(this.APP_API_BASE_URL + "/applicationSubmission", body);
     };
     return GuildService;
 }());
