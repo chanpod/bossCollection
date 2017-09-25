@@ -42,7 +42,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\n\nhtml, \nbody {\n    height: 100%;    \n}\n\n\nbody { \n    margin: 0;\n    padding: 0;\n    font-family: 'roboto'\n}\n\nhr {\n    display: block;\n    margin: 10px 0 10px 0;\n    border-top: 1px solid rgba(0, 0, 0, .32);\n    width: 100%\n  }\n\n.backgroundFlair{\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \n}\n\n.backgroundBase{\n    width:100%; \n    background-size: cover;\n    background-repeat: no-repeat;\n}\n\n.setHeightToMax {\n    height:100%;\n}\n\n.noPadding{\n    padding:0 !important;\n    margin:0 !important;\n}", ""]);
+exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\n\nhtml, \nbody {\n    min-height: 100%;    \n}\n\n\nbody { \n    margin: 0;\n    padding: 0;\n    font-family: 'roboto'\n}\n\nhr {\n    display: block;\n    margin: 10px 0 10px 0;\n    border-top: 1px solid rgba(0, 0, 0, .32);\n    width: 100%\n  }\n\n.backgroundFlair{\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \n}\n\n.backgroundBase{\n    width:100%; \n    background-size: cover;\n    background-repeat: no-repeat;\n}\n\n.setHeightToMax {\n    height:100%;\n}\n\n.noPadding{\n    padding:0 !important;\n    margin:0 !important;\n}", ""]);
 
 // exports
 

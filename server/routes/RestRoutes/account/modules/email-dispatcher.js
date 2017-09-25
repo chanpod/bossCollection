@@ -5,35 +5,35 @@ var q = require('q');
 
 var nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
-	host: 'smtp.gmail.com',
-	port: 465,
-	secure: true, // true for 465, false for other ports
-	auth: {
-		user: ES.user, // generated ethereal user
-		pass: ES.password  // generated ethereal password
-	}
-});
+// let transporter = nodemailer.createTransport({
+// 	host: 'smtp.gmail.com',
+// 	port: 465,
+// 	secure: true, // true for 465, false for other ports
+// 	auth: {
+// 		user: ES.user, // generated ethereal user
+// 		pass: ES.password  // generated ethereal password
+// 	}
+// });
 
-let mailOptions = {
-	from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
-	to: 'chanpod36@gmail.com', // list of receivers
-	subject: 'Hello ✔', // Subject line
-	text: 'Hello world?', // plain text body
-	html: '<b>Hello world?</b>' // html body
-};
+// let mailOptions = {
+// 	from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
+// 	to: 'chanpod36@gmail.com', // list of receivers
+// 	subject: 'Hello ✔', // Subject line
+// 	text: 'Hello world?', // plain text body
+// 	html: '<b>Hello world?</b>' // html body
+// };
 
-transporter.sendMail(mailOptions, (error, info) => {
-	if (error) {
-		return console.log(error);
-	}
-	console.log('Message sent: %s', info.messageId);
-	// Preview only available when sending through an Ethereal account
-	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+// transporter.sendMail(mailOptions, (error, info) => {
+// 	if (error) {
+// 		return console.log(error);
+// 	}
+// 	console.log('Message sent: %s', info.messageId);
+// 	// Preview only available when sending through an Ethereal account
+// 	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-	// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@blurdybloop.com>
-	// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-});
+// 	// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@blurdybloop.com>
+// 	// Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+// });
 
 
 module.exports = EM;

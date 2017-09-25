@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { UserService } from '../../services/user.service';
 import { BlizzardService } from '../../services/blizzard.service';
@@ -39,7 +40,8 @@ export class CreateApplicationComponent implements OnInit {
     private userService: UserService,
     private blizzardService: BlizzardService,
     private guildService: GuildService,
-    private toastr: ToastsManager
+    private toastr: ToastsManager,
+    private router: Router
   ) {
     this.characterIsValid = false;
 
@@ -132,6 +134,7 @@ export class CreateApplicationComponent implements OnInit {
     this.guildService.submitApplication(this.application)
       .subscribe((result) => {        
         this.toastr.success("Application submitted successfully!", "Success");
+        this.router.navigate(['/']);
       }, (error) => {
 
         console.log(error);

@@ -1,8 +1,8 @@
 <div class="row center-xs">
-  <div class="row col-xs-12 center-xs">
-    <md-spinner *ngIf="loading"></md-spinner>
-  </div>
-  <div class="col-xs-12 col-md-6">
+  <md-card *ngIf="loading" class="col-md-3 col-xs-12 center-xs">
+    <md-spinner ></md-spinner>
+  </md-card>
+  <div *ngIf="!loading" class="col-xs-12 col-md-6">
 
 
     <md-table [dataSource]="applications">

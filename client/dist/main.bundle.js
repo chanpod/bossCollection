@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<layout></layout>\n<div class=\"row center-xs setHeightToMax noPadding\">\n    <div class=\"col-xs-12 center-xs setHeightToMax backgroundFlair backgroundBase noPadding\">\n        <router-outlet></router-outlet>\n    </div>\n</div>"
+module.exports = "<layout></layout>\n<div class=\"row center-xs setHeightToMax noPadding\">\n    <div class=\"col-xs-12 center-xs setHeightToMax noPadding\">\n        <router-outlet></router-outlet>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -277,7 +277,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/create-application/create-application.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs classBackgroundBase {{classBackground}}\">\r\n    <div class=\"col-xs-12 dark-theme\">\r\n        <md-card>\r\n\r\n            <h2> Application for TBD </h2>\r\n        </md-card>\r\n\r\n\r\n    </div>\r\n    <div class=\"col-xs-12 col-md-12 row center-xs\">\r\n\r\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row center-xs\">\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n                    <md-form-field class = \"fullWidthField\">\r\n                        <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                        />\r\n                    </md-form-field>\r\n                    \r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n\r\n                    <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"fullWidthField\" placeholder=\"Select Realm\">\r\n                        <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                            {{ realm.name }}\r\n                        </md-option>\r\n                    </md-select>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6\">\r\n\r\n                    <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"fullWidthField\">\r\n\r\n                        <md-option value=\"Ranged DPS\">\r\n                            Ranged DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Melee DPS\">\r\n                            Melee DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Tank\">\r\n                            Tank\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Healer\">\r\n                            Healer\r\n                        </md-option>\r\n\r\n                    </md-select>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n                    <md-form-field class=\"fullWidthField\">\r\n                        <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n                    </md-form-field>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 row\">\r\n                    <md-form-field class=\"fullWidthField\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\r\n\r\n                    </md-form-field>\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 row\">\r\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click)=\"submitApplication()\"> Submit </button>\r\n                </md-card>  \r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>"
+module.exports = "<div class=\"noPadding row center-xs classBackgroundBase {{classBackground}}\">\r\n    <div class=\"col-xs-12 dark-theme noPadding\">\r\n        <md-card>\r\n\r\n            <h2> Application for TBD </h2>\r\n        </md-card>\r\n\r\n\r\n    </div>\r\n    <div class=\"col-xs-11 col-md-12 row center-xs\">\r\n\r\n        <form [formGroup]=\"CreateAppFormGroup\" class=\"row center-xs\">\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n                    <md-form-field class = \"fullWidthField\">\r\n                        <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                        />\r\n                    </md-form-field>\r\n                    \r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n\r\n                    <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"fullWidthField\" placeholder=\"Select Realm\">\r\n                        <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                            {{ realm.name }}\r\n                        </md-option>\r\n                    </md-select>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6\">\r\n\r\n                    <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"fullWidthField\">\r\n\r\n                        <md-option value=\"Ranged DPS\">\r\n                            Ranged DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Melee DPS\">\r\n                            Melee DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Tank\">\r\n                            Tank\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Healer\">\r\n                            Healer\r\n                        </md-option>\r\n\r\n                    </md-select>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 \">\r\n\r\n                    <md-form-field class=\"fullWidthField\">\r\n                        <input mdInput placeholder=\"Previous Guild\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n                    </md-form-field>\r\n\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 row\">\r\n                    <md-form-field class=\"fullWidthField\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"desiredRole\" formControlName=\"comments\"> </textarea>\r\n\r\n                    </md-form-field>\r\n                </md-card>\r\n            </div>\r\n\r\n            <div class=\"col-xs-12 center-xs row\">\r\n\r\n                <md-card class=\"col-xs-12 col-md-6 row\">\r\n                <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click)=\"submitApplication()\"> Submit </button>\r\n                </md-card>  \r\n            </div>\r\n        </form>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -288,11 +288,12 @@ module.exports = "<div class=\"row center-xs classBackgroundBase {{classBackgrou
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateApplicationComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -316,12 +317,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CreateApplicationComponent = (function () {
-    function CreateApplicationComponent(userService, blizzardService, guildService, toastr) {
+    function CreateApplicationComponent(userService, blizzardService, guildService, toastr, router) {
         this.userService = userService;
         this.blizzardService = blizzardService;
         this.guildService = guildService;
         this.toastr = toastr;
+        this.router = router;
         this.characterIsValid = false;
         this.characterIsValid = false;
         this.validateCharacter = this.validateCharacter.bind(this);
@@ -392,6 +395,7 @@ var CreateApplicationComponent = (function () {
         this.guildService.submitApplication(this.application)
             .subscribe(function (result) {
             _this.toastr.success("Application submitted successfully!", "Success");
+            _this.router.navigate(['/']);
         }, function (error) {
             console.log(error);
             _this.toastr.error("Hmm. Something didn't work. Please try again", "It broke!");
@@ -405,10 +409,10 @@ CreateApplicationComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/application/create-application/create-application.component.html"),
         styles: [__webpack_require__("../../../../../src/app/application/create-application/create-application.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_blizzard_service__["a" /* BlizzardService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_guild_service__["a" /* GuildService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__services_blizzard_service__["a" /* BlizzardService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_blizzard_service__["a" /* BlizzardService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_guild_service__["a" /* GuildService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _e || Object])
 ], CreateApplicationComponent);
 
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=create-application.component.js.map
 
 /***/ }),
@@ -486,7 +490,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-app/view-app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n\r\n  <div class=\"col-xs-12\">\r\n\r\n    Name: {{app?.character}}\r\n    <br/>\r\n    Current Realm: {{app?.realm}}\r\n    <br/>\r\n    Previous Guild: {{app?.previousGuild}}\r\n    <br/>\r\n    Role: {{app?.desiredRole}}\r\n    <br/>\r\n    Comments: {{app?.comments}}\r\n    <br/>\r\n    <img src = \"http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}\" />\r\n    <br/>\r\n    Item Level: {{armoryData?.items.averageItemLevelEquipped}}\r\n  </div>\r\n\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n  <md-card>\r\n\r\n\r\n    <md-card-header>\r\n\r\n      <img md-card-avatar src=\"http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}\" />\r\n\r\n      <md-card-title>{{app?.character}}</md-card-title>\r\n      <md-card-subtitle>{{app?.class}}</md-card-subtitle>\r\n    </md-card-header>\r\n\r\n    <md-card-content class=\"col-xs-12 start-xs\">\r\n\r\n      <md-list>\r\n        <md-list-item>\r\n          Item Level: {{armoryData?.items.averageItemLevelEquipped}}\r\n        </md-list-item>\r\n        <md-list-item>\r\n          Current Realm: {{app?.realm}}\r\n        </md-list-item>\r\n        <md-list-item>\r\n          Previous Guild: {{app?.previousGuild}}\r\n        </md-list-item>\r\n        <md-list-item>\r\n          Role: {{app?.desiredRole}}\r\n        </md-list-item>\r\n        \r\n      </md-list>\r\n      \r\n      <h3> Comments</h3>\r\n      <span> {{app?.comments}} </span>\r\n\r\n      <br/>\r\n\r\n    </md-card-content>\r\n\r\n    <md-card-actions>\r\n      <a color = \"primary\" md-raised-button href=\"{{armoryUrl(app?.realm, app?.character)}}\" target=\"_blank\">Armory</a>\r\n\r\n    </md-card-actions>\r\n\r\n  </md-card>\r\n</div>"
 
 /***/ }),
 
@@ -535,6 +539,10 @@ var ViewAppComponent = (function () {
             });
         });
     };
+    ViewAppComponent.prototype.armoryUrl = function (realm, character) {
+        var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+        return url;
+    };
     return ViewAppComponent;
 }());
 ViewAppComponent = __decorate([
@@ -572,7 +580,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-applications/view-applications.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n  <div class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row center-xs middle-xs\">\r\n\r\n            <img src=\"assets/images/classIcons/images/class/64/{{row.character.class}}.png\" /> {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\"> {{row.dateApplied | date:'shortDate'}} </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row center-xs middle-xs\">\r\n\r\n            <img src=\"assets/images/classIcons/images/class/64/{{row.character.class}}.png\" /> {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\"> {{row.dateApplied | date:'shortDate'}} </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
 
 /***/ }),
 

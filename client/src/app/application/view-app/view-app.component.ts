@@ -16,8 +16,8 @@ export class ViewAppComponent implements OnInit {
   app: any;
   armoryData: any;
   constructor(
-    private route:ActivatedRoute,
-    private guildService:GuildService,
+    private route: ActivatedRoute,
+    private guildService: GuildService,
     private blizzardService: BlizzardService
   ) { }
 
@@ -32,7 +32,7 @@ export class ViewAppComponent implements OnInit {
           this.app = app[0];
 
           this.blizzardService.getCharacterArmory(this.app.realm, this.app.character)
-            .subscribe((armoryDetails) =>{
+            .subscribe((armoryDetails) => {
 
               this.armoryData = armoryDetails;
             })
@@ -41,6 +41,12 @@ export class ViewAppComponent implements OnInit {
         })
 
     })
+  }
+
+  armoryUrl(realm, character) {
+    var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+
+    return url;
   }
 
 }

@@ -2,22 +2,46 @@
   <div class="row col-xs-12 center-xs">
     <md-spinner *ngIf="loading"></md-spinner>
   </div>
+  <md-card>
 
-  <div class="col-xs-12">
 
-    Name: {{app?.character}}
-    <br/>
-    Current Realm: {{app?.realm}}
-    <br/>
-    Previous Guild: {{app?.previousGuild}}
-    <br/>
-    Role: {{app?.desiredRole}}
-    <br/>
-    Comments: {{app?.comments}}
-    <br/>
-    <img src = "http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}" />
-    <br/>
-    Item Level: {{armoryData?.items.averageItemLevelEquipped}}
-  </div>
+    <md-card-header>
 
+      <img md-card-avatar src="http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}" />
+
+      <md-card-title>{{app?.character}}</md-card-title>
+      <md-card-subtitle>{{app?.class}}</md-card-subtitle>
+    </md-card-header>
+
+    <md-card-content class="col-xs-12 start-xs">
+
+      <md-list>
+        <md-list-item>
+          Item Level: {{armoryData?.items.averageItemLevelEquipped}}
+        </md-list-item>
+        <md-list-item>
+          Current Realm: {{app?.realm}}
+        </md-list-item>
+        <md-list-item>
+          Previous Guild: {{app?.previousGuild}}
+        </md-list-item>
+        <md-list-item>
+          Role: {{app?.desiredRole}}
+        </md-list-item>
+        
+      </md-list>
+      
+      <h3> Comments</h3>
+      <span> {{app?.comments}} </span>
+
+      <br/>
+
+    </md-card-content>
+
+    <md-card-actions>
+      <a color = "primary" md-raised-button href="{{armoryUrl(app?.realm, app?.character)}}" target="_blank">Armory</a>
+
+    </md-card-actions>
+
+  </md-card>
 </div>
