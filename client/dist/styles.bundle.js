@@ -1,5 +1,12 @@
 webpackJsonp(["styles"],{
 
+/***/ "../../../../../src/assets/images/classBackdrops/demon hunter.jpg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "demon hunter.460d696d77273c02fb06.jpg";
+
+/***/ }),
+
 /***/ "../../../../../src/styles.scss":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -35,7 +42,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\r\n\r\nbody { \r\n    margin: 0;\r\n    padding: 0;\r\n    font-family: 'roboto'\r\n}\r\n\r\nhr {\r\n    display: block;\r\n    margin: 10px 0 10px 0;\r\n    border-top: 1px solid rgba(0, 0, 0, .32);\r\n    width: 100%\r\n  }", ""]);
+exports.push([module.i, "/* You can add global styles to this file, and also import other style files */\n\nhtml, \nbody {\n    height: 100%;    \n}\n\n\nbody { \n    margin: 0;\n    padding: 0;\n    font-family: 'roboto'\n}\n\nhr {\n    display: block;\n    margin: 10px 0 10px 0;\n    border-top: 1px solid rgba(0, 0, 0, .32);\n    width: 100%\n  }\n\n.backgroundFlair{\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \n}\n\n.backgroundBase{\n    width:100%; \n    background-size: cover;\n    background-repeat: no-repeat;\n}\n\n.setHeightToMax {\n    height:100%;\n}\n\n.noPadding{\n    padding:0 !important;\n    margin:0 !important;\n}", ""]);
 
 // exports
 

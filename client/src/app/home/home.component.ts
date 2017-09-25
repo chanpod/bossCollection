@@ -6,7 +6,7 @@ import { GuildService } from '../services/guild.service';
 
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
  
-import {DialogOverviewExampleDialog} from './newTab.component';
+import {NewTabDialog} from './newTab.component';
 
 @Component({
     selector: 'app-home',
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
     }
 
     openNewTabDialog(): void {
-        let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+        let dialogRef = this.dialog.open(NewTabDialog, {
             width: '250px'            
         });
 

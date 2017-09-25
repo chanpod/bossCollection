@@ -19,6 +19,7 @@ export class ApiService {
   post(url, body) {
     return this.http.post(this.url + url, body)
       .map((res: Response) => res.json());
+      
   }
 
 }

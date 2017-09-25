@@ -14,8 +14,9 @@ import { MarkdownModule } from 'angular2-markdown';
 
 //Components
 import { LoginComponent } from './login/login.component';
+import { ResetPasswordDialogComponent } from './login/resetPasswordDialog.component';
 import { HomeComponent } from './home/home.component';
-import { DialogOverviewExampleDialog } from './home/newTab.component';
+import { NewTabDialog } from './home/newTab.component';
 
 //Routing
 import { RoutingModule } from './routing/routing.module';
@@ -28,19 +29,21 @@ import { GuildService } from './services/guild.service';
 import { BlizzardService } from './services/blizzard.service';
 
 //Modules
-import {ApplicationModule} from './application/application.module';
+import { ApplicationModule } from './application/application.module';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    DialogOverviewExampleDialog,
+    NewTabDialog,
     LayoutComponent,
-    LoginComponent    
+    LoginComponent,
+    ResetPasswordDialogComponent
   ],
   entryComponents: [
-    DialogOverviewExampleDialog
+    NewTabDialog,
+    ResetPasswordDialogComponent
   ],
   imports: [
     BrowserModule,

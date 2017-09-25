@@ -1,5 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
+html, 
+body {
+    height: 100%;    
+}
+
+
 body { 
     margin: 0;
     padding: 0;
@@ -12,3 +18,22 @@ hr {
     border-top: 1px solid rgba(0, 0, 0, .32);
     width: 100%
   }
+
+.backgroundFlair{
+    background-image: url('./assets/images/classBackdrops/demon hunter.jpg'); 
+}
+
+.backgroundBase{
+    width:100%; 
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.setHeightToMax {
+    height:100%;
+}
+
+.noPadding{
+    padding:0 !important;
+    margin:0 !important;
+}

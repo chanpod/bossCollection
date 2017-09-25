@@ -5,12 +5,12 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
     selector: 'newTabDialog',
     templateUrl: 'newTabDialog.html',
   })
-  export class DialogOverviewExampleDialog {
+  export class NewTabDialog {
 
     private title:string;
 
     constructor(
-      public dialogRef: MdDialogRef<DialogOverviewExampleDialog>,
+      public dialogRef: MdDialogRef<NewTabDialog>,
       // @Inject(MD_DIALOG_DATA) public data: any
     ) { }
   

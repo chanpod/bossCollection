@@ -45,12 +45,18 @@ export class UserService {
       password: password
     }
 
-    this.apiService.post(this.ACCOUNT_API_URL_BASE + "/login", body)
-      .subscribe((response) => {
+    return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/login", body);
+      
 
-        this.getUser();
-      })
+  }
 
+  resetPassword(email) {
+
+    let body = {
+      email: email
+    }
+
+    return this.apiService.post(this.ACCOUNT_API_URL_BASE + '/lost-password', body);
   }
 
   isGM() {

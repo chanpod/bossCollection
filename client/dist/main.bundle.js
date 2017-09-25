@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<layout></layout>\r\n<div class=\"row center-xs\">\r\n    <div class=\"col-xs-12 center-xs\">\r\n        <router-outlet></router-outlet>\r\n    </div>\r\n</div>"
+module.exports = "<layout></layout>\n<div class=\"row center-xs setHeightToMax noPadding\">\n    <div class=\"col-xs-12 center-xs setHeightToMax backgroundFlair backgroundBase noPadding\">\n        <router-outlet></router-outlet>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -106,15 +106,16 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_ngx_cookie__ = __webpack_require__("../../../../ngx-cookie/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_angular2_markdown__ = __webpack_require__("../../../../angular2-markdown/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__home_newTab_component__ = __webpack_require__("../../../../../src/app/home/newTab.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__routing_routing_module__ = __webpack_require__("../../../../../src/app/routing/routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__layout_layout_component__ = __webpack_require__("../../../../../src/app/layout/layout.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__ = __webpack_require__("../../../../../src/app/login/resetPasswordDialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__ = __webpack_require__("../../../../../src/app/home/newTab.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__routing_routing_module__ = __webpack_require__("../../../../../src/app/routing/routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__layout_layout_component__ = __webpack_require__("../../../../../src/app/layout/layout.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -137,6 +138,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 //Routing
 
 
@@ -156,32 +158,34 @@ AppModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
         declarations: [
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__home_home_component__["a" /* HomeComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__home_newTab_component__["a" /* DialogOverviewExampleDialog */],
-            __WEBPACK_IMPORTED_MODULE_15__layout_layout_component__["a" /* LayoutComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__login_login_component__["a" /* LoginComponent */]
+            __WEBPACK_IMPORTED_MODULE_13__home_home_component__["a" /* HomeComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
+            __WEBPACK_IMPORTED_MODULE_16__layout_layout_component__["a" /* LayoutComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__login_login_component__["a" /* LoginComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */]
         ],
         entryComponents: [
-            __WEBPACK_IMPORTED_MODULE_13__home_newTab_component__["a" /* DialogOverviewExampleDialog */]
+            __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
+            __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
             __WEBPACK_IMPORTED_MODULE_5__angular_material__["a" /* MaterialModule */],
             __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-            __WEBPACK_IMPORTED_MODULE_14__routing_routing_module__["a" /* RoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_15__routing_routing_module__["a" /* RoutingModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_9_ngx_cookie__["a" /* CookieModule */],
             __WEBPACK_IMPORTED_MODULE_10_angular2_markdown__["a" /* MarkdownModule */].forRoot(),
             __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_20__application_application_module__["a" /* ApplicationModule */]
+            __WEBPACK_IMPORTED_MODULE_21__application_application_module__["a" /* ApplicationModule */]
         ],
         providers: [
-            __WEBPACK_IMPORTED_MODULE_16__services_user_service__["a" /* UserService */],
-            __WEBPACK_IMPORTED_MODULE_17__services_api_service__["a" /* ApiService */],
-            __WEBPACK_IMPORTED_MODULE_18__services_guild_service__["a" /* GuildService */],
-            __WEBPACK_IMPORTED_MODULE_19__services_blizzard_service__["a" /* BlizzardService */]
+            __WEBPACK_IMPORTED_MODULE_17__services_user_service__["a" /* UserService */],
+            __WEBPACK_IMPORTED_MODULE_18__services_api_service__["a" /* ApiService */],
+            __WEBPACK_IMPORTED_MODULE_19__services_guild_service__["a" /* GuildService */],
+            __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__["a" /* BlizzardService */]
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -482,7 +486,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-app/view-app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\n  <div class=\"row col-xs-12 center-xs\">\n    <md-spinner *ngIf=\"loading\"></md-spinner>\n  </div>\n\n  <div class=\"col-xs-12\">\n\n    Name: {{app?.character}}\n    <br/>\n    Current Realm: {{app?.realm}}\n    <br/>\n    Previous Guild: {{app?.previousGuild}}\n    <br/>\n    Role: {{app?.desiredRole}}\n    <br/>\n    Comments: {{app?.comments}}\n    <br/>\n    <img src = \"http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}\" />\n    <br/>\n    Item Level: {{armoryData?.items.averageItemLevelEquipped}}\n  </div>\n\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n\r\n  <div class=\"col-xs-12\">\r\n\r\n    Name: {{app?.character}}\r\n    <br/>\r\n    Current Realm: {{app?.realm}}\r\n    <br/>\r\n    Previous Guild: {{app?.previousGuild}}\r\n    <br/>\r\n    Role: {{app?.desiredRole}}\r\n    <br/>\r\n    Comments: {{app?.comments}}\r\n    <br/>\r\n    <img src = \"http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}\" />\r\n    <br/>\r\n    Item Level: {{armoryData?.items.averageItemLevelEquipped}}\r\n  </div>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -568,7 +572,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-applications/view-applications.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\n  <div class=\"row col-xs-12 center-xs\">\n    <md-spinner *ngIf=\"loading\"></md-spinner>\n  </div>\n  <div class=\"col-xs-12 col-md-6\">\n\n\n    <md-table [dataSource]=\"applications\">\n\n      <ng-container mdColumnDef=\"Character\">\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\n        <md-cell *mdCellDef=\"let row\">\n          <div class=\"row center-xs middle-xs\">\n\n            <img src=\"assets/images/classIcons/images/class/64/{{row.character.class}}.png\" /> {{row.character}}\n\n          </div>\n        </md-cell>\n      </ng-container>\n\n      <ng-container mdColumnDef=\"Date Applied\">\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\n        <md-cell *mdCellDef=\"let row\"> {{row.dateApplied | date:'shortDate'}} </md-cell>\n      </ng-container>\n\n      <ng-container mdColumnDef=\"View Application\">\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\n        <md-cell *mdCellDef=\"let row\">\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\n        </md-cell>\n      </ng-container>\n\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\n\n    </md-table>\n  </div>\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n  <div class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row center-xs middle-xs\">\r\n\r\n            <img src=\"assets/images/classIcons/images/class/64/{{row.character.class}}.png\" /> {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\"> {{row.dateApplied | date:'shortDate'}} </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -680,7 +684,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase\" style = \"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n    <md-card>\r\n\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style = \"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n    <md-card>\r\n\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -732,7 +736,7 @@ var HomeComponent = (function () {
     };
     HomeComponent.prototype.openNewTabDialog = function () {
         var _this = this;
-        var dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_5__newTab_component__["a" /* DialogOverviewExampleDialog */], {
+        var dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_5__newTab_component__["a" /* NewTabDialog */], {
             width: '250px'
         });
         dialogRef.afterClosed().subscribe(function (result) {
@@ -801,7 +805,7 @@ var _a, _b, _c, _d;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DialogOverviewExampleDialog; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NewTabDialog; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -815,28 +819,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-var DialogOverviewExampleDialog = (function () {
-    function DialogOverviewExampleDialog(dialogRef) {
+var NewTabDialog = (function () {
+    function NewTabDialog(dialogRef) {
         this.dialogRef = dialogRef;
     }
-    DialogOverviewExampleDialog.prototype.onNoClick = function () {
+    NewTabDialog.prototype.onNoClick = function () {
         this.dialogRef.close(null);
     };
-    DialogOverviewExampleDialog.prototype.Cancel = function () {
+    NewTabDialog.prototype.Cancel = function () {
         this.dialogRef.close(null);
     };
-    DialogOverviewExampleDialog.prototype.Save = function () {
+    NewTabDialog.prototype.Save = function () {
         this.dialogRef.close(this.title);
     };
-    return DialogOverviewExampleDialog;
+    return NewTabDialog;
 }());
-DialogOverviewExampleDialog = __decorate([
+NewTabDialog = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'newTabDialog',
         template: __webpack_require__("../../../../../src/app/home/newTabDialog.html"),
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */]) === "function" && _a || Object])
-], DialogOverviewExampleDialog);
+], NewTabDialog);
 
 var _a;
 //# sourceMappingURL=newTab.component.js.map
@@ -871,7 +875,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/layout/layout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\"> Welcome {{user.name}} </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\r\n      <a md-button routerLink = \"\" style = \"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4\">\r\n\r\n      <div class=\"row end-xs\">\r\n        <button *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" (click)=\"logout()\"> Logout </button>\r\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n        <button *ngIf=\"user?.name != undefined\" md-raised-button color=\"accent\" routerLink=\"viewApplications\"> View Apps </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\"> Welcome  </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
 
 /***/ }),
 
@@ -948,7 +952,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n\r\n\r\n  <md-card>\r\n    <md-card-header>\r\n      <md-card-title>\r\n        <h2>Login </h2>\r\n      </md-card-title>\r\n    </md-card-header>\r\n\r\n    <hr />\r\n\r\n    <md-card-content>\r\n\r\n      <div class=\"row \">\r\n\r\n        <div class=\"xs-col-12\">\r\n          <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\r\n\r\n            <md-form-field class=\"col-xs-12\">\r\n              <input mdInput placeholder=\"username\" name=\"name\" formControlName=\"Name\" />\r\n            </md-form-field>\r\n\r\n            <md-form-field class=\"col-xs-12\">\r\n              <input mdInput placeholder=\"password\" type=\"password\" formControlName=\"Password\" />\r\n            </md-form-field>\r\n\r\n            <div class=\"col-xs-12 start-xs\">\r\n              <button md-raised-button (click)=\"login()\"> Login </button>\r\n            </div>\r\n          </form>\r\n        </div>\r\n\r\n      </div>\r\n    </md-card-content>\r\n  </md-card>\r\n\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\n\n  <md-card>\n    <md-card-header>\n      <md-card-title>\n        <h2>Login </h2>\n      </md-card-title>\n    </md-card-header>\n\n    <hr />\n\n\n\n    <div class=\"row \">\n\n      <div class=\"col-xs-11\">\n        <md-progress-bar *ngIf = \"loading\" mode=\"indeterminate\"></md-progress-bar>\n        <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\n\n          <md-form-field class=\"col-xs-12\">\n            <input mdInput placeholder=\"User Name\" name=\"name\" formControlName=\"Name\" />\n          </md-form-field>\n\n          <md-form-field class=\"col-xs-12\">\n            <input mdInput placeholder=\"Password\" type=\"password\" formControlName=\"Password\" />\n          </md-form-field>\n\n          <div class=\"col-xs-12 start-xs\">\n            <button md-raised-button (click)=\"login()\" color=\"primary\"> Login </button>\n            <button md-raised-button (click)=\"openResetEmailDialog()\" color=\"primary\"> Reset Password </button>\n          </div>\n        </form>\n      </div>\n\n    </div>\n\n  </md-card>\n\n</div>"
 
 /***/ }),
 
@@ -960,6 +964,91 @@ module.exports = "<div class=\"row center-xs\">\r\n\r\n\r\n  <md-card>\r\n    <m
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__resetPasswordDialog_component__ = __webpack_require__("../../../../../src/app/login/resetPasswordDialog.component.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+var LoginComponent = (function () {
+    function LoginComponent(userService, router, dialog, toastr) {
+        this.userService = userService;
+        this.router = router;
+        this.dialog = dialog;
+        this.toastr = toastr;
+    }
+    LoginComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loading = false;
+        this.LoginForm = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
+            Name: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
+            Password: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('')
+        });
+        this.userService.user.subscribe(function (user) {
+            if (user.name != undefined) {
+                _this.router.navigate(['']);
+            }
+        });
+    };
+    LoginComponent.prototype.openResetEmailDialog = function () {
+        var dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_6__resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */], {});
+        dialogRef.afterClosed().subscribe(function (result) {
+            if (result != null) {
+            }
+        });
+    };
+    LoginComponent.prototype.login = function () {
+        var _this = this;
+        this.loading = true;
+        this.userService.login(this.LoginForm.controls.Name.value, this.LoginForm.controls.Password.value)
+            .subscribe(function (response) {
+            _this.userService.getUser();
+            _this.loading = false;
+        }, function (error) {
+            _this.loading = false;
+            _this.toastr.error(error.json().message);
+        });
+    };
+    return LoginComponent;
+}());
+LoginComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-login',
+        template: __webpack_require__("../../../../../src/app/login/login.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/login/login.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_material__["b" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_material__["b" /* MdDialog */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _d || Object])
+], LoginComponent);
+
+var _a, _b, _c, _d;
+//# sourceMappingURL=login.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/login/resetPasswordDialog.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ResetPasswordDialogComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -974,39 +1063,52 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var LoginComponent = (function () {
-    function LoginComponent(userService, router) {
+var ResetPasswordDialogComponent = (function () {
+    function ResetPasswordDialogComponent(dialogRef, userService, toastr
+        // @Inject(MD_DIALOG_DATA) public data: any
+    ) {
+        this.dialogRef = dialogRef;
         this.userService = userService;
-        this.router = router;
+        this.toastr = toastr;
     }
-    LoginComponent.prototype.ngOnInit = function () {
+    ResetPasswordDialogComponent.prototype.onNoClick = function () {
+        this.dialogRef.close(null);
+    };
+    ResetPasswordDialogComponent.prototype.Cancel = function () {
+        this.dialogRef.close(null);
+    };
+    ResetPasswordDialogComponent.prototype.Save = function () {
+        this.dialogRef.close(this.title);
+    };
+    ResetPasswordDialogComponent.prototype.sendResetEmail = function () {
         var _this = this;
-        this.LoginForm = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
-            Name: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
-            Password: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('')
-        });
-        this.userService.user.subscribe(function (user) {
-            if (user.name != undefined) {
-                _this.router.navigate(['']);
-            }
+        this.userService.resetPassword(this.email)
+            .subscribe(function (response) {
+            _this.toastr.success("An email has been sent with your new temporary password.", "Password reset");
+            _this.dialogRef.close();
+        }, function (error) {
+            _this.toastr.error(error.json().message);
         });
     };
-    LoginComponent.prototype.login = function () {
-        this.userService.login(this.LoginForm.controls.Name.value, this.LoginForm.controls.Password.value);
-    };
-    return LoginComponent;
+    return ResetPasswordDialogComponent;
 }());
-LoginComponent = __decorate([
+ResetPasswordDialogComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'app-login',
-        template: __webpack_require__("../../../../../src/app/login/login.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/login/login.component.css")]
+        selector: 'resetPasswordDialog',
+        template: __webpack_require__("../../../../../src/app/login/resetPasswordDialog.html"),
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object])
-], LoginComponent);
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object])
+], ResetPasswordDialogComponent);
 
-var _a, _b;
-//# sourceMappingURL=login.component.js.map
+var _a, _b, _c;
+//# sourceMappingURL=resetPasswordDialog.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/login/resetPasswordDialog.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"light-theme\">\r\n\r\n    <md-form-field>\r\n        <input mdInput placeholder=\"Email\" [(ngModel)]=\"email\">\r\n    </md-form-field>\r\n\r\n    <div class=\"row between-xs\">\r\n        <button md-raised-button color=\"primary\" (click)=\"sendResetEmail()\"> Reset Password </button>\r\n        <button md-raised-button color=\"primary\" (click)=\"Cancel()\"> Cancel </button>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -1260,15 +1362,17 @@ var UserService = (function () {
         });
     };
     UserService.prototype.login = function (username, password) {
-        var _this = this;
         var body = {
             name: username,
             password: password
         };
-        this.apiService.post(this.ACCOUNT_API_URL_BASE + "/login", body)
-            .subscribe(function (response) {
-            _this.getUser();
-        });
+        return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/login", body);
+    };
+    UserService.prototype.resetPassword = function (email) {
+        var body = {
+            email: email
+        };
+        return this.apiService.post(this.ACCOUNT_API_URL_BASE + '/lost-password', body);
     };
     UserService.prototype.isGM = function () {
         var isValidGM = false;

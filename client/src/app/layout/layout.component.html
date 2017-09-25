@@ -1,10 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="dark-theme">
 
-  <md-toolbar color="primary" class="row center-xs">
+  <md-toolbar color="primary" class="row center-xs noPadding">
 
     <div class="col-xs-3 col-sm-4 hidden-xs row start-xs">
-      <span *ngIf="user?.name != undefined"> Welcome {{user.name}} </span>
+      <span *ngIf="user?.name != undefined"> Welcome  </span>
       <button *ngIf="user?.name == undefined" md-button routerLink=""> Home </button>
     </div>
 
@@ -13,16 +13,24 @@
     </div>
 
     <div class="col-xs-6 col-sm-4 center-xs">
-      <a md-button routerLink = "" style = "font-size: 20px;"> TBD </a>
+      <a md-button routerLink="" style="font-size: 20px;"> TBD </a>
     </div>
 
     <div class="col-xs-3 col-sm-4">
 
       <div class="row end-xs">
-        <button *ngIf="user?.name == undefined" md-raised-button color="accent" routerLink="login"> Login </button>
-        <button *ngIf="user?.name != undefined" md-raised-button color="accent" (click)="logout()"> Logout </button>
-        <button *ngIf="user?.name != undefined" md-raised-button color="accent" routerLink="createApplication"> Apply </button>
-        <button *ngIf="user?.name != undefined" md-raised-button color="accent" routerLink="viewApplications"> View Apps </button>
+
+        <button *ngIf="user?.name != undefined" style = "margin:5px;" md-raised-button [mdMenuTriggerFor]="menu" color="accent">
+            {{user.name}}
+            <md-icon>keyboard_arrow_down</md-icon>
+        </button>
+        <md-menu #menu="mdMenu">
+          <button  md-menu-item routerLink="viewApplications"> View Apps </button>
+          <button  md-menu-item (click)="logout()"> Logout </button>
+        </md-menu>
+
+        <button style = "margin:5px;" *ngIf="user?.name == undefined" md-raised-button color="accent" routerLink="login"> Login </button>
+        <button style = "margin:5px;" md-raised-button color="accent" routerLink="createApplication"> Apply </button>
       </div>
 
     </div>
