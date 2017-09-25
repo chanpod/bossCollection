@@ -343,29 +343,6 @@ var CreateApplicationComponent = (function () {
             comments: '',
             class: ''
         };
-        // character: String,
-        // class: String,
-        // realm: String,
-        // previousGuild: String,    
-        // role: String,
-        // comments: String,
-        // desiredRole: String,
-        // dateApplied: Date,
-        // guild: String,
-        // status: String    ,
-        // batteltag: String,
-        // aboutPage: Boolean,
-        // canYouMakeRaidTimes: Boolean,
-        // voiceCommunications: Boolean,
-        // uiScreenshot: String,
-        // logsLink: String,
-        // aboutYourself: String,
-        // raidExperience: String,
-        // prepareForNewEncounter: String,
-        // spec: String,
-        // flexibility: String,
-        // statPriority: String,
-        // rotation: String,
         this.CreateAppFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
             character: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', this.validateCharacter),
             realm: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["k" /* Validators */].required),
@@ -526,7 +503,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-app/view-app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n  <md-card>\r\n\r\n\r\n    <md-card-header>\r\n\r\n      <img md-card-avatar src=\"http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}\" />\r\n\r\n      <md-card-title>{{app?.character}}</md-card-title>\r\n      <md-card-subtitle>{{app?.class}}</md-card-subtitle>\r\n    </md-card-header>\r\n\r\n    <md-card-content class=\"col-xs-12 start-xs\">\r\n\r\n      <md-list>\r\n        <md-list-item>\r\n          <b>Item Level:</b>&nbsp; {{armoryData?.items.averageItemLevelEquipped}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Current Realm:</b>&nbsp; {{app?.realm}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Battle Tag:</b>&nbsp; {{app?.batteltag}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <md-checkbox [(ngModel)]=\"app.aboutPage\" disabled> Read About</md-checkbox>\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <md-checkbox [(ngModel)]=\"app.voiceCommunications\" disabled> Voice Communications Question</md-checkbox>\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <md-checkbox [(ngModel)]=\"app.canYouMakeRaidTimes\" disabled> Agreed to Raid Times</md-checkbox>\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Spec: </b>&nbsp; {{app?.spec}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Role: </b>&nbsp; {{app?.desiredRole}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Logs: </b>&nbsp; {{app?.logsLink}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>UI: </b>&nbsp; {{app?.uiScreenshot}}\r\n        </md-list-item>\r\n\r\n      </md-list>\r\n\r\n      <hr/>\r\n\r\n      <h3> Guild History </h3>\r\n      <span> {{app?.previousGuild}} </span>\r\n\r\n      <h3> Raid Experience </h3>\r\n      <span> {{app?.raidExperience}} </span>\r\n\r\n      <h3> Preparing for Encounter </h3>\r\n      <span> {{app?.prepareForNewEncounter}} </span>\r\n\r\n      <h3> Rotation </h3>\r\n      <span> {{app?.rotation}} </span>\r\n\r\n      <h3> Stat Priority </h3>\r\n      <span> {{app?.statPriority}} </span>\r\n\r\n      <h3> Spec Flexibility </h3>\r\n      <span> {{app?.flexibility}} </span>\r\n\r\n      <h3> About</h3>\r\n      <span> {{app?.aboutYourself}} </span>\r\n\r\n      <h3> Comments</h3>\r\n      <span> {{app?.comments}} </span>\r\n\r\n      <br/>\r\n\r\n    </md-card-content>\r\n\r\n    <md-card-actions>\r\n      <a color=\"primary\" md-raised-button href=\"{{armoryUrl(app?.realm, app?.character)}}\" target=\"_blank\">Armory</a>\r\n\r\n    </md-card-actions>\r\n\r\n  </md-card>\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <div class=\"row col-xs-12 center-xs\">\r\n    <md-spinner *ngIf=\"loading\"></md-spinner>\r\n  </div>\r\n\r\n  <md-card class = \"col-md-6 col-xs-12\">\r\n\r\n\r\n    <md-card-header>\r\n\r\n      <img md-card-avatar src=\"http://us.battle.net/static-render/us/{{armoryData?.thumbnail}}\" />\r\n\r\n      <md-card-title>{{app?.character}}</md-card-title>\r\n      <md-card-subtitle>{{app?.class}}</md-card-subtitle>\r\n    </md-card-header>\r\n\r\n    <md-card-content class=\"col-xs-12 start-xs\">\r\n\r\n      <md-list>\r\n        <md-list-item>\r\n          <b>Item Level:</b>&nbsp; {{armoryData?.items.averageItemLevelEquipped}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Current Realm:</b>&nbsp; {{app?.realm}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Battle Tag:</b>&nbsp; {{app?.batteltag}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <md-checkbox [(ngModel)]=\"app.aboutPage\" disabled> Read About</md-checkbox>\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <md-checkbox [(ngModel)]=\"app.voiceCommunications\" disabled> Voice Communications Question</md-checkbox>\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <md-checkbox [(ngModel)]=\"app.canYouMakeRaidTimes\" disabled> Agreed to Raid Times</md-checkbox>\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Spec: </b>&nbsp; {{app?.spec}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Role: </b>&nbsp; {{app?.desiredRole}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>Logs: </b>&nbsp; {{app?.logsLink}}\r\n        </md-list-item>\r\n\r\n        <md-list-item>\r\n          <b>UI: </b>&nbsp; {{app?.uiScreenshot}}\r\n        </md-list-item>\r\n\r\n      </md-list>\r\n\r\n      <hr/>\r\n\r\n      <h3> Guild History </h3>\r\n      <span> {{app?.previousGuild}} </span>\r\n\r\n      <h3> Raid Experience </h3>\r\n      <span> {{app?.raidExperience}} </span>\r\n\r\n      <h3> Preparing for Encounter </h3>\r\n      <span> {{app?.prepareForNewEncounter}} </span>\r\n\r\n      <h3> Rotation </h3>\r\n      <span> {{app?.rotation}} </span>\r\n\r\n      <h3> Stat Priority </h3>\r\n      <span> {{app?.statPriority}} </span>\r\n\r\n      <h3> Spec Flexibility </h3>\r\n      <span> {{app?.flexibility}} </span>\r\n\r\n      <h3> About</h3>\r\n      <span> {{app?.aboutYourself}} </span>\r\n\r\n      <h3> Comments</h3>\r\n      <span> {{app?.comments}} </span>\r\n\r\n      <br/>\r\n\r\n    </md-card-content>\r\n\r\n    <md-card-actions>\r\n      <a color=\"primary\" md-raised-button href=\"{{armoryUrl(app?.realm, app?.character)}}\" target=\"_blank\">Armory</a>\r\n\r\n    </md-card-actions>\r\n\r\n  </md-card>\r\n</div>"
 
 /***/ }),
 
@@ -560,6 +537,31 @@ var ViewAppComponent = (function () {
     }
     ViewAppComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.app = {
+            character: '',
+            class: '',
+            realm: '',
+            previousGuild: '',
+            role: '',
+            comments: '',
+            desiredRole: '',
+            dateApplied: '',
+            guild: '',
+            status: '',
+            batteltag: '',
+            aboutPage: false,
+            canYouMakeRaidTimes: false,
+            voiceCommunications: false,
+            uiScreenshot: '',
+            logsLink: '',
+            aboutYourself: '',
+            raidExperience: '',
+            prepareForNewEncounter: '',
+            spec: '',
+            flexibility: '',
+            statPriority: '',
+            rotation: ''
+        };
         this.route.params.subscribe(function (routeParams) {
             _this.appId = routeParams['appId'];
             _this.guildService.getApplication(_this.appId)
@@ -616,7 +618,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-applications/view-applications.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row center-xs middle-xs\">\r\n\r\n            <img src=\"assets/images/classIcons/images/class/64/{{row.character.class}}.png\" /> {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\"> {{row.dateApplied | date:'shortDate'}} </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row start-xs middle-xs\">\r\n\r\n            <img [src]=\"getUrl(row)\" /> &nbsp; {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">{{row.dateApplied | date:'shortDate'}}  </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -672,6 +674,9 @@ var ViewApplicationsComponent = (function () {
         }, function (error) {
             _this.loading = false;
         });
+    };
+    ViewApplicationsComponent.prototype.getUrl = function (row) {
+        return "assets/images/classIcons/images/class/64/" + row.class + ".png";
     };
     ViewApplicationsComponent.prototype.viewApp = function (app) {
         this.router.navigateByUrl("/viewApp/" + app._id);

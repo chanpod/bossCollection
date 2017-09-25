@@ -36,6 +36,10 @@ export class ViewApplicationsComponent implements OnInit {
       })
   }
 
+  getUrl(row){
+    return `assets/images/classIcons/images/class/64/${row.class}.png`
+  }
+
   viewApp(app) {
     this.router.navigateByUrl("/viewApp/" + app._id);
   }

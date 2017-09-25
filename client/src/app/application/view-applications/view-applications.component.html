@@ -10,9 +10,9 @@
       <ng-container mdColumnDef="Character">
         <md-header-cell *mdHeaderCellDef> Character </md-header-cell>
         <md-cell *mdCellDef="let row">
-          <div class="row center-xs middle-xs">
+          <div class="row start-xs middle-xs">
 
-            <img src="assets/images/classIcons/images/class/64/{{row.character.class}}.png" /> {{row.character}}
+            <img [src]="getUrl(row)" /> &nbsp; {{row.character}}
 
           </div>
         </md-cell>
@@ -20,7 +20,7 @@
 
       <ng-container mdColumnDef="Date Applied">
         <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>
-        <md-cell *mdCellDef="let row"> {{row.dateApplied | date:'shortDate'}} </md-cell>
+        <md-cell *mdCellDef="let row">{{row.dateApplied | date:'shortDate'}}  </md-cell>
       </ng-container>
 
       <ng-container mdColumnDef="View Application">

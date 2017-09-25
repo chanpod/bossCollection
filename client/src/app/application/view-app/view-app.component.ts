@@ -13,15 +13,69 @@ import { BlizzardService } from '../../services/blizzard.service';
 export class ViewAppComponent implements OnInit {
 
   appId: string;
-  app: any;
+  app: {
+    character: string,
+    class: string,
+    realm: string,
+    previousGuild: string,
+    role: string,
+    comments: string,
+    desiredRole: string,
+    dateApplied: string,
+    guild: string,
+    status: string,
+    batteltag: string,
+    aboutPage: boolean,
+    canYouMakeRaidTimes: boolean,
+    voiceCommunications: boolean,
+    uiScreenshot: string,
+    logsLink: string,
+    aboutYourself: string,
+    raidExperience: string,
+    prepareForNewEncounter: string,
+    spec: string,
+    flexibility: string,
+    statPriority: string,
+    rotation: string
+  };
   armoryData: any;
+
   constructor(
     private route: ActivatedRoute,
     private guildService: GuildService,
     private blizzardService: BlizzardService
-  ) { }
+  ) {
+
+  }
 
   ngOnInit() {
+
+    this.app = {
+      character: '',
+      class: '',
+      realm: '',
+      previousGuild: '',
+      role: '',
+      comments: '',
+      desiredRole: '',
+      dateApplied: '',
+      guild: '',
+      status: '',
+      batteltag: '',
+      aboutPage: false,
+      canYouMakeRaidTimes: false,
+      voiceCommunications: false,
+      uiScreenshot: '',
+      logsLink: '',
+      aboutYourself: '',
+      raidExperience: '',
+      prepareForNewEncounter: '',
+      spec: '',
+      flexibility: '',
+      statPriority: '',
+      rotation: ''
+    };
+
     this.route.params.subscribe((routeParams) => {
       this.appId = routeParams['appId'];
 

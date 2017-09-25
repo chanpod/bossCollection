@@ -64,29 +64,7 @@ export class CreateApplicationComponent implements OnInit {
       class: ''
     };
 
-    // character: String,
-    // class: String,
-    // realm: String,
-    // previousGuild: String,    
-    // role: String,
-    // comments: String,
-    // desiredRole: String,
-    // dateApplied: Date,
-    // guild: String,
-    // status: String    ,
-    // batteltag: String,
-    // aboutPage: Boolean,
-    // canYouMakeRaidTimes: Boolean,
-    // voiceCommunications: Boolean,
-    // uiScreenshot: String,
-    // logsLink: String,
-    // aboutYourself: String,
-    // raidExperience: String,
-    // prepareForNewEncounter: String,
-    // spec: String,
-    // flexibility: String,
-    // statPriority: String,
-    // rotation: String,
+
 
     this.CreateAppFormGroup = new FormGroup({
       character: new FormControl('', this.validateCharacter),
