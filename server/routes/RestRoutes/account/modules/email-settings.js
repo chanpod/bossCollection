@@ -3,7 +3,7 @@ module.exports = {
 	
 	host		: 'smtp.gmail.com',
 	user 		: 'mkdir.bosscollection@gmail.com',
-	password 	: 'amanda18',
+	password 	: 'ppRB3ge20',
 	sender		: 'mkdir BossCollection <mkdir.bosscollection@gmail.com>'
 	
 }
