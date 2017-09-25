@@ -1,6 +1,10 @@
 .commentsInput{
-    min-height:200px;
+    min-height:150px;
     min-width:100%;
+}
+
+.formPadding{
+    padding:15px;
 }
 
 .redIcon{

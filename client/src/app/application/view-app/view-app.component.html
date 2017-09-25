@@ -17,20 +17,70 @@
 
       <md-list>
         <md-list-item>
-          Item Level: {{armoryData?.items.averageItemLevelEquipped}}
+          <b>Item Level:</b>&nbsp; {{armoryData?.items.averageItemLevelEquipped}}
         </md-list-item>
+
         <md-list-item>
-          Current Realm: {{app?.realm}}
+          <b>Current Realm:</b>&nbsp; {{app?.realm}}
         </md-list-item>
+
         <md-list-item>
-          Previous Guild: {{app?.previousGuild}}
+          <b>Battle Tag:</b>&nbsp; {{app?.batteltag}}
         </md-list-item>
+
         <md-list-item>
-          Role: {{app?.desiredRole}}
+          <md-checkbox [(ngModel)]="app.aboutPage" disabled> Read About</md-checkbox>
         </md-list-item>
-        
+
+        <md-list-item>
+          <md-checkbox [(ngModel)]="app.voiceCommunications" disabled> Voice Communications Question</md-checkbox>
+        </md-list-item>
+
+        <md-list-item>
+          <md-checkbox [(ngModel)]="app.canYouMakeRaidTimes" disabled> Agreed to Raid Times</md-checkbox>
+        </md-list-item>
+
+        <md-list-item>
+          <b>Spec: </b>&nbsp; {{app?.spec}}
+        </md-list-item>
+
+        <md-list-item>
+          <b>Role: </b>&nbsp; {{app?.desiredRole}}
+        </md-list-item>
+
+        <md-list-item>
+          <b>Logs: </b>&nbsp; {{app?.logsLink}}
+        </md-list-item>
+
+        <md-list-item>
+          <b>UI: </b>&nbsp; {{app?.uiScreenshot}}
+        </md-list-item>
+
       </md-list>
-      
+
+      <hr/>
+
+      <h3> Guild History </h3>
+      <span> {{app?.previousGuild}} </span>
+
+      <h3> Raid Experience </h3>
+      <span> {{app?.raidExperience}} </span>
+
+      <h3> Preparing for Encounter </h3>
+      <span> {{app?.prepareForNewEncounter}} </span>
+
+      <h3> Rotation </h3>
+      <span> {{app?.rotation}} </span>
+
+      <h3> Stat Priority </h3>
+      <span> {{app?.statPriority}} </span>
+
+      <h3> Spec Flexibility </h3>
+      <span> {{app?.flexibility}} </span>
+
+      <h3> About</h3>
+      <span> {{app?.aboutYourself}} </span>
+
       <h3> Comments</h3>
       <span> {{app?.comments}} </span>
 
@@ -39,7 +89,7 @@
     </md-card-content>
 
     <md-card-actions>
-      <a color = "primary" md-raised-button href="{{armoryUrl(app?.realm, app?.character)}}" target="_blank">Armory</a>
+      <a color="primary" md-raised-button href="{{armoryUrl(app?.realm, app?.character)}}" target="_blank">Armory</a>
 
     </md-card-actions>
 

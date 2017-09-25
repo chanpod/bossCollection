@@ -64,12 +64,49 @@ export class CreateApplicationComponent implements OnInit {
       class: ''
     };
 
+    // character: String,
+    // class: String,
+    // realm: String,
+    // previousGuild: String,    
+    // role: String,
+    // comments: String,
+    // desiredRole: String,
+    // dateApplied: Date,
+    // guild: String,
+    // status: String    ,
+    // batteltag: String,
+    // aboutPage: Boolean,
+    // canYouMakeRaidTimes: Boolean,
+    // voiceCommunications: Boolean,
+    // uiScreenshot: String,
+    // logsLink: String,
+    // aboutYourself: String,
+    // raidExperience: String,
+    // prepareForNewEncounter: String,
+    // spec: String,
+    // flexibility: String,
+    // statPriority: String,
+    // rotation: String,
+
     this.CreateAppFormGroup = new FormGroup({
       character: new FormControl('', this.validateCharacter),
-      realm: new FormControl(),
-      previousGuild: new FormControl(),
+      realm: new FormControl('', Validators.required),
+      previousGuild: new FormControl('', Validators.required),
       desiredRole: new FormControl('', Validators.required),
-      comments: new FormControl()
+      comments: new FormControl('', Validators.required),
+      batteltag: new FormControl('', Validators.required),
+      aboutPage: new FormControl('', Validators.required),
+      canYouMakeRaidTimes: new FormControl('', Validators.required),
+      voiceCommunications: new FormControl('', Validators.required),
+      uiScreenshot: new FormControl('', Validators.required),
+      logsLink: new FormControl('', Validators.required),
+      aboutYourself: new FormControl('', Validators.required),
+      raidExperience: new FormControl('', Validators.required),
+      prepareForNewEncounter: new FormControl('', Validators.required),
+      spec: new FormControl('', Validators.required),
+      flexibility: new FormControl('', Validators.required),
+      statPriority: new FormControl('', Validators.required),
+      rotation: new FormControl('', Validators.required)
     })
 
     this.blizzardService.getRealms()

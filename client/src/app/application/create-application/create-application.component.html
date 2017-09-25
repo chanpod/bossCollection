@@ -9,38 +9,30 @@
     </div>
     <div class="col-xs-11 col-md-12 row center-xs">
 
-        <form [formGroup]="CreateAppFormGroup" class="row center-xs">
-            <div class="col-xs-12 center-xs row">
+        <md-card class="col-xs-12 col-md-6 ">
+            <md-card-content>
 
-                <md-card class="col-xs-12 col-md-6 ">
+                <form [formGroup]="CreateAppFormGroup" class="row center-xs">
 
-                    <md-form-field class = "fullWidthField">
+                    <md-form-field class="fullWidthField col-xs-12">
                         <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="character"
                         />
                     </md-form-field>
-                    
-                </md-card>
-            </div>
-
-            <div class="col-xs-12 center-xs row">
-
-                <md-card class="col-xs-12 col-md-6 ">
 
 
-                    <md-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField" placeholder="Select Realm">
+
+
+
+
+                    <md-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField col-xs-12 formPadding" placeholder="Select Realm">
                         <md-option *ngFor="let realm of realms" [value]="realm.name">
                             {{ realm.name }}
                         </md-option>
                     </md-select>
 
-                </md-card>
-            </div>
 
-            <div class="col-xs-12 center-xs row">
 
-                <md-card class="col-xs-12 col-md-6">
-
-                    <md-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField">
+                    <md-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField col-xs-12 formPadding">
 
                         <md-option value="Ranged DPS">
                             Ranged DPS
@@ -60,36 +52,88 @@
 
                     </md-select>
 
-                </md-card>
-            </div>
 
-            <div class="col-xs-12 center-xs row">
-
-                <md-card class="col-xs-12 col-md-6 ">
-
-                    <md-form-field class="fullWidthField">
-                        <input mdInput placeholder="Previous Guild" name="previousGuild" formControlName="previousGuild" />
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input mdInput placeholder="Guild History" name="previousGuild" formControlName="previousGuild" />
                     </md-form-field>
 
-                </md-card>
-            </div>
-
-            <div class="col-xs-12 center-xs row">
-
-                <md-card class="col-xs-12 col-md-6 row">
-                    <md-form-field class="fullWidthField">
-                        <textarea class="commentsInput" mdInput placeholder="Tell us about yourself" name="desiredRole" formControlName="comments"> </textarea>
-
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="Screenshot of your UI" mdInput name="batteltag" formControlName="uiScreenshot" />
                     </md-form-field>
-                </md-card>
-            </div>
 
-            <div class="col-xs-12 center-xs row">
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="Link recent tier logs" mdInput name="batteltag" formControlName="logsLink" />
+                    </md-form-field>
 
-                <md-card class="col-xs-12 col-md-6 row">
-                <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary" (click)="submitApplication()"> Submit </button>
-                </md-card>  
-            </div>
-        </form>
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="Battle.net tag" mdInput name="batteltag" formControlName="batteltag" />
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="What spec do you currently play?" mdInput name="spec" formControlName="spec" />
+                    </md-form-field>
+
+
+
+                    <section class="fullWidthField col-xs-12 formPadding start-xs">
+                        <md-checkbox formControlName="aboutPage">I've read the about page</md-checkbox>
+                    </section>
+
+                    <section class="fullWidthField col-xs-12 formPadding start-xs">
+                        <md-checkbox formControlName="canYouMakeRaidTimes">I can make raid times at near 100%</md-checkbox>
+                    </section>
+
+                    <section class="fullWidthField col-xs-12 formPadding start-xs">
+                        <md-checkbox formControlName="voiceCommunications">We expect raiders to be able to speak clearly and effectively via voice (Discord) to discuss strategies,
+                            ask questions, and communicate during fights. Do you have a working mic with minimal noise/interference
+                            and the ability/willingness to interact with the rest of the guild during raid?</md-checkbox>
+                    </section>
+
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <h4> Do you utilize your other specs/talents on a fight by fight basis? Are you willing to maintain multiple
+                            sets of gear that are advantageous for your different specializations?</h4>
+
+                        <textarea class="commentsInput" mdInput name="flexibility" formControlName="flexibility"> </textarea>
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <h4> List and detail which gems and enchants that you currently utilize for your spec. Are they optimal
+                            for your current spec? What are your stat priorities? Why?</h4>
+
+                        <textarea class="commentsInput" mdInput name="statPriority" formControlName="statPriority"> </textarea>
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                        <h4> Please describe your opener and rotation in detail. How does your rotation differ on a movement-heavy
+                            encounter from a Patchwerk-style fight?</h4>
+
+                        <textarea class="commentsInput" mdInput name="rotation" formControlName="rotation"> </textarea>
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" mdInput placeholder="How do you prepare for a new encounter?" name="prepareForNewEncounter"
+                            formControlName="prepareForNewEncounter"> </textarea>
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" mdInput placeholder="Tell us about yourself" name="aboutYourself" formControlName="aboutYourself"> </textarea>
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" mdInput placeholder="Past Raiding experience?" name="raidExperience" formControlName="raidExperience"> </textarea>
+                    </md-form-field>
+
+                    <md-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" mdInput placeholder="Anything else you'd like to add?" name="comments" formControlName="comments"> </textarea>
+                    </md-form-field>
+
+
+
+                    <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary" (click)="submitApplication()"> Submit </button>
+
+                </form>
+
+            </md-card-content>
+        </md-card>
     </div>
 </div>
