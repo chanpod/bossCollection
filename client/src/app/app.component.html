@@ -1,6 +1,48 @@
-<layout></layout>
-<div class="row center-xs setHeightToMax noPadding">
-    <div class="col-xs-12 center-xs setHeightToMax noPadding">
-        <router-outlet></router-outlet>
+<md-sidenav-container class="example-container">
+
+    <md-sidenav #sidenav class="example-sidenav">
+
+        <div class="dark-theme">
+
+            <md-toolbar color="primary">
+                Menu
+            </md-toolbar>
+
+        </div>
+        <md-nav-list>
+            <md-list-item routerLink="" (click)="sidenav.close()">
+                <button md-icon-button><md-icon>home</md-icon></button>
+                <a md-list-item > Home </a>
+            </md-list-item>
+
+            <md-list-item routerLink="createApplication" (click)="sidenav.close()">
+                <button md-icon-button><md-icon>games</md-icon></button>
+                <a md-list-item> Apply </a>
+            </md-list-item>
+
+
+            <md-list-item routerLink="viewApplications" (click)="sidenav.close()">
+                <button md-icon-button><md-icon>view_list</md-icon></button>
+                <a md-list-item> View Apps </a>
+            </md-list-item>
+
+            <md-list-item *ngIf="!loggedIn()" (click)="sidenav.close()" routerLink="login">
+                <button md-icon-button><md-icon>account_circle</md-icon></button>
+                <a md-list-item> Login </a>
+            </md-list-item>
+
+            <md-list-item *ngIf="loggedIn()" (click)="logout()">
+                <button md-icon-button><md-icon>exit_to_app</md-icon></button>
+                <a md-menu-item> Logout </a>
+            </md-list-item>
+
+        </md-nav-list>
+    </md-sidenav>
+
+    <layout [sidenav]="sidenav"></layout>
+    <div class="row center-xs setHeightToMax noPadding">
+        <div class="col-xs-12 center-xs setHeightToMax noPadding">
+            <router-outlet></router-outlet>
+        </div>
     </div>
-</div>
+</md-sidenav-container>

@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<layout></layout>\n<div class=\"row center-xs setHeightToMax noPadding\">\n    <div class=\"col-xs-12 center-xs setHeightToMax noPadding\">\n        <router-outlet></router-outlet>\n    </div>\n</div>"
+module.exports = "<md-sidenav-container class=\"example-container\">\n\n    <md-sidenav #sidenav class=\"example-sidenav\">\n\n        <div class=\"dark-theme\">\n\n            <md-toolbar color=\"primary\">\n                Menu\n            </md-toolbar>\n\n        </div>\n        <md-nav-list>\n            <md-list-item routerLink=\"\" (click)=\"sidenav.close()\">\n                <button md-icon-button><md-icon>home</md-icon></button>\n                <a md-list-item > Home </a>\n            </md-list-item>\n\n            <md-list-item routerLink=\"createApplication\" (click)=\"sidenav.close()\">\n                <button md-icon-button><md-icon>games</md-icon></button>\n                <a md-list-item> Apply </a>\n            </md-list-item>\n\n\n            <md-list-item routerLink=\"viewApplications\" (click)=\"sidenav.close()\">\n                <button md-icon-button><md-icon>view_list</md-icon></button>\n                <a md-list-item> View Apps </a>\n            </md-list-item>\n\n            <md-list-item *ngIf=\"!loggedIn()\" (click)=\"sidenav.close()\" routerLink=\"login\">\n                <button md-icon-button><md-icon>account_circle</md-icon></button>\n                <a md-list-item> Login </a>\n            </md-list-item>\n\n            <md-list-item *ngIf=\"loggedIn()\" (click)=\"logout()\">\n                <button md-icon-button><md-icon>exit_to_app</md-icon></button>\n                <a md-menu-item> Logout </a>\n            </md-list-item>\n\n        </md-nav-list>\n    </md-sidenav>\n\n    <layout [sidenav]=\"sidenav\"></layout>\n    <div class=\"row center-xs setHeightToMax noPadding\">\n        <div class=\"col-xs-12 center-xs setHeightToMax noPadding\">\n            <router-outlet></router-outlet>\n        </div>\n    </div>\n</md-sidenav-container>"
 
 /***/ }),
 
@@ -71,6 +71,12 @@ var AppComponent = (function () {
         this.userService.getUser();
         this.toastr.setRootViewContainerRef(vRef);
     }
+    AppComponent.prototype.logout = function () {
+        this.userService.logout();
+    };
+    AppComponent.prototype.loggedIn = function () {
+        return this.userService.user.value.name != undefined;
+    };
     return AppComponent;
 }());
 AppComponent = __decorate([
@@ -618,7 +624,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-applications/view-applications.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row start-xs middle-xs\">\r\n\r\n            <img [src]=\"getUrl(row)\" /> &nbsp; {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">{{row.dateApplied | date:'shortDate'}}  </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row start-xs middle-xs\">\r\n\r\n            <img [src]=\"getUrl(row)\" /> &nbsp; {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">{{row.dateApplied | date:'shortDate'}}  </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n          <button (click)=\"viewApp(row)\" md-icon-button color=\"warning\"> <md-icon>delete</md-icon> </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -733,7 +739,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style = \"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n    <md-card>\r\n\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button md-icon-button *ngIf=\"!editingTab\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" (click) = \"toggleEditing()\">edit</md-icon>\r\n                    </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button>\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\" (click) = \"deleteTab(i)\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style = \"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n    <md-card>\r\n\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button aria-label=\"editButton\" id = \"editButton\" md-icon-button *ngIf=\"!editingTab\" (click) = \"toggleEditing()\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" >edit</md-icon>\r\n                    </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button (click) = \"deleteTab(i)\">\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -924,7 +930,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/layout/layout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\"> Welcome  </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs\">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\">   </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n        <a md-icon-button (click)=\"sidenav.open()\" style=\"font-size: 20px;\"> <md-icon>menu</md-icon> </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs \">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
 
 /***/ }),
 
@@ -970,6 +976,7 @@ LayoutComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'layout',
         template: __webpack_require__("../../../../../src/app/layout/layout.component.html"),
+        inputs: ['sidenav'],
         styles: [__webpack_require__("../../../../../src/app/layout/layout.component.css")]
     }),
     __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */]) === "function" && _a || Object])
@@ -1553,20 +1560,124 @@ var environment = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__("../../../platform-browser-dynamic/@angular/platform-browser-dynamic.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__("../../../../../src/app/app.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills_ts__ = __webpack_require__("../../../../../src/polyfills.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser_dynamic__ = __webpack_require__("../../../platform-browser-dynamic/@angular/platform-browser-dynamic.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_app_module__ = __webpack_require__("../../../../../src/app/app.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
 
 
 
 
-if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["enableProdMode"])();
+
+if (__WEBPACK_IMPORTED_MODULE_4__environments_environment__["a" /* environment */].production) {
+    Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["enableProdMode"])();
 }
-Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
+Object(__WEBPACK_IMPORTED_MODULE_2__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_3__app_app_module__["a" /* AppModule */])
     .catch(function (err) { return console.log(err); });
 //# sourceMappingURL=main.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/polyfills.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol__ = __webpack_require__("../../../../core-js/es6/symbol.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_core_js_es6_symbol__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_es6_object__ = __webpack_require__("../../../../core-js/es6/object.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_core_js_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_core_js_es6_object__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_es6_function__ = __webpack_require__("../../../../core-js/es6/function.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_core_js_es6_function___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_core_js_es6_function__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int__ = __webpack_require__("../../../../core-js/es6/parse-int.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_core_js_es6_parse_int__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float__ = __webpack_require__("../../../../core-js/es6/parse-float.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_core_js_es6_parse_float__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_core_js_es6_number__ = __webpack_require__("../../../../core-js/es6/number.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_core_js_es6_number___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_core_js_es6_number__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_core_js_es6_math__ = __webpack_require__("../../../../core-js/es6/math.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_core_js_es6_math___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_core_js_es6_math__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_core_js_es6_string__ = __webpack_require__("../../../../core-js/es6/string.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_core_js_es6_string___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_core_js_es6_string__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_core_js_es6_date__ = __webpack_require__("../../../../core-js/es6/date.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_core_js_es6_date___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_core_js_es6_date__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_core_js_es6_array__ = __webpack_require__("../../../../core-js/es6/array.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_core_js_es6_array___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_core_js_es6_array__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp__ = __webpack_require__("../../../../core-js/es6/regexp.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_core_js_es6_regexp__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_core_js_es6_map__ = __webpack_require__("../../../../core-js/es6/map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_core_js_es6_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_core_js_es6_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_core_js_es6_weak_map__ = __webpack_require__("../../../../core-js/es6/weak-map.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_core_js_es6_weak_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_core_js_es6_weak_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_core_js_es6_set__ = __webpack_require__("../../../../core-js/es6/set.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_core_js_es6_set___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_core_js_es6_set__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_core_js_es6_reflect__ = __webpack_require__("../../../../core-js/es6/reflect.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_core_js_es6_reflect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14_core_js_es6_reflect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_core_js_es7_reflect__ = __webpack_require__("../../../../core-js/es7/reflect.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_core_js_es7_reflect___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_core_js_es7_reflect__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_zone_js_dist_zone__ = __webpack_require__("../../../../zone.js/dist/zone.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16_zone_js_dist_zone___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_16_zone_js_dist_zone__);
+/**
+ * This file includes polyfills needed by Angular and is loaded before the app.
+ * You can add your own extra polyfills to this file.
+ *
+ * This file is divided into 2 sections:
+ *   1. Browser polyfills. These are applied before loading ZoneJS and are sorted by browsers.
+ *   2. Application imports. Files imported after ZoneJS that should be loaded before your main
+ *      file.
+ *
+ * The current setup is for so-called "evergreen" browsers; the last versions of browsers that
+ * automatically update themselves. This includes Safari >= 10, Chrome >= 55 (including Opera),
+ * Edge >= 13 on the desktop, and iOS 10 and Chrome on mobile.
+ *
+ * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
+ */
+/***************************************************************************************************
+ * BROWSER POLYFILLS
+ */
+/** IE9, IE10 and IE11 requires all of the following polyfills. **/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** IE10 and IE11 requires the following for NgClass support on SVG elements */
+// import 'classlist.js';  // Run `npm install --save classlist.js`.
+/** Evergreen browsers require these. **/
+
+
+/**
+ * Required to support Web Animations `@angular/animation`.
+ * Needed for: All but Chrome, Firefox and Opera. http://caniuse.com/#feat=web-animation
+ **/
+// import 'web-animations-js';  // Run `npm install --save web-animations-js`.
+/***************************************************************************************************
+ * Zone JS is required by Angular itself.
+ */
+ // Included with Angular CLI.
+/***************************************************************************************************
+ * APPLICATION IMPORTS
+ */
+/**
+ * Date, currency, decimal and percent pipes.
+ * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
+ */
+// import 'intl';  // Run `npm install --save intl`.
+/**
+ * Need to import at least one locale-data with intl.
+ */
+// import 'intl/locale-data/jsonp/en';
+//# sourceMappingURL=polyfills.js.map
 
 /***/ }),
 

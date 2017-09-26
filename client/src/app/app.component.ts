@@ -12,11 +12,20 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 })
 export class AppComponent {
   title = 'app';
+  
 
   constructor(private userService: UserService, private toastr: ToastsManager, vRef: ViewContainerRef) {
-    this.userService.getUser();
-    this.toastr.setRootViewContainerRef(vRef);
 
+    this.userService.getUser();
+    this.toastr.setRootViewContainerRef(vRef);  
+  }
+
+  logout(){
+    this.userService.logout();
+  }
+
+  loggedIn() {
+    return this.userService.user.value.name != undefined;
   }
 
 }

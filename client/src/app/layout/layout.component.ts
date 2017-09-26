@@ -8,6 +8,7 @@ import { UserService } from '../services/user.service';
 @Component({
   selector: 'layout',
   templateUrl: './layout.component.html',
+  inputs: ['sidenav'],
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent implements OnInit {

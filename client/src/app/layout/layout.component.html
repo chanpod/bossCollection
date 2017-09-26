@@ -4,19 +4,19 @@
   <md-toolbar color="primary" class="row center-xs noPadding">
 
     <div class="col-xs-3 col-sm-4 hidden-xs row start-xs">
-      <span *ngIf="user?.name != undefined"> Welcome  </span>
+      <span *ngIf="user?.name != undefined">   </span>
       <button *ngIf="user?.name == undefined" md-button routerLink=""> Home </button>
     </div>
 
     <div class="col-xs-3 hidden-sm hidden-md hidden-lg">
-
+        <a md-icon-button (click)="sidenav.open()" style="font-size: 20px;"> <md-icon>menu</md-icon> </a>
     </div>
 
-    <div class="col-xs-6 col-sm-4 center-xs">
+    <div class="col-xs-6 col-sm-4 center-xs ">
       <a md-button routerLink="" style="font-size: 20px;"> TBD </a>
     </div>
 
-    <div class="col-xs-3 col-sm-4">
+    <div class="col-xs-3 col-sm-4 hidden-xs">
 
       <div class="row end-xs">
 

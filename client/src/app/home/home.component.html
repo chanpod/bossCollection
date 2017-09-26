@@ -37,8 +37,8 @@
 
               <md-card-actions *ngIf="userService.isGM()">
 
-                <button md-icon-button *ngIf="!editingTab">
-                      <md-icon class="md-24" aria-label="edit icon" (click) = "toggleEditing()">edit</md-icon>
+                <button aria-label="editButton" id = "editButton" md-icon-button *ngIf="!editingTab" (click) = "toggleEditing()">
+                      <md-icon class="md-24" aria-label="edit icon" >edit</md-icon>
                     </button>
 
                 <button md-icon-button *ngIf="editingTab" (click)="saveTabs()">
@@ -49,8 +49,8 @@
                           <md-icon mdTooltip="Cancel" class="md-24" aria-label="cancel icon">cancel</md-icon>
                       </button>
 
-                <button md-icon-button>
-                          <md-icon class="md-24" aria-label="delete icon" (click) = "deleteTab(i)">delete</md-icon>
+                <button md-icon-button (click) = "deleteTab(i)">
+                          <md-icon class="md-24" aria-label="delete icon">delete</md-icon>
                       </button>
 
 

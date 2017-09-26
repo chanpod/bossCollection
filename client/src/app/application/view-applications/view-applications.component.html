@@ -27,8 +27,11 @@
         <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>
         <md-cell *mdCellDef="let row">
           <button (click)="viewApp(row)" md-raised-button color="primary"> View </button>
+          <button (click)="viewApp(row)" md-icon-button color="warning"> <md-icon>delete</md-icon> </button>
         </md-cell>
       </ng-container>
+
+
 
       <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
       <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
