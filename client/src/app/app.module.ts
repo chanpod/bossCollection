@@ -30,6 +30,7 @@ import { BlizzardService } from './services/blizzard.service';
 
 //Modules
 import { ApplicationModule } from './application/application.module';
+import { AccountComponent } from './account/account.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { ApplicationModule } from './application/application.module';
     NewTabDialog,
     LayoutComponent,
     LoginComponent,
-    ResetPasswordDialogComponent
+    ResetPasswordDialogComponent,
+    AccountComponent
   ],
   entryComponents: [
     NewTabDialog,

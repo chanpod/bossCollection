@@ -12,8 +12,8 @@ var _ = require('lodash');
 var path = require('path')
 
 // main login page //
-    
-    
+
+
 router.use(function (req, res, next) {
 
     next();
@@ -22,22 +22,22 @@ router.use(function (req, res, next) {
 /**
  * Update users avatar.
  */
-router.post('/user/:userName/avatar/:avatarUrl', function(req, res){
-    
+router.post('/user/:userName/avatar/:avatarUrl', function (req, res) {
+
     var userName = req.params.userName;
     var avatarUrl = req.params.userName;
-    
+
     AM.updateAvatarUrl(userName, avatarUrl)
         .then(response => res.status(200).send(response))
         .fail(err => res.status(400).send(err))
 })
 
-router.get('/user/:userName/avatar', function(req, res){
-    
+router.get('/user/:userName/avatar', function (req, res) {
+
     var userName = req.params.userName;
 
     if (util.userExist(req)) {
-        
+
         AM.getAvatarUrl(userName)
             .then(function (response) {
                 res.status(200).send(response);
@@ -87,7 +87,7 @@ router.post('/logout', function (req, res) {
 })
 
 router.get('/login', function (req, res) {
-   
+
     // attempt automatic login //
     console.log("auto logging in");
     AM.autoLogin(req.cookies.name, req.cookies.password, function (user) {
@@ -107,7 +107,7 @@ router.get('/login', function (req, res) {
             //res.redirect('/');
         } else {
             console.log("Log in failed...");
-            
+
             res.render('index', { title: 'Hello - Please Login To Your Account' });
         }
     })
@@ -122,17 +122,17 @@ router.post('/login', function (req, res) {
     AM.manualLogin(req.body.name, req.body.password)
         .then(function (user) {
 
-            
+
 
             req.session.user = user;
-            
+
             setUser(req, res)
                 .then(function (result) {
-                    
+
                     return util.saveSession(req, res)
                 })
-                .then(function(){
-                    
+                .then(function () {
+
                     res.cookie('user', req.session.user, { maxAge: 900000 });
                     res.status(200).send(req.session.user);
                 })
@@ -148,9 +148,9 @@ router.post('/login', function (req, res) {
             res.status(400).send(util.handleErrors(err));
         })
 });
-	
+
 // logged-in user homepage //
-	
+
 router.get('/forum', function (req, res) {
     console.log("auth /forum")
     if (req.session.user == null) {
@@ -193,15 +193,21 @@ router.get('/updateAccount', function (req, res) {
 router.post('/updateAccount', function (req, res) {
 
     console.log("auth /auth/updateAccount");
-    
 
-    var sessionPassword = req.session.user.password;
+
+    if (req.session.user) {
+
+        var sessionPassword = req.session.user.password;
+    }
+    else{
+        res.status(401).send(util.handleErrors("Not authorized. Please login"));
+    }
     var currentPassword = req.body.currentPassword;
 
     var newPassword = req.body.newPassword;
     var verifyPassword = req.body.passwordVerify;
 
-    
+
 
     AM.validatePassword(currentPassword, sessionPassword)
         .then(function () {
@@ -249,9 +255,9 @@ router.post('/updateAccount', function (req, res) {
         })
 
 });
-	
+
 // creating new accounts //
-	
+
 router.get('/signup', function (req, res) {
     console.log("auth /signup")
     res.render('index', { title: 'Signup', countries: CT });
@@ -260,7 +266,7 @@ router.get('/signup', function (req, res) {
 router.post('/signup', function (req, res) {
 
     console.log("auth /api/auth/signup")
-    
+
 
     if (req.body.password === req.body.password_verify) {
 
@@ -305,14 +311,14 @@ router.post('/signup', function (req, res) {
 router.post('/lost-password', function (req, res) {
     // look up the user's account via their email //
     AM.getAccountByEmail(req.body['email'], function (o) {
-        
+
         if (o) {
-            
-            var newPass = o.password.substring(0,4);
-            
+
+            var newPass = o.password.substring(0, 4);
+
             AM.updatePassword(o.email, newPass)
-                .then(function(response){
-                    
+                .then(function (response) {
+
                     o.newPass = newPass;
                     EM.dispatchResetPasswordLink(o, function (e, m) {
                         // this callback takes a moment to return //
@@ -323,10 +329,10 @@ router.post('/lost-password', function (req, res) {
                             for (k in e) console.log('ERROR : ', k, e[k]);
                             res.status(400).send(util.handleErrors('unable to dispatch password reset'));
                         }
-                    });    
-            })
-            
-            
+                    });
+                })
+
+
         } else {
             res.status(400).send(util.handleErrors('email-not-found'));
         }
@@ -361,9 +367,9 @@ router.post('/reset-password', function (req, res) {
         }
     })
 });
-	
+
 // view & delete accounts //
-	
+
 router.get('/print', function (req, res) {
     AM.getAllRecords(function (e, accounts) {
         res.render('index', { title: 'Account List', accts: accounts });
@@ -397,7 +403,7 @@ function setUser(req, res) {
 
             if (guild) {
 
-                
+
                 guildManagement.buildGuildCookie(req, res, guild);
                 return util.saveSession(req, res)
             }
@@ -417,7 +423,7 @@ function setUser(req, res) {
     return defer.promise;
 }
 
-function findUser(userName, guildList){    
+function findUser(userName, guildList) {
 
     var userIndex = _.findIndex(guildList, { 'user': userName });
 

@@ -1,0 +1,47 @@
+<div class="noPadding row center-xs">
+  <form [formGroup]="AccountFormGroup" class="row center-xs">
+
+    <md-card>
+
+      <md-card-title>
+        <span md-headline> Account </span>
+      </md-card-title>
+      <hr/>
+      <md-card-content>
+
+        <div class="row">
+
+          <md-form-field class="fullWidthField col-xs-12">
+            <input mdInput placeholder="User Name" name="name" formControlName="name" />
+          </md-form-field>
+
+          <md-form-field class="fullWidthField col-xs-12">
+            <input mdInput placeholder="Email" name="email" formControlName="email" />
+          </md-form-field>
+
+        </div>
+
+        <div class="row">
+
+          <md-form-field class="fullWidthField col-xs-12">
+            <input mdInput placeholder="Current Password" name="currentPassword" formControlName="currentPassword" />
+          </md-form-field>
+
+          <md-form-field class="fullWidthField col-xs-12">
+            <input mdInput placeholder="Change Password" name="newPassword" formControlName="newPassword" />
+          </md-form-field>
+
+          <md-form-field class="fullWidthField col-xs-12">
+            <input mdInput placeholder="Confirm Password" name="confirmPassword" formControlName="confirmPassword" />
+          </md-form-field>
+
+        </div>
+
+        <div class = "row">
+          <button md-raised-button color = "primary" (click) = "changePassword()">Change Password</button>
+        </div>
+
+      </md-card-content>
+    </md-card>
+  </form>
+</div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { BehaviorSubject } from "rxjs/Rx";
+import { Router } from '@angular/router';
 
 import { ApiService } from './api.service';
 
@@ -13,8 +14,12 @@ export class UserService {
   public user: BehaviorSubject<any> = new BehaviorSubject({});
   private ACCOUNT_API_URL_BASE: string = "/account";
 
-  constructor(private apiService: ApiService) {
+  constructor(private apiService: ApiService, private router:Router) {
 
+  }
+
+  changePassword(body){
+    return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/updateAccount", body);
   }
 
   getUser() {
@@ -26,6 +31,7 @@ export class UserService {
       (error) => {
         console.log("API call failed");
         console.log(error);
+        this.router.navigate(['/login']);
       })
 
   }

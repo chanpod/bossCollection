@@ -17,6 +17,121 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_gendir lazy recursive";
 
 /***/ }),
 
+/***/ "../../../../../src/app/account/account.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/account/account.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"noPadding row center-xs\">\n  <form [formGroup]=\"AccountFormGroup\" class=\"row center-xs\">\n\n    <md-card>\n\n      <md-card-title>\n        <span md-headline> Account </span>\n      </md-card-title>\n      <hr/>\n      <md-card-content>\n\n        <div class=\"row\">\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"User Name\" name=\"name\" formControlName=\"name\" />\n          </md-form-field>\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Email\" name=\"email\" formControlName=\"email\" />\n          </md-form-field>\n\n        </div>\n\n        <div class=\"row\">\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Current Password\" name=\"currentPassword\" formControlName=\"currentPassword\" />\n          </md-form-field>\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Change Password\" name=\"newPassword\" formControlName=\"newPassword\" />\n          </md-form-field>\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Confirm Password\" name=\"confirmPassword\" formControlName=\"confirmPassword\" />\n          </md-form-field>\n\n        </div>\n\n        <div class = \"row\">\n          <button md-raised-button color = \"primary\" (click) = \"changePassword()\">Change Password</button>\n        </div>\n\n      </md-card-content>\n    </md-card>\n  </form>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/account/account.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AccountComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+//3rd party
+
+var AccountComponent = (function () {
+    function AccountComponent(userService, toastr) {
+        var _this = this;
+        this.userService = userService;
+        this.toastr = toastr;
+        this.userService.user.subscribe(function (user) {
+            _this.user = user;
+            _this.initForm();
+        });
+    }
+    AccountComponent.prototype.ngOnInit = function () {
+    };
+    AccountComponent.prototype.changePassword = function () {
+        var _this = this;
+        var currentPasswordControl = this.AccountFormGroup.controls.currentPassword;
+        var newPasswordControl = this.AccountFormGroup.controls.newPassword;
+        var confirmPasswordControl = this.AccountFormGroup.controls.confirmPassword;
+        var body = __assign({ currentPassword: currentPasswordControl.value, newPassword: newPasswordControl.value, passwordVerify: confirmPasswordControl.value }, this.user);
+        this.userService.changePassword(body)
+            .subscribe(function (result) {
+            _this.toastr.success("Password Updated successfully", "Password Update");
+            currentPasswordControl.setValue("");
+            newPasswordControl.setValue("");
+            confirmPasswordControl.setValue("");
+        }, function (error) {
+            var errorMessage = error.json();
+            _this.toastr.error(errorMessage.message, "Password Update");
+            console.log(error);
+        });
+    };
+    AccountComponent.prototype.initForm = function () {
+        this.AccountFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
+            name: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]({ value: (this.user.name || ''), disabled: true }),
+            newPassword: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
+            confirmPassword: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
+            currentPassword: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
+            email: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]({ value: (this.user.email || ''), disabled: false }),
+            battleTag: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
+            avatarUrl: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
+            guild: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('')
+        });
+    };
+    return AccountComponent;
+}());
+AccountComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-account',
+        template: __webpack_require__("../../../../../src/app/account/account.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/account/account.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object])
+], AccountComponent);
+
+var _a, _b;
+//# sourceMappingURL=account.component.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/app.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -122,6 +237,7 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__account_account_component__ = __webpack_require__("../../../../../src/app/account/account.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -155,6 +271,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 //Modules
 
+
 var AppModule = (function () {
     function AppModule() {
     }
@@ -168,7 +285,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
             __WEBPACK_IMPORTED_MODULE_16__layout_layout_component__["a" /* LayoutComponent */],
             __WEBPACK_IMPORTED_MODULE_11__login_login_component__["a" /* LoginComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */]
+            __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__account_account_component__["a" /* AccountComponent */]
         ],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
@@ -930,7 +1048,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/layout/layout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\">   </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n        <a md-icon-button (click)=\"sidenav.open()\" style=\"font-size: 20px;\"> <md-icon>menu</md-icon> </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs \">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\">   </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n        <a md-icon-button (click)=\"sidenav.open()\" style=\"font-size: 20px;\"> <md-icon>menu</md-icon> </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs \">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"account\"> Account </button>\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
 
 /***/ }),
 
@@ -1178,6 +1296,7 @@ module.exports = "<div class=\"light-theme\">\r\n\r\n    <md-form-field>\r\n    
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__account_account_component__ = __webpack_require__("../../../../../src/app/account/account.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1189,12 +1308,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 //Components
 
 
+
 var routes = [
     {
         path: '', component: __WEBPACK_IMPORTED_MODULE_2__home_home_component__["a" /* HomeComponent */]
     },
     {
         path: 'login', component: __WEBPACK_IMPORTED_MODULE_3__login_login_component__["a" /* LoginComponent */]
+    },
+    {
+        path: 'account', component: __WEBPACK_IMPORTED_MODULE_4__account_account_component__["a" /* AccountComponent */]
     }
 ];
 var RoutingModule = (function () {
@@ -1379,7 +1502,8 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1392,12 +1516,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var UserService = (function () {
-    function UserService(apiService) {
+    function UserService(apiService, router) {
         this.apiService = apiService;
+        this.router = router;
         this.user = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["BehaviorSubject"]({});
         this.ACCOUNT_API_URL_BASE = "/account";
     }
+    UserService.prototype.changePassword = function (body) {
+        return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/updateAccount", body);
+    };
     UserService.prototype.getUser = function () {
         var _this = this;
         this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
@@ -1407,6 +1536,7 @@ var UserService = (function () {
         }, function (error) {
             console.log("API call failed");
             console.log(error);
+            _this.router.navigate(['/login']);
         });
     };
     UserService.prototype.logout = function () {
@@ -1446,10 +1576,10 @@ var UserService = (function () {
 }());
 UserService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__api_service__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__api_service__["a" /* ApiService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__api_service__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__api_service__["a" /* ApiService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object])
 ], UserService);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=user.service.js.map
 
 /***/ }),

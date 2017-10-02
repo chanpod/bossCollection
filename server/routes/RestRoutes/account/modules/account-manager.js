@@ -71,6 +71,7 @@ exports.autoLogin = function(name, password, callback)
 exports.verifyPasswordsMatch = function(pass1, pass2){
     
     var defer = q.defer();
+    const PASSWORD_LENGTH = "Passwords must be at least 2 characters long";
     
     if (pass1 && pass2) {
 
@@ -90,17 +91,17 @@ exports.verifyPasswordsMatch = function(pass1, pass2){
             }
             else {
 
-                defer.reject(util.handleErrors("Password must be longer than 1 chacter"));
+                defer.reject(util.handleErrors(PASSWORD_LENGTH));
             }
         }
         else{
             
-            defer.resolve(false); //Not updating the password
+            defer.reject(util.handleErrors(PASSWORD_LENGTH)); //Not updating the password
         }
     }
     else{
         
-        defer.resolve(false);
+        defer.reject(util.handleErrors(PASSWORD_LENGTH)); 
     }
     
     return defer.promise;
