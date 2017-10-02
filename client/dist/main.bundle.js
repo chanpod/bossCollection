@@ -943,6 +943,7 @@ var HomeComponent = (function () {
     };
     HomeComponent.prototype.getTabs = function () {
         var _this = this;
+        this.guildService.getGuildName();
         var guildName = "";
         if (this.user.guild) {
             guildName = this.user.guild.name;
@@ -1481,6 +1482,12 @@ var GuildService = (function () {
     };
     GuildService.prototype.getApplication = function (appId) {
         return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
+    };
+    GuildService.prototype.getGuildName = function () {
+        console.log(window.location.hostname);
+        var hostname = window.location.hostname;
+        var splitHostName = hostname.split(".");
+        console.log(splitHostName[0]);
     };
     return GuildService;
 }());

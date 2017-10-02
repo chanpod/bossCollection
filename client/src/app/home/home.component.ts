@@ -89,6 +89,9 @@ export class HomeComponent implements OnInit {
     }
 
     getTabs() {
+
+        this.guildService.getGuildName();
+
         let guildName = "";
         if (this.user.guild) {
 

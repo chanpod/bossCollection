@@ -36,6 +36,15 @@ export class GuildService {
 
   getApplication(appId) {
     return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
-  } 
+  }  
+
+  getGuildName(){
+    console.log(window.location.hostname);
+    let hostname = window.location.hostname;
+
+    let splitHostName = hostname.split(".");
+
+    console.log(splitHostName[0]);
+  }
 
 }
