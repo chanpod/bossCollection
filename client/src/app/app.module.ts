@@ -31,6 +31,7 @@ import { BlizzardService } from './services/blizzard.service';
 //Modules
 import { ApplicationModule } from './application/application.module';
 import { AccountComponent } from './account/account.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 @NgModule({
@@ -41,10 +42,12 @@ import { AccountComponent } from './account/account.component';
     LayoutComponent,
     LoginComponent,
     ResetPasswordDialogComponent,
-    AccountComponent
+    AccountComponent,
+    ConfirmDialogComponent
   ],
   entryComponents: [
     NewTabDialog,
+    ConfirmDialogComponent,
     ResetPasswordDialogComponent
   ],
   imports: [

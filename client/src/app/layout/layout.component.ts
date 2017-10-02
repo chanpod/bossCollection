@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { UserService } from '../services/user.service';
+import { GuildService } from '../services/guild.service';
 
 //3rd party
 
@@ -14,9 +15,11 @@ import { UserService } from '../services/user.service';
 export class LayoutComponent implements OnInit {
 
   user: any = undefined;
+  guildName:string;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private guildService:GuildService) {
 
+    this.guildName = this.guildService.getGuildContext();
     userService.user.subscribe((user) => {
       this.updateBasedOnUser(user);
     })

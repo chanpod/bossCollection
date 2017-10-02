@@ -5,14 +5,14 @@ import { UserService } from '../services/user.service';
 import { GuildService } from '../services/guild.service';
 
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
- 
-import {NewTabDialog} from './newTab.component';
+
+import { NewTabDialog } from './newTab.component';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
-    
+
 })
 export class HomeComponent implements OnInit {
 
@@ -44,12 +44,12 @@ export class HomeComponent implements OnInit {
 
     openNewTabDialog(): void {
         let dialogRef = this.dialog.open(NewTabDialog, {
-            width: '250px'            
+            width: '250px'
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            
-            if(result != null){                
+
+            if (result != null) {
 
                 this.createTab(result);
             }
@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
             .subscribe((result) => {
                 this.toastr.success("Successfully saved", "Saving Tabs");
                 this.toggleEditing();
-            }, (error) => {                
+            }, (error) => {
                 this.toastr.error("Uh oh. Something broke!", "Error");
             })
     }
@@ -90,20 +90,18 @@ export class HomeComponent implements OnInit {
 
     getTabs() {
 
-        this.guildService.getGuildName();
-
         let guildName = "";
         if (this.user.guild) {
 
             guildName = this.user.guild.name;
         }
         else {
-            guildName = "TBD";
+            guildName = this.guildService.getGuildContext();
         }
 
         this.guildService.getTabs(guildName)
             .subscribe((response) => {
-               
+
                 this.tabs = response.guild.tabs;
             })
     }

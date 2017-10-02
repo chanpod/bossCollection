@@ -31,20 +31,29 @@ export class GuildService {
   }
 
   getApplications() {
-    return this.apiService.get(this.APP_API_BASE_URL + "/getApplications/TBD")
+    return this.apiService.get(this.APP_API_BASE_URL + "/getApplications/" + this.getGuildContext())
   }
 
   getApplication(appId) {
     return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
-  }  
+  }
 
-  getGuildName(){
+  deleteApplication(body){
+    return this.apiService.post(this.APP_API_BASE_URL + "/rejectApplication", body);
+  }
+
+  getGuildContext() {
     console.log(window.location.hostname);
     let hostname = window.location.hostname;
 
     let splitHostName = hostname.split(".");
+    let guildContext = splitHostName[0];
 
-    console.log(splitHostName[0]);
+    if (guildContext == "localhost") {
+      guildContext = "test";
+    }
+
+    return guildContext;
   }
 
 }

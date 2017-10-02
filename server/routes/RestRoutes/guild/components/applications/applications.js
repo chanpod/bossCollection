@@ -187,7 +187,8 @@ function getGuildApplications(req, res) {
     ApplicationModel.find({
         guild: guild, dateApplied: {
             $gte: date.toISOString()
-        }
+        },
+        status: { $ne: statuses.rejected }
     })
         .then(function (applications) {
 

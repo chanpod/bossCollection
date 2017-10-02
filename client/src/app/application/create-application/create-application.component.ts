@@ -16,6 +16,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class CreateApplicationComponent implements OnInit {
 
   CreateAppFormGroup: FormGroup;
+  guildName: string;
   user: any;
   characterObject: any;
   classBackground: string;
@@ -46,6 +47,7 @@ export class CreateApplicationComponent implements OnInit {
     this.characterIsValid = false;
 
     this.validateCharacter = this.validateCharacter.bind(this);
+    this.guildName = this.guildService.getGuildContext();
   }
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class CreateApplicationComponent implements OnInit {
       character: "",
       realm: "",
       desiredRole: "",
-      guildName: "TBD",
+      guildName: this.guildService.getGuildContext(),
       previousGuild: '',
       comments: '',
       class: ''
