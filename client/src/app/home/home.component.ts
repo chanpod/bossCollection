@@ -20,6 +20,9 @@ export class HomeComponent implements OnInit {
     tabs: Array<any> = [];
     editingTab: boolean = false;
     newTab: any = { title: '', content: '' }
+    guildNotFound: boolean = false;
+    guildNotOwned: boolean = false;
+    guildContext: String;
 
     constructor(
         public userService: UserService,
@@ -32,14 +35,14 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
 
         this.editingTab = false;
-
+        this.guildContext = this.guildService.getGuildContext();
         this.userService.user.subscribe((user) => {
 
             this.user = user;
-
             this.getTabs();
-
         })
+
+        this.checkIfGuildOwned();
     }
 
     openNewTabDialog(): void {
@@ -78,6 +81,33 @@ export class HomeComponent implements OnInit {
         this.saveTabs();
     }
 
+
+    claimGuild() {
+        this.guildService.claimGuild(this.guildContext)
+            .subscribe(
+            (result) => {
+                this.toastr.success("You now own the guild " + this.guildContext)
+                this.guildNotOwned = false;
+                this.userService.getUser();
+            }
+            )
+    }
+
+    checkIfGuildOwned() {
+        this.guildService.guildOwned()
+            .subscribe(
+            (result) => {
+
+                if (result == true) {
+                    this.guildNotOwned = false;
+                }
+                else {
+                    this.guildNotOwned = true;
+                }
+            }
+            )
+    }
+
     createTab(newTabName) {
 
         let tab = Object.assign(this.newTab);
@@ -91,19 +121,21 @@ export class HomeComponent implements OnInit {
     getTabs() {
 
         let guildName = "";
-        if (this.user.guild) {
 
-            guildName = this.user.guild.name;
-        }
-        else {
-            guildName = this.guildService.getGuildContext();
-        }
+        guildName = this.guildService.getGuildContext();
 
         this.guildService.getTabs(guildName)
             .subscribe((response) => {
 
                 this.tabs = response.guild.tabs;
-            })
+            },
+            (error) => {
+                let errorMessage = JSON.parse(error._body);
+                if (errorMessage.message == "Guild Not Found") {
+                    this.guildNotFound = true;
+                }
+            }
+            )
     }
 
     toggleEditing() {

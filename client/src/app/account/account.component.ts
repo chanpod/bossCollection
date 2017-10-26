@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { UserService } from '../services/user.service';
+import { GuildService } from '../services/guild.service';
 
 //3rd party
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
@@ -17,19 +18,25 @@ export class AccountComponent implements OnInit {
   private account;
   private user: any;
 
-  constructor(private userService: UserService, private toastr: ToastsManager) {
+  constructor(
+    private userService: UserService,
+    private toastr: ToastsManager,
+    private guildService: GuildService
+  ) {
     this.userService.user.subscribe((user) => {
-      this.user = user;
 
+      this.user = user;
+      console.log(this.user);
       this.initForm();
     })
   }
 
   ngOnInit() {
 
+
   }
 
-  changePassword(){
+  changePassword() {
     let currentPasswordControl = this.AccountFormGroup.controls.currentPassword;
     let newPasswordControl = this.AccountFormGroup.controls.newPassword;
     let confirmPasswordControl = this.AccountFormGroup.controls.confirmPassword;
@@ -57,20 +64,31 @@ export class AccountComponent implements OnInit {
       })
   }
 
+  leaveGuild() {
+    this.guildService.leaveGuild(this.user.guild.name)
+      .subscribe(
+      (result) => {
+        this.toastr.success("Removed from the guild");
+        this.userService.getUser();
+      }
+      )
+  }
+
   initForm() {
 
+    if (this.userService.hasGuild() == false) {
+      this.user.guild = {};
+    }
+
     this.AccountFormGroup = new FormGroup({
-      name: new FormControl({ value: (this.user.name || ''), disabled: true}),
+      name: new FormControl({ value: (this.user.name || ''), disabled: true }),
       newPassword: new FormControl(''),
       confirmPassword: new FormControl(''),
       currentPassword: new FormControl(''),
-      email: new FormControl({ value: (this.user.email || ''), disabled: false}),
+      email: new FormControl({ value: (this.user.email || ''), disabled: false }),
       battleTag: new FormControl(''),
       avatarUrl: new FormControl(''),
-      guild: new FormControl('')
+      guild: new FormControl({ value: (this.user.guild.name || ''), disabled: true })
     })
-
-    
   }
-
 }

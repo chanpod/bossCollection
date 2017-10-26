@@ -175,6 +175,72 @@ function getGuildMembers(req, res) {
     return defer.promise;
 }
 
+function claimGuild(req, res) {
+    var defer = q.defer();
+
+    var guildName = req.body.guildName;
+    var memberName = req.session.user.name;
+
+    var newMember = {
+        user: memberName,
+        rank: undefined,
+        officer: false,
+        raider: false,
+        GM: true,
+        approved: true
+    }
+
+    findGuild(guildName)
+        .then(function (guild) {
+
+            if (!guild) {
+                throw new Error("Guild doesn't exist. You can create it if you're the GM");
+                return;
+            }
+
+            console.log("Seeing if guild exist");
+            console.log("Guild name: " + guild.name);
+            console.log("User name: " + memberName);
+            var indexOfMember = doesMemberExist(guild.members, memberName);
+            if (indexOfMember != -1) {
+
+                throw new Error("You are already a part of this guild.");
+            }
+
+            let lowestRank = 0;
+
+            _.forEach(guild.ranks, (rank, index) => {
+
+                if (lowestRank < rank.rank) {
+                    lowestRank = rank.rank;
+                }
+            })
+
+            newMember.rank = lowestRank;
+
+            guild.members.push(newMember);
+
+            guild.save(function () {
+
+                req.session.user.guild = guild;
+                buildGuildCookie(req, res, guild);
+
+                util.saveSession(req, res)
+                    .then(function (user) {
+
+                        defer.resolve({ user: user });
+                    })
+            });
+        })
+        .fail(function (err) {
+
+            defer.reject(err);
+
+        })
+
+    return defer.promise;
+}
+
 function addMember(req, res) {
 
     var defer = q.defer();
@@ -358,7 +424,13 @@ function getGuildHomepage(req, res) {
     GuildModel.findOne({ name: usersGuild })
         .then(function (guild) {
 
-            defer.resolve({ guild: guild });
+            if (guild) {
+
+                defer.resolve({ guild: guild });
+            }
+            else {
+                defer.reject("Guild Not Found");
+            }
         }, function (err) {
 
             defer.reject(err);
@@ -476,20 +548,21 @@ module.exports = {
     getGuildSettings: getGuildSettings,
     getGuildMembers: getGuildMembers,
     getListOfGuilds: getListOfGuilds,
+    updateGuildRank: updateGuildRank,
     findUsersGuild: findUsersGuild,
+    updateUserRank: updateUserRank,
     removeMember: removeMember,
     kickMember: kickMember,
-    updateUserRank: updateUserRank,
+    createRank: createRank,
+    deleteRank: deleteRank,
+    claimGuild:claimGuild,
+    isOfficer: isOfficer,
     addMember: addMember,
+    getGuild: findGuild,
     addGuild: addGuild,
     getRanks: getRanks,
-    createRank: createRank,
-    updateGuildRank: updateGuildRank,
-    deleteRank: deleteRank,
-    isAdmin: isAdmin,
-    isOfficer: isOfficer,
     isRaider: isRaider,
-    getGuild: findGuild
+    isAdmin: isAdmin
 
 };
 

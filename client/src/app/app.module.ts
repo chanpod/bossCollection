@@ -32,7 +32,10 @@ import { BlizzardService } from './services/blizzard.service';
 import { ApplicationModule } from './application/application.module';
 import { AccountComponent } from './account/account.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { GuildModule } from './guild/guild.module';
 
+//Guards
+import {AccountGuard} from './account/guards/account.guard';
 
 @NgModule({
   declarations: [
@@ -61,13 +64,15 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     ToastModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
-    ApplicationModule
+    ApplicationModule,
+    GuildModule
   ],
   providers: [
     UserService,
     ApiService,
     GuildService,
-    BlizzardService
+    BlizzardService,
+    AccountGuard
   ],
   bootstrap: [AppComponent]
 })

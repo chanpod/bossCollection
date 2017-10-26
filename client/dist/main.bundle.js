@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/account/account.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"noPadding row center-xs\">\n  <form [formGroup]=\"AccountFormGroup\" class=\"row center-xs\">\n\n    <md-card>\n\n      <md-card-title>\n        <span md-headline> Account </span>\n      </md-card-title>\n      <hr/>\n      <md-card-content>\n\n        <div class=\"row\">\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"User Name\" name=\"name\" formControlName=\"name\" />\n          </md-form-field>\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Email\" name=\"email\" formControlName=\"email\" />\n          </md-form-field>\n\n        </div>\n\n        <div class=\"row\">\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Current Password\" name=\"currentPassword\" formControlName=\"currentPassword\" />\n          </md-form-field>\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Change Password\" name=\"newPassword\" formControlName=\"newPassword\" />\n          </md-form-field>\n\n          <md-form-field class=\"fullWidthField col-xs-12\">\n            <input mdInput placeholder=\"Confirm Password\" name=\"confirmPassword\" formControlName=\"confirmPassword\" />\n          </md-form-field>\n\n        </div>\n\n        <div class = \"row\">\n          <button md-raised-button color = \"primary\" (click) = \"changePassword()\">Change Password</button>\n        </div>\n\n      </md-card-content>\n    </md-card>\n  </form>\n</div>"
+module.exports = "<div class=\"noPadding row center-xs\">\r\n  <form [formGroup]=\"AccountFormGroup\" class=\"row center-xs\">\r\n\r\n    <md-card>\r\n\r\n      <md-card-title>\r\n        <span md-headline> Account </span>\r\n      </md-card-title>\r\n      <hr/>\r\n      <md-card-content>\r\n\r\n        <div class=\"row\">\r\n\r\n          <md-form-field class=\"fullWidthField col-xs-12\">\r\n            <input mdInput placeholder=\"User Name\" name=\"name\" formControlName=\"name\" />\r\n          </md-form-field>\r\n\r\n          <md-form-field class=\"fullWidthField col-xs-12\">\r\n            <input mdInput placeholder=\"Email\" name=\"email\" formControlName=\"email\" />\r\n          </md-form-field>\r\n\r\n          <md-form-field class=\"fullWidthField col-xs-12\" *ngIf = \"user.guild?.name\">\r\n            <input mdInput placeholder=\"Guild\" name=\"Guild\" formControlName=\"guild\" />\r\n          </md-form-field>\r\n\r\n        </div>\r\n\r\n        <div class=\"row\">\r\n\r\n          <md-form-field class=\"fullWidthField col-xs-12\">\r\n            <input mdInput placeholder=\"Current Password\" name=\"currentPassword\" formControlName=\"currentPassword\" />\r\n          </md-form-field>\r\n\r\n          <md-form-field class=\"fullWidthField col-xs-12\">\r\n            <input mdInput placeholder=\"Change Password\" name=\"newPassword\" formControlName=\"newPassword\" />\r\n          </md-form-field>\r\n\r\n          <md-form-field class=\"fullWidthField col-xs-12\">\r\n            <input mdInput placeholder=\"Confirm Password\" name=\"confirmPassword\" formControlName=\"confirmPassword\" />\r\n          </md-form-field>\r\n\r\n        </div>\r\n\r\n        <div class = \"row space-between\">\r\n          <button md-raised-button color = \"primary\" (click) = \"changePassword()\">Change Password</button>\r\n          <button md-raised-button color = \"primary\" (click) = \"leaveGuild()\" *ngIf = \"user.guild?.name\">Leave Guild</button>\r\n        </div>\r\n\r\n      </md-card-content>\r\n    </md-card>\r\n  </form>\r\n</div>"
 
 /***/ }),
 
@@ -50,8 +50,9 @@ module.exports = "<div class=\"noPadding row center-xs\">\n  <form [formGroup]=\
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -72,15 +73,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 //3rd party
 
 var AccountComponent = (function () {
-    function AccountComponent(userService, toastr) {
+    function AccountComponent(userService, toastr, guildService) {
         var _this = this;
         this.userService = userService;
         this.toastr = toastr;
+        this.guildService = guildService;
         this.userService.user.subscribe(function (user) {
             _this.user = user;
+            console.log(_this.user);
             _this.initForm();
         });
     }
@@ -104,7 +108,18 @@ var AccountComponent = (function () {
             console.log(error);
         });
     };
+    AccountComponent.prototype.leaveGuild = function () {
+        var _this = this;
+        this.guildService.leaveGuild(this.user.guild.name)
+            .subscribe(function (result) {
+            _this.toastr.success("Removed from the guild");
+            _this.userService.getUser();
+        });
+    };
     AccountComponent.prototype.initForm = function () {
+        if (this.userService.hasGuild() == false) {
+            this.user.guild = {};
+        }
         this.AccountFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
             name: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]({ value: (this.user.name || ''), disabled: true }),
             newPassword: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
@@ -113,7 +128,7 @@ var AccountComponent = (function () {
             email: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]({ value: (this.user.email || ''), disabled: false }),
             battleTag: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
             avatarUrl: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */](''),
-            guild: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('')
+            guild: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]({ value: (this.user.guild.name || ''), disabled: true })
         });
     };
     return AccountComponent;
@@ -124,11 +139,64 @@ AccountComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/account/account.component.html"),
         styles: [__webpack_require__("../../../../../src/app/account/account.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_guild_service__["a" /* GuildService */]) === "function" && _c || Object])
 ], AccountComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=account.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/account/guards/account.guard.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AccountGuard; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AccountGuard = (function () {
+    function AccountGuard(user, toastr, router) {
+        this.user = user;
+        this.toastr = toastr;
+        this.router = router;
+    }
+    AccountGuard.prototype.canActivate = function () {
+        var _this = this;
+        return this.user.getUserPromise().map(function (response) {
+            var canActivate = _this.user.isLoggedIn();
+            if (!_this.user.isLoggedIn()) {
+                canActivate = false;
+                _this.toastr.error("Must be logged in.");
+                _this.router.navigate(['/']);
+            }
+            return canActivate;
+        });
+    };
+    return AccountGuard;
+}());
+AccountGuard = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object])
+], AccountGuard);
+
+var _a, _b, _c;
+//# sourceMappingURL=account.guard.js.map
 
 /***/ }),
 
@@ -153,7 +221,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<md-sidenav-container class=\"example-container\">\n\n    <md-sidenav #sidenav class=\"example-sidenav\">\n\n        <div class=\"dark-theme\">\n\n            <md-toolbar color=\"primary\">\n                Menu\n            </md-toolbar>\n\n        </div>\n        <md-nav-list>\n            <md-list-item routerLink=\"\" (click)=\"sidenav.close()\">\n                <button md-icon-button><md-icon>home</md-icon></button>\n                <a md-list-item > Home </a>\n            </md-list-item>\n\n            <md-list-item routerLink=\"createApplication\" (click)=\"sidenav.close()\">\n                <button md-icon-button><md-icon>games</md-icon></button>\n                <a md-list-item> Apply </a>\n            </md-list-item>\n\n\n            <md-list-item routerLink=\"viewApplications\" (click)=\"sidenav.close()\">\n                <button md-icon-button><md-icon>view_list</md-icon></button>\n                <a md-list-item> View Apps </a>\n            </md-list-item>\n\n            <md-list-item *ngIf=\"!loggedIn()\" (click)=\"sidenav.close()\" routerLink=\"login\">\n                <button md-icon-button><md-icon>account_circle</md-icon></button>\n                <a md-list-item> Login </a>\n            </md-list-item>\n\n            <md-list-item *ngIf=\"loggedIn()\" (click)=\"logout()\">\n                <button md-icon-button><md-icon>exit_to_app</md-icon></button>\n                <a md-menu-item> Logout </a>\n            </md-list-item>\n\n        </md-nav-list>\n    </md-sidenav>\n\n    <layout [sidenav]=\"sidenav\"></layout>\n    <div class=\"row center-xs setHeightToMax noPadding\">\n        <div class=\"col-xs-12 center-xs setHeightToMax noPadding\">\n            <router-outlet></router-outlet>\n        </div>\n    </div>\n</md-sidenav-container>"
+module.exports = "<md-sidenav-container class=\"example-container\">\r\n\r\n    <md-sidenav #sidenav class=\"example-sidenav\">\r\n\r\n        <div class=\"dark-theme\">\r\n\r\n            <md-toolbar color=\"primary\">\r\n                Menu\r\n            </md-toolbar>\r\n\r\n        </div>\r\n        <md-nav-list>\r\n            <md-list-item routerLink=\"\" (click)=\"sidenav.close()\">\r\n                <button md-icon-button><md-icon>home</md-icon></button>\r\n                <a md-list-item > Home </a>\r\n            </md-list-item>\r\n\r\n            <md-list-item routerLink=\"createApplication\" (click)=\"sidenav.close()\">\r\n                <button md-icon-button><md-icon>games</md-icon></button>\r\n                <a md-list-item> Apply </a>\r\n            </md-list-item>\r\n\r\n\r\n            <md-list-item routerLink=\"viewApplications\" (click)=\"sidenav.close()\">\r\n                <button md-icon-button><md-icon>view_list</md-icon></button>\r\n                <a md-list-item> View Apps </a>\r\n            </md-list-item>\r\n\r\n            <md-list-item *ngIf=\"!loggedIn()\" (click)=\"sidenav.close()\" routerLink=\"login\">\r\n                <button md-icon-button><md-icon>account_circle</md-icon></button>\r\n                <a md-list-item> Login </a>\r\n            </md-list-item>\r\n\r\n            <md-list-item *ngIf=\"loggedIn()\" (click)=\"logout()\">\r\n                <button md-icon-button><md-icon>exit_to_app</md-icon></button>\r\n                <a md-menu-item> Logout </a>\r\n            </md-list-item>\r\n\r\n        </md-nav-list>\r\n    </md-sidenav>\r\n\r\n    <layout [sidenav]=\"sidenav\"></layout>\r\n    <div class=\"row center-xs setHeightToMax noPadding\">\r\n        <div class=\"col-xs-12 center-xs setHeightToMax noPadding\">\r\n            <router-outlet></router-outlet>\r\n        </div>\r\n    </div>\r\n</md-sidenav-container>"
 
 /***/ }),
 
@@ -164,8 +232,9 @@ module.exports = "<md-sidenav-container class=\"example-container\">\n\n    <md-
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -178,13 +247,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AppComponent = (function () {
-    function AppComponent(userService, toastr, vRef) {
+    function AppComponent(userService, toastr, vRef, guildService) {
         this.userService = userService;
         this.toastr = toastr;
         this.title = 'app';
         this.userService.getUser();
         this.toastr.setRootViewContainerRef(vRef);
+        document.title = guildService.getGuildContext();
     }
     AppComponent.prototype.logout = function () {
         this.userService.logout();
@@ -200,10 +271,10 @@ AppComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/app.component.html"),
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _d || Object])
 ], AppComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=app.component.js.map
 
 /***/ }),
@@ -238,6 +309,9 @@ var _a, _b, _c;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__account_account_component__ = __webpack_require__("../../../../../src/app/account/account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__confirm_dialog_confirm_dialog_component__ = __webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__guild_guild_module__ = __webpack_require__("../../../../../src/app/guild/guild.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__account_guards_account_guard__ = __webpack_require__("../../../../../src/app/account/guards/account.guard.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -272,6 +346,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 //Modules
 
 
+
+
+//Guards
+
 var AppModule = (function () {
     function AppModule() {
     }
@@ -286,10 +364,12 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_16__layout_layout_component__["a" /* LayoutComponent */],
             __WEBPACK_IMPORTED_MODULE_11__login_login_component__["a" /* LoginComponent */],
             __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__account_account_component__["a" /* AccountComponent */]
+            __WEBPACK_IMPORTED_MODULE_22__account_account_component__["a" /* AccountComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */]
         ],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
+            __WEBPACK_IMPORTED_MODULE_23__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */]
         ],
         imports: [
@@ -303,13 +383,15 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_21__application_application_module__["a" /* ApplicationModule */]
+            __WEBPACK_IMPORTED_MODULE_21__application_application_module__["a" /* ApplicationModule */],
+            __WEBPACK_IMPORTED_MODULE_24__guild_guild_module__["a" /* GuildModule */]
         ],
         providers: [
             __WEBPACK_IMPORTED_MODULE_17__services_user_service__["a" /* UserService */],
             __WEBPACK_IMPORTED_MODULE_18__services_api_service__["a" /* ApiService */],
             __WEBPACK_IMPORTED_MODULE_19__services_guild_service__["a" /* GuildService */],
-            __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__["a" /* BlizzardService */]
+            __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__["a" /* BlizzardService */],
+            __WEBPACK_IMPORTED_MODULE_25__account_guards_account_guard__["a" /* AccountGuard */]
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -372,7 +454,11 @@ ApplicationModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
             __WEBPACK_IMPORTED_MODULE_5__angular_material__["a" /* MaterialModule */]
         ],
-        declarations: [__WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__["a" /* CreateApplicationComponent */], __WEBPACK_IMPORTED_MODULE_9__view_applications_view_applications_component__["a" /* ViewApplicationsComponent */], __WEBPACK_IMPORTED_MODULE_10__view_app_view_app_component__["a" /* ViewAppComponent */]]
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__["a" /* CreateApplicationComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__view_applications_view_applications_component__["a" /* ViewApplicationsComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__view_app_view_app_component__["a" /* ViewAppComponent */]
+        ]
     })
 ], ApplicationModule);
 
@@ -401,7 +487,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/create-application/create-application.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"noPadding row center-xs classBackgroundBase {{classBackground}}\">\r\n    <div class=\"col-xs-12 dark-theme noPadding\">\r\n        <md-card>\r\n\r\n            <h2> Application for TBD </h2>\r\n        </md-card>\r\n\r\n\r\n    </div>\r\n    <div class=\"col-xs-11 col-md-12 row center-xs\">\r\n\r\n        <md-card class=\"col-xs-12 col-md-6 \">\r\n            <md-card-content>\r\n\r\n                <form [formGroup]=\"CreateAppFormGroup\" class=\"row center-xs\">\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12\">\r\n                        <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                        />\r\n                    </md-form-field>\r\n\r\n\r\n\r\n\r\n\r\n\r\n                    <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"fullWidthField col-xs-12 formPadding\" placeholder=\"Select Realm\">\r\n                        <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                            {{ realm.name }}\r\n                        </md-option>\r\n                    </md-select>\r\n\r\n\r\n\r\n                    <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"fullWidthField col-xs-12 formPadding\">\r\n\r\n                        <md-option value=\"Ranged DPS\">\r\n                            Ranged DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Melee DPS\">\r\n                            Melee DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Tank\">\r\n                            Tank\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Healer\">\r\n                            Healer\r\n                        </md-option>\r\n\r\n                    </md-select>\r\n\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input mdInput placeholder=\"Guild History\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"Screenshot of your UI\" mdInput name=\"batteltag\" formControlName=\"uiScreenshot\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"Link recent tier logs\" mdInput name=\"batteltag\" formControlName=\"logsLink\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"Battle.net tag\" mdInput name=\"batteltag\" formControlName=\"batteltag\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"What spec do you currently play?\" mdInput name=\"spec\" formControlName=\"spec\" />\r\n                    </md-form-field>\r\n\r\n\r\n\r\n                    <section class=\"fullWidthField col-xs-12 formPadding start-xs\">\r\n                        <md-checkbox formControlName=\"aboutPage\">I've read the about page</md-checkbox>\r\n                    </section>\r\n\r\n                    <section class=\"fullWidthField col-xs-12 formPadding start-xs\">\r\n                        <md-checkbox formControlName=\"canYouMakeRaidTimes\">I can make raid times at near 100%</md-checkbox>\r\n                    </section>\r\n\r\n                    <section class=\"fullWidthField col-xs-12 formPadding start-xs\">\r\n                        <md-checkbox formControlName=\"voiceCommunications\">We expect raiders to be able to speak clearly and effectively via voice (Discord) to discuss strategies,\r\n                            ask questions, and communicate during fights. Do you have a working mic with minimal noise/interference\r\n                            and the ability/willingness to interact with the rest of the guild during raid?</md-checkbox>\r\n                    </section>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <h4> Do you utilize your other specs/talents on a fight by fight basis? Are you willing to maintain multiple\r\n                            sets of gear that are advantageous for your different specializations?</h4>\r\n\r\n                        <textarea class=\"commentsInput\" mdInput name=\"flexibility\" formControlName=\"flexibility\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <h4> List and detail which gems and enchants that you currently utilize for your spec. Are they optimal\r\n                            for your current spec? What are your stat priorities? Why?</h4>\r\n\r\n                        <textarea class=\"commentsInput\" mdInput name=\"statPriority\" formControlName=\"statPriority\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <h4> Please describe your opener and rotation in detail. How does your rotation differ on a movement-heavy\r\n                            encounter from a Patchwerk-style fight?</h4>\r\n\r\n                        <textarea class=\"commentsInput\" mdInput name=\"rotation\" formControlName=\"rotation\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"How do you prepare for a new encounter?\" name=\"prepareForNewEncounter\"\r\n                            formControlName=\"prepareForNewEncounter\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"aboutYourself\" formControlName=\"aboutYourself\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Past Raiding experience?\" name=\"raidExperience\" formControlName=\"raidExperience\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Anything else you'd like to add?\" name=\"comments\" formControlName=\"comments\"> </textarea>\r\n                    </md-form-field>\r\n\r\n\r\n\r\n                    <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click)=\"submitApplication()\"> Submit </button>\r\n\r\n                </form>\r\n\r\n            </md-card-content>\r\n        </md-card>\r\n    </div>\r\n</div>"
+module.exports = "<div class=\"noPadding row center-xs classBackgroundBase {{classBackground}}\">\r\n    <div class=\"col-xs-12 dark-theme noPadding\">\r\n        <md-card>\r\n\r\n            <h2> Application for {{guildName}} </h2>\r\n        </md-card>\r\n\r\n\r\n    </div>\r\n    <div class=\"col-xs-11 col-md-12 row center-xs\">\r\n\r\n        <md-card class=\"col-xs-12 col-md-6 \">\r\n            <md-card-content>\r\n\r\n                <form [formGroup]=\"CreateAppFormGroup\" class=\"row center-xs\">\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12\">\r\n                        <input required (blur)=\"checkCharacterName()\" mdInput placeholder=\"Character Name\" name=\"name\" formControlName=\"character\"\r\n                        />\r\n                    </md-form-field>\r\n\r\n\r\n\r\n\r\n\r\n\r\n                    <md-select formControlName=\"realm\" (blur)=\"checkCharacterName()\" class=\"fullWidthField col-xs-12 formPadding\" placeholder=\"Select Realm\">\r\n                        <md-option *ngFor=\"let realm of realms\" [value]=\"realm.name\">\r\n                            {{ realm.name }}\r\n                        </md-option>\r\n                    </md-select>\r\n\r\n\r\n\r\n                    <md-select formControlName=\"desiredRole\" placeholder=\"Desired Role\" class=\"fullWidthField col-xs-12 formPadding\">\r\n\r\n                        <md-option value=\"Ranged DPS\">\r\n                            Ranged DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Melee DPS\">\r\n                            Melee DPS\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Tank\">\r\n                            Tank\r\n                        </md-option>\r\n\r\n                        <md-option value=\"Healer\">\r\n                            Healer\r\n                        </md-option>\r\n\r\n                    </md-select>\r\n\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input mdInput placeholder=\"Guild History\" name=\"previousGuild\" formControlName=\"previousGuild\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"Screenshot of your UI\" mdInput name=\"batteltag\" formControlName=\"uiScreenshot\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"Link recent tier logs\" mdInput name=\"batteltag\" formControlName=\"logsLink\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"Battle.net tag\" mdInput name=\"batteltag\" formControlName=\"batteltag\" />\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <input placeholder=\"What spec do you currently play?\" mdInput name=\"spec\" formControlName=\"spec\" />\r\n                    </md-form-field>\r\n\r\n\r\n\r\n                    <section class=\"fullWidthField col-xs-12 formPadding start-xs\">\r\n                        <md-checkbox formControlName=\"aboutPage\">I've read the about page</md-checkbox>\r\n                    </section>\r\n\r\n                    <section class=\"fullWidthField col-xs-12 formPadding start-xs\">\r\n                        <md-checkbox formControlName=\"canYouMakeRaidTimes\">I can make raid times at near 100%</md-checkbox>\r\n                    </section>\r\n\r\n                    <section class=\"fullWidthField col-xs-12 formPadding start-xs\">\r\n                        <md-checkbox formControlName=\"voiceCommunications\">We expect raiders to be able to speak clearly and effectively via voice (Discord) to discuss strategies,\r\n                            ask questions, and communicate during fights. Do you have a working mic with minimal noise/interference\r\n                            and the ability/willingness to interact with the rest of the guild during raid?</md-checkbox>\r\n                    </section>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <h4> Do you utilize your other specs/talents on a fight by fight basis? Are you willing to maintain multiple\r\n                            sets of gear that are advantageous for your different specializations?</h4>\r\n\r\n                        <textarea class=\"commentsInput\" mdInput name=\"flexibility\" formControlName=\"flexibility\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <h4> List and detail which gems and enchants that you currently utilize for your spec. Are they optimal\r\n                            for your current spec? What are your stat priorities? Why?</h4>\r\n\r\n                        <textarea class=\"commentsInput\" mdInput name=\"statPriority\" formControlName=\"statPriority\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField col-xs-12 formPadding\">\r\n                        <h4> Please describe your opener and rotation in detail. How does your rotation differ on a movement-heavy\r\n                            encounter from a Patchwerk-style fight?</h4>\r\n\r\n                        <textarea class=\"commentsInput\" mdInput name=\"rotation\" formControlName=\"rotation\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"How do you prepare for a new encounter?\" name=\"prepareForNewEncounter\"\r\n                            formControlName=\"prepareForNewEncounter\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Tell us about yourself\" name=\"aboutYourself\" formControlName=\"aboutYourself\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Past Raiding experience?\" name=\"raidExperience\" formControlName=\"raidExperience\"> </textarea>\r\n                    </md-form-field>\r\n\r\n                    <md-form-field class=\"fullWidthField formPadding\">\r\n                        <textarea class=\"commentsInput\" mdInput placeholder=\"Anything else you'd like to add?\" name=\"comments\" formControlName=\"comments\"> </textarea>\r\n                    </md-form-field>\r\n\r\n\r\n\r\n                    <button [disabled]=\"!CreateAppFormGroup.valid\" md-raised-button color=\"primary\" (click)=\"submitApplication()\"> Submit </button>\r\n\r\n                </form>\r\n\r\n            </md-card-content>\r\n        </md-card>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -452,6 +538,7 @@ var CreateApplicationComponent = (function () {
         this.characterIsValid = false;
         this.characterIsValid = false;
         this.validateCharacter = this.validateCharacter.bind(this);
+        this.guildName = this.guildService.getGuildContext();
     }
     CreateApplicationComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -462,7 +549,7 @@ var CreateApplicationComponent = (function () {
             character: "",
             realm: "",
             desiredRole: "",
-            guildName: "TBD",
+            guildName: this.guildService.getGuildContext(),
             previousGuild: '',
             comments: '',
             class: ''
@@ -742,7 +829,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/application/view-applications/view-applications.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <div class=\"row start-xs middle-xs\">\r\n\r\n            <img [src]=\"getUrl(row)\" /> &nbsp; {{row.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">{{row.dateApplied | date:'shortDate'}}  </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let row\">\r\n          <button (click)=\"viewApp(row)\" md-raised-button color=\"primary\"> View </button>\r\n          <button (click)=\"viewApp(row)\" md-icon-button color=\"warning\"> <md-icon>delete</md-icon> </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" class=\"col-md-3 col-xs-12 center-xs\">\r\n    <md-spinner ></md-spinner>\r\n  </md-card>\r\n  <div *ngIf=\"!loading\" class=\"col-xs-12 col-md-6\">\r\n\r\n\r\n    <md-table [dataSource]=\"applications\">\r\n\r\n      <ng-container mdColumnDef=\"Character\">\r\n        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>\r\n        <md-cell *mdCellDef=\"let application\">\r\n          <div class=\"row start-xs middle-xs\">\r\n\r\n            <img [src]=\"getUrl(application)\" /> &nbsp; {{application.character}}\r\n\r\n          </div>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"Date Applied\">\r\n        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>\r\n        <md-cell *mdCellDef=\"let application\">{{application.dateApplied | date:'shortDate'}}  </md-cell>\r\n      </ng-container>\r\n\r\n      <ng-container mdColumnDef=\"View Application\">\r\n        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>\r\n        <md-cell *mdCellDef=\"let application\">\r\n          <button (click)=\"viewApp(application)\" md-raised-button color=\"primary\"> View </button>\r\n          <button (click)=\"deleteApplication(application)\" md-icon-button color=\"warning\"> <md-icon>delete</md-icon> </button>\r\n        </md-cell>\r\n      </ng-container>\r\n\r\n\r\n\r\n      <md-header-row *mdHeaderRowDef=\"displayedColumns\"></md-header-row>\r\n      <md-row *mdRowDef=\"let row; columns: displayedColumns;\"></md-row>\r\n\r\n    </md-table>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -758,6 +845,10 @@ module.exports = "<div class=\"row center-xs\">\r\n  <md-card *ngIf=\"loading\" 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__confirm_dialog_confirm_dialog_component__ = __webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -782,15 +873,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+//Components
+
+//3rd party
+
 var ViewApplicationsComponent = (function () {
-    function ViewApplicationsComponent(guildService, router) {
+    function ViewApplicationsComponent(guildService, router, toastr, dialog) {
         this.guildService = guildService;
         this.router = router;
+        this.toastr = toastr;
+        this.dialog = dialog;
     }
     ViewApplicationsComponent.prototype.ngOnInit = function () {
+        this.displayedColumns = ["Character", "Date Applied", "View Application"];
+        this.getGuildApplications();
+    };
+    ViewApplicationsComponent.prototype.getGuildApplications = function () {
         var _this = this;
         this.loading = true;
-        this.displayedColumns = ["Character", "Date Applied", "View Application"];
         this.guildService.getApplications()
             .subscribe(function (applications) {
             _this.loading = false;
@@ -799,8 +900,24 @@ var ViewApplicationsComponent = (function () {
             _this.loading = false;
         });
     };
-    ViewApplicationsComponent.prototype.getUrl = function (row) {
-        return "assets/images/classIcons/images/class/64/" + row.class + ".png";
+    ViewApplicationsComponent.prototype.deleteApplication = function (application) {
+        var _this = this;
+        var body = {
+            application: application
+        };
+        var dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_6__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */], {});
+        dialogRef.afterClosed().subscribe(function (result) {
+            if (result == true) {
+                _this.guildService.deleteApplication(body)
+                    .subscribe(function (result) {
+                    _this.getGuildApplications();
+                    _this.toastr.success("Successfully deleted the application");
+                });
+            }
+        });
+    };
+    ViewApplicationsComponent.prototype.getUrl = function (application) {
+        return "assets/images/classIcons/images/class/64/" + application.class + ".png";
     };
     ViewApplicationsComponent.prototype.viewApp = function (app) {
         this.router.navigateByUrl("/viewApp/" + app._id);
@@ -813,7 +930,7 @@ ViewApplicationsComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/application/view-applications/view-applications.component.html"),
         styles: [__webpack_require__("../../../../../src/app/application/view-applications/view-applications.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__angular_material__["b" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_material__["b" /* MdDialog */]) === "function" && _d || Object])
 ], ViewApplicationsComponent);
 
 var ApplicationsDataSource = (function (_super) {
@@ -831,8 +948,328 @@ var ApplicationsDataSource = (function (_super) {
     return ApplicationsDataSource;
 }(__WEBPACK_IMPORTED_MODULE_1__angular_cdk_collections__["a" /* DataSource */]));
 
-var _a, _b;
+var _a, _b, _c, _d;
 //# sourceMappingURL=view-applications.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/confirm-dialog/confirm-dialog.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/confirm-dialog/confirm-dialog.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"light-theme\">\r\n  <md-card>\r\n    <md-card-title>\r\n      <span md-headline>Are you sure you want to delete this?</span>\r\n    </md-card-title>\r\n\r\n    <md-card-actions class = \"row\">\r\n\r\n      <button md-raised-button color=\"primary\" (click)=\"Save()\"> Yes! </button>\r\n      <button md-raised-button color=\"red\" (click)=\"Cancel()\"> No </button>\r\n    </md-card-actions>\r\n  </md-card>\r\n\r\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/confirm-dialog/confirm-dialog.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConfirmDialogComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ConfirmDialogComponent = (function () {
+    function ConfirmDialogComponent(dialogRef) {
+        this.dialogRef = dialogRef;
+    }
+    ConfirmDialogComponent.prototype.onNoClick = function () {
+        this.dialogRef.close(false);
+    };
+    ConfirmDialogComponent.prototype.Cancel = function () {
+        this.dialogRef.close(false);
+    };
+    ConfirmDialogComponent.prototype.Save = function () {
+        this.dialogRef.close(true);
+    };
+    return ConfirmDialogComponent;
+}());
+ConfirmDialogComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-confirm-dialog',
+        template: __webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */]) === "function" && _a || Object])
+], ConfirmDialogComponent);
+
+var _a;
+//# sourceMappingURL=confirm-dialog.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/guild/create-guild/create-guild.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/guild/create-guild/create-guild.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row center-xs\">\n  <md-card>\n    <md-card-header>\n      <md-card-title>\n        <h2>No guild exist for this page yet </h2>\n      </md-card-title>\n    </md-card-header>\n\n    <md-card-content>\n      <form [formGroup]=\"CreateGuildFormGroup\" class=\"row center-xs\">\n\n        <md-form-field class = \"col-xs-12 col-md-6\">\n          <input mdInput placeholder=\"Guild Name\" name = \"guildName\" formControlName=\"GuildName\" />\n        </md-form-field>\n      </form>\n\n      <button md-raised-button (click) = \"createGuild()\"> Create Guild</button>\n    </md-card-content>\n  </md-card>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/guild/create-guild/create-guild.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateGuildComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+//Services
+
+var CreateGuildComponent = (function () {
+    function CreateGuildComponent(guildService) {
+        this.guildService = guildService;
+        this.CreateGuildFormGroup = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["c" /* FormGroup */]({
+            GuildName: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormControl */]('', __WEBPACK_IMPORTED_MODULE_1__angular_forms__["k" /* Validators */].required)
+        });
+    }
+    CreateGuildComponent.prototype.ngOnInit = function () {
+    };
+    CreateGuildComponent.prototype.createGuild = function () {
+        this.guildService.createGuild(this.CreateGuildFormGroup.controls.GuildName.value)
+            .subscribe(function (result) {
+            alert("it worked");
+        }, function (error) {
+            alert(error);
+        });
+    };
+    return CreateGuildComponent;
+}());
+CreateGuildComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-create-guild',
+        template: __webpack_require__("../../../../../src/app/guild/create-guild/create-guild.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/guild/create-guild/create-guild.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _a || Object])
+], CreateGuildComponent);
+
+var _a;
+//# sourceMappingURL=create-guild.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/guild/guards/CreateGuild.guard.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateGuildGuard; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var CreateGuildGuard = (function () {
+    function CreateGuildGuard(user, toastr, router) {
+        this.user = user;
+        this.toastr = toastr;
+        this.router = router;
+    }
+    CreateGuildGuard.prototype.canActivate = function () {
+        var _this = this;
+        return this.user.getUserPromise().map(function (response) {
+            var canActivate = _this.user.isLoggedIn();
+            if (!_this.user.isLoggedIn()) {
+                canActivate = false;
+                _this.toastr.error("Must be logged in.");
+                _this.router.navigate(['/']);
+            }
+            else if (_this.user.hasGuild()) {
+                canActivate = false;
+                _this.toastr.error("You can only create 1 guild per account");
+            }
+            return canActivate;
+        });
+    };
+    return CreateGuildGuard;
+}());
+CreateGuildGuard = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object])
+], CreateGuildGuard);
+
+var _a, _b, _c;
+//# sourceMappingURL=CreateGuild.guard.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/guild/guild.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GuildModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_guild_create_guild_component__ = __webpack_require__("../../../../../src/app/guild/create-guild/create-guild.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser_animations__ = __webpack_require__("../../../platform-browser/@angular/platform-browser/animations.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_hammerjs__ = __webpack_require__("../../../../hammerjs/hammer.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_hammerjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_hammerjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__routing_routing_module__ = __webpack_require__("../../../../../src/app/guild/routing/routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__guards_CreateGuild_guard__ = __webpack_require__("../../../../../src/app/guild/guards/CreateGuild.guard.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+//3rd Party
+
+
+
+
+//Routing
+
+//Guards
+
+var GuildModule = (function () {
+    function GuildModule() {
+    }
+    return GuildModule;
+}());
+GuildModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_common__["CommonModule"],
+            __WEBPACK_IMPORTED_MODULE_8__routing_routing_module__["a" /* RoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastModule"],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
+            __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+            __WEBPACK_IMPORTED_MODULE_4__angular_material__["a" /* MaterialModule */]
+        ],
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_2__create_guild_create_guild_component__["a" /* CreateGuildComponent */]
+        ],
+        providers: [
+            __WEBPACK_IMPORTED_MODULE_9__guards_CreateGuild_guard__["a" /* CreateGuildGuard */]
+        ]
+    })
+], GuildModule);
+
+//# sourceMappingURL=guild.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/guild/routing/routing.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export routes */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RoutingModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__create_guild_create_guild_component__ = __webpack_require__("../../../../../src/app/guild/create-guild/create-guild.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__guards_CreateGuild_guard__ = __webpack_require__("../../../../../src/app/guild/guards/CreateGuild.guard.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+//Components
+
+//Guards
+
+var routes = [
+    {
+        path: 'guild/createGuild',
+        component: __WEBPACK_IMPORTED_MODULE_2__create_guild_create_guild_component__["a" /* CreateGuildComponent */],
+        canActivate: [__WEBPACK_IMPORTED_MODULE_3__guards_CreateGuild_guard__["a" /* CreateGuildGuard */]]
+    }
+];
+var RoutingModule = (function () {
+    function RoutingModule() {
+    }
+    return RoutingModule;
+}());
+RoutingModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        imports: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */].forRoot(routes)
+        ],
+        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */]]
+    })
+], RoutingModule);
+
+//# sourceMappingURL=routing.module.js.map
 
 /***/ }),
 
@@ -857,7 +1294,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style = \"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n    <md-card>\r\n\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button aria-label=\"editButton\" id = \"editButton\" md-icon-button *ngIf=\"!editingTab\" (click) = \"toggleEditing()\">\r\n                      <md-icon class=\"md-24\" aria-label=\"edit icon\" >edit</md-icon>\r\n                    </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                          <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                          <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                      </button>\r\n\r\n                <button md-icon-button (click) = \"deleteTab(i)\">\r\n                          <md-icon class=\"md-24\" aria-label=\"delete icon\">delete</md-icon>\r\n                      </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style=\"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n\r\n    <md-card *ngIf=\"guildNotOwned\">\r\n      <md-card-header>\r\n        <md-card-title>\r\n          <h2>Seems this guild has been abandoned. Would you like to claim it? </h2>\r\n        </md-card-title>\r\n      </md-card-header>\r\n\r\n      <md-card-content>\r\n\r\n      </md-card-content>\r\n\r\n      <md-card-actions>\r\n        <button (click) = \"claimGuild()\" md-raised-button color=\"primary\">Claim {{guildContext}}</button>\r\n      </md-card-actions>\r\n\r\n    </md-card>\r\n    <md-card *ngIf=\"guildNotFound\">\r\n      <md-card-header>\r\n        <md-card-title>\r\n          <h2>No guild exist for this page yet </h2>\r\n        </md-card-title>\r\n      </md-card-header>\r\n\r\n      <md-card-content>\r\n\r\n      </md-card-content>\r\n\r\n      <md-card-actions>\r\n        <button routerLink=\"/guild/createGuild\" md-raised-button color=\"primary\">Create a new Guild for this url</button>\r\n      </md-card-actions>\r\n\r\n    </md-card>\r\n    <md-card *ngIf=\"!guildNotFound\">\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button aria-label=\"editButton\" id=\"editButton\" md-icon-button *ngIf=\"!editingTab\" (click)=\"toggleEditing()\">\r\n                  <md-icon class=\"md-24\" aria-label=\"edit icon\">edit</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                  <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                  <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button (click)=\"deleteTab(i)\">\r\n                  <md-icon class=\"md-24\" aria-label=\"delete icon\">delete</md-icon>\r\n                </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -898,14 +1335,18 @@ var HomeComponent = (function () {
         this.tabs = [];
         this.editingTab = false;
         this.newTab = { title: '', content: '' };
+        this.guildNotFound = false;
+        this.guildNotOwned = false;
     }
     HomeComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.editingTab = false;
+        this.guildContext = this.guildService.getGuildContext();
         this.userService.user.subscribe(function (user) {
             _this.user = user;
             _this.getTabs();
         });
+        this.checkIfGuildOwned();
     };
     HomeComponent.prototype.openNewTabDialog = function () {
         var _this = this;
@@ -935,6 +1376,27 @@ var HomeComponent = (function () {
         this.user.guild.tabs = tabs.splice(index, 1);
         this.saveTabs();
     };
+    HomeComponent.prototype.claimGuild = function () {
+        var _this = this;
+        this.guildService.claimGuild(this.guildContext)
+            .subscribe(function (result) {
+            _this.toastr.success("You now own the guild " + _this.guildContext);
+            _this.guildNotOwned = false;
+            _this.userService.getUser();
+        });
+    };
+    HomeComponent.prototype.checkIfGuildOwned = function () {
+        var _this = this;
+        this.guildService.guildOwned()
+            .subscribe(function (result) {
+            if (result == true) {
+                _this.guildNotOwned = false;
+            }
+            else {
+                _this.guildNotOwned = true;
+            }
+        });
+    };
     HomeComponent.prototype.createTab = function (newTabName) {
         var tab = Object.assign(this.newTab);
         tab.title = newTabName;
@@ -943,17 +1405,16 @@ var HomeComponent = (function () {
     };
     HomeComponent.prototype.getTabs = function () {
         var _this = this;
-        this.guildService.getGuildName();
         var guildName = "";
-        if (this.user.guild) {
-            guildName = this.user.guild.name;
-        }
-        else {
-            guildName = "TBD";
-        }
+        guildName = this.guildService.getGuildContext();
         this.guildService.getTabs(guildName)
             .subscribe(function (response) {
             _this.tabs = response.guild.tabs;
+        }, function (error) {
+            var errorMessage = JSON.parse(error._body);
+            if (errorMessage.message == "Guild Not Found") {
+                _this.guildNotFound = true;
+            }
         });
     };
     HomeComponent.prototype.toggleEditing = function () {
@@ -1049,7 +1510,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/layout/layout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\">   </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n        <a md-icon-button (click)=\"sidenav.open()\" style=\"font-size: 20px;\"> <md-icon>menu</md-icon> </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs \">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> TBD </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"account\"> Account </button>\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<div class=\"dark-theme\">\r\n\r\n  <md-toolbar color=\"primary\" class=\"row center-xs noPadding\">\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs row start-xs\">\r\n      <span *ngIf=\"user?.name != undefined\">   </span>\r\n      <button *ngIf=\"user?.name == undefined\" md-button routerLink=\"\"> Home </button>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 hidden-sm hidden-md hidden-lg\">\r\n        <a md-icon-button (click)=\"sidenav.open()\" style=\"font-size: 20px;\"> <md-icon>menu</md-icon> </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-6 col-sm-4 center-xs \">\r\n      <a md-button routerLink=\"\" style=\"font-size: 20px;\"> {{guildName | uppercase}} </a>\r\n    </div>\r\n\r\n    <div class=\"col-xs-3 col-sm-4 hidden-xs\">\r\n\r\n      <div class=\"row end-xs\">\r\n\r\n        <button *ngIf=\"user?.name != undefined\" style = \"margin:5px;\" md-raised-button [mdMenuTriggerFor]=\"menu\" color=\"accent\">\r\n            {{user.name}}\r\n            <md-icon>keyboard_arrow_down</md-icon>\r\n        </button>\r\n        <md-menu #menu=\"mdMenu\">\r\n          <button  md-menu-item routerLink=\"account\"> Account </button>\r\n          <button  md-menu-item routerLink=\"viewApplications\"> View Apps </button>\r\n          <button  md-menu-item (click)=\"logout()\"> Logout </button>\r\n        </md-menu>\r\n\r\n        <button style = \"margin:5px;\" *ngIf=\"user?.name == undefined\" md-raised-button color=\"accent\" routerLink=\"login\"> Login </button>\r\n        <button style = \"margin:5px;\" md-raised-button color=\"accent\" routerLink=\"createApplication\"> Apply </button>\r\n      </div>\r\n\r\n    </div>\r\n\r\n\r\n\r\n  </md-toolbar>\r\n</div>"
 
 /***/ }),
 
@@ -1060,6 +1521,7 @@ module.exports = "<!--The content below is only a placeholder and can be replace
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LayoutComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1071,12 +1533,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 //3rd party
 var LayoutComponent = (function () {
-    function LayoutComponent(userService) {
+    function LayoutComponent(userService, guildService) {
         var _this = this;
         this.userService = userService;
+        this.guildService = guildService;
         this.user = undefined;
+        this.guildName = this.guildService.getGuildContext();
         userService.user.subscribe(function (user) {
             _this.updateBasedOnUser(user);
         });
@@ -1098,10 +1563,10 @@ LayoutComponent = __decorate([
         inputs: ['sidenav'],
         styles: [__webpack_require__("../../../../../src/app/layout/layout.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _b || Object])
 ], LayoutComponent);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=layout.component.js.map
 
 /***/ }),
@@ -1127,7 +1592,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\n\n  <md-card>\n    <md-card-header>\n      <md-card-title>\n        <h2>Login </h2>\n      </md-card-title>\n    </md-card-header>\n\n    <hr />\n\n\n\n    <div class=\"row \">\n\n      <div class=\"col-xs-11\">\n        <md-progress-bar *ngIf = \"loading\" mode=\"indeterminate\"></md-progress-bar>\n        <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\n\n          <md-form-field class=\"col-xs-12\">\n            <input mdInput placeholder=\"User Name\" name=\"name\" formControlName=\"Name\" />\n          </md-form-field>\n\n          <md-form-field class=\"col-xs-12\">\n            <input mdInput placeholder=\"Password\" type=\"password\" formControlName=\"Password\" />\n          </md-form-field>\n\n          <div class=\"col-xs-12 start-xs\">\n            <button md-raised-button (click)=\"login()\" color=\"primary\"> Login </button>\n            <button md-raised-button (click)=\"openResetEmailDialog()\" color=\"primary\"> Reset Password </button>\n          </div>\n        </form>\n      </div>\n\n    </div>\n\n  </md-card>\n\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n\r\n  <md-card>\r\n    <md-card-header>\r\n      <md-card-title>\r\n        <h2>Login </h2>\r\n      </md-card-title>\r\n    </md-card-header>\r\n\r\n    <hr />\r\n\r\n\r\n\r\n    <div class=\"row \">\r\n\r\n      <div class=\"col-xs-11\">\r\n        <md-progress-bar *ngIf = \"loading\" mode=\"indeterminate\"></md-progress-bar>\r\n        <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\r\n\r\n          <md-form-field class=\"col-xs-12\">\r\n            <input mdInput placeholder=\"User Name\" name=\"name\" formControlName=\"Name\" />\r\n          </md-form-field>\r\n\r\n          <md-form-field class=\"col-xs-12\">\r\n            <input mdInput placeholder=\"Password\" type=\"password\" formControlName=\"Password\" />\r\n          </md-form-field>\r\n\r\n          <div class=\"col-xs-12 start-xs\">\r\n            <button md-raised-button (click)=\"login()\" color=\"primary\"> Login </button>\r\n            <button md-raised-button (click)=\"openResetEmailDialog()\" color=\"primary\"> Reset Password </button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n\r\n    </div>\r\n\r\n  </md-card>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -1298,6 +1763,7 @@ module.exports = "<div class=\"light-theme\">\r\n\r\n    <md-form-field>\r\n    
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_login_component__ = __webpack_require__("../../../../../src/app/login/login.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__account_account_component__ = __webpack_require__("../../../../../src/app/account/account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__account_guards_account_guard__ = __webpack_require__("../../../../../src/app/account/guards/account.guard.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1310,6 +1776,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+//Guards
+
 var routes = [
     {
         path: '', component: __WEBPACK_IMPORTED_MODULE_2__home_home_component__["a" /* HomeComponent */]
@@ -1318,7 +1786,7 @@ var routes = [
         path: 'login', component: __WEBPACK_IMPORTED_MODULE_3__login_login_component__["a" /* LoginComponent */]
     },
     {
-        path: 'account', component: __WEBPACK_IMPORTED_MODULE_4__account_account_component__["a" /* AccountComponent */]
+        path: 'account', component: __WEBPACK_IMPORTED_MODULE_4__account_account_component__["a" /* AccountComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_5__account_guards_account_guard__["a" /* AccountGuard */]]
     }
 ];
 var RoutingModule = (function () {
@@ -1447,6 +1915,7 @@ var _a;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GuildService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1458,12 +1927,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var GuildService = (function () {
-    function GuildService(apiService) {
+    function GuildService(apiService, userService) {
         this.apiService = apiService;
+        this.userService = userService;
         this.GUILD_API_BASE_URL = "/guild/guild";
         this.APP_API_BASE_URL = "/guild/applications";
     }
+    GuildService.prototype.createGuild = function (guildName) {
+        var body = {
+            guildName: guildName
+        };
+        return this.apiService.post(this.GUILD_API_BASE_URL + "/addGuild", body);
+    };
+    GuildService.prototype.leaveGuild = function (guildName) {
+        var body = {
+            guildName: guildName
+        };
+        return this.apiService.post(this.GUILD_API_BASE_URL + "/removeMember", body);
+    };
+    GuildService.prototype.guildOwned = function () {
+        var guildContext = this.getGuildContext();
+        return this.apiService.get(this.GUILD_API_BASE_URL + "/guildOwned/" + guildContext);
+    };
+    GuildService.prototype.claimGuild = function (guildName) {
+        var body = {
+            guildName: guildName
+        };
+        return this.apiService.post(this.GUILD_API_BASE_URL + "/claimGuild", body);
+    };
     GuildService.prototype.getTabs = function (guildName) {
         return this.apiService.get(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName);
     };
@@ -1478,25 +1971,31 @@ var GuildService = (function () {
         return this.apiService.post(this.APP_API_BASE_URL + "/applicationSubmission", body);
     };
     GuildService.prototype.getApplications = function () {
-        return this.apiService.get(this.APP_API_BASE_URL + "/getApplications/TBD");
+        return this.apiService.get(this.APP_API_BASE_URL + "/getApplications/" + this.getGuildContext());
     };
     GuildService.prototype.getApplication = function (appId) {
         return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
     };
-    GuildService.prototype.getGuildName = function () {
-        console.log(window.location.hostname);
+    GuildService.prototype.deleteApplication = function (body) {
+        return this.apiService.post(this.APP_API_BASE_URL + "/rejectApplication", body);
+    };
+    GuildService.prototype.getGuildContext = function () {
         var hostname = window.location.hostname;
         var splitHostName = hostname.split(".");
-        console.log(splitHostName[0]);
+        var guildContext = splitHostName[0];
+        if (guildContext == "localhost") {
+            guildContext = "test";
+        }
+        return guildContext;
     };
     return GuildService;
 }());
 GuildService = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__api_service__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__api_service__["a" /* ApiService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__api_service__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__api_service__["a" /* ApiService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__user_service__["a" /* UserService */]) === "function" && _b || Object])
 ], GuildService);
 
-var _a;
+var _a, _b;
 //# sourceMappingURL=guild.service.js.map
 
 /***/ }),
@@ -1531,15 +2030,25 @@ var UserService = (function () {
         this.user = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["BehaviorSubject"]({});
         this.ACCOUNT_API_URL_BASE = "/account";
     }
+    UserService.prototype.isLoggedIn = function () {
+        var user = this.user.getValue();
+        var isLoggedIn = true;
+        if (user.name == "" || user.name == undefined) {
+            isLoggedIn = false;
+        }
+        return isLoggedIn;
+    };
     UserService.prototype.changePassword = function (body) {
         return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/updateAccount", body);
+    };
+    UserService.prototype.getUserPromise = function () {
+        return this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser");
     };
     UserService.prototype.getUser = function () {
         var _this = this;
         this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
-            .subscribe(function (response) {
-            console.log(response);
-            _this.user.next(response);
+            .subscribe(function (user) {
+            _this.user.next(user);
         }, function (error) {
             console.log("API call failed");
             console.log(error);
@@ -1567,17 +2076,34 @@ var UserService = (function () {
         };
         return this.apiService.post(this.ACCOUNT_API_URL_BASE + '/lost-password', body);
     };
+    UserService.prototype.hasGuild = function () {
+        var user = this.user.getValue();
+        var hasGuild = false;
+        if (user.guild != undefined && user.guild.name != "" && user.guild.name != undefined) {
+            hasGuild = true;
+        }
+        return hasGuild;
+    };
     UserService.prototype.isGM = function () {
         var isValidGM = false;
         var user = this.user.getValue();
-        if (user.guild) {
+        if (this.hasGuild() && user.guild.name == this.getGuildContext()) {
             user.guild.members.forEach(function (member, index) {
                 if (member.user == user.name) {
-                    isValidGM = true;
+                    isValidGM = member.GM;
                 }
             });
         }
         return isValidGM;
+    };
+    UserService.prototype.getGuildContext = function () {
+        var hostname = window.location.hostname;
+        var splitHostName = hostname.split(".");
+        var guildContext = splitHostName[0];
+        if (guildContext == "localhost") {
+            guildContext = "test";
+        }
+        return guildContext;
     };
     return UserService;
 }());

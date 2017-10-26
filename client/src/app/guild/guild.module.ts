@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CreateApplicationComponent } from './create-application/create-application.component';
+import { CreateGuildComponent } from './create-guild/create-guild.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-
-//Routing
-import { RoutingModule } from './routing/routing.module';
 
 //3rd Party
 import { MaterialModule } from '@angular/material';
@@ -12,24 +9,27 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 
+//Routing
+import { RoutingModule } from './routing/routing.module';
 
-import { ViewApplicationsComponent } from './view-applications/view-applications.component';
-import { ViewAppComponent } from './view-app/view-app.component';
+//Guards
+import {CreateGuildGuard} from './guards/CreateGuild.guard';
 
 @NgModule({
   imports: [
     CommonModule,
     RoutingModule,
+    ToastModule,
     ReactiveFormsModule,
     FormsModule,
-    ToastModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule, 
     MaterialModule
   ],
   declarations: [
-    CreateApplicationComponent,
-    ViewApplicationsComponent,
-    ViewAppComponent
+    CreateGuildComponent    
+  ],
+  providers: [
+    CreateGuildGuard
   ]
 })
-export class ApplicationModule { } 
+export class GuildModule { }

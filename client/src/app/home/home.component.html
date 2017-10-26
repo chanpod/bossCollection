@@ -1,4 +1,4 @@
-<div class="row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding" style = "height:100%;">
+<div class="row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding" style="height:100%;">
 
 
   <div class="col-xs-12 logBackdrop noPadding">
@@ -9,8 +9,40 @@
   <button *ngIf="userService.isGM()" md-raised-button color="accent" (click)="openNewTabDialog()"> New Tab </button>
 
   <div class="col-md-8 col-xs-12 ">
-    <md-card>
 
+    <md-card *ngIf="guildNotOwned">
+      <md-card-header>
+        <md-card-title>
+          <h2>Seems this guild has been abandoned. Would you like to claim it? </h2>
+        </md-card-title>
+      </md-card-header>
+
+      <md-card-content>
+
+      </md-card-content>
+
+      <md-card-actions>
+        <button (click) = "claimGuild()" md-raised-button color="primary">Claim {{guildContext}}</button>
+      </md-card-actions>
+
+    </md-card>
+    <md-card *ngIf="guildNotFound">
+      <md-card-header>
+        <md-card-title>
+          <h2>No guild exist for this page yet </h2>
+        </md-card-title>
+      </md-card-header>
+
+      <md-card-content>
+
+      </md-card-content>
+
+      <md-card-actions>
+        <button routerLink="/guild/createGuild" md-raised-button color="primary">Create a new Guild for this url</button>
+      </md-card-actions>
+
+    </md-card>
+    <md-card *ngIf="!guildNotFound">
 
       <md-tab-group class="card-shadow">
         <div *ngFor="let tab of tabs; let i = index">
@@ -37,21 +69,21 @@
 
               <md-card-actions *ngIf="userService.isGM()">
 
-                <button aria-label="editButton" id = "editButton" md-icon-button *ngIf="!editingTab" (click) = "toggleEditing()">
-                      <md-icon class="md-24" aria-label="edit icon" >edit</md-icon>
-                    </button>
+                <button aria-label="editButton" id="editButton" md-icon-button *ngIf="!editingTab" (click)="toggleEditing()">
+                  <md-icon class="md-24" aria-label="edit icon">edit</md-icon>
+                </button>
 
                 <button md-icon-button *ngIf="editingTab" (click)="saveTabs()">
-                          <md-icon class="md-24" aria-label="save icon">save</md-icon>
-                      </button>
+                  <md-icon class="md-24" aria-label="save icon">save</md-icon>
+                </button>
 
                 <button md-icon-button *ngIf="editingTab" (click)="toggleEditing()">
-                          <md-icon mdTooltip="Cancel" class="md-24" aria-label="cancel icon">cancel</md-icon>
-                      </button>
+                  <md-icon mdTooltip="Cancel" class="md-24" aria-label="cancel icon">cancel</md-icon>
+                </button>
 
-                <button md-icon-button (click) = "deleteTab(i)">
-                          <md-icon class="md-24" aria-label="delete icon">delete</md-icon>
-                      </button>
+                <button md-icon-button (click)="deleteTab(i)">
+                  <md-icon class="md-24" aria-label="delete icon">delete</md-icon>
+                </button>
 
 
               </md-card-actions>

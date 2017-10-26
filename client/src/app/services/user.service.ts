@@ -14,19 +14,36 @@ export class UserService {
   public user: BehaviorSubject<any> = new BehaviorSubject({});
   private ACCOUNT_API_URL_BASE: string = "/account";
 
-  constructor(private apiService: ApiService, private router:Router) {
+  constructor(private apiService: ApiService, private router: Router) {
+
+    
+  }
+
+  isLoggedIn() {
+    let user = this.user.getValue();
+    let isLoggedIn = true;
+
+    if (user.name == "" || user.name == undefined) {
+      isLoggedIn = false;
+    }
+
+    return isLoggedIn;
 
   }
 
-  changePassword(body){
+  changePassword(body) {
     return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/updateAccount", body);
+  }
+
+  getUserPromise(){
+    return this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser");
   }
 
   getUser() {
     this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
-      .subscribe((response) => {
-        console.log(response)
-        this.user.next(response);
+      .subscribe((user) => {
+        
+        this.user.next(user);
       },
       (error) => {
         console.log("API call failed");
@@ -52,7 +69,7 @@ export class UserService {
     }
 
     return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/login", body);
-      
+
 
   }
 
@@ -65,23 +82,48 @@ export class UserService {
     return this.apiService.post(this.ACCOUNT_API_URL_BASE + '/lost-password', body);
   }
 
+  hasGuild(){
+    let user = this.user.getValue();
+    let hasGuild = false;
+
+    if(user.guild != undefined && user.guild.name != "" && user.guild.name != undefined){ 
+      hasGuild = true; 
+    }
+
+    return hasGuild;
+  }
+
   isGM() {
     let isValidGM = false;
     let user = this.user.getValue();
 
-    if (user.guild) {
-
+    if (this.hasGuild() && user.guild.name == this.getGuildContext()) { 
 
       user.guild.members.forEach((member, index) => {
 
         if (member.user == user.name) {
-          isValidGM = true;
+          isValidGM = member.GM; 
         }
       });
 
     }
 
     return isValidGM;
+  }
+
+  
+  getGuildContext() {
+    
+    let hostname = window.location.hostname;
+
+    let splitHostName = hostname.split(".");
+    let guildContext = splitHostName[0];
+
+    if (guildContext == "localhost") {
+      guildContext = "test";
+    }
+
+    return guildContext;
   }
 
 }
