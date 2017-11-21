@@ -76,10 +76,9 @@ function getSecureContext(domain) {
 }
 
 //read them into memory
-var secureContext = {
-  'baseSite': getSecureContext('baseSite'),
+var secureContext = {  
   'localhost': getSecureContext('localhost'),
-  'tbd': getSecureContext('tbd')
+  'tbd.bosscollection': getSecureContext('tbd')
 }
 
 
