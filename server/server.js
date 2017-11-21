@@ -74,11 +74,12 @@ var routes = require('./routes/router.js')(app);
  * Start Server
  */
 
-var http = require('https').Server({
-  key: privateKey,
-  cert: certificate
-},app).listen(port);
+// var http = require('https').Server({
+//   key: privateKey,
+//   cert: certificate
+// },app).listen(port);
 
+app.listen(port);
 console.log("Listening on port " + port);
 
 //http.listen(4001, function(){
