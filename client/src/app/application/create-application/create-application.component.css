@@ -22,51 +22,51 @@
 }
 
 .shamanBackground{
-    background-image: url('../../../assets/images/classBackdrops/shaman.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/shaman.jpg"); 
 }
 
 .hunterBackground{
-    background-image: url('../../../assets/images/classBackdrops/hunter.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/hunter.jpg"); 
 }
 
 .demonhunterBackground{
-    background-image: url('../../../assets/images/classBackdrops/demon hunter.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/demon_hunter.jpg"); 
 }
 
 .druidBackground{
-    background-image: url('../../../assets/images/classBackdrops/druid.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/druid.jpg"); 
 }
 
 .paladinBackground{
-    background-image: url('../../../assets/images/classBackdrops/paladin.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/paladin.jpg"); 
 }
 
 .deathknightBackground{
-    background-image: url('../../../assets/images/classBackdrops/death knight.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/death_knight.jpg"); 
 }
 
 .monkBackground{
-    background-image: url('../../../assets/images/classBackdrops/monk.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/monk.jpg"); 
 }
 
 .mageBackground{
-    background-image: url('../../../assets/images/classBackdrops/mage.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/mage.jpg"); 
 }
 
 .priestBackground{
-    background-image: url('../../../assets/images/classBackdrops/priest.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/priest.jpg"); 
 }
 
 .rogueBackground{
-    background-image: url('../../../assets/images/classBackdrops/rogue.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/rogue.jpg"); 
 }
 
 .warlockBackground{
-    background-image: url('../../../assets/images/classBackdrops/warlock.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/warlock.jpg"); 
 }
 
 .warriorBackground{
-    background-image: url('../../../assets/images/classBackdrops/warrior.jpg'); 
+    background-image: url("../../../assets/images/classBackdrops/warrior.jpg"); 
 }
 
 .fullWidthField{

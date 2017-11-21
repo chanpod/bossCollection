@@ -20,7 +20,7 @@ hr {
   }
 
 .backgroundFlair{
-    background-image: url('./assets/images/classBackdrops/demon hunter.jpg'); 
+    background-image: url("./assets/images/classBackdrops/demon_hunter.jpg"); 
 }
 
 .backgroundBase{

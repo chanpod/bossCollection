@@ -13,7 +13,7 @@
 }
 
 .demonhunterBackground{
-    background-image: url('../../assets/images/classBackdrops/demon hunter.jpg'); 
+    background: url("../../assets/images/classBackdrops/demon_hunter.jpg"); 
 }
 
 .classBackgroundBase{
