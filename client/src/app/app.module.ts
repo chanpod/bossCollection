@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { ResetPasswordDialogComponent } from './login/resetPasswordDialog.component';
 import { HomeComponent } from './home/home.component';
 import { NewTabDialog } from './home/newTab.component';
+import { ImageUrlDialog } from './home/imageUrl.component';
 
 //Routing
 import { RoutingModule } from './routing/routing.module';
@@ -42,6 +43,7 @@ import {AccountGuard} from './account/guards/account.guard';
     AppComponent,
     HomeComponent,
     NewTabDialog,
+    ImageUrlDialog,
     LayoutComponent,
     LoginComponent,
     ResetPasswordDialogComponent,
@@ -50,6 +52,7 @@ import {AccountGuard} from './account/guards/account.guard';
   ],
   entryComponents: [
     NewTabDialog,
+    ImageUrlDialog,
     ConfirmDialogComponent,
     ResetPasswordDialogComponent
   ],

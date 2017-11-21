@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.config.json",
+    "start": "ng serve --proxy-config proxy.config.json --ssl true --ssl-cert ../server/certs/localhost/server.crt --ssl-key ../server/certs/localhost/privkey.key",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -23,6 +23,7 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
+    "angular-oauth2-oidc": "^3.0.3",
     "angular2-markdown": "^1.6.0",
     "core-js": "^2.4.1",
     "flexboxgrid": "^6.3.1",
@@ -31,7 +32,7 @@
     "ng2-toastr": "^4.1.2",
     "ngx-cookie": "^1.0.0",
     "roboto-fontface": "^0.8.0",
-    "rxjs": "^5.4.2",    
+    "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

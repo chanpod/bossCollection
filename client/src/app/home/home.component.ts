@@ -7,6 +7,7 @@ import { GuildService } from '../services/guild.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { NewTabDialog } from './newTab.component';
+import { ImageUrlDialog } from './imageUrl.component';
 
 @Component({
     selector: 'app-home',
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit {
     guildNotFound: boolean = false;
     guildNotOwned: boolean = false;
     guildContext: String;
+    guildSettings: any;
 
     constructor(
         public userService: UserService,
@@ -39,10 +41,61 @@ export class HomeComponent implements OnInit {
         this.userService.user.subscribe((user) => {
 
             this.user = user;
+
+            if (this.user.guild) {
+                this.getGuildSettings();
+            }
+
             this.getTabs();
         })
 
+
+
         this.checkIfGuildOwned();
+    }
+
+    updateGuildBanner(newUrl) {
+
+        this.guildSettings.bannerImage = newUrl;
+
+        this.guildService.updateGuildSettings(this.guildSettings)
+            .subscribe(
+            (guildSettings) => {
+                this.guildSettings = guildSettings.guild
+            },
+            (error) => {
+                this.toastr.error("Update failed. Try again later.");
+            }
+            )
+    }
+
+    getGuildSettings() {
+        this.guildService.getGuildSettings()
+            .subscribe(
+            (guildSettings) => {
+                this.guildSettings = guildSettings.guild
+            },
+            (error) => {
+                this.toastr.error("Could not retrieve guild settings. Try again later.");
+            }
+            )
+
+    }
+
+    openImageDialog(): void {
+
+        let dialogRef = this.dialog.open(ImageUrlDialog, {
+            width: '250px',
+            data: this.guildSettings.bannerImage
+        });
+
+        dialogRef.afterClosed().subscribe(newUrl => {
+
+            if (newUrl != null) {
+
+                this.updateGuildBanner(newUrl);
+            }
+        });
     }
 
     openNewTabDialog(): void {

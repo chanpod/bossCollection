@@ -45,6 +45,19 @@ export class GuildService {
     return this.apiService.post(this.GUILD_API_BASE_URL + "/claimGuild", body);
   }
 
+  getGuildSettings(){
+    
+    return this.apiService.get(this.GUILD_API_BASE_URL + "/guildSettings");
+  }
+
+  updateGuildSettings(guildSettings: any){
+    let body = {
+      guild: guildSettings
+    }
+
+    return this.apiService.post(this.GUILD_API_BASE_URL + "/guildSettings", body);
+  }
+
   getTabs(guildName:String) {
 
     return this.apiService.get(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName);

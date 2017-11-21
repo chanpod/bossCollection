@@ -2,8 +2,9 @@
 
 
   <div class="col-xs-12 logBackdrop noPadding">
-
-    <img src="assets/images/TBDLogo.png" style="width: 50%;height:100%" />
+    <img class = "logoBanner" *ngIf = "guildSettings && guildSettings.bannerImage" src="{{guildSettings.bannerImage}}"/>
+    <img class = "logoBanner" *ngIf = "guildSettings && !guildSettings.bannerImage" src="assets/images/bcLogo.png" /> 
+    <button md-raised-button color="primary" style = "position:absolute;left:0;" (click) = "openImageDialog()"> Update Image</button>
   </div>
 
   <button *ngIf="userService.isGM()" md-raised-button color="accent" (click)="openNewTabDialog()"> New Tab </button>
@@ -22,7 +23,7 @@
       </md-card-content>
 
       <md-card-actions>
-        <button (click) = "claimGuild()" md-raised-button color="primary">Claim {{guildContext}}</button>
+        <button (click) = "claimGuild()" md-raised-button color="accent">Claim {{guildContext}}</button>
       </md-card-actions>
 
     </md-card>

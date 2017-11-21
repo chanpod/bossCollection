@@ -301,17 +301,18 @@ var _a, _b, _c, _d;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__ = __webpack_require__("../../../../../src/app/login/resetPasswordDialog.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__home_home_component__ = __webpack_require__("../../../../../src/app/home/home.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__ = __webpack_require__("../../../../../src/app/home/newTab.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__routing_routing_module__ = __webpack_require__("../../../../../src/app/routing/routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__layout_layout_component__ = __webpack_require__("../../../../../src/app/layout/layout.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__account_account_component__ = __webpack_require__("../../../../../src/app/account/account.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__confirm_dialog_confirm_dialog_component__ = __webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__guild_guild_module__ = __webpack_require__("../../../../../src/app/guild/guild.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__account_guards_account_guard__ = __webpack_require__("../../../../../src/app/account/guards/account.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__home_imageUrl_component__ = __webpack_require__("../../../../../src/app/home/imageUrl.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__routing_routing_module__ = __webpack_require__("../../../../../src/app/routing/routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__layout_layout_component__ = __webpack_require__("../../../../../src/app/layout/layout.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_guild_service__ = __webpack_require__("../../../../../src/app/services/guild.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_blizzard_service__ = __webpack_require__("../../../../../src/app/services/blizzard.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__application_application_module__ = __webpack_require__("../../../../../src/app/application/application.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__account_account_component__ = __webpack_require__("../../../../../src/app/account/account.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__confirm_dialog_confirm_dialog_component__ = __webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__guild_guild_module__ = __webpack_require__("../../../../../src/app/guild/guild.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__account_guards_account_guard__ = __webpack_require__("../../../../../src/app/account/guards/account.guard.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -331,6 +332,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 //Components
+
 
 
 
@@ -361,37 +363,39 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */],
             __WEBPACK_IMPORTED_MODULE_13__home_home_component__["a" /* HomeComponent */],
             __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
-            __WEBPACK_IMPORTED_MODULE_16__layout_layout_component__["a" /* LayoutComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__home_imageUrl_component__["a" /* ImageUrlDialog */],
+            __WEBPACK_IMPORTED_MODULE_17__layout_layout_component__["a" /* LayoutComponent */],
             __WEBPACK_IMPORTED_MODULE_11__login_login_component__["a" /* LoginComponent */],
             __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__account_account_component__["a" /* AccountComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */]
+            __WEBPACK_IMPORTED_MODULE_23__account_account_component__["a" /* AccountComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */]
         ],
         entryComponents: [
             __WEBPACK_IMPORTED_MODULE_14__home_newTab_component__["a" /* NewTabDialog */],
-            __WEBPACK_IMPORTED_MODULE_23__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__home_imageUrl_component__["a" /* ImageUrlDialog */],
+            __WEBPACK_IMPORTED_MODULE_24__confirm_dialog_confirm_dialog_component__["a" /* ConfirmDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_12__login_resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
-            __WEBPACK_IMPORTED_MODULE_5__angular_material__["a" /* MaterialModule */],
+            __WEBPACK_IMPORTED_MODULE_5__angular_material__["b" /* MaterialModule */],
             __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-            __WEBPACK_IMPORTED_MODULE_15__routing_routing_module__["a" /* RoutingModule */],
+            __WEBPACK_IMPORTED_MODULE_16__routing_routing_module__["a" /* RoutingModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_9_ngx_cookie__["a" /* CookieModule */],
             __WEBPACK_IMPORTED_MODULE_10_angular2_markdown__["a" /* MarkdownModule */].forRoot(),
             __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"].forRoot(),
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
-            __WEBPACK_IMPORTED_MODULE_21__application_application_module__["a" /* ApplicationModule */],
-            __WEBPACK_IMPORTED_MODULE_24__guild_guild_module__["a" /* GuildModule */]
+            __WEBPACK_IMPORTED_MODULE_22__application_application_module__["a" /* ApplicationModule */],
+            __WEBPACK_IMPORTED_MODULE_25__guild_guild_module__["a" /* GuildModule */]
         ],
         providers: [
-            __WEBPACK_IMPORTED_MODULE_17__services_user_service__["a" /* UserService */],
-            __WEBPACK_IMPORTED_MODULE_18__services_api_service__["a" /* ApiService */],
-            __WEBPACK_IMPORTED_MODULE_19__services_guild_service__["a" /* GuildService */],
-            __WEBPACK_IMPORTED_MODULE_20__services_blizzard_service__["a" /* BlizzardService */],
-            __WEBPACK_IMPORTED_MODULE_25__account_guards_account_guard__["a" /* AccountGuard */]
+            __WEBPACK_IMPORTED_MODULE_18__services_user_service__["a" /* UserService */],
+            __WEBPACK_IMPORTED_MODULE_19__services_api_service__["a" /* ApiService */],
+            __WEBPACK_IMPORTED_MODULE_20__services_guild_service__["a" /* GuildService */],
+            __WEBPACK_IMPORTED_MODULE_21__services_blizzard_service__["a" /* BlizzardService */],
+            __WEBPACK_IMPORTED_MODULE_26__account_guards_account_guard__["a" /* AccountGuard */]
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
     })
@@ -452,7 +456,7 @@ ApplicationModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_8_ng2_toastr_ng2_toastr__["ToastModule"],
             __WEBPACK_IMPORTED_MODULE_6__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-            __WEBPACK_IMPORTED_MODULE_5__angular_material__["a" /* MaterialModule */]
+            __WEBPACK_IMPORTED_MODULE_5__angular_material__["b" /* MaterialModule */]
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_2__create_application_create_application_component__["a" /* CreateApplicationComponent */],
@@ -930,7 +934,7 @@ ViewApplicationsComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/application/view-applications/view-applications.component.html"),
         styles: [__webpack_require__("../../../../../src/app/application/view-applications/view-applications.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__angular_material__["b" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_material__["b" /* MdDialog */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_guild_service__["a" /* GuildService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__angular_material__["c" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__angular_material__["c" /* MdDialog */]) === "function" && _d || Object])
 ], ViewApplicationsComponent);
 
 var ApplicationsDataSource = (function (_super) {
@@ -1017,7 +1021,7 @@ ConfirmDialogComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.html"),
         styles: [__webpack_require__("../../../../../src/app/confirm-dialog/confirm-dialog.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */]) === "function" && _a || Object])
 ], ConfirmDialogComponent);
 
 var _a;
@@ -1211,7 +1215,7 @@ GuildModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["j" /* ReactiveFormsModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["e" /* FormsModule */],
             __WEBPACK_IMPORTED_MODULE_5__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-            __WEBPACK_IMPORTED_MODULE_4__angular_material__["a" /* MaterialModule */]
+            __WEBPACK_IMPORTED_MODULE_4__angular_material__["b" /* MaterialModule */]
         ],
         declarations: [
             __WEBPACK_IMPORTED_MODULE_2__create_guild_create_guild_component__["a" /* CreateGuildComponent */]
@@ -1281,7 +1285,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\r\n.card-shadow{\r\n    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);\r\n}\r\n\r\n.logBackdrop{\r\n    background-color: black;\r\n}\r\n\r\n.demonhunterBackground{\r\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \r\n}\r\n\r\n.classBackgroundBase{\r\n    width:100%; \r\n    background-size: cover;\r\n    background-repeat: no-repeat;\r\n}", ""]);
+exports.push([module.i, "\r\n.card-shadow{\r\n    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);\r\n}\r\n\r\n.logBackdrop{\r\n    background-color: black; \r\n}\r\n\r\n.logoBanner{\r\n    max-width: 100%;\r\n    max-height: 100%;\r\n}\r\n\r\n.demonhunterBackground{\r\n    background-image: url('" + __webpack_require__("../../../../../src/assets/images/classBackdrops/demon hunter.jpg") + "'); \r\n}\r\n\r\n.classBackgroundBase{\r\n    width:100%; \r\n    background-size: cover;\r\n    background-repeat: no-repeat;\r\n}", ""]);
 
 // exports
 
@@ -1294,7 +1298,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style=\"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n\r\n    <img src=\"assets/images/TBDLogo.png\" style=\"width: 50%;height:100%\" />\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n\r\n    <md-card *ngIf=\"guildNotOwned\">\r\n      <md-card-header>\r\n        <md-card-title>\r\n          <h2>Seems this guild has been abandoned. Would you like to claim it? </h2>\r\n        </md-card-title>\r\n      </md-card-header>\r\n\r\n      <md-card-content>\r\n\r\n      </md-card-content>\r\n\r\n      <md-card-actions>\r\n        <button (click) = \"claimGuild()\" md-raised-button color=\"primary\">Claim {{guildContext}}</button>\r\n      </md-card-actions>\r\n\r\n    </md-card>\r\n    <md-card *ngIf=\"guildNotFound\">\r\n      <md-card-header>\r\n        <md-card-title>\r\n          <h2>No guild exist for this page yet </h2>\r\n        </md-card-title>\r\n      </md-card-header>\r\n\r\n      <md-card-content>\r\n\r\n      </md-card-content>\r\n\r\n      <md-card-actions>\r\n        <button routerLink=\"/guild/createGuild\" md-raised-button color=\"primary\">Create a new Guild for this url</button>\r\n      </md-card-actions>\r\n\r\n    </md-card>\r\n    <md-card *ngIf=\"!guildNotFound\">\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button aria-label=\"editButton\" id=\"editButton\" md-icon-button *ngIf=\"!editingTab\" (click)=\"toggleEditing()\">\r\n                  <md-icon class=\"md-24\" aria-label=\"edit icon\">edit</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                  <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                  <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button (click)=\"deleteTab(i)\">\r\n                  <md-icon class=\"md-24\" aria-label=\"delete icon\">delete</md-icon>\r\n                </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding\" style=\"height:100%;\">\r\n\r\n\r\n  <div class=\"col-xs-12 logBackdrop noPadding\">\r\n    <img class = \"logoBanner\" *ngIf = \"guildSettings && guildSettings.bannerImage\" src=\"{{guildSettings.bannerImage}}\"/>\r\n    <img class = \"logoBanner\" *ngIf = \"guildSettings && !guildSettings.bannerImage\" src=\"assets/images/bcLogo.png\" /> \r\n    <button md-raised-button color=\"primary\" style = \"position:absolute;left:0;\" (click) = \"openImageDialog()\"> Update Image</button>\r\n  </div>\r\n\r\n  <button *ngIf=\"userService.isGM()\" md-raised-button color=\"accent\" (click)=\"openNewTabDialog()\"> New Tab </button>\r\n\r\n  <div class=\"col-md-8 col-xs-12 \">\r\n\r\n    <md-card *ngIf=\"guildNotOwned\">\r\n      <md-card-header>\r\n        <md-card-title>\r\n          <h2>Seems this guild has been abandoned. Would you like to claim it? </h2>\r\n        </md-card-title>\r\n      </md-card-header>\r\n\r\n      <md-card-content>\r\n\r\n      </md-card-content>\r\n\r\n      <md-card-actions>\r\n        <button (click) = \"claimGuild()\" md-raised-button color=\"accent\">Claim {{guildContext}}</button>\r\n      </md-card-actions>\r\n\r\n    </md-card>\r\n    <md-card *ngIf=\"guildNotFound\">\r\n      <md-card-header>\r\n        <md-card-title>\r\n          <h2>No guild exist for this page yet </h2>\r\n        </md-card-title>\r\n      </md-card-header>\r\n\r\n      <md-card-content>\r\n\r\n      </md-card-content>\r\n\r\n      <md-card-actions>\r\n        <button routerLink=\"/guild/createGuild\" md-raised-button color=\"primary\">Create a new Guild for this url</button>\r\n      </md-card-actions>\r\n\r\n    </md-card>\r\n    <md-card *ngIf=\"!guildNotFound\">\r\n\r\n      <md-tab-group class=\"card-shadow\">\r\n        <div *ngFor=\"let tab of tabs; let i = index\">\r\n\r\n          <md-tab [label]=\"tab.title\">\r\n            <md-card>\r\n              <md-card-content>\r\n\r\n                <markdown style=\"text-align: start;\" [data]=\"tab.content\"> </markdown>\r\n\r\n                <div *ngIf=\"editingTab\">\r\n                  <md-toolbar color=\"accent\" class=\"row center-xs\">\r\n                    Modify Content - Preview Changes above\r\n                    <a target=\"_blank\" href=\"https://dimpu.github.io/angular2-markdown/\" md-icon-button>\r\n                      <md-icon mdTooltip=\"Markdown Help\" class=\"md-24\" aria-label=\"helpIcon\">help</md-icon>\r\n                    </a>\r\n\r\n                    HTML supported\r\n                  </md-toolbar>\r\n                  <textarea style=\"width:95%;min-height:250px;\" [(ngModel)]=\"tab.content\"> {{tab.content}}</textarea>\r\n                </div>\r\n\r\n              </md-card-content>\r\n\r\n              <md-card-actions *ngIf=\"userService.isGM()\">\r\n\r\n                <button aria-label=\"editButton\" id=\"editButton\" md-icon-button *ngIf=\"!editingTab\" (click)=\"toggleEditing()\">\r\n                  <md-icon class=\"md-24\" aria-label=\"edit icon\">edit</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"saveTabs()\">\r\n                  <md-icon class=\"md-24\" aria-label=\"save icon\">save</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button *ngIf=\"editingTab\" (click)=\"toggleEditing()\">\r\n                  <md-icon mdTooltip=\"Cancel\" class=\"md-24\" aria-label=\"cancel icon\">cancel</md-icon>\r\n                </button>\r\n\r\n                <button md-icon-button (click)=\"deleteTab(i)\">\r\n                  <md-icon class=\"md-24\" aria-label=\"delete icon\">delete</md-icon>\r\n                </button>\r\n\r\n\r\n              </md-card-actions>\r\n\r\n            </md-card>\r\n          </md-tab>\r\n\r\n        </div>\r\n\r\n\r\n      </md-tab-group>\r\n    </md-card>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -1310,6 +1314,7 @@ module.exports = "<div class=\"row col-xs-12 light-theme center-xs demonhunterBa
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__newTab_component__ = __webpack_require__("../../../../../src/app/home/newTab.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__imageUrl_component__ = __webpack_require__("../../../../../src/app/home/imageUrl.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1319,6 +1324,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1344,9 +1350,43 @@ var HomeComponent = (function () {
         this.guildContext = this.guildService.getGuildContext();
         this.userService.user.subscribe(function (user) {
             _this.user = user;
+            if (_this.user.guild) {
+                _this.getGuildSettings();
+            }
             _this.getTabs();
         });
         this.checkIfGuildOwned();
+    };
+    HomeComponent.prototype.updateGuildBanner = function (newUrl) {
+        var _this = this;
+        this.guildSettings.bannerImage = newUrl;
+        this.guildService.updateGuildSettings(this.guildSettings)
+            .subscribe(function (guildSettings) {
+            _this.guildSettings = guildSettings.guild;
+        }, function (error) {
+            _this.toastr.error("Update failed. Try again later.");
+        });
+    };
+    HomeComponent.prototype.getGuildSettings = function () {
+        var _this = this;
+        this.guildService.getGuildSettings()
+            .subscribe(function (guildSettings) {
+            _this.guildSettings = guildSettings.guild;
+        }, function (error) {
+            _this.toastr.error("Could not retrieve guild settings. Try again later.");
+        });
+    };
+    HomeComponent.prototype.openImageDialog = function () {
+        var _this = this;
+        var dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_6__imageUrl_component__["a" /* ImageUrlDialog */], {
+            width: '250px',
+            data: this.guildSettings.bannerImage
+        });
+        dialogRef.afterClosed().subscribe(function (newUrl) {
+            if (newUrl != null) {
+                _this.updateGuildBanner(newUrl);
+            }
+        });
     };
     HomeComponent.prototype.openNewTabDialog = function () {
         var _this = this;
@@ -1428,11 +1468,70 @@ HomeComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/home/home.component.html"),
         styles: [__webpack_require__("../../../../../src/app/home/home.component.css")],
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_guild_service__["a" /* GuildService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["b" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["b" /* MdDialog */]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_guild_service__["a" /* GuildService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_guild_service__["a" /* GuildService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialog */]) === "function" && _d || Object])
 ], HomeComponent);
 
 var _a, _b, _c, _d;
 //# sourceMappingURL=home.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/home/imageUrl.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ImageUrlDialog; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_material__ = __webpack_require__("../../../material/@angular/material.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+var ImageUrlDialog = (function () {
+    function ImageUrlDialog(dialogRef, data) {
+        this.dialogRef = dialogRef;
+        this.data = data;
+        this.url = data;
+    }
+    ImageUrlDialog.prototype.onNoClick = function () {
+        this.dialogRef.close(null);
+    };
+    ImageUrlDialog.prototype.Cancel = function () {
+        this.dialogRef.close(null);
+    };
+    ImageUrlDialog.prototype.Save = function () {
+        this.dialogRef.close(this.url);
+    };
+    return ImageUrlDialog;
+}());
+ImageUrlDialog = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'imageUrl',
+        template: __webpack_require__("../../../../../src/app/home/imageUrl.html"),
+    }),
+    __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Optional"])()), __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Inject"])(__WEBPACK_IMPORTED_MODULE_1__angular_material__["a" /* MD_DIALOG_DATA */])),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */]) === "function" && _a || Object, Object])
+], ImageUrlDialog);
+
+var _a;
+//# sourceMappingURL=imageUrl.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/home/imageUrl.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"light-theme\">\r\n\r\n    <md-form-field>\r\n        <input mdInput placeholder=\"Image URL (EG Imgur)\" [(ngModel)]=\"url\">\r\n    </md-form-field>\r\n\r\n    <button md-raised-button (click)=\"Save()\"> Save </button>\r\n    <button md-raised-button (click)=\"Cancel()\"> Cancel </button>\r\n</div>"
 
 /***/ }),
 
@@ -1474,7 +1573,7 @@ NewTabDialog = __decorate([
         selector: 'newTabDialog',
         template: __webpack_require__("../../../../../src/app/home/newTabDialog.html"),
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */]) === "function" && _a || Object])
 ], NewTabDialog);
 
 var _a;
@@ -1672,7 +1771,7 @@ LoginComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/login/login.component.html"),
         styles: [__webpack_require__("../../../../../src/app/login/login.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_material__["b" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_material__["b" /* MdDialog */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _d || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_material__["c" /* MdDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_material__["c" /* MdDialog */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _d || Object])
 ], LoginComponent);
 
 var _a, _b, _c, _d;
@@ -1737,7 +1836,7 @@ ResetPasswordDialogComponent = __decorate([
         selector: 'resetPasswordDialog',
         template: __webpack_require__("../../../../../src/app/login/resetPasswordDialog.html"),
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["c" /* MdDialogRef */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_material__["d" /* MdDialogRef */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_user_service__["a" /* UserService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _c || Object])
 ], ResetPasswordDialogComponent);
 
 var _a, _b, _c;
@@ -1956,6 +2055,15 @@ var GuildService = (function () {
             guildName: guildName
         };
         return this.apiService.post(this.GUILD_API_BASE_URL + "/claimGuild", body);
+    };
+    GuildService.prototype.getGuildSettings = function () {
+        return this.apiService.get(this.GUILD_API_BASE_URL + "/guildSettings");
+    };
+    GuildService.prototype.updateGuildSettings = function (guildSettings) {
+        var body = {
+            guild: guildSettings
+        };
+        return this.apiService.post(this.GUILD_API_BASE_URL + "/guildSettings", body);
     };
     GuildService.prototype.getTabs = function (guildName) {
         return this.apiService.get(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName);
