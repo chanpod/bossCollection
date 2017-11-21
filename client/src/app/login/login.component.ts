@@ -15,8 +15,8 @@ import { ResetPasswordDialogComponent } from './resetPasswordDialog.component';
 })
 export class LoginComponent implements OnInit {
 
-  private LoginForm: FormGroup;
-  private loading: boolean;
+  public LoginForm: FormGroup;
+  public loading: boolean;
   constructor(
     private userService: UserService, 
     private router: Router, 

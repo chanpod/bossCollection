@@ -14,9 +14,9 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 })
 export class AccountComponent implements OnInit {
 
-  private AccountFormGroup: FormGroup;
-  private account;
-  private user: any;
+  public AccountFormGroup: FormGroup;
+  public account;
+  public user: any;
 
   constructor(
     private userService: UserService,

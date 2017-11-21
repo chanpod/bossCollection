@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { ApiService } from './api.service';
-import {UserService} from './user.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class GuildService {
@@ -14,7 +14,7 @@ export class GuildService {
     private userService: UserService
   ) { }
 
-  createGuild(guildName:String){
+  createGuild(guildName: String) {
     let body = {
       guildName: guildName
     };
@@ -22,7 +22,7 @@ export class GuildService {
     return this.apiService.post(this.GUILD_API_BASE_URL + "/addGuild", body);
   }
 
-  leaveGuild(guildName:String){
+  leaveGuild(guildName: String) {
 
     let body = {
       guildName: guildName
@@ -31,26 +31,26 @@ export class GuildService {
     return this.apiService.post(this.GUILD_API_BASE_URL + "/removeMember", body);
   }
 
-  guildOwned(){
+  guildOwned() {
     let guildContext = this.getGuildContext();
     return this.apiService.get(this.GUILD_API_BASE_URL + "/guildOwned/" + guildContext);
   }
 
-  claimGuild(guildName:String){
+  claimGuild(guildName: String) {
 
     let body = {
-      guildName:guildName
+      guildName: guildName
     }
 
     return this.apiService.post(this.GUILD_API_BASE_URL + "/claimGuild", body);
   }
 
-  getGuildSettings(){
-    
-    return this.apiService.get(this.GUILD_API_BASE_URL + "/guildSettings");
+  getGuildSettings(guildName) {
+
+    return this.apiService.get(this.GUILD_API_BASE_URL + "/guildSettings/" + guildName);
   }
 
-  updateGuildSettings(guildSettings: any){
+  updateGuildSettings(guildSettings: any) {
     let body = {
       guild: guildSettings
     }
@@ -58,13 +58,13 @@ export class GuildService {
     return this.apiService.post(this.GUILD_API_BASE_URL + "/guildSettings", body);
   }
 
-  getTabs(guildName:String) {
+  getTabs(guildName: String) {
 
     return this.apiService.get(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName);
 
   }
 
-  updateTabs(guildObject:any, guildName:String) {
+  updateTabs(guildObject: any, guildName: String) {
     let body = {
       guild: guildObject
     }
@@ -72,7 +72,7 @@ export class GuildService {
     return this.apiService.post(this.GUILD_API_BASE_URL + "/guildHomepage/" + guildName, body);
   }
 
-  submitApplication(newApplication:any) {
+  submitApplication(newApplication: any) {
     let body = { "newApplicant": newApplication }
 
     return this.apiService.post(this.APP_API_BASE_URL + "/applicationSubmission", body);
@@ -86,12 +86,12 @@ export class GuildService {
     return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
   }
 
-  deleteApplication(body){
+  deleteApplication(body) {
     return this.apiService.post(this.APP_API_BASE_URL + "/rejectApplication", body);
   }
 
   getGuildContext() {
-    
+
     let hostname = window.location.hostname;
 
     let splitHostName = hostname.split(".");

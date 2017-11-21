@@ -388,7 +388,25 @@ function saveGuildSettings(req, res) {
     return promise;
 }
 
-function getGuildSettings(req, res) {
+function getGuildSettings(guildName) {
+
+    var promise = new Promise((resolve, reject) => {        
+
+        GuildModel.findOne({ name: guildName })
+            .then(function (guild) {
+
+                resolve({ guild: guild })
+
+            }, function (err) {
+
+                reject(err);
+            })
+    })
+
+    return promise;
+}
+
+function getUsersGuildSettings(req, res) {
 
     var promise = new Promise((resolve, reject) => {
 
@@ -541,6 +559,7 @@ function getMemberSettings(userName) {
 
 
 module.exports = {
+    getUsersGuildSettings: getUsersGuildSettings,
     updateGuildHomepage: updateGuildHomepage,
     buildGuildCookie: buildGuildCookie,
     saveGuildSettings: saveGuildSettings,
@@ -555,7 +574,7 @@ module.exports = {
     kickMember: kickMember,
     createRank: createRank,
     deleteRank: deleteRank,
-    claimGuild:claimGuild,
+    claimGuild: claimGuild,
     isOfficer: isOfficer,
     addMember: addMember,
     getGuild: findGuild,

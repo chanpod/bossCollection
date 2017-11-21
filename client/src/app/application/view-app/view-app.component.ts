@@ -13,6 +13,7 @@ import { BlizzardService } from '../../services/blizzard.service';
 export class ViewAppComponent implements OnInit {
 
   appId: string;
+  loading: boolean;
   app: {
     character: string,
     class: string,

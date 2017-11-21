@@ -42,9 +42,7 @@ export class HomeComponent implements OnInit {
 
             this.user = user;
 
-            if (this.user.guild) {
-                this.getGuildSettings();
-            }
+            this.getGuildSettings();
 
             this.getTabs();
         })
@@ -70,7 +68,7 @@ export class HomeComponent implements OnInit {
     }
 
     getGuildSettings() {
-        this.guildService.getGuildSettings()
+        this.guildService.getGuildSettings(this.guildContext)
             .subscribe(
             (guildSettings) => {
                 this.guildSettings = guildSettings.guild

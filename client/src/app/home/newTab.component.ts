@@ -7,7 +7,7 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
   })
   export class NewTabDialog {
 
-    private title:string;
+    public title:string;
 
     constructor(
       public dialogRef: MdDialogRef<NewTabDialog>,

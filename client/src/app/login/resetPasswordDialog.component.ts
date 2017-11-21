@@ -10,8 +10,8 @@ import {UserService} from '../services/user.service';
   })
   export class ResetPasswordDialogComponent {
 
-    private title:string;
-    private email:string;
+    public title:string;
+    public email:string;
 
     constructor(
       public dialogRef: MdDialogRef<ResetPasswordDialogComponent>,

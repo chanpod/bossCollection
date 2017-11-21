@@ -16,6 +16,7 @@ export class LayoutComponent implements OnInit {
 
   user: any = undefined;
   guildName:string;
+  sidenav: any;
 
   constructor(private userService: UserService, private guildService:GuildService) {
 

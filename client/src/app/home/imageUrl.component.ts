@@ -7,7 +7,7 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
   })
   export class ImageUrlDialog {
 
-    private url:string;
+    public url:string;
 
     constructor(
       public dialogRef: MdDialogRef<ImageUrlDialog>,
