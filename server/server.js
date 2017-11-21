@@ -28,6 +28,7 @@ var certificate = fs.readFileSync( 'server.crt' );
 
 var app = express();
 var port = process.env.PORT || 4000;
+var sslPort = process.env.SSLPORT || 4443;
 
 
 //var io = require('socket.io')(http);
@@ -74,13 +75,14 @@ var routes = require('./routes/router.js')(app);
  * Start Server
  */
 
-// var http = require('https').Server({
-//   key: privateKey,
-//   cert: certificate
-// },app).listen(port);
+var http = require('https').Server({
+  key: privateKey,
+  cert: certificate
+},app).listen(sslPort);
 
 app.listen(port);
 console.log("Listening on port " + port);
+console.log("Listening on port " + sslPort);
 
 //http.listen(4001, function(){
 //    console.log("Socket server listening on 4001")
