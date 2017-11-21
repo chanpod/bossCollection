@@ -10,19 +10,26 @@ var express = require('express'),
   session = require('express-session'),
   MongoStore = require('connect-mongo')(session),
   mongoose = require('mongoose'),  
+  fs = require('fs'),
   cookieParser = require('cookie-parser');
   //socketapi = require('./routes/socket.js');
   
   
 //var authentication = require('./routes/authentication.js');
 
+var privateKey = fs.readFileSync( 'privkey.key' );
+var certificate = fs.readFileSync( 'server.crt' );
 
+// https.createServer({
+//     key: privateKey,
+//     cert: certificate
+// }, app).listen(port);
 
 
 var app = express();
 var port = process.env.PORT || 4000;
 
-var http = require('http').Server(app)
+
 //var io = require('socket.io')(http);
 
 /**
@@ -67,7 +74,11 @@ var routes = require('./routes/router.js')(app);
  * Start Server
  */
 
-app.listen(port);
+var http = require('https').Server({
+  key: privateKey,
+  cert: certificate
+},app).listen(port);
+
 console.log("Listening on port " + port);
 
 //http.listen(4001, function(){
