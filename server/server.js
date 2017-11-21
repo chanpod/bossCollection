@@ -78,13 +78,14 @@ function getSecureContext(domain) {
 //read them into memory
 var secureContext = {  
   'localhost': getSecureContext('localhost'),
-  'tbd.bosscollection': getSecureContext('tbd')
+  'tbd.bosscollection.net': getSecureContext('tbd')
 }
 
 
 //provide a SNICallback when you create the options for the https server
 var options = {
   SNICallback: function (domain, cb) {
+    console.log(domain);
     cb(null, secureContext[domain]);
   }, //SNICallback is passed the domain name, see NodeJS docs on TLS
   cert: fs.readFileSync(`${certPath}baseSite/server.crt`),
