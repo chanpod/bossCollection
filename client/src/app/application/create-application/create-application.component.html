@@ -1,139 +1,139 @@
 <div class="noPadding row center-xs classBackgroundBase {{classBackground}}">
     <div class="col-xs-12 dark-theme noPadding">
-        <md-card>
+        <mat-card>
 
             <h2> Application for {{guildName}} </h2>
-        </md-card>
+        </mat-card>
 
 
     </div>
-    <div class="col-xs-11 col-md-12 row center-xs">
+    <div class="col-xs-11 col-mat-12 row center-xs">
 
-        <md-card class="col-xs-12 col-md-6 ">
-            <md-card-content>
+        <mat-card class="col-xs-12 col-mat-6 ">
+            <mat-card-content>
 
                 <form [formGroup]="CreateAppFormGroup" class="row center-xs">
 
-                    <md-form-field class="fullWidthField col-xs-12">
-                        <input required (blur)="checkCharacterName()" mdInput placeholder="Character Name" name="name" formControlName="character"
+                    <mat-form-field class="fullWidthField col-xs-12">
+                        <input required (blur)="checkCharacterName()" matInput placeholder="Character Name" name="name" formControlName="character"
                         />
-                    </md-form-field>
+                    </mat-form-field>
 
 
 
 
 
 
-                    <md-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField col-xs-12 formPadding" placeholder="Select Realm">
-                        <md-option *ngFor="let realm of realms" [value]="realm.name">
+                    <mat-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField col-xs-12 formPadding" placeholder="Select Realm">
+                        <mat-option *ngFor="let realm of realms" [value]="realm.name">
                             {{ realm.name }}
-                        </md-option>
-                    </md-select>
+                        </mat-option>
+                    </mat-select>
 
 
 
-                    <md-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField col-xs-12 formPadding">
+                    <mat-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField col-xs-12 formPadding">
 
-                        <md-option value="Ranged DPS">
+                        <mat-option value="Ranged DPS">
                             Ranged DPS
-                        </md-option>
+                        </mat-option>
 
-                        <md-option value="Melee DPS">
+                        <mat-option value="Melee DPS">
                             Melee DPS
-                        </md-option>
+                        </mat-option>
 
-                        <md-option value="Tank">
+                        <mat-option value="Tank">
                             Tank
-                        </md-option>
+                        </mat-option>
 
-                        <md-option value="Healer">
+                        <mat-option value="Healer">
                             Healer
-                        </md-option>
+                        </mat-option>
 
-                    </md-select>
+                    </mat-select>
 
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input mdInput placeholder="Guild History" name="previousGuild" formControlName="previousGuild" />
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input matInput placeholder="Guild History" name="previousGuild" formControlName="previousGuild" />
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input placeholder="Screenshot of your UI" mdInput name="batteltag" formControlName="uiScreenshot" />
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="Screenshot of your UI" matInput name="batteltag" formControlName="uiScreenshot" />
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input placeholder="Link recent tier logs" mdInput name="batteltag" formControlName="logsLink" />
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="Link recent tier logs" matInput name="batteltag" formControlName="logsLink" />
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input placeholder="Battle.net tag" mdInput name="batteltag" formControlName="batteltag" />
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="Battle.net tag" matInput name="batteltag" formControlName="batteltag" />
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input placeholder="What spec do you currently play?" mdInput name="spec" formControlName="spec" />
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
+                        <input placeholder="What spec do you currently play?" matInput name="spec" formControlName="spec" />
+                    </mat-form-field>
 
 
 
                     <section class="fullWidthField col-xs-12 formPadding start-xs">
-                        <md-checkbox formControlName="aboutPage">I've read the about page</md-checkbox>
+                        <mat-checkbox formControlName="aboutPage">I've read the about page</mat-checkbox>
                     </section>
 
                     <section class="fullWidthField col-xs-12 formPadding start-xs">
-                        <md-checkbox formControlName="canYouMakeRaidTimes">I can make raid times at near 100%</md-checkbox>
+                        <mat-checkbox formControlName="canYouMakeRaidTimes">I can make raid times at near 100%</mat-checkbox>
                     </section>
 
                     <section class="fullWidthField col-xs-12 formPadding start-xs">
-                        <md-checkbox formControlName="voiceCommunications">We expect raiders to be able to speak clearly and effectively via voice (Discord) to discuss strategies,
+                        <mat-checkbox formControlName="voiceCommunications">We expect raiders to be able to speak clearly and effectively via voice (Discord) to discuss strategies,
                             ask questions, and communicate during fights. Do you have a working mic with minimal noise/interference
-                            and the ability/willingness to interact with the rest of the guild during raid?</md-checkbox>
+                            and the ability/willingness to interact with the rest of the guild during raid?</mat-checkbox>
                     </section>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
                         <h4> Do you utilize your other specs/talents on a fight by fight basis? Are you willing to maintain multiple
                             sets of gear that are advantageous for your different specializations?</h4>
 
-                        <textarea class="commentsInput" mdInput name="flexibility" formControlName="flexibility"> </textarea>
-                    </md-form-field>
+                        <textarea class="commentsInput" matInput name="flexibility" formControlName="flexibility"> </textarea>
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
                         <h4> List and detail which gems and enchants that you currently utilize for your spec. Are they optimal
                             for your current spec? What are your stat priorities? Why?</h4>
 
-                        <textarea class="commentsInput" mdInput name="statPriority" formControlName="statPriority"> </textarea>
-                    </md-form-field>
+                        <textarea class="commentsInput" matInput name="statPriority" formControlName="statPriority"> </textarea>
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField col-xs-12 formPadding">
+                    <mat-form-field class="fullWidthField col-xs-12 formPadding">
                         <h4> Please describe your opener and rotation in detail. How does your rotation differ on a movement-heavy
                             encounter from a Patchwerk-style fight?</h4>
 
-                        <textarea class="commentsInput" mdInput name="rotation" formControlName="rotation"> </textarea>
-                    </md-form-field>
+                        <textarea class="commentsInput" matInput name="rotation" formControlName="rotation"> </textarea>
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField formPadding">
-                        <textarea class="commentsInput" mdInput placeholder="How do you prepare for a new encounter?" name="prepareForNewEncounter"
+                    <mat-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" matInput placeholder="How do you prepare for a new encounter?" name="prepareForNewEncounter"
                             formControlName="prepareForNewEncounter"> </textarea>
-                    </md-form-field>
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField formPadding">
-                        <textarea class="commentsInput" mdInput placeholder="Tell us about yourself" name="aboutYourself" formControlName="aboutYourself"> </textarea>
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" matInput placeholder="Tell us about yourself" name="aboutYourself" formControlName="aboutYourself"> </textarea>
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField formPadding">
-                        <textarea class="commentsInput" mdInput placeholder="Past Raiding experience?" name="raidExperience" formControlName="raidExperience"> </textarea>
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" matInput placeholder="Past Raiding experience?" name="raidExperience" formControlName="raidExperience"> </textarea>
+                    </mat-form-field>
 
-                    <md-form-field class="fullWidthField formPadding">
-                        <textarea class="commentsInput" mdInput placeholder="Anything else you'd like to add?" name="comments" formControlName="comments"> </textarea>
-                    </md-form-field>
+                    <mat-form-field class="fullWidthField formPadding">
+                        <textarea class="commentsInput" matInput placeholder="Anything else you'd like to add?" name="comments" formControlName="comments"> </textarea>
+                    </mat-form-field>
 
 
 
-                    <button [disabled]="!CreateAppFormGroup.valid" md-raised-button color="primary" (click)="submitApplication()"> Submit </button>
+                    <button [disabled]="!CreateAppFormGroup.valid" mat-raised-button color="primary" (click)="submitApplication()"> Submit </button>
 
                 </form>
 
-            </md-card-content>
-        </md-card>
+            </mat-card-content>
+        </mat-card>
     </div>
 </div>

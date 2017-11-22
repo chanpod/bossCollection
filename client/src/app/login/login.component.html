@@ -1,11 +1,11 @@
 <div class="row center-xs">
 
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <h2>Login </h2>
-      </md-card-title>
-    </md-card-header>
+      </mat-card-title>
+    </mat-card-header>
 
     <hr />
 
@@ -14,26 +14,26 @@
     <div class="row ">
 
       <div class="col-xs-11">
-        <md-progress-bar *ngIf = "loading" mode="indeterminate"></md-progress-bar>
+        <mat-progress-bar *ngIf = "loading" mode="indeterminate"></mat-progress-bar>
         <form class="row center-xs" [formGroup]="LoginForm">
 
-          <md-form-field class="col-xs-12">
-            <input mdInput placeholder="User Name" name="name" formControlName="Name" />
-          </md-form-field>
+          <mat-form-field class="col-xs-12">
+            <input matInput placeholder="User Name" name="name" formControlName="Name" />
+          </mat-form-field>
 
-          <md-form-field class="col-xs-12">
-            <input mdInput placeholder="Password" type="password" formControlName="Password" />
-          </md-form-field>
+          <mat-form-field class="col-xs-12">
+            <input matInput placeholder="Password" type="password" formControlName="Password" />
+          </mat-form-field>
 
           <div class="col-xs-12 start-xs">
-            <button md-raised-button (click)="login()" color="primary"> Login </button>
-            <button md-raised-button (click)="openResetEmailDialog()" color="primary"> Reset Password </button>
+            <button mat-raised-button (click)="login()" color="primary"> Login </button>
+            <button mat-raised-button (click)="openResetEmailDialog()" color="primary"> Reset Password </button>
           </div>
         </form>
       </div>
 
     </div>
 
-  </md-card>
+  </mat-card>
 
 </div>

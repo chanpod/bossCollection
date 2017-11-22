@@ -1,43 +1,43 @@
-<md-sidenav-container class="example-container">
+<mat-sidenav-container class="example-container">
 
-    <md-sidenav #sidenav class="example-sidenav">
+    <mat-sidenav #sidenav class="example-sidenav">
 
         <div class="dark-theme">
 
-            <md-toolbar color="primary">
+            <mat-toolbar color="primary">
                 Menu
-            </md-toolbar>
+            </mat-toolbar>
 
         </div>
-        <md-nav-list>
-            <md-list-item routerLink="" (click)="sidenav.close()">
-                <button md-icon-button><md-icon>home</md-icon></button>
-                <a md-list-item > Home </a>
-            </md-list-item>
+        <mat-nav-list>
+            <mat-list-item routerLink="" (click)="sidenav.close()">
+                <button mat-icon-button><mat-icon>home</mat-icon></button>
+                <a mat-list-item > Home </a>
+            </mat-list-item>
 
-            <md-list-item routerLink="createApplication" (click)="sidenav.close()">
-                <button md-icon-button><md-icon>games</md-icon></button>
-                <a md-list-item> Apply </a>
-            </md-list-item>
+            <mat-list-item routerLink="createApplication" (click)="sidenav.close()">
+                <button mat-icon-button><mat-icon>games</mat-icon></button>
+                <a mat-list-item> Apply </a>
+            </mat-list-item>
 
 
-            <md-list-item routerLink="viewApplications" (click)="sidenav.close()">
-                <button md-icon-button><md-icon>view_list</md-icon></button>
-                <a md-list-item> View Apps </a>
-            </md-list-item>
+            <mat-list-item routerLink="viewApplications" (click)="sidenav.close()">
+                <button mat-icon-button><mat-icon>view_list</mat-icon></button>
+                <a mat-list-item> View Apps </a>
+            </mat-list-item>
 
-            <md-list-item *ngIf="!loggedIn()" (click)="sidenav.close()" routerLink="login">
-                <button md-icon-button><md-icon>account_circle</md-icon></button>
-                <a md-list-item> Login </a>
-            </md-list-item>
+            <mat-list-item *ngIf="!loggedIn()" (click)="sidenav.close()" routerLink="login">
+                <button mat-icon-button><mat-icon>account_circle</mat-icon></button>
+                <a mat-list-item> Login </a>
+            </mat-list-item>
 
-            <md-list-item *ngIf="loggedIn()" (click)="logout()">
-                <button md-icon-button><md-icon>exit_to_app</md-icon></button>
-                <a md-menu-item> Logout </a>
-            </md-list-item>
+            <mat-list-item *ngIf="loggedIn()" (click)="logout()">
+                <button mat-icon-button><mat-icon>exit_to_app</mat-icon></button>
+                <a mat-menu-item> Logout </a>
+            </mat-list-item>
 
-        </md-nav-list>
-    </md-sidenav>
+        </mat-nav-list>
+    </mat-sidenav>
 
     <layout [sidenav]="sidenav"></layout>
     <div class="row center-xs setHeightToMax noPadding">
@@ -45,4 +45,4 @@
             <router-outlet></router-outlet>
         </div>
     </div>
-</md-sidenav-container>
+</mat-sidenav-container>

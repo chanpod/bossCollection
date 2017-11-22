@@ -1,20 +1,20 @@
 <div class="row center-xs">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
         <h2>No guild exist for this page yet </h2>
-      </md-card-title>
-    </md-card-header>
+      </mat-card-title>
+    </mat-card-header>
 
-    <md-card-content>
+    <mat-card-content>
       <form [formGroup]="CreateGuildFormGroup" class="row center-xs">
 
-        <md-form-field class = "col-xs-12 col-md-6">
-          <input mdInput placeholder="Guild Name" name = "guildName" formControlName="GuildName" />
-        </md-form-field>
+        <mat-form-field class = "col-xs-12 col-mat-6">
+          <input matInput placeholder="Guild Name" name = "guildName" formControlName="GuildName" />
+        </mat-form-field>
       </form>
 
-      <button md-raised-button (click) = "createGuild()"> Create Guild</button>
-    </md-card-content>
-  </md-card>
+      <button mat-raised-button (click) = "createGuild()"> Create Guild</button>
+    </mat-card-content>
+  </mat-card>
 </div>

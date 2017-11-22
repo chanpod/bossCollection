@@ -8,6 +8,8 @@ import { GuildService } from '../../services/guild.service';
 
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
+import { MatCardModule, MatCard, MatCardTitle, MatCardActions } from '@angular/material';
+
 @Component({
   selector: 'app-create-application',
   templateUrl: './create-application.component.html',
@@ -149,7 +151,7 @@ export class CreateApplicationComponent implements OnInit {
     };
 
     this.guildService.submitApplication(this.application)
-      .subscribe((result) => {        
+      .subscribe((result) => {
         this.toastr.success("Application submitted successfully!", "Success");
         this.router.navigate(['/']);
       }, (error) => {

@@ -3,14 +3,16 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-//3rd Party
-import { MaterialModule } from '@angular/material';
+import {CoreModule} from './CoreModule';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
-import { CookieModule } from 'ngx-cookie';
+
 import { MarkdownModule } from 'angular2-markdown';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 //Components
 import { LoginComponent } from './login/login.component';
@@ -36,7 +38,7 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
 import { GuildModule } from './guild/guild.module';
 
 //Guards
-import {AccountGuard} from './account/guards/account.guard';
+import { AccountGuard } from './account/guards/account.guard';
 
 @NgModule({
   declarations: [
@@ -58,17 +60,20 @@ import {AccountGuard} from './account/guards/account.guard';
   ],
   imports: [
     BrowserModule,
-    MaterialModule,
+    NoopAnimationsModule,
     BrowserAnimationsModule,
     RoutingModule,
     HttpModule,
-    CookieModule,
+    //Material Modules ===
+    CoreModule,
+    //====
     MarkdownModule.forRoot(),
     ToastModule.forRoot(),
+    OAuthModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
     ApplicationModule,
-    GuildModule
+    GuildModule,
   ],
   providers: [
     UserService,
@@ -80,3 +85,6 @@ import {AccountGuard} from './account/guards/account.guard';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+
+

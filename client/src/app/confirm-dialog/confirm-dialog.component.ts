@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -8,7 +8,7 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 })
 export class ConfirmDialogComponent {
 
-  constructor(public dialogRef: MdDialogRef<ConfirmDialogComponent> ) { }
+  constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent> ) { }
 
   onNoClick(): void {
     this.dialogRef.close(false);

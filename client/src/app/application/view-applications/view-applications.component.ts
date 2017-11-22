@@ -4,13 +4,13 @@ import { GuildService } from '../../services/guild.service';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 //Components
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 //3rd party
-import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { ToastsManager } from 'ng2-toastr/ng2-toastr'; 
 
 @Component({
   selector: 'app-view-applications',
@@ -26,7 +26,7 @@ export class ViewApplicationsComponent implements OnInit {
   constructor(private guildService: GuildService,
     private router: Router,
     private toastr: ToastsManager,
-    public dialog: MdDialog) { }
+    public dialog: MatDialog) { }
 
   ngOnInit() {
 

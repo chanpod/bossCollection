@@ -4,7 +4,7 @@ import { CreateGuildComponent } from './create-guild/create-guild.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 //3rd Party
-import { MaterialModule } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
@@ -15,6 +15,8 @@ import { RoutingModule } from './routing/routing.module';
 //Guards
 import {CreateGuildGuard} from './guards/CreateGuild.guard';
 
+import {CoreModule} from '../CoreModule';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -22,8 +24,8 @@ import {CreateGuildGuard} from './guards/CreateGuild.guard';
     ToastModule,
     ReactiveFormsModule,
     FormsModule,
-    BrowserAnimationsModule, 
-    MaterialModule
+    BrowserAnimationsModule,
+    CoreModule
   ],
   declarations: [
     CreateGuildComponent    

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { UserService } from '../services/user.service';
 import { GuildService } from '../services/guild.service';
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
         public userService: UserService,
         private guildService: GuildService,
         public toastr: ToastsManager,
-        public dialog: MdDialog) {
+        public dialog: MatDialog) {
 
     }
 

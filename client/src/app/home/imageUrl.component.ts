@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
     selector: 'imageUrl',
@@ -10,8 +10,8 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
     public url:string;
 
     constructor(
-      public dialogRef: MdDialogRef<ImageUrlDialog>,
-      @Optional() @Inject(MD_DIALOG_DATA) public data: any
+      public dialogRef: MatDialogRef<ImageUrlDialog>,
+      @Optional() @Inject(MAT_DIALOG_DATA) public data: any
     ) { 
       this.url = data;
     }

@@ -1,41 +1,40 @@
 <div class="row center-xs">
-  <md-card *ngIf="loading" class="col-md-3 col-xs-12 center-xs">
-    <md-spinner ></md-spinner>
-  </md-card>
-  <div *ngIf="!loading" class="col-xs-12 col-md-6">
+  <mat-card *ngIf="loading" class="col-mat-3 col-xs-12 center-xs">
+    <mat-spinner ></mat-spinner>
+  </mat-card>
+  <div *ngIf="!loading" class="col-xs-12 col-mat-6">
 
 
-    <md-table [dataSource]="applications">
+    <mat-table [dataSource]="applications">
 
-      <ng-container mdColumnDef="Character">
-        <md-header-cell *mdHeaderCellDef> Character </md-header-cell>
-        <md-cell *mdCellDef="let application">
+      <ng-container matColumnDef="Character">
+        <mat-header-cell *matHeaderCellDef> Character </mat-header-cell>
+        <mat-cell *matCellDef="let application">
           <div class="row start-xs middle-xs">
 
             <img [src]="getUrl(application)" /> &nbsp; {{application.character}}
 
           </div>
-        </md-cell>
+        </mat-cell>
       </ng-container>
 
-      <ng-container mdColumnDef="Date Applied">
-        <md-header-cell *mdHeaderCellDef> Date Applied </md-header-cell>
-        <md-cell *mdCellDef="let application">{{application.dateApplied | date:'shortDate'}}  </md-cell>
+      <ng-container matColumnDef="Date Applied">
+        <mat-header-cell *matHeaderCellDef> Date Applied </mat-header-cell>
+        <mat-cell *matCellDef="let application">{{application.dateApplied | date:'shortDate'}}  </mat-cell>
       </ng-container>
 
-      <ng-container mdColumnDef="View Application">
-        <md-header-cell *mdHeaderCellDef> View Application </md-header-cell>
-        <md-cell *mdCellDef="let application">
-          <button (click)="viewApp(application)" md-raised-button color="primary"> View </button>
-          <button (click)="deleteApplication(application)" md-icon-button color="warning"> <md-icon>delete</md-icon> </button>
-        </md-cell>
+      <ng-container matColumnDef="View Application">
+        <mat-header-cell *matHeaderCellDef> View Application </mat-header-cell>
+        <mat-cell *matCellDef="let application">
+          <button (click)="viewApp(application)" mat-raised-button color="primary"> View </button>
+          <button (click)="deleteApplication(application)" mat-icon-button color="warning"> <mat-icon>delete</mat-icon> </button>
+        </mat-cell>
       </ng-container>
 
 
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-      <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-      <md-row *mdRowDef="let row; columns: displayedColumns;"></md-row>
-
-    </md-table>
+    </mat-table>
   </div>
 </div>

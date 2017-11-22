@@ -1,0 +1,87 @@
+import { NgModule } from '@angular/core';
+
+//3rd Party
+import {
+  MatAutocompleteModule,
+  MatCheckboxModule,
+  MatDatepickerModule,
+  NativeDateAdapter,
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MatFormFieldModule,
+  MatInputModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatCardModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatProgressSpinnerModule,
+  MatDialogModule,
+  MatTooltipModule,
+  MatTabsModule,
+  MatIconModule,
+  MatTableModule,
+  MatListModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatMenuModule,
+  MatProgressBarModule
+  // MatDialog, MatDialogRef, MAT_DIALOG_DATA
+} from '@angular/material';
+
+
+@NgModule({
+  imports: [
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatTabsModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatMenuModule,
+    MatProgressBarModule
+  ],
+  exports: [
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatCardModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatProgressSpinnerModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatTabsModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatMenuModule,
+    MatProgressBarModule
+  ],
+})
+export class CoreModule { }

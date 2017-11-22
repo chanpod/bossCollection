@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 
 @Component({
     selector: 'newTabDialog',
@@ -10,8 +10,8 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
     public title:string;
 
     constructor(
-      public dialogRef: MdDialogRef<NewTabDialog>,
-      // @Inject(MD_DIALOG_DATA) public data: any
+      public dialogRef: MatDialogRef<NewTabDialog>,
+      // @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
   
     onNoClick(): void {

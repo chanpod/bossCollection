@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import {UserService} from '../services/user.service';
@@ -14,10 +14,10 @@ import {UserService} from '../services/user.service';
     public email:string;
 
     constructor(
-      public dialogRef: MdDialogRef<ResetPasswordDialogComponent>,
+      public dialogRef: MatDialogRef<ResetPasswordDialogComponent>,
       private userService:UserService,
       private toastr:ToastsManager
-      // @Inject(MD_DIALOG_DATA) public data: any
+      // @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
   
     onNoClick(): void {

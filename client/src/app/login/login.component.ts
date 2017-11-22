@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 import { UserService } from '../services/user.service';
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private userService: UserService, 
     private router: Router, 
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     private toastr:ToastsManager) { }
 
   ngOnInit() {

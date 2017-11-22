@@ -7,7 +7,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RoutingModule } from './routing/routing.module';
 
 //3rd Party
-import { MaterialModule } from '@angular/material';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
@@ -16,6 +16,8 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { ViewApplicationsComponent } from './view-applications/view-applications.component';
 import { ViewAppComponent } from './view-app/view-app.component';
 
+import {CoreModule} from '../CoreModule';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,8 +25,8 @@ import { ViewAppComponent } from './view-app/view-app.component';
     ReactiveFormsModule,
     FormsModule,
     ToastModule,
-    BrowserAnimationsModule,
-    MaterialModule
+    CoreModule,
+    BrowserAnimationsModule    
   ],
   declarations: [
     CreateApplicationComponent,
