@@ -7,9 +7,9 @@
 
 
     </div>
-    <div class="col-xs-11 col-mat-12 row center-xs">
+    <div class="col-xs-11 col-md-12 row center-xs">
 
-        <mat-card class="col-xs-12 col-mat-6 ">
+        <mat-card class="col-xs-12 col-md-6 ">
             <mat-card-content>
 
                 <form [formGroup]="CreateAppFormGroup" class="row center-xs">
@@ -19,38 +19,36 @@
                         />
                     </mat-form-field>
 
+                    <mat-form-field class="col-xs-12 formPadding">
+                        <mat-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField " placeholder="Select Realm">
+                            <mat-option *ngFor="let realm of realms" [value]="realm.name">
+                                {{ realm.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
+                    <mat-form-field class="col-xs-12 formPadding">
+                        <mat-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField">
 
+                            <mat-option value="Ranged DPS">
+                                Ranged DPS
+                            </mat-option>
 
+                            <mat-option value="Melee DPS">
+                                Melee DPS
+                            </mat-option>
 
+                            <mat-option value="Tank">
+                                Tank
+                            </mat-option>
 
-                    <mat-select formControlName="realm" (blur)="checkCharacterName()" class="fullWidthField col-xs-12 formPadding" placeholder="Select Realm">
-                        <mat-option *ngFor="let realm of realms" [value]="realm.name">
-                            {{ realm.name }}
-                        </mat-option>
-                    </mat-select>
+                            <mat-option value="Healer">
+                                Healer
+                            </mat-option>
 
+                        </mat-select>
 
-
-                    <mat-select formControlName="desiredRole" placeholder="Desired Role" class="fullWidthField col-xs-12 formPadding">
-
-                        <mat-option value="Ranged DPS">
-                            Ranged DPS
-                        </mat-option>
-
-                        <mat-option value="Melee DPS">
-                            Melee DPS
-                        </mat-option>
-
-                        <mat-option value="Tank">
-                            Tank
-                        </mat-option>
-
-                        <mat-option value="Healer">
-                            Healer
-                        </mat-option>
-
-                    </mat-select>
+                    </mat-form-field>
 
 
                     <mat-form-field class="fullWidthField col-xs-12 formPadding">

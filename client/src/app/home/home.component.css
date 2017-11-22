@@ -5,6 +5,7 @@
 
 .logBackdrop{
     background-color: black; 
+    height:100%;
 }
 
 .logoBanner{
@@ -14,6 +15,7 @@
 
 .demonhunterBackground{
     background: url("../../assets/images/classBackdrops/demon_hunter.jpg"); 
+    min-height:100vh;
 }
 
 .classBackgroundBase{

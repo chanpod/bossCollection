@@ -1,101 +1,106 @@
-<div class="row col-xs-12 light-theme center-xs demonhunterBackground classBackgroundBase noPadding" style="height:100%;">
+<div class="demonhunterBackground classBackgroundBase">
 
 
-  <div class="col-xs-12 logBackdrop noPadding">
-    <img class = "logoBanner" *ngIf = "guildSettings && guildSettings.bannerImage" src="{{guildSettings.bannerImage}}"/>
-    <img class = "logoBanner" *ngIf = "guildSettings && !guildSettings.bannerImage" src="assets/images/bcLogo.png" /> 
-    <button *ngIf="userService.isGM()" mat-raised-button color="primary" style = "position:absolute;left:0;" (click) = "openImageDialog()"> Update Image</button>
-  </div>
-
-  <button *ngIf="userService.isGM()" mat-raised-button color="accent" (click)="openNewTabDialog()"> New Tab </button>
-
-  <div class="col-mat-8 col-xs-12 ">
-
-    <mat-card *ngIf="guildNotOwned">
-      <mat-card-header>
-        <mat-card-title>
-          <h2>Seems this guild has been abandoned. Would you like to claim it? </h2>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button (click) = "claimGuild()" mat-raised-button color="accent">Claim {{guildContext}}</button>
-      </mat-card-actions>
-
-    </mat-card>
-    <mat-card *ngIf="guildNotFound">
-      <mat-card-header>
-        <mat-card-title>
-          <h2>No guild exist for this page yet </h2>
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button routerLink="/guild/createGuild" mat-raised-button color="primary">Create a new Guild for this url</button>
-      </mat-card-actions>
-
-    </mat-card>
-    <mat-card *ngIf="!guildNotFound">
-
-      <mat-tab-group class="card-shadow">
-        <div *ngFor="let tab of tabs; let i = index">
-
-          <mat-tab [label]="tab.title">
-            <mat-card>
-              <mat-card-content>
-
-                <markdown style="text-align: start;" [data]="tab.content"> </markdown>
-
-                <div *ngIf="editingTab">
-                  <mat-toolbar color="accent" class="row center-xs">
-                    Modify Content - Preview Changes above
-                    <a target="_blank" href="https://dimpu.github.io/angular2-markdown/" mat-icon-button>
-                      <mat-icon mdTooltip="Markdown Help" class="mat-24" aria-label="helpIcon">help</mat-icon>
-                    </a>
-
-                    HTML supported
-                  </mat-toolbar>
-                  <textarea style="width:95%;min-height:250px;" [(ngModel)]="tab.content"> {{tab.content}}</textarea>
-                </div>
-
-              </mat-card-content>
-
-              <mat-card-actions *ngIf="userService.isGM()">
-
-                <button aria-label="editButton" id="editButton" mat-icon-button *ngIf="!editingTab" (click)="toggleEditing()">
-                  <mat-icon class="mat-24" aria-label="edit icon">edit</mat-icon>
-                </button>
-
-                <button mat-icon-button *ngIf="editingTab" (click)="saveTabs()">
-                  <mat-icon class="mat-24" aria-label="save icon">save</mat-icon>
-                </button>
-
-                <button mat-icon-button *ngIf="editingTab" (click)="toggleEditing()">
-                  <mat-icon mdTooltip="Cancel" class="mat-24" aria-label="cancel icon">cancel</mat-icon>
-                </button>
-
-                <button mat-icon-button (click)="deleteTab(i)">
-                  <mat-icon class="mat-24" aria-label="delete icon">delete</mat-icon>
-                </button>
+  <div class="row col-xs-12 light-theme center-xs  noPadding">
 
 
-              </mat-card-actions>
+    <div class="col-xs-12 logBackdrop noPadding">
+      <img class="logoBanner" *ngIf="guildSettings && guildSettings.bannerImage" src="{{guildSettings.bannerImage}}" />
+      <img class="logoBanner" *ngIf="guildSettings && !guildSettings.bannerImage" src="assets/images/bcLogo.png" />
+      <button *ngIf="userService.isGM()" mat-raised-button color="primary" style="position:absolute;left:0;" (click)="openImageDialog()">
+      Update Image</button>
+    </div>
 
-            </mat-card>
-          </mat-tab>
+    <button *ngIf="userService.isGM()" mat-raised-button color="accent" (click)="openNewTabDialog()"> New Tab </button>
 
-        </div>
+    <div class="col-md-8 col-xs-12">
+
+      <mat-card *ngIf="guildNotOwned">
+        <mat-card-header>
+          <mat-card-title>
+            <h2>Seems this guild has been abandoned. Would you like to claim it? </h2>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button (click)="claimGuild()" mat-raised-button color="accent">Claim {{guildContext}}</button>
+        </mat-card-actions>
+
+      </mat-card>
+      <mat-card *ngIf="guildNotFound">
+        <mat-card-header>
+          <mat-card-title>
+            <h2>No guild exist for this page yet </h2>
+          </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button routerLink="/guild/createGuild" mat-raised-button color="primary">Create a new Guild for this url</button>
+        </mat-card-actions>
+
+      </mat-card>
+      <mat-card *ngIf="!guildNotFound">
+
+        <mat-tab-group class="card-shadow">
+          <div *ngFor="let tab of tabs; let i = index">
+
+            <mat-tab [label]="tab.title">
+              <mat-card>
+                <mat-card-content>
+
+                  <markdown style="text-align: start;" [data]="tab.content"> </markdown>
+
+                  <div *ngIf="editingTab">
+                    <mat-toolbar color="accent" class="row center-xs">
+                      Modify Content - Preview Changes above
+                      <a target="_blank" href="https://dimpu.github.io/angular2-markdown/" mat-icon-button>
+                        <mat-icon mdTooltip="Markdown Help" class="mat-24" aria-label="helpIcon">help</mat-icon>
+                      </a>
+
+                      HTML supported
+                    </mat-toolbar>
+                    <textarea style="width:95%;min-height:250px;" [(ngModel)]="tab.content"> {{tab.content}}</textarea>
+                  </div>
+
+                </mat-card-content>
+
+                <mat-card-actions *ngIf="userService.isGM()">
+
+                  <button aria-label="editButton" id="editButton" mat-icon-button *ngIf="!editingTab" (click)="toggleEditing()">
+                    <mat-icon class="mat-24" aria-label="edit icon">edit</mat-icon>
+                  </button>
+
+                  <button mat-icon-button *ngIf="editingTab" (click)="saveTabs()">
+                    <mat-icon class="mat-24" aria-label="save icon">save</mat-icon>
+                  </button>
+
+                  <button mat-icon-button *ngIf="editingTab" (click)="toggleEditing()">
+                    <mat-icon mdTooltip="Cancel" class="mat-24" aria-label="cancel icon">cancel</mat-icon>
+                  </button>
+
+                  <button mat-icon-button (click)="deleteTab(i)">
+                    <mat-icon class="mat-24" aria-label="delete icon">delete</mat-icon>
+                  </button>
 
 
-      </mat-tab-group>
-    </mat-card>
+                </mat-card-actions>
+
+              </mat-card>
+            </mat-tab>
+
+          </div>
+
+
+        </mat-tab-group>
+      </mat-card>
+    </div>
   </div>
 </div>

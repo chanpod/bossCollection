@@ -1,37 +1,43 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="dark-theme">
 
-  <mat-toolbar color="primary" class="row center-xs noPadding">
+  <mat-toolbar color="primary" class="row noPadding">
+
 
     <div class="col-xs-3 col-sm-4 hidden-xs row start-xs">
-      <span *ngIf="user?.name != undefined">   </span>
+      <span *ngIf="user?.name != undefined"> </span>
       <button *ngIf="user?.name == undefined" mat-button routerLink=""> Home </button>
     </div>
 
-    <div class="col-xs-3 hidden-sm hidden-mat hidden-lg">
-        <a mat-icon-button (click)="sidenav.open()" style="font-size: 20px;"> <mat-icon>menu</mat-icon> </a>
+    <div class="col-xs-2 hidden-sm hidden-md hidden-lg start-xs">
+      <a mat-icon-button (click)="sidenav.open()" style="font-size: 20px;">
+        <mat-icon>menu</mat-icon>
+      </a>
     </div>
 
-    <div class="col-xs-6 col-sm-4 center-xs ">
-      <a mat-button routerLink="" style="font-size: 20px;"> {{guildName | uppercase}} </a>
+    <div class="col-xs-8 col-sm-4 center-xs ">
+
+      <a mat-button routerLink="" style="font-size: 20px;">
+        <mat-icon style = "padding-bottom:5px;">home</mat-icon>
+        {{guildName | uppercase}} </a>
     </div>
 
     <div class="col-xs-3 col-sm-4 hidden-xs">
 
       <div class="row end-xs">
 
-        <button *ngIf="user?.name != undefined" style = "margin:5px;" mat-raised-button [matMenuTriggerFor]="menu" color="accent">
-            {{user.name}}
-            <mat-icon>keyboard_arrow_down</mat-icon>
+        <button *ngIf="user?.name != undefined" style="margin:5px;" mat-raised-button [matMenuTriggerFor]="menu" color="accent">
+          {{user.name}}
+          <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button  mat-menu-item routerLink="account"> Account </button>
-          <button  mat-menu-item routerLink="viewApplications"> View Apps </button>
-          <button  mat-menu-item (click)="logout()"> Logout </button>
+          <button mat-menu-item routerLink="account"> Account </button>
+          <button mat-menu-item routerLink="viewApplications"> View Apps </button>
+          <button mat-menu-item (click)="logout()"> Logout </button>
         </mat-menu>
 
-        <button style = "margin:5px;" *ngIf="user?.name == undefined" mat-raised-button color="accent" routerLink="login"> Login </button>
-        <button style = "margin:5px;" mat-raised-button color="accent" routerLink="createApplication"> Apply </button>
+        <button style="margin:5px;" *ngIf="user?.name == undefined" mat-raised-button color="accent" routerLink="login"> Login </button>
+        <button style="margin:5px;" mat-raised-button color="accent" routerLink="createApplication"> Apply </button>
       </div>
 
     </div>

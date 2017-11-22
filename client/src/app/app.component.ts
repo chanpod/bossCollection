@@ -8,7 +8,7 @@ import { GuildService } from './services/guild.service';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 // import { authConfig } from "./authConfig";
-// import { environment } from "../environments/environment";
+import { environment } from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -28,7 +28,7 @@ export class AppComponent {
     this.userService.getUser();
     this.toastr.setRootViewContainerRef(vRef);
     document.title = guildService.getGuildContext();
-
+    document.domain = environment.domain;
 
     // this.oauthService.configure(authConfig);
     // this.oauthService.setStorage(localStorage);

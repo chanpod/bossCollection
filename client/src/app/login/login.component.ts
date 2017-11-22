@@ -10,6 +10,9 @@ import { UserService } from '../services/user.service';
 import { ResetPasswordDialogComponent } from './resetPasswordDialog.component';
 import { MatDialog } from '@angular/material';
 
+import { authConfig } from "../authConfig";
+import { environment } from "../../environments/environment";
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -24,7 +27,16 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private oAuthService: OAuthService,
     public dialog: MatDialog,
-    private toastr: ToastsManager) { }
+    private toastr: ToastsManager) {
+
+    // this.oAuthService.configure(authConfig);
+    // this.oAuthService.setStorage(localStorage);
+
+    // this.oAuthService.strictDiscoveryDocumentValidation = false;
+    // this.oAuthService.loginUrl = environment.loginUrl;
+    // this.oAuthService.logoutUrl = environment.logoutUrl;
+
+  }
 
   ngOnInit() {
 
@@ -40,6 +52,15 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['']);
       }
     })
+  }
+
+  getGoogleProfile(googleUser) {
+
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
   }
 
   blizzardLogin() {

@@ -1,6 +1,6 @@
-<mat-sidenav-container class="example-container">
+<mat-sidenav-container class="sidenav-container">
 
-    <mat-sidenav #sidenav class="example-sidenav">
+    <mat-sidenav #sidenav class="sidenav">
 
         <div class="dark-theme">
 
@@ -21,7 +21,7 @@
             </mat-list-item>
 
 
-            <mat-list-item routerLink="viewApplications" (click)="sidenav.close()">
+            <mat-list-item *ngIf = "userService.isGM()" routerLink="viewApplications" (click)="sidenav.close()">
                 <button mat-icon-button><mat-icon>view_list</mat-icon></button>
                 <a mat-list-item> View Apps </a>
             </mat-list-item>

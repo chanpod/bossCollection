@@ -14,7 +14,7 @@
     <div class="row ">
 
       <div class="col-xs-11">
-        <mat-progress-bar *ngIf = "loading" mode="indeterminate"></mat-progress-bar>
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
         <form class="row center-xs" [formGroup]="LoginForm">
 
           <mat-form-field class="col-xs-12">
@@ -26,6 +26,8 @@
           </mat-form-field>
 
           <div class="col-xs-12 start-xs">
+            <div class="g-signin2" data-onsuccess="onsuccess"></div>
+            <br />
             <button mat-raised-button (click)="login()" color="primary"> Login </button>
             <button mat-raised-button (click)="blizzardLogin()" color="primary"> Blizzard Login </button>
             <button mat-raised-button (click)="openResetEmailDialog()" color="primary"> Reset Password </button>
@@ -38,3 +40,9 @@
   </mat-card>
 
 </div>
+
+<script type = "text/javascript">
+function onsuccess(googleUser){
+  alert("Logged In");
+}
+</script>

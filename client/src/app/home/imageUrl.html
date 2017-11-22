@@ -1,9 +1,17 @@
-<div class="light-theme">
+<div class="light-theme row center-xs" style="width:100%;">
 
-    <mat-form-field>
-        <input matInput placeholder="Image URL (EG Imgur)" [(ngModel)]="url">
-    </mat-form-field>
+    <div class="row col-xs-12 center-xs">
 
-    <button mat-raised-button (click)="Save()"> Save </button>
-    <button mat-raised-button (click)="Cancel()"> Cancel </button>
+        <mat-form-field class = "col-md-6 col-xs-12">
+            <input matInput placeholder="Image URL (EG Imgur)" [(ngModel)]="url">
+        </mat-form-field>
+
+    </div>
+
+    <div class="row col-xs-12 center-xs">
+
+
+        <button mat-raised-button color="primary" (click)="Save()"> Save </button>
+        <button mat-raised-button color="red" (click)="Cancel()"> Cancel </button>
+    </div>
 </div>

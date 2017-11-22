@@ -12,5 +12,6 @@ export const environment = {
   clientId: 'fqvadba9c8auw7brtdr72vv7hfntbx7d',
   loginUrl: 'https://us.battle.net/oauth/authorize',
   logoutUrl: '',
+  domain: "localhost"
 
 };

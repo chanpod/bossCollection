@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit {
     openImageDialog(): void {
 
         let dialogRef = this.dialog.open(ImageUrlDialog, {
-            width: '250px',
+            width: '100%',
             data: this.guildSettings.bannerImage
         });
 
