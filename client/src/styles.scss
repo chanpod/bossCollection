@@ -1,5 +1,8 @@
 @import './styles.css';
 @import '~@angular/material/theming';
+
+.mat-checkbox-layout { white-space: normal !important; }
+
 @include mat-core();
 $primary: mat-palette($mat-grey, 900);
 $accent:  mat-palette($mat-light-blue, 600, 100, 800);
