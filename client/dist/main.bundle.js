@@ -1781,7 +1781,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/login/login.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row center-xs\">\r\n\r\n  <mat-card>\r\n    <mat-card-header>\r\n      <mat-card-title>\r\n        <h2>Login </h2>\r\n      </mat-card-title>\r\n    </mat-card-header>\r\n\r\n    <hr />\r\n\r\n\r\n\r\n    <div class=\"row \">\r\n\r\n      <div class=\"col-xs-11\">\r\n        <mat-progress-bar *ngIf = \"loading\" mode=\"indeterminate\"></mat-progress-bar>\r\n        <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\r\n\r\n          <mat-form-field class=\"col-xs-12\">\r\n            <input matInput placeholder=\"User Name\" name=\"name\" formControlName=\"Name\" />\r\n          </mat-form-field>\r\n\r\n          <mat-form-field class=\"col-xs-12\">\r\n            <input matInput placeholder=\"Password\" type=\"password\" formControlName=\"Password\" />\r\n          </mat-form-field>\r\n\r\n          <div class=\"col-xs-12 start-xs\">\r\n            <button mat-raised-button (click)=\"login()\" color=\"primary\"> Login </button>\r\n            <button mat-raised-button (click)=\"openResetEmailDialog()\" color=\"primary\"> Reset Password </button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n\r\n    </div>\r\n\r\n  </mat-card>\r\n\r\n</div>"
+module.exports = "<div class=\"row center-xs\">\r\n\r\n  <mat-card>\r\n    <mat-card-header>\r\n      <mat-card-title>\r\n        <h2>Login </h2>\r\n      </mat-card-title>\r\n    </mat-card-header>\r\n\r\n    <hr />\r\n\r\n\r\n\r\n    <div class=\"row \">\r\n\r\n      <div class=\"col-xs-11\">\r\n        <mat-progress-bar *ngIf = \"loading\" mode=\"indeterminate\"></mat-progress-bar>\r\n        <form class=\"row center-xs\" [formGroup]=\"LoginForm\">\r\n\r\n          <mat-form-field class=\"col-xs-12\">\r\n            <input matInput placeholder=\"User Name\" name=\"name\" formControlName=\"Name\" />\r\n          </mat-form-field>\r\n\r\n          <mat-form-field class=\"col-xs-12\">\r\n            <input matInput placeholder=\"Password\" type=\"password\" formControlName=\"Password\" />\r\n          </mat-form-field>\r\n\r\n          <div class=\"col-xs-12 start-xs\">\r\n            <button mat-raised-button (click)=\"login()\" color=\"primary\"> Login </button>\r\n            <button mat-raised-button (click)=\"blizzardLogin()\" color=\"primary\"> Blizzard Login </button>\r\n            <button mat-raised-button (click)=\"openResetEmailDialog()\" color=\"primary\"> Reset Password </button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n\r\n    </div>\r\n\r\n  </mat-card>\r\n\r\n</div>"
 
 /***/ }),
 
@@ -1793,11 +1793,13 @@ module.exports = "<div class=\"row center-xs\">\r\n\r\n  <mat-card>\r\n    <mat-
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__ = __webpack_require__("../../../../ng2-toastr/ng2-toastr.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular_oauth2_oidc__ = __webpack_require__("../../../../angular-oauth2-oidc/angular-oauth2-oidc.umd.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angular_oauth2_oidc___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_angular_oauth2_oidc__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_user_service__ = __webpack_require__("../../../../../src/app/services/user.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__resetPasswordDialog_component__ = __webpack_require__("../../../../../src/app/login/resetPasswordDialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_material__ = __webpack_require__("../../../material/esm5/material.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1814,10 +1816,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LoginComponent = /** @class */ (function () {
-    function LoginComponent(userService, router, dialog, toastr) {
+    function LoginComponent(userService, router, oAuthService, dialog, toastr) {
         this.userService = userService;
         this.router = router;
+        this.oAuthService = oAuthService;
         this.dialog = dialog;
         this.toastr = toastr;
     }
@@ -1833,6 +1837,9 @@ var LoginComponent = /** @class */ (function () {
                 _this.router.navigate(['']);
             }
         });
+    };
+    LoginComponent.prototype.blizzardLogin = function () {
+        this.oAuthService.tryLogin();
     };
     LoginComponent.prototype.openResetEmailDialog = function () {
         var dialogRef = this.dialog.open(__WEBPACK_IMPORTED_MODULE_6__resetPasswordDialog_component__["a" /* ResetPasswordDialogComponent */], {});
@@ -1859,10 +1866,10 @@ var LoginComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/login/login.component.html"),
             styles: [__webpack_require__("../../../../../src/app/login/login.component.css")]
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__angular_material__["h" /* MatDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__angular_material__["h" /* MatDialog */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _d || Object])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_user_service__["a" /* UserService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_angular_oauth2_oidc__["OAuthService"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angular_oauth2_oidc__["OAuthService"]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_7__angular_material__["h" /* MatDialog */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__angular_material__["h" /* MatDialog */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ng2_toastr_ng2_toastr__["ToastsManager"]) === "function" && _e || Object])
     ], LoginComponent);
     return LoginComponent;
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=login.component.js.map

@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { OAuthService } from "angular-oauth2-oidc";
 
 import { UserService } from '../services/user.service';
 
 import { ResetPasswordDialogComponent } from './resetPasswordDialog.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -18,10 +20,11 @@ export class LoginComponent implements OnInit {
   public LoginForm: FormGroup;
   public loading: boolean;
   constructor(
-    private userService: UserService, 
-    private router: Router, 
+    private userService: UserService,
+    private router: Router,
+    private oAuthService: OAuthService,
     public dialog: MatDialog,
-    private toastr:ToastsManager) { }
+    private toastr: ToastsManager) { }
 
   ngOnInit() {
 
@@ -37,6 +40,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['']);
       }
     })
+  }
+
+  blizzardLogin() {
+    this.oAuthService.tryLogin();
   }
 
   openResetEmailDialog() {
