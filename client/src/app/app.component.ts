@@ -19,7 +19,7 @@ export class AppComponent {
   title = 'app';
 
 
-  constructor(private userService: UserService,
+  constructor(public userService: UserService,
     private toastr: ToastsManager,
     vRef: ViewContainerRef,
     guildService: GuildService
