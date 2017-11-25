@@ -17,7 +17,7 @@ export class UserService {
 
     public user: BehaviorSubject<any> = new BehaviorSubject({});
     private ACCOUNT_API_URL_BASE: string = "/account";
-    private blizzardAccessToken: string;
+    private blizzardAccess: any;
     private blizzardAccessTokenStorageItem: 'blizzardAccessToken';
     constructor(
         private apiService: ApiService,
@@ -28,42 +28,40 @@ export class UserService {
     }
 
     getBlizzardProfile() {
-        let accountURI = "https://us.api.battle.net/account/user?access_token=" + this.blizzardAccessToken;
+        let accountURI = "https://us.api.battle.net/account/user?access_token=" + this.blizzardAccess.access_token;
 
-        return this.apiService.get(accountURI);
+        return this.http.get(accountURI).map(res => res.json());
+    }
+
+    setBlizzardUser(user: any) {
+        user.name = user.battletag;
+        user.blizzardAccount = true;
+        localStorage.setItem('blizzardProfile', JSON.stringify(user));
+
+        this.user.next(user);
     }
 
     getBlizzardAccessToken(code) {
 
-        return this.apiService.post('/oauth/getblizzardaccesstoken', {code: code})
+        return this.apiService.post('/oauth/getblizzardaccesstoken', { code: code })
             .map(
-                (accesstoken) => {
-                    console.log(accesstoken);
-                    this.blizzardAccessToken = accesstoken;
-                    localStorage.setItem(this.blizzardAccessTokenStorageItem, accesstoken);
-                    
-                    return true;
-                }
+            (accesstoken) => {
+                // console.log(accesstoken);
+                this.blizzardAccess = accesstoken;
+                this.blizzardAccess
+
+                localStorage.setItem(this.blizzardAccessTokenStorageItem, JSON.stringify(accesstoken));
+
+                return true;
+            }
             )
-
-
-
-        // return this.http.post(accessTokenURI, body, {headers: headers})
-        //     .map(
-        //     (accessToken) => {
-        //         let parseAccessToken = accessToken.json();
-        //         console.log(accessToken);
-        //         // this.blizzardAccessToken = accessToken;
-        //         return true;
-        //     }
-        //     )
     }
 
     isLoggedIn() {
         let user = this.user.getValue();
         let isLoggedIn = true;
 
-        let blizzardAccess = localStorage.getItem(this.blizzardAccessTokenStorageItem);        
+        let blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
 
         if (user.name == "" || user.name == undefined || blizzardAccess) {
             isLoggedIn = false;
@@ -71,6 +69,26 @@ export class UserService {
 
         return isLoggedIn;
 
+    }
+
+    checkBlizzardToken() {
+        // /oauth/check_token?token=<token>
+
+        // this.apiService.post('/oauth/validateBlizzardToken', { access_token: this.blizzardAccess.access_token })
+        //     .subscribe(
+        //     (response) => {
+        //         console.log(response);
+        //     }
+        //     )
+
+        this.http.get("https://us.api.battle.net/oauth/check_token?access_token=" + this.blizzardAccess.access_token
+            + "&client_id=" + environment.clientId
+        )
+            .subscribe(
+            (response) => {
+                console.log(response);
+            }
+            )
     }
 
     changePassword(body) {
@@ -95,17 +113,31 @@ export class UserService {
     }
 
     getUser() {
-        this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
-            .subscribe((user) => {
 
-                this.user.next(user);
-            },
-            (error) => {
-                console.log("API call failed");
-                console.log(error);
-                this.router.navigate(['/login']);
-            })
+        let blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
+        if (blizzardAccess) {
+            let blizzardProfile = JSON.parse(localStorage.getItem('blizzardProfile'));
 
+            if (blizzardProfile) {
+                this.setBlizzardUser(blizzardProfile);
+                this.blizzardAccess = blizzardAccess;
+                this.checkBlizzardToken();
+            }
+        }
+        else {
+
+            this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
+                .subscribe((user) => {
+
+                    this.user.next(user);
+                },
+                (error) => {
+                    console.log("API call failed");
+                    console.log(error);
+                    this.router.navigate(['/login']);
+                })
+
+        }
     }
 
     logout() {

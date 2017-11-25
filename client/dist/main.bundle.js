@@ -1870,8 +1870,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var LoginComponent = /** @class */ (function () {
     function LoginComponent(userService, activatedRoute, router, oAuthService, zone, dialog, toastr) {
-        // this.oAuthService.configure(authConfig);
-        // this.oAuthService.setStorage(localStorage);
         this.userService = userService;
         this.activatedRoute = activatedRoute;
         this.router = router;
@@ -1879,18 +1877,7 @@ var LoginComponent = /** @class */ (function () {
         this.zone = zone;
         this.dialog = dialog;
         this.toastr = toastr;
-        // this.oAuthService.strictDiscoveryDocumentValidation = false;
-        // this.oAuthService.loginUrl = environment.loginUrl;
-        // this.oAuthService.logoutUrl = environment.logoutUrl;
     }
-    LoginComponent.prototype.getFormActionUrl = function () {
-        var accessTokenURI = "https://us.battle.net/oauth/token?"
-            + "redirect_uri=" + encodeURIComponent(__WEBPACK_IMPORTED_MODULE_8__environments_environment__["a" /* environment */].redirectUri)
-            + "&scope=wow.profile"
-            + "&grant_type=authorization_code"
-            + "&code=" + this.blizzardCode;
-        return accessTokenURI;
-    };
     LoginComponent.prototype.ngOnInit = function () {
         var _this = this;
         gapi.signin2.render("googleButton");
@@ -1930,9 +1917,15 @@ var LoginComponent = /** @class */ (function () {
         });
     };
     LoginComponent.prototype.getBlizzardccessToken = function () {
+        var _this = this;
         this.userService.getBlizzardAccessToken(this.blizzardCode)
             .subscribe(function (response) {
             if (response) {
+                _this.userService.getBlizzardProfile()
+                    .subscribe(function (profile) {
+                    console.log(profile);
+                    _this.userService.setBlizzardUser(profile);
+                });
             }
         });
     };
@@ -2374,6 +2367,7 @@ var GuildService = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_service__ = __webpack_require__("../../../../../src/app/services/api.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__environments_environment__ = __webpack_require__("../../../../../src/environments/environment.ts");
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -2396,6 +2390,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var UserService = /** @class */ (function () {
     function UserService(apiService, http, router) {
         this.apiService = apiService;
@@ -2405,35 +2400,48 @@ var UserService = /** @class */ (function () {
         this.ACCOUNT_API_URL_BASE = "/account";
     }
     UserService.prototype.getBlizzardProfile = function () {
-        var accountURI = "https://us.api.battle.net/account/user?access_token=" + this.blizzardAccessToken;
-        return this.apiService.get(accountURI);
+        var accountURI = "https://us.api.battle.net/account/user?access_token=" + this.blizzardAccess.access_token;
+        return this.http.get(accountURI).map(function (res) { return res.json(); });
+    };
+    UserService.prototype.setBlizzardUser = function (user) {
+        user.name = user.battletag;
+        user.blizzardAccount = true;
+        localStorage.setItem('blizzardProfile', JSON.stringify(user));
+        this.user.next(user);
     };
     UserService.prototype.getBlizzardAccessToken = function (code) {
         var _this = this;
         return this.apiService.post('/oauth/getblizzardaccesstoken', { code: code })
             .map(function (accesstoken) {
-            console.log(accesstoken);
-            _this.blizzardAccessToken = accesstoken;
-            localStorage.setItem('blizzardAccessToken', accesstoken);
+            // console.log(accesstoken);
+            _this.blizzardAccess = accesstoken;
+            _this.blizzardAccess;
+            localStorage.setItem(_this.blizzardAccessTokenStorageItem, JSON.stringify(accesstoken));
             return true;
         });
-        // return this.http.post(accessTokenURI, body, {headers: headers})
-        //     .map(
-        //     (accessToken) => {
-        //         let parseAccessToken = accessToken.json();
-        //         console.log(accessToken);
-        //         // this.blizzardAccessToken = accessToken;
-        //         return true;
-        //     }
-        //     )
     };
     UserService.prototype.isLoggedIn = function () {
         var user = this.user.getValue();
         var isLoggedIn = true;
-        if (user.name == "" || user.name == undefined) {
+        var blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
+        if (user.name == "" || user.name == undefined || blizzardAccess) {
             isLoggedIn = false;
         }
         return isLoggedIn;
+    };
+    UserService.prototype.checkBlizzardToken = function () {
+        // /oauth/check_token?token=<token>
+        // this.apiService.post('/oauth/validateBlizzardToken', { access_token: this.blizzardAccess.access_token })
+        //     .subscribe(
+        //     (response) => {
+        //         console.log(response);
+        //     }
+        //     )
+        this.http.get("https://us.api.battle.net/oauth/check_token?access_token=" + this.blizzardAccess.access_token
+            + "&client_id=" + __WEBPACK_IMPORTED_MODULE_5__environments_environment__["a" /* environment */].clientId)
+            .subscribe(function (response) {
+            console.log(response);
+        });
     };
     UserService.prototype.changePassword = function (body) {
         return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/updateAccount", body);
@@ -2450,14 +2458,25 @@ var UserService = /** @class */ (function () {
     };
     UserService.prototype.getUser = function () {
         var _this = this;
-        this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
-            .subscribe(function (user) {
-            _this.user.next(user);
-        }, function (error) {
-            console.log("API call failed");
-            console.log(error);
-            _this.router.navigate(['/login']);
-        });
+        var blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
+        if (blizzardAccess) {
+            var blizzardProfile = JSON.parse(localStorage.getItem('blizzardProfile'));
+            if (blizzardProfile) {
+                this.setBlizzardUser(blizzardProfile);
+                this.blizzardAccess = blizzardAccess;
+                this.checkBlizzardToken();
+            }
+        }
+        else {
+            this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
+                .subscribe(function (user) {
+                _this.user.next(user);
+            }, function (error) {
+                console.log("API call failed");
+                console.log(error);
+                _this.router.navigate(['/login']);
+            });
+        }
     };
     UserService.prototype.logout = function () {
         var _this = this;

@@ -27,6 +27,7 @@ export class AppComponent {
     ) {
 
         this.userService.getUser();
+        
         this.toastr.setRootViewContainerRef(vRef);
         document.title = guildService.getGuildContext();
         document.domain = environment.domain; 

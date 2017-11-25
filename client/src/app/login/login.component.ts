@@ -94,9 +94,10 @@ export class LoginComponent implements OnInit {
                         .subscribe(
                             (profile) => {
                                 console.log(profile);
+                                
+                                this.userService.setBlizzardUser(profile);
                             }
                         )
-
                 }
             }
             )
