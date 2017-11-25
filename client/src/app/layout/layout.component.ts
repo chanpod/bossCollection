@@ -5,6 +5,7 @@ import { GuildService } from '../services/guild.service';
 
 //3rd party
 
+declare var gapi: any;
 
 @Component({
   selector: 'layout',
@@ -27,6 +28,13 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadGoogleAuthAPI()
+  }
+
+  loadGoogleAuthAPI() {
+    gapi.load('auth2', function() {
+      gapi.auth2.init();
+    });
   }
 
   updateBasedOnUser(user: any) {

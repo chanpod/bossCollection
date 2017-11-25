@@ -1,46 +1,56 @@
-<div class="row center-xs" style = "margin:0;">
+<div class="row center-xs" style="margin:0;">
 
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        <h2>Login </h2>
-      </mat-card-title>
-    </mat-card-header>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <h2>Login </h2>
+            </mat-card-title>
+        </mat-card-header>
 
-    <hr />
+        <hr />
 
-    <div class="row ">
+        <div class="row ">
 
-      <div class="col-xs-11">
-        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-        <form class="row center-xs" [formGroup]="LoginForm">
+            <div class="col-xs-11">
+                <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+               
+                <form class="row center-xs" [formGroup]="LoginForm">
 
-          <mat-form-field class="col-xs-12">
-            <input matInput placeholder="User Name" name="name" formControlName="Name" />
-          </mat-form-field>
+                    <mat-form-field class="col-xs-12">
+                        <input matInput placeholder="User Name" name="name" formControlName="Name" />
+                    </mat-form-field>
 
-          <mat-form-field class="col-xs-12">
-            <input matInput placeholder="Password" type="password" formControlName="Password" />
-          </mat-form-field>
+                    <mat-form-field class="col-xs-12">
+                        <input matInput placeholder="Password" type="password" formControlName="Password" />
+                    </mat-form-field>
 
-          <div class="col-xs-12 start-xs">
-            <div class="g-signin2" data-onsuccess="onsuccess"></div>
-            <br />
-            <button mat-raised-button (click)="login()" color="primary"> Login </button>
-            <button mat-raised-button (click)="blizzardLogin()" color="primary"> Blizzard Login </button>
-            <button mat-raised-button (click)="openResetEmailDialog()" color="primary"> Reset Password </button>
-          </div>
-        </form>
-      </div>
+                    <div class="col-xs-12 start-xs">
+                        <button mat-raised-button (click)="login()" color="primary"> Login </button>
+                        <button mat-raised-button (click)="openResetEmailDialog()" color="primary"> Reset Password </button>
+                        <button mat-raised-button (click)="getBlizzardccessToken()" color="primary"> Blizz Login Temp </button>
 
-    </div>
+                    </div>
+                    <div class="row col-xs-12 start-xs"> &nbsp; </div>
+                    <div class="row col-xs-12 start-xs">
 
-  </mat-card>
+                        <div class="col-xs-2" style="padding:0;">
+
+                            <button (click)="blizzardLogin()" class="blizzardButton">
+                                <img class = "blizzardLogo" src = "../../../assets/images/blizzardIcon.png" />
+                                Login </button>
+                        </div>
+
+                        <div class="col-xs-2">
+
+                            <div id="googleButton" class="g-signin2" (click)="googleLogin()"></div>
+                        </div>
+                    </div>
+                </form>
+      
+            </div>
+
+        </div>
+
+    </mat-card>
 
 </div>
-
-<script type = "text/javascript">
-function onsuccess(googleUser){
-  alert("Logged In");
-}
-</script>

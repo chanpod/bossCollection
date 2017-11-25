@@ -199,7 +199,7 @@ router.post('/updateAccount', function (req, res) {
 
         var sessionPassword = req.session.user.password;
     }
-    else{
+    else {
         res.status(401).send(util.handleErrors("Not authorized. Please login"));
     }
     var currentPassword = req.body.currentPassword;
@@ -263,12 +263,37 @@ router.get('/signup', function (req, res) {
     res.render('index', { title: 'Signup', countries: CT });
 });
 
+
+router.get('/googleUser/:email', function (req, res) {
+    AM.getAccountByEmail(req.params.email, function (response) {
+
+        if (response) {
+
+            res.status(200).send(response);
+        }
+        else {
+            res.status(200).send({ message: "Not Found" });
+        }
+    })
+})
+
 router.post('/signup', function (req, res) {
 
     console.log("auth /api/auth/signup")
 
+    if (req.body.googleSignup) {
 
-    if (req.body.password === req.body.password_verify) {
+        var newUser = {
+            name: req.body.name,
+            email: req.body.email,
+            googleId: req.body.googleId
+        }
+        AM.createGoogleAccount(newUser)
+            .then(function (success) {
+                res.status(200).send(success);
+            })
+    }
+    else if (req.body.password === req.body.password_verify) {
 
         var newUser = {
             name: req.body.name,
@@ -393,6 +418,21 @@ router.get('/reset', function (req, res) {
         res.redirect('/print');
     });
 });
+
+router.post('/googleLogin', function (req, res) {
+
+    AM.googleLogin(req.body.email)
+        .then(function (user) {
+
+            req.session.user = user;
+
+            setUser(req, res)
+                .then(function (result) {
+
+                    res.status(200).send(req.session.user);
+                })
+        })
+})
 
 
 function setUser(req, res) {

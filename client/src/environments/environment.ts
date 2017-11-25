@@ -6,12 +6,11 @@
 //https://us.battle.net/oauth/authorize
 
 export const environment = {
-  production: false,
-  Issuer: '',
-  redirectUri: 'https://www.bosscollection.net/login',
-  clientId: 'fqvadba9c8auw7brtdr72vv7hfntbx7d',
-  loginUrl: 'https://us.battle.net/oauth/authorize',
-  logoutUrl: '',
-  domain: "localhost"
-
+    production: false,
+    Issuer: '',
+    redirectUri: 'https://localhost:4200/login',
+    clientId: 'fqvadba9c8auw7brtdr72vv7hfntbx7d',
+    loginUrl: 'https://us.battle.net/oauth/authorize',
+    logoutUrl: '',
+    domain: "localhost"
 };

@@ -1,0 +1,39 @@
+.blizzardButton{
+    background-color: #0e86ca;
+    border-color: #10a1de;
+    color: #fff;
+    font-size: 1.0625rem;
+
+    -ms-flex-align: center;
+    align-items: center;
+    border-color: transparent;
+    border-radius: 0;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: -ms-flexbox;
+    display: flex;
+    font-family: Blizzard,sans-serif;
+    font-size: 1.0625rem;
+    font-weight: 400;
+    height: 2.5rem;
+    line-height: 1.5;
+    padding: 0 1rem;
+    text-align: center;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+    width:120px;
+    height:36px;
+}
+
+.blizzardLogo{
+    width:40%;
+    height:100%;
+    padding-right: 5px;
+}
