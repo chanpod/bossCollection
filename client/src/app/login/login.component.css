@@ -6,7 +6,8 @@
 
     -ms-flex-align: center;
     align-items: center;
-    border-color: transparent;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.25);
+    
     border-radius: 0;
     border-style: solid;
     border-width: 1px;
@@ -30,6 +31,12 @@
     white-space: nowrap;
     width:120px;
     height:36px;
+}
+
+.blizzardButton:hover{
+    background-color: #0e83b1;
+    box-shadow: 2px 2px 4px 1px rgba(0,0,0,.25);
+    transition: background-color .218s,border-color .218s,box-shadow .218s; 
 }
 
 .blizzardLogo{

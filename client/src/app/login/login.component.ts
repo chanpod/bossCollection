@@ -102,16 +102,12 @@ export class LoginComponent implements OnInit {
         this.activatedRoute.queryParams.subscribe(
             (params) => {
                 if (params.code) {
+                    this.loading = true;
                     this.blizzardCode = params.code;
                     this.getBlizzardccessToken();
                 }
             }
-        )
-        this.activatedRoute.params.subscribe(
-            (params) => {
-                console.log(params);
-            }
-        )
+        )    
     }
 
     getBlizzardccessToken() {
@@ -191,6 +187,7 @@ export class LoginComponent implements OnInit {
         this.userService.oauthLogin(oauthId)
             .subscribe(
             (result) => {
+                this.loading = false
                 if (result) {
                     this.loginSuccess();
                 }
@@ -208,7 +205,9 @@ export class LoginComponent implements OnInit {
     }
 
     blizzardLogin() {
-        console.log(encodeURIComponent(environment.redirectUri));
+        
+        this.loading = true;
+
         let blizzardLoginUrl = environment.loginUrl
             + "?"
             + "grant_type=authorization_code"

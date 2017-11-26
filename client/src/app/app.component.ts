@@ -30,7 +30,7 @@ export class AppComponent {
         
         this.toastr.setRootViewContainerRef(vRef);
         document.title = guildService.getGuildContext();
-        document.domain = environment.domain; 
+        // document.domain = environment.domain; 
 
         this.oauthService.configure(authConfig);
         this.oauthService.setStorage(localStorage);

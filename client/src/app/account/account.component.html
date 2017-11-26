@@ -25,7 +25,7 @@
 
         </div>
 
-        <div class="row" *ngIf = "!user.googleId">
+        <div class="row" *ngIf = "!user.googleId && !user.blizzardId">
 
           <mat-form-field class="fullWidthField col-xs-12">
             <input matInput placeholder="Current Password" name="currentPassword" formControlName="currentPassword" />
@@ -41,8 +41,8 @@
 
         </div>
 
-        <div class = "row space-between">
-          <button *ngIf = "!user.googleId" mat-raised-button color = "primary" (click) = "changePassword()">Change Password</button>
+        <div class = "row space-between"> 
+          <button *ngIf = "!user.googleId && !user.blizzardId" mat-raised-button color = "primary" (click) = "changePassword()">Change Password</button>
           <button mat-raised-button color = "primary" (click) = "leaveGuild()" *ngIf = "user.guild?.name">Leave Guild</button>
         </div>
 
