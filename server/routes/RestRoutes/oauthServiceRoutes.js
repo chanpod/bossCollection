@@ -10,6 +10,8 @@ var moment = require('moment');
 var util = require('utility');
 var environment = require('environment.js')
 
+console.log(environment);
+
 router.route('/getblizzardaccesstoken')
     .post(function (req, res) {
         console.log("get access token");
@@ -61,8 +63,8 @@ router.route('/getblizzardaccesstoken')
 router.route('/validateBlizzardToken')
     .post(function (req, res) {
 
-        var accessTokenURI = "https://us.api.battle.net/oauth/check_token?"
-            + "access_token=" + req.body.access_token;
+        var accessTokenURI = "https://us.battle.net/oauth/check_token?"
+            + "token=" + req.body.access_token;
 
 
         var options = {
@@ -70,9 +72,7 @@ router.route('/validateBlizzardToken')
         };
 
         function callback(error, response, body) {
-            console.log(error)
-            // console.log(response)
-            console.log(body)
+
             if (!error && response.statusCode == 200) {
                 console.log(body)
                 res.status(200).send(body);

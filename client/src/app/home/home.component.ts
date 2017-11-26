@@ -134,14 +134,21 @@ export class HomeComponent implements OnInit {
 
 
     claimGuild() {
-        this.guildService.claimGuild(this.guildContext)
+
+        if(this.userService.isLoggedIn()){
+
+            this.guildService.claimGuild(this.guildContext)
             .subscribe(
-            (result) => {
-                this.toastr.success("You now own the guild " + this.guildContext)
-                this.guildNotOwned = false;
-                this.userService.getUser();
-            }
+                (result) => {
+                    this.toastr.success("You now own the guild " + this.guildContext)
+                    this.guildNotOwned = false;
+                    this.userService.getUser();
+                }
             )
+        }
+        else{
+            this.toastr.error("Must be logged in to claim a page");
+        }
     }
 
     checkIfGuildOwned() {

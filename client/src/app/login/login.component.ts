@@ -39,8 +39,11 @@ export class LoginComponent implements OnInit {
 
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {        
         gapi.signin2.render("googleButton");
+    }
+
+    ngOnInit() {
         this.loading = false;
 
         this.LoginForm = new FormGroup({
@@ -64,7 +67,34 @@ export class LoginComponent implements OnInit {
             })
             .then((googleUser) => {
                 this.googleProfile = googleUser.getBasicProfile();
-                this.checkIfNewAccount(this.googleProfile);
+
+                this.userService.checkIfNewAccount(this.googleProfile.getId())
+                    .subscribe(
+                    (result) => {
+
+                        if (result) {
+                            this.oauthSignIn(this.googleProfile.getId());
+                        }
+                        else {
+                            let user = {
+                                name: this.googleProfile.getName(),
+                                email: this.googleProfile.getEmail(),
+                                googleId: this.googleProfile.getId(),
+                                googleSignup: true
+                            }
+
+                            this.userService.signUp(user)
+                                .subscribe(
+                                (result) => {
+
+                                    this.oauthSignIn(this.googleProfile.getId());
+                                }
+                                )
+                        }
+                    }
+                    )
+
+                // this.checkIfNewAccount(this.googleProfile.getId());
             })
     }
 
@@ -92,26 +122,47 @@ export class LoginComponent implements OnInit {
                 if (response) {
                     this.userService.getBlizzardProfile()
                         .subscribe(
-                            (profile) => {
-                                console.log(profile);
-                                
-                                this.userService.setBlizzardUser(profile);
-                            }
+                        (profile) => {
+
+                            this.userService.getOauthUser(profile.id)
+                                .subscribe(
+                                (result) => {
+                                    if (result.message != "Not Found") {
+                                        this.oauthSignIn(result.blizzardId);
+                                        this.userService.setBlizzardUser(result);
+                                    }
+                                    else {
+                                        let user = {
+                                            name: profile.battletag,
+                                            blizzardId: profile.id,
+                                            oauthSignup: true
+                                        }
+
+                                        this.userService.signUp(user)
+                                            .subscribe(
+                                            (result) => {
+                                                this.userService.setBlizzardUser(result);
+                                            }
+                                            )
+                                    }
+                                }
+                                )
+
+                            this.userService.setBlizzardUser(profile);
+                        }
                         )
                 }
             }
             )
     }
 
-    checkIfNewAccount(googleUser) {
+    checkIfNewAccount(oauthId) {
 
-        let email = this.googleProfile.getEmail();
-
-        this.userService.getGoogleUser(email)
+        this.userService.getOauthUser(oauthId)
             .subscribe(
             (result) => {
                 if (result.message != "Not Found") {
-                    this.googleSignIn();
+                    this.oauthSignIn(this.googleProfile.getId());
                 }
                 else {
 
@@ -119,14 +170,14 @@ export class LoginComponent implements OnInit {
                         name: this.googleProfile.getName(),
                         email: this.googleProfile.getEmail(),
                         googleId: this.googleProfile.getId(),
-                        googleSignup: true
+                        oauthSignup: true
                     }
 
                     this.userService.signUp(user)
                         .subscribe(
                         (result) => {
 
-                            this.googleSignIn();
+                            this.oauthSignIn(this.googleProfile.getId());
                         }
                         )
 
@@ -135,11 +186,9 @@ export class LoginComponent implements OnInit {
             )
     }
 
-    googleSignIn() {
+    oauthSignIn(oauthId) {
 
-        let email = this.googleProfile.getEmail();
-
-        this.userService.googleLogin(email)
+        this.userService.oauthLogin(oauthId)
             .subscribe(
             (result) => {
                 if (result) {

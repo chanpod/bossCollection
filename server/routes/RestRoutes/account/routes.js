@@ -264,8 +264,8 @@ router.get('/signup', function (req, res) {
 });
 
 
-router.get('/googleUser/:email', function (req, res) {
-    AM.getAccountByEmail(req.params.email, function (response) {
+router.get('/oauthUser/:id', function (req, res) {
+    AM.getAccountById(req.params.id, function (response) {
 
         if (response) {
 
@@ -281,14 +281,15 @@ router.post('/signup', function (req, res) {
 
     console.log("auth /api/auth/signup")
 
-    if (req.body.googleSignup) {
+    if (req.body.oauthSignup) {
 
         var newUser = {
             name: req.body.name,
             email: req.body.email,
-            googleId: req.body.googleId
+            googleId: req.body.googleId,
+            blizzardId: req.body.blizzardId
         }
-        AM.createGoogleAccount(newUser)
+        AM.createOauthAccount(newUser)
             .then(function (success) {
                 res.status(200).send(success);
             })
@@ -419,9 +420,9 @@ router.get('/reset', function (req, res) {
     });
 });
 
-router.post('/googleLogin', function (req, res) {
+router.post('/oauthLogin', function (req, res) {
 
-    AM.googleLogin(req.body.email)
+    AM.oauthLogin(req.body.oauthId)
         .then(function (user) {
 
             req.session.user = user;

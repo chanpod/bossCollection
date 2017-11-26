@@ -108,10 +108,10 @@ exports.verifyPasswordsMatch = function (pass1, pass2) {
 
 }
 
-exports.googleLogin = function (user, callback) {
+exports.oauthLogin = function (oauthId, callback) {
     var defer = q.defer();
 
-    UserModel.findOne({ email: user }, function (err, userFound) {
+    UserModel.findOne({ $or: [{ googleId: oauthId }, { blizzardId: oauthId }] }, function (err, userFound) {
 
         if (err || userFound == null) {
 
@@ -172,28 +172,33 @@ exports.manualLogin = function (user, pass, callback) {
     return defer.promise;
 }
 
-exports.createGoogleAccount = function (googleUser, callback) {
+exports.createOauthAccount = function (oauthUser, callback) {
     var defer = q.defer();
 
-    if (googleUser.name == '' || googleUser.name == undefined) {
+    if (oauthUser.name == '' || oauthUser.name == undefined) {
         //callback('User name missing!');
         defer.reject('User name missing!');
         return;
     }
 
-    UserModel.findOne({ googleId: googleUser.googleId }, function (e, user) {
+    UserModel.findOne({
+        $and: [
+            { googleId: oauthUser.googleId },
+            { blizzardId: oauthUser.blizzardId }
+        ]
+    }, function (e, user) {
         if (user) {
 
             //callback('username-taken');
             defer.reject(util.handleErrors('account already created'));
         } else {
-            googleUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
+            oauthUser.date = moment().format('MMMM Do YYYY, h:mm:ss a');
 
-            googleUser = new UserModel(googleUser);
+            oauthUser = new UserModel(oauthUser);
 
-            googleUser.save(function (savedUser) {
+            oauthUser.save(function (savedUser) {
 
-                defer.resolve(googleUser);
+                defer.resolve(oauthUser);
             });
         }
     });
@@ -313,6 +318,15 @@ exports.deleteAccount = function (id, callback) {
 
 exports.getAccountByEmail = function (email, callback) {
     UserModel.findOne({ email: email }, function (e, o) { callback(o); });
+}
+
+exports.getAccountById = function (Id, callback) {
+    UserModel.findOne({
+        $or: [
+            { googleId: Id },
+            { blizzardId: Id }
+        ]
+    }, function (e, o) { callback(o); });
 }
 
 exports.validateResetLink = function (email, passHash, callback) {

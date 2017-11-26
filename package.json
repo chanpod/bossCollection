@@ -11,6 +11,7 @@
     "body-parser": "^1.0.2",
     "browser-sync": "^2.12.8",
     "browserify": "^13.0.1",
+    "btoa": "^1.1.2",
     "connect-mongo": "0.8.2",
     "cookie-parser": "^1.3.5",
     "ejs": "^2.4.2",
@@ -40,7 +41,8 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
-    "start": "node server/server"
+    "start": "node server/server NODE_ENV=development",
+    "production" : "node server/server NODE_ENV=production"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",

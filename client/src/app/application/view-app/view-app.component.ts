@@ -99,7 +99,7 @@ export class ViewAppComponent implements OnInit {
   }
 
   armoryUrl(realm, character) {
-    var url = "http://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
+    var url = "https://us.battle.net/wow/en/character/" + realm + "/" + character + "/simple";
 
     return url;
   }

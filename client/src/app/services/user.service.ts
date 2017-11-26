@@ -18,7 +18,8 @@ export class UserService {
     public user: BehaviorSubject<any> = new BehaviorSubject({});
     private ACCOUNT_API_URL_BASE: string = "/account";
     private blizzardAccess: any;
-    private blizzardAccessTokenStorageItem: 'blizzardAccessToken';
+    public blizzardAccessTokenStorageItem: string = 'blizzardAccessToken';
+    public blizzardProfileStorageItem: string = 'blizzardProfile';
     constructor(
         private apiService: ApiService,
         private http: Http,
@@ -36,9 +37,13 @@ export class UserService {
     setBlizzardUser(user: any) {
         user.name = user.battletag;
         user.blizzardAccount = true;
-        localStorage.setItem('blizzardProfile', JSON.stringify(user));
+        user.blizzardId = user.id;
+
+        localStorage.setItem(this.blizzardProfileStorageItem, JSON.stringify(user));
 
         this.user.next(user);
+
+        return user;
     }
 
     getBlizzardAccessToken(code) {
@@ -61,9 +66,9 @@ export class UserService {
         let user = this.user.getValue();
         let isLoggedIn = true;
 
-        let blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
+        // let blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
 
-        if (user.name == "" || user.name == undefined || blizzardAccess) {
+        if (user.name == "" || user.name == undefined) {
             isLoggedIn = false;
         }
 
@@ -71,24 +76,41 @@ export class UserService {
 
     }
 
+    checkIfNewAccount(oauthId) {
+
+        return this.getOauthUser(oauthId)
+            .map(
+            (result) => {
+                if (result.message != "Not Found") {
+                    return false;
+                }
+                else {
+
+                    return true;
+
+                }
+            }
+            )
+    }
+
     checkBlizzardToken() {
         // /oauth/check_token?token=<token>
 
-        // this.apiService.post('/oauth/validateBlizzardToken', { access_token: this.blizzardAccess.access_token })
-        //     .subscribe(
-        //     (response) => {
-        //         console.log(response);
-        //     }
-        //     )
-
-        this.http.get("https://us.api.battle.net/oauth/check_token?access_token=" + this.blizzardAccess.access_token
-            + "&client_id=" + environment.clientId
-        )
+        this.apiService.post('/oauth/validateBlizzardToken', { access_token: this.blizzardAccess.access_token })
             .subscribe(
             (response) => {
                 console.log(response);
             }
             )
+
+        // this.http.get("https://us.battle.net/oauth/check_token?access_token=" + this.blizzardAccess.access_token
+        //     + "&client_id=" + environment.clientId
+        // )
+        //     .subscribe(
+        //     (response) => {
+        //         console.log(response);
+        //     }
+        //     )
     }
 
     changePassword(body) {
@@ -99,8 +121,8 @@ export class UserService {
         return this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser");
     }
 
-    getGoogleUser(email) {
-        return this.apiService.get(this.ACCOUNT_API_URL_BASE + "/googleUser/" + email);
+    getOauthUser(oauthId) {
+        return this.apiService.get(this.ACCOUNT_API_URL_BASE + "/oauthUser/" + oauthId);
 
     }
 
@@ -114,36 +136,31 @@ export class UserService {
 
     getUser() {
 
-        let blizzardAccess = JSON.parse(localStorage.getItem(this.blizzardAccessTokenStorageItem));
-        if (blizzardAccess) {
-            let blizzardProfile = JSON.parse(localStorage.getItem('blizzardProfile'));
 
-            if (blizzardProfile) {
-                this.setBlizzardUser(blizzardProfile);
-                this.blizzardAccess = blizzardAccess;
-                this.checkBlizzardToken();
-            }
-        }
-        else {
 
-            this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
-                .subscribe((user) => {
+        this.apiService.get(this.ACCOUNT_API_URL_BASE + "/currentUser")
+            .subscribe((user) => {
 
-                    this.user.next(user);
-                },
-                (error) => {
-                    console.log("API call failed");
-                    console.log(error);
-                    this.router.navigate(['/login']);
-                })
+                this.user.next(user);
+            },
+            (error) => {
+                console.log("API call failed");
+                console.log(error);
+                this.router.navigate(['/login']);
+            })
 
-        }
+
     }
 
     logout() {
         if (this.user.getValue().googleId) {
             gapi.auth2.getAuthInstance().signOut();
         }
+        else if (this.user.getValue().blizzardId) {
+            localStorage.removeItem(this.blizzardAccessTokenStorageItem);
+            localStorage.removeItem(this.blizzardProfileStorageItem);
+        }
+
         this.apiService.post(this.ACCOUNT_API_URL_BASE + "/logout", {})
             .subscribe((response) => {
                 console.log("Logged out successfully");
@@ -151,11 +168,11 @@ export class UserService {
             })
     }
 
-    googleLogin(email) {
+    oauthLogin(oauthId) {
         let body = {
-            email: email
+            oauthId: oauthId
         }
-        return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/googleLogin", body);
+        return this.apiService.post(this.ACCOUNT_API_URL_BASE + "/oauthLogin", body);
     }
 
     login(username, password) {
