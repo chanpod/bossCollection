@@ -6,7 +6,6 @@
 - angularRefactor is development updated to run angular 1.X with a webpack server instead of gulp. It was more of a proof of concept attempt. Not sure if it even works anymore.
 - angular 2 branch is the same look as development, but has been completely over-hauled to angular 2 specifications and no longer uses gulp. It has it's own readme
 
-
 ### Running the app
 
 npm install
