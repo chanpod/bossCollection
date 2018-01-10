@@ -11,11 +11,7 @@
 
 npm install
 
-run mongo
-
 npm start
-
-gulp watch //For browsersync
 
 
 
