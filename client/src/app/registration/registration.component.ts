@@ -26,7 +26,7 @@ export class RegistrationComponent implements OnInit {
     this.passworVerifydListener();
   }
 
-  passwordsMatchValidator() {
+  passwordsMatchValidator() { 
     let passwordControl = this.RegisterFormGroup.controls.Password;
     let passwordVerifyControl = this.RegisterFormGroup.controls.PasswordVerify;
 
