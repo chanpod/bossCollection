@@ -81,12 +81,21 @@ export class GuildService {
   getApplications() {
     return this.apiService.get(this.APP_API_BASE_URL + "/getApplications/" + this.getGuildContext())
   }
+  
+  getRejectedApplications(){
+
+    return this.apiService.get(this.APP_API_BASE_URL + "/getRejectedApplications/" + this.getGuildContext())
+  }
 
   getApplication(appId) {
     return this.apiService.get(this.APP_API_BASE_URL + "/getApplication/" + appId);
   }
 
   deleteApplication(body) {
+    return this.apiService.post(this.APP_API_BASE_URL + "/deleteApplication", body);
+  }
+
+  rejectApplication(body) {
     return this.apiService.post(this.APP_API_BASE_URL + "/rejectApplication", body);
   }
 

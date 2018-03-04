@@ -56,11 +56,19 @@
                     </mat-form-field>
 
                     <mat-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input placeholder="Screenshot of your UI" matInput name="batteltag" formControlName="uiScreenshot" />
+                        <input placeholder="Screenshot of your UI" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                            matInput name="batteltag" formControlName="uiScreenshot" />
+                        <mat-error *ngIf="CreateAppFormGroup.controls.uiScreenshot.hasError('pattern')">
+                            Not a valid url
+                        </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="fullWidthField col-xs-12 formPadding">
-                        <input placeholder="Link recent tier logs" matInput name="batteltag" formControlName="logsLink" />
+                        <input placeholder="Link recent tier logs" pattern="^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                            matInput name="batteltag" formControlName="logsLink" />
+                        <mat-error *ngIf="CreateAppFormGroup.controls.logsLink.hasError('pattern')">
+                            Not a valid url
+                        </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="fullWidthField col-xs-12 formPadding">

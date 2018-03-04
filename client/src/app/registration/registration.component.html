@@ -1,0 +1,45 @@
+<div class="row center-xs" style="margin:0;">
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                <h2>Login </h2>
+            </mat-card-title>
+        </mat-card-header>
+
+        <hr />
+
+        <div class="row ">
+
+            <div class="col-xs-11">
+
+                <form class="row center-xs" [formGroup]="RegisterFormGroup">
+
+                    <mat-form-field class="col-xs-12">
+                        <input matInput placeholder="Email" name="email" formControlName="Name" />
+                    </mat-form-field>
+
+                    <mat-form-field class="col-xs-12">
+                        <input matInput placeholder="Password" type="password" formControlName="Password" />
+                        <mat-error *ngIf="!passwordsMatch">
+                            Passwords must match
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-xs-12">
+                        <input matInput placeholder="PasswordVerify" type="password" formControlName="PasswordVerify" />
+                        <mat-error *ngIf="!passwordsMatch">
+                            Passwords must match
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div class="col-xs-12 start-xs">
+                        <button mat-raised-button (click)="login()" color="primary"> Register </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </mat-card>
+
+</div>

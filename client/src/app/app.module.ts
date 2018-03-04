@@ -40,6 +40,7 @@ import { GuildModule } from './guild/guild.module';
 
 //Guards
 import { AccountGuard } from './account/guards/account.guard';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { AccountGuard } from './account/guards/account.guard';
     LoginComponent,
     ResetPasswordDialogComponent,
     AccountComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RegistrationComponent
   ],
   entryComponents: [
     NewTabDialog,

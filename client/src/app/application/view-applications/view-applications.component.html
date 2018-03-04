@@ -1,40 +1,84 @@
-<div class="row center-xs">
-  <mat-card *ngIf="loading" class="col-md-3 col-xs-12 center-xs">
-    <mat-spinner ></mat-spinner>
-  </mat-card>
-  <div *ngIf="!loading" class="col-xs-12 col-md-6">
+<div class="row center-xs noPadding">
+    <mat-card *ngIf="loading" class="col-md-3 col-xs-12 center-xs">
+        <mat-spinner></mat-spinner>
+    </mat-card>
+    <div *ngIf="!loading" class="col-xs-12 col-md-6">
+
+        <mat-tab-group>
+            <mat-tab label="New Applications">
+
+                <mat-table [dataSource]="applications">
+
+                    <ng-container matColumnDef="Character">
+                        <mat-header-cell *matHeaderCellDef> Character </mat-header-cell>
+                        <mat-cell *matCellDef="let application">
+                            <div class="row start-xs middle-xs">
+
+                                <img [src]="getUrl(application)" /> &nbsp; {{application.character}}
+
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Date Applied">
+                        <mat-header-cell *matHeaderCellDef> Date Applied </mat-header-cell>
+                        <mat-cell *matCellDef="let application">{{application.dateApplied | date:'shortDate'}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="View Application">
+                        <mat-header-cell *matHeaderCellDef> View Application </mat-header-cell>
+                        <mat-cell *matCellDef="let application">
+                            <button (click)="viewApp(application)" mat-raised-button color="primary"> View </button>
+                            <button (click)="rejectApplication(application)" mat-icon-button color="warning">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
 
 
-    <mat-table [dataSource]="applications">
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-      <ng-container matColumnDef="Character">
-        <mat-header-cell *matHeaderCellDef> Character </mat-header-cell>
-        <mat-cell *matCellDef="let application">
-          <div class="row start-xs middle-xs">
+                </mat-table>
+            </mat-tab>
 
-            <img [src]="getUrl(application)" /> &nbsp; {{application.character}}
+            <mat-tab label="Rejected">
 
-          </div>
-        </mat-cell>
-      </ng-container>
+                <mat-table [dataSource]="rejectedApplications">
 
-      <ng-container matColumnDef="Date Applied">
-        <mat-header-cell *matHeaderCellDef> Date Applied </mat-header-cell>
-        <mat-cell *matCellDef="let application">{{application.dateApplied | date:'shortDate'}}  </mat-cell>
-      </ng-container>
+                    <ng-container matColumnDef="Character">
+                        <mat-header-cell *matHeaderCellDef> Character </mat-header-cell>
+                        <mat-cell *matCellDef="let application">
+                            <div class="row start-xs middle-xs">
 
-      <ng-container matColumnDef="View Application">
-        <mat-header-cell *matHeaderCellDef> View Application </mat-header-cell>
-        <mat-cell *matCellDef="let application">
-          <button (click)="viewApp(application)" mat-raised-button color="primary"> View </button>
-          <button (click)="deleteApplication(application)" mat-icon-button color="warning"> <mat-icon>delete</mat-icon> </button>
-        </mat-cell>
-      </ng-container>
+                                <img [src]="getUrl(application)" /> &nbsp; {{application.character}}
+
+                            </div>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Date Applied">
+                        <mat-header-cell *matHeaderCellDef> Date Applied </mat-header-cell>
+                        <mat-cell *matCellDef="let application">{{application.dateApplied | date:'shortDate'}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="View Application">
+                        <mat-header-cell *matHeaderCellDef> View Application </mat-header-cell>
+                        <mat-cell *matCellDef="let application">
+                            <button (click)="viewApp(application)" mat-raised-button color="primary"> View </button>
+                            <button (click)="deleteApplication(application)" mat-icon-button color="warning">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                    </ng-container>
 
 
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-    </mat-table>
-  </div>
+                </mat-table>
+            </mat-tab>
+        </mat-tab-group>
+
+    </div>
 </div>

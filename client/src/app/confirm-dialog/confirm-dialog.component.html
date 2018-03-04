@@ -1,7 +1,8 @@
 <div class="light-theme">
   <mat-card>
     <mat-card-title>
-      <span mat-headline>Are you sure you want to delete this?</span>
+      <span mat-headline>{{message}}</span>
+      <!-- <span mat-headline *ngIf = "message.length == 0">{{defaultMessage}}</span> -->
     </mat-card-title>
 
     <mat-card-actions class = "row">

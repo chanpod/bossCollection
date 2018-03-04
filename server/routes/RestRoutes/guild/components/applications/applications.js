@@ -201,6 +201,40 @@ function getGuildApplications(req, res) {
     return defer.promise;
 }
 
+function getRejectedGuildApplications(req, res) {
+    var guild = req.params.guild;
+
+    var defer = q.defer();
+    console.log("Getting applications...");
+
+
+    var date = moment();
+
+    if (req.params.startDate) {
+        date = moment(req.params.startDate);
+    }
+    else {
+
+        date.month((date.month() - 2))
+    }
+
+    ApplicationModel.find({
+        guild: guild, dateApplied: {
+            $gte: date.toISOString()
+        },
+        status: { $eq: statuses.rejected }
+    })
+        .then(function (applications) {
+
+            defer.resolve({ "applications": applications });
+        },
+        function (err) {
+            defer.reject(err);
+        })
+
+    return defer.promise;
+}
+
 function getApplications(req, res) {
 
     var defer = q.defer();
@@ -243,7 +277,8 @@ module.exports = {
     getUserApplications: getUserApplications,
     deleteApplication: deleteApplication,
     getGuildApplications: getGuildApplications,
-    getApplication: getApplication
+    getApplication: getApplication,
+    getRejectedGuildApplications:getRejectedGuildApplications
 };
 
 function approveApplicationEmail(application) {

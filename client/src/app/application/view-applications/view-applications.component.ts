@@ -4,13 +4,13 @@ import { GuildService } from '../../services/guild.service';
 import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 
 //Components
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 //3rd party
-import { ToastsManager } from 'ng2-toastr/ng2-toastr'; 
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-view-applications',
@@ -20,6 +20,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class ViewApplicationsComponent implements OnInit {
 
   applications: ApplicationsDataSource;
+  rejectedApplications: RejectedApplicationsDataSource;
   displayedColumns: Array<any>;
   loading: boolean;
 
@@ -45,20 +46,65 @@ export class ViewApplicationsComponent implements OnInit {
 
         this.loading = false;
         this.applications = new ApplicationsDataSource(applications.applications);
+
+
+      }, (error) => {
+
+        this.loading = false;
+      })
+
+    this.guildService.getRejectedApplications()
+      .subscribe((applications) => {
+
+        this.loading = false;
+        this.rejectedApplications = new RejectedApplicationsDataSource(applications.applications);
+        
       }, (error) => {
 
         this.loading = false;
       })
   }
 
-  deleteApplication(application) {
+  rejectApplication(application) {
     let body = {
       application: application
     };
 
-    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      
+    var dialogConfig = new MatDialogConfig()
+    dialogConfig.data = {
+      message: "You are about to reject " + application.character + ". Are you sure?"
+    }    
+
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result == true) {
+
+        this.guildService.rejectApplication(body)
+          .subscribe((result) => {
+
+            this.getGuildApplications();
+            this.toastr.success("Successfully deleted the application");
+          })
+      }
     });
+
+
+  }
+
+  deleteApplication(application) {
+    let body = {
+      appID: application._id
+    };
+
+    var dialogConfig = new MatDialogConfig()
+    dialogConfig.data = {
+      message: "You are about to permanently delete the application for " + application.character + " . Are you sure?"
+    }    
+
+
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
 
@@ -86,6 +132,23 @@ export class ViewApplicationsComponent implements OnInit {
 }
 
 export class ApplicationsDataSource extends DataSource<any> {
+
+  tableData: Array<any>;
+
+  constructor(tableData) {
+    super();
+    this.tableData = tableData;
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<Element[]> {
+    return Observable.of(this.tableData);
+  }
+
+  disconnect() { }
+}
+
+export class RejectedApplicationsDataSource extends DataSource<any> {
 
   tableData: Array<any>;
 
