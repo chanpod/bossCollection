@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 import { ApiService } from './api.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class BlizzardService {
@@ -9,7 +10,7 @@ export class BlizzardService {
   public api: string;
   public apiKey: string;
   public classes: Array<string>;
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
 
     this.api = "https://us.api.battle.net/wow";
     this.apiKey = "fqvadba9c8auw7brtdr72vv7hfntbx7d"

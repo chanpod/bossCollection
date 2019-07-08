@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 
 //3rd party
 import _ from 'lodash';
+import { HttpClient } from '@angular/common/http';
 
 
 declare var gapi: any;
@@ -20,9 +21,10 @@ export class UserService {
     private blizzardAccess: any;
     public blizzardAccessTokenStorageItem: string = 'blizzardAccessToken';
     public blizzardProfileStorageItem: string = 'blizzardProfile';
+
     constructor(
         private apiService: ApiService,
-        private http: Http,
+        private http: HttpClient,
         private router: Router) {
 
 
@@ -31,7 +33,7 @@ export class UserService {
     getBlizzardProfile() {
         let accountURI = "https://us.api.battle.net/account/user?access_token=" + this.blizzardAccess.access_token;
 
-        return this.http.get(accountURI).map(res => res.json());
+        return this.http.get(accountURI).map((res:any) => res.json());
     }
 
     setBlizzardUser(user: any) {

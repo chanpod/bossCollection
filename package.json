@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "node server/server NODE_ENV=development",
-    "production" : "node server/server NODE_ENV=production"
+    "production": "node server/server NODE_ENV=production"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",

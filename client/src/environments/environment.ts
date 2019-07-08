@@ -9,7 +9,7 @@ export const environment = {
     production: false,
     Issuer: '',
     redirectUri: 'https://localhost:4200/login',
-    clientId: 'fqvadba9c8auw7brtdr72vv7hfntbx7d',
+    clientId: 'e8714eadd5184a028689aa4c7455f481',
     loginUrl: 'https://us.battle.net/oauth/authorize',
     logoutUrl: '',
     domain: "localhost"
