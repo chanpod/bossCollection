@@ -1,6 +1,8 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { BehaviorSubject } from "rxjs/Rx";
+import { BehaviorSubject } from "rxjs";
 import { Router } from '@angular/router';
 
 import { ApiService } from './api.service';
@@ -33,7 +35,7 @@ export class UserService {
     getBlizzardProfile() {
         let accountURI = "https://us.api.battle.net/account/user?access_token=" + this.blizzardAccess.access_token;
 
-        return this.http.get(accountURI).map((res:any) => res.json());
+        return this.http.get(accountURI).pipe(map((res:any) => res.json()));
     }
 
     setBlizzardUser(user: any) {
@@ -50,8 +52,8 @@ export class UserService {
 
     getBlizzardAccessToken(code) {
 
-        return this.apiService.post('/oauth/getblizzardaccesstoken', { code: code })
-            .map(
+        return this.apiService.post('/oauth/getblizzardaccesstoken', { code: code }).pipe(
+            map(
             (accesstoken) => {
                 // console.log(accesstoken);
                 this.blizzardAccess = accesstoken;
@@ -61,7 +63,7 @@ export class UserService {
 
                 return true;
             }
-            )
+            ))
     }
 
     isLoggedIn() {
@@ -80,8 +82,8 @@ export class UserService {
 
     checkIfNewAccount(oauthId) {
 
-        return this.getOauthUser(oauthId)
-            .map(
+        return this.getOauthUser(oauthId).pipe(
+            map(
             (result) => {
                 if (result.message != "Not Found") {
                     return false;
@@ -92,7 +94,7 @@ export class UserService {
 
                 }
             }
-            )
+            ))
     }
 
     checkBlizzardToken() {

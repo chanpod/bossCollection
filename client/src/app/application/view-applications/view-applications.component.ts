@@ -1,7 +1,8 @@
+
+import {of as observableOf,  Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { GuildService } from '../../services/guild.service';
-import { Observable } from 'rxjs/Observable';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogConfig } from '@angular/material';
@@ -142,7 +143,7 @@ export class ApplicationsDataSource extends DataSource<any> {
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Element[]> {
-    return Observable.of(this.tableData);
+    return observableOf(this.tableData);
   }
 
   disconnect() { }
@@ -159,7 +160,7 @@ export class RejectedApplicationsDataSource extends DataSource<any> {
 
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<Element[]> {
-    return Observable.of(this.tableData);
+    return observableOf(this.tableData);
   }
 
   disconnect() { }

@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -14,7 +16,7 @@ export class AccountGuard implements CanActivate {
 
   canActivate() {
 
-    return this.user.getUserPromise().map(
+    return this.user.getUserPromise().pipe(map(
       (response) => {
 
         let canActivate = this.user.isLoggedIn();
@@ -27,6 +29,6 @@ export class AccountGuard implements CanActivate {
     
         return canActivate;
       }
-    )
+    ))
   }
 }

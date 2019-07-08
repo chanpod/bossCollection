@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
@@ -46,7 +48,7 @@ export class BlizzardService {
   }
 
   get(url) {
-    return this.http.get(url).map((response: Response) => response.json());
+    return this.http.get(url).pipe(map((response: Response) => response.json()));
   }
 
 }
