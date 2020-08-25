@@ -23,7 +23,7 @@
         "express": "^4.1.2",
         "express-session": "^1.11.2",
         "gulp-js-prettify": "^0.1.0",
-        "highcharts": "^4.2.5",
+        "highcharts": "^8.2.0",
         "jade": "~0.31.2",
         "lodash": "^4.0.1",
         "method-override": "^1.0.0",
